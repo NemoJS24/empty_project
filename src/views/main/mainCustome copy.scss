@@ -1,0 +1,446 @@
+// media query
+@mixin mobile {
+    @media (max-width: 512px) {
+        @content;
+    }
+}
+
+@mixin laptop {
+    @media (max-width: 912px) {
+        @content;
+    }
+}
+
+@mixin tab {
+    @media (max-width: 775px) {
+        @content;
+    }
+
+}
+
+@mixin mobile {
+    @media (max-width: 500px) {
+        @content;
+    }
+}
+
+$breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    xxl: 1440px
+);
+
+// Generate media queries using a mixin
+@mixin media-query($breakpoint) {
+    @if map-has-key($breakpoints, $breakpoint) {
+        @media (min-width: #{map-get($breakpoints, $breakpoint)}) {
+            @content;
+        }
+    }
+
+    @else {
+        @error "Invalid breakpoint: #{$breakpoint}. Make sure it is defined in $breakpoints map.";
+    }
+}
+
+
+
+// fonts
+@font-face {
+    font-family: Colaborate Thi;
+    src: url("../../assets/Colaborate/ColabThi.otf");
+}
+
+@font-face {
+    font-family: Colaborate Med;
+    src: url("../../assets/Colaborate/ColabMed.otf");
+}
+
+@font-face {
+    font-family: Colaborat Lig;
+    src: url("../../assets/Colaborate/ColabLig.otf");
+}
+
+@font-face {
+    font-family: Colaborat Reg;
+    src: url("../../assets/Colaborate/ColabReg.otf");
+}
+
+// fw class
+
+
+* {
+    font-family: Colaborate Thi !important;
+}
+
+.fw-lig {
+    font-family: Colaborat Lig !important;
+}
+
+.fw-thi {
+    font-family: Colaborat Thi !important;
+}
+
+.fw-med {
+    font-family: Colaborat Med !important;
+}
+
+.fw-reg {
+    font-family: Colaborat Reg !important;
+}
+
+
+.border-main {
+    border: solid 1px #1a1a1a !important;
+}
+
+
+// heading
+.main-heading {
+    color: #1a1a1a !important;
+}
+
+
+// -----------------------
+
+
+// line height
+.lh-83 {
+    line-height: 83px !important;
+
+    @include tab {
+        line-height: 67px !important;
+    }
+
+    @include mobile {
+        line-height: 40px !important;
+    }
+}
+
+.lh-32 {
+    line-height: 32px !important;
+}
+
+//Font size
+
+.h1 {
+    font-size: 5.5rem;
+}
+
+
+// buttons
+.main-btn-blue-gra {
+    cursor: pointer !important;
+    transition: all .25s;
+    background: transparent linear-gradient(90deg, #096ef2, #0092ff) 0 0 !important;
+    border: solid 1px #2680eb !important;
+    color: white !important;
+    border: none;
+    &:active {
+        transform: scale(0.9);
+    }
+}
+
+.main-btn-blue {
+    cursor: pointer !important;
+    transition: all .25s;
+    background: #0092ff !important;
+    border: solid 1px #0092ff !important;
+    color: white !important;
+    border: none;
+    font-family: Colaborat Reg;
+    font-weight: 900 !important;
+
+    &:active {
+        transform: scale(0.9);
+    }
+}
+
+.main-btn-blue2 {
+    cursor: pointer !important;
+    transition: all .25s;
+    background: #0092ff !important;
+    border: solid 1px #0092ff !important;
+    color: white !important;
+    border: none;
+    font-family: Colaborat Reg;
+
+    &:active {
+        transform: scale(0.9);
+    }
+}
+
+.main-btn-dark {
+    cursor: pointer !important;
+    transition: all .25s;
+
+    color: #000 !important;
+    border: solid 1px #000 !important;
+
+    &:hover {
+        color: #fff !important;
+        background: #000 !important;
+    }
+
+    &:active {
+        transform: scale(0.9);
+
+    }
+
+    &:focus {
+        border: solid 1px #000 !important;
+
+    }
+
+}
+
+.main-btn-black {
+    cursor: pointer !important;
+    transition: all .25s;
+
+    color: #ffffff !important;
+    border: solid 1px #000 !important;
+    background: #000 !important;
+
+    &:hover {
+        color: #fff !important;
+        background: #000 !important;
+    }
+
+    &:active {
+        transform: scale(0.9);
+
+    }
+
+}
+
+.main-btn-light {
+    cursor: pointer !important;
+    color: #fff !important;
+    border: solid 1px #fff !important;
+    transition: all .25s;
+
+    &:hover {
+        color: #1a1a1a !important;
+        background: #fff !important;
+    }
+
+    &:active {
+        transform: scale(0.9);
+
+    }
+
+}
+
+.main-btn-white {
+    cursor: pointer !important;
+    color: #000000 !important;
+    border: solid 1px #ffffff !important;
+    background: #fff !important;
+    transition: all .25s;
+
+
+    &:hover {
+        color: #000000 !important;
+        border: solid 1px #ffffff !important;
+        background: #fff !important;
+    }
+
+    &:active {
+        transform: scale(0.9);
+
+    }
+
+}
+
+
+// ------------------------------
+
+a {
+    color: #393939;
+    &:hover {
+        color: #0a0a0a;
+    }
+}
+
+li {
+    color: #393939;
+}
+
+// margins from 60 to 240 px
+@for $i from 6 through 24 {
+    $value: $i * 10;
+    
+    .mt#{$value} {
+        margin-top: #{$value}px !important;
+        
+        @if $value == 17 or $value == 18 {
+            @include mobile {
+                margin-top: 80px !important;
+            }
+        }
+    }
+}
+
+
+// teams page scss
+.img-grey {
+    filter: grayscale(100%);
+}
+
+/* Remove arrows for number input type */
+input[type="number"] {
+    -webkit-appearance: textfield !important; /* Chrome, Safari, Edge */
+    -moz-appearance: textfield !important;    /* Firefox */
+    appearance: textfield !important;         /* Other modern browsers */
+    margin: 0 !important;
+}
+
+/* Remove default styling for number input arrows in WebKit browsers */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+}
+
+
+
+// faq accordian
+
+
+.theme-black {
+    * {
+        background-color: #000 !important;
+    }
+
+    h1 {
+        color: #ebeaea !important;
+        font-weight: 100;
+    }
+
+    h3 {
+        font-weight: 100;
+        color: #adadad !important;
+    }
+
+    .FAQ {
+        color: #ffffff !important;
+    }
+
+    .accordion-button {
+        &:not(.collapsed) {
+            &::after {
+                // background-image: url("https://img.icons8.com/material-outlined/24/000000/minus.png");
+                background-image: url("./components/Faq/img/minus-white.png") !important    ;
+                transform: rotate(0deg) !important  ;
+
+            }
+        }
+
+        &::after {
+            transform: rotate(90deg) !important ;
+            content: "" !important  ;
+            background-repeat: no-repeat !important ;
+            background-image: url("./components/Faq/img/plus-white.png") !important ;
+
+        }
+    }
+}
+
+.theme-white {
+    * {
+        color: #000000 !important;
+        background-color: #ffffff !important;
+    }
+
+    .accordion-button {
+        &:not(.collapsed) {
+            &::after {
+                background-image: url("https://img.icons8.com/material-outlined/24/minus.png") !important;
+                transform: rotate(0deg) !important;
+            }
+        }
+
+        &::after {
+            transform: rotate(90deg) !important;
+            content: "" !important;
+            background-image: url("https://img.icons8.com/material-outlined/24/plus-math--v1.png") !important;
+            background-repeat: no-repeat !important;
+        }
+    }
+}
+
+
+
+// css for subNav bar
+.Container-subNav {
+
+    @media (min-width: 0px) {
+        width: 98%;
+    }
+
+    @media (min-width: 576px) {
+        width: 573px;
+    }
+
+    @media (min-width: 768px) {
+        width: 765px;
+    }
+
+    @media (min-width: 992px) {
+        width: 989px;
+    }
+
+    @media (min-width: 1200px) {
+        width: 1198px;
+    }
+
+    @media (min-width: 1440px) {
+        width: 1438px;
+    }
+}
+
+
+
+//   anomation
+.popupTran {
+    animation: fade-in 1s 1;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+// from login media query 
+.login_cont {
+    margin: auto;
+
+    @each $breakpoint, $width in (md: 768px,
+        lg: 992px,
+        xl: 1200px,
+        xxl: 1440px) {
+        @include media-query(#{$breakpoint}) {
+            width: $width;
+        }
+    }
+}
+
+// home pages lodaer class
+.customeHomeDiv {
+    max-width: 1440px;
+    margin: auto;
+
+    @media screen and (max-width: 770px) {
+        max-width: 100%;
+    }
+}
