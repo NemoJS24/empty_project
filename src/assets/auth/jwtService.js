@@ -6,6 +6,12 @@ export const baseURL = "https://api.demo.xircls.in"
 export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
 export const crmURL = "https://api.demo.xircls.in"
 
+// const URLs = {
+//     baseURL,
+//     SuperLeadzBaseURL,
+//     crmURL
+// }
+
 // Live 
 // export const baseURL = "https://api.xircls.com"
 // export const SuperLeadzBaseURL = "https://apps.xircls.com"
@@ -117,13 +123,18 @@ export const configUrl = {
     addOffers: "/add_offer/",
     //referal
     referalPoints: "/referral/referralpoints/",
-    affiliate_dashboard: "/affiliate/wallet_transaction/"
+    affiliate_dashboard: "/affiliate/wallet_transaction/",
+    add_customer_individual: "/customers/merchant/add_customer/"
     // Flash Account
 }
 
 const axiosInstance = axios.create({
     baseURL
 })
+
+// const updateBaseURL = (newBaseURL) => {
+//     axiosInstance.defaults.baseURL = newBaseURL
+// }
 
 let isRefreshing = false
 let refreshTokenPromise = null
@@ -196,6 +207,8 @@ axiosInstance.interceptors.response.use(
 )
 
 export const postReq = (path, data, config) => {
+    
+    // updateBaseURL(URLs[base])
     const time = new Date().getTime()
     if (path === 'login' || path === "signup") {
         return axios.post(`${baseURL}${configUrl[`${path}`]}?time=${time}`, data)

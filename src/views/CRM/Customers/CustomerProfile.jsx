@@ -14,6 +14,7 @@ import CustomerBasicCompanyInfo from "./CustomerProfileBasic/CustomerBasicCompan
 import CustomerBasicAccount from "./CustomerProfileBasic/CustomerBasicAccount.js"
 import CustomerBasicNav from "./CustomerProfileBasic/CustomerBasicNav.js"
 import { validForm, validateEmail } from "../../Validator/index.js"
+import { postReq } from "../../../assets/auth/jwtService.js"
 
 
 /* eslint-disable */
@@ -137,7 +138,7 @@ export default function CustomerProfile() {
 
   const postData = (btn) => {
     // console.log(formData)
-    const url = new URL(`${crmURL}/customers/merchant/add_customer/`)
+    // const url = new URL(`${crmURL}/customers/merchant/add_customer/`)
     const form_data = new FormData()
     Object.entries(formData).map(([key, value]) => {
       form_data.append(key, value)
@@ -155,14 +156,14 @@ export default function CustomerProfile() {
       console.log(key[0] + ', ' + key[1]);
     }
 
-
-    fetch(url, {
-      method: "POST",
-      body: form_data,
-      headers: {
-        "Api-key": "wDgmH6BS0B5s/tcOmfAqtWeBmI1t8qbiAnr5KN/oLis="
-      }
-    })
+    postReq('add_customer_individual', form_data, base="crmURL")
+    // fetch(url, {
+    //   method: "POST",
+    //   body: form_data,
+    //   headers: {
+    //     "Api-key": "wDgmH6BS0B5s/tcOmfAqtWeBmI1t8qbiAnr5KN/oLis="
+    //   }
+    // })
       .then((response) => {
         if (!response.ok) {
           if (response.status === 409) {
