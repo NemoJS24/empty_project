@@ -67,17 +67,22 @@ const Navbar = ({ position }) => {
 
 
   useEffect(() => {
-    window.addEventListener('scroll', () => {
-      const Yscroll = window.scrollY
-      const first_navbar = document.getElementById("first_navbar")
+    try {
+      window.addEventListener('scroll', () => {
+        const Yscroll = window.scrollY
+        const first_navbar = document.getElementById("first_navbar")
+  
+        if (Yscroll > 50) {
+          first_navbar.style.boxShadow = " 0 0px 8px rgba(0,0,0,0.16)"
+        } else {
+          first_navbar.style.boxShadow = " none"
+  
+        }
+      })
 
-      if (Yscroll > 50) {
-        first_navbar.style.boxShadow = " 0 0px 8px rgba(0,0,0,0.16)"
-      } else {
-        first_navbar.style.boxShadow = " none"
-
-      }
-    })
+    } catch (error) {
+      console.log(error)
+    }
   }, [])
 
 

@@ -156,7 +156,7 @@ export default function CustomerProfile() {
       console.log(key[0] + ', ' + key[1]);
     }
 
-    postReq('add_customer_individual', form_data, base="crmURL")
+    postReq('add_customer_individual', form_data)
     // fetch(url, {
     //   method: "POST",
     //   body: form_data,
@@ -164,33 +164,21 @@ export default function CustomerProfile() {
     //     "Api-key": "wDgmH6BS0B5s/tcOmfAqtWeBmI1t8qbiAnr5KN/oLis="
     //   }
     // })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 409) {
-            throw new Error('Customer already exists')
-          } else {
-            toast.error(`HTTP error! Status: ${response.status}`)
-            throw new Error(`HTTP error! Status: ${response.status}`)
-          }
-        }
-        return response.json()
-      })
       .then((resp) => {
+        if (resp.status === 409) {
+          throw new Error('Customer already exists')
+        }
         console.log("Response:", resp)
         toast.success('Customer saved successfully')
-        if (resp.is_edit_url) {
-          navigate(`/merchant/customers/edit_customer/${resp.cust_id}`)
+        if (resp.data.is_edit_url) {
+          navigate(`/merchant/customers/edit_customer/${resp.data.cust_id}`)
         } else {
           navigate(`/merchant/customers`)
         }
       })
       .catch((error) => {
         console.error("Error:", error)
-        if (error.message === 'Customer already exists') {
-          toast.error('Customer already exists')
-        } else {
-          toast.error('Failed to save customer')
-        }
+        toast.error('Failed to save customer')
       })
   }
 
