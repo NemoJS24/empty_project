@@ -277,7 +277,7 @@ const AddBusiness = () => {
          form_data.append("entry_point", 'INDV')
          form_data.append("press_btn", btn)
          id && form_data.append("customer_id", id)
-     
+
          for (var key of form_data.entries()) {
            console.log(key[0] + ', ' + key[1]);
          }
