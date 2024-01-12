@@ -11,6 +11,18 @@ import toast from "react-hot-toast"
 
 const AddServicing = () => {
     const [formData, setFormData] = useState({
+        mainForm: {},
+        sideForm: {
+            title: "",
+            cust_first_name: "",
+            cust_last_name: "",
+            email: "",
+            phone_no: "",
+            country: 1,
+            city: "",
+            state: "",
+            pincode: ""
+        }
         // customer: 57069,
         // vehicle: 23816,
         // service_advisor: "aasdsad",
@@ -19,18 +31,18 @@ const AddServicing = () => {
         // service_expiry_date: "2024-01-29",
         // service_invoice_amount: "23423432"
     })
-    const [customerFormData, setCustomerFormData] = useState({
-        title: "mr",
-        cust_first_name: "vnasdf",
-        cust_last_name: "poojary",
-        email: "hello@lol.com",
-        phone_no: "9132810845",
-        country: "Albania",
-        city: "mumbai",
-        state: "maharashtra",
-        pincode: "400080"
-    })
-    const [country, setCountry] = useState("")
+    // const [customerFormData, setCustomerFormData] = useState({
+    //     title: "mr",
+    //     cust_first_name: "vnasdf",
+    //     cust_last_name: "poojary",
+    //     email: "hello@lol.com",
+    //     phone_no: "9132810845",
+    //     country: "Albania",
+    //     city: "mumbai",
+    //     state: "maharashtra",
+    //     pincode: "400080"
+    // })
+    const [country, setCountry] = useState([])
     const [isHidden, setIsHidden] = useState(false)
     const [allOptions, setAllOptions] = useState([])
     const [vehicleOptions, setVehicleOptions] = useState([])
@@ -65,13 +77,16 @@ const AddServicing = () => {
                     }
                 }
                 // console.log('AfterRemovingNullId', newObject);
-                setFormData(newObject)
                 setFormData(prefData => ({
                     ...prefData,
-                    job_card_date: prefData?.job_card_date.substring(0, 10),
-                    service_expiry_date: prefData?.service_expiry_date.substring(0, 10),
-                    service_invoice_date: prefData?.service_invoice_date.substring(0, 10),
-                    updated_at: prefData?.updated_at.substring(0, 10)
+                    mainForm: {
+                        ...prefData.mainForm,
+                        ...newObject,
+                        job_card_date: prefData?.job_card_date.substring(0, 10),
+                        service_expiry_date: prefData?.service_expiry_date.substring(0, 10),
+                        service_invoice_date: prefData?.service_invoice_date.substring(0, 10),
+                        updated_at: prefData?.updated_at.substring(0, 10)
+                    }
                 }))
             })
             .catch((error) => {
@@ -83,7 +98,7 @@ const AddServicing = () => {
     const postData = (btn) => {
         const url = new URL(`${crmURL}/customers/merchant/jmd-servicing-customers/`)
         const form_data = new FormData()
-        Object.entries(formData).map(([key, value]) => {
+        Object.entries(formData.mainForm).map(([key, value]) => {
             form_data.append(key, value)
         })
         form_data.append("press_btn", btn)
@@ -161,7 +176,7 @@ const AddServicing = () => {
     }
 
     const selectCustomer = (e) => {
-        setFormData(prev => ({ ...prev, customer: e.value }))
+        setFormData(prev => ({ ...prev, mainForm: { ...prev.mainForm, customer: e.value } }))
         const form_data = new FormData()
         const url = new URL(`${crmURL}/customers/merchant/fetch_vehicle_number/`)
         form_data.append("id", e.value)
@@ -190,10 +205,10 @@ const AddServicing = () => {
     }
 
     const postNewCustomerData = () => {
-        console.log(customerFormData)
+        // console.log(customerFormData)
         const url = new URL(`${crmURL}/customers/merchant/add_customer/`)
         const form_data = new FormData()
-        Object.entries(customerFormData).map(([key, value]) => {
+        Object.entries(formData.sideForm).map(([key, value]) => {
             console.log(key, ": ", value)
             form_data.append(key, value)
         })
@@ -243,32 +258,33 @@ const AddServicing = () => {
         }
     }, [])
 
-    const handleInputChange = (e, addressType) => {
+    const handleInputChange = (e, keyType) => {
         console.log(e)
-        if (addressType === undefined) {
-            let { name, value, type } = e.target
-            if (type === "tel") {
-                value = value.replace(/[^0-9]/g, "")
-            }
-            if (name.includes('.')) {
-                const [parent, child] = name.split('.')
-                setCustomerFormData(prevFormData => ({
-                    ...prevFormData,
-                    ...prevFormData[parent],
-                    [child]: value
-                }))
-            } else {
-                setFormData(prevFormData => ({
-                    ...prevFormData,
-                    [name]: value
-                }))
-            }
-        } else if (addressType) {
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                [addressType]: e.value
-            }))
-        }
+        // if (addressType === undefined) {
+        //     let { name, value, type } = e.target
+        //     if (type === "tel") {
+        //         value = value.replace(/[^0-9]/g, "")
+        //     }
+        //     if (name.includes('.')) {
+        //         const [parent, child] = name.split('.')
+        //         setCustomerFormData(prevFormData => ({
+        //             ...prevFormData,
+        //             ...prevFormData[parent],
+        //             [child]: value
+        //         }))
+        //     } else {
+        //         setFormData(prevFormData => ({
+        //             ...prevFormData,
+        //             [name]: value
+        //         }))
+        //     }
+        // } else if (addressType) {
+        // setFormData(prevFormData => ({
+        //     ...prevFormData,
+        //     [addressType]: e.value
+        // }))
+        // }
+        setFormData(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
     }
 
     const handleClose = (type) => (type === 'customer') && (setIsHidden(false))
@@ -322,17 +338,21 @@ const AddServicing = () => {
                         id="basicDetails-title"
                         options={titleOptions}
                         closeMenuOnSelect={true}
-                        value={titleOptions.find(option => option.value === customerFormData.title) ?? ''}
-                        onChange={(e) => setCustomerFormData(prevData => ({ ...prevData, title: e.value }))}
+                        value={titleOptions.find(option => option.value === formData.sideForm.title) ?? ''}
+                        // onChange={(e) => setCustomerFormData(prevData => ({ ...prevData, title: e.value }))}
+                        onChange={(event) => {
+                            const e = { target: { name: "title", value: event.value } }
+                            handleInputChange(e, "sideForm")
+                        }}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-first-name">
                         First Name
                     </label>
-                    <input placeholder="First Name" type='text' id='basicDetails-first-name' name='customer.cust_first_name' className="form-control"
-                        value={customerFormData?.cust_first_name}
-                        onChange={handleInputChange}
+                    <input placeholder="First Name" type='text' id='basicDetails-first-name' name='cust_first_name' className="form-control"
+                        value={formData.sideForm?.cust_first_name}
+                        onChange={(e) => handleInputChange(e, "sideForm")}
 
                     />
                 </Col>
@@ -340,27 +360,27 @@ const AddServicing = () => {
                     <label htmlFor="basicDetails-last-name">
                         Last Name
                     </label>
-                    <input placeholder="Last Name" type='text' id='basicDetails-last-name' name='customer.cust_last_name' className="form-control"
-                        value={customerFormData?.cust_last_name}
-                        onChange={handleInputChange}
+                    <input placeholder="Last Name" type='text' id='basicDetails-last-name' name='cust_last_name' className="form-control"
+                        value={formData.sideForm?.cust_last_name}
+                        onChange={(e) => handleInputChange(e, "sideForm")}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-email">
                         Email
                     </label>
-                    <input placeholder="Email" type='text' id='basicDetails-email' name='customer.email' className="form-control"
-                        value={customerFormData?.email}
-                        onChange={handleInputChange}
+                    <input placeholder="Email" type='text' id='basicDetails-email' name='email' className="form-control"
+                        value={formData.sideForm?.email}
+                        onChange={(e) => handleInputChange(e, "sideForm")}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-mobile">
                         Mobile Number
                     </label>
-                    <input placeholder="Mobile Number" type='tel' maxLength={10} id='basicDetails-mobile' name='customer.phone_no' className="form-control"
-                        value={customerFormData?.phone_no}
-                        onChange={handleInputChange}
+                    <input placeholder="Mobile Number" type='tel' maxLength={10} id='basicDetails-mobile' name='phone_no' className="form-control"
+                        value={formData.sideForm?.phone_no}
+                        onChange={(e) => handleInputChange(e, "sideForm")}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -370,8 +390,13 @@ const AddServicing = () => {
                         inputId="aria-example-input"
                         closeMenuOnSelect={true}
                         name="country"
+                        value={country?.filter($ => $.value === formData?.sideForm?.country)}
                         placeholder="Select Country"
-                        onChange={(e) => setCustomerFormData(prevData => ({ ...prevData, country: e.label }))}
+                        // onChange={(e) => setCustomerFormData(prevData => ({ ...prevData, country: e.label }))}
+                        onChange={(event) => {
+                            const e = { target: { name: "country", value: event.value } }
+                            handleInputChange(e, "sideForm")
+                        }}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -380,10 +405,10 @@ const AddServicing = () => {
                         placeholder="City"
                         type="text"
                         id="address-1-city"
-                        name="customer.city"
+                        name="city"
                         className="form-control"
-                        value={customerFormData.city}
-                        onChange={handleInputChange}
+                        value={formData.sideForm.city}
+                        onChange={(e) => handleInputChange(e, "sideForm")}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -392,10 +417,10 @@ const AddServicing = () => {
                         placeholder="State"
                         type="text"
                         id="address-1-state"
-                        name="customer.state"
+                        name="state"
                         className="form-control"
-                        value={customerFormData.state}
-                        onChange={handleInputChange}
+                        value={formData.sideForm.state}
+                        onChange={(e) => handleInputChange(e, "sideForm")}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -404,10 +429,10 @@ const AddServicing = () => {
                         placeholder="Pincode"
                         type="text"
                         id="address-1-pincode"
-                        name="customer.pincode"
+                        name="pincode"
                         className="form-control"
-                        value={customerFormData.pincode}
-                        onChange={handleInputChange}
+                        value={formData.sideForm.pincode}
+                        onChange={(e) => handleInputChange(e, "sideForm")}
                     />
                 </Col>
 
@@ -456,8 +481,8 @@ const AddServicing = () => {
                             onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
                             components={{ Menu: CustomSelectComponent }}
                             onChange={selectCustomer}
-                            value={id && { value: formData?.customer_name, label: formData?.customer_name }}
-                            isDisabled={formData?.customer_name}
+                            value={id && { value: formData.mainForm?.customer_name, label: formData.mainForm?.customer_name }}
+                            isDisabled={formData.mainForm?.customer_name}
                         />
                     </Col>
                     <Col md={6} className="mt-2">
@@ -473,10 +498,14 @@ const AddServicing = () => {
                             id="vehicle-name"
                             options={vehicleOptions}
                             // defaultValue={vehicleOptions[0]}
-                            value={id && { value: formData?.registration_number, label: formData?.registration_number }}
-                            isDisabled={formData?.registration_number}
+                            value={id && { value: formData.mainForm?.registration_number, label: formData.mainForm?.registration_number }}
+                            isDisabled={formData.mainForm?.registration_number}
                             closeMenuOnSelect={true}
-                            onChange={e => setFormData(prev => ({ ...prev, vehicle: e.value }))}
+                            // onChange={e => setFormData(prev => ({ ...prev, vehicle: e.value }))}
+                            onChange={(event) => {
+                                const e = { target: { name: "vehicle", value: event.value } }
+                                handleInputChange(e, "mainForm")
+                            }}
                         />
                     </Col>
                     <Col md={6} className="mt-2">
@@ -487,8 +516,8 @@ const AddServicing = () => {
                             id="advisor-name"
                             name="service_advisor"
                             className="form-control"
-                            value={formData.service_advisor ?? ""}
-                            onChange={handleInputChange}
+                            value={formData.mainForm.service_advisor ?? ""}
+                            onChange={(e) => handleInputChange(e, "mainForm")}
                         />
                     </Col>
                     <Col md={6} className="mt-2">
@@ -499,8 +528,8 @@ const AddServicing = () => {
                             id="job-card-date"
                             name="job_card_date"
                             className="form-control"
-                            value={formData.job_card_date ?? ""}
-                            onChange={handleInputChange}
+                            value={formData.mainForm.job_card_date ?? ""}
+                            onChange={(e) => handleInputChange(e, "mainForm")}
                         />
                     </Col>
                     <Col md={6} className="mt-2">
@@ -511,8 +540,8 @@ const AddServicing = () => {
                             id="service-invoice-date"
                             name="service_invoice_date"
                             className="form-control"
-                            value={formData.service_invoice_date ?? ""}
-                            onChange={handleInputChange}
+                            value={formData.mainForm.service_invoice_date ?? ""}
+                            onChange={(e) => handleInputChange(e, "mainForm")}
                         />
                     </Col>
                     <Col md={6} className="mt-2">
@@ -523,8 +552,8 @@ const AddServicing = () => {
                             id="next-service-date"
                             name="service_expiry_date"
                             className="form-control"
-                            value={formData.service_expiry_date ?? ""}
-                            onChange={handleInputChange}
+                            value={formData.mainForm.service_expiry_date ?? ""}
+                            onChange={(e) => handleInputChange(e, "mainForm")}
                         />
                     </Col>
                     <Col md={6} className="mt-2">
@@ -535,8 +564,8 @@ const AddServicing = () => {
                             id="service-invoice-amount"
                             name="service_invoice_amount"
                             className="form-control"
-                            value={formData.service_invoice_amount ?? ""}
-                            onChange={handleInputChange}
+                            value={formData.mainForm.service_invoice_amount ?? ""}
+                            onChange={(e) => handleInputChange(e, "mainForm")}
                         />
                     </Col>
                     <Col xs='12'>

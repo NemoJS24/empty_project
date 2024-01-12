@@ -12,38 +12,21 @@ import toast from "react-hot-toast"
 
 /* eslint-disable */
 const AddInsurance = () => {
-    const [formData, setFormData] = useState({
-        // health_insurance: "Data not available",
-        // amount: "34234",
-        // executive_name: "asdf",
-        // policy_expiry_date: "2024-01-11",
-        // policy_purchase_date: "2024-01-11",
-        // insurance_type: "Motor",
-        // // customer_name_id: 41564,
-        // insurance_product_name: 13211,
-        // policy_number: "asdfas",
-        // insurance_company: "fsfd",
-        // insured_declared_value: "3434343",
-        // add_on_plan: "dfgdf",
-        // ncb_no_claim_bonus: "453",
-        // own_damage: "4545",
-        // pm_payment_mode: "sdfsdf",
-        // ncb_declaration: "sdfsdfs",
-        // inbuilt_discount: "434343",
-        // third_party_date: "2024-01-27",
-        // net_premimum: "34343"
-    })
+    const [formData, setFormData] = useState({})
     const [customerFormData, setCustomerFormData] = useState({
-        title: "mr",
-        cust_first_name: "vnasdf",
-        cust_last_name: "poojary",
-        email: "hello@lol.com",
-        phone_no: "9132810845",
-        country: "Albania",
-        city: "mumbai",
-        state: "maharashtra",
-        pincode: "400080"
+        title: "",
+        cust_first_name: "",
+        cust_last_name: "",
+        email: "",
+        phone_no: "",
+        country: "",
+        city: "",
+        state: "",
+        pincode: ""
     })
+
+    console.log({formData, customerFormData}, "formData")
+
     const [productFormData, setProductFormData] = useState({})
     const [isAddProductHidden, setIsAddProductHidden] = useState(false)
     const [isHidden, setIsHidden] = useState(false)
@@ -58,60 +41,106 @@ const AddInsurance = () => {
     const navigate = useNavigate()
     const { id } = useParams()
 
-    const handleInputChange = (e, type) => {
-        console.log(e)
-        if (type === undefined) {
-            const { name, value } = e.target
-            if (name.includes('.')) {
-                const [parent, child] = name.split('.')
-                if (parent === 'customer') {
-                    setCustomerFormData(prevData => ({
-                        ...prevData,
-                        [child]: value
-                    }))
-                } else if (parent === 'product') {
-                    setProductFormData(prevData => ({
-                        ...prevData,
-                        [child]: value
-                    }))
-                }
-            } else {
-                setFormData(prevData => ({
-                    ...prevData,
-                    [name]: value
-                }))
-            }
-        } else if (type === "tel") {
-            let { value } = e.target
-            const { name } = e.target
-            value = value.replace(/[^0-9]/g, "")
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                [name]: value
-            }))
-        } else if (type) {
-            console.log(e)
-            if (type.includes('.')) {
-                const [parent, child] = type.split('.')
-                if (parent === 'customer') {
-                    setCustomerFormData(prevData => ({
-                        ...prevData,
-                        [child]: e.value
-                    }))
-                } else if (parent === 'product') {
-                    setProductFormData(prevData => ({
-                        ...prevData,
-                        [child]: e.value
-                    }))
-                }
-            } else {
-                setFormData(prevFormData => ({
-                    ...prevFormData,
-                    [type]: e.value
-                }))
-            }
+    // const handleInputChange = (e, type) => {
+    //     console.log(e)
+    //     if (type === undefined) {
+    //         const { name, value } = e.target
+    //         if (name.includes('.')) {
+    //             const [parent, child] = name.split('.')
+    //             if (parent === 'customer') {
+    //                 setCustomerFormData(prevData => ({
+    //                     ...prevData,
+    //                     [child]: value
+    //                 }))
+    //             } else if (parent === 'product') {
+    //                 setProductFormData(prevData => ({
+    //                     ...prevData,
+    //                     [child]: value
+    //                 }))
+    //             }
+    //         } else {
+    //             setFormData(prevData => ({
+    //                 ...prevData,
+    //                 [name]: value
+    //             }))
+    //         }
+    //     } else if (type === "tel") {
+    //         let { value } = e.target
+    //         const { name } = e.target
+    //         value = value.replace(/[^0-9]/g, "")
+    //         setFormData(prevFormData => ({
+    //             ...prevFormData,
+    //             [name]: value
+    //         }))
+    //     } else if (type) {
+    //         console.log(e)
+    //         if (type.includes('.')) {
+    //             const [parent, child] = type.split('.')
+    //             if (parent === 'customer') {
+    //                 setCustomerFormData(prevData => ({
+    //                     ...prevData,
+    //                     [child]: e.value
+    //                 }))
+    //             } else if (parent === 'product') {
+    //                 setProductFormData(prevData => ({
+    //                     ...prevData,
+    //                     [child]: e.value
+    //                 }))
+    //             }
+    //         } else {
+    //             setFormData(prevFormData => ({
+    //                 ...prevFormData,
+    //                 [type]: e.value
+    //             }))
+    //         }
+    //     }
+    // }
+
+    const handleInputChange = (e, type="formData") => {
+        if (type === "formData") {
+            setFormData({...formData, [e.target.name]: e.target.value})
+        } else {
+            setCustomerFormData({...customerFormData, [e.target.name]: e.target.value})
         }
     }
+
+    // const handleInputChangeCustomerFrom = (e) => {
+    //     setCustomerFormData({...customerFormData, [e.target.name]: e.target.value})
+    // }
+
+    const handleChange = (options, actionMeta, check, type="formData") => {
+        if (check) {
+            const option_list = options.map((cur) => {
+                return cur.value
+            })
+            if (type === "formData") {
+                setFormData({ ...formData, [actionMeta.name]: option_list })
+
+            } else {
+                setCustomerFormData({ ...customerFormData, [actionMeta.name]: option_list })
+            }
+        } else {
+            if (type === "formData") {
+                setFormData({ ...formData, [actionMeta.name]: options.value })
+            } else {
+                setCustomerFormData({ ...customerFormData, [actionMeta.name]: options.value })
+            }
+            
+        }
+
+    }
+
+    // const handleChangeCustomerForm = (options, actionMeta, check) => {
+    //     if (check) {
+    //         const option_list = options.map((cur) => {
+    //             return cur.value
+    //         })
+    //         setCustomerFormData({ ...customerFormData, [actionMeta.name]: option_list })
+    //     } else {
+    //         setCustomerFormData({ ...formData, [actionMeta.name]: options.value })
+    //     }
+
+    // }
 
     const fetchInsuranceData = (id) => {
         const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
@@ -163,31 +192,31 @@ const AddInsurance = () => {
             method: "POST",
             body: form_data
         })
-            .then((response) => {
-                if (!response.ok) {
-                    if (response.status === 409) {
-                        throw new Error('Customer already exists')
-                    } else {
-                        toast.error(`HTTP error! Status: ${response.status}`)
-                        throw new Error(`HTTP error! Status: ${response.status}`)
-                    }
-                }
-                return response.json()
-            })
-            .then((resp) => {
-                console.log("Response:", resp)
-                toast.success('Insurance saved successfully')
-                resp.is_edit_url ? navigate(`merchant/customers/insurance/edit_insurance/${resp.insurance_code}`) : navigate(`/merchant/customers/insurance/`)
-                fetchInsuranceData(resp.insurance_code)
-            })
-            .catch((error) => {
-                console.error("Error:", error)
-                if (error.message === 'Customer already exists') {
-                    toast.error('Customer already exists')
+        .then((response) => {
+            if (!response.ok) {
+                if (response.status === 409) {
+                    throw new Error('Customer already exists')
                 } else {
-                    toast.error('Failed to save customer')
+                    toast.error(`HTTP error! Status: ${response.status}`)
+                    throw new Error(`HTTP error! Status: ${response.status}`)
                 }
-            })
+            }
+            return response.json()
+        })
+        .then((resp) => {
+            console.log("Response:", resp)
+            toast.success('Insurance saved successfully')
+            resp.is_edit_url ? navigate(`merchant/customers/insurance/edit_insurance/${resp.insurance_code}`) : navigate(`/merchant/customers/insurance/`)
+            fetchInsuranceData(resp.insurance_code)
+        })
+        .catch((error) => {
+            console.error("Error:", error)
+            if (error.message === 'Customer already exists') {
+                toast.error('Customer already exists')
+            } else {
+                toast.error('Failed to save customer')
+            }
+        })
     }
 
     const postNewCustomerData = () => {
@@ -418,33 +447,31 @@ const AddInsurance = () => {
         setVehicleOptions(vehicleOptionss)
     }
 
-    const selectCustomer = (e) => {
-        handleInputChange(e, 'customer_name_id')
-        setFormData(prevData => ({ ...prevData, customer_name: e.label }))
-        handleInputChange(e, 'product.customer_name_id')
+    const selectCustomer = (value, actionMeta, check) => {
+        handleChange(value, {name: "customer_name_id"}, check)
+        // setFormData(prevData => ({ ...prevData, customer_name: e.label }))
         const form_data = new FormData()
         const url = new URL(`${crmURL}/customers/merchant/fetch_vehicle_details/`)
-        form_data.append("id", e.value)
+        form_data.append("id", value.value)
         // "SHIVAM KALE"
         fetch(url, {
             method: "POST",
             body: form_data
         })
-            .then((response) => {
-                console.log(response)
-                return response.json()
-            })
-            .then((resp) => {
-                console.log("Response:", resp)
-                if (resp.car_variant) {
-                    changeProductName(resp)
-                    changeVehicleOptions(resp)
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error)
-                    (error.message) ? toast.error(error.message) : toast.error(error)
-            })
+        .then((response) => {
+            return response.json()
+        })
+        .then((resp) => {
+            console.log("Response:", resp)
+            if (resp.car_variant) {
+                changeProductName(resp)
+                changeVehicleOptions(resp)
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error)
+            (error.message) ? toast.error(error.message) : toast.error(error)
+        })
     }
 
     const handleClose = (type) => {
@@ -474,7 +501,7 @@ const AddInsurance = () => {
                 {formData.customer_name_id &&
                     <a
                         onClick={() => handleShow("product")}
-                        className="link-success link-underline-opacity-0 "
+                        className="link-success link-underline-opacity-0"
                     >
                         Add New Product
                     </a>}
@@ -528,12 +555,12 @@ const AddInsurance = () => {
     const InnerStyles = (
         <style>
             {`
-          .customer-profile > div {
-            z-index: 9
-          }
-          .offcanvas{
-            --bs-offcanvas-width: 40%
-          }
+                .customer-profile > div {
+                    z-index: 9
+                }
+                .offcanvas{
+                    --bs-offcanvas-width: 40%
+                }
           `}
         </style>
     )
@@ -550,10 +577,11 @@ const AddInsurance = () => {
                     </label>
                     <Select
                         id="basicDetails-title"
+                        name="title"
                         options={titleOptions}
                         closeMenuOnSelect={true}
                         value={titleOptions.find(option => option.value === customerFormData.title) ?? ''}
-                        onChange={(e) => setCustomerFormData(prevData => ({ ...prevData, title: e.value }))}
+                        onChange={(value, actionMeta) => handleChange(value, actionMeta, false, "customerData")}
                         isDisabled={id}
                     />
                 </Col>
@@ -561,9 +589,10 @@ const AddInsurance = () => {
                     <label htmlFor="basicDetails-first-name">
                         First Name
                     </label>
-                    <input placeholder="First Name" type='text' id='basicDetails-first-name' name='customer.cust_first_name' className="form-control"
+                    <input placeholder="First Name" type='text' id='basicDetails-first-name' name='cust_first_name' className="form-control"
                         value={customerFormData?.cust_first_name}
-                        onChange={handleInputChange}
+                        // onChange={handleInputChangeCustomerFrom}
+                        onChange={(e) => handleInputChange(e, "customerData")}
                         isDisabled={id}
                     />
                 </Col>
@@ -571,9 +600,10 @@ const AddInsurance = () => {
                     <label htmlFor="basicDetails-last-name">
                         Last Name
                     </label>
-                    <input placeholder="Last Name" type='text' id='basicDetails-last-name' name='customer.cust_last_name' className="form-control"
+                    <input placeholder="Last Name" type='text' id='basicDetails-last-name' name='cust_last_name' className="form-control"
                         value={customerFormData?.cust_last_name}
-                        onChange={handleInputChange}
+                        // onChange={handleInputChangeCustomerFrom}
+                        onChange={(e) => handleInputChange(e, "customerData")}
                         isDisabled={id}
                     />
                 </Col>
@@ -581,18 +611,20 @@ const AddInsurance = () => {
                     <label htmlFor="basicDetails-email">
                         Email
                     </label>
-                    <input placeholder="Email" type='text' id='basicDetails-email' name='customer.email' className="form-control"
+                    <input placeholder="Email" type='text' id='basicDetails-email' name='email' className="form-control"
                         value={customerFormData?.email}
-                        onChange={handleInputChange}
+                        // onChange={handleInputChangeCustomerFrom}
+                        onChange={(e) => handleInputChange(e, "customerData")}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-mobile">
                         Mobile Number
                     </label>
-                    <input placeholder="Mobile Number" type='tel' maxLength={10} id='basicDetails-mobile' name='customer.phone_no' className="form-control"
+                    <input placeholder="Mobile Number" type='tel' maxLength={10} id='basicDetails-mobile' name='phone_no' className="form-control"
                         value={customerFormData?.phone_no}
-                        onChange={handleInputChange}
+                        // onChange={handleInputChangeCustomerFrom}
+                        onChange={(e) => handleInputChange(e, "customerData")}
                         isDisabled={id}
                     />
                 </Col>
@@ -604,19 +636,8 @@ const AddInsurance = () => {
                         closeMenuOnSelect={true}
                         name="country"
                         placeholder="Select Country"
-                        onChange={(e) => setCustomerFormData(prevData => ({ ...prevData, country: e.label }))}
-                    />
-                </Col>
-                <Col md={12} className="mt-2">
-                    <label htmlFor="address-1-city">City</label>
-                    <input
-                        placeholder="City"
-                        type="text"
-                        id="address-1-city"
-                        name="customer.city"
-                        className="form-control"
-                        value={customerFormData.city}
-                        onChange={handleInputChange}
+                        // onChange={(e) => setCustomerFormData(prevData => ({ ...prevData, country: e.label }))}
+                        onChange={(value, actionMeta) => handleChange(value, actionMeta, false, "customerData")}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -625,10 +646,24 @@ const AddInsurance = () => {
                         placeholder="State"
                         type="text"
                         id="address-1-state"
-                        name="customer.state"
+                        name="state"
                         className="form-control"
                         value={customerFormData.state}
-                        onChange={handleInputChange}
+                        // onChange={handleInputChangeCustomerFrom}
+                        onChange={(e) => handleInputChange(e, "customerData")}
+                    />
+                </Col>
+                <Col md={12} className="mt-2">
+                    <label htmlFor="address-1-city">City</label>
+                    <input
+                        placeholder="City"
+                        type="text"
+                        id="address-1-city"
+                        name="city"
+                        className="form-control"
+                        value={customerFormData.city}
+                        // onChange={handleInputChangeCustomerFrom}
+                        onChange={(e) => handleInputChange(e, "customerData")}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -637,10 +672,11 @@ const AddInsurance = () => {
                         placeholder="Pincode"
                         type="text"
                         id="address-1-pincode"
-                        name="customer.pincode"
+                        name="pincode"
                         className="form-control"
                         value={customerFormData.pincode}
-                        onChange={handleInputChange}
+                        // onChange={handleInputChangeCustomerFrom}
+                        onChange={(e) => handleInputChange(e, "customerData")}
                     />
                 </Col>
 
@@ -648,11 +684,6 @@ const AddInsurance = () => {
                     <div>
                         <button className="btn btn-primary" type="submit">Add</button>
                         <button className="btn btn-primary ms-2" type="button">Cancel</button>
-                    </div>
-                    <div>
-                        {/* <button className="btn btn-primary" type="submit" onClick={handleSubmitSection1}>Save</button>
-                                <button className="btn btn-primary ms-2" type="button">Save & Close</button> */}
-                        {/* <button className="btn btn-primary ms-2" type="button" onClick={handleNext}>Next</button> */}
                     </div>
                 </div>
             </Row>
@@ -727,10 +758,12 @@ const AddInsurance = () => {
                     <Select
                         placeholder='Vehicle Type'
                         id="vehicle-type"
+                        name="vehicle_type"
                         options={vehicleTypeOptions}
                         closeMenuOnSelect={true}
                         value={insuranceOptions?.find(option => option.value === productFormData?.vehicle_type)}
-                        onChange={e => handleInputChange(e, 'product.vehicle_type')}
+                        onChange={(value, actionMeta) => handleChange(value, actionMeta, false, "customerData")}
+                        // onChange={e => handleInputChange(e, 'product.vehicle_type')}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -768,9 +801,12 @@ const AddInsurance = () => {
                     <Select
                         placeholder='Select Variant'
                         id="variant-select"
+                        name="variant"
                         options={productVariantOption}
                         closeMenuOnSelect={true}
-                        onChange={e => handleInputChange(e, 'product.variant')}
+                        // onChange={e => handleInputChange(e, 'product.variant')}
+                        onChange={(value, actionMeta) => handleChange(value, actionMeta, false, "customerData")}
+
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -839,33 +875,16 @@ const AddInsurance = () => {
                                         <label htmlFor="customer-name" className="" style={{ margin: '0px' }}>
                                             Customer Name
                                         </label>
-                                        {/* <AsyncSelect
-                                            placeholder='Select Customer Name'
-                                            defaultOptions
-                                            cacheOptions
-                                            id="customer-name"
-                                            loadOptions={loadOptions}
-                                            onChange={selectCustomer}
-                                            components={{ Menu: CustomSelectComponent }}
-                                        /> */}
-                                        {/* <AsyncSelect
-                                            defaultOptions
-                                            cacheOptions
-                                            loadOptions={loadOptions} 
-                                            // onChange={(selectedOption) => setSelectedOption(selectedOption)}
-                                            // value={selectedOption}
-                                            onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
-                                        // onMenuScrollToBottom={loadOptions}
-                                        // onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
-                                        /> */}
                                         <Select
                                             placeholder='Select Insurance'
                                             id="insurance-type"
                                             options={allOptions}
                                             closeMenuOnSelect={true}
+                                            name=''
                                             onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
                                             components={{ Menu: CustomSelectComponent }}
-                                            onChange={selectCustomer}
+                                            onChange={(value, actionMeta) => selectCustomer(value, actionMeta, false)}
+                                            // onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                         />
                                     </Col>
                                     <Col md={6} className="mt-2">
@@ -875,9 +894,11 @@ const AddInsurance = () => {
                                         <Select
                                             placeholder='Select Insurance'
                                             id="insurance-type"
+                                            name="insurance_type"
                                             options={insuranceOptions}
                                             value={insuranceOptions?.find(option => option.value === formData?.insurance_type)}
-                                            onChange={e => handleInputChange(e, 'insurance_type')}
+                                            // onChange={e => handleInputChange(e, 'insurance_type')}
+                                            onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                             closeMenuOnSelect={true}
                                         />
                                     </Col>
@@ -890,9 +911,11 @@ const AddInsurance = () => {
                                                 placeholder='Select Product Name'
                                                 id="product-name"
                                                 options={productOptions}
+                                                name="insurance_product_name"
                                                 // defaultValue={productOptions[0]}
                                                 components={{ Menu: CustomProductSelectComponent }}
-                                                onChange={e => handleInputChange(e, 'insurance_product_name')}
+                                                onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
+                                                // onChange={e => handleInputChange(e, 'insurance_product_name')}
                                                 closeMenuOnSelect={true}
                                             />
                                         </Col>
@@ -903,10 +926,11 @@ const AddInsurance = () => {
                                             <Select
                                                 placeholder='Vehicle Type'
                                                 id="Vehicle-type"
+                                                name="vehicle"
                                                 options={vehicleOptions}
                                                 defaultValue={vehicleOptions[0]}
                                                 value={vehicleOptions?.find(option => option.value === formData?.vehicle)}
-                                                // onChange={e => handleInputChange(e, 'vehicle')}
+                                                onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                                 closeMenuOnSelect={true}
                                             />
                                         </Col>
@@ -972,7 +996,7 @@ const AddInsurance = () => {
                                         </label>
                                         <input placeholder="Amount" type='tel' id='amount-r' name='amount' className="form-control"
                                             value={formData?.amount}
-                                            onChange={e => handleInputChange(e, 'tel')}
+                                            onChange={e => handleInputChange(e)}
                                         />
                                     </Col>
                                     {(formData?.insurance_type === 'Motor' || formData?.insurance_type === 'Lease Car') && <>
@@ -991,7 +1015,7 @@ const AddInsurance = () => {
                                             </label>
                                             <input placeholder="Insured Declared Value" type='tel' maxLength={10} id='add-on-plan' name='insured_declared_value' className="form-control"
                                                 value={formData?.insured_declared_value}
-                                                onChange={e => handleInputChange(e, 'tel')}
+                                                onChange={e => handleInputChange(e)}
                                             />
                                         </Col>
                                         <Col md={6} className="mt-2">
@@ -1000,7 +1024,7 @@ const AddInsurance = () => {
                                             </label>
                                             <input placeholder="Own Damage" type='tel' maxLength={10} id='owndamage' name='own_damage' className="form-control"
                                                 value={formData?.own_damage}
-                                                onChange={e => handleInputChange(e, 'tel')}
+                                                onChange={e => handleInputChange(e)}
                                             />
                                         </Col>
                                         <Col md={6} className="mt-2">
@@ -1009,7 +1033,7 @@ const AddInsurance = () => {
                                             </label>
                                             <input placeholder="No Claim Bonus" type='tel' maxLength={10} id='NoClaimBonus' name='ncb_no_claim_bonus' className="form-control"
                                                 value={formData?.ncb_no_claim_bonus}
-                                                onChange={e => handleInputChange(e, 'tel')}
+                                                onChange={e => handleInputChange(e)}
                                             />
                                         </Col>
                                         <Col md={6} className="mt-2">
@@ -1048,7 +1072,7 @@ const AddInsurance = () => {
                                             </label>
                                             <input placeholder="Inbuilt Discount" type='tel' maxLength={10} id='InbuiltDiscount' name='inbuilt_discount' className="form-control"
                                                 value={formData?.inbuilt_discount}
-                                                onChange={e => handleInputChange(e, 'tel')}
+                                                onChange={e => handleInputChange(e)}
                                             />
                                         </Col>
                                         <Col md={6} className="mt-2">
@@ -1057,7 +1081,7 @@ const AddInsurance = () => {
                                             </label>
                                             <input placeholder="Net Premium" type='tel' maxLength={10} id='NetPremium' name='net_premimum' className="form-control"
                                                 value={formData?.net_premimum}
-                                                onChange={e => handleInputChange(e, 'tel')}
+                                                onChange={e => handleInputChange(e)}
                                             />
                                         </Col>
                                     </>}
