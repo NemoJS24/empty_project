@@ -65,8 +65,8 @@ const AddFinance = () => {
         // console.log('AfterRemovingNullId', newObject)
         setFormData(newObject)
         setFormData(prefData => ({
-            ...prefData,
-            policy_expiry_date: prefData?.policy_expiry_date ? prefData?.policy_expiry_date.substring(0, 10) : ''
+          ...prefData,
+          policy_expiry_date: prefData?.policy_expiry_date ? prefData?.policy_expiry_date.substring(0, 10) : ''
         }))
       })
       .catch((error) => {

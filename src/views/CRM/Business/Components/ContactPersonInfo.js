@@ -76,7 +76,7 @@ const ContactPersonInfo = ({ allData }) => {
       label: "Widowed"
     }
   ]
-  
+
   const childrenOptions = [
     {
       value: "no",
@@ -134,8 +134,8 @@ const ContactPersonInfo = ({ allData }) => {
               First Name
             </label>
             <input placeholder="First Name" type='text' id='first-name' name='cust_first_name' className="form-control "
-            value={formData?.cust_first_name ?? ''}
-            onChange={handleInputChange} 
+              value={formData?.cust_first_name ?? ''}
+              onChange={handleInputChange}
             />
           </Col>
           <Col md={6} lg={4} className="mt-1">
@@ -143,8 +143,8 @@ const ContactPersonInfo = ({ allData }) => {
               Last Name
             </label>
             <input placeholder="Last Name" type='text' id='last-name' name='cust_last_name' className="form-control"
-            value={formData?.cust_last_name ?? ''}
-            onChange={handleInputChange} 
+              value={formData?.cust_last_name ?? ''}
+              onChange={handleInputChange}
             />
           </Col>
           <Col md={6} lg={4} className="mt-1">
@@ -152,8 +152,8 @@ const ContactPersonInfo = ({ allData }) => {
               Email
             </label>
             <input placeholder="Email" type='text' id='email' name='email' className="form-control"
-            value={formData?.email ?? ''} 
-            onChange={handleInputChange} 
+              value={formData?.email ?? ''}
+              onChange={handleInputChange}
             />
           </Col>
           <Col md={6} lg={4} className="mt-2">
@@ -173,8 +173,8 @@ const ContactPersonInfo = ({ allData }) => {
               Mobile Number
             </label>
             <input placeholder="Mobile Number" type='tel' maxLength={10} id='basicDetails-mobile' name='phone_no' className="form-control"
-            value={formData?.phone_no ?? ''} 
-            onChange={handleInputChange} 
+              value={formData?.phone_no ?? ''}
+              onChange={handleInputChange}
             // disabled={id} 
             />
           </Col>
@@ -182,27 +182,27 @@ const ContactPersonInfo = ({ allData }) => {
             <label htmlFor="basicDetails-alt-mobile">
               Alternate Mobile Number
             </label>
-            <input placeholder="Alternate Mobile Number" type='tel' maxLength={10} id='basicDetails-alt-mobile' name='phone_no2' className="form-control" 
-            value={formData?.phone_no2 ?? ''} 
-            onChange={handleInputChange} 
+            <input placeholder="Alternate Mobile Number" type='tel' maxLength={10} id='basicDetails-alt-mobile' name='phone_no2' className="form-control"
+              value={formData?.phone_no2 ?? ''}
+              onChange={handleInputChange}
             />
           </Col>
           <Col md={6} lg={4} className="mt-1">
             <label htmlFor="basicDetails-landline">
               Landline Number
             </label>
-            <input placeholder="Landline Number" type='tel' maxLength={10} id='basicDetails-landline' name='landline1' className="form-control" 
-            value={formData?.landline1 ?? ''} 
-            onChange={handleInputChange} 
+            <input placeholder="Landline Number" type='tel' maxLength={10} id='basicDetails-landline' name='landline1' className="form-control"
+              value={formData?.landline1 ?? ''}
+              onChange={handleInputChange}
             />
           </Col>
           <Col md={6} lg={4} className="mt-1">
             <label htmlFor="basicDetails-alt-landline">
               Alternate Landline Number
             </label>
-            <input placeholder="Alternate Landline Number" type='tel' maxLength={10} pattern="[789][0-9]{9}" id='basicDetails-alt-landline' name='landline2' className="form-control" 
-            value={formData?.landline2 ?? ''} 
-            onChange={handleInputChange} 
+            <input placeholder="Alternate Landline Number" type='tel' maxLength={10} pattern="[789][0-9]{9}" id='basicDetails-alt-landline' name='landline2' className="form-control"
+              value={formData?.landline2 ?? ''}
+              onChange={handleInputChange}
             />
           </Col>
           <Col md={6} lg={4} className="mt-1">
@@ -303,7 +303,7 @@ const ContactPersonInfo = ({ allData }) => {
             </label>
             <Select
               id="personalDetails-children"
-              placeholder='Children?'
+              placeholder='Children'
               value={childrenOptions.find(option => option.value === formData?.children) ?? ''}
               onChange={(e) => handleInputChange(e, 'children')}
               options={childrenOptions}
@@ -387,8 +387,8 @@ const ContactPersonInfo = ({ allData }) => {
           </Col>
           <Col md={6} className="mt-2">
             <label>Upload Aadhar Card Image</label>
-            <div className="form-control p-0 d-flex justify-content-between align-items-center">
-              <span className="mx-1">{formData?.aadhar_pdf_file?.name || formData?.aadhar_pdf_file || 'Aadhar Card'}</span>
+            <div className="d-flex gap-1 p-0 justify-content-start align-items-center">
+              {/* <span className="mx-1">{formData?.aadhar_pdf_file?.name || formData?.aadhar_pdf_file || 'Aadhar Card'}</span> */}
               <input
                 name="aadhar_pdf_file"
                 type="file"
@@ -398,7 +398,7 @@ const ContactPersonInfo = ({ allData }) => {
                 onChange={(e) => handleInputChange(e, 'file')}
               />
               <label
-                className="btn btn-outline-primary"
+                className="btn btn-outline-primary w-25"
                 htmlFor="idproof-aadhar"
               >
                 Upload File
@@ -419,8 +419,8 @@ const ContactPersonInfo = ({ allData }) => {
           </Col>
           <Col md={6} className="mt-2">
             <label>Upload Pan Card Image</label>
-            <div className="form-control p-0 d-flex justify-content-between align-items-center">
-              <span className="mx-1">{formData?.pan_pdf_file?.name || formData?.pan_pdf_file || 'Pan Card'}</span>
+            <div className="d-flex gap-1 p-0 justify-content-start align-items-center">
+              {/* <span className="mx-1">{formData?.pan_pdf_file?.name || formData?.pan_pdf_file || 'Pan Card'}</span> */}
               <input
                 name="pan_pdf_file"
                 type="file"
@@ -431,7 +431,7 @@ const ContactPersonInfo = ({ allData }) => {
               />
               <label
                 htmlFor="idproof-pan"
-                className="btn btn-outline-primary"
+                className="btn btn-outline-primary w-25"
               >
                 Upload File
               </label>
@@ -439,72 +439,72 @@ const ContactPersonInfo = ({ allData }) => {
           </Col>
         </Row>
         <Row >
-            <Col md={12} className="mt-2">
-              <h4 className="mb-0">Social Presence</h4>
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="personalDetails-twitter2">Twitter</label>
-              <div className="input-group mb-3">
-                <span className="input-group-text">
-                  <Twitter size={24} />
-                </span>
-                <input
-                  type="text"
-                  id="personalDetails-twitter2"
-                  className="form-control"
-                  aria-label=""
-                  name="social_twitter"
+          <Col md={12} className="mt-2">
+            <h4 className="mb-0">Social Presence</h4>
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="personalDetails-twitter2">Twitter</label>
+            <div className="input-group mb-3">
+              <span className="input-group-text">
+                <Twitter size={24} />
+              </span>
+              <input
+                type="text"
+                id="personalDetails-twitter2"
+                className="form-control"
+                aria-label=""
+                name="social_twitter"
                 value={formData?.social_twitter ?? ''}
                 onChange={handleInputChange}
-                />
-              </div>
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="personalDetails-facebook2">Facebook</label>
-              <div className="input-group mb-3">
-                <span className="input-group-text">
-                  <Facebook size={24} />
-                </span>
-                <input
-                  type="text"
-                  id="personalDetails-facebook2"
-                  className="form-control"
-                  aria-label=""
-                  name="social_fb"
+              />
+            </div>
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="personalDetails-facebook2">Facebook</label>
+            <div className="input-group mb-3">
+              <span className="input-group-text">
+                <Facebook size={24} />
+              </span>
+              <input
+                type="text"
+                id="personalDetails-facebook2"
+                className="form-control"
+                aria-label=""
+                name="social_fb"
                 value={formData?.social_fb ?? ''}
                 onChange={handleInputChange}
-                />
-              </div>
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="personalDetails-instagram2">Instagram</label>
-              <div className="input-group mb-3">
-                <span className="input-group-text">
-                  <Instagram size={24} />
-                </span>
-                <input
-                  type="text"
-                  id="personalDetails-instagram2"
-                  className="form-control"
-                  aria-label=""
-                  name="social_insta"
+              />
+            </div>
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="personalDetails-instagram2">Instagram</label>
+            <div className="input-group mb-3">
+              <span className="input-group-text">
+                <Instagram size={24} />
+              </span>
+              <input
+                type="text"
+                id="personalDetails-instagram2"
+                className="form-control"
+                aria-label=""
+                name="social_insta"
                 value={formData?.social_insta ?? ''}
                 onChange={handleInputChange}
-                />
-              </div>
-            </Col>
-          </Row>
-          <div className='d-flex justify-content-between mt-1'>
-            <div>
-              <button className="btn btn-primary" type="button" onClick={handleBack}>Back</button>
-              <button className="btn btn-primary ms-2" type="button">Cancel</button>
+              />
             </div>
-            <div>
-              {/* <button className="btn btn-primary" type="submit" onClick={handleSubmitSection1}>Save</button>
-                                <button className="btn btn-primary ms-2" type="button">Save & Close</button> */}
-              <button className="btn btn-primary ms-2" type="button" onClick={handleNext}>Next</button>
-            </div>
+          </Col>
+        </Row>
+        <div className='d-flex justify-content-between mt-1'>
+          <div>
+            <button className="btn btn-primary" type="button" onClick={handleBack}>Back</button>
+            <button className="btn btn-primary ms-2" type="button">Cancel</button>
           </div>
+          <div>
+            {/* <button className="btn btn-primary" type="submit" onClick={handleSubmitSection1}>Save</button>
+                                <button className="btn btn-primary ms-2" type="button">Save & Close</button> */}
+            <button className="btn btn-primary ms-2" type="button" onClick={handleNext}>Next</button>
+          </div>
+        </div>
       </Container>
     </>
   )

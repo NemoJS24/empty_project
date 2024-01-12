@@ -141,7 +141,7 @@ const CustomerBasicPersonal = ({ allData }) => {
                 No. of Children
               </label>
               <input
-                placeholder="Occupation"
+                placeholder="No of children"
                 type="number"
                 id="personalDetails-noChildren"
                 name="NO_Of_Children"

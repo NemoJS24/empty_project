@@ -32,8 +32,8 @@ const CustomerBasicIdProof = ({ allData }) => {
           </Col>
           <Col md={6} className="mt-2">
             <label>Upload Aadhar Card Image</label>
-            <div className="form-control p-0 d-flex justify-content-between align-items-center">
-              <span className="mx-1">{formData?.aadhar_pdf_file?.name || formData?.aadhar_pdf_file || 'Aadhar Card'}</span>
+            <div className="gap-1 d-flex justify-content-start align-items-center w-100">
+              {/* <span className="mx-1">{formData?.aadhar_pdf_file?.name || formData?.aadhar_pdf_file || 'Aadhar Card'}</span> */}
               <input
                 name="aadhar_pdf_file"
                 type="file"
@@ -43,7 +43,7 @@ const CustomerBasicIdProof = ({ allData }) => {
                 onChange={(e) => handleInputChange(e, 'file')}
               />
               <label
-                className="btn btn-outline-primary"
+                className="btn btn-outline-primary w-25"
                 htmlFor="idproof-aadhar"
               >
                 Upload File
@@ -64,8 +64,8 @@ const CustomerBasicIdProof = ({ allData }) => {
           </Col>
           <Col md={6} className="mt-2">
             <label>Upload Pan Card Image</label>
-            <div className="form-control p-0 d-flex justify-content-between align-items-center">
-              <span className="mx-1">{formData?.pan_pdf_file?.name || formData?.pan_pdf_file || 'Pan Card'}</span>
+            <div className="gap-1 d-flex d-flex justify-content-start align-items-center">
+              {/* <span className="mx-1">{formData?.pan_pdf_file?.name || formData?.pan_pdf_file || 'Pan Card'}</span> */}
               <input
                 name="pan_pdf_file"
                 type="file"
@@ -76,7 +76,7 @@ const CustomerBasicIdProof = ({ allData }) => {
               />
               <label
                 htmlFor="idproof-pan"
-                className="btn btn-outline-primary"
+                className="btn btn-outline-primary w-25"
               >
                 Upload File
               </label>

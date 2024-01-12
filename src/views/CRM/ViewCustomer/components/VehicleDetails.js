@@ -108,7 +108,7 @@ const VehicleDetails = () => {
                                 selectedRows={selected}
                                 advanceFilter={false}
                                 create={true}
-                                createLink={"/"}
+                                createLink={`/merchant/customers/add-vehicle/${id}`}
                                 createText={"Add Vehicle"}
                             />
                         </CardBody>

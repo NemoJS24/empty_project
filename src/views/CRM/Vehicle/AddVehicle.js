@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { Card, CardBody, Container, Row, Col } from "reactstrap"
 import AsyncSelect from 'react-select/async'
-import { crmURL, getReq } from '@src/assets/auth/jwtService'
+import { baseURL, crmURL, getReq } from '@src/assets/auth/jwtService'
 import axios from "axios"
 import Select from "react-select"
 // import { createPortal } from 'react-dom'
@@ -13,14 +13,71 @@ import toast from "react-hot-toast"
 
 
 const AddVehicle = () => {
-   const [formData, setFormData] = useState({})
+   const [formData, setFormData] = useState({
+      vehicle_type: 'new',
+      manufacture_date: '2000'
+   })
    const [productModelOption, setProductModelOption] = useState([])
    const [productVariantOption, setProductVariantOption] = useState([])
+   const [viewPage, setViewPage] = useState(false)
 
    const { id } = useParams()
+   const navigate = useNavigate()
 
+   let PageTitle = 'Add Vehicle'
+
+   const getUser = (edit) => {
+      const form_data = new FormData()
+      form_data.append("id", id)
+      edit ? form_data.append("edit_type", "is_vehicle") : form_data.append("edit_type", "is_customer_detail")
+      axios.post(`${baseURL}/customers/merchant/get_view_customer/`, form_data)
+         .then((res) => {
+            console.log(res.data.success[0])
+            if (edit) {
+               setFormData(res.data.success[0])
+               setFormData(prev => ({
+                  ...prev,
+                  delivery_date: prev?.delivery_date?.substring(0, 10) ?? '',
+                  registeration_date: prev?.registeration_date?.substring(0, 10) ?? ''
+               }))
+            }
+            else {
+               setFormData(prev => ({ ...prev, customer_name: res.data.success[0].customer_name, customer_id: res.data.success[0].id }))
+            }
+         })
+         .catch((err) => {
+            console.log(err)
+            toast.error('Failed to get Vehicle details')
+         })
+   }
+
+   const postVehicleDetails = (btn) => {
+      const url = new URL(`${crmURL}/vehicle/add_vehicle/`)
+      const form_data = new FormData()
+      Object.entries(formData).map(([key, value]) => {
+         form_data.append(key, value)
+      })
+      form_data.append("press_btn", btn)
+
+      fetch(url, {
+         method: "POST",
+         body: form_data
+      })
+         .then((response) => {
+            return response.json()
+         })
+         .then((resp) => {
+            console.log("Response:", resp)
+            // resp.is_error ?  toast.error(resp.is_error) :  toast.success('Vehicle saved successfully')
+            resp.is_error ? toast.error(resp.is_error) : resp.is_edit ? navigate(`/merchant/customers/edit-vehicle/${resp.vehicle_id}`) : navigate(`/merchant/customers/view_customer/${id}`)
+         })
+         .catch((error) => {
+            console.error("Error:", error)
+            toast.error('Failed to save Vehicle')
+         })
+   }
    const loadBrandOptions = (inputValue, callback) => {
-      const getUrl = new URL(`${crmURL}/customers/merchant/fetch_car_details/`)
+      const getUrl = new URL(`${crmURL}/vehicle/fetch_car_details/`)
       axios.get(getUrl.toString())
          .then((response) => {
             const successData = response.data.car_brand
@@ -39,9 +96,37 @@ const AddVehicle = () => {
          })
    }
 
+   useEffect(() => {
+      if (location.pathname.startsWith('/merchant/customers/edit-vehicle/')) {
+         getUser('edit')
+         PageTitle = 'Edit Vehicle'
+      } else if (location.pathname.startsWith('/merchant/customers/view-vehicle/')) {
+         setViewPage(true)
+         getUser('edit')
+         PageTitle = 'View Vehicle'
+      } else {
+         getUser()
+      }
+   }, [])
+
+   const handleInputChange = (e, type) => {
+      if (type === undefined) {
+         const { name, value } = e.target
+         setFormData(prev => ({
+            ...prev,
+            [name]: value
+         }))
+      } else {
+         setFormData(prev => ({
+            ...prev,
+            [type]: e.value
+         }))
+      }
+   }
+
    const selectChange = async (e, select) => {
       console.log('getProductOptions runned')
-      const url = new URL(`${crmURL}/customers/merchant/fetch_car_details/`)
+      const url = new URL(`${crmURL}/vehicle/fetch_car_details/`)
       const form_data = new FormData()
       select === 'brand' ? form_data.append("brand", e.value) : form_data.append("carmodel", e.value)
 
@@ -92,7 +177,7 @@ const AddVehicle = () => {
 
    const handleSubmitSection = (event, btn) => {
       event.preventDefault()
-      // postData(btn)
+      postVehicleDetails(btn)
    }
 
    const vehicleTypeOptions = [
@@ -107,8 +192,8 @@ const AddVehicle = () => {
    const endYear = 2050;
    const years = Array.from({ length: endYear - startYear + 1 }, (_, index) => startYear + index);
    const vehicleYearOption = years.map((year) => ({
-     value: year.toString(),
-     label: year.toString()
+      value: year.toString(),
+      label: year.toString()
    }))
 
    return (
@@ -116,7 +201,7 @@ const AddVehicle = () => {
          <div className="customer-profile">
             <Card>
                <CardBody>
-                  <h3 className="mb-0">{id ? 'Edit Vehicle' : 'Add Vehilcle'}</h3>
+                  <h3 className="mb-0">{PageTitle}</h3>
                </CardBody>
             </Card>
             <Card>
@@ -125,16 +210,16 @@ const AddVehicle = () => {
                      <Container fluid className="px-0 pb-1">
                         <Row>
                            <Col md={12} className="">
-                              <h4 className="mb-0">Applicant Details</h4>
+                              <h4 className="mb-0">Vehicle Details</h4>
                            </Col>
                            <Col md={6} className="mt-2">
                               <label htmlFor="customer-name">
                                  Customer Name
                               </label>
-                              <input type='text' id='customer-name' name='product.customer_name' className="form-control"
-                                 // value={formData?.customer_name}
+                              <input type='text' id='customer-name' name='customer_name' className="form-control"
+                                 value={formData?.customer_name}
                                  // onChange={handleInputChange} 
-                                 disabled
+                                 disabled={id || viewPage}
                               />
                            </Col>
                            <Col md={6} className="mt-2">
@@ -143,9 +228,10 @@ const AddVehicle = () => {
                               </label>
                               <input
                                  placeholder='Registration Number'
-                                 type='text' id='registration-name' name='product.registration_number' className="form-control"
-                              // value={productFormData.registration_number}
-                              // onChange={handleInputChange}
+                                 type='text' id='registration-name' name='registration_number' className="form-control"
+                                 value={formData?.registration_number}
+                                 onChange={handleInputChange}
+                                 disabled={viewPage}
                               />
                            </Col>
                            <Col md={6} className="mt-2">
@@ -154,9 +240,10 @@ const AddVehicle = () => {
                               </label>
                               <input
                                  placeholder='Sales Person'
-                                 type='text' id='sales-person' name='product.sales_executive' className="form-control"
-                              // value={productFormData?.sales_executive}
-                              // onChange={handleInputChange}
+                                 type='text' id='sales-person' name='sales_person' className="form-control"
+                                 value={formData?.sales_person}
+                                 onChange={handleInputChange}
+                                 disabled={viewPage}
                               />
                            </Col>
                            <Col md={6} className="mt-2">
@@ -165,9 +252,10 @@ const AddVehicle = () => {
                               </label>
                               <input
                                  placeholder='Vehicle Identification Number'
-                                 type='text' id='vehicle-identification' name='product.vehicle_number' className="form-control"
-                              // value={productFormData?.vehicle_number}
-                              // onChange={handleInputChange}
+                                 type='text' id='vehicle-identification' name='vehicle_number' className="form-control"
+                                 value={formData?.vehicle_number}
+                                 onChange={handleInputChange}
+                                 disabled={viewPage}
                               />
                            </Col>
                            <Col md={6} className="mt-2">
@@ -176,9 +264,10 @@ const AddVehicle = () => {
                               </label>
                               <input
                                  placeholder='Engine Number'
-                                 type='text' id='engine-number' name='product.engine_no' className="form-control"
-                              // value={productFormData?.engine_no}
-                              // onChange={handleInputChange}
+                                 type='text' id='engine-number' name='engine_no' className="form-control"
+                                 value={formData?.engine_no}
+                                 onChange={handleInputChange}
+                                 disabled={viewPage}
                               />
                            </Col>
 
@@ -189,10 +278,11 @@ const AddVehicle = () => {
                               <Select
                                  placeholder='Vehicle Type'
                                  id="vehicle-type"
+                                 isDisabled={viewPage}
                                  options={vehicleTypeOptions}
                                  closeMenuOnSelect={true}
-                              // value={insuranceOptions?.find(option => option.value === productFormData?.vehicle_type)}
-                              // onChange={e => handleInputChange(e, 'product.vehicle_type')}
+                                 value={vehicleTypeOptions?.filter(option => option.value === formData?.vehicle_type)}
+                                 onChange={e => handleInputChange(e, 'vehicle_type')}
                               />
                            </Col>
                            <Col md={6} className="mt-2">
@@ -205,11 +295,15 @@ const AddVehicle = () => {
                                  cacheOptions
                                  id="brand-select"
                                  loadOptions={loadBrandOptions}
-                                 onChange={(e) => selectChange(e, 'brand')}
-                              //  value={selectedOption}
+                                 onChange={(e) => {
+                                    setFormData(prev => ({ ...prev, car_model: '', variant: '' }))
+                                    selectChange(e, 'brand')
+                                    handleInputChange(e, 'brand')
+                                 }}
+                                 value={{ value: formData?.brand, label: formData?.brand }}
+                                 isDisabled={viewPage}
                               />
                            </Col>
-
                            <Col md={6} className="mt-2">
                               <label htmlFor="model-select" className="" style={{ margin: '0px' }}>
                                  Select Model
@@ -219,8 +313,15 @@ const AddVehicle = () => {
                                  id="model-select"
                                  options={productModelOption}
                                  closeMenuOnSelect={true}
-                                 onChange={e => selectChange(e, 'model')}
-                              // isLoading={loading}
+                                 // value={productModelOption.filter(option => formData.car_model === option.value) ?? ''}
+                                 value={{ value: formData?.car_model, label: formData?.car_model }}
+                                 onChange={e => {
+                                    setFormData(prev => ({ ...prev, variant: '' }))
+                                    selectChange(e, 'model')
+                                    handleInputChange(e, 'car_model')
+                                 }}
+                                 // isLoading={loading}
+                                 isDisabled={viewPage}
                               />
                            </Col>
                            <Col md={6} className="mt-2">
@@ -231,8 +332,11 @@ const AddVehicle = () => {
                                  placeholder='Select Variant'
                                  id="variant-select"
                                  options={productVariantOption}
+                                 // value={productVariantOption.filter(option => formData.variant === option.value) ?? ''}
+                                 value={{ value: formData?.variant, label: formData?.variant }}
                                  closeMenuOnSelect={true}
-                              // onChange={e => handleInputChange(e, 'product.variant')}
+                                 onChange={e => handleInputChange(e, 'variant')}
+                                 isDisabled={viewPage}
                               />
                            </Col>
                            <Col md={6} className="mt-2">
@@ -240,41 +344,51 @@ const AddVehicle = () => {
                                  Vehicle Manufacture Year
                               </label>
                               <Select
-                                 placeholder='Select Variant'
+                                 placeholder='Vehicle Manufacture Year'
                                  id="manufacture-select"
                                  options={vehicleYearOption}
+                                 value={vehicleYearOption.filter(option => formData?.manufacture_date === option.value) ?? ''}
                                  closeMenuOnSelect={true}
-                              // onChange={e => handleInputChange(e, 'product.variant')}
+                                 onChange={e => handleInputChange(e, 'manufacture_date')}
+                                 isDisabled={viewPage}
                               />
                            </Col>
                            <Col md={6} className="mt-2">
                               <label htmlFor="vehicle-delivery-date">
                                  Vehicle Delivery Date
                               </label>
-                              <input placeholder="Vehicle Delivery Date" type='date' id='vehicle-delivery-date' name='product.delivery_date' className="form-control"
-                              // value={productFormData.delivery_date}
-                              // onChange={handleInputChange}
+                              <input placeholder="Vehicle Delivery Date" type='date' id='vehicle-delivery-date' name='delivery_date' className="form-control"
+                                 value={formData?.delivery_date ?? ''}
+                                 onChange={handleInputChange}
+                                 disabled={viewPage}
                               />
                            </Col>
                            <Col md={6} className="mt-2">
                               <label htmlFor="vehicle-registration-date">
                                  Vehicle Registration Date
                               </label>
-                              <input placeholder="Vehicle Registration Date" type='date' id='vehicle-registration-date' name='product.registeration_date' className="form-control"
-                              // value={productFormData?.registeration_date}
-                              // onChange={handleInputChange}
+                              <input placeholder="Vehicle Registration Date" type='date' id='vehicle-registration-date' name='registeration_date' className="form-control"
+                                 value={formData?.registeration_date}
+                                 onChange={handleInputChange}
+                                 disabled={viewPage}
                               />
                            </Col>
                         </Row>
-                        <div className='w-100 d-flex justify-content-end mt-2'>
-                           <button className="btn btn-primary" type="button" onClick={e => handleSubmitSection(e, 'SAVE & CLOSE')} >Save & Close</button>
-                           <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE')} >Save</button>
+                        <div className='w-100 d-flex justify-content-between mt-2'>
+                           <div>
+                              <button className="btn btn-primary" type="button" onClick={() => navigate(-1)} >Back</button>
+                           </div>
+                           {!viewPage && <div>
+                              <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE')} >Save</button>
+                              <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE & CLOSE')} >Save & Close</button>
+                           </div>}
                         </div>
                      </Container>
                   </form>
                </CardBody>
             </Card>
-         </div></>
+         </div>
+      </>
    )
 }
 
