@@ -36,37 +36,7 @@ export const InfinitiNavigation = [
         title: 'Customers',
         icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/customers.png`} width='16px' />,
         navLink: '/merchant/customers/'
-      },
-      // {
-      //   id: 'business',
-      //   title: 'Customers & Business',
-      //   icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/customers.png`} width='16px' />,
-      //   navLink: '/merchant/customer/add_type_of_customer/'
-      // },
-      {
-        id: 'finance',
-        title: 'Finance',
-        icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/customer_group.png`} width='16px' />,
-        navLink: '/merchant/customer/all_cust_dashboard/add_finance/'
-      },
-      {
-        id: 'servicing',
-        title: 'Servicing',
-        icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/customer_group.png`} width='16px' />,
-        navLink: '/merchant/customer/all_cust_dashboard/add_servicing/'
-      },
-      {
-        id: 'insurance',
-        title: 'Insurance',
-        icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/customer_group.png`} width='16px' />,
-        navLink: '/merchant/customers/insurance'
       }
-      // {
-      //   id: 'customer_groups',
-      //   title: 'Customer Groups',
-      //   icon: <img style={{marginRight: '18px'}} src={`${ownUrl}/images/website-slide/navbar/customer_group.png`} width='16px' />,
-      //   navLink: '/merchant/customers/priv-groups/'
-      // }
     ]
   },
   {

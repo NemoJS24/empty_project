@@ -15,7 +15,7 @@ export const crmURL = "https://crm.demo.xircls.in"
 // Live 
 // export const baseURL = "https://api.xircls.com"
 // export const SuperLeadzBaseURL = "https://apps.xircls.com"
-// export const crmURL = "https://crm.xircls.in"
+// export const crmURL = "https://crm.xircls.com"
 
 export const configUrl = {
 
@@ -124,7 +124,10 @@ export const configUrl = {
     //referal
     referalPoints: "/referral/referralpoints/",
     affiliate_dashboard: "/affiliate/wallet_transaction/",
-    add_customer_individual: "/customers/merchant/add_customer/"
+    add_customer_individual: "/customers/merchant/add_customer/",
+    get_view_customer: "/customers/merchant/get_view_customer/",
+    get_company_details: "/customers/merchant/get_company_details/",
+    all_cust_dashboard: "/customers/merchant/all_cust_dashboard/"
     // Flash Account
 }
 

@@ -12,6 +12,7 @@ import { PermissionProvider } from '../Helper/Context'
 import { DefaultNav } from '../navigation/Apps/DefualtNav'
 import { ProductReviewNavigation } from '../navigation/Apps/ProductReview'
 import { OhMyCustomerNavigation } from '../navigation/Apps/OhMyCustomer'
+import { CRMNavigation } from '../navigation/Apps/CRM'
 
 // ** Menu Items Array
 // import navigation from '@src/navigation/vertical'
@@ -20,28 +21,26 @@ const VerticalLayout = props => {
 
   const { userPermission } = useContext(PermissionProvider)
 
-  // let navigation = []
+  let navigation = []
 
-  const getAppMenu = () => {
-    if (userPermission?.appName === "superleadz") {
-      return SuperLeadzNavigation
-    } else if (userPermission?.appName === "infiniti") {
-      return InfinitiNavigation
-    } else if (userPermission?.appName === "referral") {
-      return referralNavigation
-    } else if (userPermission?.appName === "flash_accounts") {
-      return flashAccountsNavigation
-    } else if (userPermission?.appName === "product_review") {
-      return ProductReviewNavigation
-    } else if (userPermission?.appName === "oh_my_customer") {
-      return OhMyCustomerNavigation
-    } else {
-      return DefaultNav
-    }
+  if (userPermission?.appName === "superleadz") {
+    navigation = SuperLeadzNavigation
+  } else if (userPermission?.appName === "infiniti") {
+    navigation = InfinitiNavigation
+  } else if (userPermission?.appName === "referral") {
+    navigation = referralNavigation
+  } else if (userPermission?.appName === "flash_accounts") {
+    navigation = flashAccountsNavigation
+  } else if (userPermission?.appName === "product_review") {
+    navigation = ProductReviewNavigation
+  } else if (userPermission?.appName === "crm") {
+    navigation = CRMNavigation
+  } else {
+    navigation = DefaultNav
   }
 
   return (
-    <Layout menuData={getAppMenu()} {...props}>
+    <Layout menuData={navigation} {...props}>
       <Outlet />
     </Layout>
   )

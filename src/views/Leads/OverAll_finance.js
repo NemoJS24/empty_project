@@ -1,9 +1,10 @@
 import { Col, Row, Card, CardBody} from "reactstrap"
 import { useState } from "react"
 import AdvanceServerSide from "@src/views/Components/DataTable/AdvanceServerSide.js"
-import { crmURL } from "@src/assets/auth/jwtService.js"
+// import { crmURL } from "@src/assets/auth/jwtService.js"
 import { Edit3, Eye, Trash2 } from "react-feather"
 import { Link } from "react-router-dom"
+import { postReq } from "../../assets/auth/jwtService"
 
 /* eslint-disable */
 const Customers = () => {
@@ -14,7 +15,7 @@ const Customers = () => {
   const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
     setIsLoading(true)
     const form_data = new FormData()
-    const url = new URL(`${crmURL}/customers/merchant/all_cust_dashboard/`)
+    // const url = new URL(`${crmURL}/customers/merchant/all_cust_dashboard/`)
     // form_data.append("draw", "1")
     // form_data.append("length", "10")
     // form_data.append("start", "1")
@@ -25,14 +26,14 @@ const Customers = () => {
     form_data.append("size", currentEntry)
     form_data.append("searchValue", searchValue)
 
-    fetch(url, {
-      method: "POST",
-      body: form_data
-    })
-      .then((data) => data.json())
+    // fetch(url, {
+    //   method: "POST",
+    //   body: form_data
+    // })
+      postReq("all_cust_dashboard", form_data)
       .then((resp) => {
-        // console.log("hh", resp.customers_obj)
-        setTableData(resp)
+        console.log("sdsadad", resp)
+        setTableData(resp.data)
         setIsLoading(false)
       })
       .catch((error) => {

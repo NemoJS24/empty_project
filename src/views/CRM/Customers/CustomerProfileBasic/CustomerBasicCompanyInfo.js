@@ -3,10 +3,8 @@ import { Container, Card, CardBody, Row, Col } from "reactstrap"
 // import "../CustomerProfile.css"
 import { Twitter, Facebook, Instagram } from "react-feather"
 import Select from "react-select"
-import axios from "axios"
 import toast from "react-hot-toast"
 import { crmURL, getReq } from "../../../../assets/auth/jwtService"
-import Button from 'react-bootstrap/Button'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 
 /* eslint-disable */
@@ -29,20 +27,21 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
   // console.log(newCompany)
 
   const fetchCompanyData = async () => {
-    const getUrl = new URL(`${crmURL}/customers/merchant/get_company_details/`)
-    axios({
-      method: "GET",
-      url: getUrl
+    // const getUrl = new URL(`${crmURL}/customers/merchant/get_company_details/`)
+    // axios({
+    //   method: "GET",
+    //   url: getUrl
+    // })
+    getReq('get_company_details')
+    .then((res) => {
+      console.log(res)
+      getCompanyData(res.data.success)
+      // setIsLoading(false)
     })
-      .then((res) => {
-        getCompanyData(res.data.success)
-        // setIsLoading(false)
-      })
-      .catch((err) => {
-        console.log(err)
-        toast.error("Data could not be loaded")
-        // setIsLoading(false)
-      })
+    .catch((err) => {
+      console.log(err)
+      // setIsLoading(false)
+    })
   }
 
   const getCountries = () => {

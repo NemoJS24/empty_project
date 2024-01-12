@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { Card, CardBody } from "reactstrap"
-import { crmURL } from "@src/assets/auth/jwtService.js"
 import { useParams, useNavigate } from 'react-router-dom'
 import toast from "react-hot-toast"
 
@@ -27,48 +26,38 @@ export default function CustomerProfile() {
   const { id } = useParams()
 
   const fetchCustomerData = (id) => {
-    const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
+    // const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
     const form_data = new FormData()
     form_data.append('id', id)
     form_data.append('edit_type', 'is_customer_detail')
-    fetch(url, {
-      method: "POST",
-      body: form_data
+    postReq('get_view_customer', form_data)
+    .then((resp) => {
+      console.log("Response:", resp.data.success[0])
+      const newObject = {};
+      for (const key in resp.data.success[0]) {
+        if (resp.data.success[0].hasOwnProperty(key) && resp.data.success[0][key] !== null) {
+          newObject[key] = resp.data.success[0][key];
+        }
+      }
+      // console.log('AfterRemovingNull', newObject);
+      setFormData(newObject)
+      const name = newObject?.customer_name?.split(' ')
+      const datePart = newObject?.cust_dob?.substring(0, 10)
+      setFormData(prefData => ({
+        ...prefData,
+        cust_first_name: name[0],
+        cust_last_name: name[1],
+        cust_dob: datePart
+      }))
     })
-      .then((response) => {
-        if (!response.ok) {
-          // toast.error(`HTTP error! Status: ${response.status}`)
-          // throw new Error(`HTTP error! Status: ${response.status}`)
-        }
-        return response.json()
-      })
-      .then((resp) => {
-        console.log("Response:", resp.success[0])
-        const newObject = {};
-        for (const key in resp.success[0]) {
-          if (resp.success[0].hasOwnProperty(key) && resp.success[0][key] !== null) {
-            newObject[key] = resp.success[0][key];
-          }
-        }
-        // console.log('AfterRemovingNull', newObject);
-        setFormData(newObject)
-        const name = newObject.customer_name.split(' ')
-        const datePart = newObject.cust_dob.substring(0, 10)
-        setFormData(prefData => ({
-          ...prefData,
-          cust_first_name: name[0],
-          cust_last_name: name[1],
-          cust_dob: datePart
-        }))
-      })
-      .catch((error) => {
-        console.error("Error:", error)
-        if (error.message === 'Customer already exists') {
-          toast.error('Customer already exists')
-        } else {
-          toast.error('Failed to save customer')
-        }
-      })
+    .catch((error) => {
+      console.error("Error:", error)
+      if (error.message === 'Customer already exists') {
+        toast.error('Customer already exists')
+      } else {
+        toast.error('Failed to save customer')
+      }
+    })
   }
 
   useEffect(() => {
