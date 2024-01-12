@@ -128,6 +128,8 @@ const ContactPersonInfo = ({ allData }) => {
               value={titleOptions.find(option => option.value === formData.title) ?? ''}
               onChange={(e) => handleInputChange(e, 'title')}
             />
+            <p id="title_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
           </Col>
           <Col md={6} lg={4} className="mt-1">
             <label htmlFor="first-name ">
@@ -137,6 +139,8 @@ const ContactPersonInfo = ({ allData }) => {
               value={formData?.cust_first_name ?? ''}
               onChange={handleInputChange}
             />
+            <p id="cust_first_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
           </Col>
           <Col md={6} lg={4} className="mt-1">
             <label htmlFor="last-name">
@@ -146,6 +150,8 @@ const ContactPersonInfo = ({ allData }) => {
               value={formData?.cust_last_name ?? ''}
               onChange={handleInputChange}
             />
+            <p id="cust_last_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
           </Col>
           <Col md={6} lg={4} className="mt-1">
             <label htmlFor="email">
@@ -155,8 +161,10 @@ const ContactPersonInfo = ({ allData }) => {
               value={formData?.email ?? ''}
               onChange={handleInputChange}
             />
+            <p id="email_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
           </Col>
-          <Col md={6} lg={4} className="mt-2">
+          <Col md={6} lg={4} className="mt-1">
             <label htmlFor="country2">Country</label>
             <Select
               options={country}
@@ -177,6 +185,8 @@ const ContactPersonInfo = ({ allData }) => {
               onChange={handleInputChange}
             // disabled={id} 
             />
+            <p id="phone_no_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
           </Col>
           <Col md={6} lg={4} className="mt-1">
             <label htmlFor="basicDetails-alt-mobile">
@@ -216,6 +226,8 @@ const ContactPersonInfo = ({ allData }) => {
               onChange={(e) => handleInputChange(e, 'dropdown')}
               closeMenuOnSelect={true}
             />
+            <p id="dropdown_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
           </Col>
           {formData?.dropdown === 'privi_group' && <Col md={6} lg={4} className="mt-1">
             <label htmlFor="basicDetails-privilegedCustomerGroup" style={{ margin: '0px' }}>

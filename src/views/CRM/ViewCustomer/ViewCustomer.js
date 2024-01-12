@@ -6,8 +6,7 @@ import CustomerDetails from './components/CustomerDetails'
 import BasicsDetails from './components/BasicsDetails'
 import VehicleDetails from './components/VehicleDetails'
 import FinanceDetails from './components/FinanceDetails'
-import axios from 'axios'
-import { crmURL } from '../../../assets/auth/jwtService'
+import { postReq } from '../../../assets/auth/jwtService'
 import InsuranceDetails from './components/InsuranceDetails'
 import ServicingDetails from './ServicingDetails'
 import Call from './components/Call'
@@ -27,16 +26,18 @@ const ViewCustomer = () => {
         const form_data = new FormData()
         form_data.append("id", id)
         form_data.append("edit_type", "is_customer_detail")
-        axios.post(`${crmURL}/customers/merchant/get_view_customer/`, form_data)
-            .then((res) => {
-                console.log("123", res.data.success[0])
-                setUserData(res.data.success[0])
-                console.log("vehicle_data", res.data.vehicle_data)
-                setVehicalData(res.data.vehicle_data)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+        // axios.post(`${crmURL}/customers/merchant/get_view_customer/`, form_data)
+        postReq('get_view_customer', form_data)
+        .then((res) => {
+            console.log(res, "ppppp")
+            console.log("123", res.data.success[0])
+            setUserData(res.data.success[0])
+            console.log("vehicle_data", res.data.vehicle_data)
+            setVehicalData(res.data.vehicle_data)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
     }
 
     useEffect(() => {

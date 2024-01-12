@@ -1,20 +1,20 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable prefer-const */
+// /* eslint-disable no-unused-vars */
+// /* eslint-disable prefer-const */
 import React, { useContext, useState } from 'react'
-import Navbar from '@src/views/main/utilities/navbar/Navbar'
+// import Navbar from '@src/views/main/utilities/navbar/Navbar'
 import { Col, Container, Row } from 'reactstrap'
 import Footer from '@src/views/main/utilities/footer/Footer'
 import toast from 'react-hot-toast'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { getUserPermission, setToken } from '../../../../assets/auth/auth'
+import { Link, useNavigate } from 'react-router-dom'
+import { setToken } from '../../../../assets/auth/auth'
 import { postReq } from '../../../../assets/auth/jwtService'
 import countries from '../../../NewFrontBase/Country'
 import { PermissionProvider } from '../../../../Helper/Context'
-import $ from "jquery"
+// import $ from "jquery"
 import FrontBaseLoader from '../../../Components/Loader/Loader'
 
 export default function LoginPage() {
-    const { pathname } = useLocation()
+    // const { pathname } = useLocation()
     const navigate = useNavigate()
     const { setUserPermission, userPermission } = useContext(PermissionProvider)
     const [apiLoader, setApiLoader] = useState(false)

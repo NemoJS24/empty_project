@@ -12,13 +12,13 @@ import { Image } from 'react-bootstrap'
 import userprofile from '../../assets/user_profile.jpg'
 import { User, Flag, Phone, Star, Send, Layout } from 'react-feather'
 import { crmURL } from '../../../../assets/auth/jwtService'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 // import axios from 'axios'
 // import { crmURL } from '../../../../assets/auth/jwtService'
 // import { useParams } from 'react-router-dom'
 
 const CustomerDetails = ({ userData }) => {
-
+    const {id} = useParams()
     const navigate = useNavigate()
 
     const [activeTab, setActiveTab] = useState(0)
@@ -278,7 +278,7 @@ const CustomerDetails = ({ userData }) => {
                         </Col>
 
                         <Col md='4'>
-                            <Card>
+                            <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/add-vehicle/${id}`)}>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
                                         <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px", background: "rgb(215 247 229)" }}>

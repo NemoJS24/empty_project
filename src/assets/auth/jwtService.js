@@ -4,7 +4,7 @@ import jwtDecode from "jwt-decode"
 
 export const baseURL = "https://api.demo.xircls.in"
 export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
-export const crmURL = "https://api.demo.xircls.in"
+export const crmURL = "https://crm.demo.xircls.in"
 
 // const URLs = {
 //     baseURL,
@@ -15,7 +15,7 @@ export const crmURL = "https://api.demo.xircls.in"
 // Live 
 // export const baseURL = "https://api.xircls.com"
 // export const SuperLeadzBaseURL = "https://apps.xircls.com"
-// export const crmURL = "https://crm.xircls.in"
+// export const crmURL = "https://crm.xircls.com"
 
 export const configUrl = {
 
@@ -124,7 +124,11 @@ export const configUrl = {
     //referal
     referalPoints: "/referral/referralpoints/",
     affiliate_dashboard: "/affiliate/wallet_transaction/",
-    add_customer_individual: "/customers/merchant/add_customer/"
+    add_customer_individual: "/customers/merchant/add_customer/",
+    get_view_customer: "/customers/merchant/get_view_customer/",
+    get_company_details: "/customers/merchant/get_company_details/",
+    all_cust_dashboard: "/customers/merchant/all_cust_dashboard/",
+    add_company_details: "/customers/merchant/add_company_details/"
     // Flash Account
 }
 
@@ -206,7 +210,11 @@ axiosInstance.interceptors.response.use(
     }
 )
 
-export const postReq = (path, data, config) => {
+export const postReq = (path, data, customBaseURL = baseURL, config) => {
+    console.log(customBaseURL, "domian")
+    // if (customBaseURL) {
+    axiosInstance.defaults.baseURL = customBaseURL
+    // }
     
     // updateBaseURL(URLs[base])
     const time = new Date().getTime()
@@ -217,7 +225,11 @@ export const postReq = (path, data, config) => {
     }
 }
 
-export const putReq = (path, data, config) => {
+export const putReq = (path, data, customBaseURL = baseURL, config) => {
+    console.log(customBaseURL, "domian")
+    // if (customBaseURL) {
+    axiosInstance.defaults.baseURL = customBaseURL
+    // }
     const time = new Date().getTime()
     if (path === 'login' || path === "signup") {
         return axios.put(`${baseURL}${configUrl[`${path}`]}?time=${time}`, data)
@@ -227,12 +239,16 @@ export const putReq = (path, data, config) => {
 }
 
 
-export const getReq = (path, slug) => {
+export const getReq = (path, slug, customBaseURL = baseURL) => {
+    console.log(customBaseURL, "domian")
+    axiosInstance.defaults.baseURL = customBaseURL
     const time = new Date().getTime()
     return slug ? axiosInstance.get(`${configUrl[path]}${slug}&time=${time}`) : axiosInstance.get(`${configUrl[path]}?time=${time}`)
 }
 
-export const deleteReq = (path, slug) => {
+export const deleteReq = (path, slug, customBaseURL = baseURL) => {
+    console.log(customBaseURL, "domian")
+    axiosInstance.defaults.baseURL = customBaseURL
     return axiosInstance.delete(`${configUrl[path]}${slug}`)
 }
 

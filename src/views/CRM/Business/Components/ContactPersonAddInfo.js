@@ -7,9 +7,9 @@ const ContactPersonAddInfo = ({ allData }) => {
   const {
     formData,
     country,
-    handleInputChange,
-    handleNext,
-    handleBack
+    handleInputChange
+    // handleNext,
+    // handleBack
   } = allData
 
   return (
@@ -239,17 +239,17 @@ const ContactPersonAddInfo = ({ allData }) => {
             />
           </Col>
         </Row>
-        <div className='d-flex justify-content-between mt-1'>
+        {/* <div className='d-flex justify-content-between mt-1'>
           <div>
             <button className="btn btn-primary" type="button" onClick={handleBack}>Back</button>
             <button className="btn btn-primary ms-2" type="button">Cancel</button>
           </div>
           <div>
             {/* <button className="btn btn-primary" type="submit" onClick={handleSubmitSection1}>Save</button>
-                                <button className="btn btn-primary ms-2" type="button">Save & Close</button> */}
+                                <button className="btn btn-primary ms-2" type="button">Save & Close</button>
             <button className="btn btn-primary ms-2" type="button" onClick={handleNext}>Next</button>
-          </div>
-        </div>
+          </div> 
+        </div>*/}
       </Container>
     </>
   )

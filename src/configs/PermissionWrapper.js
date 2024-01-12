@@ -15,7 +15,8 @@ const PermissionWrapper = ({children}) => {
         campaign: [],
         isSupport: false,
         isAdmin: false,
-        currencySymbol: "₹"
+        currencySymbol: "₹",
+        multiUser: ""
     }
     const [userPermission, setUserPermission] = useState(localStorage.getItem('userPermission') ? JSON.parse(localStorage.getItem('userPermission')) : defaultData)
     const location = useLocation()

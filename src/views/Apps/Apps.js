@@ -64,7 +64,12 @@ const Apps = () => {
       .then((resp) => {
         console.log(resp)
         // setApiLoader(false)
-        window.location.href = resp?.data?.data
+        if (name === "other") {
+          navigate("/merchant/customers/")
+          setUserPermission({...userPermission, appName: data?.selectApp})
+        } else {
+          window.location.href = resp?.data?.data
+        }
       })
       .catch((error) => {
         console.log(error)
@@ -75,7 +80,7 @@ const Apps = () => {
     }
   }
 
-  useEffect(() => { 
+  useEffect(() => {
     getAppsData()
   }, [])
   

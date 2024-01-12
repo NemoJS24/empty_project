@@ -10,6 +10,7 @@ import { DefaultNav } from '../navigation/Apps/DefualtNav'
 import { flashAccountsNavigation } from '../navigation/Apps/FlashAccounts'
 import { referralNavigation } from '../navigation/Apps/Referral'
 import { ProductReviewNavigation } from '../navigation/Apps/ProductReview'
+import { CRMNavigation } from '../navigation/Apps/CRM'
 
 // ** Menu Items Array
 // import navigation from '@src/navigation/horizontal'
@@ -29,6 +30,8 @@ const HorizontalLayout = props => {
     navigation = flashAccountsNavigation
   } else if (userPermission?.appName === "product_review") {
     navigation = ProductReviewNavigation
+  } else if (userPermission?.appName === "crm") {
+    navigation = CRMNavigation
   } else {
     navigation = DefaultNav
   }

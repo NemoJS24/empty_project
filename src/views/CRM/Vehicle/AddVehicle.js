@@ -76,6 +76,7 @@ const AddVehicle = () => {
             toast.error('Failed to save Vehicle')
          })
    }
+
    const loadBrandOptions = (inputValue, callback) => {
       const getUrl = new URL(`${crmURL}/vehicle/fetch_car_details/`)
       axios.get(getUrl.toString())

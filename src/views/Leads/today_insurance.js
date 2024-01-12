@@ -1,12 +1,12 @@
 import { Col, Row, Card, CardBody, CardHeader, Button } from "reactstrap"
 import { useState } from "react"
 import AdvanceServerSide from "@src/views/Components/DataTable/AdvanceServerSide.js"
-import { crmURL } from "@src/assets/auth/jwtService.js"
 import { Edit3, Eye, Trash2 } from "react-feather"
 import { LuTrendingUp } from "react-icons/lu"
 import { LiaUserSlashSolid, LiaUserSolid } from "react-icons/lia"
 import { PiMoneyThin } from "react-icons/pi"
 import { Link } from "react-router-dom"
+import { postReq } from "../../assets/auth/jwtService"
 
 /* eslint-disable */
 const Customers = () => {
@@ -18,7 +18,7 @@ const Customers = () => {
   const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
     setIsLoading(true)
     const form_data = new FormData()
-    const url = new URL(`${crmURL}/customers/merchant/all_cust_dashboard/`)
+    // const url = new URL(`${crmURL}/customers/merchant/all_cust_dashboard/`)
     Object.entries(advanceSearchValue).map(([key, value]) => value && form_data.append(key, value))
     form_data.append("slug", "add_insurance")
     form_data.append("table_name", "today_insurance")
@@ -26,15 +26,15 @@ const Customers = () => {
     form_data.append("size", currentEntry)
     form_data.append("searchValue", searchValue)
 
-    fetch(url, {
-      method: "POST",
-      body: form_data
-    })
-      .then((data) => data.json())
+    // fetch(url, {
+    //   method: "POST",
+    //   body: form_data
+    // })
+      postReq("all_cust_dashboard", form_data)
       .then((resp) => {
         setCustData(resp)
-        console.log("hh", resp)
-        setTableData(resp.insurance)
+        console.log("hh", resp.data)
+        setTableData(resp?.data?.insurance)
         setIsLoading(false)
       })
       .catch((error) => {

@@ -8,6 +8,8 @@ import CompanyAddInfo from '@src/views/CRM/Business/Components/CompanyAddInfo.js
 import CompanyBasicInfo from '@src/views/CRM/Business/Components/CompanyBasicInfo.js'
 import ContactPersonInfo from '@src/views/CRM/Business/Components/ContactPersonInfo.js'
 import ContactPersonAddInfo from '@src/views/CRM/Business/Components/ContactPersonAddInfo.js'
+import { postReq } from '../../../assets/auth/jwtService'
+import { validForm } from '../../Validator'
 
 /* eslint-disable */
 const AddBusiness = () => {
@@ -140,64 +142,181 @@ const AddBusiness = () => {
             toast.error('Failed to save customer')
           }
         })
-    }
-   
-   const postData = (btn) => {
-      const url = new URL(`${crmURL}/customers/merchant/add_customer/`)
-      const form_data = new FormData()
-      Object.entries(formData).map(([key, value]) => {
-         if (key === 'mark_parent') {
-            value = value ? 'yes' : 'no'
-         }
-        form_data.append(key, value)
-      })
-      formData?.aadhar_pdf_file instanceof Object && form_data.append("is_aadhar_file", '1')
-      formData?.pan_pdf_file instanceof Object && form_data.append("is_pan_file", '1')
-      // formData?.user_profile_img instanceof Object && form_data.append("is_user_profile", '1')
-      form_data.append("add_new_customers_b2b", '1')
-      form_data.append("mark_parent", formData?.mark_parent ? 'yes' : 'no')
-      form_data.append("pin", 'INsdfsdfsDV')
-      form_data.append("entry_point", 'INDV')
-      form_data.append("press_btn", btn)
-      id && form_data.append("customer_id", id)
-  
-      for (var key of form_data.entries()) {
-        console.log(key[0] + ', ' + key[1]);
+   }
+
+   const notParent = [
+      {
+         name: 'company_name',
+         message: 'Please enter your company name',
+         type: 'string',
+         id: 'company_name'
+      },
+      {
+         name: 'industry',
+         message: 'Please enter your industry',
+         type: 'string',
+         id: 'industry'
+      },
+      {
+         name: 'company_phone',
+         message: 'Please enter your company phone',
+         type: 'string',
+         id: 'company_phone'
+      },
+      {
+         name: 'company_email',
+         message: 'Please enter your company email',
+         type: 'string',
+         id: 'company_email'
       }
-  
-      fetch(url, {
-        method: "POST",
-        body: form_data
-      })
-        .then((response) => {
-          if (!response.ok) {
-            if (response.status === 409) {
-              throw new Error('Customer already exists')
-            } else {
-              toast.error(`HTTP error! Status: ${response.status}`)
-              throw new Error(`HTTP error! Status: ${response.status}`)
+   ]
+
+   const parentForm = [
+      {
+         name: 'par_company_name',
+         message: 'Please enter your name',
+         type: 'string',
+         id: 'par_company_name'
+      },
+      {
+         name: 'par_industry',
+         message: 'Please enter your industry',
+         type: 'string',
+         id: 'par_industry'
+      },
+      {
+         name: 'par_company_phone',
+         message: 'Please enter your company phone',
+         type: 'string',
+         id: 'par_company_phone'
+      },
+      {
+         name: 'par_company_email',
+         message: 'Please enter your company email',
+         type: 'string',
+         id: 'par_company_email'
+      }
+   ]
+
+   const contactPerson = [
+      {
+         name: 'title',
+         message: 'Please select your title',
+         type: 'string',
+         id: 'title'
+      },
+      {
+         name: 'cust_first_name',
+         message: 'Please enter your first name',
+         type: 'string',
+         id: 'cust_first_name'
+      },
+      {
+         name: 'cust_last_name',
+         message: 'Please enter your last name',
+         type: 'string',
+         id: 'cust_last_name'
+      },
+      {
+         name: 'email',
+         message: 'Please enter your email',
+         type: 'string',
+         id: 'email'
+      },
+      {
+         name: 'phone_no',
+         message: 'Please enter your phone no',
+         type: 'string',
+         id: 'phone_no'
+      },
+      {
+         name: 'dropdown',
+         message: 'Please select customer type',
+         type: 'string',
+         id: 'dropdown'
+      }
+   ]
+   
+   const checkVaildation = () => {
+      let checkForm = true
+      if (currentStep === 1) {
+         checkForm = validForm(notParent, formData)
+   
+         if (checkForm && !formData.mark_parent) {
+            checkForm = validForm(parentForm, formData)
+         }
+
+      }
+
+      if (currentStep === 3) {
+         checkForm = validForm(contactPerson, formData)
+      }
+
+      return checkForm
+   }
+
+   const postData = (btn) => {
+
+      const check = checkVaildation()
+
+      if (check) {
+
+         const form_data = new FormData()
+         Object.entries(formData).map(([key, value]) => {
+            if (key === 'mark_parent') {
+               value = value ? 'yes' : 'no'
             }
-          }
-          return response.json()
-        })
-        .then((resp) => {
-          console.log("Response:", resp)
-          toast.success('Customer saved successfully')
-          if (resp.is_edit_url) {
-            // navigate(`/merchant/customers/edit_customer/${resp.cust_id}`)
-          } else {
-            // navigate(`/merchant/customers`)
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error)
-          if (error.message === 'Customer already exists') {
-            toast.error('Customer already exists')
-          } else {
-            toast.error('Failed to save customer')
-          }
-        })
-    }
+           form_data.append(key, value)
+         })
+         formData?.aadhar_pdf_file instanceof Object && form_data.append("is_aadhar_file", '1')
+         formData?.pan_pdf_file instanceof Object && form_data.append("is_pan_file", '1')
+         // formData?.user_profile_img instanceof Object && form_data.append("is_user_profile", '1')
+         form_data.append("add_new_customers_b2b", '1')
+         form_data.append("mark_parent", formData?.mark_parent ? 'yes' : 'no')
+         form_data.append("pin", 'INsdfsdfsDV')
+         form_data.append("entry_point", 'INDV')
+         form_data.append("press_btn", btn)
+         id && form_data.append("customer_id", id)
+     
+         for (var key of form_data.entries()) {
+           console.log(key[0] + ', ' + key[1]);
+         }
+         
+         console.log("slfnsdjklnsdklv")
+         postReq('add_customer_individual', form_data)
+         // fetch(url, {
+         //   method: "POST",
+         //   body: form_data
+         // })
+         //   .then((response) => {
+         //    //  if (!response.ok) {
+         //       if (response.status === 409) {
+         //          throw new Error('Customer already exists')
+         //       }
+         //       //  }
+         //       return response.json()
+         //    })
+           .then((resp) => {
+               if (resp.status === 409) {
+                  throw new Error('Customer already exists')
+               }
+               console.log("Response:", resp)
+               toast.success('Customer saved successfully')
+               if (resp.data.is_edit_url) {
+                  navigate(`/merchant/customers/edit_customer/${resp.data.cust_id}`)
+               }
+           })
+           .catch((error) => {
+             console.error("Error:", error)
+             if (error.message === 'Customer already exists') {
+               toast.error('Customer already exists')
+             } else {
+               toast.error('Failed to save customer')
+             }
+           })
+      }
+
+   }
    
    useEffect(() => {
       getCountries()
@@ -263,7 +382,11 @@ const AddBusiness = () => {
    }
 
    const handleNext = () => {
-      setCurrentStep(prevStep => prevStep + 1)
+      const check = checkVaildation()
+
+      if (check) {
+         setCurrentStep(prevStep => prevStep + 1)
+      }
    }
 
    const handleBack = () => {
@@ -271,7 +394,11 @@ const AddBusiness = () => {
    }
 
    const NavCurrentStep = (step) => {
-      setCurrentStep(step)
+      const check = checkVaildation()
+      if (check) {
+         setCurrentStep(step)
+      }
+      
    }
 
    const allData = {
@@ -307,10 +434,22 @@ const AddBusiness = () => {
                      {currentStep === 4 && (
                         <ContactPersonAddInfo allData={allData} />
                      )}
-                     <div className="w-100 d-flex justify-content-end">
-                        <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE')}>Save</button>
-                        <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE & CLOSE')}>Save & Close</button>
-                     </div>
+
+                     {
+                        currentStep === 4 && (
+                           <div className="w-100 d-flex justify-content-between">
+                              <div>
+                                 <button className="btn btn-primary" type="button" onClick={handleBack}>Back</button>
+                                 <button className="btn btn-primary ms-2" type="button">Cancel</button>
+                              </div>
+                              <div>
+                                 <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE')}>Save</button>
+                                 <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE & CLOSE')}>Save & Close</button>
+
+                              </div>
+                           </div>
+                        )
+                     }
                   </form>
                </CardBody>
             </Card>

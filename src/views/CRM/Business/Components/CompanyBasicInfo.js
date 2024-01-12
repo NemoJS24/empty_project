@@ -43,6 +43,7 @@ const CompanyBasicInfo = ({ allData }) => {
             value={formData?.company_name ?? ''}
             onChange={handleInputChange}
           />
+          <p id="company_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
         </Col>
         <Col md={6} lg={4} className="mt-1">
           <label htmlFor="industry">
@@ -52,6 +53,8 @@ const CompanyBasicInfo = ({ allData }) => {
             value={formData?.industry ?? ''}
             onChange={handleInputChange}
           />
+          <p id="industry_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
         </Col>
         <Col md={6} lg={4} className="mt-1">
           <label htmlFor="GSTIN-Number">
@@ -79,6 +82,8 @@ const CompanyBasicInfo = ({ allData }) => {
             value={formData?.company_phone ?? ''}
             onChange={handleInputChange}
           />
+          <p id="company_phone_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
         </Col>
         <Col md={6} lg={4} className="mt-1">
           <label htmlFor="Company-Email">
@@ -88,6 +93,8 @@ const CompanyBasicInfo = ({ allData }) => {
             value={formData?.company_email ?? ''}
             onChange={handleInputChange}
           />
+          <p id="company_email_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
         </Col>
         <Col md={6} lg={4} className="mt-1">
           <label htmlFor="Company-Website">
@@ -124,6 +131,7 @@ const CompanyBasicInfo = ({ allData }) => {
               value={formData?.par_company_name ?? ''}
               onChange={handleInputChange}
             />
+            <p id="par_company_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
           </Col>
           <Col md={6} lg={4} className="mt-1">
             <label htmlFor="industry2">
@@ -133,6 +141,8 @@ const CompanyBasicInfo = ({ allData }) => {
               value={formData?.par_industry ?? ''}
               onChange={handleInputChange}
             />
+            <p id="par_industry_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
           </Col>
           <Col md={6} lg={4} className="mt-1">
             <label htmlFor="GST-Number">
@@ -160,6 +170,8 @@ const CompanyBasicInfo = ({ allData }) => {
               value={formData?.par_company_phone ?? ''}
               onChange={handleInputChange}
             />
+            <p id="par_company_phone_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
           </Col>
           <Col md={6} lg={4} className="mt-1">
             <label htmlFor="Company-Email2">
@@ -169,6 +181,8 @@ const CompanyBasicInfo = ({ allData }) => {
               value={formData?.par_company_email ?? ''}
               onChange={handleInputChange}
             />
+            <p id="par_company_email_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
           </Col>
           <Col md={6} lg={4} className="mt-1">
             <label htmlFor="Company-Website2">

@@ -1,12 +1,12 @@
 import { Col, Row, Card, CardBody, CardHeader, Button } from "reactstrap"
 import { useState } from "react"
 import AdvanceServerSide from "@src/views/Components/DataTable/AdvanceServerSide.js"
-import { crmURL } from "@src/assets/auth/jwtService.js"
 import { Edit3, Eye, Trash2 } from "react-feather"
 import { LuTrendingUp } from "react-icons/lu"
 import { LiaUserSlashSolid, LiaUserSolid } from "react-icons/lia"
 import { PiMoneyThin } from "react-icons/pi"
 import { Link } from "react-router-dom"
+import { baseURL } from "../../assets/auth/jwtService"
 
 /* eslint-disable */
 const Customers = () => {
@@ -19,7 +19,7 @@ const Customers = () => {
   const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
     setIsLoading(true)
     const form_data = new FormData()
-    const url = new URL(`${crmURL}/customers/merchant/all_cust_dashboard/`)
+    const url = new URL(`${baseURL}/customers/merchant/all_cust_dashboard/`)
     // form_data.append("draw", "1")
     // form_data.append("length", "10")
     // form_data.append("start", "1")
@@ -110,28 +110,28 @@ const Customers = () => {
   const customerStatisticsData = [
     {
       name: "Total Customers",
-      data: custData.customer_detailsrecordsTotal,
+      data: custData.customer_detailsrecordsTotal ?? '0',
       type: "number",
       icon: <LuTrendingUp size={30} className="text-warning" />,
       iconStyle: "bg-warning bg-opacity-25"
     },
     {
       name: "Active Customers",
-      data: custData.customer_detailsrecordsFiltered,
+      data: custData.customer_detailsrecordsFiltered ?? '0',
       type: "number",
       icon: <LiaUserSolid size={30} className="text-info" />,
       iconStyle: "bg-info bg-opacity-25"
     },
     {
       name: "Inactive Customers",
-      data: custData.total_loan_amount,
+      data: custData.total_loan_amount ?? '0',
       type: "number",
       icon: <LiaUserSlashSolid size={30} className="text-danger" />,
       iconStyle: "bg-danger bg-opacity-25"
     },
     {
       name: "Earnings Today",
-      data: custData.total_emi_amt,
+      data: custData.total_emi_amt ?? '0',
       type: "money",
       icon: <PiMoneyThin size={30} className="text-success" />,
       iconStyle: "bg-success bg-opacity-25"

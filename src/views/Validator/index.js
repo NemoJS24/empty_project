@@ -167,7 +167,8 @@ export const dashboardURL = {
     flash_accounts: "/merchant/Flash_Accounts/",
     product_review: "/merchant/product-review/",
     oh_my_customer: "/merchant/oh-my-customer/",
-    otp_verification: "/merchant/apps/"
+    otp_verification: "/merchant/apps/",
+    crm: "/merchant/customers/"
 }
 
 export function generateRandomString() {
