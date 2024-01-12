@@ -194,8 +194,7 @@ const Customers = () => {
 
   return (
     <>
-
-<Card>
+      <Card>
         <CardHeader>
           <Row className="mb-2">
             <h4 className="">Statistics</h4>
