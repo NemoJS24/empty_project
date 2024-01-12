@@ -12,7 +12,7 @@ import toast from "react-hot-toast"
 const AddServicing = () => {
     const [formData, setFormData] = useState({
         mainForm: {},
-        sideForm: {
+        addForm: {
             title: "",
             cust_first_name: "",
             cust_last_name: "",
@@ -208,7 +208,7 @@ const AddServicing = () => {
         // console.log(customerFormData)
         const url = new URL(`${crmURL}/customers/merchant/add_customer/`)
         const form_data = new FormData()
-        Object.entries(formData.sideForm).map(([key, value]) => {
+        Object.entries(formData.addForm).map(([key, value]) => {
             console.log(key, ": ", value)
             form_data.append(key, value)
         })
@@ -338,11 +338,11 @@ const AddServicing = () => {
                         id="basicDetails-title"
                         options={titleOptions}
                         closeMenuOnSelect={true}
-                        value={titleOptions.find(option => option.value === formData.sideForm.title) ?? ''}
+                        value={titleOptions.find(option => option.value === formData.addForm.title) ?? ''}
                         // onChange={(e) => setCustomerFormData(prevData => ({ ...prevData, title: e.value }))}
                         onChange={(event) => {
                             const e = { target: { name: "title", value: event.value } }
-                            handleInputChange(e, "sideForm")
+                            handleInputChange(e, "addForm")
                         }}
                     />
                 </Col>
@@ -351,8 +351,8 @@ const AddServicing = () => {
                         First Name
                     </label>
                     <input placeholder="First Name" type='text' id='basicDetails-first-name' name='cust_first_name' className="form-control"
-                        value={formData.sideForm?.cust_first_name}
-                        onChange={(e) => handleInputChange(e, "sideForm")}
+                        value={formData.addForm?.cust_first_name}
+                        onChange={(e) => handleInputChange(e, "addForm")}
 
                     />
                 </Col>
@@ -361,8 +361,8 @@ const AddServicing = () => {
                         Last Name
                     </label>
                     <input placeholder="Last Name" type='text' id='basicDetails-last-name' name='cust_last_name' className="form-control"
-                        value={formData.sideForm?.cust_last_name}
-                        onChange={(e) => handleInputChange(e, "sideForm")}
+                        value={formData.addForm?.cust_last_name}
+                        onChange={(e) => handleInputChange(e, "addForm")}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -370,8 +370,8 @@ const AddServicing = () => {
                         Email
                     </label>
                     <input placeholder="Email" type='text' id='basicDetails-email' name='email' className="form-control"
-                        value={formData.sideForm?.email}
-                        onChange={(e) => handleInputChange(e, "sideForm")}
+                        value={formData.addForm?.email}
+                        onChange={(e) => handleInputChange(e, "addForm")}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -379,8 +379,8 @@ const AddServicing = () => {
                         Mobile Number
                     </label>
                     <input placeholder="Mobile Number" type='tel' maxLength={10} id='basicDetails-mobile' name='phone_no' className="form-control"
-                        value={formData.sideForm?.phone_no}
-                        onChange={(e) => handleInputChange(e, "sideForm")}
+                        value={formData.addForm?.phone_no}
+                        onChange={(e) => handleInputChange(e, "addForm")}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -390,12 +390,12 @@ const AddServicing = () => {
                         inputId="aria-example-input"
                         closeMenuOnSelect={true}
                         name="country"
-                        value={country?.filter($ => $.value === formData?.sideForm?.country)}
+                        value={country?.filter($ => $.value === formData?.addForm?.country)}
                         placeholder="Select Country"
                         // onChange={(e) => setCustomerFormData(prevData => ({ ...prevData, country: e.label }))}
                         onChange={(event) => {
                             const e = { target: { name: "country", value: event.value } }
-                            handleInputChange(e, "sideForm")
+                            handleInputChange(e, "addForm")
                         }}
                     />
                 </Col>
@@ -407,8 +407,8 @@ const AddServicing = () => {
                         id="address-1-city"
                         name="city"
                         className="form-control"
-                        value={formData.sideForm.city}
-                        onChange={(e) => handleInputChange(e, "sideForm")}
+                        value={formData.addForm.city}
+                        onChange={(e) => handleInputChange(e, "addForm")}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -419,8 +419,8 @@ const AddServicing = () => {
                         id="address-1-state"
                         name="state"
                         className="form-control"
-                        value={formData.sideForm.state}
-                        onChange={(e) => handleInputChange(e, "sideForm")}
+                        value={formData.addForm.state}
+                        onChange={(e) => handleInputChange(e, "addForm")}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -431,8 +431,8 @@ const AddServicing = () => {
                         id="address-1-pincode"
                         name="pincode"
                         className="form-control"
-                        value={formData.sideForm.pincode}
-                        onChange={(e) => handleInputChange(e, "sideForm")}
+                        value={formData.addForm.pincode}
+                        onChange={(e) => handleInputChange(e, "addForm")}
                     />
                 </Col>
 
