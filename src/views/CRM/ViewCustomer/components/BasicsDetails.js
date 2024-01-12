@@ -7,10 +7,9 @@ import IdentityProof from './IdentityProof'
 import Address from './Address'
 import CompanyInfo from './CompanyInfo'
 import Account from './Account'
-import { crmURL } from '../../../../assets/auth/jwtService'
-import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import { postReq } from '../../../../assets/auth/jwtService'
 
 const BasicsDetails = () => {
     const [userData, setUserData] = useState({})
@@ -39,34 +38,35 @@ const BasicsDetails = () => {
         const form_data = new FormData()
         form_data.append("id", id)
         form_data.append("edit_type", "is_customer_detail")
-        axios.post(`${crmURL}/customers/merchant/get_view_customer/`, form_data)
-            .then((res) => {
-                console.log("resp here", res.data.success[0])
-                const newObject = {}
-                for (const key in res.data.success[0]) {
-                    if (res.data.success[0].hasOwnProperty(key) && res.data.success[0][key] !== null) {
-                        newObject[key] = res.data.success[0][key]
-                    }
+        // axios.post(`${crmURL}/customers/merchant/get_view_customer/`, form_data)
+        postReq('get_view_customer', form_data)
+        .then((res) => {
+            console.log("resp here", res.data.success[0])
+            const newObject = {}
+            for (const key in res.data.success[0]) {
+                if (res.data.success[0].hasOwnProperty(key) && res.data.success[0][key] !== null) {
+                    newObject[key] = res.data.success[0][key]
                 }
-                console.log(newObject, "nw  ")
-                setUserData(newObject)
-                const name = newObject.customer_name.split(' ')
-                const datePart = newObject?.cust_dob ? newObject?.cust_dob.substring(0, 10) : ''
-                setUserData(prefData => ({
-                    ...prefData,
-                    cust_first_name: name[0],
-                    cust_last_name: name[1],
-                    cust_dob: datePart
-                }))
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+            }
+            console.log(newObject, "nw  ")
+            setUserData(newObject)
+            const name = newObject.customer_name.split(' ')
+            const datePart = newObject?.cust_dob ? newObject?.cust_dob.substring(0, 10) : ''
+            setUserData(prefData => ({
+                ...prefData,
+                cust_first_name: name[0],
+                cust_last_name: name[1],
+                cust_dob: datePart
+            }))
+        })
+        .catch((err) => {
+            console.log(err)
+        })
     }
 
     const postData = () => {
         // console.log(userData)
-        const url = new URL(`${crmURL}/customers/merchant/add_customer/`)
+        // const url = new URL(`${crmURL}/customers/merchant/add_customer/`)
         const form_data = new FormData()
         Object.entries(userData).map(([key, value]) => {
             form_data.append(key, value)
@@ -83,35 +83,30 @@ const BasicsDetails = () => {
         form_data.append("customer_id", id)
         form_data.append("press_btn", 'SAVE & CLOSE')
 
-        fetch(url, {
-            method: "POST",
-            body: form_data
+        // fetch(url, {
+        //     method: "POST",
+        //     body: form_data
+        // })
+        postReq("add_customer_individual", form_data)
+        .then((resp) => {
+            if (resp.status === 409) {
+                throw new Error('Customer already exists')
+            }
         })
-            .then((resp) => {
-                if (!resp.ok) {
-                    if (resp.status === 409) {
-                        throw new Error('Customer already exists')
-                    } else {
-                        toast.error(`HTTP error! Status: ${resp.status}`)
-                        throw new Error(`HTTP error! Status: ${resp.status}`)
-                    }
-                }
-                return resp.json()
-            })
-            .then((resp) => {
-                console.log("Response:", resp)
-                toast.success('Customer saved successfully')
-                getUser()
-            })
-            .catch((error) => {
-                console.error("Error:", error)
-                if (error.message === 'Customer already exists') {
-                    toast.error('Customer already exists')
+        .then((resp) => {
+            console.log("Response:", resp)
+            toast.success('Customer saved successfully')
+            getUser()
+        })
+        .catch((error) => {
+            console.error("Error:", error)
+            if (error.message === 'Customer already exists') {
+                toast.error('Customer already exists')
 
-                } else {
-                    toast.error('Failed to save customer')
-                }
-            })
+            } else {
+                toast.error('Failed to save customer')
+            }
+        })
     }
 
     console.log(userData, "pp")

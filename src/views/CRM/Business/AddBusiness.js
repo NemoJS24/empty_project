@@ -316,7 +316,7 @@ const AddBusiness = () => {
            })
       }
 
-    }
+   }
    
    useEffect(() => {
       getCountries()
