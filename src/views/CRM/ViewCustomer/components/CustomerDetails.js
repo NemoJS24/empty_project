@@ -293,7 +293,7 @@ const CustomerDetails = ({ userData }) => {
                         </Col>
 
                         <Col md='4'>
-                            <Card className=' cursor-pointer' onClick={() => navigate('/merchant/customers/add-insurance/')}>
+                            <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/add-insurance/${id}`)}>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
                                         <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px", background: "rgb(215 247 229)" }}>
@@ -309,7 +309,7 @@ const CustomerDetails = ({ userData }) => {
                     </Row>
                     <Row>
                         <Col md='4'>
-                            <Card className=' cursor-pointer' onClick={() => navigate('/merchant/customers/add-servicing/')}>
+                            <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/add-servicing/${id}`)}>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
                                         <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px", background: "rgb(215 247 229)" }}>
@@ -324,7 +324,7 @@ const CustomerDetails = ({ userData }) => {
                         </Col>
 
                         <Col md='4'>
-                            <Card>
+                            <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/jmd-finance-customers/${id}`)}>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
                                         <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px", background: "rgb(215 247 229)" }}>
