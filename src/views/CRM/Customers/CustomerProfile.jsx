@@ -193,7 +193,7 @@ export default function CustomerProfile() {
     {
       name: 'email',
       message: 'Please enter your email ID',
-      type: 'string',
+      type: 'email',
       id: 'email'
     },
     {
@@ -202,11 +202,21 @@ export default function CustomerProfile() {
       type: 'string',
       id: 'phone_no'
     },
+    {
+      name: 'dropdown',
+      message: 'Please select a Customer Type',
+      type: 'string',
+      id: 'basicDetails-customerType'
+    }
   ]
 
   const handleSubmitSection = (event, btn) => {
     event.preventDefault()
-    checkForm = validForm(valueToCheck, formData)
+    if (currentStep === 1) {
+      checkForm = validForm(valueToCheck, formData)
+    } else if (currentStep === 5) {
+      checkForm = validForm([...valueToCheck], formData)
+    }
     if (checkForm) {
       const emailCheck = validateEmail(formData.email)
       if (!emailCheck) {
@@ -313,14 +323,13 @@ export default function CustomerProfile() {
                 </div>
                 <div>
                   <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE')}>Save</button>
-                  <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE & CLOSE')}>Save & Close</button>
-                  {!(currentStep === 6) && <button
+                  {(currentStep < 5) ? <button
                     className="btn btn-primary ms-2"
                     type="button"
                     onClick={handleNext}
                   >
                     Next
-                  </button>}
+                  </button> : <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE & CLOSE')}>Save & Close</button>}
                 </div>
               </div>
             </form>

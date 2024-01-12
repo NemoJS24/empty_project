@@ -127,7 +127,8 @@ export const configUrl = {
     add_customer_individual: "/customers/merchant/add_customer/",
     get_view_customer: "/customers/merchant/get_view_customer/",
     get_company_details: "/customers/merchant/get_company_details/",
-    all_cust_dashboard: "/customers/merchant/all_cust_dashboard/"
+    all_cust_dashboard: "/customers/merchant/all_cust_dashboard/",
+    add_company_details: "/customers/merchant/add_company_details/"    
     // Flash Account
 }
 
