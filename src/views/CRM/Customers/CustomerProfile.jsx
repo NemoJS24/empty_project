@@ -156,7 +156,7 @@ export default function CustomerProfile() {
       console.log(key[0] + ', ' + key[1]);
     }
 
-    postReq('add_customer_individual', form_data)
+    postReq('add_customer_individual', form_data, crmURL)
     // fetch(url, {
     //   method: "POST",
     //   body: form_data,
