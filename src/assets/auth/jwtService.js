@@ -4,7 +4,7 @@ import jwtDecode from "jwt-decode"
 
 export const baseURL = "https://api.demo.xircls.in"
 export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
-export const crmURL = "https://api.demo.xircls.in"
+export const crmURL = "https://crm.demo.xircls.in"
 
 // const URLs = {
 //     baseURL,
@@ -206,7 +206,11 @@ axiosInstance.interceptors.response.use(
     }
 )
 
-export const postReq = (path, data, config) => {
+export const postReq = (path, data, customBaseURL = baseURL, config) => {
+    console.log(customBaseURL, "domian")
+    // if (customBaseURL) {
+    axiosInstance.defaults.baseURL = customBaseURL
+    // }
     
     // updateBaseURL(URLs[base])
     const time = new Date().getTime()
@@ -217,7 +221,11 @@ export const postReq = (path, data, config) => {
     }
 }
 
-export const putReq = (path, data, config) => {
+export const putReq = (path, data, customBaseURL = baseURL, config) => {
+    console.log(customBaseURL, "domian")
+    // if (customBaseURL) {
+    axiosInstance.defaults.baseURL = customBaseURL
+    // }
     const time = new Date().getTime()
     if (path === 'login' || path === "signup") {
         return axios.put(`${baseURL}${configUrl[`${path}`]}?time=${time}`, data)
@@ -227,12 +235,16 @@ export const putReq = (path, data, config) => {
 }
 
 
-export const getReq = (path, slug) => {
+export const getReq = (path, slug, customBaseURL = baseURL) => {
+    console.log(customBaseURL, "domian")
+    axiosInstance.defaults.baseURL = customBaseURL
     const time = new Date().getTime()
     return slug ? axiosInstance.get(`${configUrl[path]}${slug}&time=${time}`) : axiosInstance.get(`${configUrl[path]}?time=${time}`)
 }
 
-export const deleteReq = (path, slug) => {
+export const deleteReq = (path, slug, customBaseURL = baseURL) => {
+    console.log(customBaseURL, "domian")
+    axiosInstance.defaults.baseURL = customBaseURL
     return axiosInstance.delete(`${configUrl[path]}${slug}`)
 }
 

@@ -8,6 +8,7 @@ import CompanyAddInfo from '@src/views/CRM/Business/Components/CompanyAddInfo.js
 import CompanyBasicInfo from '@src/views/CRM/Business/Components/CompanyBasicInfo.js'
 import ContactPersonInfo from '@src/views/CRM/Business/Components/ContactPersonInfo.js'
 import ContactPersonAddInfo from '@src/views/CRM/Business/Components/ContactPersonAddInfo.js'
+import { postReq } from '../../../assets/auth/jwtService'
 
 /* eslint-disable */
 const AddBusiness = () => {
@@ -164,11 +165,13 @@ const AddBusiness = () => {
       for (var key of form_data.entries()) {
         console.log(key[0] + ', ' + key[1]);
       }
-  
-      fetch(url, {
-        method: "POST",
-        body: form_data
-      })
+      
+      console.log("slfnsdjklnsdklv")
+      postReq('add_customer_individual', form_data, crmURL)
+      // fetch(url, {
+      //   method: "POST",
+      //   body: form_data
+      // })
         .then((response) => {
           if (!response.ok) {
             if (response.status === 409) {
