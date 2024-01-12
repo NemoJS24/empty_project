@@ -124,7 +124,9 @@ export const configUrl = {
     //referal
     referalPoints: "/referral/referralpoints/",
     affiliate_dashboard: "/affiliate/wallet_transaction/",
-    add_customer_individual: "/customers/merchant/add_customer/"
+    add_customer_individual: "/customers/merchant/add_customer/",
+    add_company_details: "/customers/merchant/add_company_details/",
+    get_company_details: "/customers/merchant/get_company_details/"
     // Flash Account
 }
 

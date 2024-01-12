@@ -3,11 +3,11 @@ import { Container, Card, CardBody, Row, Col } from "reactstrap"
 // import "../CustomerProfile.css"
 import { Twitter, Facebook, Instagram } from "react-feather"
 import Select from "react-select"
-import axios from "axios"
 import toast from "react-hot-toast"
-import { crmURL, getReq } from "../../../../assets/auth/jwtService"
+import { crmURL, getReq, postReq } from "../../../../assets/auth/jwtService"
 import Button from 'react-bootstrap/Button'
 import Offcanvas from 'react-bootstrap/Offcanvas'
+import { validForm, validateEmail } from "../../../Validator"
 
 /* eslint-disable */
 const CustomerBasicCompanyInfo = ({ allData }) => {
@@ -15,7 +15,11 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
   const [filteredData, setFilteredData] = useState([{ formId: 1 }])
   const [country, setCountry] = useState("")
   const [isHidden, setIsHidden] = useState(false)
-  const [newCompany, setNewCompany] = useState({})
+  const [newCompany, setNewCompany] = useState({
+    company_name: "",
+    company_phone: "",
+    company_email: ""
+  })
   const [newCompanyPage, setNewCompanyPage] = useState(1)
 
   const { formData, handleInputChange } = allData
@@ -29,11 +33,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
   // console.log(newCompany)
 
   const fetchCompanyData = async () => {
-    const getUrl = new URL(`${crmURL}/customers/merchant/get_company_details/`)
-    axios({
-      method: "GET",
-      url: getUrl
-    })
+    getReq("get_company_details")
       .then((res) => {
         getCompanyData(res.data.success)
         // setIsLoading(false)
@@ -69,24 +69,14 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
       // form_data.append("press_btn", 'SAVE')
     })
 
-    fetch(url, {
-      method: "POST",
-      body: form_data
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 409) {
-            throw new Error('Customer already exists')
-          } else {
-            throw new Error(`HTTP error! Status: ${response.status}`)
-          }
-        }
-        return response.json()
-      })
+    postReq("add_company_details", form_data)
       .then((resp) => {
-        console.log("Response:", resp)
-        // Access status code
-        console.log("Status Code:", response.status)
+        console.log({ resp })
+        if (resp.status === 409) {
+          throw new Error('Customer already exists')
+        } else {
+          throw new Error(`HTTP error! Status: ${resp.status}`)
+        }
       })
       .catch((error) => {
         console.error("Error:", error)
@@ -96,7 +86,47 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
           toast.error('Customer already exists')
         }
       })
+    // fetch(url, {
+    //   method: "POST",
+    //   body: form_data
+    // })
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       if (response.status === 409) {
+    //         throw new Error('Customer already exists')
+    //       } else {
+    //         throw new Error(`HTTP error! Status: ${response.status}`)
+    //       }
+    //     }
+    //     return response.json()
+    //   })
+    //   .then((resp) => {
+    //     console.log("Response:", resp)
+    //     // Access status code
+    //     console.log("Status Code:", response.status)
+    // })
   }
+
+  const valueToCheck5 = [
+    {
+      name: 'company_name',
+      message: 'Please enter your Company Name',
+      type: 'string',
+      id: 'basicDetails-name'
+    },
+    {
+      name: 'company_phone',
+      message: 'Please enter your Company Phone Number',
+      type: 'number',
+      id: 'basicDetails-phone'
+    },
+    {
+      name: 'company_email',
+      message: 'Please enter your Company Email',
+      type: 'string',
+      id: 'basicDetails-email'
+    }
+  ]
 
   useEffect(() => {
     fetchCompanyData()
@@ -133,6 +163,21 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
               : form
         )
       })
+    }
+  }
+  const handleSubmitSection3 = (event) => {
+    event.preventDefault()
+    let checkForm = false
+    checkForm = validForm(valueToCheck5, newCompany)
+    console.log({ checkForm, valueToCheck5, newCompany })
+    if (checkForm) {
+      const emailCheck = validateEmail(newCompany.company_email)
+      if (!emailCheck) {
+        // document.getElementById('email_val').innerHTML = 'Invaild email ID'
+        toast.error("Invaild email ID")
+      } else {
+        postData()
+      }
     }
   }
 
@@ -248,6 +293,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
       `}
     </style>
   )
+
 
   const CompanyForm = (
     <>
@@ -565,10 +611,13 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
     {newCompanyPage === 1 && (
       <Row className="">
         <Col md={12} className="mt-2">
+          <h4 className="mb-0">Add Customer</h4>
+        </Col>
+        <Col md={12} className="mt-2">
           <div className="form-check mb-1">
-            <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked" defaultChecked />
+            <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
             <label className="form-check-label" htmlFor="flexCheckChecked">
-              Checked checkbox
+              Add new company
             </label>
           </div>
 
@@ -583,6 +632,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
             value={newCompany.company_name ?? ''}
             onChange={(e) => handleInputChange2(e, "new-company")}
           />
+          <p id="basicDetails-name_val" className="text-danger m-0 p-0 vaildMessage"></p>
         </Col>
         <Col md={12} className="mt-2">
           <label htmlFor="basicDetails-last-name">Industry</label>
@@ -639,6 +689,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
             value={newCompany.company_phone ?? ''}
             onChange={(e) => handleInputChange2(e, "new-company")}
           />
+          <p id="basicDetails-phone_val" className="text-danger m-0 p-0 vaildMessage"></p>
         </Col>
         <Col md={12} className="mt-2">
           <label htmlFor="basicDetails-last-name">Email</label>
@@ -652,6 +703,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
             value={newCompany.company_email ?? ''}
             onChange={(e) => handleInputChange2(e, "new-company")}
           />
+          <p id="basicDetails-email_val" className="text-danger m-0 p-0 vaildMessage"></p>
         </Col>
         <Col md={12} className="mt-2">
           <label htmlFor="basicDetails-last-name">Website</label>
@@ -677,7 +729,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
               <button
                 className="btn btn-primary"
                 type="submit"
-              // onClick={handleSubmitSection3}
+                onClick={handleSubmitSection3}
               >
                 Save
               </button>

@@ -168,6 +168,7 @@ const CustomersAddCustomer = ({ allData }) => {
                      onChange={(e) => handleInputChange(e, 'dropdown')}
                      closeMenuOnSelect={true}
                   />
+                  <p id="basicDetails-customerType_val" className="text-danger m-0 p-0 vaildMessage"></p>
                </Col>
                {formData?.dropdown === 'privi_group' && <Col md={6} lg={4} className="mt-1">
                   <label htmlFor="basicDetails-privilegedCustomerGroup" style={{ margin: '0px' }}>

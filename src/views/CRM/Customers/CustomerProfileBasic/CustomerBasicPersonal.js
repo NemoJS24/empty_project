@@ -83,6 +83,7 @@ const CustomerBasicPersonal = ({ allData }) => {
               value={formData?.cust_dob ?? ''}
               onChange={handleInputChange}
             />
+            <p id="personalDetails-dob_val" className="text-danger m-0 p-0 vaildMessage"></p>
           </Col>
           <Col md={6} lg={4} className="mt-2">
             <label
@@ -100,6 +101,7 @@ const CustomerBasicPersonal = ({ allData }) => {
               onChange={(e) => handleInputChange(e, 'gender')}
               closeMenuOnSelect={true}
             />
+            <p id="personalDetails-gender_val" className="text-danger m-0 p-0 vaildMessage"></p>
           </Col>
           <Col md={6} lg={4} className="mt-2">
             <label
@@ -117,6 +119,7 @@ const CustomerBasicPersonal = ({ allData }) => {
               onChange={(e) => handleInputChange(e, 'marital_status')}
               closeMenuOnSelect={true}
             />
+            <p id="personalDetails-marital-status_val" className="text-danger m-0 p-0 vaildMessage"></p>
           </Col>
           <Col md={6} lg={4} className="mt-2">
             <label
@@ -134,6 +137,7 @@ const CustomerBasicPersonal = ({ allData }) => {
               options={childrenOptions}
               closeMenuOnSelect={true}
             />
+            <p id="personalDetails-children_val" className="text-danger m-0 p-0 vaildMessage"></p>
           </Col>
           {formData?.children === 'yes' && (
             <Col md={6} lg={4} className="mt-2">
@@ -150,6 +154,7 @@ const CustomerBasicPersonal = ({ allData }) => {
                 value={formData?.NO_Of_Children ?? ''}
                 onChange={handleInputChange}
               />
+              <p id="personalDetails-noChildren_val" className="text-danger m-0 p-0 vaildMessage"></p>
             </Col>
           )}
           <Col md={6} lg={4} className="mt-2">
@@ -161,13 +166,14 @@ const CustomerBasicPersonal = ({ allData }) => {
               Occupation
             </label>
             <Select
-              id="personalDetails-children"
+              id="personalDetails-occupation"
               options={occupationOptions}
               placeholder='Select Occupation'
               value={occupationOptions.find(option => option.value === formData?.occupation) ?? ''}
               onChange={(e) => handleInputChange(e, 'occupation')}
               closeMenuOnSelect={true}
             />
+            <p id="personalDetails-occupation_val" className="text-danger m-0 p-0 vaildMessage"></p>
           </Col>
           {(formData?.occupation === 'employed' || formData?.occupation === 'businessOwner') && <Col md={6} lg={4} className="mt-2">
             <label htmlFor="personalDetails-sector">Sector</label>
@@ -180,6 +186,7 @@ const CustomerBasicPersonal = ({ allData }) => {
               value={formData?.category ?? ''}
               onChange={handleInputChange}
             />
+            <p id="personalDetails-sector_val" className="text-danger m-0 p-0 vaildMessage"></p>
           </Col>}
           <Col md={6} lg={4} className="mt-2">
             <label htmlFor="personalDetails-designation">Designation</label>
@@ -192,6 +199,7 @@ const CustomerBasicPersonal = ({ allData }) => {
               value={formData?.designation ?? ''}
               onChange={handleInputChange}
             />
+            <p id="personalDetails-designation_val" className="text-danger m-0 p-0 vaildMessage"></p>
           </Col>
         </Row>
         <Row>
@@ -214,6 +222,7 @@ const CustomerBasicPersonal = ({ allData }) => {
                 onChange={handleInputChange}
               />
             </div>
+            <p id="personalDetails-twitter_val" className="text-danger m-0 p-0 vaildMessage"></p>
           </Col>
           <Col md={6} lg={4} className="mt-2">
             <label htmlFor="personalDetails-facebook">Facebook</label>
@@ -231,6 +240,7 @@ const CustomerBasicPersonal = ({ allData }) => {
                 onChange={handleInputChange}
               />
             </div>
+            <p id="personalDetails-facebook_val" className="text-danger m-0 p-0 vaildMessage"></p>
           </Col>
           <Col md={6} lg={4} className="mt-2">
             <label htmlFor="personalDetails-instagram">Instagram</label>
@@ -248,6 +258,7 @@ const CustomerBasicPersonal = ({ allData }) => {
                 onChange={handleInputChange}
               />
             </div>
+            <p id="personalDetails-instagram_val" className="text-danger m-0 p-0 vaildMessage"></p>
           </Col>
         </Row>
         {/* <div className="d-flex justify-content-between mt-3">
