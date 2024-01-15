@@ -5,7 +5,7 @@ import AddFinanceNav from './AddFinanceNav'
 import CoApplicantForm from './CoApplicantForm'
 import EMIForm from './EMIForm'
 import ReferralForm from './ReferralForm'
-import { crmURL } from '@src/assets/auth/jwtService.js'
+import { baseURL } from '@src/assets/auth/jwtService.js'
 import toast from "react-hot-toast"
 import financeData from './financeData'
 import { useParams, useNavigate } from 'react-router-dom'
@@ -13,11 +13,24 @@ import { useParams, useNavigate } from 'react-router-dom'
 const AddFinance = () => {
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState(financeData)
+  const [addWithCustId, setAddWithCustId] = useState(false)
 
   // console.log(formData, 'formData')
 
   const navigate = useNavigate()
   const { id } = useParams()
+
+  let PageTitle = 'Add Finance'
+
+  const formatDate = (inputDate) => {
+    const parts = inputDate.split('-')
+    if (parts.length === 3 && parts[0].length === 2 && parts[1].length === 2 && parts[2].length === 4) {
+      const parsedDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`)
+      const formattedDate = parsedDate.toISOString().split('T')[0]
+      return formattedDate
+    }
+    return inputDate
+  }
 
   const handleInputChange = (e, type) => {
     if (type === undefined) {
@@ -43,7 +56,7 @@ const AddFinance = () => {
   }
 
   const fetchFinanceData = (id) => {
-    const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
+    const url = new URL(`${baseURL}/customers/merchant/get_view_customer/`)
     const form_data = new FormData()
     form_data.append("id", id)
     form_data.append('edit_type', 'is_finance')
@@ -55,19 +68,20 @@ const AddFinance = () => {
         return response.json()
       })
       .then((resp) => {
-        // console.log("ResponseId:", resp.success[0])
-        const newObject = {}
-        for (const key in resp.success[0]) {
-          if (resp.success[0].hasOwnProperty(key) && resp.success[0][key] !== null) {
-            newObject[key] = resp.success[0][key]
+        if (!addWithCustId) {
+          const newObject = {}
+          for (const key in resp.success[0]) {
+            if (resp.success[0].hasOwnProperty(key) && resp.success[0][key] !== null) {
+              newObject[key] = resp.success[0][key]
+            }
           }
-        }
-        // console.log('AfterRemovingNullId', newObject)
-        setFormData(newObject)
-        setFormData(prefData => ({
+          setFormData(newObject)
+          setFormData(prefData => ({
             ...prefData,
-            policy_expiry_date: prefData?.policy_expiry_date ? prefData?.policy_expiry_date.substring(0, 10) : ''
-        }))
+            Loan_Disbursement_Date: prefData?.Loan_Disbursement_Date ? formatDate(prefData?.Loan_Disbursement_Date.substring(0, 10)) : '',
+            policy_expiry_date: prefData?.policy_expiry_date ? formatDate(prefData?.policy_expiry_date.substring(0, 10)) : ''
+          }))
+        }
       })
       .catch((error) => {
         console.error("Error:", error)
@@ -75,12 +89,12 @@ const AddFinance = () => {
       })
   }
 
+
   const postData = (btn) => {
     console.log(formData)
-    const url = new URL(`${crmURL}/customers/merchant/jmd-finance-customers/`)
+    const url = new URL(`${baseURL}/customers/merchant/jmd-finance-customers/`)
     const form_data = new FormData()
     Object.entries(formData).map(([key, value]) => {
-      // console.log(key, ": ", value)
       form_data.append(key, value)
     })
     form_data.append("press_btn", btn)
@@ -111,7 +125,12 @@ const AddFinance = () => {
   }
 
   useEffect(() => {
-    if (id) {
+    if (location.pathname.startsWith('/merchant/customers/add_finance/')) {
+      console.log('This is the add vehicle page')
+      fetchFinanceData(id)
+      setAddWithCustId(true)
+    } else if (id) {
+      PageTitle = 'Edit Page'
       fetchFinanceData(id)
     }
   }, [])
@@ -154,7 +173,7 @@ const AddFinance = () => {
       <div className="customer-profile">
         <Card>
           <CardBody>
-            <h3 className="mb-0">{id ? 'Edit Finance' : 'Add Finance'}</h3>
+            <h3 className="mb-0">{PageTitle}</h3>
           </CardBody>
         </Card>
         <Card>

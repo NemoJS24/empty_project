@@ -62,8 +62,16 @@ const Customers_Routes = [
     element: <AddBusiness/>
   },
   {
+    path: '/merchant/customer/all_cust_dashboard/add_finance/:id',
+    element: <Finance />
+  },
+  {
     path: '/merchant/customer/all_cust_dashboard/add_finance/',
     element: <Finance />
+  },
+  {
+    path: '/merchant/customers/jmd-finance-customers/:id',
+    element: <AddFinance />
   },
   {
     path: '/merchant/customers/jmd-finance-customers/',
@@ -95,6 +103,10 @@ const Customers_Routes = [
   },
   {
     path: '/merchant/customers/add-insurance/',
+    element: <AddInsurance />
+  },
+  {
+    path: '/merchant/customers/add-insurance/:id',
     element: <AddInsurance />
   },
   {

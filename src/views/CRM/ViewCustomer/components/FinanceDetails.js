@@ -159,7 +159,7 @@ const FinanceDetails = () => {
                                 selectedRows={selected}
                                 advanceFilter={false}
                                 create={true}
-                                createLink={"/"}
+                                createLink={`/merchant/customers/jmd-finance-customers/${id}`}
                                 createText={"Add Finance"}
                             />
                         </CardBody>

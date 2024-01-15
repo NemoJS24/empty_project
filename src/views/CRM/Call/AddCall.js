@@ -58,11 +58,6 @@ const AddCall = () => {
       const checkForm = validForm(valueToCheck, data)
       console.log(checkForm)
 
-      // valueToCheck.forEach(validation => {
-      //    const errorMessageElement = document.getElementById(`${validation.id}_error`)
-      //    errorMessageElement.innerText = checkForm[validation.name] ? '' : validation.message
-      // })
-
       if (checkForm.isValid) {
          console.log("Form is valid")
 

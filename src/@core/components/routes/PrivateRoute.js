@@ -1,44 +1,26 @@
 // ** React Imports
-import { Navigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { Suspense } from 'react'
-// import { TOKEN_KEY, getToken } from '../../../assets/auth/auth'
 import toast from 'react-hot-toast'
 import Cookies from 'js-cookie'
-// import Cookies from 'js-cookie'
-
-// ** Context Imports
-// import { AbilityContext } from '@src/utility/context/Can'
+import { getToken } from '../../../assets/auth/auth'
 
 const PrivateRoute = ({ children, route }) => {
-  // ** Hooks & Vars
-  // const ability = useContext(AbilityContext)
-  const user = Cookies.get("xircls_user_token")
 
-  if (route) {
-    // let action = null
-    // let resource = null
-    // let restrictedRoute = false
+  const navigate = useNavigate()
 
-    // if (route.meta) {
-    //   action = route.meta.action
-    //   resource = route.meta.resource
-    //   restrictedRoute = route.meta.restricted
-    // }
-    if (!user) {
+  const checkUserToken = async () => {
+    const token = await getToken() ? JSON.parse(getToken()) : null
+    // console.log(token, "useruser")
+    if (!token) {
       toast.error("Session expired. Please login")
-      return <Navigate to='/merchant/login/' />
+      navigate('/merchant/login/')
     }
-    // if (user && restrictedRoute) {
-    //   return <Navigate to='/' />
-    // }
-    // if (user && restrictedRoute && user.role === 'client') {
-    //   return <Navigate to='/access-control' />
-    // }
-    // if (user && !ability.can(action || 'read', resource)) {
-    //   return <Navigate to='/misc/not-authorized' replace />
-    // }
   }
-
+  // useEffect(() => {
+  if (route) {
+    checkUserToken()
+  }
   return <Suspense fallback={null}>{children}</Suspense>
 }
 

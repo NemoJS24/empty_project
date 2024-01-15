@@ -31,33 +31,33 @@ export default function CustomerProfile() {
     form_data.append('id', id)
     form_data.append('edit_type', 'is_customer_detail')
     postReq('get_view_customer', form_data)
-    .then((resp) => {
-      console.log("Response:", resp.data.success[0])
-      const newObject = {};
-      for (const key in resp.data.success[0]) {
-        if (resp.data.success[0].hasOwnProperty(key) && resp.data.success[0][key] !== null) {
-          newObject[key] = resp.data.success[0][key];
+      .then((resp) => {
+        console.log("Response:", resp.data.success[0])
+        const newObject = {};
+        for (const key in resp.data.success[0]) {
+          if (resp.data.success[0].hasOwnProperty(key) && resp.data.success[0][key] !== null) {
+            newObject[key] = resp.data.success[0][key];
+          }
         }
-      }
-      // console.log('AfterRemovingNull', newObject);
-      setFormData(newObject)
-      const name = newObject?.customer_name?.split(' ')
-      const datePart = newObject?.cust_dob?.substring(0, 10)
-      setFormData(prefData => ({
-        ...prefData,
-        cust_first_name: name[0],
-        cust_last_name: name[1],
-        cust_dob: datePart
-      }))
-    })
-    .catch((error) => {
-      console.error("Error:", error)
-      if (error.message === 'Customer already exists') {
-        toast.error('Customer already exists')
-      } else {
-        toast.error('Failed to save customer')
-      }
-    })
+        // console.log('AfterRemovingNull', newObject);
+        setFormData(newObject)
+        const name = newObject?.customer_name?.split(' ')
+        const datePart = newObject?.cust_dob?.substring(0, 10)
+        setFormData(prefData => ({
+          ...prefData,
+          cust_first_name: name[0],
+          cust_last_name: name[1],
+          cust_dob: datePart
+        }))
+      })
+      .catch((error) => {
+        console.error("Error:", error)
+        if (error.message === 'Customer already exists') {
+          toast.error('Customer already exists')
+        } else {
+          toast.error('Failed to save customer')
+        }
+      })
   }
 
   useEffect(() => {
@@ -113,6 +113,14 @@ export default function CustomerProfile() {
         view_logo_url: URL.createObjectURL(e.target.files[0]),
         [e.target.name]: (e.target.files[0])
       }))
+
+      //   else if (AddressType === 'file') {
+      //     setUserData(prevFormData => ({
+      //         ...prevFormData,
+      //         [e.target.name]: (e.target.files[0])
+      //     }))
+      // }
+
     } else if (addressType) {
       setFormData(prevFormData => ({
         ...prevFormData,
@@ -146,13 +154,13 @@ export default function CustomerProfile() {
     }
 
     postReq('add_customer_individual', form_data)
-    // fetch(url, {
-    //   method: "POST",
-    //   body: form_data,
-    //   headers: {
-    //     "Api-key": "wDgmH6BS0B5s/tcOmfAqtWeBmI1t8qbiAnr5KN/oLis="
-    //   }
-    // })
+      // fetch(url, {
+      //   method: "POST",
+      //   body: form_data,
+      //   headers: {
+      //     "Api-key": "wDgmH6BS0B5s/tcOmfAqtWeBmI1t8qbiAnr5KN/oLis="
+      //   }
+      // })
       .then((resp) => {
         if (resp.status === 409) {
           throw new Error('Customer already exists')

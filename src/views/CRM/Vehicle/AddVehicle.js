@@ -31,24 +31,24 @@ const AddVehicle = () => {
       form_data.append("id", id)
       edit ? form_data.append("edit_type", "is_vehicle") : form_data.append("edit_type", "is_customer_detail")
       axios.post(`${baseURL}/customers/merchant/get_view_customer/`, form_data)
-      .then((res) => {
-         console.log(res.data.success[0])
-         if (edit) {
-            setFormData(res.data.success[0])
-            setFormData(prev => ({
-               ...prev,
-               delivery_date: prev?.delivery_date?.substring(0, 10) ?? '',
-               registeration_date: prev?.registeration_date?.substring(0, 10) ?? ''
-            }))
-         }
-         else {
-            setFormData(prev => ({ ...prev, customer_name: res.data.success[0].customer_name, customer_id: res.data.success[0].id }))
-         }
-      })
-      .catch((err) => {
-         console.log(err)
-         toast.error('Failed to get Vehicle details')
-      })
+         .then((res) => {
+            console.log(res.data.success[0])
+            if (edit) {
+               setFormData(res.data.success[0])
+               setFormData(prev => ({
+                  ...prev,
+                  delivery_date: prev?.delivery_date?.substring(0, 10) ?? '',
+                  registeration_date: prev?.registeration_date?.substring(0, 10) ?? ''
+               }))
+            }
+            else {
+               setFormData(prev => ({ ...prev, customer_name: res.data.success[0].customer_name, customer_id: res.data.success[0].id }))
+            }
+         })
+         .catch((err) => {
+            console.log(err)
+            toast.error('Failed to get Vehicle details')
+         })
    }
 
    const postVehicleDetails = (btn) => {
@@ -69,7 +69,7 @@ const AddVehicle = () => {
          .then((resp) => {
             console.log("Response:", resp)
             // resp.is_error ?  toast.error(resp.is_error) :  toast.success('Vehicle saved successfully')
-            resp.is_error ?  toast.error(resp.is_error) : resp.is_edit ? navigate(`/merchant/customers/edit-vehicle/${resp.vehicle_id}`) : navigate(`/merchant/customers/view_customer/${id}`)
+            resp.is_error ? toast.error(resp.is_error) : resp.is_edit ? navigate(`/merchant/customers/edit-vehicle/${resp.vehicle_id}`) : navigate(`/merchant/customers/view_customer/${id}`)
          })
          .catch((error) => {
             console.error("Error:", error)

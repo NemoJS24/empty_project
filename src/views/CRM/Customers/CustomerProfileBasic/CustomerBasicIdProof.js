@@ -32,8 +32,8 @@ const CustomerBasicIdProof = ({ allData }) => {
           </Col>
           <Col md={6} className="mt-2">
             <label>Upload Aadhar Card Image</label>
-            <div className="form-control p-0 d-flex justify-content-between align-items-center">
-              <span className="mx-1">{formData?.aadhar_pdf_file?.name || formData?.aadhar_pdf_file || 'Aadhar Card'}</span>
+            <div className="gap-1 d-flex justify-content-start align-items-center w-100">
+              {/* <span className="mx-1">{formData?.aadhar_pdf_file?.name || formData?.aadhar_pdf_file || 'Aadhar Card'}</span> */}
               <input
                 name="aadhar_pdf_file"
                 type="file"
@@ -43,7 +43,7 @@ const CustomerBasicIdProof = ({ allData }) => {
                 onChange={(e) => handleInputChange(e, 'file')}
               />
               <label
-                className="btn btn-outline-primary"
+                className="btn btn-outline-primary w-25"
                 htmlFor="idproof-aadhar"
               >
                 Upload File
@@ -64,8 +64,8 @@ const CustomerBasicIdProof = ({ allData }) => {
           </Col>
           <Col md={6} className="mt-2">
             <label>Upload Pan Card Image</label>
-            <div className="form-control p-0 d-flex justify-content-between align-items-center">
-              <span className="mx-1">{formData?.pan_pdf_file?.name || formData?.pan_pdf_file || 'Pan Card'}</span>
+            <div className="gap-1 d-flex d-flex justify-content-start align-items-center">
+              {/* <span className="mx-1">{formData?.pan_pdf_file?.name || formData?.pan_pdf_file || 'Pan Card'}</span> */}
               <input
                 name="pan_pdf_file"
                 type="file"
@@ -76,35 +76,12 @@ const CustomerBasicIdProof = ({ allData }) => {
               />
               <label
                 htmlFor="idproof-pan"
-                className="btn btn-outline-primary"
+                className="btn btn-outline-primary w-25"
               >
                 Upload File
               </label>
             </div>
           </Col>
-          {/* <div className="d-flex justify-content-between mt-2">
-            <div>
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={handleBack}
-              >
-                Back
-              </button>
-              <button className="btn btn-primary ms-2" type="button">
-                Cancel
-              </button>
-            </div>
-            <div>
-              <button
-                className="btn btn-primary ms-2"
-                type="button"
-                onClick={handleNext}
-              >
-                Next
-              </button>
-            </div>
-          </div> */}
         </Row>
       </Container>
     </>

@@ -8,29 +8,143 @@ import { crmURL, getReq } from '@src/assets/auth/jwtService'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from "axios"
 import toast from "react-hot-toast"
+import { validForm } from '../../Validator'
 
 const AddServicing = () => {
-    const [formData, setFormData] = useState({
-        mainForm: {},
-        addForm: {
-            title: "",
-            cust_first_name: "",
-            cust_last_name: "",
-            email: "",
-            phone_no: "",
-            country: 1,
-            city: "",
-            state: "",
-            pincode: ""
+
+    const mainFormvalueToCheck = [
+        {
+            name: 'customer_name',
+            message: 'Enter Customer Name',
+            type: 'string',
+            id: 'customer_name'
+        },
+        {
+            name: 'vehicle',
+            message: 'Enter Vehicle Name',
+            type: 'string',
+            id: 'vehicle'
+        },
+        {
+            name: 'service_advisor',
+            message: 'Enter Service advisor Name',
+            type: 'string',
+            id: 'service_advisor'
+        },
+        {
+            name: 'job_card_date',
+            message: 'Enter Job card date',
+            type: 'string',
+            id: 'job_card_date'
+        },
+        {
+            name: 'service_invoice_date',
+            message: 'Enter Service invoice date',
+            type: 'string',
+            id: 'service_invoice_date'
+        },
+        {
+            name: 'service_expiry_date',
+            message: 'Enter Next service date',
+            type: 'string',
+            id: 'service_expiry_date'
+        },
+        {
+            name: 'service_invoice_amount',
+            message: 'Enter Service invoice amount',
+            type: 'string',
+            id: 'service_invoice_amount'
         }
-        // customer: 57069,
-        // vehicle: 23816,
-        // service_advisor: "aasdsad",
-        // job_card_date: "2024-01-12",
-        // service_invoice_date: "2024-01-19",
-        // service_expiry_date: "2024-01-29",
-        // service_invoice_amount: "23423432"
+    ]
+
+    const addFormvalueToCheck = [
+        {
+            name: 'title',
+            message: 'Enter title',
+            type: 'string',
+            id: 'title'
+        },
+        {
+            name: 'cust_first_name',
+            message: 'Enter customer first Name',
+            type: 'string',
+            id: 'cust_first_name'
+        },
+        {
+            name: 'cust_last_name',
+            message: 'Enter customer last Name',
+            type: 'string',
+            id: 'cust_last_name'
+        },
+        {
+            name: 'email',
+            message: 'Enter email',
+            type: 'string',
+            id: 'email'
+        },
+        {
+            name: 'phone_no',
+            message: 'Enter Phone no',
+            type: 'string',
+            id: 'phone_no'
+        },
+        {
+            name: 'country',
+            message: 'Enter Country',
+            type: 'string',
+            id: 'country'
+        },
+        {
+            name: 'city',
+            message: 'Enter City',
+            type: 'string',
+            id: 'city'
+        },
+        {
+            name: 'state',
+            message: 'Enter State',
+            type: 'string',
+            id: 'state'
+        },
+        {
+            name: 'pincode',
+            message: 'Enter Pincode',
+            type: 'string',
+            id: 'pincode'
+        }
+    ]
+
+    const [formData, setFormData] = useState({
+        mainForm: {
+            customer_name: '',
+            vehicle: '',
+            service_advisor: '',
+            job_card_date: '',
+            service_invoice_date: '',
+            next_service_date: '',
+            service_invoice_amount: ''
+        },
+        addForm: {
+            title: '',
+            cust_first_name: '',
+            cust_last_name: '',
+            email: '',
+            phone_no: '',
+            country: 1,
+            city: '',
+            state: '',
+            pincode: ''
+        },
     })
+
+    const inputChangeHandler = (e) => {
+        setFormData({ ...formData, mainForm: { ...formData.mainForm, [e.target.name]: e.target.value } })
+    }
+
+    const addInputChangeHandler = (e) => {
+        setFormData({ ...formData, addForm: { ...formData.addForm, [e.target.name]: e.target.value } })
+    }
+
     // const [customerFormData, setCustomerFormData] = useState({
     //     title: "mr",
     //     cust_first_name: "vnasdf",
@@ -260,30 +374,11 @@ const AddServicing = () => {
 
     const handleInputChange = (e, keyType) => {
         console.log(e)
-        // if (addressType === undefined) {
-        //     let { name, value, type } = e.target
-        //     if (type === "tel") {
-        //         value = value.replace(/[^0-9]/g, "")
-        //     }
-        //     if (name.includes('.')) {
-        //         const [parent, child] = name.split('.')
-        //         setCustomerFormData(prevFormData => ({
-        //             ...prevFormData,
-        //             ...prevFormData[parent],
-        //             [child]: value
-        //         }))
-        //     } else {
-        //         setFormData(prevFormData => ({
-        //             ...prevFormData,
-        //             [name]: value
-        //         }))
-        //     }
-        // } else if (addressType) {
-        // setFormData(prevFormData => ({
-        //     ...prevFormData,
-        //     [addressType]: e.value
-        // }))
-        // }
+        setFormData(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
+    }
+
+    const handleAddInputChange = (e, keyType) => {
+        console.log(e)
         setFormData(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
     }
 
@@ -324,6 +419,54 @@ const AddServicing = () => {
         </div>
     )
 
+    // const handleCustomerSubmit = (event) => {
+    //     event.preventDefault()
+
+    //     const checkForm = validForm(mainFormvalueToCheck, formData.addForm); // Use mainFormvalueToCheck for validation
+    //     console.log(checkForm)
+
+    //     if (checkForm.isValid) {
+    //         console.log('Form is valid')
+    //         postNewCustomerData()
+    //     }
+    // }
+
+    const handleSubmitSection = (e, action) => {
+        e.preventDefault();
+
+        const checkForm = validForm(mainFormvalueToCheck, formData.mainForm); // Use mainFormvalueToCheck for validation
+        console.log(checkForm);
+
+        if (checkForm.isValid) {
+            console.log('Form is valid');
+
+            if (action === 'SAVE') {
+                // Save
+            } else if (action === 'SAVE & CLOSE') {
+                // Save and close
+            }
+        }
+    }
+
+
+    const handleAddSubmitSection = (e, action) => {
+        e.preventDefault();
+
+        const checkForm = validForm(addFormvalueToCheck, formData.addForm); // Use mainFormvalueToCheck for validation
+        console.log(checkForm);
+
+        if (checkForm.isValid) {
+            console.log('Form is valid');
+
+            if (action === 'SAVE') {
+                // Save
+            } else if (action === 'SAVE & CLOSE') {
+                // Save and close
+            }
+        }
+    }
+
+
     const AddCustomerForm = (
         <form onSubmit={handleCustomerSubmitSection}>
             <Row>
@@ -338,13 +481,15 @@ const AddServicing = () => {
                         id="basicDetails-title"
                         options={titleOptions}
                         closeMenuOnSelect={true}
-                        value={titleOptions.find(option => option.value === formData.addForm.title) ?? ''}
-                        // onChange={(e) => setCustomerFormData(prevData => ({ ...prevData, title: e.value }))}
+                        value={titleOptions.find(option => option.value === formData.addForm?.title) ?? ''}
                         onChange={(event) => {
-                            const e = { target: { name: "title", value: event.value } }
+                            const e = { target: { name: "title", value: event.value } };
                             handleInputChange(e, "addForm")
+                            // addInputChangeHandler({ target: { name: 'title', value: e?.value } });
                         }}
                     />
+
+                    <p id="title_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-first-name">
@@ -352,9 +497,12 @@ const AddServicing = () => {
                     </label>
                     <input placeholder="First Name" type='text' id='basicDetails-first-name' name='cust_first_name' className="form-control"
                         value={formData.addForm?.cust_first_name}
-                        onChange={(e) => handleInputChange(e, "addForm")}
-
+                        onChange={(e) => {
+                            handleInputChange(e, "addForm")
+                            // addInputChangeHandler(e)
+                        }}
                     />
+                    <p id="cust_first_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-last-name">
@@ -362,8 +510,13 @@ const AddServicing = () => {
                     </label>
                     <input placeholder="Last Name" type='text' id='basicDetails-last-name' name='cust_last_name' className="form-control"
                         value={formData.addForm?.cust_last_name}
-                        onChange={(e) => handleInputChange(e, "addForm")}
+                        onChange={(e) => {
+                            handleInputChange(e, "addForm")
+                            // addInputChangeHandler(e)
+                        }}
+
                     />
+                    <p id="cust_last_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-email">
@@ -371,8 +524,12 @@ const AddServicing = () => {
                     </label>
                     <input placeholder="Email" type='text' id='basicDetails-email' name='email' className="form-control"
                         value={formData.addForm?.email}
-                        onChange={(e) => handleInputChange(e, "addForm")}
+                        onChange={(e) => {
+                            handleInputChange(e, "addForm")
+                            // addInputChangeHandler(e)
+                        }}
                     />
+                    <p id="email_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-mobile">
@@ -380,8 +537,13 @@ const AddServicing = () => {
                     </label>
                     <input placeholder="Mobile Number" type='tel' maxLength={10} id='basicDetails-mobile' name='phone_no' className="form-control"
                         value={formData.addForm?.phone_no}
-                        onChange={(e) => handleInputChange(e, "addForm")}
+                        onChange={(e) => {
+                            handleInputChange(e, "addForm")
+                            // addInputChangeHandler(e)
+                        }}
                     />
+                    <p id="phone_no_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="address-1-country">Country</label>
@@ -396,8 +558,11 @@ const AddServicing = () => {
                         onChange={(event) => {
                             const e = { target: { name: "country", value: event.value } }
                             handleInputChange(e, "addForm")
+                            // inputChangeHandler({ target: { name: 'country', value: e?.value } })
                         }}
                     />
+                    <p id="country_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="address-1-city">City</label>
@@ -408,8 +573,12 @@ const AddServicing = () => {
                         name="city"
                         className="form-control"
                         value={formData.addForm.city}
-                        onChange={(e) => handleInputChange(e, "addForm")}
+                        onChange={(e) => {
+                            handleInputChange(e, "addForm")
+                            // addInputChangeHandler(e)
+                        }}
                     />
+                    <p id="city_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="address-1-state">State</label>
@@ -420,8 +589,13 @@ const AddServicing = () => {
                         name="state"
                         className="form-control"
                         value={formData.addForm.state}
-                        onChange={(e) => handleInputChange(e, "addForm")}
+                        onChange={(e) => {
+                            handleInputChange(e, "addForm")
+                            // addInputChangeHandler(e)
+                        }}
                     />
+                    <p id="state_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="address-1-pincode">Pincode</label>
@@ -432,14 +606,19 @@ const AddServicing = () => {
                         name="pincode"
                         className="form-control"
                         value={formData.addForm.pincode}
-                        onChange={(e) => handleInputChange(e, "addForm")}
+                        onChange={(e) => {
+                            handleInputChange(e, "addForm")
+                            addInputChangeHandler(e)
+                        }}
                     />
+                    <p id="pincode_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
                 </Col>
 
                 <div className='d-flex justify-content-between mt-2'>
                     <div>
-                        <button className="btn btn-primary" type="submit">Add</button>
-                        <button className="btn btn-primary ms-2" type="button">Cancel</button>
+                        <button className="btn btn-primary" type="submit" onClick={(e) => handleAddSubmitSection(e)}>Add</button>
+                        <button className="btn btn-primary ms-2" type="button" onClick={(e) => handleAddSubmitSection(e)}>Cancel</button>
                     </div>
                     <div>
                         {/* <button className="btn btn-primary" type="submit" onClick={handleSubmitSection1}>Save</button>
@@ -451,6 +630,16 @@ const AddServicing = () => {
         </form>
     )
 
+    const handleChange = (e, formType) => {
+        const { name, value } = e.target
+        setFormData((prevData) => ({
+            ...prevData,
+            [formType]: {
+                ...prevData[formType],
+                [name]: value
+            }
+        }))
+    }
     return (
         <div >
             <Offcanvas show={isHidden} onHide={() => handleClose('customer')} placement="end">
@@ -480,10 +669,14 @@ const AddServicing = () => {
                             closeMenuOnSelect={true}
                             onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
                             components={{ Menu: CustomSelectComponent }}
-                            onChange={selectCustomer}
+                            onChange={(e) => {
+                                selectCustomer
+                                inputChangeHandler({ target: { name: 'customer_name', value: e?.value } })
+                            }}
                             value={id && { value: formData.mainForm?.customer_name, label: formData.mainForm?.customer_name }}
                             isDisabled={formData.mainForm?.customer_name}
                         />
+                        <p id="customer_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label
@@ -504,9 +697,10 @@ const AddServicing = () => {
                             // onChange={e => setFormData(prev => ({ ...prev, vehicle: e.value }))}
                             onChange={(event) => {
                                 const e = { target: { name: "vehicle", value: event.value } }
-                                handleInputChange(e, "mainForm")
+                                inputChangeHandler({ target: { name: 'vehicle', value: e?.value } })
                             }}
                         />
+                        <p id="vehicle_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="advisor-name">Service Advisor</label>
@@ -517,8 +711,12 @@ const AddServicing = () => {
                             name="service_advisor"
                             className="form-control"
                             value={formData.mainForm.service_advisor ?? ""}
-                            onChange={(e) => handleInputChange(e, "mainForm")}
+                            onChange={(e) => {
+                                handleInputChange(e, "mainForm")
+                                inputChangeHandler(e)
+                            }}
                         />
+                        <p id="service_advisor_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="job-card-date">Job Card Date</label>
@@ -529,8 +727,13 @@ const AddServicing = () => {
                             name="job_card_date"
                             className="form-control"
                             value={formData.mainForm.job_card_date ?? ""}
-                            onChange={(e) => handleInputChange(e, "mainForm")}
+                            onChange={(e) => {
+                                handleInputChange(e, "mainForm")
+                                inputChangeHandler(e)
+                            }}
                         />
+                        <p id="job_card_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="service-invoice-date">Service Invoice Date</label>
@@ -541,8 +744,13 @@ const AddServicing = () => {
                             name="service_invoice_date"
                             className="form-control"
                             value={formData.mainForm.service_invoice_date ?? ""}
-                            onChange={(e) => handleInputChange(e, "mainForm")}
+                            onChange={(e) => {
+                                handleInputChange(e, "mainForm")
+                                inputChangeHandler(e)
+                            }}
                         />
+                        <p id="service_invoice_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="next-service-date">Next Service Date</label>
@@ -553,8 +761,13 @@ const AddServicing = () => {
                             name="service_expiry_date"
                             className="form-control"
                             value={formData.mainForm.service_expiry_date ?? ""}
-                            onChange={(e) => handleInputChange(e, "mainForm")}
+                            onChange={(e) => {
+                                handleInputChange(e, "mainForm")
+                                inputChangeHandler(e)
+                            }}
                         />
+                        <p id="service_expiry_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="service-invoice-amount">Service Invoice Amount - ₹</label>
@@ -565,8 +778,13 @@ const AddServicing = () => {
                             name="service_invoice_amount"
                             className="form-control"
                             value={formData.mainForm.service_invoice_amount ?? ""}
-                            onChange={(e) => handleInputChange(e, "mainForm")}
+                            onChange={(e) => {
+                                handleInputChange(e, "mainForm")
+                                inputChangeHandler(e)
+                            }}
                         />
+                        <p id="service_invoice_amount_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
                     </Col>
                     <Col xs='12'>
                         <div className='d-flex justify-content-between mt-2'>
@@ -577,8 +795,8 @@ const AddServicing = () => {
                                 {/* <button className="btn btn-primary ms-2" type="button">Cancel</button> */}
                             </div>
                             <div>
-                                <button className="btn btn-primary" type="button" onClick={e => handleSubmit(e, 'SAVE')} >Save</button>
-                                <button className="btn btn-primary ms-2" type="button">Save & Close</button>
+                                <button className="btn btn-primary" type="button" onClick={(e) => handleSubmitSection(e, 'SAVE')} >Save</button>
+                                <button className="btn btn-primary ms-2" type="button" onClick={(e) => handleSubmitSection(e)}>Save & Close</button>
                             </div>
                         </div>
                     </Col>

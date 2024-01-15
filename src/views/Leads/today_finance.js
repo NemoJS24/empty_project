@@ -156,35 +156,35 @@ const Customers = () => {
   const customerStatisticsData = [
     {
       name: "All Loan",
-      data: tableData.total_loan_amount,
+      data: tableData.total_loan_amount ?? "0",
       type: "number",
       icon: <LuTrendingUp size={30} className="text-warning" />,
       iconStyle: "bg-warning bg-opacity-25"
     },
     {
       name: "Today's Loan",
-      data: tableData.today_loan,
+      data: tableData.today_loan ?? "0",
       type: "number",
       icon: <LiaUserSolid size={30} className="text-info" />,
       iconStyle: "bg-info bg-opacity-25"
     },
     {
       name: "Total Loan Amount",
-      data: tableData.total_loan_amount,
+      data: tableData.total_loan_amount ?? "0",
       type: "number",
       icon: <LiaUserSlashSolid size={30} className="text-danger" />,
       iconStyle: "bg-danger bg-opacity-25"
     },
     {
       name: "Total EMI Amount Paid",
-      data: tableData.total_emi_amt,
+      data: tableData.total_emi_amt ?? "0",
       type: "money",
       icon: <PiMoneyThin size={30} className="text-success" />,
       iconStyle: "bg-success bg-opacity-25"
     },
     {
       name: "Total EMI Amount Due",
-      data: tableData.total_loan_amount_remain,
+      data: tableData.total_loan_amount_remain ?? "0",
       type: "money",
       icon: <PiMoneyThin size={30} className="text-success" />,
       iconStyle: "bg-success bg-opacity-25"
@@ -194,8 +194,7 @@ const Customers = () => {
 
   return (
     <>
-
-<Card>
+      <Card>
         <CardHeader>
           <Row className="mb-2">
             <h4 className="">Statistics</h4>
