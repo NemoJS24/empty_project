@@ -71,12 +71,13 @@ const Navbar = ({ position }) => {
       window.addEventListener('scroll', () => {
         const Yscroll = window.scrollY
         const first_navbar = document.getElementById("first_navbar")
-  
-        if (Yscroll > 50) {
-          first_navbar.style.boxShadow = " 0 0px 8px rgba(0,0,0,0.16)"
-        } else {
-          first_navbar.style.boxShadow = " none"
-  
+        if (first_navbar) {
+          if (Yscroll > 50) {
+            first_navbar.style.boxShadow = " 0 0px 8px rgba(0,0,0,0.16)"
+          } else {
+            first_navbar.style.boxShadow = " none"
+    
+          }
         }
       })
 
