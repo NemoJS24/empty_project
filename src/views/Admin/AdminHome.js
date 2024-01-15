@@ -24,17 +24,17 @@ const AdminHome = () => {
         const isSuperUser = await Cookies.get('superUser')
         console.log(isSuperUser)
         if (isSuperUser === 'true') {
-        fetch(`${baseURL}/merchant/admin_merchant_list/`)
-        .then((data) => data.json())
-        .then((resp) => {
-            console.log(resp)
-            setEmails(resp.data.company_profile)
-            setIsloading(false)
-        })
-        .catch((error) => {
-            console.log(error)
-            setIsloading(false)
-        })
+            fetch(`${baseURL}/merchant/admin_merchant_list/`)
+            .then((data) => data.json())
+            .then((resp) => {
+                console.log(resp)
+                setEmails(resp.data.company_profile)
+                setIsloading(false)
+            })
+            .catch((error) => {
+                console.log(error)
+                setIsloading(false)
+            })
         } else {
             navigate('/admin/')
         }
