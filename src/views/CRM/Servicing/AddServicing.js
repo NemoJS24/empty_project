@@ -9,6 +9,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import axios from "axios"
 import toast from "react-hot-toast"
 import { validForm } from '../../Validator'
+import { postReq } from '../../../assets/auth/jwtService'
 
 const AddServicing = () => {
 
@@ -276,17 +277,17 @@ const AddServicing = () => {
 
     const getCountries = () => {
         getReq("countries")
-            .then((resp) => {
-                console.log(resp)
-                setCountry(
-                    resp.data.data.countries.map((curElem) => {
-                        return { value: curElem.id, label: `${curElem.name}` }
-                    })
-                )
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        .then((resp) => {
+            console.log(resp)
+            setCountry(
+                resp.data.data.countries.map((curElem) => {
+                    return { value: curElem.id, label: `${curElem.name}` }
+                })
+            )
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }
 
     const selectCustomer = (e) => {
@@ -299,28 +300,28 @@ const AddServicing = () => {
             method: "POST",
             body: form_data
         })
-            .then((response) => {
-                console.log(response)
-                return response.json()
-            })
-            .then((resp) => {
-                console.log("Response:", resp)
-                const vehicleOptions = resp.car_variant
-                    .map((vehicle) => ({
-                        value: vehicle.id,
-                        label: vehicle.registration_number
-                    }))
-                setVehicleOptions(vehicleOptions)
-            })
-            .catch((error) => {
-                console.error("Error:", error)
-                    (error.message) ? toast.error(error.message) : toast.error(error)
-            })
+        .then((response) => {
+            console.log(response)
+            return response.json()
+        })
+        .then((resp) => {
+            console.log("Response:", resp)
+            const vehicleOptions = resp.car_variant
+            .map((vehicle) => ({
+                value: vehicle.id,
+                label: vehicle.registration_number
+            }))
+            setVehicleOptions(vehicleOptions)
+        })
+        .catch((error) => {
+            console.error("Error:", error)
+            (error.message) ? toast.error(error.message) : toast.error(error)
+        })
     }
 
     const postNewCustomerData = () => {
         // console.log(customerFormData)
-        const url = new URL(`${crmURL}/customers/merchant/add_customer/`)
+        // const url = new URL(`${crmURL}/customers/merchant/add_customer/`)
         const form_data = new FormData()
         Object.entries(formData.addForm).map(([key, value]) => {
             console.log(key, ": ", value)
@@ -331,37 +332,26 @@ const AddServicing = () => {
         form_data.append("entry_point", 'INDV')
         form_data.append("press_btn", 'SAVE & CLOSE')
 
-        fetch(url, {
-            method: "POST",
-            body: form_data
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    if (response.status === 409) {
-                        throw new Error('Customer already exists')
-                    }
-                    else {
-                        toast.error(`HTTP error! Status: ${response.status}`)
-                        throw new Error(`HTTP error! Status: ${response.status}`)
-                    }
-                }
-                return response.json()
-            })
-            .then((resp) => {
-                console.log("Response:", resp)
-                toast.success('Customer saved successfully')
-                handleClose('customer')
-                fetchCustomerData(currentPage, null, () => { })
+        // fetch(url, {
+        //     method: "POST",
+        //     body: form_data
+        // })
+        postReq("add_customer_individual", form_data)
+        // .then((data) => data.json())
+        .then((resp) => {
+            
+            console.log("Response:", resp)
+            toast.success('Customer saved successfully')
+            handleClose('customer')
+            fetchCustomerData(currentPage, null, () => { })
 
-            })
-            .catch((error) => {
-                console.error("Error:", error)
-                if (error.message === 'Customer already exists') {
-                    toast.error('Customer already exists')
-                } else {
-                    toast.error('Failed to save customer')
-                }
-            })
+        })
+        .catch((error) => {
+            console.error("Error:", error.status)
+            if (error.status === 409) {
+                toast.error('Customer already exists')
+            }
+        })
     }
 
     useEffect(() => {
@@ -455,20 +445,16 @@ const AddServicing = () => {
         const checkForm = validForm(addFormvalueToCheck, formData.addForm); // Use mainFormvalueToCheck for validation
         console.log(checkForm);
 
-        if (checkForm.isValid) {
+        if (checkForm) {
             console.log('Form is valid');
-
-            if (action === 'SAVE') {
-                // Save
-            } else if (action === 'SAVE & CLOSE') {
-                // Save and close
-            }
+            
+            postNewCustomerData()
         }
     }
 
 
     const AddCustomerForm = (
-        <form onSubmit={handleCustomerSubmitSection}>
+        <form>
             <Row>
                 <Col md={12} className="mt-2">
                     <h4 className="mb-0">Add Customer</h4>
@@ -651,156 +637,170 @@ const AddServicing = () => {
             </Offcanvas>
             <form>
                 <Row>
-                    <Col md={12} className="mt-2">
-                        <h4 className="mb-0">{id ? 'Edit Servicing' : 'Add Servicing'}</h4>
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label
-                            htmlFor="company-name"
-                            className="form-label"
-                            style={{ margin: "0px" }}
-                        >
-                            Customer Name
-                        </label>
-                        <Select
-                            placeholder='Select Customer'
-                            id='company-name'
-                            options={allOptions}
-                            closeMenuOnSelect={true}
-                            onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
-                            components={{ Menu: CustomSelectComponent }}
-                            onChange={(e) => {
-                                selectCustomer
-                                inputChangeHandler({ target: { name: 'customer_name', value: e?.value } })
-                            }}
-                            value={id && { value: formData.mainForm?.customer_name, label: formData.mainForm?.customer_name }}
-                            isDisabled={formData.mainForm?.customer_name}
-                        />
-                        <p id="customer_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label
-                            htmlFor="vehicle-name"
-                            className="form-label"
-                            style={{ margin: "0px" }}
-                        >
-                            Vehicle Number
-                        </label>
-                        <Select
-                            placeholder='Vehicle Number'
-                            id="vehicle-name"
-                            options={vehicleOptions}
-                            // defaultValue={vehicleOptions[0]}
-                            value={id && { value: formData.mainForm?.registration_number, label: formData.mainForm?.registration_number }}
-                            isDisabled={formData.mainForm?.registration_number}
-                            closeMenuOnSelect={true}
-                            // onChange={e => setFormData(prev => ({ ...prev, vehicle: e.value }))}
-                            onChange={(event) => {
-                                const e = { target: { name: "vehicle", value: event.value } }
-                                inputChangeHandler({ target: { name: 'vehicle', value: e?.value } })
-                            }}
-                        />
-                        <p id="vehicle_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="advisor-name">Service Advisor</label>
-                        <input
-                            placeholder="Service Advisor"
-                            type="text"
-                            id="advisor-name"
-                            name="service_advisor"
-                            className="form-control"
-                            value={formData.mainForm.service_advisor ?? ""}
-                            onChange={(e) => {
-                                handleInputChange(e, "mainForm")
-                                inputChangeHandler(e)
-                            }}
-                        />
-                        <p id="service_advisor_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="job-card-date">Job Card Date</label>
-                        <input
-                            placeholder="Job Card Date"
-                            type="date"
-                            id="job-card-date"
-                            name="job_card_date"
-                            className="form-control"
-                            value={formData.mainForm.job_card_date ?? ""}
-                            onChange={(e) => {
-                                handleInputChange(e, "mainForm")
-                                inputChangeHandler(e)
-                            }}
-                        />
-                        <p id="job_card_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
-
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="service-invoice-date">Service Invoice Date</label>
-                        <input
-                            placeholder="Service Invoice Date"
-                            type="date"
-                            id="service-invoice-date"
-                            name="service_invoice_date"
-                            className="form-control"
-                            value={formData.mainForm.service_invoice_date ?? ""}
-                            onChange={(e) => {
-                                handleInputChange(e, "mainForm")
-                                inputChangeHandler(e)
-                            }}
-                        />
-                        <p id="service_invoice_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
-
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="next-service-date">Next Service Date</label>
-                        <input
-                            placeholder="Next Service Date"
-                            type="date"
-                            id="next-service-date"
-                            name="service_expiry_date"
-                            className="form-control"
-                            value={formData.mainForm.service_expiry_date ?? ""}
-                            onChange={(e) => {
-                                handleInputChange(e, "mainForm")
-                                inputChangeHandler(e)
-                            }}
-                        />
-                        <p id="service_expiry_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
-
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="service-invoice-amount">Service Invoice Amount - ₹</label>
-                        <input
-                            placeholder="Service Invoice Amount"
-                            type="tel"
-                            id="service-invoice-amount"
-                            name="service_invoice_amount"
-                            className="form-control"
-                            value={formData.mainForm.service_invoice_amount ?? ""}
-                            onChange={(e) => {
-                                handleInputChange(e, "mainForm")
-                                inputChangeHandler(e)
-                            }}
-                        />
-                        <p id="service_invoice_amount_val" className="text-danger m-0 p-0 vaildMessage"></p>
-
-                    </Col>
-                    <Col xs='12'>
-                        <div className='d-flex justify-content-between mt-2'>
-                            <div>
-                                <button className="btn btn-primary" type="button" onClick={() => history.back()}>
-                                    Back
-                                </button>
-                                {/* <button className="btn btn-primary ms-2" type="button">Cancel</button> */}
-                            </div>
-                            <div>
-                                <button className="btn btn-primary" type="button" onClick={(e) => handleSubmitSection(e, 'SAVE')} >Save</button>
-                                <button className="btn btn-primary ms-2" type="button" onClick={(e) => handleSubmitSection(e)}>Save & Close</button>
-                            </div>
-                        </div>
-                    </Col>
+                    <Card>
+                        <CardBody>
+                            <Col md={12}>
+                                <h4 className="mb-0">{id ? 'Edit Servicing' : 'Add Servicing'}</h4>
+                            </Col>
+                        </CardBody>
+                    </Card>
+                    
                 </Row>
+
+                <Card>
+                    <CardBody>
+
+                        <Row>
+                            
+                            <Col md={6} className="mb-2">
+                                <label
+                                    htmlFor="company-name"
+                                    className="form-label"
+                                    style={{ margin: "0px" }}
+                                >
+                                    Customer Name
+                                </label>
+                                <Select
+                                    placeholder='Select Customer'
+                                    id='company-name'
+                                    options={allOptions}
+                                    closeMenuOnSelect={true}
+                                    onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
+                                    components={{ Menu: CustomSelectComponent }}
+                                    onChange={(e) => {
+                                        selectCustomer
+                                        inputChangeHandler({ target: { name: 'customer_name', value: e?.value } })
+                                    }}
+                                    value={id && { value: formData.mainForm?.customer_name, label: formData.mainForm?.customer_name }}
+                                    isDisabled={formData.mainForm?.customer_name}
+                                />
+                                <p id="customer_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                            </Col>
+                            <Col md={6} className="mb-2">
+                                <label
+                                    htmlFor="vehicle-name"
+                                    className="form-label"
+                                    style={{ margin: "0px" }}
+                                >
+                                    Vehicle Number
+                                </label>
+                                <Select
+                                    placeholder='Vehicle Number'
+                                    id="vehicle-name"
+                                    options={vehicleOptions}
+                                    // defaultValue={vehicleOptions[0]}
+                                    value={id && { value: formData.mainForm?.registration_number, label: formData.mainForm?.registration_number }}
+                                    isDisabled={formData.mainForm?.registration_number}
+                                    closeMenuOnSelect={true}
+                                    // onChange={e => setFormData(prev => ({ ...prev, vehicle: e.value }))}
+                                    onChange={(event) => {
+                                        const e = { target: { name: "vehicle", value: event.value } }
+                                        inputChangeHandler({ target: { name: 'vehicle', value: e?.value } })
+                                    }}
+                                />
+                                <p id="vehicle_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                            </Col>
+                            <Col md={6} className="mb-2">
+                                <label htmlFor="advisor-name">Service Advisor</label>
+                                <input
+                                    placeholder="Service Advisor"
+                                    type="text"
+                                    id="advisor-name"
+                                    name="service_advisor"
+                                    className="form-control"
+                                    value={formData.mainForm.service_advisor ?? ""}
+                                    onChange={(e) => {
+                                        handleInputChange(e, "mainForm")
+                                        inputChangeHandler(e)
+                                    }}
+                                />
+                                <p id="service_advisor_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                            </Col>
+                            <Col md={6} className="mb-2">
+                                <label htmlFor="job-card-date">Job Card Date</label>
+                                <input
+                                    placeholder="Job Card Date"
+                                    type="date"
+                                    id="job-card-date"
+                                    name="job_card_date"
+                                    className="form-control"
+                                    value={formData.mainForm.job_card_date ?? ""}
+                                    onChange={(e) => {
+                                        handleInputChange(e, "mainForm")
+                                        inputChangeHandler(e)
+                                    }}
+                                />
+                                <p id="job_card_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
+                            </Col>
+                            <Col md={6} className="mb-2">
+                                <label htmlFor="service-invoice-date">Service Invoice Date</label>
+                                <input
+                                    placeholder="Service Invoice Date"
+                                    type="date"
+                                    id="service-invoice-date"
+                                    name="service_invoice_date"
+                                    className="form-control"
+                                    value={formData.mainForm.service_invoice_date ?? ""}
+                                    onChange={(e) => {
+                                        handleInputChange(e, "mainForm")
+                                        inputChangeHandler(e)
+                                    }}
+                                />
+                                <p id="service_invoice_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
+                            </Col>
+                            <Col md={6} className="mb-2">
+                                <label htmlFor="next-service-date">Next Service Date</label>
+                                <input
+                                    placeholder="Next Service Date"
+                                    type="date"
+                                    id="next-service-date"
+                                    name="service_expiry_date"
+                                    className="form-control"
+                                    value={formData.mainForm.service_expiry_date ?? ""}
+                                    onChange={(e) => {
+                                        handleInputChange(e, "mainForm")
+                                        inputChangeHandler(e)
+                                    }}
+                                />
+                                <p id="service_expiry_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
+                            </Col>
+                            <Col md={6} className="mb-2">
+                                <label htmlFor="service-invoice-amount">Service Invoice Amount - ₹</label>
+                                <input
+                                    placeholder="Service Invoice Amount"
+                                    type="tel"
+                                    id="service-invoice-amount"
+                                    name="service_invoice_amount"
+                                    className="form-control"
+                                    value={formData.mainForm.service_invoice_amount ?? ""}
+                                    onChange={(e) => {
+                                        handleInputChange(e, "mainForm")
+                                        inputChangeHandler(e)
+                                    }}
+                                />
+                                <p id="service_invoice_amount_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
+                            </Col>
+                            <Col xs='12'>
+                                <div className='d-flex justify-content-between'>
+                                    <div>
+                                        <button className="btn btn-primary" type="button" onClick={() => history.back()}>
+                                            Back
+                                        </button>
+                                        {/* <button className="btn btn-primary ms-2" type="button">Cancel</button> */}
+                                    </div>
+                                    <div>
+                                        <button className="btn btn-primary" type="button" onClick={(e) => handleSubmitSection(e, 'SAVE')} >Save</button>
+                                        <button className="btn btn-primary ms-2" type="button" onClick={(e) => handleSubmitSection(e)}>Save & Close</button>
+                                    </div>
+                                </div>
+                            </Col>
+                        </Row>
+                    </CardBody>
+                </Card>
             </form>
         </div>
     )
