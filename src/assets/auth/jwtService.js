@@ -33,7 +33,7 @@ export const configUrl = {
     outletType: "/merchant/choose-outlet-type/",
     getCategory: "/merchant/categories/",
     saveOutletDetails: "/merchant/create-outlet/",
-    networkDashboard : "/merchant/xircls/networks-dashboard/",
+    networkDashboard: "/merchant/xircls/networks-dashboard/",
     addPlanDetails: "/merchant/xircls/make-a-xircls/",
     getDashboardData: "/dashboard/add_count_dash/",
     getDashboardCampaginDetails: "/dashboard/current_campaign/",
@@ -128,8 +128,14 @@ export const configUrl = {
     get_view_customer: "/customers/merchant/get_view_customer/",
     get_company_details: "/customers/merchant/get_company_details/",
     all_cust_dashboard: "/customers/merchant/all_cust_dashboard/",
-    add_company_details: "/customers/merchant/add_company_details/"
+    add_company_details: "/customers/merchant/add_company_details/",
     // Flash Account
+
+    fetch_vehicle_details: "/vehicle/fetch_vehicle_details/",
+    fetch_car_details: '/vehicle/fetch_car_details/',
+    add_insurance: "/insurance/add_insurance/",
+    add_customer: '/customers/add_customer/',
+    add_vehicle: '/vehicle/add_vehicle/'
 }
 
 const axiosInstance = axios.create({
@@ -215,7 +221,7 @@ export const postReq = (path, data, customBaseURL = baseURL, config) => {
     // if (customBaseURL) {
     axiosInstance.defaults.baseURL = customBaseURL
     // }
-    
+
     // updateBaseURL(URLs[base])
     const time = new Date().getTime()
     if (path === 'login' || path === "signup") {

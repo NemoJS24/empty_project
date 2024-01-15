@@ -43,6 +43,17 @@ const CustomersAddCustomer = ({ allData }) => {
       { value: 'mrs', label: 'Mrs.' }
    ]
 
+   const capitalizeFirstLetter = (str) => {
+      return str.charAt(0).toUpperCase() + str.slice(1)
+   }
+
+   const handleNameInputChange = (e, fieldName) => {
+      const { value } = e.target
+      const capitalizedValue = capitalizeFirstLetter(value)
+
+      handleInputChange({ target: { name: fieldName, value: capitalizedValue } })
+   }
+
    return (
       <>
          <style>{`
@@ -99,14 +110,14 @@ const CustomersAddCustomer = ({ allData }) => {
                   <label htmlFor="basicDetails-first-name ">
                      First Name
                   </label>
-                  <input placeholder="First Name" type='text' id='basicDetails-first-name' name='cust_first_name' className="form-control " value={formData?.cust_first_name ?? ''} onChange={handleInputChange} />
+                  <input placeholder="First Name" type='text' id='basicDetails-first-name' name='cust_first_name' className="form-control " value={formData?.cust_first_name ?? ''} onChange={(e) => handleNameInputChange(e, 'cust_first_name')} />
                   <p id="cust_first_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                </Col>
                <Col md={6} lg={4} className="mt-1">
                   <label htmlFor="basicDetails-last-name">
                      Last Name
                   </label>
-                  <input placeholder="Last Name" type='text' id='basicDetails-last-name' name='cust_last_name' className="form-control" value={formData?.cust_last_name ?? ''} onChange={handleInputChange} />
+                  <input placeholder="Last Name" type='text' id='basicDetails-last-name' name='cust_last_name' className="form-control" value={formData?.cust_last_name ?? ''} onChange={(e) => handleNameInputChange(e, 'cust_last_name')} />
                   <p id="cust_last_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                </Col>
                <Col md={6} lg={4} className="mt-1">
@@ -164,7 +175,7 @@ const CustomersAddCustomer = ({ allData }) => {
                   <Select
                      id="basicDetails-customerType"
                      options={dropdownOptions}
-                     value={dropdownOptions.find(option => option.value === formData.dropdown) ?? ''}
+                     value={dropdownOptions.find(option => option.value === formData.dropdown) || dropdownOptions[0]} // Set the default value to 'regular'
                      onChange={(e) => handleInputChange(e, 'dropdown')}
                      closeMenuOnSelect={true}
                   />

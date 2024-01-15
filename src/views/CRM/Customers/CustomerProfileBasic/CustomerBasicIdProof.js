@@ -82,29 +82,6 @@ const CustomerBasicIdProof = ({ allData }) => {
               </label>
             </div>
           </Col>
-          {/* <div className="d-flex justify-content-between mt-2">
-            <div>
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={handleBack}
-              >
-                Back
-              </button>
-              <button className="btn btn-primary ms-2" type="button">
-                Cancel
-              </button>
-            </div>
-            <div>
-              <button
-                className="btn btn-primary ms-2"
-                type="button"
-                onClick={handleNext}
-              >
-                Next
-              </button>
-            </div>
-          </div> */}
         </Row>
       </Container>
     </>
