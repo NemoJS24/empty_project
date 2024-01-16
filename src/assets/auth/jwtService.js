@@ -136,8 +136,12 @@ export const configUrl = {
     fetch_vehicle_details: "/vehicle/fetch_vehicle_details/",
     fetch_car_details: '/vehicle/fetch_car_details/',
     add_insurance: "/insurance/add_insurance/",
-    add_customer: '/customers/add_customer/',
-    add_vehicle: '/vehicle/add_vehicle/'
+    add_customer: '/customers/merchant/add_customer/',
+    add_vehicle: '/vehicle/add_vehicle/',
+    crm_servicing_customers: '/servicing/get_add_servicing/',
+    get_customer_details: '/customers/merchant/get_customer_details',
+    fetch_vehicle_number: '/vehicle/fetch_vehicle_number',
+    add_finance: '/finance/add_finance/'
 }
 
 const axiosInstance = axios.create({

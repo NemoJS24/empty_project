@@ -8,16 +8,22 @@ import { crmURL, getReq } from '@src/assets/auth/jwtService'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from "axios"
 import toast from "react-hot-toast"
-import { validForm } from '../../Validator'
+import { validForm, validateEmail } from '../../Validator'
+import { postReq } from '../../../assets/auth/jwtService'
 
 const AddServicing = () => {
 
+    const { id } = useParams()
+    const urlParams = new URLSearchParams(location.search)
+    const isEdit = urlParams.get("type") === "edit"
+    const isCustomer = urlParams.get("type") === "customer"
+
     const mainFormvalueToCheck = [
         {
-            name: 'customer_name',
+            name: 'customer_id',
             message: 'Enter Customer Name',
             type: 'string',
-            id: 'customer_name'
+            id: 'customer_id'
         },
         {
             name: 'vehicle',
@@ -116,7 +122,7 @@ const AddServicing = () => {
 
     const [formData, setFormData] = useState({
         mainForm: {
-            customer_name: '',
+            customer_id: id ? id : "",
             vehicle: '',
             service_advisor: '',
             job_card_date: '',
@@ -137,13 +143,13 @@ const AddServicing = () => {
         },
     })
 
-    const inputChangeHandler = (e) => {
-        setFormData({ ...formData, mainForm: { ...formData.mainForm, [e.target.name]: e.target.value } })
-    }
+    // const inputChangeHandler = (e) => {
+    //     setFormData({ ...formData, mainForm: { ...formData.mainForm, [e.target.name]: e.target.value } })
+    // }
 
-    const addInputChangeHandler = (e) => {
-        setFormData({ ...formData, addForm: { ...formData.addForm, [e.target.name]: e.target.value } })
-    }
+    // const addInputChangeHandler = (e) => {
+    //     setFormData({ ...formData, addForm: { ...formData.addForm, [e.target.name]: e.target.value } })
+    // }
 
     // const [customerFormData, setCustomerFormData] = useState({
     //     title: "mr",
@@ -163,45 +169,50 @@ const AddServicing = () => {
     const [currentPage, setCurrentPage] = useState(1)
 
     const navigate = useNavigate()
-    const { id } = useParams()
 
-    const fetchServiceData = (id) => {
-        const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
+    const fetchServiceData = (func_id) => {
+        // const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
         const form_data = new FormData()
-        form_data.append("id", id)
-        form_data.append('edit_type', 'is_servicing')
-        fetch(url, {
-            method: "POST",
-            body: form_data
-        })
-            .then((response) => {
-                return response.json()
-            })
+        form_data.append("id", func_id)
+        form_data.append('edit_type', (id && isCustomer) ? "is_customer_detail" : 'is_servicing')
+        // fetch(url, {
+        //     method: "POST",
+        //     body: form_data
+        // })
+        postReq("get_view_customer", form_data)
+            // .then((response) => {
+            //     return response.json()
+            // })
             .then((resp) => {
-                console.log("ResponseId:", resp.success[0])
-                if (resp.success.length === 0) {
-                    // navigate(`/merchant/customer/all_cust_dashboard/add_servicing/`)
-                    toast.error('Autofill is not available')
-                    return
-                }
-                const newObject = {};
-                for (const key in resp.success[0]) {
-                    if (resp.success[0].hasOwnProperty(key) && resp.success[0][key] !== null) {
-                        newObject[key] = resp.success[0][key];
-                    }
-                }
-                // console.log('AfterRemovingNullId', newObject);
-                setFormData(prefData => ({
-                    ...prefData,
-                    mainForm: {
-                        ...prefData.mainForm,
-                        ...newObject,
-                        job_card_date: prefData?.job_card_date.substring(0, 10),
-                        service_expiry_date: prefData?.service_expiry_date.substring(0, 10),
-                        service_invoice_date: prefData?.service_invoice_date.substring(0, 10),
-                        updated_at: prefData?.updated_at.substring(0, 10)
-                    }
-                }))
+                const newArr = resp?.data?.success?.map(ele => {
+                    return { value: ele.id, label: ele.customer_name }
+                })
+                console.log("ResponseId:", resp, newArr)
+                setAllOptions([...newArr])
+                // console.log("ResponseId:", resp.success[0])
+                // if (resp.success.length === 0) {
+                //     // navigate(`/merchant/customer/all_cust_dashboard/add_servicing/`)
+                //     toast.error('Autofill is not available')
+                //     return
+                // }
+                // const newObject = {};
+                // for (const key in resp.success[0]) {
+                //     if (resp.success[0].hasOwnProperty(key) && resp.success[0][key] !== null) {
+                //         newObject[key] = resp.success[0][key];
+                //     }
+                // }
+                // // console.log('AfterRemovingNullId', newObject);
+                // setFormData(prefData => ({
+                //     ...prefData,
+                //     mainForm: {
+                //         ...prefData.mainForm,
+                //         ...newObject,
+                //         job_card_date: prefData?.job_card_date.substring(0, 10),
+                //         service_expiry_date: prefData?.service_expiry_date.substring(0, 10),
+                //         service_invoice_date: prefData?.service_invoice_date.substring(0, 10),
+                //         updated_at: prefData?.updated_at.substring(0, 10)
+                //     }
+                // }))
             })
             .catch((error) => {
                 console.error("Error:", error)
@@ -210,7 +221,7 @@ const AddServicing = () => {
     }
 
     const postData = (btn) => {
-        const url = new URL(`${crmURL}/customers/merchant/jmd-servicing-customers/`)
+        // const url = new URL(`${crmURL}/customers/merchant/jmd-servicing-customers/`)
         const form_data = new FormData()
         Object.entries(formData.mainForm).map(([key, value]) => {
             form_data.append(key, value)
@@ -218,18 +229,19 @@ const AddServicing = () => {
         form_data.append("press_btn", btn)
         id && form_data.append("servicing_id", id)
 
-        fetch(url, {
-            method: "POST",
-            body: form_data
-        })
-            .then((response) => {
-                return response.json()
-            })
+        // fetch(url, {
+        //     method: "POST",
+        //     body: form_data
+        // })
+        // .then((response) => {
+        //     return response.json()
+        // })
+        postReq("crm_servicing_customers", form_data, crmURL)
             .then((resp) => {
                 console.log("Response:", resp)
-                toast.success('Customer Service saved successfully')
-                resp.is_edit_url ? navigate(`/merchant/customers/edit_service/${resp.servicing_code}`) : navigate(`/merchant/customer/all_cust_dashboard/add_servicing/`)
-                fetchServiceData(resp.servicing_code)
+                // toast.success('Customer Service saved successfully')
+                // resp.is_edit_url ? navigate(`/merchant/customers/edit_service/${resp.servicing_code}`) : navigate(`/merchant/customer/all_cust_dashboard/add_servicing/`)
+                // fetchServiceData(resp.servicing_code)
             })
             .catch((error) => {
                 console.error("Error:", error)
@@ -244,9 +256,10 @@ const AddServicing = () => {
     const fetchCustomerData = async (page, inputValue, callback) => {
         // console.log(callback, 'callback2')
         try {
-            const response = await axios.get(
-                `https://api.demo.xircls.in/customers/merchant/get_customer_details/?page=${page}`
-            )
+            const response = await getReq("get_customer_details", `/?page=${page}`)
+            // const response = await axios.get(
+            //     `https://api.demo.xircls.in/customers/merchant/get_customer_details/?page=${page}`
+            // )
             const successData = response.data.success
             // console.log(successData)
             if (successData && Array.isArray(successData)) {
@@ -258,7 +271,7 @@ const AddServicing = () => {
                     }))
                 const option = [...allOptions, ...customerOptions]
                 console.log(option, "option")
-                setAllOptions(option)
+                setAllOptions(prev => (id && isCustomer) ? prev : option)
                 callback(option)
                 // setCurrentPage((prevPage) => prevPage + 1)
                 setCurrentPage((prevPage) => {
@@ -290,32 +303,26 @@ const AddServicing = () => {
     }
 
     const selectCustomer = (e) => {
-        setFormData(prev => ({ ...prev, mainForm: { ...prev.mainForm, customer: e.value } }))
-        const form_data = new FormData()
-        const url = new URL(`${crmURL}/customers/merchant/fetch_vehicle_number/`)
-        form_data.append("id", e.value)
-        // "SHIVAM KALE"
-        fetch(url, {
-            method: "POST",
-            body: form_data
-        })
-            .then((response) => {
-                console.log(response)
-                return response.json()
-            })
-            .then((resp) => {
-                console.log("Response:", resp)
-                const vehicleOptions = resp.car_variant
-                    .map((vehicle) => ({
-                        value: vehicle.id,
-                        label: vehicle.registration_number
-                    }))
-                setVehicleOptions(vehicleOptions)
-            })
-            .catch((error) => {
-                console.error("Error:", error)
-                    (error.message) ? toast.error(error.message) : toast.error(error)
-            })
+        if (e) {
+            setFormData(prev => ({ ...prev, mainForm: { ...prev.mainForm, customer: (id && isCustomer) ? id : e.value } }))
+            const form_data = new FormData()
+            form_data.append("id", (id && isCustomer) ? id : e.value)
+            // "SHIVAM KALE"
+            getReq(`fetch_vehicle_number`, `/?id=${(id && isCustomer) ? id : e.value}`, crmURL)
+                .then((resp) => {
+                    console.log("Response: selectCustomer", resp)
+                    const vehicleOptions = resp.data.car_variant
+                        .map((vehicle) => ({
+                            value: vehicle.id,
+                            label: vehicle.registration_number
+                        }))
+                    setVehicleOptions(vehicleOptions)
+                })
+                .catch((error) => {
+                    console.error("Error:", error)
+                        (error.message) ? toast.error(error.message) : toast.error(error)
+                })
+        }
     }
 
     const postNewCustomerData = () => {
@@ -368,7 +375,9 @@ const AddServicing = () => {
         fetchCustomerData(currentPage, null, () => { })
         getCountries()
         if (id) {
+            setFormData({ ...formData, main: { ...formData.main, customer_id: id } })
             fetchServiceData(id)
+            selectCustomer()
         }
     }, [])
 
@@ -377,10 +386,10 @@ const AddServicing = () => {
         setFormData(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
     }
 
-    const handleAddInputChange = (e, keyType) => {
-        console.log(e)
-        setFormData(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
-    }
+    // const handleAddInputChange = (e, keyType) => {
+    //     console.log(e)
+    //     setFormData(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
+    // }
 
     const handleClose = (type) => (type === 'customer') && (setIsHidden(false))
     const handleShow = (type) => (type === 'customer') && setIsHidden(true)
@@ -431,21 +440,47 @@ const AddServicing = () => {
     //     }
     // }
 
-    const handleSubmitSection = (e, action) => {
+    const handleSubmitSection = async (e, action) => {
         e.preventDefault();
-
         const checkForm = validForm(mainFormvalueToCheck, formData.mainForm); // Use mainFormvalueToCheck for validation
-        console.log(checkForm);
+        console.log({ checkForm });
 
-        if (checkForm.isValid) {
-            console.log('Form is valid');
+        if (checkForm) {
+            postData(action)
 
-            if (action === 'SAVE') {
-                // Save
-            } else if (action === 'SAVE & CLOSE') {
-                // Save and close
-            }
+            // if (action === 'SAVE') {
+            //     // Save
+
+            // } else if (action === 'SAVE & CLOSE') {
+            //     // Save and close
+            // }
         }
+    }
+
+
+    const postAddNewCustomerData = () => {
+        console.log(formData.addForm)
+        const form_data = new FormData()
+        Object.entries(formData.addForm).map(([key, value]) => {
+            form_data.append(key, value)
+        })
+        form_data.append("dropdown", 'regular')
+        form_data.append("pin", 'INsdfsdfsDV')
+        form_data.append("entry_point", 'INDV')
+        form_data.append("press_btn", 'SAVE & CLOSE')
+        postReq('add_customer', form_data)
+            .then((resp) => {
+                console.log("Response:", resp)
+                toast.success('Customer saved successfully')
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+                if (error.message === 'Customer already exists') {
+                    toast.error('Customer already exists')
+                } else {
+                    toast.error('Failed to save customer')
+                }
+            })
     }
 
 
@@ -455,14 +490,39 @@ const AddServicing = () => {
         const checkForm = validForm(addFormvalueToCheck, formData.addForm); // Use mainFormvalueToCheck for validation
         console.log(checkForm);
 
-        if (checkForm.isValid) {
-            console.log('Form is valid');
-
-            if (action === 'SAVE') {
-                // Save
-            } else if (action === 'SAVE & CLOSE') {
-                // Save and close
+        if (checkForm) {
+            const emailCheck = validateEmail(formData.addForm.email)
+            if (!emailCheck) {
+                // document.getElementById('email_val').innerHTML = 'Invaild email ID'
+                toast.error("Invaild email ID")
+            } else {
+                postAddNewCustomerData()
             }
+            // const url = new URL(`${crmURL}/customers/merchant/add_company_details/`)
+            // const form_data = new FormData()
+            // Object.entries(newCompany).map(([key, value]) => {
+            //     form_data.append(key, value)
+            //     form_data.append('add_company_from_add', 'yes')
+            //     // form_data.append("press_btn", 'SAVE')
+            // })
+
+            // postReq("add_company_details", form_data)
+            //     .then((resp) => {
+            //         console.log({ resp })
+            //         if (resp.status === 409) {
+            //             throw new Error('Customer already exists')
+            //         } else {
+            //             throw new Error(`HTTP error! Status: ${resp.status}`)
+            //         }
+            //     })
+            //     .catch((error) => {
+            //         console.error("Error:", error)
+
+            //         // Display toast for 409 status code
+            //         if (error.message === 'Customer already exists') {
+            //             toast.error('Customer already exists')
+            //         }
+            //     })
         }
     }
 
@@ -608,7 +668,6 @@ const AddServicing = () => {
                         value={formData.addForm.pincode}
                         onChange={(e) => {
                             handleInputChange(e, "addForm")
-                            addInputChangeHandler(e)
                         }}
                     />
                     <p id="pincode_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -652,7 +711,7 @@ const AddServicing = () => {
             <form>
                 <Row>
                     <Col md={12} className="mt-2">
-                        <h4 className="mb-0">{id ? 'Edit Servicing' : 'Add Servicing'}</h4>
+                        <h4 className="mb-0">{(id && isEdit) ? 'Edit Servicing' : 'Add Servicing'}</h4>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label
@@ -669,14 +728,15 @@ const AddServicing = () => {
                             closeMenuOnSelect={true}
                             onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
                             components={{ Menu: CustomSelectComponent }}
-                            onChange={(e) => {
-                                selectCustomer
-                                inputChangeHandler({ target: { name: 'customer_name', value: e?.value } })
+                            onChange={(event) => {
+                                selectCustomer(event)
+                                const e = { target: { name: 'customer_id', value: event?.value } }
+                                handleInputChange(e, "mainForm")
                             }}
-                            value={id && { value: formData.mainForm?.customer_name, label: formData.mainForm?.customer_name }}
-                            isDisabled={formData.mainForm?.customer_name}
+                            value={(id && isCustomer) ? allOptions : allOptions?.filter($ => $.value === formData?.mainForm?.customer_id)}
+                            isDisabled={formData.mainForm?.customer_id || id}
                         />
-                        <p id="customer_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                        <p id="customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label
@@ -697,7 +757,7 @@ const AddServicing = () => {
                             // onChange={e => setFormData(prev => ({ ...prev, vehicle: e.value }))}
                             onChange={(event) => {
                                 const e = { target: { name: "vehicle", value: event.value } }
-                                inputChangeHandler({ target: { name: 'vehicle', value: e?.value } })
+                                handleInputChange(e, "mainForm")
                             }}
                         />
                         <p id="vehicle_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -713,7 +773,6 @@ const AddServicing = () => {
                             value={formData.mainForm.service_advisor ?? ""}
                             onChange={(e) => {
                                 handleInputChange(e, "mainForm")
-                                inputChangeHandler(e)
                             }}
                         />
                         <p id="service_advisor_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -729,7 +788,6 @@ const AddServicing = () => {
                             value={formData.mainForm.job_card_date ?? ""}
                             onChange={(e) => {
                                 handleInputChange(e, "mainForm")
-                                inputChangeHandler(e)
                             }}
                         />
                         <p id="job_card_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -746,7 +804,6 @@ const AddServicing = () => {
                             value={formData.mainForm.service_invoice_date ?? ""}
                             onChange={(e) => {
                                 handleInputChange(e, "mainForm")
-                                inputChangeHandler(e)
                             }}
                         />
                         <p id="service_invoice_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -763,7 +820,6 @@ const AddServicing = () => {
                             value={formData.mainForm.service_expiry_date ?? ""}
                             onChange={(e) => {
                                 handleInputChange(e, "mainForm")
-                                inputChangeHandler(e)
                             }}
                         />
                         <p id="service_expiry_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -780,7 +836,6 @@ const AddServicing = () => {
                             value={formData.mainForm.service_invoice_amount ?? ""}
                             onChange={(e) => {
                                 handleInputChange(e, "mainForm")
-                                inputChangeHandler(e)
                             }}
                         />
                         <p id="service_invoice_amount_val" className="text-danger m-0 p-0 vaildMessage"></p>

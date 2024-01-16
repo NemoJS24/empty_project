@@ -90,8 +90,8 @@ const Customers_Routes = [
     element: <AddServicing />
   },
   {
-    path: '/merchant/customers/edit_service/:id',
-    element: <AddServicing/>
+    path: '/merchant/customers/add-servicing/:id',
+    element: <AddServicing />
   },
   {
     path: '/merchant/customers/insurance/edit_insurance/:id',

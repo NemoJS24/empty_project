@@ -1,16 +1,17 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react'
 import { Card, CardBody, Container, Row, Col } from "reactstrap"
 import AsyncSelect from 'react-select/async'
 import { crmURL, getReq } from '@src/assets/auth/jwtService'
 import axios from "axios"
 import Select from "react-select"
-// import { createPortal } from 'react-dom'
 import Button from 'react-bootstrap/Button'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import { useParams, useNavigate } from 'react-router-dom'
 import toast from "react-hot-toast"
+import { baseURL, postReq } from '../../../assets/auth/jwtService'
+import { validForm } from '../../Validator'
 
-/* eslint-disable */
 const AddInsurance = () => {
     const [formData, setFormData] = useState({})
     const [customerFormData, setCustomerFormData] = useState({
@@ -25,7 +26,7 @@ const AddInsurance = () => {
         pincode: ""
     })
 
-    console.log({formData, customerFormData}, "formData")
+    console.log({ formData, customerFormData }, "formData")
 
     const [productFormData, setProductFormData] = useState({})
     const [isAddProductHidden, setIsAddProductHidden] = useState(false)
@@ -40,6 +41,93 @@ const AddInsurance = () => {
 
     const navigate = useNavigate()
     const { id } = useParams()
+
+    const insuranceFormToCheck = [
+        {
+            name: 'customer_name',
+            message: 'Please select a Customer',
+            type: 'string',
+            id: 'customer_name'
+        },
+        {
+            name: 'insurance_type',
+            message: 'Please select an Insurance Type',
+            type: 'string',
+            id: 'insurance_type'
+        },
+        // {
+        //    name: 'insurance_product_name',
+        //    message: 'Please select a Product Name',
+        //    type: 'string',
+        //    id: 'insurance_product_name'
+        // },
+        // {
+        //    name: 'vehicle',
+        //    message: 'Please select a Vehicle Type',
+        //    type: 'string',
+        //    id: 'vehicle'
+        // },
+        {
+            name: 'policy_number',
+            message: 'Please enter your Policy Number',
+            type: 'number',
+            id: 'policy_number'
+        },
+        {
+            name: 'insurance_company',
+            message: 'Please enter you Insurance Company Name',
+            type: 'string',
+            id: 'insurance_company'
+        }
+    ]
+
+    const addCustomerFormToCheck = [
+        {
+            name: 'title',
+            message: 'Please select a Title',
+            type: 'string',
+            id: 'title'
+        },
+        {
+            name: 'cust_first_name',
+            message: 'Please enter your First Name',
+            type: 'string',
+            id: 'cust_first_name'
+        },
+        {
+            name: 'cust_last_name',
+            message: 'Please enter your Last Name',
+            type: 'string',
+            id: 'cust_last_name'
+        },
+        {
+            name: 'email',
+            message: 'Please enter your email',
+            type: 'email',
+            id: 'email'
+        },
+        {
+            name: 'phone_no',
+            message: 'Please enter your Phone Number',
+            type: 'number',
+            id: 'phone_no'
+        }
+    ]
+
+    const addProductFormToCheck = [
+        {
+            name: 'brand',
+            message: 'Please select a Brand',
+            type: 'string',
+            id: 'brand'
+        },
+        {
+            name: 'carmodel',
+            message: 'Please select a Model',
+            type: 'string',
+            id: 'carmodel'
+        }
+    ]
 
     // const handleInputChange = (e, type) => {
     //     console.log(e)
@@ -96,11 +184,13 @@ const AddInsurance = () => {
     //     }
     // }
 
-    const handleInputChange = (e, type="formData") => {
+    const handleInputChange = (e, type = "formData") => {
         if (type === "formData") {
-            setFormData({...formData, [e.target.name]: e.target.value})
+            setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+        } else if (type === "product") {
+            setProductFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
         } else {
-            setCustomerFormData({...customerFormData, [e.target.name]: e.target.value})
+            setCustomerFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
         }
     }
 
@@ -108,27 +198,36 @@ const AddInsurance = () => {
     //     setCustomerFormData({...customerFormData, [e.target.name]: e.target.value})
     // }
 
-    const handleChange = (options, actionMeta, check, type="formData") => {
+    const handleChange = (options, actionMeta, check, type = "formData") => {
         if (check) {
             const option_list = options.map((cur) => {
                 return cur.value
             })
             if (type === "formData") {
-                setFormData({ ...formData, [actionMeta.name]: option_list })
+                setFormData(prev => ({ ...prev, [actionMeta.name]: option_list }))
 
             } else {
-                setCustomerFormData({ ...customerFormData, [actionMeta.name]: option_list })
+                setCustomerFormData(prev => ({ ...prev, [actionMeta.name]: option_list }))
             }
         } else {
             if (type === "formData") {
-                setFormData({ ...formData, [actionMeta.name]: options.value })
+                setFormData(prev => ({ ...prev, [actionMeta.name]: options.value }))
+            } else if (type === "product") {
+                setProductFormData(prev => ({ ...prev, [actionMeta.name]: options.value }))
             } else {
-                setCustomerFormData({ ...customerFormData, [actionMeta.name]: options.value })
+                setCustomerFormData(prev => ({ ...prev, [actionMeta.name]: options.value }))
             }
-            
+
         }
 
     }
+
+    const handleClose = (type) => {
+        (type === 'customer') ? (setIsHidden(false)) : setIsAddProductHidden(false)
+        setProductModelOption([])
+        setProductVariantOption([])
+    }
+    const handleShow = (type) => ((type === 'customer') ? setIsHidden(true) : setIsAddProductHidden(true))
 
     // const handleChangeCustomerForm = (options, actionMeta, check) => {
     //     if (check) {
@@ -143,34 +242,21 @@ const AddInsurance = () => {
     // }
 
     const fetchInsuranceData = (id) => {
-        const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
+        // const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
         const form_data = new FormData()
         form_data.append("id", id)
         form_data.append('edit_type', 'is_insurance')
-        fetch(url, {
-            method: "POST",
-            body: form_data
-        })
-            .then((response) => {
-                return response.json()
-            })
+
+        postReq('get_view_customer', form_data, baseURL)
             .then((resp) => {
-                console.log("ResponseId:", resp.success[0])
-                const newObject = {};
-                for (const key in resp.success[0]) {
-                    if (resp.success[0].hasOwnProperty(key) && resp.success[0][key] !== null) {
-                        newObject[key] = resp.success[0][key];
+                console.log("ResponseId:", resp.data.success[0])
+                const newObject = {}
+                for (const key in resp.data.success[0]) {
+                    if (resp.data.success[0].hasOwnProperty(key) && resp.data.success[0][key] !== null) {
+                        newObject[key] = resp.data.success[0][key]
                     }
                 }
-                // console.log('AfterRemovingNullId', newObject);
                 setFormData(newObject)
-                // setFormData(prefData => ({
-                //     ...prefData,
-                //     job_card_date: prefData.job_card_date.substring(0, 10),
-                //     service_expiry_date: prefData.service_expiry_date.substring(0, 10),
-                //     service_invoice_date: prefData.service_invoice_date.substring(0, 10),
-                //     updated_at: prefData.updated_at.substring(0, 10)
-                // }))
             })
             .catch((error) => {
                 console.error("Error:", error)
@@ -179,75 +265,43 @@ const AddInsurance = () => {
     }
 
     const postData = (btn) => {
-        console.log(formData)
-        const url = new URL(`${crmURL}/customers/merchant/get_add_insurance/`)
         const form_data = new FormData()
         Object.entries(formData).map(([key, value]) => {
             form_data.append(key, value)
         })
         form_data.append("press_btn", btn)
-        id && form_data.append("insurance_id", id)
-
-        fetch(url, {
-            method: "POST",
-            body: form_data
-        })
-        .then((response) => {
-            if (!response.ok) {
-                if (response.status === 409) {
-                    throw new Error('Customer already exists')
+        if (id) {
+            form_data.append("insurance_id", id)
+        }
+        postReq('add_insurance', form_data, crmURL)
+            .then((resp) => {
+                console.log("Response:", resp)
+                toast.success('Insurance saved successfully')
+                resp.data.is_edit_url ? navigate(`/merchant/customers/insurance/edit_insurance/${resp.data.insurance_code}`) : navigate(`/merchant/customers/insurance/`)
+                fetchInsuranceData(resp.data.insurance_code)
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+                if (error.message === 'Customer already exists') {
+                    toast.error('Customer already exists')
                 } else {
-                    toast.error(`HTTP error! Status: ${response.status}`)
-                    throw new Error(`HTTP error! Status: ${response.status}`)
+                    toast.error('Failed to save customer')
                 }
-            }
-            return response.json()
-        })
-        .then((resp) => {
-            console.log("Response:", resp)
-            toast.success('Insurance saved successfully')
-            resp.is_edit_url ? navigate(`merchant/customers/insurance/edit_insurance/${resp.insurance_code}`) : navigate(`/merchant/customers/insurance/`)
-            fetchInsuranceData(resp.insurance_code)
-        })
-        .catch((error) => {
-            console.error("Error:", error)
-            if (error.message === 'Customer already exists') {
-                toast.error('Customer already exists')
-            } else {
-                toast.error('Failed to save customer')
-            }
-        })
+            })
+
     }
 
     const postNewCustomerData = () => {
         console.log(customerFormData)
-        const url = new URL(`${crmURL}/customers/merchant/add_customer/`)
         const form_data = new FormData()
         Object.entries(customerFormData).map(([key, value]) => {
-            console.log(key, ": ", value)
             form_data.append(key, value)
         })
         form_data.append("dropdown", 'regular')
         form_data.append("pin", 'INsdfsdfsDV')
         form_data.append("entry_point", 'INDV')
         form_data.append("press_btn", 'SAVE & CLOSE')
-
-        fetch(url, {
-            method: "POST",
-            body: form_data
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    if (response.status === 409) {
-                        throw new Error('Customer already exists')
-                    }
-                    else {
-                        toast.error(`HTTP error! Status: ${response.status}`)
-                        throw new Error(`HTTP error! Status: ${response.status}`)
-                    }
-                }
-                return response.json()
-            })
+        postReq('add_customer', form_data)
             .then((resp) => {
                 console.log("Response:", resp)
                 toast.success('Customer saved successfully')
@@ -263,25 +317,13 @@ const AddInsurance = () => {
     }
 
     const postVehicleDetails = () => {
-        const url = new URL(`${crmURL}/customers/merchant/add_vehicle_details/`)
         const form_data = new FormData()
         Object.entries(productFormData).map(([key, value]) => {
             form_data.append(key, value)
         })
         form_data.append("press_btn", 'SAVE')
 
-        fetch(url, {
-            method: "POST",
-            body: form_data
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    if (response.status === 409) {
-                        throw new Error('Vehicle  already exists')
-                    }
-                }
-                return response.json()
-            })
+        postReq('add_vehicle', form_data, crmURL)
             .then((resp) => {
                 console.log("Response:", resp)
                 toast.success('Vehicle saved successfully')
@@ -289,7 +331,7 @@ const AddInsurance = () => {
             })
             .catch((error) => {
                 console.error("Error:", error)
-                    toast.error('Failed to save Vehicle')
+                toast.error('Failed to save Vehicle')
             })
     }
 
@@ -308,19 +350,13 @@ const AddInsurance = () => {
             })
     }
 
-    const loadOptions = (inputValue, callback) => {
-        // console.log(callback, 'callback')
-        fetchCustomerData(currentPage, inputValue, callback)
-    }
-
     const fetchCustomerData = async (page, inputValue, callback) => {
         // console.log(callback, 'callback2')
         try {
             const response = await axios.get(
-                `https://api.demo.xircls.in/customers/merchant/get_customer_details/?page=${page}`
+                `${baseURL}/customers/merchant/get_customer_details/?page=${page}`
             )
             const successData = response.data.success
-            // console.log(successData)
             if (successData && Array.isArray(successData)) {
                 const customerOptions = successData
                     .filter((item) => item.customer_name !== "")
@@ -328,7 +364,7 @@ const AddInsurance = () => {
                         value: customer.id,
                         label: customer.customer_name
                     }))
-                let option = [...allOptions, ...customerOptions]
+                const option = [...allOptions, ...customerOptions]
                 console.log(option, "option")
                 setAllOptions(option)
                 callback(option)
@@ -354,60 +390,59 @@ const AddInsurance = () => {
         }
     }, [])
 
-    const selectChange = async (e, select) => {
+    const selectChange = (value, actionMeta) => {
         console.log('getProductOptions runned')
-        const url = new URL(`${crmURL}/customers/merchant/fetch_car_details/`)
         const form_data = new FormData()
-        select === 'brand' ? form_data.append("brand", e.value) : form_data.append("carmodel", e.value)
-
-        try {
-            const response = await fetch(url, {
-                method: "POST",
-                body: form_data,
-            })
-
-            const resp = await response.json()
-            console.log("Response ooption:", resp)
-            if (resp.car_model) {
-                const productModelOptions = []
-                resp.car_model.forEach((item) => {
-                    if (item === "") {
-                        return
-                    }
-                    productModelOptions.push({
-                        value: item,
-                        label: item
-                    })
-                })
-                setProductModelOption(productModelOptions)
-            }
-            if (resp.car_variant) {
-                const variantOptions = []
-                resp.car_variant.map((item) => {
-                    if (item === "") {
-                        return
-                    }
-                    variantOptions.push({
-                        value: item,
-                        label: item
-                    })
-                })
-                setProductVariantOption(variantOptions)
-            }
-        } catch (error) {
-            console.error("Error:", error)
-            if (error.message === 'Customer already exists') {
-                toast.error('Customer already exists')
-            } else {
-                toast.error('Failed to save customer')
-            }
-            throw error
+        if (actionMeta.name === 'brand') {
+            form_data.append("brand", value.value)
+            handleChange(value, actionMeta, false, "product")
+            setProductModelOption([])
+            setProductVariantOption([])
+        } else if (actionMeta.name === 'carmodel') {
+            form_data.append("carmodel", value.value)
+            actionMeta.name = 'car_model'
+            handleChange(value, actionMeta, false, "product")
+            setProductVariantOption([])
         }
+        postReq('fetch_car_details', form_data, crmURL)
+            .then((resp) => {
+                console.log("Response ooption:", resp)
+                if (resp.data.car_model) {
+                    const productModelOptions = []
+                    resp.data.car_model.forEach((item) => {
+                        if (item === "") {
+                            return
+                        }
+                        productModelOptions.push({
+                            value: item,
+                            label: item
+                        })
+                    })
+                    setProductModelOption(productModelOptions)
+                }
+                if (resp.data.car_variant) {
+                    const variantOptions = []
+                    resp.data.car_variant.map((item) => {
+                        if (item === "") {
+                            return
+                        }
+                        variantOptions.push({
+                            value: item,
+                            label: item
+                        })
+                    })
+                    setProductVariantOption(variantOptions)
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+                toast.error('Something went wrong!')
+            })
     }
 
     const loadBrandOptions = (inputValue, callback) => {
-        const getUrl = new URL(`${crmURL}/customers/merchant/fetch_car_details/`)
-        axios.get(getUrl.toString())
+        // const getUrl = new URL(`${crmURL}/vehicle/fetch_car_details/`)
+        getReq('fetch_car_details', ``, crmURL)
             .then((response) => {
                 const successData = response.data.car_brand
                 const brandOptions = successData
@@ -426,12 +461,13 @@ const AddInsurance = () => {
     }
 
     const changeProductName = (data) => {
+        console.log(data)
         const productOptions = data.car_variant.map(item => {
-            let value = item[0]
-            let label = item.slice(1).filter(Boolean).join(' -- ')
+            const value = item[0]
+            const label = item.slice(1).filter(Boolean).join(' -- ')
             return {
-                value: value,
-                label: label
+                value,
+                label
             }
         })
         setProductOptions(productOptions)
@@ -448,38 +484,28 @@ const AddInsurance = () => {
     }
 
     const selectCustomer = (value, actionMeta, check) => {
-        handleChange(value, {name: "customer_name_id"}, check)
-        // setFormData(prevData => ({ ...prevData, customer_name: e.label }))
+        setProductFormData(prev => ({ ...prev, insurance_product_name: '' }))
+        setProductOptions([])
+        // handleChange(value, { name: "customer_id" }, check)
+        setProductFormData(prev => ({ ...prev, customer_id: value.value }))
+        setFormData(prevData => ({ ...prevData, customer_name: value.label, customer_id: value.value }))
         const form_data = new FormData()
-        const url = new URL(`${crmURL}/customers/merchant/fetch_vehicle_details/`)
         form_data.append("id", value.value)
         // "SHIVAM KALE"
-        fetch(url, {
-            method: "POST",
-            body: form_data
-        })
-        .then((response) => {
-            return response.json()
-        })
-        .then((resp) => {
-            console.log("Response:", resp)
-            if (resp.car_variant) {
-                changeProductName(resp)
-                changeVehicleOptions(resp)
-            }
-        })
-        .catch((error) => {
-            console.error("Error:", error)
-            (error.message) ? toast.error(error.message) : toast.error(error)
-        })
+        getReq(`fetch_vehicle_details`, `?id=${value.value}`, crmURL)
+            .then((resp) => {
+                console.log("Response:", resp)
+                if (resp.data.car_variant) {
+                    changeProductName(resp.data)
+                    changeVehicleOptions(resp.data)
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+                toast.error('Something went wrong')
+                error.message ? toast.error(error.message) : toast.error(error)
+            })
     }
-
-    const handleClose = (type) => {
-        (type === 'customer') ? (setIsHidden(false)) : setIsAddProductHidden(false)
-        setProductModelOption([])
-        setProductVariantOption([])
-    }
-    const handleShow = (type) => (type === 'customer') ? setIsHidden(true) : setIsAddProductHidden(true)
 
     const CustomSelectComponent = ({ innerProps, children }) => (
         <div {...innerProps} className="position-absolute w-100 bg-white border">
@@ -498,7 +524,7 @@ const AddInsurance = () => {
     const CustomProductSelectComponent = ({ innerProps, children }) => (
         <div {...innerProps} className="position-absolute w-100 bg-white border">
             <p className="m-1">
-                {formData.customer_name_id &&
+                {formData.customer_id &&
                     <a
                         onClick={() => handleShow("product")}
                         className="link-success link-underline-opacity-0"
@@ -512,19 +538,28 @@ const AddInsurance = () => {
 
     const handleSubmitSection = (event, btn) => {
         event.preventDefault()
-        postData(btn)
-        // setErrors(previousErrors => {
-        //   const newErrors = validateValues(formData)
-        //   if (Object.keys(newErrors).length === 0) {
-        //     postData()
-        //   }
-        //   return newErrors
-        // })
+        const checkForm = validForm(insuranceFormToCheck, formData)
+        if (checkForm) {
+            // console.log('Validated Insurance Form')
+            postData(btn)
+        }
     }
 
     const handleCustomerSubmitSection = (event) => {
         event.preventDefault()
-        postNewCustomerData()
+        const checkForm = validForm(addCustomerFormToCheck, customerFormData)
+        if (checkForm) {
+            // console.log('Validated Customer Form')
+            postNewCustomerData()
+        }
+    }
+
+    const handleProductSubmit = () => {
+        const checkForm = validForm(addProductFormToCheck, productFormData)
+        if (checkForm) {
+            // console.log('Validated Product Form')
+            postVehicleDetails()
+        }
     }
 
     const insuranceOptions = [
@@ -559,7 +594,7 @@ const AddInsurance = () => {
                     z-index: 9
                 }
                 .offcanvas{
-                    --bs-offcanvas-width: 40%
+                    --bs-offcanvas-width: 400px
                 }
           `}
         </style>
@@ -582,8 +617,8 @@ const AddInsurance = () => {
                         closeMenuOnSelect={true}
                         value={titleOptions.find(option => option.value === customerFormData.title) ?? ''}
                         onChange={(value, actionMeta) => handleChange(value, actionMeta, false, "customerData")}
-                        isDisabled={id}
                     />
+                    <p id="title_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-first-name">
@@ -593,8 +628,8 @@ const AddInsurance = () => {
                         value={customerFormData?.cust_first_name}
                         // onChange={handleInputChangeCustomerFrom}
                         onChange={(e) => handleInputChange(e, "customerData")}
-                        isDisabled={id}
                     />
+                    <p id="cust_first_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-last-name">
@@ -606,6 +641,7 @@ const AddInsurance = () => {
                         onChange={(e) => handleInputChange(e, "customerData")}
                         isDisabled={id}
                     />
+                    <p id="cust_last_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-email">
@@ -616,6 +652,7 @@ const AddInsurance = () => {
                         // onChange={handleInputChangeCustomerFrom}
                         onChange={(e) => handleInputChange(e, "customerData")}
                     />
+                    <p id="email_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-mobile">
@@ -627,6 +664,7 @@ const AddInsurance = () => {
                         onChange={(e) => handleInputChange(e, "customerData")}
                         isDisabled={id}
                     />
+                    <p id="phone_no_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="address-1-country">Country</label>
@@ -700,7 +738,7 @@ const AddInsurance = () => {
                     <label htmlFor="customer-name">
                         Customer Name
                     </label>
-                    <input type='text' id='customer-name' name='product.customer_name' className="form-control"
+                    <input type='text' id='customer-name' name='customer_name' className="form-control"
                         value={formData?.customer_name}
                         // onChange={handleInputChange} 
                         disabled
@@ -712,9 +750,9 @@ const AddInsurance = () => {
                     </label>
                     <input
                         placeholder='Registration Number'
-                        type='text' id='registration-name' name='product.registration_number' className="form-control"
+                        type='text' id='registration-name' name='registration_number' className="form-control"
                         value={productFormData.registration_number}
-                        onChange={handleInputChange}
+                        onChange={e => handleInputChange(e, 'product')}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -723,9 +761,9 @@ const AddInsurance = () => {
                     </label>
                     <input
                         placeholder='Sales Person'
-                        type='text' id='sales-person' name='product.sales_executive' className="form-control"
+                        type='text' id='sales-person' name='sales_executive' className="form-control"
                         value={productFormData?.sales_executive}
-                        onChange={handleInputChange}
+                        onChange={e => handleInputChange(e, 'product')}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -734,9 +772,9 @@ const AddInsurance = () => {
                     </label>
                     <input
                         placeholder='Vehicle Identification Number'
-                        type='text' id='vehicle-identification' name='product.vehicle_number' className="form-control"
+                        type='text' id='vehicle-identification' name='vehicle_number' className="form-control"
                         value={productFormData?.vehicle_number}
-                        onChange={handleInputChange}
+                        onChange={e => handleInputChange(e, 'product')}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -745,9 +783,9 @@ const AddInsurance = () => {
                     </label>
                     <input
                         placeholder='Engine Number'
-                        type='text' id='engine-number' name='product.engine_no' className="form-control"
+                        type='text' id='engine-number' name='engine_no' className="form-control"
                         value={productFormData?.engine_no}
-                        onChange={handleInputChange}
+                        onChange={e => handleInputChange(e, 'product')}
                     />
                 </Col>
 
@@ -762,8 +800,9 @@ const AddInsurance = () => {
                         options={vehicleTypeOptions}
                         closeMenuOnSelect={true}
                         value={insuranceOptions?.find(option => option.value === productFormData?.vehicle_type)}
-                        onChange={(value, actionMeta) => handleChange(value, actionMeta, false, "customerData")}
-                        // onChange={e => handleInputChange(e, 'product.vehicle_type')}
+                        // onChange={(value, actionMeta) => handleChange(value, actionMeta, false, "customerData")}
+                        // onChange={e => e => handleInputChange(e, 'product')}
+                        onChange={(value, actionMeta) => handleChange(value, actionMeta, false, "product")}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -776,9 +815,12 @@ const AddInsurance = () => {
                         cacheOptions
                         id="brand-select"
                         loadOptions={loadBrandOptions}
-                        onChange={(e) => selectChange(e, 'brand')}
+                        name='brand'
+                        onChange={(value, actionMeta) => selectChange(value, actionMeta)}
+                    // onChange={(e) => selectChange(e, 'brand')}
                     //   value={selectedOption}
                     />
+                    <p id="brand_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
 
                 <Col md={12} className="mt-2">
@@ -790,9 +832,11 @@ const AddInsurance = () => {
                         id="model-select"
                         options={productModelOption}
                         closeMenuOnSelect={true}
-                        onChange={e => selectChange(e, 'model')}
+                        name='carmodel'
+                        onChange={(value, actionMeta) => selectChange(value, actionMeta)}
                     // isLoading={loading}
                     />
+                    <p id="carmodel_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="variant-select" className="" style={{ margin: '0px' }}>
@@ -804,8 +848,8 @@ const AddInsurance = () => {
                         name="variant"
                         options={productVariantOption}
                         closeMenuOnSelect={true}
-                        // onChange={e => handleInputChange(e, 'product.variant')}
-                        onChange={(value, actionMeta) => handleChange(value, actionMeta, false, "customerData")}
+                        // onChange={e => e => handleInputChange(e, 'product')}
+                        onChange={(value, actionMeta) => handleChange(value, actionMeta, false, "product")}
 
                     />
                 </Col>
@@ -813,23 +857,23 @@ const AddInsurance = () => {
                     <label htmlFor="vehicle-delivery-date">
                         Vehicle Delivery Date
                     </label>
-                    <input placeholder="Vehicle Delivery Date" type='date' id='vehicle-delivery-date' name='product.delivery_date' className="form-control"
+                    <input placeholder="Vehicle Delivery Date" type='date' id='vehicle-delivery-date' name='delivery_date' className="form-control"
                         value={productFormData.delivery_date}
-                        onChange={handleInputChange}
+                        onChange={e => handleInputChange(e, 'product')}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="vehicle-registration-date">
                         Vehicle Registration Date
                     </label>
-                    <input placeholder="Vehicle Registration Date" type='date' id='vehicle-registration-date' name='product.registeration_date' className="form-control"
+                    <input placeholder="Vehicle Registration Date" type='date' id='vehicle-registration-date' name='registeration_date' className="form-control"
                         value={productFormData?.registeration_date}
-                        onChange={handleInputChange}
+                        onChange={e => handleInputChange(e, 'product')}
                     />
                 </Col>
                 <div className='d-flex justify-content-end mt-2'>
                     <div>
-                        <button className="btn btn-primary ms-2" type="button" onClick={postVehicleDetails}>Add Product</button>
+                        <button className="btn btn-primary ms-2" type="button" onClick={handleProductSubmit}>Add Product</button>
                     </div>
                 </div>
             </Row>
@@ -876,16 +920,17 @@ const AddInsurance = () => {
                                             Customer Name
                                         </label>
                                         <Select
-                                            placeholder='Select Insurance'
+                                            placeholder='Customer Name'
                                             id="insurance-type"
                                             options={allOptions}
                                             closeMenuOnSelect={true}
-                                            name=''
+                                            name='customer_name'
                                             onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
                                             components={{ Menu: CustomSelectComponent }}
                                             onChange={(value, actionMeta) => selectCustomer(value, actionMeta, false)}
-                                            // onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
+                                        // onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                         />
+                                        <p id="customer_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                     </Col>
                                     <Col md={6} className="mt-2">
                                         <label htmlFor="insurance-type" className="" style={{ margin: '0px' }}>
@@ -901,6 +946,7 @@ const AddInsurance = () => {
                                             onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                             closeMenuOnSelect={true}
                                         />
+                                        <p id="insurance_type_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                     </Col>
                                     {(formData?.insurance_type === 'Motor' || formData?.insurance_type === 'Lease Car') && <>
                                         <Col md={6} className="mt-2">
@@ -912,12 +958,13 @@ const AddInsurance = () => {
                                                 id="product-name"
                                                 options={productOptions}
                                                 name="insurance_product_name"
-                                                // defaultValue={productOptions[0]}
                                                 components={{ Menu: CustomProductSelectComponent }}
+                                                // value={productOptions?.find(option => option.value === productFormData?.insurance_product_name) ?? { value: '', label: '' }}
                                                 onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                                 // onChange={e => handleInputChange(e, 'insurance_product_name')}
                                                 closeMenuOnSelect={true}
                                             />
+                                            <p id="insurance_product_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                         </Col>
                                         <Col md={6} className="mt-2">
                                             <label htmlFor="Vehicle-type" className="" style={{ margin: '0px' }}>
@@ -933,6 +980,7 @@ const AddInsurance = () => {
                                                 onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                                 closeMenuOnSelect={true}
                                             />
+                                            <p id="vehicle_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                         </Col>
                                     </>}
                                     <Col md={6} className="mt-2">
@@ -943,6 +991,7 @@ const AddInsurance = () => {
                                             value={formData?.policy_number}
                                             onChange={handleInputChange}
                                         />
+                                        <p id="policy_number_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                     </Col>
                                     <Col md={6} className="mt-2">
                                         <label htmlFor="Insurance-company">
@@ -952,6 +1001,7 @@ const AddInsurance = () => {
                                             value={formData?.insurance_company}
                                             onChange={handleInputChange}
                                         />
+                                        <p id="insurance_company_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                     </Col>
                                     <Col md={6} className="mt-2">
                                         <label htmlFor="Policy-purchase-date">

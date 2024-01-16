@@ -91,25 +91,6 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
           toast.error('Customer already exists')
         }
       })
-    // fetch(url, {
-    //   method: "POST",
-    //   body: form_data
-    // })
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       if (response.status === 409) {
-    //         throw new Error('Customer already exists')
-    //       } else {
-    //         throw new Error(`HTTP error! Status: ${response.status}`)
-    //       }
-    //     }
-    //     return response.json()
-    //   })
-    //   .then((resp) => {
-    //     console.log("Response:", resp)
-    //     // Access status code
-    //     console.log("Status Code:", response.status)
-    // })
   }
 
   const valueToCheck5 = [
