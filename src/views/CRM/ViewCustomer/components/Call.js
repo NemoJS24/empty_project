@@ -19,6 +19,13 @@ const Call = ({ userData }) => {
 
     const { id } = useParams()
 
+    const callPurposeOptions = {
+        prospecting: "Prospecting",
+        sale_call: "Sale Call",
+        negotiation: "Negotiation",
+        close_Sale: "Close Sale"
+    }
+
     const handleFilter = e => {
         const { value } = e.target
         let updatedData = []
@@ -56,7 +63,7 @@ const Call = ({ userData }) => {
             name: "Call Purpose",
             minWidth: "320px",
             selector: (row) => (
-                row?.Call_Purpose
+                callPurposeOptions[row?.Call_Purpose]
             ),
             type: 'text'
         },
@@ -174,14 +181,6 @@ const Call = ({ userData }) => {
                                 filteredData={filteredData}
                                 isLoading={isLoading}
                             />
-                            {/* <div className='text-center py-1'>
-                                <div>
-                                    <h4>No Calls to display</h4>
-                                </div>
-                                <div>
-                                    <button type="button" className='btn btn-primary-main' onClick={() => navigate(`/merchant/customers/add_call/${id}`, {state: {data: userData}})} style={{ width: "fit-content" }}>Add Call</button>
-                                </div>
-                            </div> */}
                         </CardBody>
                     </Card>
                 </Col>
