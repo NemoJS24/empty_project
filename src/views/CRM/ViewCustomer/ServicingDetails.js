@@ -10,6 +10,7 @@ import ComTable from '../../Components/DataTable/ComTable'
 const ServicingDetails = () => {
 
     const { id } = useParams()
+    console.log("paramId", id)
     const [tableData, setTableData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [filteredData, setFilteredData] = useState([])
@@ -188,7 +189,7 @@ const ServicingDetails = () => {
                                 selectedRows={selected}
                                 advanceFilter={false}
                                 create={true}
-                                createLink={"/merchant/customers/add-servicing/"}
+                                createLink={`/merchant/customers/add-servicing/${id}?type=customer`}
                                 createText={"Add Servicing"}
                             /> */}
 

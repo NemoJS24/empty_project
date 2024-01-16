@@ -103,7 +103,7 @@ const Customers_Routes = [
     route_type: "crm_add_servicing"
   },
   {
-    path: '/merchant/customers/edit_service/:id',
+    path: '/merchant/customers/add-servicing/:id',
     element: <AddServicing/>,
     route_type: "crm_edit_servicing"
   },

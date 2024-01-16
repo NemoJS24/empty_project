@@ -18,7 +18,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 // import { useParams } from 'react-router-dom'
 
 const CustomerDetails = ({ userData }) => {
-    const {id} = useParams()
+    const { id } = useParams()
     const navigate = useNavigate()
 
     const [activeTab, setActiveTab] = useState(0)
@@ -74,35 +74,37 @@ const CustomerDetails = ({ userData }) => {
                                         </div>
                                     </Col>
                                     <Col md='8' className='d-flex justify-content-end gap-5'>
-                                        <div className='d-flex gap-3 align-items-center mt-1 justify-content-end'>
-                                            <div className='d-flex flex-column gap-1'>
-                                                <span className='d-flex gap-2 align-items-center fs-6 fw-bold'><Phone size='16px' />Contact</span>
-                                                <span className='d-flex gap-2 align-items-center fs-6 fw-bold'><Star size='16px' />Status</span>
-                                                <span className='d-flex gap-2 align-items-center fs-6 fw-bold'><Star size='16px' />Type</span>
-                                                <span className='d-flex gap-2 align-items-center fs-6 fw-bold'><Flag size='16px' />Country</span>
-                                            </div>
-                                            <div className='d-flex flex-column gap-1'>
-                                                <div><span className='font-small-4'>{userData?.phone_no}</span></div>
-                                                <div><span className='font-small-4'>Inactive</span></div>
-                                                <div><span className='font-small-4'>Regular</span></div>
-                                                <div><span className='font-small-4'>{userData?.country}</span></div>
-                                            </div>
-                                        </div>
 
                                         <div className='d-flex gap-3 align-items-center mt-1 justify-content-end'>
                                             <div className='d-flex flex-column gap-1'>
-                                                <span className='d-flex gap-2 align-items-center fs-6 fw-bold'><User size='16px' />Full name</span>
-                                                <span className='d-flex gap-2 align-items-center fs-6 fw-bold'><Star size='16px' />Status</span>
-                                                <span className='d-flex gap-2 align-items-center fs-6 fw-bold'><Star size='16px' />Type</span>
-                                                <span className='d-flex gap-2 align-items-center fs-6 fw-bold'><Flag size='16px' />Country</span>
+                                                <span className='d-flex gap-2 align-items-center font-small-3'><User size='16px' />Full name</span>
+                                                <span className='d-flex gap-2 align-items-center font-small-3'><Star size='16px' />Status</span>
+                                                <span className='d-flex gap-2 align-items-center font-small-3'><Star size='16px' />Type</span>
+                                                {/* <span className='d-flex gap-2 align-items-center fs-6 fw-bold'><Flag size='16px' />Country</span> */}
                                             </div>
                                             <div className='d-flex flex-column gap-1'>
-                                                <div> <span className='font-small-4'>{userData?.customer_name}</span></div>
-                                                <div><span className='font-small-4'>Inactive</span></div>
-                                                <div><span className='font-small-4'>Regular</span></div>
-                                                <div><span className='font-small-4'>{userData?.country}</span></div>
+                                                <div> <span className='font-small-3'>{userData?.customer_name ? userData.customer_name : "-"}</span></div>
+                                                <div><span className='font-small-3'>Inactive</span></div>
+                                                <div><span className='font-small-3'>Regular</span></div>
+                                                {/* <div><span className='font-small-4'>{userData?.country}</span></div> */}
                                             </div>
                                         </div>
+
+
+                                        <div className='d-flex gap-3 align-items-start mt-1 justify-content-end'>
+                                            <div className='d-flex flex-column gap-1'>
+                                                <span className='d-flex gap-2 align-items-center fs-6 fw-bold'><Flag size='16px' />Country</span>
+                                                <span className='d-flex gap-2 align-items-center fs-6 fw-bold'><Phone size='16px' />Contact</span>
+                                                {/* <span className='d-flex gap-2 align-items-center fs-6 fw-bold'><Star size='16px' />Email</span> */}
+                                            </div>
+                                            <div className='d-flex flex-column gap-1'>
+                                                <div><span className='font-small-4'>{userData?.country ? userData.country : "-"}</span></div>
+                                                <div><span className='font-small-4'>{userData?.phone_no ? userData.phone_no : "-"}</span></div>
+                                                {/* <div><span className='font-small-4'>{userData?.email}</span></div> */}
+                                            </div>
+                                        </div>
+
+
                                     </Col>
                                 </Row>
 
