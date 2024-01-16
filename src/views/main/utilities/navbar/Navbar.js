@@ -68,16 +68,15 @@ const Navbar = ({ position }) => {
 
   useEffect(() => {
     try {
-      window.addEventListener('scroll', () => {
+      window.addEventListener('scroll', async() => {
         const Yscroll = window.scrollY
-        const first_navbar = document.getElementById("first_navbar")
-        if (first_navbar) {
-          if (Yscroll > 50) {
-            first_navbar.style.boxShadow = " 0 0px 8px rgba(0,0,0,0.16)"
-          } else {
-            first_navbar.style.boxShadow = " none"
-    
-          }
+        const first_navbar = await document.getElementById("first_navbar")
+  
+        if (Yscroll > 50) {
+          first_navbar.style.boxShadow = " 0 0px 8px rgba(0,0,0,0.16)"
+        } else {
+          first_navbar.style.boxShadow = " none"
+  
         }
       })
 

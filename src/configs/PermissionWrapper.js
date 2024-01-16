@@ -37,42 +37,38 @@ const PermissionWrapper = ({children}) => {
         
     }, [userPermission])
 
+    const checkUserPermission = async () => {
+        const token = await getToken()
+        if (token) {
+            console.log("Not Mounted", "Route Permission")
+            const currentRoute = Routes?.filter((curRoute) => {
+                return curRoute?.path.toLowerCase() === location?.pathname.toLowerCase()
+            })
+            console.log(currentRoute[0]?.app, "Route Permission")
+
+            if (currentRoute[0]?.app) {
+                if (userPermission?.installedApps?.includes(currentRoute[0]?.app)) {
+                    // console.log("INSTALLED", "Route Permission")
+                    setUserPermission({...userPermission, appName: currentRoute[0]?.app})
+                } else {
+                    // console.log("NOT INSTALLED", "Route Permission")
+                    toast.error("You don't have access of that App")
+                    navigate("/merchant/apps/")
+                }
+
+            }
+        }
+    }
+
     useEffect(() => {
         // let isMounted = true
-        if (getToken()) {
-            console.log("Not Mounted", "Route Permission")
-            // if (isMounted) {
-                const currentRoute = Routes?.filter((curRoute) => {
-                    return curRoute?.path.toLowerCase() === location?.pathname.toLowerCase()
-                })
-                console.log(currentRoute[0]?.app, "Route Permission")
-    
-                if (currentRoute[0]?.app) {
-                    if (userPermission?.installedApps?.includes(currentRoute[0]?.app)) {
-                        console.log("INSTALLED", "Route Permission")
-                        setUserPermission({...userPermission, appName: currentRoute[0]?.app})
-                    } else {
-                        console.log("NOT INSTALLED", "Route Permission")
-                        toast.error("You don't have access of that App")
-                        navigate("/merchant/apps/")
-                    }
-    
-                }
-            // }
-        }
+        
+        checkUserPermission()
         const params = new URLSearchParams(location.search)
         if (params.get('aft_no')) {
             localStorage.setItem('aft_no', params.get('aft_no'))
         }
-
-        // if (params.get('aft_no') && localStorage.getItem('aft_no')) {
-        //     affiliateTracking(params.get('aft_no') ? params.get('aft_no') : localStorage.getItem('aft_no'))
-        // }
-
-        // return () => { isMounted = false }
     }, [location])
-
-    // console.log(multipleDomain)
 
     return (
         <PermissionProvider.Provider value={{ userPermission, setUserPermission}}>
