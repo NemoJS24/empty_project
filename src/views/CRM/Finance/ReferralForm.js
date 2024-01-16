@@ -1,10 +1,69 @@
 import React from 'react'
 import { Container, Row, Col } from "reactstrap"
 import Select from "react-select"
+// import { validForm } from '../../Validator'
 
-const ReferralForm = ({ formHandler }) => {
+const ReferralForm = ({ allData }) => {
 
-    const { handleBack, formData, handleInputChange } = formHandler
+    const { formData, handleNext, handleBack, handleInputChange, currentStep, handleSubmitSection } = allData
+
+    // const refferalFormvalueToCheck = [
+    //     {
+    //         name: 'Ref_title',
+    //         message: 'Select Title',
+    //         type: 'string',
+    //         id: 'Ref_title'
+    //     },
+    //     {
+    //         name: 'Ref_first_name',
+    //         message: 'Enter First Name',
+    //         type: 'string',
+    //         id: 'Ref_first_name'
+    //     },
+    //     {
+    //         name: 'Ref_last_name',
+    //         message: 'Enter Last Name',
+    //         type: 'string',
+    //         id: 'Ref_last_name'
+    //     },
+    //     {
+    //         name: 'Ref_phone_no',
+    //         message: 'Enter Mobile Number',
+    //         type: 'string',
+    //         id: 'Ref_phone_no'
+    //     }
+    // ]
+
+    // const [check, setCheck] = useState({
+    //     mainForm: {
+    //         Ref_title: "",
+    //         Ref_first_name: '',
+    //         Ref_last_name: "",
+    //         Ref_phone_no: ""
+    //     }
+    // })
+
+    // const handleAddInputChange = (e, keyType) => {
+    //     console.log(e)
+    //     setCheck(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
+    // }
+
+    // const handleSubmitSection = (e, action) => {
+    //     e.preventDefault()
+
+    //     const checkForm = validForm(mainFormvalueToCheck, check.mainForm)  // Use mainFormvalueToCheck for validation
+    //     console.log(checkForm)
+
+    //     if (checkForm.isValid) {
+    //         console.log('Form is valid')
+    //         // handleNext()
+    //         if (action === 'SAVE') {
+    //             // Save
+    //         } else if (action === 'SAVE & CLOSE') {
+    //             // Save and close
+    //         }
+    //     }
+    // }
 
     const titleOptions = [
         { value: 'mr', label: 'Mr.' },
@@ -13,7 +72,7 @@ const ReferralForm = ({ formHandler }) => {
     ]
 
     const countryOptions = [{ value: 'India', label: 'India' }]
-    
+
     return (
         <>
             <Container>
@@ -27,8 +86,13 @@ const ReferralForm = ({ formHandler }) => {
                             options={titleOptions}
                             closeMenuOnSelect={true}
                             value={titleOptions?.find(option => option.value === formData?.Ref_title)}
-                            onChange={e => (handleInputChange(e, 'Ref_title'))}
+                            // onChange={e => (handleInputChange(e, 'Ref_title'))}
+                            onChange={(e) => {
+                                handleInputChange(e, 'Ref_title')
+                            }}
                         />
+                        <p id="Ref_title_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-first-name">
@@ -36,8 +100,13 @@ const ReferralForm = ({ formHandler }) => {
                         </label>
                         <input placeholder="First Name" type='text' id='basicDetails-first-name' name='Ref_first_name' className="form-control"
                             value={formData?.Ref_first_name}
-                            onChange={handleInputChange}
+                            // onChange={handleInputChange}
+                            onChange={(e) => {
+                                handleInputChange(e)
+                            }}
                         />
+                        <p id="Ref_first_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-last-name">
@@ -45,8 +114,13 @@ const ReferralForm = ({ formHandler }) => {
                         </label>
                         <input required placeholder="Last Name" type='text' id='basicDetails-last-name' name='Ref_last_name' className="form-control"
                             value={formData?.Ref_last_name}
-                            onChange={handleInputChange}
+                            // onChange={handleInputChange}
+                            onChange={(e) => {
+                                handleInputChange(e)
+                            }}
                         />
+                        <p id="Ref_last_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-mobile">
@@ -54,8 +128,12 @@ const ReferralForm = ({ formHandler }) => {
                         </label>
                         <input required placeholder="10-digit Mobile Number" type='tel' pattern="[789][0-9]{9}" maxLength={10} id='basicDetails-mobile' name='Ref_phone_no' className="form-control"
                             value={formData?.Ref_phone_no}
-                        onChange={ e => (handleInputChange(e))} 
+                            // onChange={e => (handleInputChange(e))}
+                            onChange={(e) => {
+                                handleInputChange(e)
+                            }}
                         />
+                        <p id="Ref_phone_no_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="address-1-house-details">
@@ -142,7 +220,7 @@ const ReferralForm = ({ formHandler }) => {
                             name="Ref_pincode"
                             className="form-control"
                             value={formData.Ref_pincode}
-                        onChange={ e => (handleInputChange(e))} 
+                            onChange={e => (handleInputChange(e))}
                         />
                     </Col>
                     <Col md={6} className="mt-2">
@@ -156,17 +234,38 @@ const ReferralForm = ({ formHandler }) => {
                             closeMenuOnSelect={true}
                         />
                     </Col>
-                    <Col xs='12' className='mt-2'>
-                        <div className='d-flex justify-content-between mt-2'>
+
+                    {
+                        currentStep === 4 && (
+                            <>
+
+                                <div className='w-100 mt-3 d-flex justify-content-between align-items-center'>
+                                    <div className='d-flex gap-2'>
+                                        <button className="btn btn-primary" type="button" onClick={handleBack}>Back</button>
+                                        <button className="btn btn-primary" type="button">Cancel</button>
+                                    </div>
+                                    <div className='d-flex gap-2'>
+                                        <button className="btn btn-primary" type="button" onClick={handleNext} >Save & Close</button>
+                                        <button className="btn btn-primary" type="button" onClick={() => {
+                                            handleNext()
+                                            handleSubmitSection("SAVE")
+                                        }}>Save</button>
+                                    </div>
+                                </div>
+                            </>
+                        )
+                    }
+                    {/* <Col xs='12' className='mt-2'>
+                    <div className='d-flex justify-content-between mt-2'>
                             <div>
-                                <button className="btn btn-primary" type="button" onClick={handleBack}>Back</button>
-                                <button className="btn btn-primary ms-2" type="button">Cancel</button>
+                    <button className="btn btn-primary" type="button" onClick={handleBack}>Back</button>
+                    <button className="btn btn-primary ms-2" type="button">Cancel</button>
                             </div>
                             <div>
                                 <button className="btn btn-primary" type="submit" >Save</button>
                             </div>
                         </div>
-                    </Col>
+                    </Col> */}
                 </Row>
             </Container>
         </>

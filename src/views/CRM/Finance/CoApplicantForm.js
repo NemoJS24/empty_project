@@ -1,12 +1,78 @@
 import React, { useState } from 'react'
 import { Container, Row, Col } from 'reactstrap'
 import Select from "react-select"
+// import { validForm } from '../../Validator'
 
 /* eslint-disable */
-const CoApplicantForm = ({ formHandler }) => {
+const CoApplicantForm = ({ allData }) => {
     const [children, setChildren] = useState(false)
 
-    const { handleNext, handleBack, formData, handleInputChange } = formHandler
+    const { formData, handleNext, handleBack, handleInputChange } = allData
+
+    // const coApplicantvalueToCheck = [
+    //     {
+    //         name: 'title',
+    //         message: 'Select Title',
+    //         type: 'string',
+    //         id: 'title'
+    //     },
+    //     {
+    //         name: 'cust_first_name',
+    //         message: 'Enter First Name',
+    //         type: 'string',
+    //         id: 'cust_first_name'
+    //     },
+    //     {
+    //         name: 'cust_last_name',
+    //         message: 'Enter Last Name',
+    //         type: 'string',
+    //         id: 'cust_last_name'
+    //     },
+    //     {
+    //         name: 'email',
+    //         message: 'Enter Email',
+    //         type: 'string',
+    //         id: 'email'
+    //     },
+    //     {
+    //         name: 'phone_no',
+    //         message: 'Enter Phone Number',
+    //         type: 'string',
+    //         id: 'phone_no'
+    //     }
+    // ]
+
+    // const [check, setCheck] = useState({
+    //     mainForm: {
+    //         title: "",
+    //         cust_first_name: '',
+    //         cust_last_name: "",
+    //         email: "",
+    //         phone_no: ""
+    //     },
+    // })
+
+    // const handleAddInputChange = (e, keyType) => {
+    //     console.log(e)
+    //     setCheck(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
+    // }
+
+    // const handleSubmitSection = (e, action) => {
+    //     e.preventDefault();
+
+    //     const checkForm = validForm(mainFormvalueToCheck, check.mainForm)  // Use mainFormvalueToCheck for validation
+    //     console.log(checkForm);
+
+    //     if (checkForm.isValid) {
+    //         console.log('Form is valid');
+
+    //         if (action === 'SAVE') {
+    //             // Save
+    //         } else if (action === 'SAVE & CLOSE') {
+    //             // Save and close
+    //         }
+    //     }
+    // }
 
     const titleOptions = [
         { value: 'mr', label: 'Mr.' },
@@ -80,9 +146,13 @@ const CoApplicantForm = ({ formHandler }) => {
                             id="basicDetails-title"
                             options={titleOptions}
                             value={titleOptions?.find(option => option.value === formData?.title)}
-                            onChange={e => (handleInputChange(e, 'title'))}
+                            // onChange={e => (handleInputChange(e, 'title'))}
+                            onChange={(e) => {
+                                handleInputChange(e, 'title')
+                            }}
                             closeMenuOnSelect={true}
                         />
+                        <p id="title_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-first-name">
@@ -90,8 +160,18 @@ const CoApplicantForm = ({ formHandler }) => {
                         </label>
                         <input placeholder="First Name" type='text' id='basicDetails-first-name' name='cust_first_name' className="form-control"
                             value={formData?.cust_first_name}
-                            onChange={handleInputChange}
-                            required />
+                            // onChange={handleInputChange}
+                            // onChange={(event) => {
+                            //     (handleInputChange(e))
+                            //     const e = { target: { name: "cust_first_name", value: event.value } };
+                            //     handleAddInputChange(e, "mainForm")
+                            // }}
+                            onChange={(e) => {
+                                handleInputChange(e)
+                            }}
+                            required
+                        />
+                        <p id="cust_first_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-last-name">
@@ -99,8 +179,12 @@ const CoApplicantForm = ({ formHandler }) => {
                         </label>
                         <input required placeholder="Last Name" type='text' id='basicDetails-last-name' name='cust_last_name' className="form-control"
                             value={formData?.cust_last_name}
-                            onChange={handleInputChange}
+                            // onChange={handleInputChange}
+                            onChange={(e) => {
+                                handleInputChange(e)
+                            }}
                         />
+                        <p id="cust_last_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-email">
@@ -108,8 +192,12 @@ const CoApplicantForm = ({ formHandler }) => {
                         </label>
                         <input required placeholder="Email Address" type='text' id='basicDetails-email' name='email' className="form-control"
                             value={formData?.email}
-                            onChange={handleInputChange}
+                            // onChange={handleInputChange}
+                            onChange={(e) => {
+                                handleInputChange(e)
+                            }}
                         />
+                        <p id="email_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-mobile">
@@ -117,8 +205,11 @@ const CoApplicantForm = ({ formHandler }) => {
                         </label>
                         <input required placeholder="10-digit Mobile Number" type='tel' pattern="[789][0-9]{9}" maxLength={10} id='basicDetails-mobile' name='phone_no' className="form-control"
                             value={formData?.phone_no}
-                            onChange={e => (handleInputChange(e))}
+                            onChange={(e) => {
+                                handleInputChange(e)
+                            }}
                         />
+                        <p id="phone_no_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="personalDetails-dob">Date Of Birth</label>

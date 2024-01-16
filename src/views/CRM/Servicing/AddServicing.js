@@ -137,13 +137,13 @@ const AddServicing = () => {
         },
     })
 
-    const inputChangeHandler = (e) => {
-        setFormData({ ...formData, mainForm: { ...formData.mainForm, [e.target.name]: e.target.value } })
-    }
+    // const inputChangeHandler = (e) => {
+    //     setFormData({ ...formData, mainForm: { ...formData.mainForm, [e.target.name]: e.target.value } })
+    // }
 
-    const addInputChangeHandler = (e) => {
-        setFormData({ ...formData, addForm: { ...formData.addForm, [e.target.name]: e.target.value } })
-    }
+    // const addInputChangeHandler = (e) => {
+    //     setFormData({ ...formData, addForm: { ...formData.addForm, [e.target.name]: e.target.value } })
+    // }
 
     // const [customerFormData, setCustomerFormData] = useState({
     //     title: "mr",
@@ -377,10 +377,10 @@ const AddServicing = () => {
         setFormData(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
     }
 
-    const handleAddInputChange = (e, keyType) => {
-        console.log(e)
-        setFormData(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
-    }
+    // const handleAddInputChange = (e, keyType) => {
+    //     console.log(e)
+    //     setFormData(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
+    // }
 
     const handleClose = (type) => (type === 'customer') && (setIsHidden(false))
     const handleShow = (type) => (type === 'customer') && setIsHidden(true)
@@ -608,7 +608,6 @@ const AddServicing = () => {
                         value={formData.addForm.pincode}
                         onChange={(e) => {
                             handleInputChange(e, "addForm")
-                            addInputChangeHandler(e)
                         }}
                     />
                     <p id="pincode_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -618,7 +617,7 @@ const AddServicing = () => {
                 <div className='d-flex justify-content-between mt-2'>
                     <div>
                         <button className="btn btn-primary" type="submit" onClick={(e) => handleAddSubmitSection(e)}>Add</button>
-                        <button className="btn btn-primary ms-2" type="button" onClick={(e) => handleAddSubmitSection(e)}>Cancel</button>
+                        <button className="btn btn-primary ms-2" type="button" >Cancel</button>
                     </div>
                     <div>
                         {/* <button className="btn btn-primary" type="submit" onClick={handleSubmitSection1}>Save</button>
@@ -669,9 +668,10 @@ const AddServicing = () => {
                             closeMenuOnSelect={true}
                             onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
                             components={{ Menu: CustomSelectComponent }}
-                            onChange={(e) => {
-                                selectCustomer
-                                inputChangeHandler({ target: { name: 'customer_name', value: e?.value } })
+                            onChange={(event) => {
+                                selectCustomer(event)
+                                const e = { target: { name: 'customer_name', value: e?.value } }
+                                handleInputChange(e, "mainForm")
                             }}
                             value={id && { value: formData.mainForm?.customer_name, label: formData.mainForm?.customer_name }}
                             isDisabled={formData.mainForm?.customer_name}
@@ -697,7 +697,7 @@ const AddServicing = () => {
                             // onChange={e => setFormData(prev => ({ ...prev, vehicle: e.value }))}
                             onChange={(event) => {
                                 const e = { target: { name: "vehicle", value: event.value } }
-                                inputChangeHandler({ target: { name: 'vehicle', value: e?.value } })
+                                handleInputChange(e, "mainForm")
                             }}
                         />
                         <p id="vehicle_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -713,7 +713,6 @@ const AddServicing = () => {
                             value={formData.mainForm.service_advisor ?? ""}
                             onChange={(e) => {
                                 handleInputChange(e, "mainForm")
-                                inputChangeHandler(e)
                             }}
                         />
                         <p id="service_advisor_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -729,7 +728,6 @@ const AddServicing = () => {
                             value={formData.mainForm.job_card_date ?? ""}
                             onChange={(e) => {
                                 handleInputChange(e, "mainForm")
-                                inputChangeHandler(e)
                             }}
                         />
                         <p id="job_card_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -746,7 +744,6 @@ const AddServicing = () => {
                             value={formData.mainForm.service_invoice_date ?? ""}
                             onChange={(e) => {
                                 handleInputChange(e, "mainForm")
-                                inputChangeHandler(e)
                             }}
                         />
                         <p id="service_invoice_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -763,7 +760,6 @@ const AddServicing = () => {
                             value={formData.mainForm.service_expiry_date ?? ""}
                             onChange={(e) => {
                                 handleInputChange(e, "mainForm")
-                                inputChangeHandler(e)
                             }}
                         />
                         <p id="service_expiry_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -780,7 +776,6 @@ const AddServicing = () => {
                             value={formData.mainForm.service_invoice_amount ?? ""}
                             onChange={(e) => {
                                 handleInputChange(e, "mainForm")
-                                inputChangeHandler(e)
                             }}
                         />
                         <p id="service_invoice_amount_val" className="text-danger m-0 p-0 vaildMessage"></p>
