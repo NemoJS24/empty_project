@@ -7,12 +7,179 @@ import EMIForm from './EMIForm'
 import ReferralForm from './ReferralForm'
 import { baseURL } from '@src/assets/auth/jwtService.js'
 import toast from "react-hot-toast"
-import financeData from './financeData'
+// import financeData from './financeData'
 import { useParams, useNavigate } from 'react-router-dom'
+import { crmURL, postReq } from '../../../assets/auth/jwtService'
+import { validForm } from '../../Validator'
 
 const AddFinance = () => {
+
+  const mainFormvalueToCheck = [
+    {
+      name: 'customer_name',
+      message: 'Select Customer Name',
+      type: 'string',
+      id: 'customer_name'
+    },
+    {
+      name: 'client',
+      message: 'Select Client Type',
+      type: 'string',
+      id: 'client'
+    },
+    {
+      name: 'product_name_id',
+      message: 'Select Product Name',
+      type: 'string',
+      id: 'product_name_id'
+    },
+    {
+      name: 'Loan_Type',
+      message: 'Select Loan Type',
+      type: 'string',
+      id: 'Loan_Type'
+    }
+  ]
+
+  const coApplicantvalueToCheck = [
+    {
+      name: 'title',
+      message: 'Select Title',
+      type: 'string',
+      id: 'title'
+    },
+    {
+      name: 'cust_first_name',
+      message: 'Enter First Name',
+      type: 'string',
+      id: 'cust_first_name'
+    },
+    {
+      name: 'cust_last_name',
+      message: 'Enter Last Name',
+      type: 'string',
+      id: 'cust_last_name'
+    },
+    {
+      name: 'email',
+      message: 'Enter Email',
+      type: 'string',
+      id: 'email'
+    },
+    {
+      name: 'phone_no',
+      message: 'Enter Phone Number',
+      type: 'string',
+      id: 'phone_no'
+    }
+  ]
+
+  const EMIFormvalueToCheck = [
+    {
+      name: 'Emi_Amount',
+      message: 'Enter EMI Amount',
+      type: 'string',
+      id: 'Emi_Amount'
+    },
+    {
+      name: 'no_of_tenure',
+      message: 'Enter Number of Tenure',
+      type: 'string',
+      id: 'no_of_tenure'
+    },
+    {
+      name: 'no_of_installment',
+      message: 'Enter Number of Installment',
+      type: 'string',
+      id: 'no_of_installment'
+    }
+  ]
+
+  const refferalFormvalueToCheck = [
+    {
+      name: 'Ref_title',
+      message: 'Select Title',
+      type: 'string',
+      id: 'Ref_title'
+    },
+    {
+      name: 'Ref_first_name',
+      message: 'Enter First Name',
+      type: 'string',
+      id: 'Ref_first_name'
+    },
+    {
+      name: 'Ref_last_name',
+      message: 'Enter Last Name',
+      type: 'string',
+      id: 'Ref_last_name'
+    },
+    {
+      name: 'Ref_phone_no',
+      message: 'Enter Mobile Number',
+      type: 'string',
+      id: 'Ref_phone_no'
+    }
+  ]
+
+
   const [currentStep, setCurrentStep] = useState(1)
-  const [formData, setFormData] = useState(financeData)
+  const [formData, setFormData] = useState({
+    SE_DSA_Name: "",
+    customer_name_id: "",
+    Bank_Name: "",
+    client: '',
+    product_name_id: "",
+    Loan_Type: "",
+    Rate_of_Interest: "",
+    Loan_Number: "",
+    Bank_Number: "",
+    Loan_amount: "",
+    Loan_Disbursement_Date: "",
+    title: "",
+    cust_first_name: "",
+    cust_last_name: "",
+    email: "",
+    phone_no: "",
+    cust_dob: "",
+    phone_no2: "",
+    address_line1: "",
+    address_line2: "",
+    area_building: "",
+    landmark: "",
+    city: "",
+    state: "",
+    pincode: "",
+    country: "",
+    pancard: "",
+    Adharcard: "",
+    gender: "",
+    children: "",
+    marital_status: "",
+    occupation: "",
+    Emi_Amount: "",
+    no_of_tenure: "",
+    frequency: "",
+    no_of_installment: "",
+    Ex_Showroom_Amount: "",
+    No_Advance_EMI: "",
+    Dealer_Name: "",
+    Account_Type: "",
+    Emi_Start_Date: "",
+    Emi_End_Date: "",
+    Ref_title: "",
+    Ref_first_name: "",
+    Ref_last_name: "",
+    Ref_phone_no: "",
+    Ref_address1: "",
+    Ref_address2: "",
+    area_building_ref: "",
+    landmark_ref: "",
+    Ref_city: "",
+    Ref_state: "",
+    Ref_pincode: "",
+    Ref_country: ''
+  })
   const [addWithCustId, setAddWithCustId] = useState(false)
 
   // console.log(formData, 'formData')
@@ -56,14 +223,11 @@ const AddFinance = () => {
   }
 
   const fetchFinanceData = (id) => {
-    const url = new URL(`${baseURL}/customers/merchant/get_view_customer/`)
     const form_data = new FormData()
     form_data.append("id", id)
     form_data.append('edit_type', 'is_finance')
-    fetch(url, {
-      method: "POST",
-      body: form_data
-    })
+
+    postReq("get_view_customer", form_data, baseURL)
       .then((response) => {
         return response.json()
       })
@@ -89,39 +253,59 @@ const AddFinance = () => {
       })
   }
 
+  const checkVaildation = () => {
+    let checkForm = true
+    if (currentStep === 1) {
+      checkForm = validForm(mainFormvalueToCheck, formData)
+    }
+
+    if (currentStep === 2) {
+      checkForm = validForm(coApplicantvalueToCheck, formData)
+    }
+
+    if (currentStep === 3) {
+      checkForm = validForm(EMIFormvalueToCheck, formData)
+    }
+
+    if (currentStep === 4) {
+      checkForm = validForm(refferalFormvalueToCheck, formData)
+    }
+
+    return checkForm
+  }
+
 
   const postData = (btn) => {
-    console.log(formData)
-    const url = new URL(`${baseURL}/customers/merchant/jmd-finance-customers/`)
-    const form_data = new FormData()
-    Object.entries(formData).map(([key, value]) => {
-      form_data.append(key, value)
-    })
-    form_data.append("press_btn", btn)
-    if (id) {
-      form_data.append("finance_id", id)
+    const check = checkVaildation()
+    if (check) {
+      const form_data = new FormData()
+      Object.entries(formData).map(([key, value]) => {
+        form_data.append(key, value)
+      })
+      form_data.append("press_btn", btn)
+      if (id) {
+        form_data.append("finance_id", id)
+      }
+
+      postReq("add_finance", form_data, crmURL)
+        .then((response) => {
+          return response.json()
+        })
+        .then((resp) => {
+          console.log("Response:", resp)
+          toast.success('Finance saved successfully')
+          resp.is_edit_url ? navigate(`/merchant/customers/edit_finance/${resp.finance_code}`) : navigate(`/merchant/customer/all_cust_dashboard/add_finance/`)
+          fetchFinanceData(resp.finance_code)
+        })
+        .catch((error) => {
+          console.error("Error:", error)
+          if (error.message === 'Customer already exists') {
+            toast.error('Customer already exists')
+          } else {
+            toast.error('Failed to save customer')
+          }
+        })
     }
-    fetch(url, {
-      method: "POST",
-      body: form_data
-    })
-      .then((response) => {
-        return response.json()
-      })
-      .then((resp) => {
-        console.log("Response:", resp)
-        toast.success('Finance saved successfully')
-        resp.is_edit_url ? navigate(`/merchant/customers/edit_finance/${resp.finance_code}`) : navigate(`/merchant/customer/all_cust_dashboard/add_finance/`)
-        fetchFinanceData(resp.finance_code)
-      })
-      .catch((error) => {
-        console.error("Error:", error)
-        if (error.message === 'Customer already exists') {
-          toast.error('Customer already exists')
-        } else {
-          toast.error('Failed to save customer')
-        }
-      })
   }
 
   useEffect(() => {
@@ -136,20 +320,33 @@ const AddFinance = () => {
   }, [])
 
   const handleNext = () => {
-    setCurrentStep(prevStep => prevStep + 1)
-    console.log('handleNext', currentStep)
+    const check = checkVaildation()
+
+    if (check) {
+      setCurrentStep(prevStep => prevStep + 1)
+    }
   }
 
   const handleBack = () => {
     setCurrentStep(prevStep => prevStep - 1)
   }
 
+  // const NavCurrentStep = (step) => {
+  //   setCurrentStep(step)
+  // }
+
   const NavCurrentStep = (step) => {
-    setCurrentStep(step)
+    const check = checkVaildation()
+  
+    if (check) {
+      setCurrentStep(step)
+    } else {
+      
+    }
   }
 
-  const handleSubmitSection = (event, btn) => {
-    event.preventDefault()
+  const handleSubmitSection = (btn) => {
+    // event.preventDefault()
     postData(btn)
     // setErrors(previousErrors => {
     //   const newErrors = validateValues(formData)
@@ -160,13 +357,15 @@ const AddFinance = () => {
     // })
   }
 
-  const formHandler = {
-    currentStep,
+  const allData = {
     formData,
+    currentStep,
     handleInputChange,
     handleNext,
-    handleBack
+    handleBack,
+    handleSubmitSection
   }
+
 
   return (
     <>
@@ -181,22 +380,23 @@ const AddFinance = () => {
             <AddFinanceNav currentStep={currentStep} NavCurrentStep={NavCurrentStep} />
             <form >
               {currentStep === 1 && (
-                <ApplicantForm formHandler={formHandler} />
+                <ApplicantForm allData={allData} />
               )}
               {currentStep === 2 && (
-                <CoApplicantForm formHandler={formHandler} />
+                <CoApplicantForm allData={allData} />
               )}
               {currentStep === 3 && (
-                <EMIForm formHandler={formHandler} />
+                <EMIForm allData={allData} />
               )}
               {currentStep === 4 && (
-                <ReferralForm formHandler={formHandler} />
+                <ReferralForm allData={allData} />
               )}
-              <div className='w-100 d-flex justify-content-end mt-2'>
-                {/* <button className="btn btn-primary" type="submit" >Save</button> */}
-                <button className="btn btn-primary" type="button" onClick={e => handleSubmitSection(e, 'SAVE & CLOSE')} >Save & Close</button>
-                <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE')} >Save</button>
-              </div>
+
+              {
+
+                console.log(handleSubmitSection)
+              }
+
             </form>
           </CardBody>
         </Card>

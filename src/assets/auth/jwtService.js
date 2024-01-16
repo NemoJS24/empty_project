@@ -133,11 +133,13 @@ export const configUrl = {
     get_customer_insurance:'/insurance/get_customer_insurance', //crm
     // Flash Account
 
+
     fetch_vehicle_details: "/vehicle/fetch_vehicle_details/",
     fetch_car_details: '/vehicle/fetch_car_details/',
     add_insurance: "/insurance/add_insurance/",
     add_customer: '/customers/merchant/add_customer/',
     add_vehicle: '/vehicle/add_vehicle/',
+    add_finance: '/finance/add_finance/',
     crm_servicing_customers: '/servicing/get_add_servicing/',
     get_customer_details: '/customers/merchant/get_customer_details',
     fetch_vehicle_number: '/vehicle/fetch_vehicle_number',

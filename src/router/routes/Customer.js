@@ -39,83 +39,103 @@ import AddCall from '../../views/CRM/Call/AddCall'
 const Customers_Routes = [
   {
     path: '/merchant/leads',
-    element: <Leads />
+    element: <Leads />,
+    route_type: ""
   },
   {
     path: '/merchant/customers',
-    element: <Customers />
+    element: <Customers />,
+    route_type: "crm_view_customer"
   },
   {
     path: '/merchant/customer/add_type_of_customer/',
-    element: <CustomerType/>
+    element: <CustomerType/>,
+    route_type: "crm_add_customer"
   },
   {
     path: '/merchant/customers/add_customer',
-    element: <CustomerProfile/>
+    element: <CustomerProfile/>,
+    route_type: "crm_add_individual_customer"
   },
   {
     path: '/merchant/customers/edit_customer/:id',
-    element: <CustomerProfile/>
+    element: <CustomerProfile/>,
+    route_type: "crm_edit_individual_customer"
   },
   {
     path: '/merchant/customers/add_business',
-    element: <AddBusiness/>
+    element: <AddBusiness/>,
+    route_type: "crm_add_business_customer"
   },
   {
     path: '/merchant/customer/all_cust_dashboard/add_finance/:id',
-    element: <Finance />
+    element: <Finance />,
+    route_type: ""
   },
   {
     path: '/merchant/customer/all_cust_dashboard/add_finance/',
-    element: <Finance />
+    element: <Finance />,
+    route_type: "crm_view_finance"
   },
   {
     path: '/merchant/customers/jmd-finance-customers/:id',
-    element: <AddFinance />
+    element: <AddFinance />,
+    route_type: "crm_add_customer_finance"
   },
   {
     path: '/merchant/customers/jmd-finance-customers/',
-    element: <AddFinance />
+    element: <AddFinance />,
+    route_type: "crm_add_finance"
   },
   {
     path: '/merchant/customers/edit_finance/:id',
-    element: <AddFinance/>
+    element: <AddFinance/>,
+    route_type: "crm_edit_finance"
   },
   {
     path: '/merchant/customer/all_cust_dashboard/add_servicing/',
-    element: <Servicing />
+    element: <Servicing />,
+    route_type: "crm_view_servicing"
   },
   {
     path: '/merchant/customers/add-servicing/',
-    element: <AddServicing />
+    element: <AddServicing />,
+    route_type: "crm_add_servicing"
   },
   {
     path: '/merchant/customers/add-servicing/:id',
-    element: <AddServicing />
+    element: <AddServicing/>,
+    route_type: "crm_edit_servicing"
   },
   {
     path: '/merchant/customers/insurance/edit_insurance/:id',
-    element: <AddInsurance/>
+    element: <AddInsurance/>,
+    route_type: "crm_edit_insurance"
   },
   {
     path: '/merchant/customers/insurance/',
-    element: <Insurance />
+    element: <Insurance />,
+    route_type: "crm_view_insurance"
   },
   {
     path: '/merchant/customers/add-insurance/',
-    element: <AddInsurance />
+    element: <AddInsurance />,
+    route_type: "crm_add_insurance"
   },
   {
     path: '/merchant/customers/add-insurance/:id',
-    element: <AddInsurance />
+    element: <AddInsurance />,
+    route_type: "crm_add_customer_insurance"
   },
   {
     path: '/merchant/customers/add-vehicle/:id',
-    element: <AddVehicle />
+    element: <AddVehicle />,
+    route_type: "crm_add_vehicle"
   },
   {
     path: '/merchant/customers/edit-vehicle/:id',
-    element: <AddVehicle />
+    element: <AddVehicle />,
+    route_type: "crm_edit_vehicle"
   },
   // --------------------------------
   {

@@ -10,7 +10,6 @@ import LayoutWrapper from '@src/@core/layouts/components/layout-wrapper'
 import PublicRoute from '@components/routes/PublicRoute'
 import PrivateRoute from '@components/routes/PrivateRoute'
 import AdminRoute from '@components/routes/AdminRoute'
-
 // ** Utils
 import { isObjEmpty } from '@utils'
 
@@ -35,6 +34,7 @@ import { ProductReview_Routes } from './ProductReviews'
 import { OhMyCustomer_Routes } from './OhMyCustomer'
 import Homes_Routes from './Home'
 import HomeLayout from '../../@core/layouts/HomeLayout'
+
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -146,7 +146,9 @@ const MergeLayoutRoutes = (layout, defaultLayout) => {
 
           route.element = (
             <Wrapper {...(isBlank === false ? getRouteMeta(route) : {})}>
-              <RouteTag route={route}>{route.element}</RouteTag>
+              <RouteTag route={route}>
+                  {route.element}
+              </RouteTag>
             </Wrapper>
           )
         }

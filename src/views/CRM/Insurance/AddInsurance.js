@@ -595,6 +595,7 @@ const AddInsurance = () => {
                 }
                 .offcanvas{
                     --bs-offcanvas-width: 400px
+                    --bs-offcanvas-width: 400px
                 }
           `}
         </style>

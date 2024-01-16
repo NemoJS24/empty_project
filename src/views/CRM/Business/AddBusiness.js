@@ -82,7 +82,7 @@ const AddBusiness = () => {
    const navigate = useNavigate()
 
    const { id } = useParams()
-   
+
    console.log(formData, 'formData')
 
    const getCountries = () => {
@@ -106,42 +106,42 @@ const AddBusiness = () => {
       form_data.append('id', id)
       form_data.append('edit_type', 'is_customer_detail')
       fetch(url, {
-        method: "POST",
-        body: form_data
+         method: "POST",
+         body: form_data
       })
-        .then((response) => {
-          if (!response.ok) {
-            // toast.error(`HTTP error! Status: ${response.status}`)
-            // throw new Error(`HTTP error! Status: ${response.status}`)
-          }
-          return response.json()
-        })
-        .then((resp) => {
-          console.log("Response:", resp.success[0])
-          const newObject = {};
-          for (const key in resp.success[0]) {
-            if (resp.success[0].hasOwnProperty(key) && resp.success[0][key] !== null) {
-              newObject[key] = resp.success[0][key];
+         .then((response) => {
+            if (!response.ok) {
+               // toast.error(`HTTP error! Status: ${response.status}`)
+               // throw new Error(`HTTP error! Status: ${response.status}`)
             }
-          }
-          setFormData(newObject)
-          const name = newObject.customer_name.split(' ')
-          const datePart = newObject.cust_dob.substring(0, 10)
-          setFormData(prefData => ({
-            ...prefData,
-            cust_first_name: name[0],
-            cust_last_name: name[1],
-            cust_dob: datePart
-          }))
-        })
-        .catch((error) => {
-          console.error("Error:", error)
-          if (error.message === 'Customer already exists') {
-            toast.error('Customer already exists')
-          } else {
-            toast.error('Failed to save customer')
-          }
-        })
+            return response.json()
+         })
+         .then((resp) => {
+            console.log("Response:", resp.success[0])
+            const newObject = {};
+            for (const key in resp.success[0]) {
+               if (resp.success[0].hasOwnProperty(key) && resp.success[0][key] !== null) {
+                  newObject[key] = resp.success[0][key];
+               }
+            }
+            setFormData(newObject)
+            const name = newObject.customer_name.split(' ')
+            const datePart = newObject.cust_dob.substring(0, 10)
+            setFormData(prefData => ({
+               ...prefData,
+               cust_first_name: name[0],
+               cust_last_name: name[1],
+               cust_dob: datePart
+            }))
+         })
+         .catch((error) => {
+            console.error("Error:", error)
+            if (error.message === 'Customer already exists') {
+               toast.error('Customer already exists')
+            } else {
+               toast.error('Failed to save customer')
+            }
+         })
    }
 
    const notParent = [
@@ -236,12 +236,12 @@ const AddBusiness = () => {
          id: 'dropdown'
       }
    ]
-   
+
    const checkVaildation = () => {
       let checkForm = true
       if (currentStep === 1) {
          checkForm = validForm(notParent, formData)
-   
+
          if (checkForm && !formData.mark_parent) {
             checkForm = validForm(parentForm, formData)
          }
@@ -266,7 +266,7 @@ const AddBusiness = () => {
             if (key === 'mark_parent') {
                value = value ? 'yes' : 'no'
             }
-           form_data.append(key, value)
+            form_data.append(key, value)
          })
          formData?.aadhar_pdf_file instanceof Object && form_data.append("is_aadhar_file", '1')
          formData?.pan_pdf_file instanceof Object && form_data.append("is_pan_file", '1')
@@ -279,24 +279,24 @@ const AddBusiness = () => {
          id && form_data.append("customer_id", id)
 
          for (var key of form_data.entries()) {
-           console.log(key[0] + ', ' + key[1]);
+            console.log(key[0] + ', ' + key[1]);
          }
-         
+
          console.log("slfnsdjklnsdklv")
          postReq('add_customer_individual', form_data)
-         // fetch(url, {
-         //   method: "POST",
-         //   body: form_data
-         // })
-         //   .then((response) => {
-         //    //  if (!response.ok) {
-         //       if (response.status === 409) {
-         //          throw new Error('Customer already exists')
-         //       }
-         //       //  }
-         //       return response.json()
-         //    })
-           .then((resp) => {
+            // fetch(url, {
+            //   method: "POST",
+            //   body: form_data
+            // })
+            //   .then((response) => {
+            //    //  if (!response.ok) {
+            //       if (response.status === 409) {
+            //          throw new Error('Customer already exists')
+            //       }
+            //       //  }
+            //       return response.json()
+            //    })
+            .then((resp) => {
                if (resp.status === 409) {
                   throw new Error('Customer already exists')
                }
@@ -305,23 +305,23 @@ const AddBusiness = () => {
                if (resp.data.is_edit_url) {
                   navigate(`/merchant/customers/edit_customer/${resp.data.cust_id}`)
                }
-           })
-           .catch((error) => {
-             console.error("Error:", error)
-             if (error.message === 'Customer already exists') {
-               toast.error('Customer already exists')
-             } else {
-               toast.error('Failed to save customer')
-             }
-           })
+            })
+            .catch((error) => {
+               console.error("Error:", error)
+               if (error.message === 'Customer already exists') {
+                  toast.error('Customer already exists')
+               } else {
+                  toast.error('Failed to save customer')
+               }
+            })
       }
 
    }
-   
+
    useEffect(() => {
       getCountries()
    }, [])
-   
+
    const handleInputChange = (e, addressType) => {
       if (addressType === undefined) {
          let { name, value, type, checked } = e.target
@@ -398,7 +398,7 @@ const AddBusiness = () => {
       if (check) {
          setCurrentStep(step)
       }
-      
+
    }
 
    const allData = {

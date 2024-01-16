@@ -8,8 +8,199 @@ import toast from "react-hot-toast"
 import { crmURL } from '@src/assets/auth/jwtService.js'
 import AsyncSelect from 'react-select/async'
 import Offcanvas from 'react-bootstrap/Offcanvas'
+import { baseURL, getReq, postReq } from '../../../assets/auth/jwtService'
+import { validForm } from '../../Validator'
+// import toast from "react-hot-toast"
 
-const ApplicantForm = ({ formHandler }) => {
+const ApplicantForm = ({ allData }) => {
+    const { formData, handleNext, handleInputChange } = allData
+
+    // const mainFormvalueToCheck = [
+    //     {
+    //         name: 'customer_name',
+    //         message: 'Select Customer Name',
+    //         type: 'string',
+    //         id: 'customer_name'
+    //     },
+    //     {
+    //         name: 'client',
+    //         message: 'Select Client Type',
+    //         type: 'string',
+    //         id: 'client'
+    //     },
+    //     {
+    //         name: 'product_name_id',
+    //         message: 'Select Product Name',
+    //         type: 'string',
+    //         id: 'product_name_id'
+    //     },
+    //     {
+    //         name: 'Loan_Type',
+    //         message: 'Select Loan Type',
+    //         type: 'string',
+    //         id: 'Loan_Type'
+    //     }
+    // ]
+
+    const addFormvalueToCheck = [
+        {
+            name: 'title',
+            message: 'Select Title',
+            type: 'string',
+            id: 'title'
+        },
+        {
+            name: 'cust_first_name',
+            message: 'Enter First Name',
+            type: 'string',
+            id: 'cust_first_name'
+        },
+        {
+            name: 'cust_last_name',
+            message: 'Enter Last Name',
+            type: 'string',
+            id: 'cust_last_name'
+        },
+        {
+            name: 'email',
+            message: 'Enter Email',
+            type: 'string',
+            id: 'email'
+        },
+        {
+            name: 'phone_no',
+            message: 'Enter Phone No',
+            type: 'string',
+            id: 'phone_no'
+        }
+    ]
+
+    const productFormvalueToCheck = [
+        {
+            name: 'cust_first_name',
+            message: 'Enter Customer Name',
+            type: 'string',
+            id: 'cust_first_name'
+        },
+        {
+            name: 'engine_number',
+            message: 'Enter Engine Number',
+            type: 'string',
+            id: 'engine_number'
+        },
+        {
+            name: 'brand',
+            message: 'Enter Brad',
+            type: 'string',
+            id: 'brand'
+        },
+        {
+            name: 'model',
+            message: 'Enter Model',
+            type: 'string',
+            id: 'model'
+        }
+    ]
+
+    const [check, setCheck] = useState({
+        addForm: {
+            title: '',
+            cust_first_name: '',
+            cust_last_name: "",
+            email: "",
+            phone_no: ""
+        },
+        productForm: {
+            cust_first_name: '',
+            engine_number: '',
+            brand: '',
+            model: ''
+        }
+    })
+
+    const postNewCustomerData = () => {
+        console.log(check.addForm)
+        const form_data = new FormData()
+        Object.entries(check.addForm).map(([key, value]) => {
+            form_data.append(key, value)
+        })
+        form_data.append("dropdown", 'regular')
+        form_data.append("pin", 'INsdfsdfsDV')
+        form_data.append("entry_point", 'INDV')
+        form_data.append("press_btn", 'SAVE & CLOSE')
+        postReq('add_customer', form_data)
+            .then((resp) => {
+                console.log("Response:", resp)
+                toast.success('Customer saved successfully')
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+                if (error.message === 'Customer already exists') {
+                    toast.error('Customer already exists')
+                } else {
+                    toast.error('Failed to save customer')
+                }
+            })
+    }
+
+
+    const handleAddInputChange = (e, keyType) => {
+        console.log(e)
+        setCheck(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
+    }
+
+    // const inputChangeHandler = (e) => {
+    //     setCheck({ ...check, mainForm: { ...check.mainForm, [e.target.name]: e.target.value } })
+    // }
+
+    // const addInputChangeHandler = (e) => {
+    //     setCheck({ ...check, addForm: { ...check.addForm, [e.target.name]: e.target.value } })
+    // }
+
+    // const handleSubmitSection = (e, action) => {
+    //     e.preventDefault();
+
+    //     const checkForm = validForm(mainFormvalueToCheck, check.mainForm)  // Use mainFormvalueToCheck for validation
+    //     console.log(checkForm);
+
+    //     if (checkForm.isValid) {
+    //         console.log('Form is valid');
+
+    //         if (action === 'SAVE') {
+    //             // Save
+    //         } else if (action === 'SAVE & CLOSE') {
+    //             // Save and close
+    //         }
+    //     }
+    // }
+
+    const handleAddSubmitSection = (e, action) => {
+        e.preventDefault();
+
+        const checkForm = validForm(addFormvalueToCheck, check.addForm)  // Use addFormvalueToCheck for validation
+        console.log(checkForm);
+
+        if (checkForm) {
+            console.log('Form is valid')
+            postNewCustomerData()
+        }
+    }
+
+
+    const handleProductSubmitSection = (e, action) => {
+        e.preventDefault();
+
+        const checkForm = validForm(productFormvalueToCheck, check.productForm)  // Use productFormvalueToCheck for validation
+        console.log(checkForm);
+
+        if (checkForm) {
+            console.log('Form is valid');
+            
+        }
+    }
+
+    //---------------------------------
+
     const [isHidden, setIsHidden] = useState(false)
     const [isAddProductHidden, setIsAddProductHidden] = useState(false)
     const [customerDetails, setCustomerDetails] = useState([])
@@ -24,7 +215,7 @@ const ApplicantForm = ({ formHandler }) => {
     // console.log('productOptions')
     // console.log(productOptions)
 
-    const { handleNext, formData, handleInputChange } = formHandler
+    // const { handleNext, formData, handleInputChange } = formHandler
 
     const fetchCustomerData = async () => {
         try {
@@ -40,20 +231,13 @@ const ApplicantForm = ({ formHandler }) => {
     };
 
     const selectCustomer = (e) => {
-        handleInputChange(e, 'customer_name_id')
+        handleInputChange(e, 'customer_id')
         // setIsLoading(true)
         const form_data = new FormData()
-        const url = new URL(`${crmURL}/customers/merchant/fetch_vehicle_details/`)
+        const url = new URL(`${crmURL}/vehicle/fetch_vehicle_details/`)
         form_data.append("id", e.value)
         // "SHIVAM KALE"
-        fetch(url, {
-            method: "POST",
-            body: form_data
-        })
-            .then((response) => {
-                console.log(response)
-                return response.json()
-            })
+        getReq(`fetch_vehicle_details`, `?id=${e.value}`, crmURL)
             .then((resp) => {
                 console.log("Response:", resp)
                 if (resp.car_variant) {
@@ -61,14 +245,14 @@ const ApplicantForm = ({ formHandler }) => {
                 }
             })
             .catch((error) => {
-                // setIsLoading(false)
                 console.error("Error:", error)
-                    (error.message) ? toast.error(error.message) : toast.error(error)
+                toast.error('Something went wrong')
+
             })
     }
 
     const loadOptions = (inputValue, callback) => {
-        const getUrl = new URL(`${crmURL}/customers/merchant/get_customer_details/`);
+        const getUrl = new URL(`${baseURL}/customers/merchant/get_customer_details/`);
         // getUrl.searchParams.set("q", inputValue)
         axios.get(getUrl.toString())
             .then((response) => {
@@ -226,44 +410,72 @@ const ApplicantForm = ({ formHandler }) => {
                             { value: 'mrs', label: 'Mrs.' }
                         ]}
                         closeMenuOnSelect={true}
+                        onChange={(event) => {
+                            const e = { target: { name: "title", value: event.value } };
+                            handleAddInputChange(e, "addForm")
+                        }}
                     />
+                    <p id="title_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-first-name">
                         First Name
                     </label>
-                    <input placeholder="First Name" type='text' id='basicDetails-first-name' name='basicDetail.cust_first_name' className="form-control"
-                    // value={formData?.basicDetail?.cust_first_name} 
-                    // onChange={handleInputChange} 
+                    <input placeholder="First Name" type='text' id='basicDetails-first-name' name='cust_first_name' className="form-control"
+                        // value={formData?.basicDetail?.cust_first_name} 
+                        // onChange={handleInputChange} 
+                        // onChange={}
+                        onChange={(e) => {
+                            handleAddInputChange(e, "addForm")
+                            // addInputChangeHandler(e)
+                        }}
 
                     />
+                    <p id="cust_first_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-last-name">
                         Last Name
                     </label>
-                    <input placeholder="Last Name" type='text' id='basicDetails-last-name' name='basicDetail.cust_last_name' className="form-control"
-                    // value={formData?.basicDetail?.cust_last_name} 
-                    // onChange={handleInputChange} 
+                    <input placeholder="Last Name" type='text' id='basicDetails-last-name' name='cust_last_name' className="form-control"
+                        // value={formData?.basicDetail?.cust_last_name} 
+                        // onChange={handleInputChange} 
+                        onChange={(e) => {
+                            handleAddInputChange(e, "addForm")
+                            // addInputChangeHandler(e)
+                        }}
                     />
+                    <p id="cust_last_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-email">
                         Email
                     </label>
-                    <input placeholder="Email" type='text' id='basicDetails-email' name='basicDetail.email' className="form-control"
-                    //  value={formData?.basicDetail?.email} 
-                    //  onChange={handleInputChange}
+                    <input placeholder="Email" type='text' id='basicDetails-email' name='email' className="form-control"
+                        //  value={formData?.basicDetail?.email} 
+                        //  onChange={handleInputChange}
+                        onChange={(e) => {
+                            handleAddInputChange(e, "addForm")
+                            // addInputChangeHandler(e)
+                        }}
                     />
+                    <p id="email_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="basicDetails-mobile">
                         Mobile Number
                     </label>
-                    <input placeholder="Mobile Number" type='tel' maxLength={10} id='basicDetails-mobile' name='basicDetail.phone_no' className="form-control"
-                    // value={formData?.basicDetail?.phone_no}
-                    //  onChange={handleInputChange} 
+                    <input placeholder="Mobile Number" type='tel' maxLength={10} id='basicDetails-mobile' name='phone_no' className="form-control"
+                        // value={formData?.basicDetail?.phone_no}
+                        //  onChange={handleInputChange} 
+                        onChange={(e) => {
+                            handleAddInputChange(e, "addForm")
+                            // addInputChangeHandler(e)
+                        }}
                     />
+                    <p id="phone_no_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="address-1-country">Country</label>
@@ -320,7 +532,9 @@ const ApplicantForm = ({ formHandler }) => {
 
                 <div className='d-flex justify-content-between mt-2'>
                     <div>
-                        <button className="btn btn-primary" type="button">Add</button>
+                        <button className="btn btn-primary" type="button" onClick={((e) => {
+                            handleAddSubmitSection(e)
+                        })}>Add</button>
                         <button className="btn btn-primary ms-2" type="button">Cancel</button>
                     </div>
                     <div>
@@ -343,11 +557,16 @@ const ApplicantForm = ({ formHandler }) => {
                     <label htmlFor="customer-name">
                         Customer Name
                     </label>
-                    <input type='text' id='customer-name' name='basicDetail.cust_first_name' className="form-control"
+                    <input type='text' id='customer-name' name='cust_first_name' className="form-control"
                         // value={formData?.basicDetail?.cust_first_name} 
                         // onChange={handleInputChange} 
                         disabled
+                        onChange={(event) => {
+                            const e = { target: { name: "cust_first_name", value: event.value } };
+                            handleAddInputChange(e, "productForm")
+                        }}
                     />
+                    <p id="cust_first_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="registration-name">
@@ -388,10 +607,15 @@ const ApplicantForm = ({ formHandler }) => {
                     </label>
                     <input
                         placeholder='Engine Number'
-                        type='text' id='engine-number' name='basicDetail.cust_first_name' className="form-control"
-                    // value={formData?.basicDetail?.cust_first_name} 
-                    // onChange={handleInputChange} 
+                        type='text' id='engine-number' name='engine_number' className="form-control"
+                        // value={formData?.basicDetail?.cust_first_name} 
+                        // onChange={handleInputChange}
+                        onChange={(event) => {
+                            const e = { target: { name: "engine_number", value: event.value } };
+                            handleAddInputChange(e, "productForm")
+                        }}
                     />
+                    <p id="engine_number_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
 
                 <Col md={12} className="mt-2">
@@ -419,8 +643,13 @@ const ApplicantForm = ({ formHandler }) => {
                             { value: 'newCar', label: 'New Car' },
                             { value: 'used', label: 'Used' },
                         ]}
+                        onChange={(event) => {
+                            const e = { target: { name: "brand", value: event.value } };
+                            handleAddInputChange(e, "productForm")
+                        }}
                         closeMenuOnSelect={true}
                     />
+                    <p id="brand_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
 
                 <Col md={12} className="mt-2">
@@ -434,8 +663,14 @@ const ApplicantForm = ({ formHandler }) => {
                             { value: 'newCar', label: 'New Car' },
                             { value: 'used', label: 'Used' },
                         ]}
+                        onChange={(event) => {
+                            const e = { target: { name: "model", value: event.value } };
+                            handleAddInputChange(e, "productForm")
+                        }}
                         closeMenuOnSelect={true}
                     />
+                    <p id="model_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="variant-select" className="form-label" style={{ margin: '0px' }}>
@@ -471,7 +706,7 @@ const ApplicantForm = ({ formHandler }) => {
                 </Col>
                 <div className='d-flex justify-content-end mt-2'>
                     <div>
-                        <button className="btn btn-primary ms-2" type="button">Add Product</button>
+                        <button className="btn btn-primary ms-2" type="button" onClick={(e) => handleProductSubmitSection(e)}>Add Product</button>
                     </div>
                 </div>
             </Row>
@@ -515,10 +750,15 @@ const ApplicantForm = ({ formHandler }) => {
                             cacheOptions
                             id="customer-name"
                             loadOptions={loadOptions}
-                            onChange={selectCustomer}
+                            onChange={(e) => {
+                                selectCustomer(e);
+                                handleInputChange(e, 'customer_name')
+                            }}
                             components={{ Menu: CustomSelectComponent }}
                         //   value={selectedOption}
+                        // name='customer_name'
                         />
+                        <p id="customer_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-client-type" className="form-label" style={{ margin: '0px' }}>
@@ -529,9 +769,19 @@ const ApplicantForm = ({ formHandler }) => {
                             id="basicDetails-client-type"
                             options={clientTypeOptions}
                             value={clientTypeOptions?.find(option => option.value === formData?.client)}
-                            onChange={e => handleInputChange(e, 'client')}
+                            // onChange={((event) => {
+                            //     selectCustomer(event)
+                            //     const e = { target: { name: 'client', value: e?.value } }
+                            //     handleAddInputChange(e, "mainForm")
+                            // })}
+                            onChange={(e) => {
+                                selectCustomer(e);
+                                handleInputChange(e, 'client')
+                            }}
                             closeMenuOnSelect={true}
+                        // name='client'
                         />
+                        <p id="client_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-se_dsa-name">
@@ -541,6 +791,7 @@ const ApplicantForm = ({ formHandler }) => {
                             value={formData?.SE_DSA_Name}
                             onChange={handleInputChange}
                         />
+                        <p id="SE_DSA_Name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-Bank-name">
@@ -561,9 +812,18 @@ const ApplicantForm = ({ formHandler }) => {
                             options={productOptions}
                             defaultValue={productOptions[0]}
                             components={{ Menu: CustomProductSelectComponent }}
-                            onChange={e => handleInputChange(e, 'product_name_id')}
+                            // onChange={((event) => {
+                            //     selectCustomer(event)
+                            //     const e = { target: { name: 'product_name_id', value: e?.value } }
+                            //     handleAddInputChange(e, "mainForm")
+                            // })}
+                            onChange={(e) => {
+                                selectCustomer(e);
+                                handleInputChange(e, 'product_name_id')
+                            }}
                             closeMenuOnSelect={true}
                         />
+                        <p id="product_name_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-loan-type" className="form-label" style={{ margin: '0px' }}>
@@ -574,9 +834,18 @@ const ApplicantForm = ({ formHandler }) => {
                             id="basicDetails-loan-type"
                             options={loanTypeOptions}
                             value={loanTypeOptions?.find(option => option.value === formData?.Loan_Type)}
-                            onChange={e => (handleInputChange(e, 'Loan_Type'))}
+                            // onChange={((event) => {
+                            //     selectCustomer(event)
+                            //     const e = { target: { name: 'Loan_Type', value: e?.value } }
+                            //     handleInputChange(e, "mainForm")
+                            // })}
+                            onChange={(e) => {
+                                selectCustomer(e);
+                                handleInputChange(e, 'Loan_Type')
+                            }}
                             closeMenuOnSelect={true}
                         />
+                        <p id="Loan_Type_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-rot">
@@ -633,7 +902,17 @@ const ApplicantForm = ({ formHandler }) => {
                                 <button className="btn btn-primary" type="button">Cancel</button>
                             </div>
                             <div>
-                                <button className="btn btn-primary ms-2" type="button" onClick={handleNext}>Next</button>
+                                <button className="btn btn-primary ms-2" type="button"
+                                    // onClick={((e) => {
+                                    //     handleNext
+                                    //     handleSubmitSection(e)
+                                    //     console.log("aa")
+
+                                    // })}
+
+                                    onClick={handleNext}
+                                >
+                                    Next</button>
                             </div>
                         </div>
                     </Col>

@@ -1,10 +1,62 @@
 import React from 'react'
 import { Container, Row, Col } from "reactstrap"
 import Select from "react-select"
+// import { validForm } from '../../Validator'
 
-const EMIForm = ({ formHandler }) => {
+const EMIForm = ({ allData }) => {
 
-    const { handleBack, handleNext, formData, handleInputChange } = formHandler
+    const { formData, handleNext, handleBack, handleInputChange } = allData
+
+    // const EMIFormvalueToCheck = [
+    //     {
+    //         name: 'Emi_Amount',
+    //         message: 'Enter EMI Amount',
+    //         type: 'string',
+    //         id: 'Emi_Amount'
+    //     },
+    //     {
+    //         name: 'no_of_tenure',
+    //         message: 'Enter Number of Tenure',
+    //         type: 'string',
+    //         id: 'no_of_tenure'
+    //     },
+    //     {
+    //         name: 'no_of_installment',
+    //         message: 'Enter Number of Installment',
+    //         type: 'string',
+    //         id: 'no_of_installment'
+    //     }
+    // ]
+
+    // const [check, setCheck] = useState({
+    //     mainForm: {
+    //         Emi_Amount: "",
+    //         no_of_tenure: '',
+    //         no_of_installment: ""
+    //     }
+    // })
+
+    // const handleAddInputChange = (e, keyType) => {
+    //     console.log(e)
+    //     setCheck(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
+    // }
+
+    // const handleSubmitSection = (e, action) => {
+    //     e.preventDefault()
+
+    //     const checkForm = validForm(mainFormvalueToCheck, check.mainForm)  // Use mainFormvalueToCheck for validation
+    //     console.log(checkForm)
+
+    //     if (checkForm.isValid) {
+    //         console.log('Form is valid')
+    //         handleNext()
+    //         if (action === 'SAVE') {
+    //             // Save
+    //         } else if (action === 'SAVE & CLOSE') {
+    //             // Save and close
+    //         }
+    //     }
+    // }
 
     const accountType = [
         { value: 'Saving', label: 'Saving' },
@@ -30,8 +82,12 @@ const EMIForm = ({ formHandler }) => {
                         </label>
                         <input required placeholder="EMI Amount" type='tel' pattern="[0-9]" maxLength={10} id='basicDetails-emi' name='Emi_Amount' className="form-control"
                             value={formData?.Emi_Amount}
-                        onChange={ e => (handleInputChange(e))} 
+                            // onChange={e => (handleInputChange(e))}
+                            onChange={(e) => {
+                                handleInputChange(e)
+                            }}
                         />
+                        <p id="Emi_Amount_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-tenure">
@@ -39,8 +95,13 @@ const EMIForm = ({ formHandler }) => {
                         </label>
                         <input required placeholder="Number of Tenure" type='tel' pattern="[0-9]" maxLength={10} id='basicDetails-tenure' name='no_of_tenure' className="form-control"
                             value={formData?.no_of_tenure}
-                            onChange={handleInputChange}
+                            // onChange={handleInputChange}
+                            onChange={(e) => {
+                                handleInputChange(e)
+                            }}
                         />
+                        <p id="no_of_tenure_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-frequency" className="form-label" style={{ margin: '0px' }}>
@@ -61,8 +122,12 @@ const EMIForm = ({ formHandler }) => {
                         </label>
                         <input required placeholder="Number of Installment" type='tel' pattern="[0-9]" maxLength={10} id='basicDetails-installment' name='no_of_installment' className="form-control"
                             value={formData?.no_of_installment}
-                            onChange={handleInputChange}
+                            // onChange={handleInputChange}
+                            onChange={(e) => {
+                                handleInputChange(e)
+                            }}
                         />
+                        <p id="no_of_installment_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-showroom-amount">
@@ -138,6 +203,7 @@ const EMIForm = ({ formHandler }) => {
                             </div>
                             <div>
                                 <button className="btn btn-primary ms-2" type="button" onClick={handleNext}>Next</button>
+
                                 {/* <button className="btn btn-primary" type="submit" >Save</button> */}
                             </div>
                         </div>

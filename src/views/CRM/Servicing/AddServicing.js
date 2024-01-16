@@ -734,7 +734,7 @@ const AddServicing = () => {
                                 handleInputChange(e, "mainForm")
                             }}
                             value={(id && isCustomer) ? allOptions : allOptions?.filter($ => $.value === formData?.mainForm?.customer_id)}
-                            isDisabled={formData.mainForm?.customer_id || id}
+                            isDisabled={isCustomer}
                         />
                         <p id="customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
