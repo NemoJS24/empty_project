@@ -65,7 +65,7 @@ const ViewCustomer = () => {
                 {currentStep === 4 && <FinanceDetails />}
                 {currentStep === 5 && <InsuranceDetails />}
                 {currentStep === 6 && <ServicingDetails />}
-                {currentStep === 7 && <Call />}
+                {currentStep === 7 && <Call userData={userData} />}
             </div>
         </>
     )

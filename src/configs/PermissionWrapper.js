@@ -16,7 +16,8 @@ const PermissionWrapper = ({children}) => {
         isSupport: false,
         isAdmin: false,
         currencySymbol: "₹",
-        multiUser: ""
+        multiUser: "",
+        permissionList: ["crm_view_customer"]
     }
     const [userPermission, setUserPermission] = useState(localStorage.getItem('userPermission') ? JSON.parse(localStorage.getItem('userPermission')) : defaultData)
     const location = useLocation()
@@ -34,7 +35,7 @@ const PermissionWrapper = ({children}) => {
         if (getToken()) {
             localStorage.setItem('userPermission', JSON.stringify(userPermission))
         }
-        
+
     }, [userPermission])
 
     const checkUserPermission = async () => {
@@ -50,6 +51,7 @@ const PermissionWrapper = ({children}) => {
                 if (userPermission?.installedApps?.includes(currentRoute[0]?.app)) {
                     // console.log("INSTALLED", "Route Permission")
                     setUserPermission({...userPermission, appName: currentRoute[0]?.app})
+
                 } else {
                     // console.log("NOT INSTALLED", "Route Permission")
                     toast.error("You don't have access of that App")
@@ -57,6 +59,14 @@ const PermissionWrapper = ({children}) => {
                 }
 
             }
+
+            // if (currentRoute[0]?.route_type) {
+            //     if (!userPermission?.permissionList?.includes(currentRoute[0]?.route_type)) {
+            //         navigate(-1)
+            //         toast.error("Permission denied")
+            //     }
+
+            // }
         }
     }
 

@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { Card, CardBody, Container, Row, Col, Input } from "reactstrap"
 import Select from "react-select"
 import { validForm } from '../../Validator'
+import { postReq } from '../../../assets/auth/jwtService'
+import { useLocation, useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 // import { validForm } from "../Validator"
 
 const AddCall = () => {
@@ -39,33 +42,57 @@ const AddCall = () => {
       }
    ]
 
+   const location = useLocation()
+
+   const navigate = useNavigate()
+
+   console.log(location, "location")
+
    const [formData, setFormData] = useState({ schedule_call: false })
    const [data, setData] = useState({
-      customer_name: "",
+      customer_name: location?.state?.data?.customer_name,
       call_status: "",
       call_purpose: "",
       lead_status: "",
-      interested: ""
+      interested: "",
+      customer_id: location?.state?.data?.id
    })
 
    const inputChangeHandler = (e) => {
       setData({ ...data, [e.target.name]: e.target.value })
    }
 
+   const saveData = (action) => {
+
+      const form_data = new FormData()
+
+      Object.entries(data).map(([key, value]) => form_data.append(key, value))
+
+      postReq('add_call', form_data)
+      .then((resp) => {
+         console.log(resp)
+         if (action === "SAVE & CLOSE") {
+            navigate(-1)
+         }
+
+         toast.success("Saved Successfully")
+      })
+      .catch((error) => {
+         console.log(error)
+         toast.error("Something went wrong!")
+      })
+   }
+
    const handleSubmitSection = (e, action) => {
       e.preventDefault()
 
       const checkForm = validForm(valueToCheck, data)
-      console.log(checkForm)
+      console.log(checkForm, "result")
 
-      if (checkForm.isValid) {
+      if (checkForm) {
          console.log("Form is valid")
 
-         if (action === 'SAVE') {
-            // Save
-         } else if (action === 'SAVE & CLOSE') {
-            // Save and close
-         }
+         saveData(action)
       }
    }
    const handleInputChange = (e, type) => {
@@ -139,6 +166,7 @@ const AddCall = () => {
                                  onChange={(e) => {
                                     inputChangeHandler(e)
                                  }}
+                                 disabled
                               />
                               <p id="customer_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                            </Col>
@@ -191,7 +219,11 @@ const AddCall = () => {
                                  Notes
                               </label>
                               {/* <div className="form-floating"> */}
-                              <textarea className="form-control" placeholder="Leave a note here" id="notes-label" style={{ minHeight: '90px' }}></textarea>
+                              <textarea className="form-control" placeholder="Leave a note here" id="notes-label" style={{ minHeight: '90px' }}
+                                 onChange={(e) => {
+                                    inputChangeHandler({ target: { name: 'note', value: e?.value } })
+                                 }}
+                              ></textarea>
                               {/* <label htmlFor="notes-label">Notes</label> */}
                               {/* </div> */}
                            </Col>

@@ -57,7 +57,7 @@ const Customers = () => {
       minWidth: "150px",
       selector: (row) => (
         <Link to={`/merchant/customers/view_customer/${row?.servicing_customer_id}`}>{row?.servicing_customer_name}</Link>
-        ),
+      ),
       type: 'text',
       isEnable: true
     },

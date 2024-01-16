@@ -1,50 +1,93 @@
-import React, { useState } from 'react'
-import { Card, CardBody, Col, Row } from 'reactstrap'
+import React, { useEffect, useState } from 'react'
+import { Card, CardBody, Col, Input, Row } from 'reactstrap'
 import AdvanceServerSide from "@src/views/Components/DataTable/AdvanceServerSide.js"
 // import axios from 'axios'
-import { crmURL } from '../../../../assets/auth/jwtService'
-import { useParams } from 'react-router-dom'
+import { crmURL, postReq } from '../../../../assets/auth/jwtService'
+import { Link, useParams } from 'react-router-dom'
 import moment from 'moment'
+import ComTable from '../../../Components/DataTable/ComTable'
 
 const InsuranceDetails = () => {
 
     const { id } = useParams()
     const [tableData, setTableData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    const [selected, setSelected] = useState([])
-    let serialNumber = 1
+    const [filteredData, setFilteredData] = useState([])
+    const [searchValue, setSearchValue] = useState('')
+    // const [selected, setSelected] = useState([])
+    // let serialNumber = 1
 
 
     const getData = () => {
         setIsLoading(true)
         const form_data = new FormData()
-        const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
+        // const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
         form_data.append("customer_id", id)
         form_data.append("tab_type", "insurance")
-        fetch(url, {
-            method: "POST",
-            body: form_data
+        // fetch(url, {
+        //     method: "POST",
+        //     body: form_data
+        // })
+        postReq('get_customer_insurance', form_data, crmURL)
+        .then((res) => {
+            console.log(res.success, "ll")
+            setTableData(res.success)
+            setIsLoading(false)
         })
-            .then((res) => res.json())
-            .then((res) => {
-                console.log(res.success[0], "ll")
-                setTableData(res.success)
-                setIsLoading(false)
-            })
-            .catch((error) => {
-                console.log(error)
-                setIsLoading(false)
-            })
+        .catch((error) => {
+            console.log(error)
+            setIsLoading(false)
+        })
     }
 
+    const handleFilter = e => {
+        const { value } = e.target
+        let updatedData = []
+        setSearchValue(value)
+
+        if (value.length) {
+            updatedData = data.filter(item => {
+                const startsWith =
+                    item.registration_number.toLowerCase().startsWith(value.toLowerCase())
+
+                const includes =
+                    item.registration_number.toLowerCase().includes(value.toLowerCase())
+
+                if (startsWith) {
+                    return startsWith
+                } else if (!startsWith && includes) {
+                    return includes
+                } else return null
+            })
+            setFilteredData(updatedData)
+            setSearchValue(value)
+        }
+    }
+
+    const defferContent = <>
+        <Col className='d-flex align-items-center justify-content-center' md='4' sm='12'>
+            <h4 className='m-0'>Insurance Details</h4>
+        </Col>
+        <Col className='d-flex align-items-center justify-content-end' md='4' sm='12'>
+            <Link className='btn btn-primary-main' to={`/merchant/customers/add-insurance/${id}`}>Add Insurance</Link>
+            <Input
+                className='dataTable-filter form-control ms-1'
+                style={{ width: `180px`, height: `2.714rem` }}
+                type='text'
+                bsSize='sm'
+                id='search-input-1'
+                placeholder='Search...'
+                value={searchValue}
+                onChange={handleFilter}
+            />
+        </Col>
+    </>
+
+    useEffect(() => {
+        getData()
+    }, [])
 
     const columns = [
-        {
-            name: "SR NO.",
-            minWidth: "100px",
-            selector: () => serialNumber++,
-            type: 'text'
-        },
         {
             name: "CUSTOMER NAME",
             minWidth: "240px",
@@ -126,7 +169,7 @@ const InsuranceDetails = () => {
                 <Col>
                     <Card>
                         <CardBody>
-                            <AdvanceServerSide
+                            {/* <AdvanceServerSide
                                 tableName="Insurance Details"
                                 tableCol={columns}
                                 data={tableData}
@@ -140,6 +183,16 @@ const InsuranceDetails = () => {
                                 create={true}
                                 createLink={"/merchant/customers/add-insurance/"}
                                 createText={"Add Insurance"}
+                            /> */}
+                            <ComTable
+                                // tableName="Verified Email"
+                                content={defferContent}
+                                tableCol={columns}
+                                data={tableData}
+                                searchValue={searchValue}
+                                // handleFilter={handleFilter}
+                                filteredData={filteredData}
+                                isLoading={isLoading}
                             />
                         </CardBody>
                     </Card>

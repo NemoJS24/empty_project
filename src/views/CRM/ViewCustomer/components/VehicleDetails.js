@@ -3,7 +3,7 @@ import { Card, CardBody, Col, Input, Row } from 'reactstrap'
 import AdvanceServerSide from "@src/views/Components/DataTable/AdvanceServerSide.js"
 // import axios from 'axios'
 import { postReq, crmURL } from '../../../../assets/auth/jwtService'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Edit, Eye } from 'react-feather'
 import ComTable from '../../../Components/DataTable/ComTable'
 
@@ -28,22 +28,16 @@ const VehicleDetails = () => {
         form_data.append("customer_id", id)
         form_data.append("tab_type", "vehicle_data")
         postReq('get_customer_vehicle', form_data, crmURL)
+        .then((res) => {
+            console.log(res.data.success, "kk")
+            setTableData([...res.data.success])
 
-            // fetch(url, {
-            //     method: "POST",
-            //     body: form_data
-            // })
-            // .then((res) => res.json())
-            .then((res) => {
-                console.log(res.data.success, "kk")
-                setTableData([...res.data.success])
-
-                setIsLoading(false)
-            })
-            .catch((error) => {
-                console.log(error)
-                setIsLoading(false)
-            })
+            setIsLoading(false)
+        })
+        .catch((error) => {
+            console.log(error)
+            setIsLoading(false)
+        })
     }
 
     const handleFilter = e => {
@@ -125,6 +119,7 @@ const VehicleDetails = () => {
             <h4 className='m-0'>Vehicle Details</h4>
         </Col>
         <Col className='d-flex align-items-center justify-content-end' md='4' sm='12'>
+            <Link className='btn btn-primary-main' to={`/merchant/customers/add-vehicle/${id}`}>Add Vehicle</Link>
             <Input
                 className='dataTable-filter form-control ms-1'
                 style={{ width: `180px`, height: `2.714rem` }}

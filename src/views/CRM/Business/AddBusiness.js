@@ -82,7 +82,7 @@ const AddBusiness = () => {
    const navigate = useNavigate()
 
    const { id } = useParams()
-   
+
    console.log(formData, 'formData')
 
    const getCountries = () => {
