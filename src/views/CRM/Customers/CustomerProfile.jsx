@@ -330,14 +330,18 @@ export default function CustomerProfile() {
                   </button>
                 </div>
                 <div>
-                  <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE')}>Save</button>
                   {(currentStep < 5) ? <button
                     className="btn btn-primary ms-2"
                     type="button"
                     onClick={handleNext}
                   >
                     Next
-                  </button> : <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE & CLOSE')}>Save & Close</button>}
+                  </button> : (
+                    <>
+                      <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE & CLOSE')}>Save & Close</button>
+                      <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE')}>Save</button>
+                    </>
+                  )}
                 </div>
               </div>
             </form>

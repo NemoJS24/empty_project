@@ -9,7 +9,7 @@ import { baseURL } from '@src/assets/auth/jwtService.js'
 import toast from "react-hot-toast"
 // import financeData from './financeData'
 import { useParams, useNavigate } from 'react-router-dom'
-import { crmURL, postReq } from '../../../assets/auth/jwtService'
+import { postReq } from '../../../assets/auth/jwtService'
 import { validForm } from '../../Validator'
 
 const AddFinance = () => {
@@ -287,7 +287,7 @@ const AddFinance = () => {
         form_data.append("finance_id", id)
       }
 
-      postReq("add_finance", form_data, crmURL)
+      postReq("add_finance", form_data, baseURL)
         .then((response) => {
           return response.json()
         })

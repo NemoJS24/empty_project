@@ -1,4 +1,4 @@
-import {  Col, Row, Card, CardBody, CardHeader, Button} from "reactstrap"
+import { Col, Row, Card, CardBody, CardHeader, Button } from "reactstrap"
 import { useState } from "react"
 import AdvanceServerSide from "@src/views/Components/DataTable/AdvanceServerSide.js"
 // import { crmURL } from "@src/assets/auth/jwtService.js"
@@ -8,7 +8,7 @@ import { LiaUserSlashSolid, LiaUserSolid } from "react-icons/lia"
 import { PiMoneyThin } from "react-icons/pi"
 import { Link } from "react-router-dom"
 import moment from "moment/moment"
-import { postReq } from "../../assets/auth/jwtService"
+import { crmURL, postReq } from "../../assets/auth/jwtService"
 
 /* eslint-disable */
 const Customers = () => {
@@ -34,7 +34,7 @@ const Customers = () => {
     //   method: "POST",
     //   body: form_data
     // })
-      postReq("all_cust_dashboard", form_data)
+    postReq("servicing_dashboard", form_data, crmURL)
       .then((resp) => {
         console.log("hh", resp)
         setTableData(resp?.data)
@@ -45,18 +45,18 @@ const Customers = () => {
         setIsLoading(false)
       })
 
-    }
+  }
 
-//   useEffect(() => {
-//     getData()
-//   }, [])
+  //   useEffect(() => {
+  //     getData()
+  //   }, [])
 
   const columns = [
     {
       name: "Customer Name",
       minWidth: "150px",
       selector: (row) => (
-        <Link to={`/merchant/customers/view_customer/${row?.servicing_customer_id}`}>{row?.servicing_customer_name}</Link>
+        <Link to={`/merchant/customers/view_customer/${row?.servicing_customer_id}`}>{row?.servicing_customer_name ? row?.servicing_customer_name : "-"}</Link>
       ),
       type: 'text',
       isEnable: true
@@ -64,56 +64,56 @@ const Customers = () => {
     {
       name: "Brand",
       minWidth: "150px",
-      selector: (row) => row?.servicing_brand,
+      selector: (row) => row?.servicing_brand ? row?.servicing_brand : "-",
       type: 'number',
       isEnable: true
     },
     {
       name: "Model",
       minWidth: "200px",
-      selector: (row) => row?.servicing_model,
+      selector: (row) => row?.servicing_model ? row?.servicing_model : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Variant",
       minWidth: "200px",
-      selector: (row) => row?.servicing_variant,
+      selector: (row) => row?.servicing_variant ? row?.servicing_variant : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Service Location",
       minWidth: "200px",
-      selector: (row) => row?.servicing_service_location,
+      selector: (row) => row?.servicing_service_location ? row?.servicing_service_location : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Job Card Date",
       minWidth: "200px",
-      selector: (row) => moment(row?.servicing_job_card_date).format("YYYY-MM-DD"),
+      selector: (row) => row?.servicing_job_card_date ? moment(row?.servicing_job_card_date).format("YYYY-MM-DD") : "-",
       type: 'date',
       isEnable: true
     },
     {
       name: "Service Invoice Date",
       minWidth: "200px",
-      selector: (row) => moment(row?.servicing_service_invoice_date).format("YYYY-MM-DD"),
+      selector: (row) => row?.servicing_service_invoice_date ? moment(row?.servicing_service_invoice_date).format("YYYY-MM-DD") : '-',
       type: 'date',
       isEnable: true
     },
     {
       name: "Service Expiry Date",
       minWidth: "200px",
-      selector: (row) => moment(row?.servicing_service_expiry_date).format("YYYY-MM-DD"),
+      selector: (row) => row?.servicing_service_expiry_date ? moment(row?.servicing_service_expiry_date).format("YYYY-MM-DD") : "-",
       type: 'date',
       isEnable: true
     },
     {
-      name: "Service Invoice Ammount",
+      name: "Service Invoice Amount",
       minWidth: "200px",
-      selector: (row) => row?.servicing_service_invoice_amount,
+      selector: (row) => row?.servicing_service_invoice_amount ? row?.servicing_service_invoice_amount : "-",
       type: 'text',
       isEnable: true
     },
@@ -124,7 +124,6 @@ const Customers = () => {
         <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
           <Link to={`/merchant/customers/view_customer/${row?.servicing_customer_id}`}><Eye size={15} /></Link>
           <Link to={`/merchant/customers/add-servicing/${row?.servicing_customer_id}?type=edit`}> <Edit3 size={15} /></Link>
-          <Trash2 size={15} />
         </div>
       )
     }
@@ -139,7 +138,7 @@ const Customers = () => {
               <AdvanceServerSide
                 tableName="All Servicing"
                 tableCol={columns}
-                data={tableData?.servicing}
+                data={tableData?.data}
                 isLoading={isLoading}
                 getData={getData}
                 count={tableData?.recordsTotal}
