@@ -57,7 +57,7 @@ const Customers = () => {
       name: "Customer Name",
       minWidth: "200px",
       selector: (row) => (
-        <Link to={`/merchant/customers/view_customer/${row?.finance_customer_id}`}>{row?.finance_customer_name ? row?.finance_customer_name : "-"}</Link>
+        <Link to={`/merchant/customers/view_customer/${row?.finance_customer_id}`}>{row?.finance_customer_name ? row.finance_customer_name : "-"}</Link>
       )
       ,
       type: 'text',
@@ -66,77 +66,77 @@ const Customers = () => {
     {
       name: "Vehicle Name",
       minWidth: "200px",
-      selector: (row) => row?.finance_car_name ? row?.finance_car_name : "-",
+      selector: (row) => row?.finance_car_name ? row.finance_car_name : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Bank Name",
       minWidth: "200px",
-      selector: (row) => row?.finance_bank_name ? row?.finance_bank_name : "-",
+      selector: (row) => row?.finance_bank_name ? row.finance_bank_name : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Vehical Number",
       minWidth: "200px",
-      selector: (row) => row?.finance_vehicle_number ? row?.finance_vehicle_number : "-",
+      selector: (row) => row?.finance_vehicle_number ? row.finance_vehicle_number : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Loan Number",
       minWidth: "200px",
-      selector: (row) => row?.finance_loan_number ? row?.finance_loan_number : "-",
+      selector: (row) => row?.finance_loan_number ? row.finance_loan_number : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Loan Type",
       minWidth: "200px",
-      selector: (row) => row?.finance_loan_type ? row?.finance_loan_type : "-",
+      selector: (row) => row?.finance_loan_type ? row.finance_loan_type : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Disburse Date",
       minWidth: "200px",
-      selector: (row) => row?.finance_loan_disbursement_date ? moment(row?.finance_loan_disbursement_date).format("YYYY-MM-DD") : "-",
+      selector: (row) => row?.finance_loan_disbursement_date ? moment(row.finance_loan_disbursement_date).format("YYYY-MM-DD") : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Rate Of Interest",
       minWidth: "200px",
-      selector: (row) => row?.finance_rate_of_interest ? row?.finance_rate_of_interest : "-",
+      selector: (row) => row?.finance_rate_of_interest ? row.finance_rate_of_interest : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Loan Amount",
       minWidth: "200px",
-      selector: (row) => row?.finance_loan_amount ? row?.finance_loan_amount : "-",
+      selector: (row) => row?.finance_loan_amount ? row.finance_loan_amount : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "EMI Amount",
       minWidth: "200px",
-      selector: (row) => row?.finance_emi_amount ? row?.finance_emi_amount : "-",
+      selector: (row) => row?.finance_emi_amount ? row.finance_emi_amount : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "EMI Start Date",
       minWidth: "200px",
-      selector: (row) => row?.finance_emi_start_date ? moment(row?.finance_emi_start_date).format("YYYY-MM-DD") : "-",
+      selector: (row) => row?.finance_emi_start_date ? moment(row.finance_emi_start_date).format("YYYY-MM-DD") : "-",
       type: 'date',
       isEnable: true
     },
     {
       name: "EMI End Date",
       minWidth: "200px",
-      selector: (row) => row?.finance_emi_end_date ? moment(row?.finance_emi_end_date).format("YYYY-MM-DD") : "-",
+      selector: (row) => row?.finance_emi_end_date ? moment(row.finance_emi_end_date).format("YYYY-MM-DD") : "-",
       type: 'date',
       isEnable: true
     },

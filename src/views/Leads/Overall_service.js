@@ -56,7 +56,7 @@ const Customers = () => {
       name: "Customer Name",
       minWidth: "150px",
       selector: (row) => (
-        <Link to={`/merchant/customers/view_customer/${row?.servicing_customer_id}`}>{row?.servicing_customer_name ? row?.servicing_customer_name : "-"}</Link>
+        <Link to={`/merchant/customers/view_customer/${row?.servicing_customer_id}`}>{row?.servicing_customer_name ? row.servicing_customer_name : "-"}</Link>
       ),
       type: 'text',
       isEnable: true
@@ -64,56 +64,56 @@ const Customers = () => {
     {
       name: "Brand",
       minWidth: "150px",
-      selector: (row) => row?.servicing_brand ? row?.servicing_brand : "-",
+      selector: (row) => row?.servicing_brand ? row.servicing_brand : "-",
       type: 'number',
       isEnable: true
     },
     {
       name: "Model",
       minWidth: "200px",
-      selector: (row) => row?.servicing_model ? row?.servicing_model : "-",
+      selector: (row) => row?.servicing_model ? row.servicing_model : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Variant",
       minWidth: "200px",
-      selector: (row) => row?.servicing_variant ? row?.servicing_variant : "-",
+      selector: (row) => row?.servicing_variant ? row.servicing_variant : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Service Location",
       minWidth: "200px",
-      selector: (row) => row?.servicing_service_location ? row?.servicing_service_location : "-",
+      selector: (row) => row?.servicing_service_location ? row.servicing_service_location : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Job Card Date",
       minWidth: "200px",
-      selector: (row) => row?.servicing_job_card_date ? moment(row?.servicing_job_card_date).format("YYYY-MM-DD") : "-",
+      selector: (row) => row?.servicing_job_card_date ? moment(row.servicing_job_card_date).format("YYYY-MM-DD") : "-",
       type: 'date',
       isEnable: true
     },
     {
       name: "Service Invoice Date",
       minWidth: "200px",
-      selector: (row) => row?.servicing_service_invoice_date ? moment(row?.servicing_service_invoice_date).format("YYYY-MM-DD") : '-',
+      selector: (row) => row?.servicing_service_invoice_date ? moment(row.servicing_service_invoice_date).format("YYYY-MM-DD") : '-',
       type: 'date',
       isEnable: true
     },
     {
       name: "Service Expiry Date",
       minWidth: "200px",
-      selector: (row) => row?.servicing_service_expiry_date ? moment(row?.servicing_service_expiry_date).format("YYYY-MM-DD") : "-",
+      selector: (row) => row?.servicing_service_expiry_date ? moment(row.servicing_service_expiry_date).format("YYYY-MM-DD") : "-",
       type: 'date',
       isEnable: true
     },
     {
       name: "Service Invoice Amount",
       minWidth: "200px",
-      selector: (row) => row?.servicing_service_invoice_amount ? row?.servicing_service_invoice_amount : "-",
+      selector: (row) => row?.servicing_service_invoice_amount ? row.servicing_service_invoice_amount : "-",
       type: 'text',
       isEnable: true
     },

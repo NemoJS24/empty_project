@@ -97,14 +97,14 @@ const Customers = () => {
     {
       name: "Policy Purchase Date",
       minWidth: "200px",
-      selector: (row) => row?.insurance_policy_purchase_date ? moment(row?.insurance_policy_purchase_date).format("YYYY-MM-DD") : "-",
+      selector: (row) => row?.insurance_policy_purchase_date ? moment(row.insurance_policy_purchase_date).format("YYYY-MM-DD") : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Policy Expiry Date",
       minWidth: "200px",
-      selector: (row) => row?.insurance_policy_expiry_date ? moment(row?.insurance_policy_expiry_date).format("YYYY-MM-DD") : "-",
+      selector: (row) => row?.insurance_policy_expiry_date ? moment(row.insurance_policy_expiry_date).format("YYYY-MM-DD") : "-",
       type: 'text',
       isEnable: true
     },
