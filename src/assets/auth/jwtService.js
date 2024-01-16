@@ -140,7 +140,6 @@ export const configUrl = {
     add_customer: '/customers/merchant/add_customer/',
     add_vehicle: '/vehicle/add_vehicle/',
     crm_servicing_customers: '/servicing/get_add_servicing/',
-    get_customer_details: '/customers/merchant/get_customer_details',
     fetch_vehicle_number: '/vehicle/fetch_vehicle_number',
     add_finance: '/finance/add_finance/',
     get_customer_finance: '/finance/get_customer_finance/',
