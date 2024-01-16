@@ -10,13 +10,24 @@ import axios from "axios"
 import toast from "react-hot-toast"
 import { validForm, validateEmail } from '../../Validator'
 import { postReq } from '../../../assets/auth/jwtService'
+import { main } from '@popperjs/core'
 
 const AddServicing = () => {
 
     const { id } = useParams()
+    // let servicingId
     const urlParams = new URLSearchParams(location.search)
     const isEdit = urlParams.get("type") === "edit"
     const isCustomer = urlParams.get("type") === "customer"
+
+    // if (isEdit) {
+    //     id = getid.split("-")[0]
+    //     servicingId = getid.split("-")[1]
+    // } else {
+    //     id = getid
+    // }
+
+    console.log(id, "idIsThe", { isEdit }, { isCustomer })
 
     const mainFormvalueToCheck = [
         {
@@ -122,7 +133,7 @@ const AddServicing = () => {
 
     const [formData, setFormData] = useState({
         mainForm: {
-            customer_id: id ? id : "",
+            customer_id: isCustomer ? id : "",
             vehicle: '',
             service_advisor: '',
             job_card_date: '',
@@ -173,51 +184,85 @@ const AddServicing = () => {
     const fetchServiceData = (func_id) => {
         // const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
         const form_data = new FormData()
-        form_data.append("id", func_id)
-        form_data.append('edit_type', (id && isCustomer) ? "is_customer_detail" : 'is_servicing')
+        form_data.append('edit_type', isEdit ? 'is_servicing': 'is_customer_detail')
+        if (isEdit) {
+            form_data.append("id", id)
+            postReq("get_customer_servicing", form_data, crmURL)
+                .then((resp) => {
+                    // const newArr = resp?.data?.success?.map(ele => {
+                    //     return { value: ele.id, label: ele.customer_name }
+                    // })
+                    console.log("ResponseId:", resp.data.success[0])
+                    setFormData((prev) => {
+                        return {
+                            ...prev, mainForm: {
+                                ...prev.mainForm,
+                                customer_id: resp?.data?.success[0]?.xircls_customer,
+                                vehicle: resp?.data?.success[0]?.vehicle?.registration_number,
+                                service_advisor: resp?.data?.success[0]?.service_advisor,
+                                job_card_date: resp?.data?.success[0]?.job_card_date,
+                                service_invoice_date: resp?.data?.success[0]?.service_invoice_date,
+                                next_service_date: resp?.data?.success[0]?.service_expiry_date,
+                                service_invoice_amount: resp?.data?.success[0]?.service_invoice_amount
+
+                            }
+                        }
+                    })
+                })
+                .catch((error) => {
+                    console.error("Error:", error)
+                    toast.error('Failed to fetch Servicing Detail')
+                })
+            // const dupObj = { ...formData.mainForm }
+            // Object.keys(formData.mainForm).map(key => {
+            //     dupObj[key] = resp.data.success[0][key]
+            // })
+            // console.log({ dupObj })
+            // setFormData(prev => {
+            //     return {
+            //         ...prev, main: dupObj
+            //     }
+            // })
+            // setAllOptions([...newArr])
+            // if (isEdit) {
+
+            // }
+            // console.log("ResponseId:", resp.success[0])
+            // if (resp.success.length === 0) {
+            //     // navigate(`/merchant/customer/all_cust_dashboard/add_servicing/`)
+            //     toast.error('Autofill is not available')
+            //     return
+            // }
+            // const newObject = {};
+            // for (const key in resp.success[0]) {
+            //     if (resp.success[0].hasOwnProperty(key) && resp.success[0][key] !== null) {
+            //         newObject[key] = resp.success[0][key];
+            //     }
+            // }
+            // // console.log('AfterRemovingNullId', newObject);
+            // setFormData(prefData => ({
+            //     ...prefData,
+            //     mainForm: {
+            //         ...prefData.mainForm,
+            //         // ...newObject,
+            //         // job_card_date: prefData?.job_card_date?.substring(0, 10),
+            //         // service_expiry_date: prefData?.service_expiry_date?.substring(0, 10),
+            //         // service_invoice_date: prefData?.service_invoice_date?.substring(0, 10),
+            //         // updated_at: prefData?.updated_at?.substring(0, 10)
+            //     }
+            // }))
+        }
+        // if (isEdit) {
+
+        // }
+        // // form_data.append("customer_id", func_id)
+        // form_data.append('tab_type', 'servicing')
+        // // form_data.append('edit_type', !isEdit ? "is_customer_detail" : 'is_servicing')
         // fetch(url, {
         //     method: "POST",
         //     body: form_data
         // })
-        postReq("get_view_customer", form_data)
-            // .then((response) => {
-            //     return response.json()
-            // })
-            .then((resp) => {
-                const newArr = resp?.data?.success?.map(ele => {
-                    return { value: ele.id, label: ele.customer_name }
-                })
-                console.log("ResponseId:", resp, newArr)
-                setAllOptions([...newArr])
-                // console.log("ResponseId:", resp.success[0])
-                // if (resp.success.length === 0) {
-                //     // navigate(`/merchant/customer/all_cust_dashboard/add_servicing/`)
-                //     toast.error('Autofill is not available')
-                //     return
-                // }
-                // const newObject = {};
-                // for (const key in resp.success[0]) {
-                //     if (resp.success[0].hasOwnProperty(key) && resp.success[0][key] !== null) {
-                //         newObject[key] = resp.success[0][key];
-                //     }
-                // }
-                // // console.log('AfterRemovingNullId', newObject);
-                // setFormData(prefData => ({
-                //     ...prefData,
-                //     mainForm: {
-                //         ...prefData.mainForm,
-                //         ...newObject,
-                //         job_card_date: prefData?.job_card_date.substring(0, 10),
-                //         service_expiry_date: prefData?.service_expiry_date.substring(0, 10),
-                //         service_invoice_date: prefData?.service_invoice_date.substring(0, 10),
-                //         updated_at: prefData?.updated_at.substring(0, 10)
-                //     }
-                // }))
-            })
-            .catch((error) => {
-                console.error("Error:", error)
-                toast.error('Failed to fetch Servicing Detail')
-            })
+
     }
 
     const postData = (btn) => {
@@ -262,6 +307,7 @@ const AddServicing = () => {
             // )
             const successData = response.data.success
             // console.log(successData)
+            console.log("successData", successData)
             if (successData && Array.isArray(successData)) {
                 const customerOptions = successData
                     .filter((item) => item.customer_name !== "")
@@ -271,7 +317,7 @@ const AddServicing = () => {
                     }))
                 const option = [...allOptions, ...customerOptions]
                 console.log(option, "option")
-                setAllOptions(prev => (id && isCustomer) ? prev : option)
+                setAllOptions(option)
                 callback(option)
                 // setCurrentPage((prevPage) => prevPage + 1)
                 setCurrentPage((prevPage) => {
@@ -733,7 +779,7 @@ const AddServicing = () => {
                                 const e = { target: { name: 'customer_id', value: event?.value } }
                                 handleInputChange(e, "mainForm")
                             }}
-                            value={(id && isCustomer) ? allOptions : allOptions?.filter($ => $.value === formData?.mainForm?.customer_id)}
+                            value={allOptions?.filter($ => parseFloat($.value) === parseFloat(formData?.mainForm?.customer_id))}
                             isDisabled={isCustomer}
                         />
                         <p id="customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
