@@ -13,7 +13,32 @@ import { baseURL, postReq } from '../../../assets/auth/jwtService'
 import { validForm } from '../../Validator'
 
 const AddInsurance = () => {
-    const [formData, setFormData] = useState({})
+    const { id } = useParams()
+
+    const urlParams = new URLSearchParams(location.search)
+    const isEdit = urlParams.get("type") === "edit"
+    const isCustomer = urlParams.get("type") === "customer"
+
+    const [formData, setFormData] = useState({
+        customer_name: isCustomer ? id : "",
+        policy_number: "",
+        insurance_type: "",
+        insurance_company: "",
+        policy_purchase_date: "",
+        policy_expiry_date: "",
+        executive_name: "",
+        amount: "",
+        add_on_plan: "",
+        insured_declared_value: "",
+        own_damage: "",
+        ncb_no_claim_bonus: "",
+        pm_payment_mode: "",
+        ncb_declaration: "",
+        third_party_date: "",
+        inbuilt_discount: "",
+        net_premimum: "", 
+        health_insurance: ""
+    })
     const [customerFormData, setCustomerFormData] = useState({
         title: "",
         cust_first_name: "",
@@ -40,7 +65,6 @@ const AddInsurance = () => {
     const [allOptions, setAllOptions] = useState([])
 
     const navigate = useNavigate()
-    const { id } = useParams()
 
     const insuranceFormToCheck = [
         {
@@ -244,24 +268,49 @@ const AddInsurance = () => {
     const fetchInsuranceData = (id) => {
         // const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
         const form_data = new FormData()
-        form_data.append("id", id)
-        form_data.append('edit_type', 'is_insurance')
+        if (isEdit) {
+            form_data.append("id", id)
+            form_data.append('edit_type', 'is_insurance')
 
-        postReq('get_view_customer', form_data, baseURL)
-            .then((resp) => {
-                console.log("ResponseId:", resp.data.success[0])
-                const newObject = {}
-                for (const key in resp.data.success[0]) {
-                    if (resp.data.success[0].hasOwnProperty(key) && resp.data.success[0][key] !== null) {
-                        newObject[key] = resp.data.success[0][key]
-                    }
-                }
-                setFormData(newObject)
-            })
-            .catch((error) => {
-                console.error("Error:", error)
-                toast.error('Failed to fetch Servicing Detail')
-            })
+            postReq('get_customer_insurance', form_data, crmURL)
+                .then((resp) => {
+                    console.log("ResponseId:", resp.data.success[0])
+                    // const newObject = {}
+                    // for (const key in resp.data.success[0]) {
+                    //     if (resp.data.success[0].hasOwnProperty(key) && resp.data.success[0][key] !== null) {
+                    //         newObject[key] = resp.data.success[0][key]
+                    //     }
+                    // }
+                    // setFormData(newObject)
+                    setFormData((prev) => {
+                        return {
+                            ...prev,
+                            customer_name: resp?.data?.success[0]?.xircls_customer,
+                            policy_number: resp?.data?.success[0]?.policy_number,
+                            insurance_type: resp?.data?.success[0]?.insurance_type,
+                            insurance_company: resp?.data?.success[0]?.insurance_company,
+                            policy_purchase_date: resp?.data?.success[0]?.policy_purchase_date,
+                            policy_expiry_date: resp?.data?.success[0]?.policy_expiry_date,
+                            executive_name: resp?.data?.success[0]?.executive_name,
+                            amount: resp?.data?.success[0]?.amount,
+                            add_on_plan: resp?.data?.success[0]?.add_on_plan,
+                            insured_declared_value: resp?.data?.success[0]?.insured_declared_value,
+                            own_damage: resp?.data?.success[0]?.own_damage,
+                            ncb_no_claim_bonus: resp?.data?.success[0]?.ncb_no_claim_bonus,
+                            pm_payment_mode: resp?.data?.success[0]?.pm_payment_mode,
+                            ncb_declaration: resp?.data?.success[0]?.ncb_declaration,
+                            third_party_date: resp?.data?.success[0]?.third_party_date,
+                            inbuilt_discount: resp?.data?.success[0]?.inbuilt_discount,
+                            net_premimum: resp?.data?.success[0]?.net_premimum,
+                            health_insurance: resp?.data?.success[0]?.net_premimum
+                        }
+                    })
+                })
+                .catch((error) => {
+                    console.error("Error:", error)
+                    toast.error('Failed to fetch Servicing Detail')
+                })
+        }
     }
 
     const postData = (btn) => {
@@ -597,7 +646,7 @@ const AddInsurance = () => {
                     --bs-offcanvas-width: 400px
                     --bs-offcanvas-width: 400px
                 }
-          `}
+            `}
         </style>
     )
 
@@ -905,7 +954,7 @@ const AddInsurance = () => {
             <div className="customer-profile">
                 <Card>
                     <CardBody>
-                        <h3 className="mb-0">{id ? 'Edit Insurance' : 'Add Insurance'}</h3>
+                        <h3 className="mb-0">{isEdit ? 'Edit Insurance' : 'Add Insurance'}</h3>
                     </CardBody>
                 </Card>
                 <Card>
@@ -926,9 +975,11 @@ const AddInsurance = () => {
                                             options={allOptions}
                                             closeMenuOnSelect={true}
                                             name='customer_name'
+                                            value={allOptions.filter($ => Number($.value) === Number(formData?.customer_name))}
                                             onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
                                             components={{ Menu: CustomSelectComponent }}
                                             onChange={(value, actionMeta) => selectCustomer(value, actionMeta, false)}
+                                            isDisabled={isCustomer}
                                         // onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                         />
                                         <p id="customer_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -1144,6 +1195,7 @@ const AddInsurance = () => {
                                                     className="form-check-input"
                                                     type="radio"
                                                     name="health_insurance"
+                                                    checked={formData.health_insurance === "Data not available"}
                                                     id="flexRadioDefault1"
                                                     value="Data not available"
                                                     onChange={(e) => handleInputChange(e)}
@@ -1157,10 +1209,11 @@ const AddInsurance = () => {
                                                     className="form-check-input"
                                                     type="radio"
                                                     name="health_insurance"
+                                                    checked={formData.health_insurance === "No"}
                                                     id="flexRadioDefault2"
                                                     value="No"
                                                     onChange={(e) => handleInputChange(e)}
-                                                />
+                                                    />
                                                 <label className="form-check-label" htmlFor="flexRadioDefault2">
                                                     No
                                                 </label>
@@ -1170,6 +1223,7 @@ const AddInsurance = () => {
                                                     className="form-check-input"
                                                     type="radio"
                                                     name="health_insurance"
+                                                    checked={formData.health_insurance === "Yes"}
                                                     id="flexRadioDefault3"
                                                     value="Yes"
                                                     onChange={(e) => handleInputChange(e)}
