@@ -130,7 +130,7 @@ export const configUrl = {
     all_cust_dashboard: "/customers/merchant/all_cust_dashboard/",
     add_company_details: "/customers/merchant/add_company_details/",
     get_customer_vehicle:'/vehicle/get_customer_vehicle/', //crm
-    get_customer_insurance:'/insurance/get_customer_insurance', //crm
+    get_customer_insurance:'/insurance/get_customer_insurance/', //crm
     // Flash Account
 
 

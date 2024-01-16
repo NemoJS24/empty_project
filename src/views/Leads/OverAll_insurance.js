@@ -122,7 +122,7 @@ const Customers = () => {
       selector: (row) => (
         <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
           <Link to={`/merchant/customers/view_customer/${row?.customer_id}`}><Eye size={15} /></Link>
-          <Link to={`/merchant/customers/insurance/edit_insurance/${row?.customer_id}`}> <Edit3 size={15} /></Link>
+          <Link to={`/merchant/customers/insurance/edit_insurance/${row?.id}?type=edit`}> <Edit3 size={15} /></Link>
           <Trash2 size={15} />
         </div>
       )

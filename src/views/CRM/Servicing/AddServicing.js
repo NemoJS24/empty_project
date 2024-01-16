@@ -133,7 +133,7 @@ const AddServicing = () => {
 
     const [formData, setFormData] = useState({
         mainForm: {
-            customer_id: id ? id : "",
+            customer_id: isCustomer ? id : "",
             vehicle: '',
             service_advisor: '',
             job_card_date: '',
@@ -251,28 +251,6 @@ const AddServicing = () => {
             //         // updated_at: prefData?.updated_at?.substring(0, 10)
             //     }
             // }))
-        } else {
-            form_data.append("id", id)
-            postReq("get_view_customer", form_data)
-                .then((resp) => {
-                    // const newArr = resp?.data?.success?.map(ele => {
-                    //     return { value: ele.id, label: ele.customer_name }
-                    // })
-                    console.log("ResponseId:", resp.data.success[0])
-                    // setFormData((prev) => {
-                    //     return {
-                    //         ...prev, mainForm: {
-                    //             ...prev.mainForm,
-                    //             customer_id: resp?.data?.success[0]?.xircls_user,
-
-                    //         }
-                    //     }
-                    // })
-                })
-                .catch((error) => {
-                    console.error("Error:", error)
-                    toast.error('Failed to fetch Servicing Detail')
-                })
         }
         // if (isEdit) {
 
