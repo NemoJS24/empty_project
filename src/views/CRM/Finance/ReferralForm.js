@@ -247,7 +247,6 @@ const ReferralForm = ({ allData }) => {
                                     <div className='d-flex gap-2'>
                                         <button className="btn btn-primary" type="button" onClick={handleNext} >Save & Close</button>
                                         <button className="btn btn-primary" type="button" onClick={() => {
-                                            handleNext()
                                             handleSubmitSection("SAVE")
                                         }}>Save</button>
                                     </div>

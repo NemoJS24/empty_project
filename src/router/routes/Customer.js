@@ -232,7 +232,7 @@ const Customers_Routes = [
     element: <ThankYouPage />
   },
   {
-    path: '/merchant/customers/add_call/:customer_id',
+    path: '/merchant/customers/add_call/:id',
     element: <AddCall />
   }
 

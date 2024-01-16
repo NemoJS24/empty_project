@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, CardBody, Container, Row, Col, Input } from "reactstrap"
 import Select from "react-select"
 import { validForm } from '../../Validator'
 import { postReq } from '../../../assets/auth/jwtService'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 // import { validForm } from "../Validator"
 
@@ -17,46 +17,67 @@ const AddCall = () => {
          id: 'customer_name'
       },
       {
-         name: 'call_status',
+         name: 'Call_Status',
          message: 'Select Call Status',
          type: 'string',
-         id: 'call_status'
+         id: 'Call_Status'
       },
       {
-         name: 'call_purpose',
+         name: 'Call_Purpose',
          message: 'Select Call Purpose',
          type: 'string',
          id: 'call_purpos'
       },
       {
-         name: 'lead_status',
+         name: 'Lead_Status',
          message: 'Select Lead Status',
          type: 'string',
-         id: 'lead_status'
+         id: 'Lead_Status'
       },
       {
-         name: 'interested',
+         name: 'Interested',
          message: 'Select Interested',
          type: 'string',
-         id: 'interested'
+         id: 'Interested'
       }
    ]
 
-   const location = useLocation()
-
    const navigate = useNavigate()
 
-   console.log(location, "location")
+   const { id } = useParams()
+   const params = new URLSearchParams(location.search)
 
-   const [formData, setFormData] = useState({ schedule_call: false })
+   // const [formData, setFormData] = useState({ schedule_call: false })
    const [data, setData] = useState({
-      customer_name: location?.state?.data?.customer_name,
-      call_status: "",
-      call_purpose: "",
-      lead_status: "",
-      interested: "",
-      customer_id: location?.state?.data?.id
+      customer_name: "",
+      Call_Status: "",
+      Call_Purpose: "",
+      Lead_Status: "",
+      customer_id: "",
+      Note: "",
+      Interested: "",
+      schedule_Next_Call: false,
+      schedule_Next_Call_date: "",
+      schedule_Next_Call_time: "",
+      email: false,
+      sms: false
    })
+
+   // {
+   //    "customer_name": "Fname Lname",
+   //    "Call_Status": "Junk Lead",
+   //    "Call_Purpose": "sale_call",
+   //    "Lead_Status": "Cold",
+   //    "customer_id": 57154,
+   //    "schedule_call": false,
+   //    "Note": "asfsdf",
+   //    "Interested": "Maybe",
+   //    "schedule_Next_Call": true,
+   //    "schedule_Next_Call_date": "2024-01-24",
+   //    "schedule_Next_Call_time": "12:00",
+   //    "email": true,
+   //    "sms": true
+   // }
 
    const inputChangeHandler = (e) => {
       setData({ ...data, [e.target.name]: e.target.value })
@@ -67,6 +88,10 @@ const AddCall = () => {
       const form_data = new FormData()
 
       Object.entries(data).map(([key, value]) => form_data.append(key, value))
+
+      if (params.get('type') === "edit") {
+         form_data.append("add_call_id", id)
+      }
 
       postReq('add_call', form_data)
       .then((resp) => {
@@ -95,15 +120,18 @@ const AddCall = () => {
          saveData(action)
       }
    }
+
+   console.log(data, "data")
+
    const handleInputChange = (e, type) => {
       if (type === undefined) {
          const { name, value, type } = e.target
-         setFormData(prev => ({
+         setData(prev => ({
             ...prev,
             [name]: type === 'checkbox' ? !prev[name] : value
          }))
       } else {
-         setFormData(prev => ({
+         setData(prev => ({
             ...prev,
             [type]: value
          }))
@@ -142,6 +170,58 @@ const AddCall = () => {
       { value: 'Maybe', label: 'Maybe' }
    ]
 
+   const fetchServiceData = () => {
+
+      const form_data = new FormData()
+      
+      if (params.get('type') === "customer") {
+         form_data.append("edit_type", "is_customer_detail")
+      } else if (params.get('type') === "edit") {
+         form_data.append("edit_type", "is_add_call")
+      }
+
+      form_data.append("id", id)
+      postReq("get_view_customer", form_data)
+      .then((resp) => {
+         console.log("ResponseId:", resp)
+         let updatedData
+         if (params.get('type') === "customer") {
+            updatedData = {
+               customer_name: resp?.data?.success[0]?.customer_name,
+               customer_id: resp?.data?.success[0]?.id
+            }
+
+         } else if (params.get('type') === "edit") {
+            updatedData = {
+               customer_name: resp?.data?.success[0]?.customer?.customer_name,
+               customer_id: resp?.data?.success[0]?.customer?.id,
+               Call_Status: resp?.data?.success[0]?.Call_Status,
+               Call_Purpose: resp?.data?.success[0]?.Call_Purpose,
+               Lead_Status: resp?.data?.success[0]?.Lead_Status,
+               Note: resp?.data?.success[0]?.Note,
+               Interested: resp?.data?.success[0]?.Interested,
+               schedule_Next_Call: resp?.data?.success[0]?.schedule_Next_Call,
+               schedule_Next_Call_date: resp?.data?.success[0]?.schedule_Next_Call_date,
+               schedule_Next_Call_time: resp?.data?.success[0]?.schedule_Next_Call_time,
+               email: false,
+               sms: false
+            }
+         }
+         setData((preData) => ({
+            ...preData,
+            ...updatedData
+         }))
+      })
+      .catch((error) => {
+         console.error("Error:", error)
+         toast.error('Failed to fetch Customer details')
+      })
+   }
+
+   useEffect(() => {
+      fetchServiceData()
+   }, [])
+
    return (
       <>
          <div className="customer-profile">
@@ -171,48 +251,55 @@ const AddCall = () => {
                               <p id="customer_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                            </Col>
                            <Col md={6} className="mt-2">
-                              <label htmlFor="call_status">Call Status</label>
+                              <label htmlFor="Call_Status">Call Status</label>
                               <Select
                                  placeholder='Call Status'
                                  id="call_status"
+                                 name="Call_Status"
                                  options={callStatusOptions}
                                  closeMenuOnSelect={true}
                                  onChange={(e) => {
-                                    inputChangeHandler({ target: { name: 'call_status', value: e?.value } })
+                                    inputChangeHandler({ target: { name: 'Call_Status', value: e?.value } })
                                  }}
+                                 value={callStatusOptions.filter(option => data.Call_Status === option.value)}
                               />
-                              <p id="call_status_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                              <p id="Call_Status_val" className="text-danger m-0 p-0 vaildMessage"></p>
                            </Col>
                            <Col md={6} className="mt-2">
                               <label htmlFor="call_purpos">Call Purpose</label>
                               <Select
                                  placeholder='Call Purpose'
                                  id="call_purpos"
+                                 name="Call_Purpose"
                                  options={callPurposeOptions}
                                  closeMenuOnSelect={true}
                                  onChange={(e) => {
-                                    inputChangeHandler({ target: { name: 'call_purpose', value: e?.value } })
+                                    inputChangeHandler({ target: { name: 'Call_Purpose', value: e?.value } })
                                  }}
+                                 value={callPurposeOptions.filter(option => data.Call_Purpose === option.value)}
                               />
                               <p id="call_purpos_val" className="text-danger m-0 p-0 vaildMessage"></p>
                            </Col>
                            <Col md={6} className="mt-2">
-                              <label htmlFor="lead_status" className="" style={{ margin: '0px' }}>
+                              <label htmlFor="Lead_Status" className="" style={{ margin: '0px' }}>
                                  Lead Status
                               </label>
                               <Select
                                  placeholder='Lead Status'
-                                 id="lead_status"
+                                 id="Lead_Status"
+                                 name="Lead_Status"
                                  // isDisabled={viewPage}
                                  options={leadStatusOptions}
                                  closeMenuOnSelect={true}
                                  onChange={(e) => {
-                                    inputChangeHandler({ target: { name: 'lead_status', value: e?.value } })
+                                    inputChangeHandler({ target: { name: 'Lead_Status', value: e?.value } })
                                  }}
+                                 value={leadStatusOptions.filter(option => data.Lead_Status === option.value)}
+
                               // value={leadStatusOptions?.filter(option => option.value === formData?.vehicle_type)}
                               // onChange={e => handleInputChange(e, 'vehicle_type')}
                               />
-                              <p id="lead_status_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                              <p id="Lead_Status_val" className="text-danger m-0 p-0 vaildMessage"></p>
                            </Col>
                            <Col md={12} className="mt-2">
                               <label htmlFor="notes-label" className="" style={{ margin: '0px' }}>
@@ -221,11 +308,9 @@ const AddCall = () => {
                               {/* <div className="form-floating"> */}
                               <textarea className="form-control" placeholder="Leave a note here" id="notes-label" style={{ minHeight: '90px' }}
                                  onChange={(e) => {
-                                    inputChangeHandler({ target: { name: 'note', value: e?.value } })
-                                 }}
-                              ></textarea>
-                              {/* <label htmlFor="notes-label">Notes</label> */}
-                              {/* </div> */}
+                                    console.log(e.target.value)
+                                    inputChangeHandler({ target: { name: 'Note', value: e.target.value } })
+                                 }} value={data?.Note} />
                            </Col>
                            <Col md={6} className="mt-2">
                               <label htmlFor="interested" className="" style={{ margin: '0px' }}>
@@ -233,34 +318,33 @@ const AddCall = () => {
                               </label>
                               <Select
                                  placeholder='Interested'
-                                 id="interested"
                                  // isDisabled={viewPage}
                                  options={linterestedOptions}
                                  closeMenuOnSelect={true}
                                  onChange={(e) => {
-                                    inputChangeHandler({ target: { name: 'interested', value: e?.value } })
+                                    inputChangeHandler({ target: { name: 'Interested', value: e?.value } })
                                  }}
-                              // value={linterestedOptions?.filter(option => option.value === formData?.vehicle_type)}
+                                 value={linterestedOptions?.filter(option => option.value === data?.Interested)}
                               // onChange={e => handleInputChange(e, 'vehicle_type')}
                               />
-                              <p id="interested_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                              <p id="Interested_val" className="text-danger m-0 p-0 vaildMessage"></p>
                            </Col>
                            <Row>
                               <Col md={12} className="mt-2">
                                  <div className="d-flex justify-content-start align-items-center gap-1">
                                     <input
                                        type="checkbox"
-                                       id="schedule_next_call"
+                                       id="schedule_Next_Call"
                                        className="form-check-input cursor-pointer"
-                                       name="schedule_call"
-                                       checked={formData.schedule_call}
+                                       name="schedule_Next_Call"
+                                       checked={data.schedule_Next_Call}
                                        onChange={handleInputChange}
                                     />
-                                    <label htmlFor="schedule_next_call">Schedule Next Call</label>
+                                    <label htmlFor="schedule_Next_Call">Schedule Next Call</label>
                                  </div>
                               </Col>
 
-                              {formData.schedule_call && (
+                              {data.schedule_Next_Call && (
                                  <>
                                     {/* ... (previous code) */}
                                     <Col md={6} className="mt-2">
@@ -269,9 +353,9 @@ const AddCall = () => {
                                           placeholder="Date"
                                           type="date"
                                           id="vehicle-delivery-date"
-                                          name="delivery_date"
+                                          name="schedule_Next_Call_date"
                                           className="form-control"
-                                          value={formData.delivery_date}
+                                          value={data.schedule_Next_Call_date}
                                           onChange={handleInputChange}
                                        />
                                     </Col>
@@ -280,9 +364,9 @@ const AddCall = () => {
                                        <input
                                           type="time"
                                           id="appt"
-                                          name="time"
                                           className="form-control"
-                                          value={formData.time}
+                                          name="schedule_Next_Call_time"
+                                          value={data.schedule_Next_Call_time}
                                           onChange={handleInputChange}
                                        />
                                     </Col>
@@ -301,7 +385,7 @@ const AddCall = () => {
                                        id="send_email"
                                        className="form-check-input m-0 p-0 cursor-pointer"
                                        name="email"
-                                       checked={formData?.email}
+                                       checked={data?.email}
                                        onChange={handleInputChange}
                                     />
                                     <label htmlFor="send_email" >Send Email</label>
@@ -314,7 +398,7 @@ const AddCall = () => {
                                        id="send_sms"
                                        className="form-check-input cursor-pointer"
                                        name="sms"
-                                       checked={formData?.sms}
+                                       checked={data?.sms}
                                        onChange={handleInputChange}
                                     />
                                     <label htmlFor="send_sms">Send SMS</label>

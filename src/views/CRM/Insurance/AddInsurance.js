@@ -324,15 +324,15 @@ const AddInsurance = () => {
         form_data.append("press_btn", 'SAVE')
 
         postReq('add_vehicle', form_data, crmURL)
-            .then((resp) => {
-                console.log("Response:", resp)
-                toast.success('Vehicle saved successfully')
-                handleClose('product')
-            })
-            .catch((error) => {
-                console.error("Error:", error)
-                toast.error('Failed to save Vehicle')
-            })
+        .then((resp) => {
+            console.log("Response:", resp)
+            toast.success('Vehicle saved successfully')
+            handleClose('product')
+        })
+        .catch((error) => {
+            console.error("Error:", error)
+            toast.error('Failed to save Vehicle')
+        })
     }
 
     const getCountries = () => {

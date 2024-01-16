@@ -1,0 +1,2492 @@
+{% extends "new_merchant_base.html" %}
+{% load custom_filters %}
+{% load static %}
+{% block merchant_content %}
+{% block plugin_css %}
+	<!-- Time Date Picker CSS -->
+		<link href='{% static "css/tagsinput/bootstrap-tagsinput.css" %}' rel='stylesheet' type='text/css'>
+
+        	<!-- <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker3.min.css' %}">
+
+	<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css' %}"> -->
+{% endblock %}
+<link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/plugins/forms/pickers/form-flat-pickr.css' %}">
+<link rel="stylesheet" type="text/css" href="{%static 'app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{%static 'app-assets/css/bootstrap.css' %}">
+   
+
+<link rel="stylesheet" type="text/css" href="{%static 'app-assets/css/core/menu/menu-types/vertical-menu.css' %}">
+    <link rel="stylesheet" type="text/css" href="{%static 'app-assets/css/plugins/forms/pickers/form-flat-pickr.css' %}">
+    <link rel="stylesheet" type="text/css" href="{%static 'app-assets/css/plugins/forms/pickers/form-pickadate.css' %}"> 
+
+
+	<link rel="stylesheet" type="text/css" href="{%static 'app-assets/css/core/menu/menu-types/vertical-menu.css' %}">
+	<link rel="stylesheet" type="text/css" href="{%static 'app-assets/css/plugins/forms/pickers/form-flat-pickr.css' %}">
+	<link rel="stylesheet" type="text/css" href="{%static 'app-assets/css/plugins/forms/pickers/form-pickadate.css' %}"> 
+	<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css' %}">
+	<link rel="stylesheet" type="text/css" href="{%static 'app-assets/css/colors.css' %}">
+	<link rel="stylesheet" type="text/css" href="{%static 'app-assets/css/components.css' %}">
+	<link rel="stylesheet" type="text/css" href="{%static 'app-assets/css/themes/dark-layout.css' %}">
+	<link rel="stylesheet" type="text/css" href="{%static 'app-assets/css/themes/bordered-layout.css' %}">
+	<link rel="stylesheet" type="text/css" href="{%static 'app-assets/css/themes/semi-dark-layout.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'app-assets/vendors/css/calendars/fullcalendar.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'app-assets/css/pages/app-calendar.css' %}">	
+
+
+<!-- 17-09-2019 -->
+<style type="text/css">
+	.disabled.day{color:#ccc;}
+
+    .fc-timegrid-col-events{
+        width:100%;
+    }
+</style>
+
+
+<style>
+ /* The container */
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}  
+.datepicker,
+.timepicker,
+.datetimepicker {
+	.form-control {
+		background: #fff;
+	}
+} 
+</style>
+
+<div>
+	{% if messages %}
+		{% for msg in messages %}
+			{% if msg.level_tag == 'success'%}
+				<script> toastr.success('{{msg.message}}');</script>
+			{% else %}
+				<script> toastr.error('{{msg.message}}');</script>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+	<form class="js-validation" action="." method="POST" novalidate="novalidate" enctype="multipart/form-data" name="add_call_form" id="add_call_form">
+		{% csrf_token %}
+		<div>
+			<input type="hidden" name="press_btn" id="press_btn" value="" />
+		
+		</div>
+
+		<!-- <div class="header-background" style="">
+			<div class="content content-full" >
+				<div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+				
+					<h1 class="flex-sm-fill font-size-h2 font-w400 mt-2 mb-0 mb-sm-2">Add Call Page</h1>
+				
+				</div>
+			</div>
+		</div> -->
+
+		<div class="app-content content">
+			<div class="content-header">
+				<div class="card">
+					<div class="card-body">
+						<div style="margin-top: 10px">
+							<h4>Add Call</h4> 
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="content-body">
+				<div class="card">
+					<div class="card-body">
+<!-- selected customer name -->
+
+				<div class="row match-height">
+<!-- vehicel number -->
+							<div class="col-6">
+								<div class="form-group">
+									<label>Customer Name</label>
+									<input type="text" class="form-control" onclick="display()" id="customer_name" name="customer_name" value="{{customerobj.customer_name}}" placeholder="Customer Name" onclick="clearError('cust_name_val')" readonly="True">
+								<span id="customer_name_val" class="validation_msg"></span>
+							</div>
+							</div>
+
+
+<!-- registration number -->
+							<div class='has-feedback col-6'>
+							<div class="form-group">
+									<label>Call Status</label>
+										<select id="call_status" name="call_status" placeholder="Call Status" type="text" class="form-control" value="" >
+											<option selected disabled>Call Status</option>
+											<option value="Not Contacted">Not Contacted</option>
+											<option value="Attempted to Contact">Attempted to Contact</option>
+											<option value="Contacted">Contacted</option>
+											<option value="Junk Lead">Junk Lead</option>
+											<option value="Not Interested">Not Interested</option>
+											<option value="DND (Call & SMS)">DND (Call & SMS)</option>
+											<option value="DND (Email)">DND (Email)</option>
+											<option value="DND (All)">DND (All)</option>
+											<option value="Junk Lead">Junk Lead</option>
+										</select>
+									<span id="call_status_val" class="validation_msg"></span>
+								</div>
+							</div>
+
+
+					
+							<div class="col-6">
+								<div class="form-group">
+									<label>Call Purpose</label>
+										<select id="call_purpose" name="call_purpose" placeholder="Call Purpose" type="text" class="form-control" value="" >
+											<option selected disabled>Call Purpose</option>
+											<option value="prospecting">Prospecting</option>
+											<option value="sale_call">Sale Call</option>
+											<option value="negotiation">Negotiation</option>
+											<option value="close_Sale">Close Sale</option>
+										</select>
+									<span id="car_model_val" class="validation_msg"></span>
+								</div>
+							</div>
+
+								<div class="col-6">
+									<div class="form-group">
+										<label>Lead Status</label>
+										<select id="lead_status" name="lead_status" placeholder="Lead Status" type="text" class="form-control" value="" >
+											<option selected disabled>Lead Status</option>
+											<option value="Cold">Cold</option>
+											<option value="Warm">Warm</option>
+											<option value="Hot">Hot</option>
+											<option value="File Pickup">File Pickup</option>
+										</select>
+									<span id="lead_status_val" class="validation_msg"></span>
+								</div>
+								</div>
+
+					<!-- vehicel number -->
+					<div class="col-12">
+						<div class="form-group">
+                        <label for="notes">Notes</label>
+                        <textarea class="form-control" name="notes" value="" id="notes" rows="3" style="resize: none;"></textarea>
+                    </div>
+					</div>
+
+					<div class="has-feedback col-6">
+						<div class='form-group'>
+							<label>Intrested</label>
+							<select id="interested" name="interested" placeholder="Interested" type="text" class="form-control" value="" >
+								<option selected disabled>Interested</option>
+								<option value="Yes">Yes</option>
+								<option value="No">No</option>
+								<option value="No">Maybe</option>
+
+							</select>
+						<span id="interested_val" class="validation_msg"></span>
+					</div>
+					</div>
+
+					<div class="has-feedback col-6" id='box'>
+						<div class='form-group'>
+							<label>Product</label>
+							<select id="product" name="product" placeholder="Product" type="text" class="form-control" value="">
+							<option selected disabled>Product</option>
+							<option value="Sales-Skoda">Sales-Skoda</option>
+							<option value="Sales-ISUZU-Passenger">Sales-ISUZU-Passenger</option>
+							<option value="Sales-ISUZU-Commercial">Sales - ISUZU-Commercial</option>
+							<option value="Sales-All Other New Cars">Sales - All Other New Cars</option>
+							<option value="User Cars_Buy / Sell">User Cars - Buy / Sell</option>
+							<option value="Insurance">Insurance</option>
+							<option value="Service - All Cars">Service - All Cars</option>
+							<option value="Finance - Additional Car Loans">Finance - Additional Car Loans(Top Up)</option>
+							<option value="Finance - Additional Home Loans for New / Existing">Finance - Additional Home Loans for New / Existing</option>
+							<option value="Car Leasing">Car Leasing</option>											
+							<option value="Car Grooming">Car Grooming</option>
+
+						</select>
+					<span id="product_val" class="validation_msg"></span>
+					</div>
+					</div>
+
+					<div class="col-12 mb-1 mt-1">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" name="next_call" id="next_call">
+							<label class="custom-control-label" for="next_call">Schedule Next Call</label>
+						</div>
+					</div>
+
+					<div class="col-12 mb-1" id="date_time" style="display:none;" >
+						<div class="row match-height">
+							<div class="col-md-4">
+								<label>Schedule With</label>
+								<select id="scheWith" name="scheWith" placeholder="" type="text" class="form-control" value="" onchange="getCalDetails()" >
+                                    <option selected disabled>Select User</option>
+
+                                {% for res in users %}
+
+                                    <option value="{{res.user_id}}" >{{res.name}} </option>
+
+                                {% endfor %}
+
+
+								</select>
+							</div>
+							<span id="scheWith_val" class="validation_msg"></span>
+
+
+							<div class='col-md-4'>
+								<div class="form-group">
+									<label>Timezone</label>
+									<select class="form-control" name="timezoneABBR" id="timezone" onchange="setCountries()">
+										<option value="" selected disabled >Select Timezone</option>
+									</select>
+									<span id="timezone_val" class="validation_msg text-danger"></span>
+									
+								</div>
+							</div>
+
+							<div class="col-md-4" id="countryDiv">
+								<div class="form-group">
+									<label>Country</label>
+									<select class="form-control" name="timezone" id="countries" onchange="getCalDetails()">
+									</select>
+									<span id="countries_val" class="validation_msg text-danger"></span>
+								</div>
+							</div>
+
+
+						</div>
+						<div class="row mb-1">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <div class="parent">
+                                        <label style="margin: 0px">Recurring :</label>
+                                        <div class="parent" style="display: flex; gap: 1rem; align-items: center; margin-top: 13px;">
+                                            <div class="form-check">
+                                                <input class="form-check-input"  onclick="period()" type="radio" name="eventRecurr" id="eventRecurrYes" value="Yes">
+                                                <label class="form-check-label" for="eventRecurrYes">
+                                                    Yes
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="eventRecurr" onclick="no()" id="eventRecurrNo" value="No">
+                                                <label class="form-check-label" for="eventRecurrNo">
+                                                    No
+                                                </label>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="period" class="col-4 period">
+                                <div class="form-group">
+                                    <label>Period</label>
+                                    <select class="form-control" name="eventPeriod" id="eventPeriod">
+                                        <option selected disabled>Select Period</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                        <option value="yearly">Yearly</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+						<div class="col-12 my-1" id="date_time">
+                            <div class="row match-height">
+                                <input type="hidden" name="startDT" id="startDT">
+                                <input type="hidden" name="endDT" id="endDT">
+                                <input type="hidden" name="eventType" id="eventType" value="INDV">
+                                <input type="hidden" name="calID" id="calID">
+                                <div id='calendar' class="col-12" style="height: 500px;"></div>
+                            </div>
+                        </div>
+						
+					</div>
+					<div class="col-12">
+						
+					<h4>Send</h4>
+					</div>
+
+					<div class="col-12 mb-2">
+
+					<div class="custom-control custom-checkbox mb-1">
+						  <!-- <span class="checkmark"></span> -->
+						<input type="checkbox" class="custom-control-input"  name="send_email" id="send_email">
+						<label for="send_email" class="custom-control-label">Send Email</label>
+					</div>
+
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" class="custom-control-input" name="send_sms" id="send_sms">
+						<label for="send_sms" class="custom-control-label">Send SMS</label>
+						  <!-- <span class="checkmark"></span> -->
+					</div>
+						
+					</div>
+
+					<div class="col-lg-24 col-xl-12 text-right">
+			
+					<div class="">
+                     <!-- <hr/> -->
+                    <!--  <button type="button" class="btn btn-primary" onclick="Add_Call_validation('SAVE')" value="SAVE">Save</button> -->
+                    <div class="d-flex justify-content-sm-between">
+                    	<div>
+                    		 <button type="button" class="btn btn-primary" onclick="goToBackPage();">Back</button>
+                    	</div>
+                    	
+                    	<div>
+                    		<a href="{% url 'customers:add_calls' custCode %}">
+                     <button type="submit" class="btn btn-primary" onclick="Add_Call_validation('SAVE')" value="SAVE">Save</button></a>
+                     <button type="button" class="btn btn-primary" onclick="Add_Call_validation('SAVE & CLOSE')" value="SAVE & CLOSE">Save & Close</button>
+                    	</div>
+                    </div>
+                  </div>
+				</div>
+			</div>
+		</div>
+	</div>
+		</div>
+	</form>
+</div>
+
+
+{% endblock %}
+
+{% block custom_scripts %}
+
+<script src="{% static 'app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js' %}"></script>
+<script src="{% static 'app-assets/js/scripts/forms/pickers/form-pickers.min.js' %}"></script>
+
+
+<script src='{% static "js/customers_validation.js" %}'></script>
+<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/start/jquery-ui.css" rel="Stylesheet" type="text/css" />
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.min.js"></script>
+<script src="{% static 'app-assets/vendors/js/extensions/rrule.min.js' %}"></script>
+
+
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/moment@5.5.0/main.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/moment-timezone@0.5.31/builds/moment-timezone-with-data.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.js"></script>
+<script src="{% static 'dashmix/js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js' %}"></script>
+<script src='{% static "js/autocomplete_address.js" %}'></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src='{% static "js/form_validator_add_product.js" %}'></script>
+<script>
+$("#period").hide()
+function no(){
+    $("#period").hide()
+}
+function period() {
+    console.log("DDDD")
+
+    if ($("#eventRecurrYes").is(":checked")) {
+        console.log("seeee")
+        $("#period").show()
+    }
+    else{
+        console.log("BFHFF")
+    $("#period").hide()
+    }
+}
+
+
+
+$('#logo').hide(); 
+$('#product').hide();
+$('#box').hide(); 
+
+$("#interested").change(function() {
+  console.log($("#interested option:selected").val());
+  if ($("#interested option:selected").val() == 'Yes') {
+    $('#logo').show(); 
+    $('#product').show();
+    $('#box').show();
+}
+  else{
+  	$('#logo').hide(); 
+	$('#product').hide();
+	$('#box').hide(); 
+  }
+});
+
+$("#offer_valid_from").flatpickr(
+    {
+        
+        dateFormat: "d-m-Y",
+
+    });
+$("#offer_valid_from").flatpickr(
+{
+	
+	dateFormat: "d-m-Y",
+
+});
+
+$(function () {
+    $("#next_call").click(function () {
+
+        if ($(this).is(":checked")) {
+        	
+            $("#date_time").show();
+            $(function () {
+$("#offer_valid_from").datepicker({
+
+    startDate: '0d',
+    onSelect: function (selected) {
+    	alert("SSSSSSSSSSSSSSSSSSSSSSss")
+        var dt = new Date(selected);
+        dt.setDate(dt.getDate() + 1);
+        $("#offer_valid_from").datepicker("option", "minDate", dt);
+
+}
+});
+});
+        } 
+        else {
+        	
+            $("#date_time").hide();
+        }
+    });
+});
+
+
+
+
+function Add_Call_validation(hiddenval)
+{
+    // alert('bsakjdhsajhdlks')
+    var boolResult = true;
+    
+
+    $("#press_btn").val(hiddenval);
+
+    var customer_name = $("#customer_name").val();
+    var call_status = $("#call_status").val();
+    var notes = $("#notes").val();
+    var interested = $("#interested").val();
+    var product = $("#product").val();
+    var call_purpose = $("#call_purpose").val();
+    var lead_status = $("#lead_status").val();
+    var offer_valid_from = $('#offer_valid_from').val();
+
+    if ($('#next_call').is(":checked")){
+    	if(boolResult == true){
+	    	if(offer_valid_from == ""){
+	    		$("#offer_date_val").html("This is a mandatory field");
+	    		$("#offer_valid_from").focus();
+	    		boolResult = false;
+	    	}
+	    	else{
+	    		$("#offer_date_val").html("");
+	    	}
+	    }
+    }
+    
+    if(boolResult == true){
+        if(customer_name == ""){
+            $("#customer_name_val").html("This is a mandatory field");
+            $("#customer_name").focus();
+            boolResult = false;
+        }else{
+
+            $("#customer_name_val").html("");
+            }
+        
+    }
+
+    if(boolResult == true){
+        if(call_status == null){
+            $("#call_status_val").html("This is a mandatory field");
+            $("#call_status").focus();
+            boolResult = false;
+        }else{
+
+            $("#call_status_val").html("");
+            }
+        
+    }
+
+    if(interested == 'Yes'){
+        if(product == null){
+            $("#product_val").html("This is a mandatory field");
+            $("#product").focus();
+            boolResult = false;
+        }else{
+            $("#product_val").html("");
+            }        
+    }
+    
+
+    if(boolResult == true){
+        if(call_purpose == null){
+            $("#car_model_val").html("This is a mandatory field");
+            $("#call_purpose").focus();
+            boolResult = false;
+        }else{
+
+            $("#car_model_val").html("");
+            }
+        
+    }
+
+    if(boolResult == true){
+        if(lead_status == null){
+            $("#lead_status_val").html("This is a mandatory field");
+            $("#lead_status").focus();
+            boolResult = false;
+        }else{
+
+            $("#lead_status_val").html("");
+            }
+        
+    }
+
+    // if(boolResult == true){
+    //     if(interested == null){
+    //         $("#interested_val").html("This is a mandatory field");
+    //         $("#interested").focus();
+    //         boolResult = false;
+    //     }else{
+
+    //         $("#interested_val").html("");
+    //         }
+        
+    // }
+
+    
+
+    if(boolResult == true){
+        $("#add_call_form").submit();
+    }
+    
+}
+</script>
+
+<script>
+
+    var timeZoneList = [
+            {
+                "value":"India Standard Time",
+                "abbr":"IST",
+                "offset":5.5,
+                "isdst":false,
+                "text":"(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi",
+                "utc":[
+                    "Asia/Kolkata",
+                    "Asia/Calcutta"
+                ],
+                "index":0
+            },
+            {
+                "value":"UTC",
+                "abbr":"UTC",
+                "offset":0,
+                "isdst":false,
+                "text":"(UTC) Coordinated Universal Time",
+                "utc":[
+                    "America/Danmarkshavn",
+                    "Etc/GMT"
+                ],
+                "index":1
+            },
+            {
+                "value":"Hawaiian Standard Time",
+                "abbr":"HST",
+                "offset":-10,
+                "isdst":false,
+                "text":"(UTC-10:00) Hawaii",
+                "utc":[
+                    "Etc/GMT+10",
+                    "Pacific/Honolulu",
+                    "Pacific/Johnston",
+                    "Pacific/Rarotonga",
+                    "Pacific/Tahiti"
+                ],
+                "index":2
+            },
+            {
+                "value":"Alaskan Standard Time",
+                "abbr":"AKDT",
+                "offset":-8,
+                "isdst":true,
+                "text":"(UTC-09:00) Alaska",
+                "utc":[
+                    "America/Anchorage",
+                    "America/Juneau",
+                    "America/Nome",
+                    "America/Sitka",
+                    "America/Yakutat"
+                ],
+                "index":3
+            },
+            {
+                "value":"Pacific Standard Time (Mexico)",
+                "abbr":"PDT",
+                "offset":-7,
+                "isdst":true,
+                "text":"(UTC-08:00) Baja California",
+                "utc":[
+                    "America/Santa_Isabel"
+                ],
+                "index":4
+            },
+            {
+                "value":"Pacific Daylight Time",
+                "abbr":"PDT",
+                "offset":-7,
+                "isdst":true,
+                "text":"(UTC-07:00) Pacific Daylight Time (US & Canada)",
+                "utc":[
+                    "America/Los_Angeles",
+                    "America/Tijuana",
+                    "America/Vancouver"
+                ],
+                "index":5
+            },
+            {
+                "value":"Pacific Standard Time",
+                "abbr":"PST",
+                "offset":-8,
+                "isdst":false,
+                "text":"(UTC-08:00) Pacific Standard Time (US & Canada)",
+                "utc":[
+                    "America/Los_Angeles",
+                    "America/Tijuana",
+                    "America/Vancouver",
+                    "PST8PDT"
+                ],
+                "index":6
+            },
+            {
+                "value":"US Mountain Standard Time",
+                "abbr":"UMST",
+                "offset":-7,
+                "isdst":false,
+                "text":"(UTC-07:00) Arizona",
+                "utc":[
+                    "America/Creston",
+                    "America/Dawson",
+                    "America/Dawson_Creek",
+                    "America/Hermosillo",
+                    "America/Phoenix",
+                    "America/Whitehorse",
+                    "Etc/GMT+7"
+                ],
+                "index":7
+            },
+            {
+                "value":"Mountain Standard Time (Mexico)",
+                "abbr":"MDT",
+                "offset":-6,
+                "isdst":true,
+                "text":"(UTC-07:00) Chihuahua, La Paz, Mazatlan",
+                "utc":[
+                    "America/Chihuahua",
+                    "America/Mazatlan"
+                ],
+                "index":8
+            },
+            {
+                "value":"Mountain Standard Time",
+                "abbr":"MDT",
+                "offset":-6,
+                "isdst":true,
+                "text":"(UTC-07:00) Mountain Time (US & Canada)",
+                "utc":[
+                    "America/Boise",
+                    "America/Cambridge_Bay",
+                    "America/Denver",
+                    "America/Edmonton",
+                    "America/Inuvik",
+                    "America/Ojinaga",
+                    "America/Yellowknife",
+                    "MST7MDT"
+                ],
+                "index":9
+            },
+            {
+                "value":"Central America Standard Time",
+                "abbr":"CAST",
+                "offset":-6,
+                "isdst":false,
+                "text":"(UTC-06:00) Central America",
+                "utc":[
+                    "America/Belize",
+                    "America/Costa_Rica",
+                    "America/El_Salvador",
+                    "America/Guatemala",
+                    "America/Managua",
+                    "America/Tegucigalpa",
+                    "Etc/GMT+6",
+                    "Pacific/Galapagos"
+                ],
+                "index":10
+            },
+            {
+                "value":"Central Standard Time",
+                "abbr":"CDT",
+                "offset":-5,
+                "isdst":true,
+                "text":"(UTC-06:00) Central Time (US & Canada)",
+                "utc":[
+                    "America/Chicago",
+                    "America/Indiana/Knox",
+                    "America/Indiana/Tell_City",
+                    "America/Matamoros",
+                    "America/Menominee",
+                    "America/North_Dakota/Beulah",
+                    "America/North_Dakota/Center",
+                    "America/North_Dakota/New_Salem",
+                    "America/Rainy_River",
+                    "America/Rankin_Inlet",
+                    "America/Resolute",
+                    "America/Winnipeg",
+                    "CST6CDT"
+                ],
+                "index":11
+            },
+            {
+                "value":"Central Standard Time (Mexico)",
+                "abbr":"CDT",
+                "offset":-5,
+                "isdst":true,
+                "text":"(UTC-06:00) Guadalajara, Mexico City, Monterrey",
+                "utc":[
+                    "America/Bahia_Banderas",
+                    "America/Cancun",
+                    "America/Merida",
+                    "America/Mexico_City",
+                    "America/Monterrey"
+                ],
+                "index":12
+            },
+            {
+                "value":"Canada Central Standard Time",
+                "abbr":"CCST",
+                "offset":-6,
+                "isdst":false,
+                "text":"(UTC-06:00) Saskatchewan",
+                "utc":[
+                    "America/Regina",
+                    "America/Swift_Current"
+                ],
+                "index":13
+            },
+            {
+                "value":"SA Pacific Standard Time",
+                "abbr":"SPST",
+                "offset":-5,
+                "isdst":false,
+                "text":"(UTC-05:00) Bogota, Lima, Quito",
+                "utc":[
+                    "America/Bogota",
+                    "America/Cayman",
+                    "America/Coral_Harbour",
+                    "America/Eirunepe",
+                    "America/Guayaquil",
+                    "America/Jamaica",
+                    "America/Lima",
+                    "America/Panama",
+                    "America/Rio_Branco",
+                    "Etc/GMT+5"
+                ],
+                "index":14
+            },
+            {
+                "value":"Eastern Standard Time",
+                "abbr":"EST",
+                "offset":-5,
+                "isdst":false,
+                "text":"(UTC-05:00) Eastern Time (US & Canada)",
+                "utc":[
+                    "America/Detroit",
+                    "America/Havana",
+                    "America/Indiana/Petersburg",
+                    "America/Indiana/Vincennes",
+                    "America/Indiana/Winamac",
+                    "America/Iqaluit",
+                    "America/Kentucky/Monticello",
+                    "America/Louisville",
+                    "America/Montreal",
+                    "America/Nassau",
+                    "America/New_York",
+                    "America/Nipigon",
+                    "America/Pangnirtung",
+                    "America/Port-au-Prince",
+                    "America/Thunder_Bay",
+                    "America/Toronto"
+                ],
+                "index":15
+            },
+            {
+                "value":"Eastern Daylight Time",
+                "abbr":"EDT",
+                "offset":-4,
+                "isdst":true,
+                "text":"(UTC-04:00) Eastern Daylight Time (US & Canada)",
+                "utc":[
+                    "America/Detroit",
+                    "America/Havana",
+                    "America/Indiana/Petersburg",
+                    "America/Indiana/Vincennes",
+                    "America/Indiana/Winamac",
+                    "America/Iqaluit",
+                    "America/Kentucky/Monticello",
+                    "America/Louisville",
+                    "America/Montreal",
+                    "America/Nassau",
+                    "America/New_York",
+                    "America/Nipigon",
+                    "America/Pangnirtung",
+                    "America/Port-au-Prince",
+                    "America/Thunder_Bay",
+                    "America/Toronto"
+                ],
+                "index":16
+            },
+            {
+                "value":"US Eastern Standard Time",
+                "abbr":"UEDT",
+                "offset":-5,
+                "isdst":false,
+                "text":"(UTC-05:00) Indiana (East)",
+                "utc":[
+                    "America/Indiana/Marengo",
+                    "America/Indiana/Vevay",
+                    "America/Indianapolis"
+                ],
+                "index":17
+            },
+            {
+                "value":"Venezuela Standard Time",
+                "abbr":"VST",
+                "offset":-4.5,
+                "isdst":false,
+                "text":"(UTC-04:30) Caracas",
+                "utc":[
+                    "America/Caracas"
+                ],
+                "index":18
+            },
+            {
+                "value":"Paraguay Standard Time",
+                "abbr":"PYT",
+                "offset":-4,
+                "isdst":false,
+                "text":"(UTC-04:00) Asuncion",
+                "utc":[
+                    "America/Asuncion"
+                ],
+                "index":19
+            },
+            {
+                "value":"Atlantic Standard Time",
+                "abbr":"ADT",
+                "offset":-3,
+                "isdst":true,
+                "text":"(UTC-04:00) Atlantic Time (Canada)",
+                "utc":[
+                    "America/Glace_Bay",
+                    "America/Goose_Bay",
+                    "America/Halifax",
+                    "America/Moncton",
+                    "America/Thule",
+                    "Atlantic/Bermuda"
+                ],
+                "index":20
+            },
+            {
+                "value":"Central Brazilian Standard Time",
+                "abbr":"CBST",
+                "offset":-4,
+                "isdst":false,
+                "text":"(UTC-04:00) Cuiaba",
+                "utc":[
+                    "America/Campo_Grande",
+                    "America/Cuiaba"
+                ],
+                "index":21
+            },
+            {
+                "value":"SA Western Standard Time",
+                "abbr":"SWST",
+                "offset":-4,
+                "isdst":false,
+                "text":"(UTC-04:00) Georgetown, La Paz, Manaus, San Juan",
+                "utc":[
+                    "America/Anguilla",
+                    "America/Antigua",
+                    "America/Aruba",
+                    "America/Barbados",
+                    "America/Blanc-Sablon",
+                    "America/Boa_Vista",
+                    "America/Curacao",
+                    "America/Dominica",
+                    "America/Grand_Turk",
+                    "America/Grenada",
+                    "America/Guadeloupe",
+                    "America/Guyana",
+                    "America/Kralendijk",
+                    "America/La_Paz",
+                    "America/Lower_Princes",
+                    "America/Manaus",
+                    "America/Marigot",
+                    "America/Martinique",
+                    "America/Montserrat",
+                    "America/Port_of_Spain",
+                    "America/Porto_Velho",
+                    "America/Puerto_Rico",
+                    "America/Santo_Domingo",
+                    "America/St_Barthelemy",
+                    "America/St_Kitts",
+                    "America/St_Lucia",
+                    "America/St_Thomas",
+                    "America/St_Vincent",
+                    "America/Tortola",
+                    "Etc/GMT+4"
+                ],
+                "index":22
+            },
+            {
+                "value":"Pacific SA Standard Time",
+                "abbr":"PSST",
+                "offset":-4,
+                "isdst":false,
+                "text":"(UTC-04:00) Santiago",
+                "utc":[
+                    "America/Santiago",
+                    "Antarctica/Palmer"
+                ],
+                "index":23
+            },
+            {
+                "value":"Newfoundland Standard Time",
+                "abbr":"NDT",
+                "offset":-2.5,
+                "isdst":true,
+                "text":"(UTC-03:30) Newfoundland",
+                "utc":[
+                    "America/St_Johns"
+                ],
+                "index":24
+            },
+            {
+                "value":"E. South America Standard Time",
+                "abbr":"ESAST",
+                "offset":-3,
+                "isdst":false,
+                "text":"(UTC-03:00) Brasilia",
+                "utc":[
+                    "America/Sao_Paulo"
+                ],
+                "index":25
+            },
+            {
+                "value":"Argentina Standard Time",
+                "abbr":"AST",
+                "offset":-3,
+                "isdst":false,
+                "text":"(UTC-03:00) Buenos Aires",
+                "utc":[
+                    "America/Argentina/La_Rioja",
+                    "America/Argentina/Rio_Gallegos",
+                    "America/Argentina/Salta",
+                    "America/Argentina/San_Juan",
+                    "America/Argentina/San_Luis",
+                    "America/Argentina/Tucuman",
+                    "America/Argentina/Ushuaia",
+                    "America/Buenos_Aires",
+                    "America/Catamarca",
+                    "America/Cordoba",
+                    "America/Jujuy",
+                    "America/Mendoza"
+                ],
+                "index":26
+            },
+            {
+                "value":"SA Eastern Standard Time",
+                "abbr":"SEST",
+                "offset":-3,
+                "isdst":false,
+                "text":"(UTC-03:00) Cayenne, Fortaleza",
+                "utc":[
+                    "America/Araguaina",
+                    "America/Belem",
+                    "America/Cayenne",
+                    "America/Fortaleza",
+                    "America/Maceio",
+                    "America/Paramaribo",
+                    "America/Recife",
+                    "America/Santarem",
+                    "Antarctica/Rothera",
+                    "Atlantic/Stanley",
+                    "Etc/GMT+3"
+                ],
+                "index":27
+            },
+            {
+                "value":"Greenland Standard Time",
+                "abbr":"GDT",
+                "offset":-3,
+                "isdst":true,
+                "text":"(UTC-03:00) Greenland",
+                "utc":[
+                    "America/Godthab"
+                ],
+                "index":28
+            },
+            {
+                "value":"Montevideo Standard Time",
+                "abbr":"MST",
+                "offset":-3,
+                "isdst":false,
+                "text":"(UTC-03:00) Montevideo",
+                "utc":[
+                    "America/Montevideo"
+                ],
+                "index":29
+            },
+            {
+                "value":"Bahia Standard Time",
+                "abbr":"BST",
+                "offset":-3,
+                "isdst":false,
+                "text":"(UTC-03:00) Salvador",
+                "utc":[
+                    "America/Bahia"
+                ],
+                "index":30
+            },
+            {
+                "value":"UTC-02",
+                "abbr":"U",
+                "offset":-2,
+                "isdst":false,
+                "text":"(UTC-02:00) Coordinated Universal Time-02",
+                "utc":[
+                    "America/Noronha",
+                    "Atlantic/South_Georgia",
+                    "Etc/GMT+2"
+                ],
+                "index":31
+            },
+            {
+                "value":"Mid-Atlantic Standard Time",
+                "abbr":"MDT",
+                "offset":-1,
+                "isdst":true,
+                "text":"(UTC-02:00) Mid-Atlantic - Old",
+                "utc":[
+                    
+                ],
+                "index":32
+            },
+            {
+                "value":"Azores Standard Time",
+                "abbr":"ADT",
+                "offset":0,
+                "isdst":true,
+                "text":"(UTC-01:00) Azores",
+                "utc":[
+                    "America/Scoresbysund",
+                    "Atlantic/Azores"
+                ],
+                "index":33
+            },
+            {
+                "value":"Cape Verde Standard Time",
+                "abbr":"CVST",
+                "offset":-1,
+                "isdst":false,
+                "text":"(UTC-01:00) Cape Verde Is.",
+                "utc":[
+                    "Atlantic/Cape_Verde",
+                    "Etc/GMT+1"
+                ],
+                "index":34
+            },
+            {
+                "value":"Morocco Standard Time",
+                "abbr":"MDT",
+                "offset":1,
+                "isdst":true,
+                "text":"(UTC) Casablanca",
+                "utc":[
+                    "Africa/Casablanca",
+                    "Africa/El_Aaiun"
+                ],
+                "index":35
+            },
+            {
+                "value":"UTC-11",
+                "abbr":"U",
+                "offset":-11,
+                "isdst":false,
+                "text":"(UTC-11:00) Coordinated Universal Time-11",
+                "utc":[
+                    "Etc/GMT+11",
+                    "Pacific/Midway",
+                    "Pacific/Niue",
+                    "Pacific/Pago_Pago"
+                ],
+                "index":36
+            },
+            {
+                "value":"GMT Standard Time",
+                "abbr":"GMT",
+                "offset":0,
+                "isdst":false,
+                "text":"(UTC) Edinburgh, London",
+                "utc":[
+                    "Europe/Isle_of_Man",
+                    "Europe/Guernsey",
+                    "Europe/Jersey",
+                    "Europe/London"
+                ],
+                "index":37
+            },
+            {
+                "value":"British Summer Time",
+                "abbr":"BST",
+                "offset":1,
+                "isdst":true,
+                "text":"(UTC+01:00) Edinburgh, London",
+                "utc":[
+                    "Europe/Isle_of_Man",
+                    "Europe/Guernsey",
+                    "Europe/Jersey",
+                    "Europe/London"
+                ],
+                "index":38
+            },
+            {
+                "value":"GMT Standard Time",
+                "abbr":"GDT",
+                "offset":1,
+                "isdst":true,
+                "text":"(UTC) Dublin, Lisbon",
+                "utc":[
+                    "Atlantic/Canary",
+                    "Atlantic/Faeroe",
+                    "Atlantic/Madeira",
+                    "Europe/Dublin",
+                    "Europe/Lisbon"
+                ],
+                "index":39
+            },
+            {
+                "value":"Greenwich Standard Time",
+                "abbr":"GST",
+                "offset":0,
+                "isdst":false,
+                "text":"(UTC) Monrovia, Reykjavik",
+                "utc":[
+                    "Africa/Abidjan",
+                    "Africa/Accra",
+                    "Africa/Bamako",
+                    "Africa/Banjul",
+                    "Africa/Bissau",
+                    "Africa/Conakry",
+                    "Africa/Dakar",
+                    "Africa/Freetown",
+                    "Africa/Lome",
+                    "Africa/Monrovia",
+                    "Africa/Nouakchott",
+                    "Africa/Ouagadougou",
+                    "Africa/Sao_Tome",
+                    "Atlantic/Reykjavik",
+                    "Atlantic/St_Helena"
+                ],
+                "index":40
+            },
+            {
+                "value":"W. Europe Standard Time",
+                "abbr":"WEDT",
+                "offset":2,
+                "isdst":true,
+                "text":"(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna",
+                "utc":[
+                    "Arctic/Longyearbyen",
+                    "Europe/Amsterdam",
+                    "Europe/Andorra",
+                    "Europe/Berlin",
+                    "Europe/Busingen",
+                    "Europe/Gibraltar",
+                    "Europe/Luxembourg",
+                    "Europe/Malta",
+                    "Europe/Monaco",
+                    "Europe/Oslo",
+                    "Europe/Rome",
+                    "Europe/San_Marino",
+                    "Europe/Stockholm",
+                    "Europe/Vaduz",
+                    "Europe/Vatican",
+                    "Europe/Vienna",
+                    "Europe/Zurich"
+                ],
+                "index":41
+            },
+            {
+                "value":"Central Europe Standard Time",
+                "abbr":"CEDT",
+                "offset":2,
+                "isdst":true,
+                "text":"(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague",
+                "utc":[
+                    "Europe/Belgrade",
+                    "Europe/Bratislava",
+                    "Europe/Budapest",
+                    "Europe/Ljubljana",
+                    "Europe/Podgorica",
+                    "Europe/Prague",
+                    "Europe/Tirane"
+                ],
+                "index":42
+            },
+            {
+                "value":"Romance Standard Time",
+                "abbr":"RDT",
+                "offset":2,
+                "isdst":true,
+                "text":"(UTC+01:00) Brussels, Copenhagen, Madrid, Paris",
+                "utc":[
+                    "Africa/Ceuta",
+                    "Europe/Brussels",
+                    "Europe/Copenhagen",
+                    "Europe/Madrid",
+                    "Europe/Paris"
+                ],
+                "index":43
+            },
+            {
+                "value":"Central European Standard Time",
+                "abbr":"CEDT",
+                "offset":2,
+                "isdst":true,
+                "text":"(UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb",
+                "utc":[
+                    "Europe/Sarajevo",
+                    "Europe/Skopje",
+                    "Europe/Warsaw",
+                    "Europe/Zagreb"
+                ],
+                "index":44
+            },
+            {
+                "value":"W. Central Africa Standard Time",
+                "abbr":"WCAST",
+                "offset":1,
+                "isdst":false,
+                "text":"(UTC+01:00) West Central Africa",
+                "utc":[
+                    "Africa/Algiers",
+                    "Africa/Bangui",
+                    "Africa/Brazzaville",
+                    "Africa/Douala",
+                    "Africa/Kinshasa",
+                    "Africa/Lagos",
+                    "Africa/Libreville",
+                    "Africa/Luanda",
+                    "Africa/Malabo",
+                    "Africa/Ndjamena",
+                    "Africa/Niamey",
+                    "Africa/Porto-Novo",
+                    "Africa/Tunis",
+                    "Etc/GMT-1"
+                ],
+                "index":45
+            },
+            {
+                "value":"Namibia Standard Time",
+                "abbr":"NST",
+                "offset":1,
+                "isdst":false,
+                "text":"(UTC+01:00) Windhoek",
+                "utc":[
+                    "Africa/Windhoek"
+                ],
+                "index":46
+            },
+            {
+                "value":"GTB Standard Time",
+                "abbr":"GDT",
+                "offset":3,
+                "isdst":true,
+                "text":"(UTC+02:00) Athens, Bucharest",
+                "utc":[
+                    "Asia/Nicosia",
+                    "Europe/Athens",
+                    "Europe/Bucharest",
+                    "Europe/Chisinau"
+                ],
+                "index":47
+            },
+            {
+                "value":"Middle East Standard Time",
+                "abbr":"MEDT",
+                "offset":3,
+                "isdst":true,
+                "text":"(UTC+02:00) Beirut",
+                "utc":[
+                    "Asia/Beirut"
+                ],
+                "index":48
+            },
+            {
+                "value":"Egypt Standard Time",
+                "abbr":"EST",
+                "offset":2,
+                "isdst":false,
+                "text":"(UTC+02:00) Cairo",
+                "utc":[
+                    "Africa/Cairo"
+                ],
+                "index":49
+            },
+            {
+                "value":"Syria Standard Time",
+                "abbr":"SDT",
+                "offset":3,
+                "isdst":true,
+                "text":"(UTC+02:00) Damascus",
+                "utc":[
+                    "Asia/Damascus"
+                ],
+                "index":50
+            },
+            {
+                "value":"E. Europe Standard Time",
+                "abbr":"EEDT",
+                "offset":3,
+                "isdst":true,
+                "text":"(UTC+02:00) E. Europe",
+                "utc":[
+                    "Asia/Nicosia",
+                    "Europe/Athens",
+                    "Europe/Bucharest",
+                    "Europe/Chisinau",
+                    "Europe/Helsinki",
+                    "Europe/Kiev",
+                    "Europe/Mariehamn",
+                    "Europe/Nicosia",
+                    "Europe/Riga",
+                    "Europe/Sofia",
+                    "Europe/Tallinn",
+                    "Europe/Uzhgorod",
+                    "Europe/Vilnius",
+                    "Europe/Zaporozhye"
+                ],
+                "index":51
+            },
+            {
+                "value":"South Africa Standard Time",
+                "abbr":"SAST",
+                "offset":2,
+                "isdst":false,
+                "text":"(UTC+02:00) Harare, Pretoria",
+                "utc":[
+                    "Africa/Blantyre",
+                    "Africa/Bujumbura",
+                    "Africa/Gaborone",
+                    "Africa/Harare",
+                    "Africa/Johannesburg",
+                    "Africa/Kigali",
+                    "Africa/Lubumbashi",
+                    "Africa/Lusaka",
+                    "Africa/Maputo",
+                    "Africa/Maseru",
+                    "Africa/Mbabane",
+                    "Etc/GMT-2"
+                ],
+                "index":52
+            },
+            {
+                "value":"FLE Standard Time",
+                "abbr":"FDT",
+                "offset":3,
+                "isdst":true,
+                "text":"(UTC+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius",
+                "utc":[
+                    "Europe/Helsinki",
+                    "Europe/Kiev",
+                    "Europe/Mariehamn",
+                    "Europe/Riga",
+                    "Europe/Sofia",
+                    "Europe/Tallinn",
+                    "Europe/Uzhgorod",
+                    "Europe/Vilnius",
+                    "Europe/Zaporozhye"
+                ],
+                "index":53
+            },
+            {
+                "value":"Turkey Standard Time",
+                "abbr":"TDT",
+                "offset":3,
+                "isdst":false,
+                "text":"(UTC+03:00) Istanbul",
+                "utc":[
+                    "Europe/Istanbul"
+                ],
+                "index":54
+            },
+            {
+                "value":"Israel Standard Time",
+                "abbr":"JDT",
+                "offset":3,
+                "isdst":true,
+                "text":"(UTC+02:00) Jerusalem",
+                "utc":[
+                    "Asia/Jerusalem"
+                ],
+                "index":55
+            },
+            {
+                "value":"Libya Standard Time",
+                "abbr":"LST",
+                "offset":2,
+                "isdst":false,
+                "text":"(UTC+02:00) Tripoli",
+                "utc":[
+                    "Africa/Tripoli"
+                ],
+                "index":56
+            },
+            {
+                "value":"Jordan Standard Time",
+                "abbr":"JST",
+                "offset":3,
+                "isdst":false,
+                "text":"(UTC+03:00) Amman",
+                "utc":[
+                    "Asia/Amman"
+                ],
+                "index":57
+            },
+            {
+                "value":"Arabic Standard Time",
+                "abbr":"AST",
+                "offset":3,
+                "isdst":false,
+                "text":"(UTC+03:00) Baghdad",
+                "utc":[
+                    "Asia/Baghdad"
+                ],
+                "index":58
+            },
+            {
+                "value":"Kaliningrad Standard Time",
+                "abbr":"KST",
+                "offset":3,
+                "isdst":false,
+                "text":"(UTC+02:00) Kaliningrad",
+                "utc":[
+                    "Europe/Kaliningrad"
+                ],
+                "index":59
+            },
+            {
+                "value":"Arab Standard Time",
+                "abbr":"AST",
+                "offset":3,
+                "isdst":false,
+                "text":"(UTC+03:00) Kuwait, Riyadh",
+                "utc":[
+                    "Asia/Aden",
+                    "Asia/Bahrain",
+                    "Asia/Kuwait",
+                    "Asia/Qatar",
+                    "Asia/Riyadh"
+                ],
+                "index":60
+            },
+            {
+                "value":"E. Africa Standard Time",
+                "abbr":"EAST",
+                "offset":3,
+                "isdst":false,
+                "text":"(UTC+03:00) Nairobi",
+                "utc":[
+                    "Africa/Addis_Ababa",
+                    "Africa/Asmera",
+                    "Africa/Dar_es_Salaam",
+                    "Africa/Djibouti",
+                    "Africa/Juba",
+                    "Africa/Kampala",
+                    "Africa/Khartoum",
+                    "Africa/Mogadishu",
+                    "Africa/Nairobi",
+                    "Antarctica/Syowa",
+                    "Etc/GMT-3",
+                    "Indian/Antananarivo",
+                    "Indian/Comoro",
+                    "Indian/Mayotte"
+                ],
+                "index":61
+            },
+            {
+                "value":"Moscow Standard Time",
+                "abbr":"MSK",
+                "offset":3,
+                "isdst":false,
+                "text":"(UTC+03:00) Moscow, St. Petersburg, Volgograd, Minsk",
+                "utc":[
+                    "Europe/Kirov",
+                    "Europe/Moscow",
+                    "Europe/Simferopol",
+                    "Europe/Volgograd",
+                    "Europe/Minsk"
+                ],
+                "index":62
+            },
+            {
+                "value":"Samara Time",
+                "abbr":"SAMT",
+                "offset":4,
+                "isdst":false,
+                "text":"(UTC+04:00) Samara, Ulyanovsk, Saratov",
+                "utc":[
+                    "Europe/Astrakhan",
+                    "Europe/Samara",
+                    "Europe/Ulyanovsk"
+                ],
+                "index":63
+            },
+            {
+                "value":"Iran Standard Time",
+                "abbr":"IDT",
+                "offset":4.5,
+                "isdst":true,
+                "text":"(UTC+03:30) Tehran",
+                "utc":[
+                    "Asia/Tehran"
+                ],
+                "index":64
+            },
+            {
+                "value":"Gulf Standard Time",
+                "abbr":"GST",
+                "offset":4,
+                "isdst":false,
+                "text":"(UTC+04:00) Abu Dhabi, Muscat",
+                "utc":[
+                    "Asia/Dubai",
+                    "Asia/Muscat",
+                    "Etc/GMT-4"
+                ],
+                "index":65
+            },
+            {
+                "value":"Azerbaijan Standard Time",
+                "abbr":"ADT",
+                "offset":5,
+                "isdst":true,
+                "text":"(UTC+04:00) Baku",
+                "utc":[
+                    "Asia/Baku"
+                ],
+                "index":66
+            },
+            {
+                "value":"Mauritius Standard Time",
+                "abbr":"MST",
+                "offset":4,
+                "isdst":false,
+                "text":"(UTC+04:00) Port Louis",
+                "utc":[
+                    "Indian/Mahe",
+                    "Indian/Mauritius",
+                    "Indian/Reunion"
+                ],
+                "index":67
+            },
+            {
+                "value":"Georgian Standard Time",
+                "abbr":"GET",
+                "offset":4,
+                "isdst":false,
+                "text":"(UTC+04:00) Tbilisi",
+                "utc":[
+                    "Asia/Tbilisi"
+                ],
+                "index":68
+            },
+            {
+                "value":"Caucasus Standard Time",
+                "abbr":"CST",
+                "offset":4,
+                "isdst":false,
+                "text":"(UTC+04:00) Yerevan",
+                "utc":[
+                    "Asia/Yerevan"
+                ],
+                "index":69
+            },
+            {
+                "value":"Afghanistan Standard Time",
+                "abbr":"AST",
+                "offset":4.5,
+                "isdst":false,
+                "text":"(UTC+04:30) Kabul",
+                "utc":[
+                    "Asia/Kabul"
+                ],
+                "index":70
+            },
+            {
+                "value":"West Asia Standard Time",
+                "abbr":"WAST",
+                "offset":5,
+                "isdst":false,
+                "text":"(UTC+05:00) Ashgabat, Tashkent",
+                "utc":[
+                    "Antarctica/Mawson",
+                    "Asia/Aqtau",
+                    "Asia/Aqtobe",
+                    "Asia/Ashgabat",
+                    "Asia/Dushanbe",
+                    "Asia/Oral",
+                    "Asia/Samarkand",
+                    "Asia/Tashkent",
+                    "Etc/GMT-5",
+                    "Indian/Kerguelen",
+                    "Indian/Maldives"
+                ],
+                "index":71
+            },
+            {
+                "value":"Yekaterinburg Time",
+                "abbr":"YEKT",
+                "offset":5,
+                "isdst":false,
+                "text":"(UTC+05:00) Yekaterinburg",
+                "utc":[
+                    "Asia/Yekaterinburg"
+                ],
+                "index":72
+            },
+            {
+                "value":"Pakistan Standard Time",
+                "abbr":"PKT",
+                "offset":5,
+                "isdst":false,
+                "text":"(UTC+05:00) Islamabad, Karachi",
+                "utc":[
+                    "Asia/Karachi"
+                ],
+                "index":73
+            },
+            {
+                "value":"Dateline Standard Time",
+                "abbr":"DST",
+                "offset":-12,
+                "isdst":false,
+                "text":"(UTC-12:00) International Date Line West",
+                "utc":[
+                    "Etc/GMT+12"
+                ],
+                "index":74
+            },
+            {
+                "value":"Sri Lanka Standard Time",
+                "abbr":"SLST",
+                "offset":5.5,
+                "isdst":false,
+                "text":"(UTC+05:30) Sri Jayawardenepura",
+                "utc":[
+                    "Asia/Colombo"
+                ],
+                "index":75
+            },
+            {
+                "value":"Nepal Standard Time",
+                "abbr":"NST",
+                "offset":5.75,
+                "isdst":false,
+                "text":"(UTC+05:45) Kathmandu",
+                "utc":[
+                    "Asia/Kathmandu"
+                ],
+                "index":76
+            },
+            {
+                "value":"Central Asia Standard Time",
+                "abbr":"CAST",
+                "offset":6,
+                "isdst":false,
+                "text":"(UTC+06:00) Nur-Sultan (Astana)",
+                "utc":[
+                    "Antarctica/Vostok",
+                    "Asia/Almaty",
+                    "Asia/Bishkek",
+                    "Asia/Qyzylorda",
+                    "Asia/Urumqi",
+                    "Etc/GMT-6",
+                    "Indian/Chagos"
+                ],
+                "index":77
+            },
+            {
+                "value":"Bangladesh Standard Time",
+                "abbr":"BST",
+                "offset":6,
+                "isdst":false,
+                "text":"(UTC+06:00) Dhaka",
+                "utc":[
+                    "Asia/Dhaka",
+                    "Asia/Thimphu"
+                ],
+                "index":78
+            },
+            {
+                "value":"Myanmar Standard Time",
+                "abbr":"MST",
+                "offset":6.5,
+                "isdst":false,
+                "text":"(UTC+06:30) Yangon (Rangoon)",
+                "utc":[
+                    "Asia/Rangoon",
+                    "Indian/Cocos"
+                ],
+                "index":79
+            },
+            {
+                "value":"SE Asia Standard Time",
+                "abbr":"SAST",
+                "offset":7,
+                "isdst":false,
+                "text":"(UTC+07:00) Bangkok, Hanoi, Jakarta",
+                "utc":[
+                    "Antarctica/Davis",
+                    "Asia/Bangkok",
+                    "Asia/Hovd",
+                    "Asia/Jakarta",
+                    "Asia/Phnom_Penh",
+                    "Asia/Pontianak",
+                    "Asia/Saigon",
+                    "Asia/Vientiane",
+                    "Etc/GMT-7",
+                    "Indian/Christmas"
+                ],
+                "index":80
+            },
+            {
+                "value":"N. Central Asia Standard Time",
+                "abbr":"NCAST",
+                "offset":7,
+                "isdst":false,
+                "text":"(UTC+07:00) Novosibirsk",
+                "utc":[
+                    "Asia/Novokuznetsk",
+                    "Asia/Novosibirsk",
+                    "Asia/Omsk"
+                ],
+                "index":81
+            },
+            {
+                "value":"China Standard Time",
+                "abbr":"CST",
+                "offset":8,
+                "isdst":false,
+                "text":"(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi",
+                "utc":[
+                    "Asia/Hong_Kong",
+                    "Asia/Macau",
+                    "Asia/Shanghai"
+                ],
+                "index":82
+            },
+            {
+                "value":"North Asia Standard Time",
+                "abbr":"NAST",
+                "offset":8,
+                "isdst":false,
+                "text":"(UTC+08:00) Krasnoyarsk",
+                "utc":[
+                    "Asia/Krasnoyarsk"
+                ],
+                "index":83
+            },
+            {
+                "value":"Singapore Standard Time",
+                "abbr":"MPST",
+                "offset":8,
+                "isdst":false,
+                "text":"(UTC+08:00) Kuala Lumpur, Singapore",
+                "utc":[
+                    "Asia/Brunei",
+                    "Asia/Kuala_Lumpur",
+                    "Asia/Kuching",
+                    "Asia/Makassar",
+                    "Asia/Manila",
+                    "Asia/Singapore",
+                    "Etc/GMT-8"
+                ],
+                "index":84
+            },
+            {
+                "value":"W. Australia Standard Time",
+                "abbr":"WAST",
+                "offset":8,
+                "isdst":false,
+                "text":"(UTC+08:00) Perth",
+                "utc":[
+                    "Antarctica/Casey",
+                    "Australia/Perth"
+                ],
+                "index":85
+            },
+            {
+                "value":"Taipei Standard Time",
+                "abbr":"TST",
+                "offset":8,
+                "isdst":false,
+                "text":"(UTC+08:00) Taipei",
+                "utc":[
+                    "Asia/Taipei"
+                ],
+                "index":86
+            },
+            {
+                "value":"Ulaanbaatar Standard Time",
+                "abbr":"UST",
+                "offset":8,
+                "isdst":false,
+                "text":"(UTC+08:00) Ulaanbaatar",
+                "utc":[
+                    "Asia/Choibalsan",
+                    "Asia/Ulaanbaatar"
+                ],
+                "index":87
+            },
+            {
+                "value":"North Asia East Standard Time",
+                "abbr":"NAEST",
+                "offset":8,
+                "isdst":false,
+                "text":"(UTC+08:00) Irkutsk",
+                "utc":[
+                    "Asia/Irkutsk"
+                ],
+                "index":88
+            },
+            {
+                "value":"Japan Standard Time",
+                "abbr":"JST",
+                "offset":9,
+                "isdst":false,
+                "text":"(UTC+09:00) Osaka, Sapporo, Tokyo",
+                "utc":[
+                    "Asia/Dili",
+                    "Asia/Jayapura",
+                    "Asia/Tokyo",
+                    "Etc/GMT-9",
+                    "Pacific/Palau"
+                ],
+                "index":89
+            },
+            {
+                "value":"Korea Standard Time",
+                "abbr":"KST",
+                "offset":9,
+                "isdst":false,
+                "text":"(UTC+09:00) Seoul",
+                "utc":[
+                    "Asia/Pyongyang",
+                    "Asia/Seoul"
+                ],
+                "index":90
+            },
+            {
+                "value":"Cen. Australia Standard Time",
+                "abbr":"CAST",
+                "offset":9.5,
+                "isdst":false,
+                "text":"(UTC+09:30) Adelaide",
+                "utc":[
+                    "Australia/Adelaide",
+                    "Australia/Broken_Hill"
+                ],
+                "index":91
+            },
+            {
+                "value":"AUS Central Standard Time",
+                "abbr":"ACST",
+                "offset":9.5,
+                "isdst":false,
+                "text":"(UTC+09:30) Darwin",
+                "utc":[
+                    "Australia/Darwin"
+                ],
+                "index":92
+            },
+            {
+                "value":"E. Australia Standard Time",
+                "abbr":"EAST",
+                "offset":10,
+                "isdst":false,
+                "text":"(UTC+10:00) Brisbane",
+                "utc":[
+                    "Australia/Brisbane",
+                    "Australia/Lindeman"
+                ],
+                "index":93
+            },
+            {
+                "value":"AUS Eastern Standard Time",
+                "abbr":"AEST",
+                "offset":10,
+                "isdst":false,
+                "text":"(UTC+10:00) Canberra, Melbourne, Sydney",
+                "utc":[
+                    "Australia/Melbourne",
+                    "Australia/Sydney"
+                ],
+                "index":94
+            },
+            {
+                "value":"West Pacific Standard Time",
+                "abbr":"WPST",
+                "offset":10,
+                "isdst":false,
+                "text":"(UTC+10:00) Guam, Port Moresby",
+                "utc":[
+                    "Antarctica/DumontDUrville",
+                    "Etc/GMT-10",
+                    "Pacific/Guam",
+                    "Pacific/Port_Moresby",
+                    "Pacific/Saipan",
+                    "Pacific/Truk"
+                ],
+                "index":95
+            },
+            {
+                "value":"Tasmania Standard Time",
+                "abbr":"TST",
+                "offset":10,
+                "isdst":false,
+                "text":"(UTC+10:00) Hobart",
+                "utc":[
+                    "Australia/Currie",
+                    "Australia/Hobart"
+                ],
+                "index":96
+            },
+            {
+                "value":"Yakutsk Standard Time",
+                "abbr":"YST",
+                "offset":9,
+                "isdst":false,
+                "text":"(UTC+09:00) Yakutsk",
+                "utc":[
+                    "Asia/Chita",
+                    "Asia/Khandyga",
+                    "Asia/Yakutsk"
+                ],
+                "index":97
+            },
+            {
+                "value":"Central Pacific Standard Time",
+                "abbr":"CPST",
+                "offset":11,
+                "isdst":false,
+                "text":"(UTC+11:00) Solomon Is., New Caledonia",
+                "utc":[
+                    "Antarctica/Macquarie",
+                    "Etc/GMT-11",
+                    "Pacific/Efate",
+                    "Pacific/Guadalcanal",
+                    "Pacific/Kosrae",
+                    "Pacific/Noumea",
+                    "Pacific/Ponape"
+                ],
+                "index":98
+            },
+            {
+                "value":"Vladivostok Standard Time",
+                "abbr":"VST",
+                "offset":11,
+                "isdst":false,
+                "text":"(UTC+11:00) Vladivostok",
+                "utc":[
+                    "Asia/Sakhalin",
+                    "Asia/Ust-Nera",
+                    "Asia/Vladivostok"
+                ],
+                "index":99
+            },
+            {
+                "value": "New Zealand Standard Time",
+                "abbr": "NZST",
+                "offset": 12,
+                "isdst": false,
+                "text": "(UTC+12:00) Auckland, Wellington",
+                "utc": [
+                    "Antarctica/McMurdo",
+                    "Pacific/Auckland"
+                ],
+                "index":100
+            },
+            {
+                "value": "UTC+12",
+                "abbr": "U",
+                "offset": 12,
+                "isdst": false,
+                "text": "(UTC+12:00) Coordinated Universal Time+12",
+                "utc": [
+                    "Etc/GMT-12",
+                    "Pacific/Funafuti",
+                    "Pacific/Kwajalein",
+                    "Pacific/Majuro",
+                    "Pacific/Nauru",
+                    "Pacific/Tarawa",
+                    "Pacific/Wake",
+                    "Pacific/Wallis"
+                ],
+                "index":101
+            },
+            {
+                "value": "Fiji Standard Time",
+                "abbr": "FST",
+                "offset": 12,
+                "isdst": false,
+                "text": "(UTC+12:00) Fiji",
+                "utc": [
+                    "Pacific/Fiji"
+                ],
+                "index":102
+            },
+            {
+                "value": "Magadan Standard Time",
+                "abbr": "MST",
+                "offset": 12,
+                "isdst": false,
+                "text": "(UTC+12:00) Magadan",
+                "utc": [
+                    "Asia/Anadyr",
+                    "Asia/Kamchatka",
+                    "Asia/Magadan",
+                    "Asia/Srednekolymsk"
+                ],
+                "index":103
+            },
+            {
+                "value": "Kamchatka Standard Time",
+                "abbr": "KDT",
+                "offset": 13,
+                "isdst": true,
+                "text": "(UTC+12:00) Petropavlovsk-Kamchatsky - Old",
+                "utc": [
+                    "Asia/Kamchatka"
+                ],
+                "index":104
+            },
+            {
+                "value": "Tonga Standard Time",
+                "abbr": "TST",
+                "offset": 13,
+                "isdst": false,
+                "text": "(UTC+13:00) Nuku'alofa",
+                "utc": [
+                    "Etc/GMT-13",
+                    "Pacific/Enderbury",
+                    "Pacific/Fakaofo",
+                    "Pacific/Tongatapu"
+                ],
+                "index":105
+            },
+            {
+                "value": "Samoa Standard Time",
+                "abbr": "SST",
+                "offset": 13,
+                "isdst": false,
+                "text": "(UTC+13:00) Samoa",
+                "utc": [
+                    "Pacific/Apia"
+                ],
+                "index":106
+            }
+        ]
+
+    function getCalDetails() {
+        calendar.render();
+        timezones();
+        setTimezone()
+        var tz = ""
+        if ($('#countries').val() == null || $('#countries').val() == ""){
+            tz = "local"
+			console.log("dekhoo")
+        }else{
+            tz = $('#countries').val()
+			console.log(tz,"tz")
+        }
+        $.ajax({
+            
+            url:"/merchant/employees/getCalDetails/",
+            type:"POST",
+            data:{
+                'id':$('#scheWith').val(),
+                'timezone':tz,
+            },
+            success:function(response){
+                if(response.name == "Error"){
+					console.log("error")
+                    //toastr.error("The user you've selected hasn't set their availbility so schedule accordingly")
+                }
+                else{
+                    console.log("Response:", response.availFrom, "|", response.realAvailTo, "|", typeof(response.availFrom), "|", response.slotDur, "|", typeof(response.slotDur))
+                    console.log("Events:", response.events, typeof(response.events))
+
+                    $("#hiddTo").val(response.realAvailTo)
+                    $("#hiddFrom").val(response.availFrom)
+                    calendar.setOption('slotLabelInterval', response.slotDur);
+                    calendar.removeAllEvents();
+                    minmax(response.realAvailTo, response.availFrom)
+                    calendar.addEventSource(response.events);
+                }
+            }
+        })
+    }
+
+    function setTimezone(){
+        console.log("[Timezone] Setting timezone:"+$("#timezone").val()+"| Type:", typeof( $("#timezone").val()))
+        calendar.setOption('timeZone', $("#timezone").val());
+        console.log("[Timezone] Timezone set!")
+    }
+
+    function bookSlot(startDT, endDT){
+        console.log("SLOT BOOKING STARTED!")
+        console.log(startDT,endDT)
+        $("#startDT").val(startDT)
+        $("#endDT").val(endDT)
+    }
+
+    lis = []
+    function getList(){
+
+        timeList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+
+        to = $("#hiddTo").val().split(":")[0]
+        from = $("#hiddFrom").val().split(":")[0]
+
+        lis = timeList.slice(to, from)
+
+        return lis
+    }
+
+    function minmax(toRaw, fromRaw){
+        to = toRaw.split(":")
+        console.log("TO",to)
+        console.log("TO0",to[0])
+        console.log("TO1",to[1])
+        from = fromRaw.split(":")
+
+        now1 = new Date(2022, 4, 22, to[0], to[1])
+        now2 = new Date(2022, 4, 22, from[0], from[1])
+        console.log((parseInt(to[0]) - 24)-(parseInt(from[0]) - 24))
+        console.log("start:", toRaw)
+        console.log("end:", fromRaw)
+
+        if(now1.getMinutes().toString().length === 1){
+            now1Min = now1.getMinutes().toString() + "0"
+        }else{
+            now1Min = now1.getMinutes().toString()
+        }
+        if(now2.getMinutes().toString().length === 1){
+            now2Min = now2.getMinutes().toString() + "0"
+        }else{
+            now2Min = now2.getMinutes().toString()
+        }
+
+        if((parseInt(to[0]) - 24)-(parseInt(from[0]) - 24) < 0){
+            console.log("[something | if]",now1, now2)
+            
+            now1.setTime(now1.getTime() + 1 * 60 * 60 * 1000);
+            now2.setTime(now2.getTime() + 1 * 60 * 60 * 1000);
+            
+            console.log("[something | if]",now1, now2)
+            console.log("[something | if]",(now1.getHours() - 24)-(now2.getHours() - 24))
+            
+            if((now1.getHours() - 24)-(now2.getHours() - 24) < 0){
+                console.log("[something | if | if]")
+                calendar.setOption('businessHours', [
+                    {
+                        daysOfWeek: [0, 1, 2, 3, 4, 5, 6 ],
+                        startTime: "00:00", 
+                        endTime: now1.getHours()+":"+now1Min,
+                    },
+                    {
+                        daysOfWeek: [0, 1, 2, 3, 4, 5, 6 ],
+                        startTime: now2.getHours()+":"+now2Min,
+                        endTime: "24:00",
+                    }
+                ]);
+                calendar.setOption('slotMaxTime', "24:00:00");
+                calendar.setOption('slotMinTime', "00:00:00");
+            }else{
+                console.log("[something | if | else]")
+                
+                if(now1.getHours().toString().length === 1){
+                    now1Hours = now1.getHours().toString() + "0"
+                }else{
+                    now1Hours = now1.getHours().toString()
+                }
+                if(now2.getHours().toString().length === 1){
+                    now2Hours = now2.getHours().toString() + "0"
+                }else{
+                    now2Hours = now2.getHours().toString()
+                }
+
+                console.log("[something | if | else]", now2Hours+":"+now2Min)
+                console.log("[something | if | else]", now1Hours+":"+now1Min)
+                
+                calendar.setOption('businessHours', [
+                    {
+                        // days of week. an array of zero-based day of week integers (0=Sunday)
+                        daysOfWeek: [0, 1, 2, 3, 4, 5, 6 ], // Monday - Thursday
+                    
+                        startTime: now2Hours+":"+now2Min, // a start time (10am in this example)
+                        endTime: now1Hours+":"+now1Min, // an end time (6pm in this example)
+                    },
+                ]);
+                calendar.setOption('slotMaxTime', now1Hours+":"+now1Min);
+                calendar.setOption('slotMinTime', now2Hours+":"+now2Min);
+            }
+        }else{
+            console.log("[something | else]",now1, now2)
+            console.log("[something | else]", now2.getHours()+":"+now2Min)
+            console.log("[something | else]", now1.getHours()+":"+now1Min)
+            calendar.setOption('businessHours', [
+                {
+                    // days of week. an array of zero-based day of week integers (0=Sunday)
+                    daysOfWeek: [0, 1, 2, 3, 4, 5, 6 ], // Monday - Thursday
+                
+                    startTime: now2.getHours()+":"+now2Min, // a start time (10am in this example)
+                    endTime: now1.getHours()+":"+now1Min, // an end time (6pm in this example)
+                },
+            ]);
+            calendar.setOption('slotMaxTime', toRaw);
+            calendar.setOption('slotMinTime', fromRaw);
+        }
+    }
+
+    //Calendar Initialization.
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl,{
+        initialView: 'dayGridMonth',
+        customButtons: {
+            Events: {
+              text: 'Events',
+              click: function() {
+                calendar.changeView('listMonth');
+              }
+            }
+        },
+
+        headerToolbar: {
+            left: 'prev,next',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+
+        selectable: true,
+        selectMirror : true,
+        unselectAuto : true,
+        dayMaxEvents: true, 
+
+        slotLabelInterval: "01:00",
+
+        selectConstraint: "businessHours",
+        dateClick: function(info) {
+            if(info.allDay === true){
+                console.log('[dateClick] Date:', info.dateStr)
+                console.log("[dateClick] dateClick:", info.dayEl)
+                console.log("[dateClick] AllDay:", info.allDay)
+                calendar.changeView('timeGridDay',info.dateStr);
+            }
+        },
+
+        eventTimeFormat: { 
+            hour: 'numeric', 
+            minute: '2-digit', 
+            //timeZoneName: 'short' 
+        },
+
+        select: function(info) {
+            if(info.allDay === false){
+                console.log("[select] AllDay:", info.allDay)
+                console.log("[select] Start:", info.start, "| type:", typeof(info.start))
+                console.log("[select] month:", info.start.getMonth()+1, "| type:", typeof(info.start.getMonth()))
+                console.log("[select] StartTime:", info.start.getHours()+":"+info.start.getMinutes()+":"+info.start.getSeconds())
+                console.log("[select] EndTime:", info.end.getHours()+":"+info.end.getMinutes()+":"+info.end.getSeconds())
+                
+                $("#eventType").val("INDV")
+                $("#calID").val("")
+                startDT = info.start.getUTCFullYear()+":"+(parseInt(info.start.getUTCMonth())+1)+":"+info.start.getUTCDate()+":"+info.start.getUTCHours()+":"+info.start.getUTCMinutes()+":"+info.start.getUTCSeconds()
+                endDT = info.end.getUTCFullYear()+":"+(parseInt(info.end.getUTCMonth())+1)+":"+info.end.getUTCDate()+":"+info.end.getUTCHours()+":"+info.end.getUTCMinutes()+":"+info.end.getUTCSeconds()   
+                
+                // startDT = info.start.getFullYear()+":"+(parseInt(info.start.getMonth())+1)+":"+info.start.getDate()+":"+info.start.getHours()+":"+info.start.getMinutes()+":"+info.start.getSeconds()
+                // endDT = info.end.getFullYear()+":"+(parseInt(info.end.getMonth())+1)+":"+info.end.getDate()+":"+info.end.getHours()+":"+info.end.getMinutes()+":"+info.end.getSeconds()
+
+                bookSlot(startDT, endDT)
+            }
+        },
+
+        eventMouseEnter: function(calEvent) {
+            if(calEvent.view.type != "timeGridDay"){
+                var tooltip = '<div class="tooltipevent" style="width:auto;height:20px;vertical-align:middle;background-color:'+calEvent.el.style.color+';position:absolute;z-index:10001;">' + calEvent.event.title + '</div>';
+                $("body").append(tooltip);
+                $(this.el).mouseover(function(e) {
+                    $(this.el).css('z-index', 10000);
+                    $('.tooltipevent').fadeIn('500');
+                    $('.tooltipevent').fadeTo('10', 1.9);
+                }).mousemove(function(e) {
+                    $('.tooltipevent').css('top', e.pageY + 10);
+                    $('.tooltipevent').css('left', e.pageX + 20);
+                });
+            }
+        },
+            
+        eventMouseLeave: function(calEvent, jsEvent) {
+            if(calEvent.view.type != "timeGridDay"){
+                $(this.el).css('z-index', 8);
+                $('.tooltipevent').remove();
+            }
+        },
+
+        unselect: function(jsEvent, view) {
+            console.log("[unselect] unselected:", jsEvent)
+        },
+
+        eventClick: function(info) {
+            console.log("[eventClick]", info.event.id)
+            console.log("[eventClick]", info.view.type)
+            console.log("[eventClick]", info.event.view)
+
+            if(info.view.type == "dayGridMonth"){
+                info.jsEvent.preventDefault(); // don't let the browser navigate
+
+                if (info.event.url) {
+                    window.open(info.event.url);
+                }
+            }else{
+                if(info.event.id.includes("GRP_interview")){
+                    info.jsEvent.preventDefault(); // don't let the browser navigate
+                    calendar.unselect();
+                    
+                    $("#eventType").val("GRP")
+                    $("#calID").val(info.event.id)
+
+                    startDT = info.event.start.getFullYear()+":"+(parseInt(info.event.start.getMonth())+1)+":"+info.event.start.getDate()+":"+info.event.start.getHours()+":"+info.event.start.getMinutes()+":"+info.event.start.getSeconds()
+                    endDT = info.event.end.getFullYear()+":"+(parseInt(info.event.end.getMonth())+1)+":"+info.event.end.getDate()+":"+info.event.end.getHours()+":"+info.event.end.getMinutes()+":"+info.event.end.getSeconds()
+
+                    bookSlot(startDT, endDT)
+                }
+                else{
+                    console.log("Can't book slot for this event!")
+                }
+            }
+        },
+    });
+
+    /*document.addEventListener('DOMContentLoaded', function() {
+        calendar.render();
+    });*/
+
+    function display() {
+        console.log("locale:",calendar.getOption('locale'));
+        console.log("slotDuration:",calendar.getOption('slotDuration'));
+        console.log("slotLabelInterval:",calendar.getOption('slotLabelInterval'));
+        console.log("Timezone:",calendar.getOption('timeZone'));
+        console.log("UN:",calendar.getEventById("ub").start);
+        console.log("Event:",calendar.getEventById("title2ID").url);
+    }
+    
+    function timezones(){
+        timeZoneList.forEach(function(tz){
+            $("#timezone").append(`
+                <option value="${tz['index']}">${tz['abbr']} (${tz['value']})</option>
+            `);
+        })
+    }
+    
+    function setCountries(){
+        $("#countries").empty()
+        $("#countryDiv").show()
+        $("#countries").append(`
+            <option value="" selected disabled>Select Country</option>
+        `);
+        var tzUTC = timeZoneList[$("#timezone").val()]['utc'];
+        tzUTC.forEach(function(tz){
+            $("#countries").append(`
+                <option value="${tz}">${tz}</option>
+            `);
+        })
+    }
+    
+</script>
+
+{% endblock %}
