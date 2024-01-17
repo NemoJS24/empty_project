@@ -19,6 +19,13 @@ const Call = ({ userData }) => {
 
     const { id } = useParams()
 
+    const callPurposeOptions = {
+        prospecting: "Prospecting",
+        sale_call: "Sale Call",
+        negotiation: "Negotiation",
+        close_Sale: "Close Sale"
+    }
+
     const handleFilter = e => {
         const { value } = e.target
         let updatedData = []
@@ -56,7 +63,7 @@ const Call = ({ userData }) => {
             name: "Call Purpose",
             minWidth: "320px",
             selector: (row) => (
-                row?.Call_Purpose
+                callPurposeOptions[row?.Call_Purpose]
             ),
             type: 'text'
         },
@@ -101,11 +108,14 @@ const Call = ({ userData }) => {
         {
             name: "Action",
             minWidth: "50px",
-            selector: () => (
+            selector: (row) => (
                 <>
                     <div className='d-flex justify-content-center align-items-center gap-2'>
                         <Eye size='17px' style={{ cursor: "pointer" }} />
-                        <Edit size='17px' style={{ cursor: "pointer" }} />
+                        <Link to={`/merchant/customers/add_call/${row.id}?type=edit`}>
+                            <Edit size='17px' style={{ cursor: "pointer" }} />
+
+                        </Link>
                     </div>
                 </>
             )
@@ -117,7 +127,7 @@ const Call = ({ userData }) => {
             <h4 className='m-0'>Call Details</h4>
         </Col>
         <Col className='d-flex align-items-center justify-content-end' md='4' sm='12'>
-            <Link className='btn btn-primary-main' to={`/merchant/customers/add_call/${id}`}>Add Call</Link>
+            <Link className='btn btn-primary-main' to={`/merchant/customers/add_call/${id}?type=customer`}>Add Call</Link>
             <Input
                 className='dataTable-filter form-control ms-1'
                 style={{ width: `180px`, height: `2.714rem` }}
@@ -171,14 +181,6 @@ const Call = ({ userData }) => {
                                 filteredData={filteredData}
                                 isLoading={isLoading}
                             />
-                            {/* <div className='text-center py-1'>
-                                <div>
-                                    <h4>No Calls to display</h4>
-                                </div>
-                                <div>
-                                    <button type="button" className='btn btn-primary-main' onClick={() => navigate(`/merchant/customers/add_call/${id}`, {state: {data: userData}})} style={{ width: "fit-content" }}>Add Call</button>
-                                </div>
-                            </div> */}
                         </CardBody>
                     </Card>
                 </Col>

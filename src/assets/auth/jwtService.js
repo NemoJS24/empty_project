@@ -145,12 +145,12 @@ export const configUrl = {
     get_customer_finance: '/finance/get_customer_finance/',
     get_customer_servicing: '/servicing/get_customer_servicing/',
     get_customer_insurance: '/insurance/get_customer_insurance/',
-    add_vehicle: '/vehicle/add_vehicle/',
     add_finance: '/finance/add_finance/',
     crm_servicing_customers: '/servicing/get_add_servicing/',
     get_customer_details: '/customers/merchant/get_customer_details',
     fetch_vehicle_number: '/vehicle/fetch_vehicle_number',
     add_finance: '/finance/add_finance/',
+    add_call: "/customers/merchant/Customer_Add_Calls/",
     finance_dashboard: 'finance/finance_dashboard/',
     servicing_dashboard: 'servicing/servicing_dashboard/',
     insurance_dashboard: 'insurance/insurance_dashboard/'
