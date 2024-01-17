@@ -86,30 +86,18 @@ const CustomerBasicPersonal = ({ allData }) => {
             />
 
             {/* <Flatpickr
-              options={{ dateFormat: "Y-m-dTH:i:s" }}
-              className="form-control advanInputs"
+              id="personalDetails-dob"
               name="cust_dob"
+              className='form-control'
+              placeholder="Date Of Birth"
               value={formData?.cust_dob ?? ''}
-              onChange={(e) => {
-                handleInputChange()
-                console.log(e.target.value)
+              onChange={handleInputChange}
+              options={{
+                dateFormat: "Y-m-d",
+                allowInput: true
               }}
             /> */}
 
-            {/* // onChange={(date) => { */}
-            {/* //   console.log(date) */}
-            {/* //   try { */}
-            {/* updateData({ */}
-            {/* //       target: {
-              //         name: `columns[${index}][search][value]`,
-              //         value: `${moment(date[0]).format("YYYY-MM-DD")},${moment(date[1]).format("YYYY-MM-DD")}`
-              //       }
-              //     })
-              //   } catch (error) {
-              //     console.log(error)
-              //   }
-              // }}
-              // /> */}
 
             <p p id="personalDetails-dob_val" className="text-danger m-0 p-0 vaildMessage" ></p>
           </Col>
