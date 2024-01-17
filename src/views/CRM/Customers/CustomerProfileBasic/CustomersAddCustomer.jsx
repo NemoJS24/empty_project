@@ -175,7 +175,7 @@ const CustomersAddCustomer = ({ allData }) => {
                   <Select
                      id="basicDetails-customerType"
                      options={dropdownOptions}
-                     value={dropdownOptions.find(option => option.value === formData.dropdown) || dropdownOptions[0]} // Set the default value to 'regular'
+                     value={dropdownOptions[0]} // Set the default value to 'regular'   -- dropdownOptions.find(option => option.value === formData.dropdown) || --
                      onChange={(e) => handleInputChange(e, 'dropdown')}
                      closeMenuOnSelect={true}
                   />
@@ -205,14 +205,6 @@ const CustomersAddCustomer = ({ allData }) => {
                      closeMenuOnSelect={true}
                   />
                </Col>
-               {/* <div className='d-flex justify-content-between mt-1'>
-                        <div>
-                            <button className="btn btn-primary ms-2" type="button">Cancel</button>
-                        </div>
-                        <div>
-                            <button className="btn btn-primary ms-2" type="button" onClick={handleNext}>Next</button>
-                        </div>
-                    </div> */}
             </Row>
          </Container>
       </>

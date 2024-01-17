@@ -1,4 +1,4 @@
-import {  Col, Row, Card, CardBody, CardHeader, Button} from "reactstrap"
+import { Col, Row, Card, CardBody, CardHeader, Button } from "reactstrap"
 import { useState } from "react"
 import AdvanceServerSide from "@src/views/Components/DataTable/AdvanceServerSide.js"
 // import { crmURL } from "@src/assets/auth/jwtService.js"
@@ -7,7 +7,8 @@ import { LuTrendingUp } from "react-icons/lu"
 import { LiaUserSlashSolid, LiaUserSolid } from "react-icons/lia"
 import { PiMoneyThin } from "react-icons/pi"
 import { Link } from "react-router-dom"
-import { postReq } from "../../assets/auth/jwtService"
+import { crmURL, postReq } from "../../assets/auth/jwtService"
+import moment from "moment"
 
 /* eslint-disable */
 const Customers = () => {
@@ -16,7 +17,7 @@ const Customers = () => {
   const [selected, setSelected] = useState([])
 
   const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
-    setIsLoading(true)
+    // setIsLoading(true)
     const form_data = new FormData()
     // const url = new URL(`${crmURL}/customers/merchant/all_cust_dashboard/`)
     // form_data.append("draw", "1")
@@ -29,9 +30,9 @@ const Customers = () => {
     form_data.append("size", currentEntry)
     form_data.append("searchValue", searchValue)
 
-      postReq("all_cust_dashboard", form_data)
+    postReq("servicing_dashboard", form_data, crmURL)
       .then((resp) => {
-        console.log("hh", resp)
+        console.log("today_servicing", resp.data)
         setTableData(resp?.data)
         setIsLoading(false)
       })
@@ -40,76 +41,76 @@ const Customers = () => {
         setIsLoading(false)
       })
 
-    }
+  }
 
-//   useEffect(() => {
-//     getData()
-//   }, [])
+  //   useEffect(() => {
+  //     getData()
+  //   }, [])
 
-const columns = [
+  const columns = [
     {
       name: "Customer Name",
       minWidth: "150px",
       selector: (row) => (
-        <Link to={`/merchant/customers/view_customer/${row?.servicing_customer_id}`}>{row?.servicing_customer_name}</Link>
-        
-        ),
+        <Link to={`/merchant/customers/view_customer/${row?.servicing_customer_id}`}>{row?.servicing_customer_name ? row.servicing_customer_name : "-"}</Link>
+
+      ),
       type: 'text',
       isEnable: true
     },
     {
       name: "Brand",
       minWidth: "150px",
-      selector: (row) => row?.servicing_brand,
+      selector: (row) => row?.servicing_brand ? row.servicing_brand : "-",
       type: 'number',
       isEnable: true
     },
     {
       name: "Model",
       minWidth: "200px",
-      selector: (row) => row?.servicing_model,
+      selector: (row) => row?.servicing_model ?  row.servicing_model : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Variant",
       minWidth: "200px",
-      selector: (row) => row?.servicing_variant,
+      selector: (row) => row?.servicing_variant ? row.servicing_variant : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Service Location",
       minWidth: "200px",
-      selector: (row) => row?.servicing_service_location,
+      selector: (row) => row?.servicing_service_location ? row.servicing_service_location : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Job Card Date",
       minWidth: "200px",
-      selector: (row) => row?.servicing_job_card_date,
+      selector: (row) => row?.servicing_job_card_date ? moment(row.servicing_job_card_date).format("YYYY-MM-DD") : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Service Invoice Date",
       minWidth: "200px",
-      selector: (row) => row?.servicing_service_invoice_date,
+      selector: (row) => row?.servicing_service_invoice_date ? moment(row.servicing_service_invoice_date).format("YYYY-MM-DD") : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Service Expiry Date",
       minWidth: "200px",
-      selector: (row) => row?.servicing_service_expiry_date,
+      selector: (row) => row?.servicing_service_expiry_date ? row.servicing_service_expiry_date : "-",
       type: 'text',
       isEnable: true
     },
     {
-      name: "Service Invoice Ammount",
+      name: "Service Invoice Amount",
       minWidth: "200px",
-      selector: (row) => row?.servicing_service_invoice_amount,
+      selector: (row) => row?.servicing_service_invoice_amount ? row.servicing_service_invoice_amount : "-",
       type: 'text',
       isEnable: true
     },
@@ -118,10 +119,9 @@ const columns = [
       width: "130px",
       selector: (row) => (
         <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
-        <Link to={`/merchant/customers/view_customer/${row?.servicing_customer_id}`}><Eye size={15} /></Link>
-        <Link to={`/merchant/customers/edit_service/${row?.servicing_customer_id}`}> <Edit3 size={15} /></Link>
-        <Trash2 size={15} />
-      </div>
+          <Link to={`/merchant/customers/view_customer/${row?.servicing_customer_id}`}><Eye size={15} /></Link>
+          <Link to={`/merchant/customers/edit_service/${row?.servicing_customer_id}`}> <Edit3 size={15} /></Link>
+        </div>
       )
     }
   ]
@@ -208,7 +208,7 @@ const columns = [
               <AdvanceServerSide
                 tableName="Upcoming Servicing"
                 tableCol={columns}
-                data={tableData?.servicing}
+                data={tableData?.data}
                 isLoading={isLoading}
                 getData={getData}
                 count={tableData?.recordsTotal}

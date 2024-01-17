@@ -2,6 +2,7 @@ import React from "react"
 import { Container, Card, CardBody, Row, Col } from "reactstrap"
 import { Facebook, Instagram, Twitter } from "react-feather"
 import Select from "react-select"
+import Flatpickr from "react-flatpickr"
 
 const CustomerBasicPersonal = ({ allData }) => {
   const {
@@ -83,7 +84,34 @@ const CustomerBasicPersonal = ({ allData }) => {
               value={formData?.cust_dob ?? ''}
               onChange={handleInputChange}
             />
-            <p id="personalDetails-dob_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
+            {/* <Flatpickr
+              options={{ dateFormat: "Y-m-dTH:i:s" }}
+              className="form-control advanInputs"
+              name="cust_dob"
+              value={formData?.cust_dob ?? ''}
+              onChange={(e) => {
+                handleInputChange()
+                console.log(e.target.value)
+              }}
+            /> */}
+
+            {/* // onChange={(date) => { */}
+            {/* //   console.log(date) */}
+            {/* //   try { */}
+            {/* updateData({ */}
+            {/* //       target: {
+              //         name: `columns[${index}][search][value]`,
+              //         value: `${moment(date[0]).format("YYYY-MM-DD")},${moment(date[1]).format("YYYY-MM-DD")}`
+              //       }
+              //     })
+              //   } catch (error) {
+              //     console.log(error)
+              //   }
+              // }}
+              // /> */}
+
+            <p p id="personalDetails-dob_val" className="text-danger m-0 p-0 vaildMessage" ></p>
           </Col>
           <Col md={6} lg={4} className="mt-2">
             <label
@@ -285,7 +313,7 @@ const CustomerBasicPersonal = ({ allData }) => {
               <button className="btn btn-primary ms-2" type="button">
                 Save & Close
               </button> */}
-            {/* <button
+        {/* <button
               className="btn btn-primary ms-2"
               type="button"
               onClick={handleNext}
@@ -294,7 +322,7 @@ const CustomerBasicPersonal = ({ allData }) => {
             </button>
           </div>
         </div> */}
-      </Container>
+      </Container >
     </>
   )
 }

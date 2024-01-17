@@ -6,7 +6,8 @@ import { LuTrendingUp } from "react-icons/lu"
 import { LiaUserSlashSolid, LiaUserSolid } from "react-icons/lia"
 import { PiMoneyThin } from "react-icons/pi"
 import { Link } from "react-router-dom"
-import { postReq } from "../../assets/auth/jwtService"
+import { crmURL, postReq } from "../../assets/auth/jwtService"
+import moment from "moment"
 
 /* eslint-disable */
 const Customers = () => {
@@ -30,11 +31,11 @@ const Customers = () => {
     //   method: "POST",
     //   body: form_data
     // })
-      postReq("all_cust_dashboard", form_data)
+    postReq("insurance_dashboard", form_data, crmURL)
       .then((resp) => {
         setCustData(resp)
-        console.log("hh", resp.data)
-        setTableData(resp?.data?.insurance)
+        console.log("today_insurance", resp.data)
+        setTableData(resp?.data)
         setIsLoading(false)
       })
       .catch((error) => {
@@ -53,7 +54,7 @@ const Customers = () => {
       name: "Customer Name",
       minWidth: "150px",
       selector: (row) => (
-        <Link to={`/merchant/customers/view_customer/${row?.customer_id}`}>{row?.customer_name}</Link>
+        <Link to={`/merchant/customers/view_customer/${row?.insurance_id}`}>{row?.insurance_customer_name ? row.insurance_customer_name : "-"}</Link>
       ),
       type: 'text',
       isEnable: true
@@ -61,56 +62,56 @@ const Customers = () => {
     {
       name: "Brand",
       minWidth: "150px",
-      selector: (row) => row?.brand,
+      selector: (row) => row?.insurance_brand ? row.insurance_brand : "-",
       type: 'number',
       isEnable: true
     },
     {
       name: "Model",
       minWidth: "200px",
-      selector: (row) => row?.car_model,
+      selector: (row) => row?.insurance_model ? row.insurance_model : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Variant",
       minWidth: "200px",
-      selector: (row) => row?.variant,
+      selector: (row) => row?.insurance_variant ? row.insurance_variant : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Policy Number",
       minWidth: "200px",
-      selector: (row) => row?.policy_number,
+      selector: (row) => row?.insurance_policy_number ? row.insurance_policy_number : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Insurance Company",
       minWidth: "200px",
-      selector: (row) => row?.insurance_company,
+      selector: (row) => row?.insurance_insurance_company ? row.insurance_insurance_company : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Policy Purchase Date",
       minWidth: "200px",
-      selector: (row) => row?.policy_purchase_date,
+      selector: (row) => row?.insurance_policy_purchase_date ? moment(row.insurance_policy_purchase_date).format("YYYY-MM-DD") : "-",
       type: 'text',
       isEnable: true
     },
     {
       name: "Policy Expiry Date",
       minWidth: "200px",
-      selector: (row) => row?.policy_expiry_date,
+      selector: (row) => row?.insurance_policy_expiry_date ? moment(row.insurance_policy_expiry_date).format("YYYY-MM-DD") : "-",
       type: 'text',
       isEnable: true
     },
     {
-      name: "Ammount",
+      name: "Amount",
       minWidth: "200px",
-      selector: (row) => row?.amount,
+      selector: (row) => row?.insurance_amount ? row.insurance_amount : "-",
       type: 'text',
       isEnable: true
     },
@@ -121,7 +122,6 @@ const Customers = () => {
         <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
           <Link to={`/merchant/customers/view_customer/${row?.customer_id}`}><Eye size={15} /></Link>
           <Link to={`/merchant/customers/insurance/edit_insurance/${row?.customer_id}`}> <Edit3 size={15} /></Link>
-          <Trash2 size={15} />
         </div>
       )
     }
@@ -202,14 +202,14 @@ const Customers = () => {
               <AdvanceServerSide
                 tableName="Upcoming Insurance"
                 tableCol={columns}
-                data={tableData}
+                data={tableData?.data}
                 isLoading={isLoading}
                 getData={getData}
                 count={tableData?.recordsTotal}
                 selectableRows={true}
                 setSelectedRows={setSelected}
                 selectedRows={selected}
-                isadvance={true}
+                advanceFilter={true}
               />
             </CardBody>
           </Card>

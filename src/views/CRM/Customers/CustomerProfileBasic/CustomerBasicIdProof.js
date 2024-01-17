@@ -1,5 +1,6 @@
 import React from "react"
-import { Container, Card, CardBody, Row, Col } from "reactstrap"
+import toast from "react-hot-toast"
+import { Container, Card, CardBody, Row, Col, Label, FormGroup, Input } from "reactstrap"
 // import "../CustomerProfile.css"
 
 const CustomerBasicIdProof = ({ allData }) => {
@@ -32,23 +33,45 @@ const CustomerBasicIdProof = ({ allData }) => {
           </Col>
           <Col md={6} className="mt-2">
             <label>Upload Aadhar Card Image</label>
-            <div className="gap-1 d-flex justify-content-start align-items-center w-100">
-              {/* <span className="mx-1">{formData?.aadhar_pdf_file?.name || formData?.aadhar_pdf_file || 'Aadhar Card'}</span> */}
-              <input
+            {/* <div className="gap-1 d-flex justify-content-start align-items-center w-100"> */}
+            {/* <span className="mx-1">{formData?.aadhar_pdf_file?.name || formData?.aadhar_pdf_file || 'Aadhar Card'}</span> */}
+            {/* <input
                 name="aadhar_pdf_file"
                 type="file"
                 id="idproof-aadhar"
-                className="d-none"
-                // value={formData?.aadhar_pdf_file}
+                className="d-none" */}
+            {/* // value={formData?.aadhar_pdf_file}
                 onChange={(e) => handleInputChange(e, 'file')}
-              />
-              <label
+              /> */}
+            {/* <label
                 className="btn btn-outline-primary w-25"
                 htmlFor="idproof-aadhar"
               >
                 Upload File
               </label>
-            </div>
+            </div> */}
+
+            <FormGroup>
+              <Input
+                id="idproof-aadhar"
+                name="aadhar_pdf_file"
+                type="file"
+                className="w-50"
+                // disabled={!editMode}
+                onChange={(e) => {
+                  handleInputChange(e, 'file')
+                  const file = e.target.files[0]
+                  if (file && file.type.startsWith('image/')) {
+                    toast.success('Image Uploaded Successfully')
+                  } else {
+                    toast.error('Please select image format')
+                  }
+                }}
+
+              />
+            </FormGroup>
+
+
           </Col>
           <Col md={6} className="mt-2">
             <label htmlFor="idproof-pan-no">Pan Card Number</label>
@@ -64,14 +87,14 @@ const CustomerBasicIdProof = ({ allData }) => {
           </Col>
           <Col md={6} className="mt-2">
             <label>Upload Pan Card Image</label>
-            <div className="gap-1 d-flex d-flex justify-content-start align-items-center">
-              {/* <span className="mx-1">{formData?.pan_pdf_file?.name || formData?.pan_pdf_file || 'Pan Card'}</span> */}
-              <input
+            {/* <div className="gap-1 d-flex d-flex justify-content-start align-items-center"> */}
+            {/* <span className="mx-1">{formData?.pan_pdf_file?.name || formData?.pan_pdf_file || 'Pan Card'}</span> */}
+            {/* <input
                 name="pan_pdf_file"
                 type="file"
                 id="idproof-pan"
-                className="d-none"
-                // value={formData?.pan_pdf_file}
+                className="d-none" */}
+            {/* // value={formData?.pan_pdf_file}
                 onChange={(e) => handleInputChange(e, 'file')}
               />
               <label
@@ -80,7 +103,27 @@ const CustomerBasicIdProof = ({ allData }) => {
               >
                 Upload File
               </label>
-            </div>
+            </div> */}
+
+            <FormGroup>
+              <Input
+                id="idproof-pan"
+                name="pan_pdf_file"
+                type="file"
+                className="w-50"
+                // disabled={!editMode}
+                onChange={(e) => {
+                  handleInputChange(e, 'file')
+                  const file = e.target.files[0]
+                  if (file && file.type.startsWith('image/')) {
+                    toast.success('Image Uploaded Successfully')
+                  } else {
+                    toast.error('Please select image format')
+                  }
+                }}
+
+              />
+            </FormGroup>
           </Col>
         </Row>
       </Container>

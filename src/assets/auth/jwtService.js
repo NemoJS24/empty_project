@@ -150,7 +150,10 @@ export const configUrl = {
     get_customer_details: '/customers/merchant/get_customer_details',
     fetch_vehicle_number: '/vehicle/fetch_vehicle_number',
     add_finance: '/finance/add_finance/',
-    add_call: "/customers/merchant/Customer_Add_Calls/"
+    add_call: "/customers/merchant/Customer_Add_Calls/",
+    finance_dashboard: 'finance/finance_dashboard/',
+    servicing_dashboard: 'servicing/servicing_dashboard/',
+    insurance_dashboard: 'insurance/insurance_dashboard/'
 }
 
 const axiosInstance = axios.create({

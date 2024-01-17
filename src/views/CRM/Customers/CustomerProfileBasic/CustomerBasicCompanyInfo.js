@@ -39,15 +39,15 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
     //   url: getUrl
     // })
     getReq('get_company_details')
-    .then((res) => {
-      console.log(res)
-      getCompanyData(res.data.success)
-      // setIsLoading(false)
-    })
-    .catch((err) => {
-      console.log(err)
-      // setIsLoading(false)
-    })
+      .then((res) => {
+        console.log(res)
+        getCompanyData(res.data.success)
+        // setIsLoading(false)
+      })
+      .catch((err) => {
+        console.log(err)
+        // setIsLoading(false)
+      })
   }
 
   const getCountries = () => {
@@ -77,6 +77,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
     postReq("add_company_details", form_data)
       .then((resp) => {
         console.log({ resp })
+        fetchCompanyData()
         if (resp.status === 409) {
           throw new Error('Customer already exists')
         } else {
@@ -713,13 +714,6 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
             </div>
             <div>
               <button
-                className="btn btn-primary"
-                type="submit"
-                onClick={handleSubmitSection3}
-              >
-                Save
-              </button>
-              <button
                 className="btn btn-primary ms-2"
                 type="button"
                 onClick={() => setNewCompanyPage(2)}
@@ -851,7 +845,12 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
               <button
                 className="btn btn-primary"
                 type="button"
-                onClick={postData}
+                onClick={(e) => {
+                  // handleSubmitSection3
+                  postData()
+                  toast.success('Company Added Successfully')
+                  setShow(false)
+                }}
               >
                 Save
               </button>
