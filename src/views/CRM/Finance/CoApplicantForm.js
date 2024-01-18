@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Row, Col } from 'reactstrap'
 import Select from "react-select"
 // import { validForm } from '../../Validator'
+import Flatpickr from 'react-flatpickr'
+import moment from 'moment'
+import { getReq } from '../../../assets/auth/jwtService'
 
 /* eslint-disable */
 const CoApplicantForm = ({ allData }) => {
     const [children, setChildren] = useState(false)
-
+    const [country, setCountry] = useState([])
     const { formData, handleNext, handleBack, handleInputChange } = allData
 
     // const coApplicantvalueToCheck = [
@@ -130,6 +133,26 @@ const CoApplicantForm = ({ allData }) => {
         { value: 'homemaker', label: 'Homemaker' }
     ]
 
+
+    const getCountries = () => {
+        getReq("countries")
+          .then((resp) => {
+            console.log(resp)
+            setCountry(
+              resp.data.data.countries.map((curElem) => {
+                return { value: curElem.name, label: `${curElem.name}` }
+              })
+            )
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+    }
+
+    useEffect(() => {
+        getCountries()
+    }, [])
+
     return (
         <>
             <Container fluid className="px-0 py-1">
@@ -147,8 +170,8 @@ const CoApplicantForm = ({ allData }) => {
                             options={titleOptions}
                             value={titleOptions?.find(option => option.value === formData?.title)}
                             // onChange={e => (handleInputChange(e, 'title'))}
-                            onChange={(e) => {
-                                handleInputChange(e, 'title')
+                            onChange={(value, actionMeta) => {
+                                handleInputChange({target: {name: "title", value: value?.value}})
                             }}
                             closeMenuOnSelect={true}
                         />
@@ -213,7 +236,16 @@ const CoApplicantForm = ({ allData }) => {
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="personalDetails-dob">Date Of Birth</label>
-                        <input
+                        <Flatpickr
+                            name='cust_dob'
+                            className='form-control'
+                            value={formData?.cust_dob}
+                            onChange={(date) => {
+                                handleInputChange({target: {name: "cust_dob", value: moment(date[0]).format("YYYY-MM-DD")}})
+                                // setData({...defaultData, cust_dob: moment(date[0]).format("YYYY-MM-DD")})
+                            }}
+                        />
+                        {/* <input
 
                             placeholder="Date Of Birth"
                             type="date"
@@ -222,7 +254,7 @@ const CoApplicantForm = ({ allData }) => {
                             className="form-control"
                             value={formData?.cust_dob}
                             onChange={handleInputChange}
-                        />
+                        /> */}
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-alt-landline">
@@ -329,12 +361,22 @@ const CoApplicantForm = ({ allData }) => {
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="address-1-country">Country</label>
-                        <Select
+                        {/* <Select
                             id="address-1-country"
                             placeholder="Country"
                             options={countryOptions}
                             value={countryOptions?.find(option => option.value === formData?.country)}
                             onChange={e => (handleInputChange(e, 'country'))}
+                            closeMenuOnSelect={true}
+                        /> */}
+                        <Select
+                            id="country"
+                            placeholder="Country"
+                            options={country}
+                            value={country?.find(option => option.value === formData?.country)}
+                            onChange={(value) => {
+                                handleInputChange({target: {value: value?.value, name: "country"}})
+                            }}
                             closeMenuOnSelect={true}
                         />
                     </Col>
@@ -373,7 +415,9 @@ const CoApplicantForm = ({ allData }) => {
                             id="personalDetails-gender"
                             options={genderOptions}
                             closeMenuOnSelect={true}
-                            onChange={e => (handleInputChange(e, 'gender'))}
+                            onChange={(value) => {
+                                handleInputChange({target: {name: "gender", value: value?.value}})
+                            }}
                             value={genderOptions?.find(option => option.value === formData?.gender)}
                         />
                     </Col>
@@ -390,7 +434,10 @@ const CoApplicantForm = ({ allData }) => {
                             id="personalDetails-children"
                             placeholder='Children'
                             value={childrenOptions.find(option => option.value === formData?.children) ?? ''}
-                            onChange={(e) => handleInputChange(e, 'children')}
+                            onChange={(value) => {
+                                handleInputChange({target: {name: "children", value: value?.value}})
+                            }}
+                            // onChange={(e) => handleInputChange(e, 'children')}
                             options={childrenOptions}
                             closeMenuOnSelect={true}
                         />
@@ -425,13 +472,16 @@ const CoApplicantForm = ({ allData }) => {
                             options={maritalStatusOptions}
                             placeholder='Select Your Martial Status'
                             value={maritalStatusOptions.find(option => option.value === formData?.marital_status) ?? ''}
-                            onChange={(e) => handleInputChange(e, 'marital_status')}
+                            // onChange={(e) => handleInputChange(e, 'marital_status')}
+                            onChange={(value) => {
+                                handleInputChange({target: {name: "marital_status", value: value?.value}})
+                            }}
                             closeMenuOnSelect={true}
                         />
                     </Col>
                     {formData?.marital_status === 'married' && <Col md={6} className="mt-2">
                         <label htmlFor="Marriage Anniversary">Marriage Anniversary</label>
-                        <input
+                        {/* <input
 
                             placeholder="Marriage Anniversary"
                             type="date"
@@ -440,6 +490,15 @@ const CoApplicantForm = ({ allData }) => {
                             className="form-control"
                             value={formData?.marriage_anniversery}
                             onChange={handleInputChange}
+                        /> */}
+                        <Flatpickr
+                            name='marriage_anniversery'
+                            className='form-control'
+                            value={formData?.marriage_anniversery}
+                            onChange={(date) => {
+                                handleInputChange({target: {name: "marriage_anniversery", value: moment(date[0]).format("YYYY-MM-DD")}})
+                                // setData({...defaultData, cust_dob: moment(date[0]).format("YYYY-MM-DD")})
+                            }}
                         />
                     </Col>}
                     <Col md={6} className="mt-2">
@@ -455,7 +514,10 @@ const CoApplicantForm = ({ allData }) => {
                             options={occupationOptions}
                             placeholder='Select Occupation'
                             value={occupationOptions.find(option => option.value === formData?.occupation) ?? ''}
-                            onChange={(e) => handleInputChange(e, 'occupation')}
+                            // onChange={(e) => handleInputChange(e, 'occupation')}
+                            onChange={(value) => {
+                                handleInputChange({target: {name: "occupation", value: value?.value}})
+                            }}
                             closeMenuOnSelect={true}
                         />
                     </Col>

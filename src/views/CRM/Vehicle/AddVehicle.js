@@ -65,6 +65,8 @@ const AddVehicle = () => {
          .then((resp) => {
             console.log(resp.data.success, "get_customer_vehicle")
             const data = resp?.data?.success[0]
+
+            console.log(data, "manufacture_date")
             let updatedData
             if (urlParams.get("type") === "edit") {
                updatedData = {
@@ -78,17 +80,16 @@ const AddVehicle = () => {
                   brand: data?.brand,
                   car_model: data?.car_model,
                   variant: data?.variant,
-                  manufacture_date: moment(data?.registeration_date).format("YYYY"),
-                  delivery_date: moment(data?.delivery_date).format("DD-MM-YYYY"),
-                  registeration_date: data?.registeration_date
-      
+                  manufacture_date: data?.manufacture_date,
+                  delivery_date: data?.delivery_date ? moment(data?.delivery_date).format("YYYY-MM-DD") : "",
+                  registeration_date: data?.registeration_date ? moment(data?.registeration_date).format("YYYY-MM-DD") : ""
                }
    
             }
    
             if (urlParams.get("type") === "customer") {
                updatedData = {
-                  customer_id: data?.xircls_customer,
+                  customer_id: id,
                }
             }
    
@@ -104,7 +105,17 @@ const AddVehicle = () => {
 
    const apiCall = (btn) => {
       const form_data = new FormData()
-      Object.entries(editData).map(([key, value]) => form_data.append(key, value))
+      Object.entries(editData).map(([key, value]) => {
+
+         if (value !== "Invalid date") {
+            form_data.append(key, value)
+         }
+      })
+
+      if (urlParams.get("type") === "edit") {
+         form_data.append("vehicle_id", id)
+      }
+
       form_data.append("press_btn", 'SAVE')
       // form_data.append("customer_id", id)
       console.log(form_data, "gg")

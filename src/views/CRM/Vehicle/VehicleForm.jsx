@@ -13,10 +13,12 @@ import { validForm } from '../../Validator'
 // import { useParams } from 'react-router-dom'
 import Flatpickr from 'react-flatpickr'
 import moment from 'moment'
+import { useNavigate } from 'react-router-dom'
 
 const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
     // const { id } = useParams()
     const [brand, setBrand] = useState()
+    const navigate = useNavigate()
     console.log(defaultData)
     // const [defaultState, setDefaultState] = useState(edit ? defaultData : {
     //     // defaultData
@@ -276,7 +278,7 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
                             value={vehicleTypeOptions?.filter((curElem) => defaultData?.vehicle_type === curElem?.value)}
                             onChange={selectedOption => {
                                 handleInputChange({
-                                    target: { name: 'vehicle_type', value:selectedOption.value}
+                                    target: { name: 'vehicle_type', value: selectedOption.value}
                                 })
                             }}
                         />
@@ -391,7 +393,7 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
                         </label>
                         {/* <input value={defaultData.registeration_date} placeholder="Vehicle Registration Date" type='date' id='vehicle-registration-date' name='registeration_date' className="form-control" /> */}
                         <Flatpickr
-                            name='delivery_date'
+                            name='registeration_date'
                             className='form-control'
                             value={defaultData.registeration_date}
                             onChange={(date) => {
@@ -409,7 +411,7 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
                     {!isView &&
                         <div>
                             <button className="btn btn-primary ms-2" type="button" onClick={(e) => handleSubmitSection(e, "SAVE")} >Save</button>
-                            <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE&CLOSE')} >Save & Close</button>
+                            <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE&Close')} >Save & Close</button>
                         </div>
                     }
                 </div>

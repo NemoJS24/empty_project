@@ -18,8 +18,9 @@ const ApplicantForm = ({ allData }) => {
     const { formData, handleNext, handleInputChange, setFormData, handleChange } = allData
     const [productModelOption, setProductModelOption] = useState([])
     const [productVariantOption, setProductVariantOption] = useState([])
-    const [allOptions, setAllOptions] = useState([])
+    // const [allOptions, setAllOptions] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
+    const [customerList, setCustomerList] = useState([])
     // const mainFormvalueToCheck = [
     //     {
     //         name: 'customer_name',
@@ -415,37 +416,37 @@ const ApplicantForm = ({ allData }) => {
     //     }
     // };
 
-    const fetchCustomerData = async (page, inputValue, callback) => {
-        // console.log(callback, 'callback2')
-        try {
-            const response = await axios.get(
-                `${baseURL}/customers/merchant/get_customer_details/?page=${page}`
-            )
-            const successData = response.data.success
-            if (successData && Array.isArray(successData)) {
-                const customerOptions = successData
-                    .filter((item) => item.customer_name !== "")
-                    .map((customer) => ({
-                        value: customer.id,
-                        label: customer.customer_name
-                    }))
-                const option = [...allOptions, ...customerOptions]
-                console.log(option, "option")
-                setAllOptions(option)
-                callback(option)
-                // setCurrentPage((prevPage) => prevPage + 1)
-                setCurrentPage((prevPage) => {
-                    const nextPage = Math.min(prevPage + 1, (response.data.total_count / 100))
-                    return nextPage
-                })
-            } else {
-                console.error("Invalid or missing data in the API response")
-                callback([])
-            }
-        } catch (error) {
-            console.error("Error fetching data:", error.message)
-        }
-    }
+    // const fetchCustomerData = async (page, inputValue, callback) => {
+    //     // console.log(callback, 'callback2')
+    //     try {
+    //         const response = await axios.get(
+    //             `${baseURL}/customers/merchant/get_customer_details/?page=${page}`
+    //         )
+    //         const successData = response.data.success
+    //         if (successData && Array.isArray(successData)) {
+    //             const customerOptions = successData
+    //                 .filter((item) => item.customer_name !== "")
+    //                 .map((customer) => ({
+    //                     value: customer.id,
+    //                     label: customer.customer_name
+    //                 }))
+    //             const option = [...allOptions, ...customerOptions]
+    //             console.log(option, "option")
+    //             setAllOptions(option)
+    //             callback(option)
+    //             // setCurrentPage((prevPage) => prevPage + 1)
+    //             setCurrentPage((prevPage) => {
+    //                 const nextPage = Math.min(prevPage + 1, (response.data.total_count / 100))
+    //                 return nextPage
+    //             })
+    //         } else {
+    //             console.error("Invalid or missing data in the API response")
+    //             callback([])
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching data:", error.message)
+    //     }
+    // }
 
     const selectCustomer = () => {
         // handleInputChange(e, 'customer_id')
@@ -594,8 +595,22 @@ const ApplicantForm = ({ allData }) => {
         { value: 'Topup', label: 'Topup' }
     ]
 
+    const getCustomer = () => {
+        getReq("getAllCustomer")
+        .then((resp) => {
+            console.log(resp)
+            setCustomerList(resp?.data?.success?.map((curElem) => {
+                return { label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id }
+            }))
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
+
     useEffect(() => {
-        fetchCustomerData(currentPage, null, () => { })
+        // fetchCustomerData(currentPage, null, () => { })
+        getCustomer()
     }, [])
 
     const InnerStyles = (
@@ -1146,10 +1161,10 @@ const ApplicantForm = ({ allData }) => {
                         <Select
                             placeholder='Customer Name'
                             id="insurance-type"
-                            options={allOptions}
+                            options={customerList}
                             closeMenuOnSelect={true}
                             name='customer_name'
-                            onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
+                            // onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
                             components={{ Menu: CustomSelectComponent }}
                             onChange={(e) => {
                                 console.log(e)
@@ -1172,7 +1187,7 @@ const ApplicantForm = ({ allData }) => {
                                 //     productForm: {...preData.productForm, ...updatedData}
                                 // }))
                             }}
-                            value={allOptions?.filter((curElem) => Number(curElem?.value) === Number(formData.customer_id))}
+                            value={customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.customer_id))}
                         // onChange={(value, actionMeta) => selectCustomer(value, actionMeta, false)}
                         // onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                         />
@@ -1243,6 +1258,7 @@ const ApplicantForm = ({ allData }) => {
                             value={formData?.Bank_Name}
                             onChange={handleInputChange}
                         />
+                        <p id="Bank_Name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="product-name" className="form-label" style={{ margin: '0px' }}>
