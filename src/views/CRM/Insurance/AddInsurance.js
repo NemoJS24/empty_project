@@ -11,6 +11,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import toast from "react-hot-toast"
 import { baseURL, postReq } from '../../../assets/auth/jwtService'
 import { validForm } from '../../Validator'
+import Flatpickr from 'react-flatpickr'
+import moment from 'moment'
 
 const AddInsurance = () => {
     const { id } = useParams()
@@ -62,7 +64,8 @@ const AddInsurance = () => {
     const [productModelOption, setProductModelOption] = useState([])
     const [productVariantOption, setProductVariantOption] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
-    const [allOptions, setAllOptions] = useState([])
+    // const [allOptions, setAllOptions] = useState([])
+    const [customerList, setCustomerList] = useState([])
 
     const navigate = useNavigate()
 
@@ -144,13 +147,13 @@ const AddInsurance = () => {
             message: 'Please select a Brand',
             type: 'string',
             id: 'brand'
-        },
-        {
-            name: 'carmodel',
-            message: 'Please select a Model',
-            type: 'string',
-            id: 'carmodel'
         }
+        // {
+        //     name: 'carmodel',
+        //     message: 'Please select a Model',
+        //     type: 'string',
+        //     id: 'carmodel'
+        // }
     ]
 
     // const handleInputChange = (e, type) => {
@@ -275,42 +278,48 @@ const AddInsurance = () => {
             postReq('get_customer_insurance', form_data, crmURL)
                 .then((resp) => {
                     console.log("ResponseId:", resp.data.success[0])
-                    // const newObject = {}
-                    // for (const key in resp.data.success[0]) {
-                    //     if (resp.data.success[0].hasOwnProperty(key) && resp.data.success[0][key] !== null) {
-                    //         newObject[key] = resp.data.success[0][key]
-                    //     }
-                    // }
-                    // setFormData(newObject)
-                    setFormData((prev) => {
-                        return {
-                            ...prev,
-                            customer_name: resp?.data?.success[0]?.xircls_customer,
-                            policy_number: resp?.data?.success[0]?.policy_number,
-                            insurance_type: resp?.data?.success[0]?.insurance_type,
-                            insurance_company: resp?.data?.success[0]?.insurance_company,
-                            policy_purchase_date: resp?.data?.success[0]?.policy_purchase_date,
-                            policy_expiry_date: resp?.data?.success[0]?.policy_expiry_date,
-                            executive_name: resp?.data?.success[0]?.executive_name,
-                            amount: resp?.data?.success[0]?.amount,
-                            add_on_plan: resp?.data?.success[0]?.add_on_plan,
-                            insured_declared_value: resp?.data?.success[0]?.insured_declared_value,
-                            own_damage: resp?.data?.success[0]?.own_damage,
-                            ncb_no_claim_bonus: resp?.data?.success[0]?.ncb_no_claim_bonus,
-                            pm_payment_mode: resp?.data?.success[0]?.pm_payment_mode,
-                            ncb_declaration: resp?.data?.success[0]?.ncb_declaration,
-                            third_party_date: resp?.data?.success[0]?.third_party_date,
-                            inbuilt_discount: resp?.data?.success[0]?.inbuilt_discount,
-                            net_premimum: resp?.data?.success[0]?.net_premimum,
-                            health_insurance: resp?.data?.success[0]?.net_premimum
-                        }
-                    })
+                    const data = resp.data.success[0]
+                    const updatedData = {
+                        customer_name: data?.xircls_customer,
+                        insurance_type: data?.sub_product,
+                        policy_number: data?.policy_number,
+                        // insurance_type: data?.insurance_type,
+                        insurance_company: data?.insurance_company,
+                        policy_purchase_date: data?.policy_purchase_date,
+                        policy_expiry_date: data?.policy_expiry_date,
+                        executive_name: data?.executive_name,
+                        amount: data?.amount,
+                        add_on_plan: data?.add_on_plan,
+                        insured_declared_value: data?.insured_declared_value,
+                        own_damage: data?.own_damage,
+                        ncb_no_claim_bonus: data?.ncb_no_claim_bonus,
+                        pm_payment_mode: data?.pm_payment_mode,
+                        ncb_declaration: data?.ncb_declaration,
+                        third_party_date: data?.third_party_date,
+                        inbuilt_discount: data?.inbuilt_discount,
+                        net_premimum: data?.net_premimum,
+                        health_insurance: data?.net_premimum
+                    }
+                    setFormData(updatedData)
                 })
                 .catch((error) => {
                     console.error("Error:", error)
                     toast.error('Failed to fetch Servicing Detail')
                 })
         }
+    }
+
+    const getCustomer = () => {
+        getReq("getAllCustomer")
+            .then((resp) => {
+                console.log(resp)
+                setCustomerList(resp?.data?.success?.map((curElem) => {
+                    return { label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id }
+                }))
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     const postData = (btn) => {
@@ -326,7 +335,7 @@ const AddInsurance = () => {
             .then((resp) => {
                 console.log("Response:", resp)
                 toast.success('Insurance saved successfully')
-                resp.data.is_edit_url ? navigate(`/merchant/customers/insurance/edit_insurance/${resp.data.insurance_code}`) : navigate(`/merchant/customers/insurance/`)
+                resp.data.is_edit_url ? navigate(`/merchant/customers/insurance/edit_insurance/${resp.data.insurance_code}?type=edit`) : navigate(`/merchant/customers/insurance/`)
                 fetchInsuranceData(resp.data.insurance_code)
             })
             .catch((error) => {
@@ -354,6 +363,7 @@ const AddInsurance = () => {
             .then((resp) => {
                 console.log("Response:", resp)
                 toast.success('Customer saved successfully')
+                getCustomer()
             })
             .catch((error) => {
                 console.error("Error:", error)
@@ -399,44 +409,46 @@ const AddInsurance = () => {
             })
     }
 
-    const fetchCustomerData = async (page, inputValue, callback) => {
-        // console.log(callback, 'callback2')
-        try {
-            const response = await axios.get(
-                `${baseURL}/customers/merchant/get_customer_details/?page=${page}`
-            )
-            const successData = response.data.success
-            if (successData && Array.isArray(successData)) {
-                const customerOptions = successData
-                    .filter((item) => item.customer_name !== "")
-                    .map((customer) => ({
-                        value: customer.id,
-                        label: customer.customer_name
-                    }))
-                const option = [...allOptions, ...customerOptions]
-                console.log(option, "option")
-                setAllOptions(option)
-                callback(option)
-                // setCurrentPage((prevPage) => prevPage + 1)
-                setCurrentPage((prevPage) => {
-                    const nextPage = Math.min(prevPage + 1, (response.data.total_count / 100))
-                    return nextPage
-                })
-            } else {
-                console.error("Invalid or missing data in the API response")
-                callback([])
-            }
-        } catch (error) {
-            console.error("Error fetching data:", error.message)
-        }
-    }
+    // const fetchCustomerData = async (page, inputValue, callback) => {
+    //     // console.log(callback, 'callback2')
+    //     try {
+    //         const response = await axios.get(
+    //             `${baseURL}/customers/merchant/get_customer_details/?page=${page}`
+    //         )
+    //         const successData = response.data.success
+    //         if (successData && Array.isArray(successData)) {
+    //             const customerOptions = successData
+    //                 .filter((item) => item.customer_name !== "")
+    //                 .map((customer) => ({
+    //                     value: customer.id,
+    //                     label: customer.customer_name
+    //                 }))
+    //             const option = [...allOptions, ...customerOptions]
+    //             console.log(option, "option")
+    //             setAllOptions(option)
+    //             callback(option)
+    //             // setCurrentPage((prevPage) => prevPage + 1)
+    //             setCurrentPage((prevPage) => {
+    //                 const nextPage = Math.min(prevPage + 1, (response.data.total_count / 100))
+    //                 return nextPage
+    //             })
+    //         } else {
+    //             console.error("Invalid or missing data in the API response")
+    //             callback([])
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching data:", error.message)
+    //     }
+    // }
 
     useEffect(() => {
         getCountries()
-        fetchCustomerData(currentPage, null, () => { })
+        // fetchCustomerData(currentPage, null, () => { })
         if (id) {
             fetchInsuranceData(id)
         }
+
+        getCustomer()
     }, [])
 
     const selectChange = (value, actionMeta) => {
@@ -788,11 +800,19 @@ const AddInsurance = () => {
                     <label htmlFor="customer-name">
                         Customer Name
                     </label>
-                    <input type='text' id='customer-name' name='customer_name' className="form-control"
+                    {/* <input type='text' id='customer-name' name='customer_name' className="form-control"
                         value={formData?.customer_name}
                         // onChange={handleInputChange} 
                         disabled
+                    /> */}
+
+                    <Select
+                        id='customer-name'
+                        placeholder='Customer Name'
+                        value={{ value: formData?.customer_name, label: formData?.customer_name }}
+                        isDisabled={true}
                     />
+
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="registration-name">
@@ -883,11 +903,11 @@ const AddInsurance = () => {
                         options={productModelOption}
                         closeMenuOnSelect={true}
                         name='carmodel'
-                        value={insuranceOptions?.find(option => option.value === productFormData?.car_model)}
+                        value={productModelOption?.filter((option) => option.value === productFormData?.car_model)}
                         onChange={(value, actionMeta) => selectChange(value, actionMeta)}
                     // isLoading={loading}
                     />
-                    <p id="carmodel_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                    {/* <p id="carmodel_val" className="text-danger m-0 p-0 vaildMessage"></p> */}
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="variant-select" className="" style={{ margin: '0px' }}>
@@ -908,18 +928,36 @@ const AddInsurance = () => {
                     <label htmlFor="vehicle-delivery-date">
                         Vehicle Delivery Date
                     </label>
-                    <input placeholder="Vehicle Delivery Date" type='date' id='vehicle-delivery-date' name='delivery_date' className="form-control"
+                    {/* <input placeholder="Vehicle Delivery Date" type='date' id='vehicle-delivery-date' name='delivery_date' className="form-control"
                         value={productFormData.delivery_date}
                         onChange={e => handleInputChange(e, 'product')}
+                    /> */}
+                    <Flatpickr
+                        placeholder="Vehicle Delivery Date"
+                        id='vehicle-delivery-date'
+                        name='delivery_date'
+                        className="form-control"
+                        value={productFormData.delivery_date}
+                        // onChange={(e) => handleInputChange(e)}
+                        onChange={(date) => {
+                            // setFormData({ ...formData, policy_purchase_date: moment(date[0]).format("YYYY-MM-DD") })
+                            setProductFormData({ ...productFormData, delivery_date: moment(date[0]).format("YYYY-MM-DD") })
+                        }}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="vehicle-registration-date">
                         Vehicle Registration Date
                     </label>
-                    <input placeholder="Vehicle Registration Date" type='date' id='vehicle-registration-date' name='registeration_date' className="form-control"
+                    <Flatpickr
+                        placeholder="Vehicle Registration Date"
+                        id='vehicle-registration-date'
+                        name='registeration_date'
+                        className="form-control"
                         value={productFormData?.registeration_date}
-                        onChange={e => handleInputChange(e, 'product')}
+                        onChange={(date) => {
+                            setProductFormData({ ...productFormData, registeration_date: moment(date[0]).format("YYYY-MM-DD") })
+                        }}
                     />
                 </Col>
                 <div className='d-flex justify-content-end mt-2'>
@@ -935,7 +973,7 @@ const AddInsurance = () => {
         <>
             {InnerStyles}
             <>
-                <Offcanvas show={isHidden} onHide={() => handleClose('customer')} placement="end">
+                <Offcanvas show={isHidden} onHide={() => handleClose('customer')} placement="end" className='w-25'>
                     <Offcanvas.Header closeButton>
                         {/* <Offcanvas.Title>Offcanvas</Offcanvas.Title> */}
                     </Offcanvas.Header>
@@ -943,9 +981,8 @@ const AddInsurance = () => {
                         {AddCustomerForm}
                     </Offcanvas.Body>
                 </Offcanvas>
-                <Offcanvas show={isAddProductHidden} onHide={() => handleClose('product')} placement="end">
+                <Offcanvas show={isAddProductHidden} onHide={() => handleClose('product')} placement="end" className='w-25'>
                     <Offcanvas.Header closeButton>
-                        {/* <Offcanvas.Title>Offcanvas</Offcanvas.Title> */}
                     </Offcanvas.Header>
                     <Offcanvas.Body>
                         {AddNewProductSideForm}
@@ -973,11 +1010,11 @@ const AddInsurance = () => {
                                         <Select
                                             placeholder='Customer Name'
                                             id="insurance-type"
-                                            options={allOptions}
+                                            options={customerList}
                                             closeMenuOnSelect={true}
                                             name='customer_name'
-                                            value={allOptions.filter($ => Number($.value) === Number(formData?.customer_name))}
-                                            onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
+                                            value={customerList?.find($ => Number($.value) === Number(formData?.customer_name))}
+                                            // onMenuScrollToBottom={() => getCustomer(currentPage, null, () => { })}
                                             components={{ Menu: CustomSelectComponent }}
                                             onChange={(value, actionMeta) => selectCustomer(value, actionMeta, false)}
                                             isDisabled={isCustomer}
@@ -1028,7 +1065,7 @@ const AddInsurance = () => {
                                                 id="Vehicle-type"
                                                 name="vehicle"
                                                 options={vehicleOptions}
-                                                defaultValue={vehicleOptions[0]}
+                                                // defaultValue={vehicleOptions[0]}
                                                 value={vehicleOptions?.find(option => option.value === formData?.vehicle)}
                                                 onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                                 closeMenuOnSelect={true}
@@ -1060,7 +1097,7 @@ const AddInsurance = () => {
                                         <label htmlFor="Policy-purchase-date">
                                             Policy Purchase Date
                                         </label>
-                                        <input
+                                        {/* <input
                                             placeholder="Policy Purchase Date"
                                             type="date"
                                             id="Policy-purchase-date"
@@ -1068,13 +1105,25 @@ const AddInsurance = () => {
                                             className="form-control"
                                             value={formData?.policy_purchase_date}
                                             onChange={handleInputChange}
+                                        /> */}
+
+                                        <Flatpickr
+                                            placeholder="Policy Purchase Date"
+                                            id="Policy-purchase-date"
+                                            name="policy_purchase_date"
+                                            className="form-control"
+                                            value={formData?.policy_purchase_date}
+                                            // onChange={(e) => handleInputChange(e)}
+                                            onChange={(date) => {
+                                                setFormData({ ...formData, policy_purchase_date: moment(date[0]).format("YYYY-MM-DD") })
+                                            }}
                                         />
                                     </Col>
                                     <Col md={6} className="mt-2">
                                         <label htmlFor="Policy-expiry-date">
                                             Policy Expiry Date
                                         </label>
-                                        <input
+                                        {/* <input
                                             placeholder="Policy Purchase Date"
                                             type="date"
                                             id="Policy-expiry-date"
@@ -1082,6 +1131,18 @@ const AddInsurance = () => {
                                             className="form-control"
                                             value={formData?.policy_expiry_date}
                                             onChange={handleInputChange}
+                                        /> */}
+
+                                        <Flatpickr
+                                            placeholder="Policy Expiry Date"
+                                            id="Policy-expiry-date"
+                                            name="policy_expiry_date"
+                                            className="form-control"
+                                            value={formData?.policy_expiry_date}
+                                            // onChange={handleInputChange}
+                                            onChange={(date) => {
+                                                setFormData({ ...formData, policy_expiry_date: moment(date[0]).format("YYYY-MM-DD") })
+                                            }}
                                         />
                                     </Col>
                                     <Col md={6} className="mt-2">
@@ -1159,7 +1220,7 @@ const AddInsurance = () => {
                                         </Col>
                                         <Col md={6} className="mt-2">
                                             <label htmlFor="ThirdPartyDate">TPD – Third Party Date</label>
-                                            <input
+                                            {/* <input
                                                 placeholder="Third Party Date"
                                                 type="date"
                                                 id="ThirdPartyDate"
@@ -1167,6 +1228,18 @@ const AddInsurance = () => {
                                                 className="form-control"
                                                 value={formData?.third_party_date}
                                                 onChange={handleInputChange}
+                                            /> */}
+
+                                            <Flatpickr
+                                                placeholder="Third Party Date"
+                                                id="ThirdPartyDate"
+                                                name='third_party_date'
+                                                className="form-control"
+                                                value={formData?.third_party_date}
+                                                // onChange={handleInputChange}
+                                                onChange={(date) => {
+                                                    setFormData({ ...formData, third_party_date: moment(date[0]).format("YYYY-MM-DD") })
+                                                }}
                                             />
                                         </Col>
                                         <Col md={6} className="mt-2">
