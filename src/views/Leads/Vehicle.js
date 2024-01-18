@@ -32,7 +32,7 @@ const Vehicle = () => {
         postReq('get_vehicle', form_data, crmURL)
             .then((resp) => {
                 console.log("vehicle", resp.data.customers_obj)
-                setTableData(resp.data.customers_obj)
+                setTableData(resp.data)
                 setIsLoading(false)
             })
             .catch((error) => {
@@ -82,7 +82,7 @@ const Vehicle = () => {
         {
             name: "Registration Date",
             minWidth: "200px",
-            selector: (row) => moment(row?.vehicle_registeration_date).format('YYYY-MM-DD') ?? '-',
+            selector: (row) => row?.vehicle_registeration_date ? moment(row?.vehicle_registeration_date).format('YYYY-MM-DD') : "-",
             type: 'date',
             isEnable: true
         },
@@ -176,10 +176,10 @@ const Vehicle = () => {
                             <AdvanceServerSide
                                 tableName="Vehicles"
                                 tableCol={columns}
-                                data={tableData}
+                                data={tableData?.customers_obj}
                                 isLoading={isLoading}
                                 getData={getData}
-                                // count={tableData?.customer_detailsrecordsTotal}
+                                count={tableData?.recordsTotal}
                                 selectableRows={true}
                                 setSelectedRows={setSelected}
                                 selectedRows={selected}

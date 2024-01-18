@@ -305,6 +305,10 @@ const AddBusiness = () => {
                if (resp.data.is_edit_url) {
                   navigate(`/merchant/customers/edit_customer/${resp.data.cust_id}`)
                }
+
+               if (btn === "SAVE & CLOSE") {
+                  navigate("/merchant/customers/")
+               }
             })
             .catch((error) => {
                console.error("Error:", error)
