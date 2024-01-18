@@ -1,6 +1,8 @@
 import React from 'react'
 import { Container, Row, Col } from "reactstrap"
 import Select from "react-select"
+import Flatpickr from 'react-flatpickr'
+import moment from 'moment'
 // import { validForm } from '../../Validator'
 
 const EMIForm = ({ allData }) => {
@@ -112,7 +114,9 @@ const EMIForm = ({ allData }) => {
                             id="basicDetails-frequency"
                             options={frequencyOptions}
                             value={frequencyOptions?.find(option => option.value === formData?.frequency)}
-                            onChange={e => (handleInputChange(e, 'frequency'))}
+                            onChange={(value) => {
+                                handleInputChange({target: {name: "frequency", value: value?.value}})
+                            }}
                             closeMenuOnSelect={true}
                         />
                     </Col>
@@ -164,14 +168,16 @@ const EMIForm = ({ allData }) => {
                             placeholder='Account Type'
                             id="basicDetails-acc-type"
                             value={accountType?.find(option => option.value === formData?.Account_Type)}
-                            onChange={e => (handleInputChange(e, 'Account_Type'))}
+                            onChange={(value) => {
+                                handleInputChange({target: {value: value?.value, name: "Account_Type"}})
+                            }}
                             options={accountType}
                             closeMenuOnSelect={true}
                         />
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="personalDetails-emi-start-date">EMI Start Date</label>
-                        <input
+                        {/* <input
 
                             placeholder="EMI Start Date"
                             type="date"
@@ -180,11 +186,20 @@ const EMIForm = ({ allData }) => {
                             className="form-control"
                             value={formData?.Emi_Start_Date}
                             onChange={handleInputChange}
+                        /> */}
+                        <Flatpickr
+                            name='Emi_Start_Date'
+                            className='form-control'
+                            value={formData?.Emi_Start_Date}
+                            onChange={(date) => {
+                                handleInputChange({target: {name: "Emi_Start_Date", value: moment(date[0]).format("YYYY-MM-DD")}})
+                                // setData({...defaultData, Emi_Start_Date: moment(date[0]).format("YYYY-MM-DD")})
+                            }}
                         />
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="personalDetails-emi-end-date">EMI End Date</label>
-                        <input
+                        {/* <input
 
                             placeholder="EMI End Date"
                             type="date"
@@ -193,6 +208,15 @@ const EMIForm = ({ allData }) => {
                             className="form-control"
                             value={formData?.Emi_End_Date}
                             onChange={handleInputChange}
+                        /> */}
+                        <Flatpickr
+                            name='Emi_End_Date'
+                            className='form-control'
+                            value={formData?.Emi_End_Date}
+                            onChange={(date) => {
+                                handleInputChange({target: {name: "Emi_End_Date", value: moment(date[0]).format("YYYY-MM-DD")}})
+                                // setData({...defaultData, Emi_End_Date: moment(date[0]).format("YYYY-MM-DD")})
+                            }}
                         />
                     </Col>
                     <Col xs='12' className='mt-2'>

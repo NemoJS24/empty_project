@@ -14,6 +14,8 @@ import { validForm } from '../../Validator'
 
 const AddFinance = () => {
 
+  const parmas = new URLSearchParams(location.search)
+
   const mainFormvalueToCheck = [
     {
       name: 'customer_id',
@@ -47,38 +49,38 @@ const AddFinance = () => {
     }
   ]
 
-  const coApplicantvalueToCheck = [
-    {
-      name: 'title',
-      message: 'Select Title',
-      type: 'string',
-      id: 'title'
-    },
-    {
-      name: 'cust_first_name',
-      message: 'Enter First Name',
-      type: 'string',
-      id: 'cust_first_name'
-    },
-    {
-      name: 'cust_last_name',
-      message: 'Enter Last Name',
-      type: 'string',
-      id: 'cust_last_name'
-    },
-    {
-      name: 'email',
-      message: 'Enter Email',
-      type: 'string',
-      id: 'email'
-    },
-    {
-      name: 'phone_no',
-      message: 'Enter Phone Number',
-      type: 'string',
-      id: 'phone_no'
-    }
-  ]
+  // const coApplicantvalueToCheck = [
+  //   {
+  //     name: 'title',
+  //     message: 'Select Title',
+  //     type: 'string',
+  //     id: 'title'
+  //   },
+  //   {
+  //     name: 'cust_first_name',
+  //     message: 'Enter First Name',
+  //     type: 'string',
+  //     id: 'cust_first_name'
+  //   },
+  //   {
+  //     name: 'cust_last_name',
+  //     message: 'Enter Last Name',
+  //     type: 'string',
+  //     id: 'cust_last_name'
+  //   },
+  //   {
+  //     name: 'email',
+  //     message: 'Enter Email',
+  //     type: 'string',
+  //     id: 'email'
+  //   },
+  //   {
+  //     name: 'phone_no',
+  //     message: 'Enter Phone Number',
+  //     type: 'string',
+  //     id: 'phone_no'
+  //   }
+  // ]
 
   const EMIFormvalueToCheck = [
     {
@@ -248,29 +250,26 @@ const AddFinance = () => {
     form_data.append('edit_type', 'is_finance')
 
     postReq("get_view_customer", form_data, baseURL)
-      .then((response) => {
-        return response.json()
-      })
-      .then((resp) => {
-        // if (!addWithCustId) {
-          const newObject = {}
-          for (const key in resp.success[0]) {
-            if (resp.success[0].hasOwnProperty(key) && resp.success[0][key] !== null) {
-              newObject[key] = resp.success[0][key]
-            }
+    .then((resp) => {
+      // if (!addWithCustId) {
+        const newObject = {}
+        for (const key in resp.success[0]) {
+          if (resp.success[0].hasOwnProperty(key) && resp.success[0][key] !== null) {
+            newObject[key] = resp.success[0][key]
           }
-          setFormData(newObject)
-          setFormData(prefData => ({
-            ...prefData,
-            Loan_Disbursement_Date: prefData?.Loan_Disbursement_Date ? formatDate(prefData?.Loan_Disbursement_Date.substring(0, 10)) : '',
-            policy_expiry_date: prefData?.policy_expiry_date ? formatDate(prefData?.policy_expiry_date.substring(0, 10)) : ''
-          }))
-        // }
-      })
-      .catch((error) => {
-        console.error("Error:", error)
-        toast.error('Failed to fetch Servicing Detail')
-      })
+        }
+        setFormData(newObject)
+        setFormData(prefData => ({
+          ...prefData,
+          Loan_Disbursement_Date: prefData?.Loan_Disbursement_Date ? formatDate(prefData?.Loan_Disbursement_Date.substring(0, 10)) : '',
+          policy_expiry_date: prefData?.policy_expiry_date ? formatDate(prefData?.policy_expiry_date.substring(0, 10)) : ''
+        }))
+      // }
+    })
+    .catch((error) => {
+      console.error("Error:", error)
+      toast.error('Failed to fetch Servicing Detail')
+    })
   }
 
   const checkVaildation = () => {
@@ -279,9 +278,9 @@ const AddFinance = () => {
       checkForm = validForm(mainFormvalueToCheck, formData)
     }
 
-    if (currentStep === 2) {
-      checkForm = validForm(coApplicantvalueToCheck, formData)
-    }
+    // if (currentStep === 2) {
+    //   checkForm = validForm(coApplicantvalueToCheck, formData)
+    // }
 
     if (currentStep === 3) {
       checkForm = validForm(EMIFormvalueToCheck, formData)
@@ -311,7 +310,7 @@ const AddFinance = () => {
       .then((resp) => {
         console.log("Response:", resp)
         toast.success('Finance saved successfully')
-        resp.data?.is_edit_url ? navigate(`/merchant/customers/edit_finance/${resp.data?.finance_code}`) : navigate(`/merchant/customer/all_cust_dashboard/add_finance/`)
+        resp.data?.is_edit_url ? navigate(`/merchant/customers/edit_finance/${resp.data?.finance_code}?type=edit`) : navigate(`/merchant/customer/all_cust_dashboard/add_finance/`)
         fetchFinanceData(resp.finance_code)
       })
       .catch((error) => {
@@ -327,15 +326,18 @@ const AddFinance = () => {
 
   const getData = () => {
     const form_data = new FormData()
-    form_data.append("id", id)
-    form_data.append("edit_type", "is_finance")
+    if (parmas.get("type") === "edit") {
+      form_data.append("id", id)
+      form_data.append("edit_type", "is_finance")
+    }
     postReq("get_customer_finance", form_data, crmURL)
     .then((resp) => {
       console.log(resp)
       const data = resp?.data?.success[0]
+      console.log(data, "fdata")
       const updateData = {
         SE_DSA_Name: data?.SE_DSA_Name,
-        customer_id: 57080,
+        customer_id: data?.xircls_customer,
         customer_name: data?.customer_name,
         Bank_Name: data?.Bank_Name,
         client: data?.client,
