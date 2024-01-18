@@ -119,7 +119,7 @@ const VehicleDetails = () => {
             <h4 className='m-0'>Vehicle Details</h4>
         </Col>
         <Col className='d-flex align-items-center justify-content-end' md='4' sm='12'>
-            <Link className='btn btn-primary-main' to={`/merchant/customers/add-vehicle/${id}`}>Add Vehicle</Link>
+            <Link className='btn btn-primary-main' to={`/merchant/customers/add-vehicle/${id}?type=customer`}>Add Vehicle</Link>
             <Input
                 className='dataTable-filter form-control ms-1'
                 style={{ width: `180px`, height: `2.714rem` }}

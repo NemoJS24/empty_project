@@ -206,18 +206,40 @@ const Customers_Routes = [
     }
   },
   {
-    path: '/merchant/customers/add-vehicle/:id',
-    element: <AddVehicle />,
-    route_type: "crm_add_vehicle"
+    path: '/merchant/customers/vehicle/',
+    element: <Vehicle />,
+    permission: {
+      app: "crm",
+      route_type: "vehicle",
+      action: "read"
+    }
   },
   {
-    path: '/merchant/customers/vehicle/',
-    element: <Vehicle />
+    path: '/merchant/customers/add-vehicle/',
+    element: <AddVehicle />,
+    permission: {
+      app: "crm",
+      route_type: "vehicle",
+      action: "create"
+    }
   },
   {
     path: '/merchant/customers/edit-vehicle/:id',
     element: <AddVehicle />,
-    route_type: "crm_edit_vehicle"
+    permission: {
+      app: "crm",
+      route_type: "vehicle",
+      action: "update"
+    }
+  },
+  {
+    path: '/merchant/customers/add-vehicle/:id',
+    element: <AddVehicle />,
+    permission: {
+      app: "crm",
+      route_type: "vehicle",
+      action: "create"
+    }
   },
   // --------------------------------
   {

@@ -177,8 +177,9 @@ axiosInstance.interceptors.request.use(
     async (config) => {
         const token = await getToken() ? JSON.parse(getToken()) : null
         const userPermission = await localStorage.getItem('userPermission') ? JSON.parse(localStorage.getItem('userPermission')) : null
-        // console.log(config, "config")
         if (token && userPermission.apiKey) {
+            const currentUser = await userPermission?.multipleDomain?.filter((cur) => cur?.api_key === userPermission?.apiKey)
+            // console.log(config, "config")
             // console.log("going")
             const accessToken = token['access']
             // const refreshToken = token['refresh']
@@ -205,6 +206,7 @@ axiosInstance.interceptors.request.use(
                 if (newAccessToken) {
                     config.headers['Authorization'] = `Bearer ${newAccessToken.data.access}`
                     config.headers['Api-Key'] = userPermission.apiKey // to get this use HTTP_API_KEY
+                    config.headers['Outlet'] = currentUser[0]?.id
                     const newToken = JSON.stringify({ access: newAccessToken.data.access, refresh: token.refresh })
                     setToken(newToken)
                 } else {
@@ -216,6 +218,7 @@ axiosInstance.interceptors.request.use(
             } else {
                 config.headers['Authorization'] = `Bearer ${accessToken}`
                 config.headers['Api-Key'] = userPermission.apiKey // to get this use HTTP_API_KEY
+                config.headers['Outlet'] = currentUser[0]?.id
             }
         }
         return config

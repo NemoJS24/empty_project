@@ -46,7 +46,7 @@ const Vehicle = () => {
             name: "Customer Name",
             minWidth: "200px",
             selector: (row) => (
-                <Link to={`view_customer/${row?.vehicle_customer_id}`}>{row?.vehicle_customer_name ?? '-'}</Link>
+                <Link to={`/merchant/customers/view_customer/${row?.vehicle_customer_id}`}>{row?.vehicle_customer_name ?? '-'}</Link>
             ),
             type: 'text',
             isEnable: true
@@ -129,7 +129,7 @@ const Vehicle = () => {
                     <div className="d-flex justify-content-between align-items-center w-100">
                         <h4 className="m-0">Vehicle Dashboard</h4>
                         <div className="pe-2 d-flex">
-                            <Link to="/merchant/customer/vehicle/">
+                            <Link to="/merchant/customers/add-vehicle/">
                                 <Button className="btn btn-outline-primary btn-block">Add Vehicle</Button>
                             </Link>
                         </div>

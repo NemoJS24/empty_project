@@ -1,14 +1,9 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react'
-import { Card, CardBody, Container, Row, Col } from "reactstrap"
-import AsyncSelect from 'react-select/async'
-import { baseURL, crmURL, getReq } from '@src/assets/auth/jwtService'
-import axios from "axios"
-import Select from "react-select"
+import {Container, Row, Col } from "reactstrap"
+import { crmURL } from '@src/assets/auth/jwtService'
 // import { createPortal } from 'react-dom'
-import Button from 'react-bootstrap/Button'
-import Offcanvas from 'react-bootstrap/Offcanvas'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import toast from "react-hot-toast"
 import VehicleForm from './VehicleForm'
 import { postReq } from '../../../assets/auth/jwtService'
@@ -18,18 +13,10 @@ import moment from 'moment'
 const AddVehicle = () => {
 
    const urlParams = new URLSearchParams(location.search)
-   const isEdit = urlParams.get("type") === "edit"
-
-   // const [formData, setFormData] = useState({
-   //    vehicle_type: 'new',
-   //    manufacture_date: '2000'
-   // })
-
-   const [viewPage, setViewPage] = useState(false)
-   const [edit, setEdit] = useState(isEdit)
-   console.log(edit, "pppppppp")
+   const navigate = useNavigate()
    const [editData, setEditData] = useState({
-      customer_name: "",
+      // customer_name: "",
+      customer_id: "",
       registration_number: "",
       sales_person: "",
       vehicle_number: "",
@@ -45,94 +32,97 @@ const AddVehicle = () => {
    })
 
    const { id } = useParams()
-   const navigate = useNavigate()
-   console.log(editData, "editData")
    let PageTitle = 'Add Vehicle'
 
-   const getUser = () => {
-      const form_data = new FormData()
-      form_data.append("customer_id", id)
-      form_data.append("tab_type", "vehicle_data")
-      postReq('get_customer_vehicle', form_data, crmURL)
-         .then((res) => {
-            console.log(res.data.success, "get_customer_vehicle")
+   useEffect(() => {
+      // fetchVehicleData()
+      // if (location.pathname.startsWith('/merchant/customers/edit-vehicle/')) {
+      //    getUser('edit')
+      //    PageTitle = 'Edit Vehicle'
+      // } else if (location.pathname.startsWith('/merchant/customers/view-vehicle/')) {
+      //    setViewPage(true)
+      //    getUser('edit')
+      //    PageTitle = 'View Vehicle'
+      // } else {
+      //    getUser()
+      // }
+
+      if (id) {
+         const form_data = new FormData()
+         if (urlParams.get("type") === "edit") {
+            form_data.append("id", id)
+            form_data.append("edit_type", "is_vehicle")
+            PageTitle = 'Edit Vehicle'
+         }
+   
+         if (urlParams.get("type") === "customer") {
+            form_data.append("customer_id", id)
+            form_data.append("tab_type", "vehicle_data")
+            PageTitle = 'Add Vehicle'
+         }
+   
+         postReq('get_customer_vehicle', form_data, crmURL)
+         .then((resp) => {
+            console.log(resp.data.success, "get_customer_vehicle")
+            const data = resp?.data?.success[0]
+            let updatedData
+            if (urlParams.get("type") === "edit") {
+               updatedData = {
+                  // customer_name: data?.xircls_customer,
+                  customer_id: data?.xircls_customer,
+                  registration_number: data?.registration_number,
+                  sales_person: data?.sales_person,
+                  vehicle_number: data?.vehicle_number,
+                  engine_no: data?.engine_no,
+                  vehicle_type: data?.vehicle_type,
+                  brand: data?.brand,
+                  car_model: data?.car_model,
+                  variant: data?.variant,
+                  manufacture_date: moment(data?.registeration_date).format("YYYY"),
+                  delivery_date: moment(data?.delivery_date).format("DD-MM-YYYY"),
+                  registeration_date: data?.registeration_date
+      
+               }
+   
+            }
+   
+            if (urlParams.get("type") === "customer") {
+               updatedData = {
+                  customer_id: data?.xircls_customer,
+               }
+            }
+   
+            setEditData(updatedData)
          })
          .catch((error) => {
             console.log(error)
          })
-   }
 
-   //----------------------------
+      }
 
-   const fetchVehicleData = () => {
+   }, [])
+
+   const apiCall = (btn) => {
       const form_data = new FormData()
-      form_data.append("id", "22")
-      form_data.append('edit_type', 'is_vehicle')
-
-      postReq('get_customer_vehicle', form_data, crmURL)
-         .then((resp) => {
-            console.log("get_vehicle:", resp)
-            const data = resp?.data?.success[0]
-            const updatedData = {
-               customer_name: data?.xircls_customer,
-               registration_number: data?.registration_number,
-               sales_person: data?.sales_person,
-               vehicle_number: data?.vehicle_number,
-               engine_no: data?.engine_no,
-               vehicle_type: data?.vehicle_type,
-               brand: data?.brand,
-               car_model: data?.car_model,
-               variant: data?.variant,
-               manufacture_date: moment(data?.registeration_date).format("YYYY"),
-               delivery_date: moment(data?.delivery_date).format("DD-MM-YYYY"),
-               registeration_date: data?.registeration_date
-
-            }
-            setEditData(updatedData)
-            console.log("editData", updatedData.delivery_date)
-         })
-         .catch((error) => {
-            console.error("Error:", error)
-            toast.error('Failed to fetch Servicing Detail')
-         })
-
-   }
-
-   useEffect(() => {
-      if (urlParams.get("type") === "edit") {
-         fetchVehicleData()
-      }
-   }, [])
-
-
-   useEffect(() => {
-      // fetchVehicleData()
-      if (location.pathname.startsWith('/merchant/customers/edit-vehicle/')) {
-         getUser('edit')
-         PageTitle = 'Edit Vehicle'
-      } else if (location.pathname.startsWith('/merchant/customers/view-vehicle/')) {
-         setViewPage(true)
-         getUser('edit')
-         PageTitle = 'View Vehicle'
-      } else {
-         getUser()
-      }
-   }, [])
-
-   const apiCall = (form_data) => {
+      Object.entries(editData).map(([key, value]) => form_data.append(key, value))
       form_data.append("press_btn", 'SAVE')
-      form_data.append("customer_id", id)
+      // form_data.append("customer_id", id)
       console.log(form_data, "gg")
 
       postReq('add_vehicle', form_data, crmURL)
-         .then((resp) => {
-            console.log("Response:", resp)
-            toast.success('Vehicle saved successfully')
-         })
-         .catch((error) => {
-            console.error("Error:", error)
-            toast.error('Failed to save Vehicle')
-         })
+      .then((resp) => {
+         console.log("Response:", resp)
+         toast.success('Vehicle saved successfully')
+         if (btn === "SAVE&Close") {
+            navigate("/merchant/customers/vehicle/")
+         } else {
+            navigate(`/merchant/customers/edit-vehicle/${resp?.data?.vehicle_id}?type=edit`)
+         }
+      })
+      .catch((error) => {
+         console.error("Error:", error)
+         toast.error('Failed to save Vehicle')
+      })
    }
 
    const startYear = 2000;
@@ -149,7 +139,7 @@ const AddVehicle = () => {
          </Container>
 
          <form id='formId'>
-            <VehicleForm edit={edit} fetchVehicleData={fetchVehicleData} isView={false} defaultData={editData} apiCall={apiCall} id={"formId"} />
+            <VehicleForm isView={false} defaultData={editData} setData={setEditData} apiCall={apiCall} formId={"formId"} />
          </form>
       </>
    )

@@ -6,28 +6,45 @@ import { Col, Container, Row } from 'reactstrap'
 // import AsyncSelect from 'react-select/dist/declarations/src/Async'
 import AsyncSelect from 'react-select/async'
 import Select from "react-select"
-import { crmURL } from '../../../assets/auth/jwtService'
+import { crmURL, getReq, postReq } from '../../../assets/auth/jwtService'
 import axios from 'axios'
 import { validForm } from '../../Validator'
-import toast from 'react-hot-toast'
-import { useParams } from 'react-router-dom'
+// import toast from 'react-hot-toast'
+// import { useParams } from 'react-router-dom'
 import Flatpickr from 'react-flatpickr'
+import moment from 'moment'
 
-const VehicleForm = ({ isView, apiCall, defaultData, edit }) => {
-    const { id } = useParams()
+const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
+    // const { id } = useParams()
     const [brand, setBrand] = useState()
-
-    const [defaultState, setDefaultState] = useState({})
+    console.log(defaultData)
+    // const [defaultState, setDefaultState] = useState(edit ? defaultData : {
+    //     // defaultData
+    //     customer_name: "",
+    //     registration_number: "",
+    //     sales_person: "",
+    //     vehicle_number: "",
+    //     engine_no: "",
+    //     vehicle_type: "",
+    //     brand: "",
+    //     car_model: "",
+    //     variant: "",
+    //     manufacture_date: "",
+    //     delivery_date: "",
+    //     registeration_date: ""
+    // })
 
     const [productModelOption, setProductModelOption] = useState([])
     const [productVariantOption, setProductVariantOption] = useState([])
+    const [customerList, setCustomerList] = useState([])
+    console.log(setProductModelOption, setProductVariantOption)
 
     const checkMessage = [
         {
-            name: 'customer_name',
+            name: 'customer_id',
             message: 'Enter Customer Name',
             type: 'string',
-            id: 'customer_name'
+            id: 'customer_id'
         },
         {
             name: 'vehicle_type',
@@ -67,30 +84,21 @@ const VehicleForm = ({ isView, apiCall, defaultData, edit }) => {
     //     console.log({ checkForm })
     // }
 
-    const handleSubmitSection = (e) => {
+    const handleSubmitSection = (e, btn) => {
         e.preventDefault()
 
-        const checkForm = validForm(checkMessage, defaultState)
+        const checkForm = validForm(checkMessage, defaultData)
         if (checkForm) {
-            const formValues = document.getElementById(id)
-            const form_data = new FormData(formValues)
-            apiCall(form_data)
-        } else {
-            toast.error("Something Went Wrong")
-            console.log("Form is not valid. Handle errors or show messages.")
+            // const formValues = document.getElementById(formId)
+            // const form_data = new FormData(formValues)
+            apiCall(btn)
         }
     }
-
-    // const handleEditSubmit = (e) => {
-    //     e.preventDefault()
-    //     const form_value = id
-    //     apiCall(form_value)
-    // }
 
 
     const handleInputChange = (e) => {
         console.log(e)
-        setDefaultState(prevData => ({ ...prevData, [e.target.name]: e.target.value }))
+        setData(prevData => ({ ...prevData, [e.target.name]: e.target.value }))
     }
 
 
@@ -106,109 +114,95 @@ const VehicleForm = ({ isView, apiCall, defaultData, edit }) => {
         { value: 'data', label: 'Data' }
     ]
 
-    console.log(defaultState?.vehicle_type, "defaultState?.vehicle_type")
+    console.log(defaultData?.vehicle_type, "defaultData?.vehicle_type")
     console.log(productModelOption, productVariantOption, "productModelOption")
 
-    const loadBrandOptions = (inputValue, callback) => {
+    const getBrand = () => {
         const getUrl = new URL(`${crmURL}/vehicle/fetch_car_details/`)
         axios.get(getUrl.toString())
-            .then((response) => {
-                const successData = response.data.car_brand
-                const brandOptions = successData
-                    .filter((item) => item[0] !== "")
-                    .map((item) => ({
-                        value: item[0],
-                        label: item[0]
-                    }))
-                console.log(brandOptions, "brandOptions")
-                setBrand(brandOptions)
-                callback(brandOptions)
-            })
-            .catch((error) => {
-                console.error("Error fetching data:", error.message)
-                callback([])
-            })
+        .then((response) => {
+            const successData = response.data.car_brand
+            const brandOptions = successData
+                .filter((item) => item[0] !== "")
+                .map((item) => ({
+                    value: item[0],
+                    label: item[0]
+                }))
+            console.log(brandOptions, "brandOptions")
+            setBrand(brandOptions)
+        })
+        .catch((error) => {
+            console.error("Error fetching data:", error.message)
+        })
     }
 
-    const selectChange = async (e, select) => {
-        console.log('getProductOptions runned')
-        const url = new URL(`${crmURL}/vehicle/fetch_car_details/`)
+    const getCustomer = () => {
+        getReq("getAllCustomer")
+        .then((resp) => {
+            console.log(resp)
+            setCustomerList(resp?.data?.success?.map((curElem) => {
+                return {label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id}
+            }))
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
+
+    const fetchModel = () => {
         const form_data = new FormData()
-        select === 'brand' ? form_data.append("brand", e.value) : form_data.append("carmodel", e.value)
+        form_data.append("brand", defaultData.brand)
 
-        try {
-            const response = await fetch(url, {
-                method: "POST",
-                body: form_data
-            })
-
-            const resp = await response.json()
-            console.log("Response ooption:", resp)
-            if (resp.car_model) {
-                const productModelOptions = []
-                resp.car_model.forEach((item) => {
-                    if (item === "") {
-                        return
-                    }
-                    productModelOptions.push({
-                        value: item,
-                        label: item
-                    })
-                })
-                setProductModelOption(productModelOptions)
-            }
-            if (resp.car_variant) {
-                const variantOptions = []
-                resp.car_variant.map((item) => {
-                    if (item === "") {
-                        return
-                    }
-                    variantOptions.push({
-                        value: item,
-                        label: item
-                    })
-                })
-                setProductVariantOption(variantOptions)
-            }
-        } catch (error) {
-            console.error("Error:", error)
-            if (error.message === 'Customer already exists') {
-                toast.error('Customer already exists')
-            } else {
-                toast.error('Failed to save customer')
-            }
-            throw error
-        }
+        postReq('fetch_car_details', form_data, crmURL)
+        .then((resp) => {
+            console.log(resp, "fetch_car_details")
+            setProductModelOption(resp?.data?.car_model?.map((curElem) => {
+                return {label: curElem, value: curElem}
+            }))
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }
+
+    const fetchVariant = () => {
+        const form_data = new FormData()
+        form_data.append("carmodel", defaultData.car_model)
+
+        postReq('fetch_car_details', form_data, crmURL)
+        .then((resp) => {
+            console.log(resp, "fetch_car_details")
+            setProductVariantOption(resp?.data?.car_variant?.map((curElem) => {
+                return {label: curElem, value: curElem}
+            }))
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
+
+    useEffect(() => {
+        if (defaultData.brand) {
+            fetchModel()
+        }
+    }, [defaultData.brand])
+
+    useEffect(() => {
+        if (defaultData?.car_model) {
+            fetchVariant()
+        }
+    }, [defaultData?.car_model])
+
+    useEffect(() => {
+        getBrand()
+        getCustomer()
+    }, [])
+
     const vehicleYearOption = years.map((year) => ({
         value: year.toString(),
         label: year.toString()
     }))
 
-    useEffect(() => {
-        if (edit) {
-            setDefaultState(defaultData)
-        } else {
-            setDefaultState({
-                // defaultData
-                customer_name: "",
-                registration_number: "",
-                sales_person: "",
-                vehicle_number: "",
-                engine_no: "",
-                vehicle_type: "",
-                brand: "",
-                car_model: "",
-                variant: "",
-                manufacture_date: "",
-                delivery_date: "",
-                registeration_date: ""
-            })
-        }
-    }, [defaultData])
-
-    console.log({ isView, apiCall, defaultData, edit, vehicleYearOption }, "defaultState")
-    console.log(defaultData.delivery_date, defaultData.brand, defaultData.manufacture_date, "ooooco")
     return (
         <>
             <Container fluid className="px-0 pb-1">
@@ -220,8 +214,21 @@ const VehicleForm = ({ isView, apiCall, defaultData, edit }) => {
                         <label htmlFor="customer-name">
                             Customer Name
                         </label>
-                        <input value={defaultState.customer_name} type='text' id='customer-name' name='customer_name' className="form-control" onChange={(e) => handleInputChange(e)} />
-                        <p id="customer_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                        <Select
+                            placeholder='Customer name'
+                            id="vehicle-type"
+                            options={customerList}
+                            closeMenuOnSelect={true}
+                            isDisabled={isView}
+                            value={customerList?.filter((curElem) => defaultData?.customer_id === curElem?.value)}
+                            onChange={selectedOption => {
+                                handleInputChange({
+                                    target: { name: 'customer_id', value:selectedOption.value}
+                                })
+                            }}
+                        />
+                        {/* <input value={defaultData.customer_name} type='text' id='customer-name' name='customer_name' className="form-control" onChange={(e) => handleInputChange(e)} /> */}
+                        <p id="customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="registration-name">
@@ -229,7 +236,7 @@ const VehicleForm = ({ isView, apiCall, defaultData, edit }) => {
                         </label>
                         <input
                             placeholder='Registration Number'
-                            type='text' id='registration-name' value={defaultState.registration_number} name='registration_number' className="form-control" onChange={(e) => handleInputChange(e)} />
+                            type='text' id='registration-name' value={defaultData.registration_number} name='registration_number' className="form-control" onChange={(e) => handleInputChange(e)} />
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="sales-person">
@@ -237,7 +244,7 @@ const VehicleForm = ({ isView, apiCall, defaultData, edit }) => {
                         </label>
                         <input
                             placeholder='Sales Person'
-                            type='text' id='sales-person' value={defaultState.sales_person} name='sales_person' className="form-control" onChange={(e) => handleInputChange(e)} />
+                            type='text' id='sales-person' value={defaultData.sales_person} name='sales_person' className="form-control" onChange={(e) => handleInputChange(e)} />
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="vehicle-identification">
@@ -245,7 +252,7 @@ const VehicleForm = ({ isView, apiCall, defaultData, edit }) => {
                         </label>
                         <input
                             placeholder='Vehicle Identification Number'
-                            type='text' id='vehicle-identification' name='vehicle_number' className="form-control" />
+                            type='text' id='vehicle-identification' name='vehicle_number' value={defaultData.vehicle_number} className="form-control" onChange={(e) => handleInputChange(e)} />
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="engine-number">
@@ -253,7 +260,7 @@ const VehicleForm = ({ isView, apiCall, defaultData, edit }) => {
                         </label>
                         <input
                             placeholder='Engine Number'
-                            type='text' id='engine-number' value={defaultState.engine_no} name='engine_no' className="form-control" />
+                            type='text' id='engine-number' value={defaultData.engine_no} name='engine_no' className="form-control" onChange={(e) => handleInputChange(e)} />
                     </Col>
 
                     <Col md={6} className="mt-2">
@@ -266,60 +273,59 @@ const VehicleForm = ({ isView, apiCall, defaultData, edit }) => {
                             options={vehicleTypeOptions}
                             closeMenuOnSelect={true}
                             isDisabled={isView}
-                            value={vehicleTypeOptions?.filter((curElem) => defaultState?.vehicle_type === curElem?.value)}
+                            value={vehicleTypeOptions?.filter((curElem) => defaultData?.vehicle_type === curElem?.value)}
                             onChange={selectedOption => {
                                 handleInputChange({
-                                    target: { name: 'vehicle_type', value: selectedOption ? selectedOption.value : '' }
+                                    target: { name: 'vehicle_type', value:selectedOption.value}
                                 })
                             }}
                         />
 
-                        <input type='hidden' value={defaultState?.vehicle_type} id='vehicle_type' name='vehicle_type' />
+                        <input type='hidden' value={defaultData?.vehicle_type} id='vehicle_type' name='vehicle_type' />
                         <p id="vehicle_type_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="brand-select" className="" style={{ margin: '0px' }}>
                             Select Brand
                         </label>
-                        <AsyncSelect
+                        <Select
                             placeholder='Select Brand'
                             defaultOptions
                             cacheOptions
                             id="brand-select"
-                            value={brand?.filter((curElem) => defaultState?.brand === curElem?.value)}
-                            loadOptions={loadBrandOptions}
+                            options={brand}
+                            value={brand?.filter((curElem) => defaultData?.brand === curElem?.value)}
+                            // loadOptions={loadBrandOptions}
                             onChange={selectedOption => {
-                                selectChange(selectedOption, 'brand')
-                                document.getElementById('brand').value = selectedOption ? selectedOption.value : ''
+                                // selectChange(selectedOption, 'brand')
+                                // document.getElementById('brand').value = selectedOption ? selectedOption.value : ''
                                 handleInputChange({
-                                    target: { name: 'brand', value: selectedOption ? selectedOption.value : '' }
+                                    target: { name: 'brand', value: selectedOption.value }
                                 })
                             }}
                             isDisabled={isView}
                         />
-                        <input type='hidden' value={defaultState?.brand} id='brand' name='brand' />
+                        <input type='hidden' value={defaultData?.brand} id='brand' name='brand' />
                         <p id="brand_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="model-select" className="" style={{ margin: '0px' }}>
                             Select Model
                         </label>
-                        <AsyncSelect
+                        <Select
                             placeholder='Select Model'
                             id="model-select"
                             options={productModelOption}
                             closeMenuOnSelect={true}
                             isDisabled={isView}
-                            value={productModelOption?.filter((curElem) => defaultState?.car_model === curElem?.value)}
+                            value={productModelOption?.filter((curElem) => defaultData?.car_model === curElem?.value)}
                             onChange={selectedOption => {
-                                selectChange(selectedOption, 'model')
-                                document.getElementById('car_model').value = selectedOption ? selectedOption.value : ''
                                 handleInputChange({
-                                    target: { name: 'car_model', value: selectedOption ? selectedOption.value : '' }
+                                    target: { name: 'car_model', value: selectedOption.value}
                                 })
                             }}
                         />
-                        <input type='hidden' value={defaultState?.car_model} id='car_model' name='car_model' />
+                        <input type='hidden' value={defaultData?.car_model} id='car_model' name='car_model' />
                         <p id="car_model_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
@@ -332,15 +338,15 @@ const VehicleForm = ({ isView, apiCall, defaultData, edit }) => {
                             options={productVariantOption}
                             closeMenuOnSelect={true}
                             isDisabled={isView}
-                            value={productVariantOption?.filter((curElem) => defaultState?.variant === curElem?.value)}
+                            value={productVariantOption?.filter((curElem) => defaultData?.variant === curElem?.value)}
                             onChange={selectedOption => {
-                                document.getElementById('variant').value = selectedOption ? selectedOption.value : ''
+                                // document.getElementById('variant').value = selectedOption ? selectedOption.value : ''
                                 handleInputChange({
-                                    target: { name: 'variant', value: selectedOption ? selectedOption.value : '' }
+                                    target: { name: 'variant', value: selectedOption.value}
                                 })
                             }}
                         />
-                        <input type='hidden' value={defaultState?.variant} id='variant' name='variant' />
+                        <input type='hidden' value={defaultData?.variant} id='variant' name='variant' />
                         <p id="variant_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
@@ -352,16 +358,16 @@ const VehicleForm = ({ isView, apiCall, defaultData, edit }) => {
                             id="manufacture-select"
                             options={vehicleYearOption}
                             closeMenuOnSelect={true}
-                            value={vehicleYearOption?.filter((curElem) => defaultState?.manufacture_date === curElem?.value)}
+                            value={vehicleYearOption?.filter((curElem) => defaultData?.manufacture_date === curElem?.value)}
                             isDisabled={isView}
                             onChange={selectedOption => {
-                                document.getElementById('manufacture_date').value = selectedOption ? selectedOption.value : ''
+                                // document.getElementById('manufacture_date').value = selectedOption ? selectedOption.value : ''
                                 handleInputChange({
-                                    target: { name: 'manufacture_date', value: selectedOption ? selectedOption.value : '' }
+                                    target: { name: 'manufacture_date', value: selectedOption.value}
                                 })
                             }}
                         />
-                        <input type='hidden' value={defaultState?.manufacture_date} id='manufacture_date' name='manufacture_date' />
+                        <input type='hidden' value={defaultData?.manufacture_date} id='manufacture_date' name='manufacture_date' />
                         <p id="manufacture_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
 
                     </Col>
@@ -369,21 +375,30 @@ const VehicleForm = ({ isView, apiCall, defaultData, edit }) => {
                         <label htmlFor="vehicle-delivery-date">
                             Vehicle Delivery Date
                         </label>
-                        {/* <input value={defaultState?.delivery_date} placeholder="Vehicle Delivery Date" type='date' id='vehicle-delivery-date' name='delivery_date' className="form-control" /> */}
+                        {/* <input value={defaultData?.delivery_date} placeholder="Vehicle Delivery Date" type='date' id='vehicle-delivery-date' name='delivery_date' className="form-control" /> */}
                         <Flatpickr
                             name='delivery_date'
                             className='form-control'
-                            value={defaultState?.delivery_date} />
+                            value={defaultData?.delivery_date}
+                            onChange={(date) => {
+                                setData({...defaultData, delivery_date: moment(date[0]).format("YYYY-MM-DD")})
+                            }}
+                        />
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="vehicle-registration-date">
                             Vehicle Registration Date
                         </label>
-                        {/* <input value={defaultState.registeration_date} placeholder="Vehicle Registration Date" type='date' id='vehicle-registration-date' name='registeration_date' className="form-control" /> */}
+                        {/* <input value={defaultData.registeration_date} placeholder="Vehicle Registration Date" type='date' id='vehicle-registration-date' name='registeration_date' className="form-control" /> */}
                         <Flatpickr
                             name='delivery_date'
                             className='form-control'
-                            value={defaultState.registeration_date} />
+                            value={defaultData.registeration_date}
+                            onChange={(date) => {
+                                setData({...defaultData, registeration_date: moment(date[0]).format("YYYY-MM-DD")})
+                            }}
+                        />
+                            
                         {/* disabled={isView} */}
                     </Col>
                 </Row>
@@ -393,23 +408,8 @@ const VehicleForm = ({ isView, apiCall, defaultData, edit }) => {
                     </div>
                     {!isView &&
                         <div>
-                            <button className="btn btn-primary ms-2" type="button" onClick={(e) => {
-                                if (edit) {
-                                    e.preventDefault()
-                                    const formValues = document.getElementById(id)
-                                    console.log(formValues, "formValues")
-                                    handleSubmitSection(e)
-                                }
-
-                                e.preventDefault()
-                                const formValues = document.getElementById(id)
-                                console.log(formValues, "uu")
-                                handleSubmitSection(e)
-                                // const form_data = new FormData(formValues)
-                                // console.log(form_data)
-                                // apiCall(form_data)
-                            }} >Save</button>
-                            {/* <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE & CLOSE')} >Save & Close</button> */}
+                            <button className="btn btn-primary ms-2" type="button" onClick={(e) => handleSubmitSection(e, "SAVE")} >Save</button>
+                            <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE&CLOSE')} >Save & Close</button>
                         </div>
                     }
                 </div>

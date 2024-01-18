@@ -1165,6 +1165,8 @@ const ApplicantForm = ({ allData }) => {
                                     ...updatedData
                                 }))
 
+                                handleAddInputChange({target: {value: e.value, name: "customer_name"}}, 'productForm')
+
                                 // setCheck((preData) => ({
                                 //     ...preData,
                                 //     productForm: {...preData.productForm, ...updatedData}
