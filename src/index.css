@@ -5,6 +5,7 @@
     font-style: normal;
 }
 
-.nav-item .menu-item, .nav-item .menu-title {
-	text-transform: uppercase;
+.nav-item .menu-item,
+.nav-item .menu-title {
+    text-transform: uppercase;
 }

@@ -175,7 +175,8 @@ const CustomersAddCustomer = ({ allData }) => {
                   <Select
                      id="basicDetails-customerType"
                      options={dropdownOptions}
-                     value={dropdownOptions[0]} // Set the default value to 'regular'   -- dropdownOptions.find(option => option.value === formData.dropdown) || --
+                     value={dropdownOptions.find(option => option.value === formData.dropdown) ?? ''}
+                     // value={dropdownOptions[0]} // Set the default value to 'regular'   -- dropdownOptions.find(option => option.value === formData.dropdown) || --
                      onChange={(e) => handleInputChange(e, 'dropdown')}
                      closeMenuOnSelect={true}
                   />

@@ -18,7 +18,9 @@ import { postReq } from "../../../assets/auth/jwtService.js"
 
 /* eslint-disable */
 export default function CustomerProfile() {
-  const [formData, setFormData] = useState({})
+  const [formData, setFormData] = useState({
+    dropdown:'regular'
+  })
   const [errors, setErrors] = useState({})
   const [currentStep, setCurrentStep] = useState(1)
   const navigate = useNavigate()
