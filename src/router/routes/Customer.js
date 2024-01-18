@@ -34,6 +34,7 @@ const Service = lazy(() => import('../../views/Leads/Service'))
 // const Customer = lazy(() => import('../../views/Leads/Customers'))
 const Insurance = lazy(() => import('../../views/Leads/Insurance'))
 import AddCall from '../../views/CRM/Call/AddCall'
+import Vehicle from '../../views/Leads/Vehicle'
 
 
 const Customers_Routes = [
@@ -208,6 +209,10 @@ const Customers_Routes = [
     path: '/merchant/customers/add-vehicle/:id',
     element: <AddVehicle />,
     route_type: "crm_add_vehicle"
+  },
+  {
+    path: '/merchant/customers/vehicle/',
+    element: <Vehicle />
   },
   {
     path: '/merchant/customers/edit-vehicle/:id',

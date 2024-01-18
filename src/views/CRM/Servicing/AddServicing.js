@@ -184,7 +184,7 @@ const AddServicing = () => {
     const fetchServiceData = (func_id) => {
         // const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
         const form_data = new FormData()
-        form_data.append('edit_type', isEdit ? 'is_servicing': 'is_customer_detail')
+        form_data.append('edit_type', isEdit ? 'is_servicing' : 'is_customer_detail')
         if (isEdit) {
             form_data.append("id", id)
             postReq("get_customer_servicing", form_data, crmURL)
@@ -493,13 +493,6 @@ const AddServicing = () => {
 
         if (checkForm) {
             postData(action)
-
-            // if (action === 'SAVE') {
-            //     // Save
-
-            // } else if (action === 'SAVE & CLOSE') {
-            //     // Save and close
-            // }
         }
     }
 
