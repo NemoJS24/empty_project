@@ -2,15 +2,15 @@ import React, { useState } from 'react'
 import { Card, CardBody, Col, FormGroup, Input, InputGroup, InputGroupText, Label, Row } from 'reactstrap'
 import { Edit } from 'react-feather'
 import toast from 'react-hot-toast'
-import { crmURL } from '../../../../assets/auth/jwtService'
+import { ownUrl } from '../../../Validator'
 
 const IdentityProof = ({ AllFormData }) => {
   const { handleInputChange, userData, postData } = AllFormData
   const [editMode, setEditMode] = useState(false)
 
-  const adharImageUrlFromAPI = userData?.aadhar_pdf_file ? `${crmURL}/static/${userData.aadhar_pdf_file}` : null
+  const adharImageUrlFromAPI = userData?.aadhar_pdf_file ? `${ownUrl}${userData.aadhar_pdf_file}` : null
 
-  const panImageUrlFromAPI = userData?.pan_pdf_file ? `${crmURL}/static/${userData.pan_pdf_file}` : null
+  const panImageUrlFromAPI = userData?.pan_pdf_file ? `${ownUrl}${userData.pan_pdf_file}` : null
 
   const [adharImageUrl, setAdharImageUrl] = useState(adharImageUrlFromAPI)
   const [panImageUrl, setPanImageUrl] = useState(panImageUrlFromAPI)

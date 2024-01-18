@@ -249,7 +249,7 @@ const CustomerDetails = ({ userData }) => {
                                     <h4>User Timeline</h4>
                                 </Col>
                             </Row>
-                            <Row className='mt-2 ms-2'>
+                            {/* <Row className='mt-2 ms-2'>
                                 <Col md='8'>
                                     <h6>A Vehicle has been added.</h6>
                                     <span>Delivery Date: 30-01-2015</span>
@@ -257,7 +257,7 @@ const CustomerDetails = ({ userData }) => {
                                 <Col>
                                     <span>03 Jan, 15:19 p.m.</span>
                                 </Col>
-                            </Row>
+                            </Row> */}
                         </CardBody>
                     </Card>
                 </Col>

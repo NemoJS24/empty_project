@@ -15,6 +15,13 @@ const BasicInfo = ({ AllFormData }) => {
         { value: "prof.", label: "Prof." }
     ]
 
+    const dropdownOptions = [
+        { value: 'regular', label: 'Regular Customer' },
+        { value: 'privi_group', label: 'Privileged Customer' }
+    ]
+
+    const customerTypeOptions = [{ value: 'customerGroup', label: 'Select Privileged Customer Group' }]
+
     const [editMode, setEditMode] = useState(false)
 
     const handleEditClick = () => {
@@ -175,12 +182,43 @@ const BasicInfo = ({ AllFormData }) => {
                                             id="alt_land_number"
                                             name="landline2"
                                             type="number"
-                                            disabled={!editMode}
+                                            isDisabled={!editMode}
                                             value={userData.landline2}
                                             onChange={handleInputChange}
                                         />
                                     </FormGroup>
                                 </Col>
+
+                                <Col md={4}>
+                                    <label htmlFor="basicDetails-customerType" style={{ margin: '0px' }}>
+                                        Customer Type
+                                    </label>
+                                    <Select
+                                        id="basicDetails-customerType"
+                                        options={dropdownOptions}
+                                        value={dropdownOptions.find(option => option.value === userData.cust_type_dropdown) ?? ''}
+                                        // value={dropdownOptions[0]} // Set the default value to 'regular'   -- dropdownOptions.find(option => option.value === formData.dropdown) || --
+                                        onChange={(e) => handleInputChange(e, 'dropdown')}
+                                        closeMenuOnSelect={true}
+                                        isDisabled={!editMode}
+                                    />
+                                    <p id="basicDetails-customerType_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                                </Col>
+                            </Row>
+                            <Row>
+                                {userData?.dropdown === 'privi_group' && <Col md={4} className="mt-1">
+                                    <label htmlFor="basicDetails-privilegedCustomerGroup" style={{ margin: '0px' }}>
+                                        Customer Group
+                                    </label>
+                                    <Select
+                                        id="basicDetails-privilegedCustomerGroup"
+                                        options={customerTypeOptions}
+                                        value={customerTypeOptions.find(option => option.value === userData.cust_status_dropdown)}
+                                        onChange={(e) => handleInputChange(e, 'customerType')}
+                                        closeMenuOnSelect={true}
+                                        disabled={!editMode}
+                                    />
+                                </Col>}
                             </Row>
                             <Row>
                                 <Col md='12 d-flex justify-content-between mb-3'>

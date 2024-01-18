@@ -22,13 +22,13 @@ const PersonalInfo = ({ AllFormData }) => {
   const marital_status = [
     { value: "married", label: "Married" },
     { value: "single", label: "Single" },
-    { value: "in relationship", label: "In Relationship" },
+    { value: "inRelationship", label: "In Relationship" },
     { value: "divorced", label: "Divorced" },
     { value: "widowed", label: "Widowed" }
   ]
 
   const occupation = [
-    { value: "employed", label: "Employed" },
+    { value: "Employed", label: "Employed" },
     { value: "business owner", label: "Business Owner" },
     { value: "retired professional", label: "Retired Professional" },
     { value: "student", label: "Student" },
@@ -118,7 +118,7 @@ const PersonalInfo = ({ AllFormData }) => {
                     </Label>
                     <Select
                       options={marital_status}
-                      value={marital_status.find(option => option.value === userData.marital_status)}
+                      value={marital_status?.filter((curElem) => userData?.marital_status === curElem?.value)}
                       isDisabled={!editMode}
                       onChange={e => handleInputChange(e, 'marital_status')}
                     />

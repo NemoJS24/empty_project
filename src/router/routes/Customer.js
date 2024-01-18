@@ -35,6 +35,7 @@ const Service = lazy(() => import('../../views/Leads/Service'))
 const Insurance = lazy(() => import('../../views/Leads/Insurance'))
 import AddCall from '../../views/CRM/Call/AddCall'
 import Vehicle from '../../views/Leads/Vehicle'
+import CrossLeads from '../../views/Leads/CrossLeads'
 
 
 const Customers_Routes = [
@@ -63,7 +64,7 @@ const Customers_Routes = [
   },
   {
     path: '/merchant/customer/add_type_of_customer/',
-    element: <CustomerType/>,
+    element: <CustomerType />,
     permission: {
       app: "crm",
       route_type: "customer",
@@ -72,7 +73,7 @@ const Customers_Routes = [
   },
   {
     path: '/merchant/customers/add_customer/',
-    element: <CustomerProfile/>,
+    element: <CustomerProfile />,
     permission: {
       app: "crm",
       route_type: "customer",
@@ -81,7 +82,7 @@ const Customers_Routes = [
   },
   {
     path: '/merchant/customers/add_business/',
-    element: <AddBusiness/>,
+    element: <AddBusiness />,
     permission: {
       app: "crm",
       route_type: "customer",
@@ -90,7 +91,7 @@ const Customers_Routes = [
   },
   {
     path: '/merchant/customers/edit_customer/:id',
-    element: <CustomerProfile/>,
+    element: <CustomerProfile />,
     permission: {
       app: "crm",
       route_type: "customer",
@@ -135,7 +136,7 @@ const Customers_Routes = [
   },
   {
     path: '/merchant/customers/edit_finance/:id',
-    element: <AddFinance/>,
+    element: <AddFinance />,
     permission: {
       app: "crm",
       route_type: "finance",
@@ -162,7 +163,7 @@ const Customers_Routes = [
   },
   {
     path: '/merchant/customers/add-servicing/:id',
-    element: <AddServicing/>,
+    element: <AddServicing />,
     permission: {
       app: "crm",
       route_type: "servicing",
@@ -189,12 +190,16 @@ const Customers_Routes = [
   },
   {
     path: '/merchant/customers/insurance/edit_insurance/:id',
-    element: <AddInsurance/>,
+    element: <AddServicing />,
     permission: {
       app: "crm",
       route_type: "insurance",
       action: "update"
     }
+  },
+  {
+    path: '/merchant/customers/edit_service/:id',
+    element: <AddServicing />
   },
   {
     path: '/merchant/customers/add-insurance/:id',
@@ -213,6 +218,10 @@ const Customers_Routes = [
       route_type: "vehicle",
       action: "read"
     }
+  },
+  {
+    path: '/merchant/customers/cross_leads',
+    element: <CrossLeads />
   },
   {
     path: '/merchant/customers/add-vehicle/',

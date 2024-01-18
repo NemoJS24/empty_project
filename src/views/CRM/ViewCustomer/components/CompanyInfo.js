@@ -38,213 +38,222 @@ const CompanyInfo = ({ AllFormData }) => {
                   <Edit size='15px' cursor='pointer' onClick={handleEditClick} />
                 </Col>
               </Row>
+              {userData?.associated_accounts.map((company, index) => (
+                <>
+                  <Row className='mt-1'>
+                    <Col md='12'>
+                      <h4>{`Company ${index + 1}`}</h4>
+                    </Col>
+                  </Row>
+                  <Row className='mt-1'>
+                    <Col md='4'>
+                      <FormGroup>
+                        <Label for="name">
+                          Name
+                        </Label>
+                        <Input
+                          id="name"
+                          name="company"
+                          type="text"
+                          value={company.company_name}
+                          disabled={!editMode}
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
 
-              <Row className='mt-1'>
-                <Col md='4'>
-                  <FormGroup>
-                    <Label for="name">
-                      Name
-                    </Label>
-                    <Input
-                      id="name"
-                      name="company"
-                      type="text"
-                      value={userData.company}
-                      disabled={!editMode}
-                      onChange={handleInputChange}
-                    />
-                  </FormGroup>
-                </Col>
+                    <Col md='4'>
+                      <FormGroup>
+                        <Label for="industry">
+                          Industry
+                        </Label>
+                        <Input
+                          id="industry"
+                          name="industry"
+                          type="text"
+                          value={userData?.associated_accounts[0]?.industry}
+                          disabled={!editMode}
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
 
-                <Col md='4'>
-                  <FormGroup>
-                    <Label for="industry">
-                      Industry
-                    </Label>
-                    <Input
-                      id="industry"
-                      name="industry"
-                      type="text"
-                      value={userData.industry}
-                      disabled={!editMode}
-                      onChange={handleInputChange}
-                    />
-                  </FormGroup>
-                </Col>
+                    <Col md='4'>
+                      <FormGroup>
+                        <Label for="gst_number">
+                          GST Number
+                        </Label>
+                        <Input
+                          id="gst_number"
+                          name="cust_gst_no"
+                          type="text"
+                          value={userData?.associated_accounts[0]?.company_gst}
+                          disabled={!editMode}
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
 
-                <Col md='4'>
-                  <FormGroup>
-                    <Label for="gst_number">
-                      GST Number
-                    </Label>
-                    <Input
-                      id="gst_number"
-                      name="cust_gst_no"
-                      type="text"
-                      value={userData.cust_gst_no}
-                      disabled={!editMode}
-                      onChange={handleInputChange}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
+                  <Row>
+                    <Col md='4'>
+                      <FormGroup>
+                        <Label for="c_phone">
+                          Company Phone
+                        </Label>
+                        <Input
+                          id="c_phone"
+                          name="company_phone"
+                          type="number"
+                          value={userData?.associated_accounts[0]?.company_phone}
+                          disabled={!editMode}
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
 
-              <Row>
-                <Col md='4'>
-                  <FormGroup>
-                    <Label for="c_phone">
-                      Company Phone
-                    </Label>
-                    <Input
-                      id="c_phone"
-                      name="company_phone"
-                      type="number"
-                      value={userData.company_phone}
-                      disabled={!editMode}
-                      onChange={handleInputChange}
-                    />
-                  </FormGroup>
-                </Col>
+                    <Col md='4'>
+                      <FormGroup>
+                        <Label for="c_email">
+                          Company Email
+                        </Label>
+                        <Input
+                          id="c_email"
+                          name="company_email"
+                          type="email"
+                          value={userData?.associated_accounts[0]?.company_email}
+                          disabled={!editMode}
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
 
-                <Col md='4'>
-                  <FormGroup>
-                    <Label for="c_email">
-                      Company Email
-                    </Label>
-                    <Input
-                      id="c_email"
-                      name="company_email"
-                      type="email"
-                      value={userData.company_email}
-                      disabled={!editMode}
-                      onChange={handleInputChange}
-                    />
-                  </FormGroup>
-                </Col>
+                    <Col md='4'>
+                      <FormGroup>
+                        <Label for="c_website">
+                          Company Website
+                        </Label>
+                        <Input
+                          id="c_website"
+                          name="company_website"
+                          type="text"
+                          value={userData?.associated_accounts[0]?.company_website}
+                          disabled={!editMode}
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
 
-                <Col md='4'>
-                  <FormGroup>
-                    <Label for="c_website">
-                      Company Website
-                    </Label>
-                    <Input
-                      id="c_website"
-                      name="company_website"
-                      type="text"
-                      value={userData.company_website}
-                      disabled={!editMode}
-                      onChange={handleInputChange}
-                    />
-                  </FormGroup>
-                </Col>
+                  </Row>
 
-              </Row>
+                  <Row>
+                    <Col md='4'>
+                      <FormGroup>
+                        <Label for="c_pan">
+                          Company PAN Card Number
+                        </Label>
+                        <Input
+                          id="c_pan"
+                          name="company_pancard"
+                          type="text"
+                          value={userData?.associated_accounts[0]?.company_pancard}
+                          disabled={!editMode}
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
 
-              <Row>
-                <Col md='4'>
-                  <FormGroup>
-                    <Label for="c_pan">
-                      Company PAN Card Number
-                    </Label>
-                    <Input
-                      id="c_pan"
-                      name="company_pancard"
-                      type="text"
-                      value={userData.company_pancard}
-                      disabled={!editMode}
-                      onChange={handleInputChange}
-                    />
-                  </FormGroup>
-                </Col>
+                    <Col md='4'>
+                      <FormGroup>
+                        <Label for="relation">
+                          Relation
+                        </Label>
+                        <Input
+                          id="relation"
+                          name="relation"
+                          type="text"
+                          disabled={!editMode}
+                          onChange={handleInputChange}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
 
-                <Col md='4'>
-                  <FormGroup>
-                    <Label for="relation">
-                      Relation
-                    </Label>
-                    <Input
-                      id="relation"
-                      name="relation"
-                      type="text"
-                      disabled={!editMode}
-                      onChange={handleInputChange}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
+                  <Row>
+                    <Col md='12'>
+                      <h4>Social Presence</h4>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md='4'>
+                      <Label for="twitter">
+                      </Label>
+                      <InputGroup>
+                        <InputGroupText>
+                          <Twitter size='15px' />
+                        </InputGroupText>
+                        <Input
+                          type='text'
+                          name='company_twitter'
+                          value={userData.company_twitter}
+                          disabled={!editMode}
+                          onChange={handleInputChange}
+                        />
+                      </InputGroup>
+                    </Col>
 
-              <Row>
-                <Col md='12'>
-                  <h4>Social Presence</h4>
-                </Col>
-              </Row>
-              <Row>
-                <Col md='4'>
-                  <Label for="twitter">
-                  </Label>
-                  <InputGroup>
-                    <InputGroupText>
-                      <Twitter size='15px' />
-                    </InputGroupText>
-                    <Input
-                      type='text'
-                      name='company_twitter'
-                      value={userData.company_twitter}
-                      disabled={!editMode}
-                      onChange={handleInputChange}
-                    />
-                  </InputGroup>
-                </Col>
+                    <Col md='4'>
+                      <Label for="facebook">
+                        Facebook
+                      </Label>
+                      <InputGroup>
+                        <InputGroupText>
+                          <Facebook size='15px' />
+                        </InputGroupText>
+                        <Input
+                          type='text'
+                          name='company_fb'
+                          value={userData.company_fb}
+                          disabled={!editMode}
+                          onChange={handleInputChange}
+                        />
+                      </InputGroup>
+                    </Col>
 
-                <Col md='4'>
-                  <Label for="facebook">
-                    Facebook
-                  </Label>
-                  <InputGroup>
-                    <InputGroupText>
-                      <Facebook size='15px' />
-                    </InputGroupText>
-                    <Input
-                      type='text'
-                      name='company_fb'
-                      value={userData.company_fb}
-                      disabled={!editMode}
-                      onChange={handleInputChange}
-                    />
-                  </InputGroup>
-                </Col>
-
-                <Col md='4'>
-                  <Label for="instagram">
-                    Instagram
-                  </Label>
-                  <InputGroup>
-                    <InputGroupText>
-                      <Instagram size='15px' />
-                    </InputGroupText>
-                    <Input
-                      type='text'
-                      name='company_insta'
-                      value={userData.company_insta}
-                      disabled={!editMode}
-                      onChange={handleInputChange}
-                    />
-                  </InputGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col md='12 d-flex justify-content-between mb-3'>
-                  {editMode && (
-                    <>
-                      <button className='btn btn-primary mx-1'>Back</button>
-                      <button className='btn btn-primary mx-1' onClick={postData}>Save</button>
-                    </>
-                  )}
-                </Col>
-              </Row>
+                    <Col md='4'>
+                      <Label for="instagram">
+                        Instagram
+                      </Label>
+                      <InputGroup>
+                        <InputGroupText>
+                          <Instagram size='15px' />
+                        </InputGroupText>
+                        <Input
+                          type='text'
+                          name='company_insta'
+                          value={userData.company_insta}
+                          disabled={!editMode}
+                          onChange={handleInputChange}
+                        />
+                      </InputGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md='12 d-flex justify-content-between mb-3'>
+                      {editMode && (
+                        <>
+                          <button className='btn btn-primary mx-1'>Back</button>
+                          <button className='btn btn-primary mx-1' onClick={postData}>Save</button>
+                        </>
+                      )}
+                    </Col>
+                  </Row>
+                </>
+              ))}
             </CardBody>
           </Card>
         </Col>
+
       </Row>
     </>
   )

@@ -26,7 +26,7 @@ const Address = ({ AllFormData }) => {
       handleInputChange({ target: { name: 'shipping_pincode', value: userData.pincode } })
       handleInputChange({ target: { name: 'shipping_country', value: userData.country } })
     } else {
-      
+
       // If unchecked, clear Shipping Address fields
       handleInputChange({ target: { name: 'shipping_address1', value: '' } })
       handleInputChange({ target: { name: 'shipping_address2', value: '' } })
@@ -40,7 +40,7 @@ const Address = ({ AllFormData }) => {
   }
 
   const country = [
-    { value: 'india', label: 'India' },
+    { value: 'India', label: 'India' },
     { value: 'USA', label: 'USA' }
   ]
   return (
@@ -212,7 +212,7 @@ const Address = ({ AllFormData }) => {
                       Same as Billing Address
                     </Label>
                     <Input
-                    className='form-control'
+                      className='form-control'
                       id='sameBillingAddress'
                       type='checkbox'
                       checked={sameBillingAddress}

@@ -11,6 +11,8 @@ import toast from "react-hot-toast"
 import { validForm, validateEmail } from '../../Validator'
 import { postReq } from '../../../assets/auth/jwtService'
 import { main } from '@popperjs/core'
+import Flatpickr from 'react-flatpickr'
+import moment from 'moment'
 
 const AddServicing = () => {
 
@@ -19,6 +21,7 @@ const AddServicing = () => {
     const urlParams = new URLSearchParams(location.search)
     const isEdit = urlParams.get("type") === "edit"
     const isCustomer = urlParams.get("type") === "customer"
+    const [customerList, setCustomerList] = useState([])
 
     // if (isEdit) {
     //     id = getid.split("-")[0]
@@ -26,6 +29,19 @@ const AddServicing = () => {
     // } else {
     //     id = getid
     // }
+
+    const getCustomer = () => {
+        getReq("getAllCustomer")
+            .then((resp) => {
+                console.log(resp)
+                setCustomerList(resp?.data?.success?.map((curElem) => {
+                    return { label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id }
+                }))
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
 
     console.log(id, "idIsThe", { isEdit }, { isCustomer })
 
@@ -154,24 +170,7 @@ const AddServicing = () => {
         },
     })
 
-    // const inputChangeHandler = (e) => {
-    //     setFormData({ ...formData, mainForm: { ...formData.mainForm, [e.target.name]: e.target.value } })
-    // }
 
-    // const addInputChangeHandler = (e) => {
-    //     setFormData({ ...formData, addForm: { ...formData.addForm, [e.target.name]: e.target.value } })
-    // }
-
-    // const [customerFormData, setCustomerFormData] = useState({
-    //     title: "mr",
-    //     cust_first_name: "vnasdf",
-    //     cust_last_name: "poojary",
-    //     email: "hello@lol.com",
-    //     phone_no: "9132810845",
-    //     country: "Albania",
-    //     city: "mumbai",
-    //     state: "maharashtra",
-    //     pincode: "400080"
     // })
     const [country, setCountry] = useState([])
     const [isHidden, setIsHidden] = useState(false)
@@ -271,7 +270,7 @@ const AddServicing = () => {
         Object.entries(formData.mainForm).map(([key, value]) => {
             form_data.append(key, value)
         })
-        form_data.append("press_btn", btn)
+        form_data.append("press_btn", "SAVE")
         id && form_data.append("servicing_id", id)
 
         // fetch(url, {
@@ -284,9 +283,9 @@ const AddServicing = () => {
         postReq("crm_servicing_customers", form_data, crmURL)
             .then((resp) => {
                 console.log("Response:", resp)
-                // toast.success('Customer Service saved successfully')
-                // resp.is_edit_url ? navigate(`/merchant/customers/edit_service/${resp.servicing_code}`) : navigate(`/merchant/customer/all_cust_dashboard/add_servicing/`)
-                // fetchServiceData(resp.servicing_code)
+                toast.success('Customer Service saved successfully')
+                resp.data.is_edit_url ? navigate(`/merchant/customers/edit_service/${resp.data.servicing_code}?type=edit`) : navigate(`/merchant/customer/all_cust_dashboard/add_servicing/`)
+                fetchServiceData(resp.servicing_code)
             })
             .catch((error) => {
                 console.error("Error:", error)
@@ -418,6 +417,7 @@ const AddServicing = () => {
     }
 
     useEffect(() => {
+        getCustomer()
         fetchCustomerData(currentPage, null, () => { })
         getCountries()
         if (id) {
@@ -425,7 +425,7 @@ const AddServicing = () => {
             fetchServiceData(id)
             selectCustomer()
         }
-    }, [])
+    }, [getCustomer])
 
     const handleInputChange = (e, keyType) => {
         console.log(e)
@@ -763,7 +763,7 @@ const AddServicing = () => {
                         <Select
                             placeholder='Select Customer'
                             id='company-name'
-                            options={allOptions}
+                            options={customerList}
                             closeMenuOnSelect={true}
                             onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
                             components={{ Menu: CustomSelectComponent }}
@@ -772,7 +772,7 @@ const AddServicing = () => {
                                 const e = { target: { name: 'customer_id', value: event?.value } }
                                 handleInputChange(e, "mainForm")
                             }}
-                            value={allOptions?.filter($ => parseFloat($.value) === parseFloat(formData?.mainForm?.customer_id))}
+                            value={customerList?.filter($ => parseFloat($.value) === parseFloat(formData?.mainForm?.customer_id))}
                             isDisabled={isCustomer}
                         />
                         <p id="customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -818,7 +818,7 @@ const AddServicing = () => {
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="job-card-date">Job Card Date</label>
-                        <input
+                        {/* <input
                             placeholder="Job Card Date"
                             type="date"
                             id="job-card-date"
@@ -828,13 +828,22 @@ const AddServicing = () => {
                             onChange={(e) => {
                                 handleInputChange(e, "mainForm")
                             }}
+                        /> */}
+
+                        <Flatpickr
+                            name="job_card_date"
+                            className='form-control'
+                            value={formData.mainForm.job_card_date ?? ""}
+                            onChange={(date) => {
+                                setFormData({ ...formData, mainForm: { ...formData.mainForm, job_card_date: moment(date[0]).format("YYYY-MM-DD") } })
+                            }}
                         />
                         <p id="job_card_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
 
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="service-invoice-date">Service Invoice Date</label>
-                        <input
+                        {/* <input
                             placeholder="Service Invoice Date"
                             type="date"
                             id="service-invoice-date"
@@ -844,13 +853,22 @@ const AddServicing = () => {
                             onChange={(e) => {
                                 handleInputChange(e, "mainForm")
                             }}
+                        /> */}
+
+                        <Flatpickr
+                            name="job_card_date"
+                            className='form-control'
+                            value={formData.mainForm.service_invoice_date ?? ""}
+                            onChange={(date) => {
+                                setFormData({ ...formData, mainForm: { ...formData.mainForm, service_invoice_date: moment(date[0]).format("YYYY-MM-DD") } })
+                            }}
                         />
                         <p id="service_invoice_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
 
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="next-service-date">Next Service Date</label>
-                        <input
+                        {/* <input
                             placeholder="Next Service Date"
                             type="date"
                             id="next-service-date"
@@ -859,6 +877,15 @@ const AddServicing = () => {
                             value={formData.mainForm.service_expiry_date ?? ""}
                             onChange={(e) => {
                                 handleInputChange(e, "mainForm")
+                            }}
+                        /> */}
+
+                        <Flatpickr
+                            name="job_card_date"
+                            className='form-control'
+                            value={formData.mainForm.service_expiry_date ?? ""}
+                            onChange={(date) => {
+                                setFormData({ ...formData, mainForm: { ...formData.mainForm, service_expiry_date: moment(date[0]).format("YYYY-MM-DD") } })
                             }}
                         />
                         <p id="service_expiry_date_val" className="text-danger m-0 p-0 vaildMessage"></p>

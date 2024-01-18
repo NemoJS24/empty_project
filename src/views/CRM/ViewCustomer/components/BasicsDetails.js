@@ -40,28 +40,28 @@ const BasicsDetails = () => {
         form_data.append("edit_type", "is_customer_detail")
         // axios.post(`${crmURL}/customers/merchant/get_view_customer/`, form_data)
         postReq('get_view_customer', form_data)
-        .then((res) => {
-            console.log("resp here", res.data.success[0])
-            const newObject = {}
-            for (const key in res.data.success[0]) {
-                if (res.data.success[0].hasOwnProperty(key) && res.data.success[0][key] !== null) {
-                    newObject[key] = res.data.success[0][key]
+            .then((res) => {
+                console.log("resp here", res.data.success[0])
+                const newObject = {}
+                for (const key in res.data.success[0]) {
+                    if (res.data.success[0].hasOwnProperty(key) && res.data.success[0][key] !== null) {
+                        newObject[key] = res.data.success[0][key]
+                    }
                 }
-            }
-            console.log(newObject, "nw  ")
-            setUserData(newObject)
-            const name = newObject.customer_name.split(' ')
-            const datePart = newObject?.cust_dob ? newObject?.cust_dob.substring(0, 10) : ''
-            setUserData(prefData => ({
-                ...prefData,
-                cust_first_name: name[0],
-                cust_last_name: name[1],
-                cust_dob: datePart
-            }))
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+                console.log(newObject, "userData ")
+                setUserData(newObject)
+                const name = newObject.customer_name.split(' ')
+                const datePart = newObject?.cust_dob ? newObject?.cust_dob.substring(0, 10) : ''
+                setUserData(prefData => ({
+                    ...prefData,
+                    cust_first_name: name[0],
+                    cust_last_name: name[1],
+                    cust_dob: datePart
+                }))
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     const postData = () => {
@@ -88,25 +88,25 @@ const BasicsDetails = () => {
         //     body: form_data
         // })
         postReq("add_customer_individual", form_data)
-        .then((resp) => {
-            if (resp.status === 409) {
-                throw new Error('Customer already exists')
-            }
-        })
-        .then((resp) => {
-            console.log("Response:", resp)
-            toast.success('Customer saved successfully')
-            getUser()
-        })
-        .catch((error) => {
-            console.error("Error:", error)
-            if (error.message === 'Customer already exists') {
-                toast.error('Customer already exists')
+            .then((resp) => {
+                if (resp.status === 409) {
+                    throw new Error('Customer already exists')
+                }
+            })
+            .then((resp) => {
+                console.log("Response:", resp)
+                toast.success('Customer saved successfully')
+                getUser()
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+                if (error.message === 'Customer already exists') {
+                    toast.error('Customer already exists')
 
-            } else {
-                toast.error('Failed to save customer')
-            }
-        })
+                } else {
+                    toast.error('Failed to save customer')
+                }
+            })
     }
 
     console.log(userData, "pp")
