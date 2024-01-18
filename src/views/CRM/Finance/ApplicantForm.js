@@ -133,7 +133,7 @@ const ApplicantForm = ({ allData }) => {
         productForm: {
             customer_name: '',
             engine_number: '',
-            brand: '',
+            // brand: '',
             model: ''
         }
     })
@@ -198,12 +198,13 @@ const ApplicantForm = ({ allData }) => {
         e.preventDefault();
 
         const checkForm = validForm(addFormvalueToCheck, check.addForm)  // Use addFormvalueToCheck for validation
-        console.log(checkForm);
+        console.log(checkForm, "dd");
+        postNewCustomerData()
 
-        if (checkForm) {
-            console.log('Form is valid')
-            postNewCustomerData()
-        }
+        // if (checkForm) {
+        //     console.log('Form is valid')
+
+        // }
     }
 
     const vehicleTypeOptions = [
@@ -251,7 +252,7 @@ const ApplicantForm = ({ allData }) => {
     //             console.error("Error:", error)
     //             toast.error('Failed to save Vehicle')
     //         })
-            
+
     //     }
     // }
 
@@ -263,33 +264,32 @@ const ApplicantForm = ({ allData }) => {
         form_data.append("press_btn", 'SAVE')
 
         postReq('add_vehicle', form_data, crmURL)
-        .then((resp) => {
-            console.log("Response:", resp)
-            toast.success('Vehicle saved successfully')
-            handleClose('product')
-            getReq(`fetch_vehicle_details`, `?id=${formData?.customer_id}`, crmURL)
             .then((resp) => {
                 console.log("Response:", resp)
-                if (resp?.data?.car_variant) {
-                    changeProductName(resp)
-                }
+                toast.success('Vehicle saved successfully')
+                handleClose('product')
+                getReq(`fetch_vehicle_details`, `?id=${formData?.customer_id}`, crmURL)
+                    .then((resp) => {
+                        console.log("Response:", resp)
+                        if (resp?.data?.car_variant) {
+                            changeProductName(resp)
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error)
+                        toast.error('Something went wrong')
+
+                    })
             })
             .catch((error) => {
                 console.error("Error:", error)
-                toast.error('Something went wrong')
-
+                toast.error('Failed to save Vehicle')
             })
-        })
-        .catch((error) => {
-            console.error("Error:", error)
-            toast.error('Failed to save Vehicle')
-        })
     }
 
     const handleProductSubmit = () => {
         const checkForm = validForm(addProductFormToCheck, check?.productForm)
         if (checkForm) {
-            // console.log('Validated Product Form')
             postVehicleDetails()
         }
     }
@@ -317,21 +317,21 @@ const ApplicantForm = ({ allData }) => {
     const loadBrandOptions = (inputValue, callback) => {
         // const getUrl = new URL(`${crmURL}/vehicle/fetch_car_details/`)
         getReq('fetch_car_details', ``, crmURL)
-        .then((response) => {
-            const successData = response.data.car_brand
-            const brandOptions = successData
-                .filter((item) => item[0] !== "")
-                .map((item) => ({
-                    value: item[0],
-                    label: item[0]
-                }))
-            console.log(brandOptions)
-            callback(brandOptions)
-        })
-        .catch((error) => {
-            console.error("Error fetching data:", error.message)
-            callback([])
-        })
+            .then((response) => {
+                const successData = response.data.car_brand
+                const brandOptions = successData
+                    .filter((item) => item[0] !== "")
+                    .map((item) => ({
+                        value: item[0],
+                        label: item[0]
+                    }))
+                console.log(brandOptions)
+                callback(brandOptions)
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error.message)
+                callback([])
+            })
     }
 
     const selectChange = (value, actionMeta) => {
@@ -349,39 +349,39 @@ const ApplicantForm = ({ allData }) => {
             setProductVariantOption([])
         }
         postReq('fetch_car_details', form_data, crmURL)
-        .then((resp) => {
-            console.log("Response ooption:", resp)
-            if (resp.data.car_model) {
-                const productModelOptions = []
-                resp.data.car_model.forEach((item) => {
-                    if (item === "") {
-                        return
-                    }
-                    productModelOptions.push({
-                        value: item,
-                        label: item
+            .then((resp) => {
+                console.log("Response ooption:", resp)
+                if (resp.data.car_model) {
+                    const productModelOptions = []
+                    resp.data.car_model.forEach((item) => {
+                        if (item === "") {
+                            return
+                        }
+                        productModelOptions.push({
+                            value: item,
+                            label: item
+                        })
                     })
-                })
-                setProductModelOption(productModelOptions)
-            }
-            if (resp.data.car_variant) {
-                const variantOptions = []
-                resp.data.car_variant.map((item) => {
-                    if (item === "") {
-                        return
-                    }
-                    variantOptions.push({
-                        value: item,
-                        label: item
+                    setProductModelOption(productModelOptions)
+                }
+                if (resp.data.car_variant) {
+                    const variantOptions = []
+                    resp.data.car_variant.map((item) => {
+                        if (item === "") {
+                            return
+                        }
+                        variantOptions.push({
+                            value: item,
+                            label: item
+                        })
                     })
-                })
-                setProductVariantOption(variantOptions)
-            }
-        })
-        .catch((error) => {
-            console.log(error)
-            toast.error('Something went wrong!')
-        })
+                    setProductVariantOption(variantOptions)
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+                toast.error('Something went wrong!')
+            })
     }
 
     //---------------------------------
@@ -456,17 +456,17 @@ const ApplicantForm = ({ allData }) => {
         form_data.append("id", formData?.customer_id)
         // "SHIVAM KALE"
         getReq(`fetch_vehicle_details`, `?id=${formData?.customer_id}`, crmURL)
-        .then((resp) => {
-            console.log("Response:", resp)
-            if (resp?.data?.car_variant) {
-                changeProductName(resp)
-            }
-        })
-        .catch((error) => {
-            console.error("Error:", error)
-            toast.error('Something went wrong')
+            .then((resp) => {
+                console.log("Response:", resp)
+                if (resp?.data?.car_variant) {
+                    changeProductName(resp)
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+                toast.error('Something went wrong')
 
-        })
+            })
     }
 
 
@@ -1028,13 +1028,13 @@ const ApplicantForm = ({ allData }) => {
                         options={vehicleTypeOptions}
                         closeMenuOnSelect={true}
                         value={insuranceOptions?.find(option => option.value === check?.productForm?.vehicle_type)}
-                        // onChange={(value, actionMeta) => handleChange(value, actionMeta, false, "customerData")}
-                        // onChange={e => e => handleInputChange(e, 'product')}
-                        // onChange={(value) => {
-                        //     const e = {target: {name: "vehicle_type", value: value?.value}}
-                        //     handleAddInputChange(e, "productForm")
-                        //     handleChange(value, actionMeta, false, "product")
-                        // }}
+                    // onChange={(value, actionMeta) => handleChange(value, actionMeta, false, "customerData")}
+                    // onChange={e => e => handleInputChange(e, 'product')}
+                    // onChange={(value) => {
+                    //     const e = {target: {name: "vehicle_type", value: value?.value}}
+                    //     handleAddInputChange(e, "productForm")
+                    //     handleChange(value, actionMeta, false, "product")
+                    // }}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -1052,7 +1052,7 @@ const ApplicantForm = ({ allData }) => {
                     // onChange={(e) => selectChange(e, 'brand')}
                     //   value={selectedOption}
                     />
-                    <p id="brand_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                    {/* <p id="brand_val" className="text-danger m-0 p-0 vaildMessage"></p> */}
                 </Col>
 
                 <Col md={12} className="mt-2">
@@ -1165,7 +1165,7 @@ const ApplicantForm = ({ allData }) => {
                                     ...updatedData
                                 }))
 
-                                handleAddInputChange({target: {value: e.value, name: "customer_name"}}, 'productForm')
+                                handleAddInputChange({ target: { value: e.value, name: "customer_name" } }, 'productForm')
 
                                 // setCheck((preData) => ({
                                 //     ...preData,
@@ -1173,7 +1173,7 @@ const ApplicantForm = ({ allData }) => {
                                 // }))
                             }}
                             value={allOptions?.filter((curElem) => Number(curElem?.value) === Number(formData.customer_id))}
-                            // onChange={(value, actionMeta) => selectCustomer(value, actionMeta, false)}
+                        // onChange={(value, actionMeta) => selectCustomer(value, actionMeta, false)}
                         // onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                         />
                         {/* <AsyncSelect
@@ -1333,12 +1333,12 @@ const ApplicantForm = ({ allData }) => {
                         <label htmlFor="loan-disbursement">Loan Disbursement Date</label>
                         <Flatpickr options={{ // Sets the minimum date as 14 days ago
                             dateFormat: "Y-m-d"
-                        }} 
-                        className='form-control'
-                        value={formData?.Loan_Disbursement_Date} onChange={(date) => {
-                            setFormData({ ...formData, Loan_Disbursement_Date: moment(date[0]).format("YYYY-MM-DD") })
                         }}
-                        placeholder='Select date' 
+                            className='form-control'
+                            value={formData?.Loan_Disbursement_Date} onChange={(date) => {
+                                setFormData({ ...formData, Loan_Disbursement_Date: moment(date[0]).format("YYYY-MM-DD") })
+                            }}
+                            placeholder='Select date'
                         />
                         {/* <input
 
