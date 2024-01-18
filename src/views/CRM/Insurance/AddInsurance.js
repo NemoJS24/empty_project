@@ -147,13 +147,13 @@ const AddInsurance = () => {
             message: 'Please select a Brand',
             type: 'string',
             id: 'brand'
-        },
-        {
-            name: 'carmodel',
-            message: 'Please select a Model',
-            type: 'string',
-            id: 'carmodel'
         }
+        // {
+        //     name: 'carmodel',
+        //     message: 'Please select a Model',
+        //     type: 'string',
+        //     id: 'carmodel'
+        // }
     ]
 
     // const handleInputChange = (e, type) => {
@@ -309,6 +309,19 @@ const AddInsurance = () => {
         }
     }
 
+    const getCustomer = () => {
+        getReq("getAllCustomer")
+            .then((resp) => {
+                console.log(resp)
+                setCustomerList(resp?.data?.success?.map((curElem) => {
+                    return { label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id }
+                }))
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
     const postData = (btn) => {
         const form_data = new FormData()
         Object.entries(formData).map(([key, value]) => {
@@ -350,6 +363,7 @@ const AddInsurance = () => {
             .then((resp) => {
                 console.log("Response:", resp)
                 toast.success('Customer saved successfully')
+                getCustomer()
             })
             .catch((error) => {
                 console.error("Error:", error)
@@ -426,19 +440,6 @@ const AddInsurance = () => {
     //         console.error("Error fetching data:", error.message)
     //     }
     // }
-
-    const getCustomer = () => {
-        getReq("getAllCustomer")
-            .then((resp) => {
-                console.log(resp)
-                setCustomerList(resp?.data?.success?.map((curElem) => {
-                    return { label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id }
-                }))
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
 
     useEffect(() => {
         getCountries()
@@ -804,19 +805,14 @@ const AddInsurance = () => {
                         // onChange={handleInputChange} 
                         disabled
                     /> */}
+
                     <Select
                         id='customer-name'
-                        options={customerList}
-                        closeMenuOnSelect={true}
-                        name='customer_name'
-                        value={customerList?.filter((curElem) => formData?.customer_name === curElem?.value)}
-                        // value={customerList?.find($ => Number($.value) === Number(formData?.customer_name))}
-                        // onMenuScrollToBottom={() => getCustomer(currentPage, null, () => { })}
-                        components={{ Menu: CustomSelectComponent }}
-                        onChange={(value, actionMeta) => selectCustomer(value, actionMeta, false)}
+                        placeholder='Customer Name'
+                        value={{ value: formData?.customer_name, label: formData?.customer_name }}
                         isDisabled={true}
-                    // onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                     />
+
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="registration-name">
@@ -907,11 +903,11 @@ const AddInsurance = () => {
                         options={productModelOption}
                         closeMenuOnSelect={true}
                         name='carmodel'
-                        value={insuranceOptions?.find(option => option.value === productFormData?.car_model)}
+                        value={productModelOption?.filter((option) => option.value === productFormData?.car_model)}
                         onChange={(value, actionMeta) => selectChange(value, actionMeta)}
                     // isLoading={loading}
                     />
-                    <p id="carmodel_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                    {/* <p id="carmodel_val" className="text-danger m-0 p-0 vaildMessage"></p> */}
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="variant-select" className="" style={{ margin: '0px' }}>
@@ -932,18 +928,36 @@ const AddInsurance = () => {
                     <label htmlFor="vehicle-delivery-date">
                         Vehicle Delivery Date
                     </label>
-                    <input placeholder="Vehicle Delivery Date" type='date' id='vehicle-delivery-date' name='delivery_date' className="form-control"
+                    {/* <input placeholder="Vehicle Delivery Date" type='date' id='vehicle-delivery-date' name='delivery_date' className="form-control"
                         value={productFormData.delivery_date}
                         onChange={e => handleInputChange(e, 'product')}
+                    /> */}
+                    <Flatpickr
+                        placeholder="Vehicle Delivery Date"
+                        id='vehicle-delivery-date'
+                        name='delivery_date'
+                        className="form-control"
+                        value={productFormData.delivery_date}
+                        // onChange={(e) => handleInputChange(e)}
+                        onChange={(date) => {
+                            // setFormData({ ...formData, policy_purchase_date: moment(date[0]).format("YYYY-MM-DD") })
+                            setProductFormData({ ...productFormData, delivery_date: moment(date[0]).format("YYYY-MM-DD") })
+                        }}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="vehicle-registration-date">
                         Vehicle Registration Date
                     </label>
-                    <input placeholder="Vehicle Registration Date" type='date' id='vehicle-registration-date' name='registeration_date' className="form-control"
+                    <Flatpickr
+                        placeholder="Vehicle Registration Date"
+                        id='vehicle-registration-date'
+                        name='registeration_date'
+                        className="form-control"
                         value={productFormData?.registeration_date}
-                        onChange={e => handleInputChange(e, 'product')}
+                        onChange={(date) => {
+                            setProductFormData({ ...productFormData, registeration_date: moment(date[0]).format("YYYY-MM-DD") })
+                        }}
                     />
                 </Col>
                 <div className='d-flex justify-content-end mt-2'>
