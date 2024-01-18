@@ -19,8 +19,10 @@ import { postReq } from "../../../assets/auth/jwtService.js"
 /* eslint-disable */
 export default function CustomerProfile() {
   const [formData, setFormData] = useState({
-    dropdown:'regular'
+    dropdown:'regular',
+    associate_clients: []
   })
+  const [filteredData, setFilteredData] = useState([{ formId: 1 }])
   const [errors, setErrors] = useState({})
   const [currentStep, setCurrentStep] = useState(1)
   const navigate = useNavigate()
@@ -45,11 +47,12 @@ export default function CustomerProfile() {
         setFormData(newObject)
         const name = newObject?.customer_name?.split(' ')
         const datePart = newObject?.cust_dob?.substring(0, 10)
+        setFilteredData(resp.data.success[0]?.associated_accounts)
         setFormData(prefData => ({
           ...prefData,
           cust_first_name: name[0],
           cust_last_name: name[1],
-          cust_dob: datePart
+          cust_dob: datePart ? datePart : ""
         }))
       })
       .catch((error) => {
@@ -69,7 +72,7 @@ export default function CustomerProfile() {
   }, [])
 
   // default addressType is for React-Select onChange
-  const handleInputChange = (e, addressType) => {
+  const handleInputChange = (e, addressType, count) => {
     // console.log(e)
     if (addressType === undefined) {
       let { name, value, type, checked } = e.target
@@ -107,7 +110,7 @@ export default function CustomerProfile() {
     } else if (addressType === 'company') {
       setFormData(prevFormData => ({
         ...prevFormData,
-        select_comp_id: e.id
+        [`associate_clients_${count}`]: e.id
       }))
     } else if (addressType === 'file') {
       setFormData(prevFormData => ({
@@ -140,7 +143,9 @@ export default function CustomerProfile() {
     // const url = new URL(`${crmURL}/customers/merchant/add_customer/`)
     const form_data = new FormData()
     Object.entries(formData).map(([key, value]) => {
-      form_data.append(key, value)
+      if (value !== "") {
+        form_data.append(key, value)
+      }
     })
     // formData?.aadhar_pdf_file instanceof Object && console.log('object')
     formData?.aadhar_pdf_file instanceof Object && form_data.append("is_aadhar_file", '1')
@@ -149,8 +154,18 @@ export default function CustomerProfile() {
     form_data.append("pin", 'INsdfsdfsDV')
     form_data.append("entry_point", 'INDV')
     form_data.append("press_btn", btn)
-    id && form_data.append("customer_id", id)
+    if (id) {
+      form_data.append("customer_id", id)
+      form_data.append("is_edit", "1")
+    }
 
+    form_data.append("associate_clients_count", filteredData.length)
+
+
+    filteredData?.map((curElem, i) => {
+      form_data.append(`associate_clients_${i}`, curElem?.id) 
+    })
+    
     for (var key of form_data.entries()) {
       console.log(key[0] + ', ' + key[1]);
     }
@@ -228,13 +243,13 @@ export default function CustomerProfile() {
       checkForm = validForm([...valueToCheck], formData)
     }
     if (checkForm) {
-      const emailCheck = validateEmail(formData.email)
-      if (!emailCheck) {
+      // const emailCheck = validateEmail(formData.email)
+      // if (!emailCheck) {
         // document.getElementById('email_val').innerHTML = 'Invaild email ID'
-        toast.error("Invaild email ID")
-      } else {
-        postData(btn)
-      }
+        // toast.error("Invaild email ID")
+      // } else {
+      postData(btn)
+      // }
     }
   }
 
@@ -242,13 +257,13 @@ export default function CustomerProfile() {
   const handleNext = async () => {
     checkForm = validForm(valueToCheck, formData)
     if (checkForm) {
-      const emailCheck = validateEmail(formData.email)
-      if (!emailCheck) {
+      // const emailCheck = validateEmail(formData.email)
+      // if (!emailCheck) {
         // document.getElementById('email_val').innerHTML = 'Invaild email ID'
-        toast.error("Invaild email ID")
-      } else {
+        // toast.error("Invaild email ID")
+      // } else {
         setCurrentStep(prevStep => prevStep + 1)
-      }
+      // }
     }
   }
 
@@ -267,13 +282,13 @@ export default function CustomerProfile() {
   const NavCurrentStep = (step) => {
     checkForm = validForm(valueToCheck, formData)
     if (checkForm) {
-      const emailCheck = validateEmail(formData.email)
-      if (!emailCheck) {
+      // const emailCheck = validateEmail(formData.email)
+      // if (!emailCheck) {
         // document.getElementById('email_val').innerHTML = 'Invaild email ID'
-        toast.error("Invaild email ID")
-      } else {
+        // toast.error("Invaild email ID")
+      // } else {
         setCurrentStep(step)
-      }
+      // }
     }
   }
 
@@ -285,7 +300,8 @@ export default function CustomerProfile() {
     handleEmailBlur,
     handleInputChange,
     handleNext,
-    handleBack
+    handleBack,
+    setFormData
   }
 
   return (
@@ -313,7 +329,7 @@ export default function CustomerProfile() {
                 <CustomerBasicAddress allData={allData} />
               )}
               {currentStep === 5 && (
-                <CustomerBasicCompanyInfo allData={allData} />
+                <CustomerBasicCompanyInfo filteredData={filteredData} setFilteredData={setFilteredData} allData={allData} />
               )}
               {currentStep === 6 && (
                 <CustomerBasicAccount allData={allData} />

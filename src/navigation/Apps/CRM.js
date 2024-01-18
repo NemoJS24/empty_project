@@ -31,6 +31,12 @@ export const CRMNavigation = [
         title: 'Insurance',
         icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/customer_group.png`} width='16px' />,
         navLink: '/merchant/customers/insurance'
+    },
+    {
+        id: 'vehicle',
+        title: 'Vehicle',
+        icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/customer_group.png`} width='16px' />,
+        navLink: '/merchant/customers/vehicle/'
     }
 
 ]

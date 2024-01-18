@@ -8,7 +8,6 @@ const CustomersAddCustomer = ({ allData }) => {
       id,
       formData,
       handleInputChange,
-      handleEmailBlur,
       // handleNext,
       errors
    } = allData
@@ -124,7 +123,7 @@ const CustomersAddCustomer = ({ allData }) => {
                   <label htmlFor="basicDetails-email">
                      Email
                   </label>
-                  <input onBlur={handleEmailBlur} placeholder="Email" type='email' id='basicDetails-email' name='email' className="form-control" value={formData?.email ?? ''} onChange={handleInputChange} disabled={id} />
+                  <input placeholder="Email" type='email' id='basicDetails-email' name='email' className="form-control" value={formData?.email ?? ''} onChange={handleInputChange} disabled={id} />
                   <p id="email_val" className="text-danger m-0 p-0 vaildMessage"></p>
                   <p id="email_val1" className="text-danger m-0 p-0 vaildMessage"></p>
                </Col>

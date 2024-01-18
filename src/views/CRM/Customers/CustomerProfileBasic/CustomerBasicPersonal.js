@@ -2,12 +2,14 @@ import React from "react"
 import { Container, Card, CardBody, Row, Col } from "reactstrap"
 import { Facebook, Instagram, Twitter } from "react-feather"
 import Select from "react-select"
-import Flatpickr from "react-flatpickr"
+import Flatpickr from 'react-flatpickr'
+import moment from 'moment'
 
 const CustomerBasicPersonal = ({ allData }) => {
   const {
     formData,
-    handleInputChange
+    handleInputChange,
+    setFormData
     // handleNext,
     // handleBack
   } = allData
@@ -74,8 +76,15 @@ const CustomerBasicPersonal = ({ allData }) => {
           </Col>
           <Col md={6} lg={4} className="mt-2">
             <label htmlFor="personalDetails-dob">Date Of Birth</label>
-            <input
-
+            <Flatpickr
+              name='cust_dob'
+              className='form-control'
+              value={formData?.cust_dob}
+              onChange={(date) => {
+                setFormData({...formData, cust_dob: moment(date[0]).format("YYYY-MM-DD")})
+              }}
+            />
+            {/* <input
               placeholder="Date Of Birth"
               type="date"
               id="personalDetails-dob"
@@ -83,7 +92,7 @@ const CustomerBasicPersonal = ({ allData }) => {
               className="form-control"
               value={formData?.cust_dob ?? ''}
               onChange={handleInputChange}
-            />
+            /> */}
 
             {/* <Flatpickr
               id="personalDetails-dob"

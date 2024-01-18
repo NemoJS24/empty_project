@@ -4,21 +4,49 @@ import { Container, Card, CardBody, Row, Col } from "reactstrap"
 import { Twitter, Facebook, Instagram } from "react-feather"
 import Select from "react-select"
 import toast from "react-hot-toast"
-import { crmURL, getReq, postReq } from "../../../../assets/auth/jwtService"
+import { getReq, postReq } from "../../../../assets/auth/jwtService"
 import Button from 'react-bootstrap/Button'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import { validForm, validateEmail } from "../../../Validator"
+import { useParams } from "react-router-dom"
 
 /* eslint-disable */
-const CustomerBasicCompanyInfo = ({ allData }) => {
+const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) => {
   const [companyData, getCompanyData] = useState([])
-  const [filteredData, setFilteredData] = useState([{ formId: 1 }])
-  const [country, setCountry] = useState("")
+  
+  const [country, setCountry] = useState([])
   const [isHidden, setIsHidden] = useState(false)
   const [newCompany, setNewCompany] = useState({
     company_name: "",
     company_phone: "",
-    company_email: ""
+    company_email: "",
+    industry: "",
+    company_gst: "",
+    company_pancard: "",
+    company_website: "",
+    address_line1: "",
+    street: "",
+    area_building: "",
+    landmark: "",
+    city: "",
+    state: "",
+    pincode: "",
+    country: "",
+    par_company_name: "",
+    par_industry: "",
+    par_company_gst: "",
+    par_company_pancard: "",
+    par_company_phone: "",
+    par_company_email: "",
+    par_company_website: "",
+    par_address_line1: "",
+    par_street: "",
+    par_area_building: "",
+    par_landmark: "",
+    par_city: "",
+    par_state: "",
+    par_pincode: "",
+    mark_parent: "0"
   })
   const [newCompanyPage, setNewCompanyPage] = useState(1)
 
@@ -28,7 +56,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
 
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
-
+  const { id } = useParams()
   // console.log(filteredData)
   // console.log(newCompany)
 
@@ -66,11 +94,11 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
   }
 
   const postData = () => {
-    const url = new URL(`${crmURL}/customers/merchant/add_company_details/`)
+    // const url = new URL(`${crmURL}/customers/merchant/add_company_details/`)
     const form_data = new FormData()
+    form_data.append('add_company_from_add', 'yes')
     Object.entries(newCompany).map(([key, value]) => {
       form_data.append(key, value)
-      form_data.append('add_company_from_add', 'yes')
       // form_data.append("press_btn", 'SAVE')
     })
 
@@ -170,41 +198,38 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
 
   let options = []
   companyData.forEach((item) => {
-    if (item.company_name === "") {
+    // console.log(item, "items")
+    if (item.id === "") {
       return
     }
     options.push({
-      value: item.company_name,
+      value: item.id,
       label: item.company_name
     })
   })
 
-  const selectCompany = (e, id) => {
+  const selectCompany = (e, id, i) => {
     const foundObject = companyData.find(
-      (item) => item.company_name === e.value
+      (item) => item.id === e.value
     )
-    console.log("Found:", foundObject.id)
-    handleInputChange(foundObject, 'company')
+
+    console.log(foundObject, id, "foundObject")
+    // console.log("Found:", foundObject.id)
+    handleInputChange(foundObject, 'company', i)
     if (foundObject) {
       setFilteredData((prevForms) => prevForms.map((form) => form.id === id ? foundObject : form.formId == id ? foundObject : form))
-      // setFilteredData((prevForms) => {
-      //   return prevForms.map((form) => {
-      //     if (form.id === id) {
-      //       console.log(form.id);
-      //       console.log('foundobj: ', foundObject);
-      //       return foundObject;
-      //     } else if (form.formId === id) {
-      //       console.log(form.formId);
-      //       return foundObject;
-      //     } else {
-      //       return form;
-      //     }
-      //   });
-      // });
     } else {
       console.log("Company not found")
     }
   }
+
+  // useEffect(() => {
+  //   if (id) {
+  //     filteredData?.map((curElem, i) => {
+  //       selectCompany({value: curElem?.id}, curElem?.id, i)
+  //     })
+  //   }
+  // }, [])
 
   const selectCountry = (e, id) => {
     if (id === "new-company") {
@@ -237,7 +262,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
           onClick={handleShow}
           className="link-success link-underline-opacity-0 "
         >
-          Add New Company
+          Add new company
         </a>
       </p>
       {children}
@@ -288,7 +313,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
         <div key={i}>
           <Row>
             <Col md={12} className="mt-2">
-              <h4 className="mb-0">Company Details No. {i + 1}</h4>
+              <h4 className="mb-0">Company Details</h4>
             </Col>
             <Col md={6} lg={4} className="mt-2">
               <label
@@ -303,7 +328,10 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 closeMenuOnSelect={true}
                 components={{ Menu: CustomSelectComponent }}
                 placeholder="Select company Name"
-                onChange={(e) => selectCompany(e, form.id ?? form.formId)}
+                onChange={(e) => {
+                  selectCompany(e, form.id ?? form.formId, i)
+                }}
+                value={options?.filter((curElem) => Number(curElem?.value) === Number(form?.id))}
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
@@ -316,6 +344,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 className="form-control"
                 value={form.industry ?? ""}
                 onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
@@ -326,8 +355,9 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 id="company-gst-no"
                 name="gst"
                 className="form-control"
-                value={form.gst ?? ""}
+                value={form.company_gst ?? ""}
                 onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
@@ -342,6 +372,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 className="form-control"
                 value={form.company_phone ?? ""}
                 onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
@@ -354,6 +385,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 className="form-control"
                 value={form.company_email ?? ""}
                 onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
@@ -366,6 +398,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 className="form-control"
                 value={form.company_website ?? ""}
                 onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
@@ -376,8 +409,9 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 id="company-pancard"
                 name="company_panCard"
                 className="form-control"
-                value={form.company_panCard ?? ""}
+                value={form.company_pancard ?? ""}
                 onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
@@ -389,15 +423,15 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 closeMenuOnSelect={true}
                 value={relationOptions?.find(option => option.value === formData?.shipping_relation)}
                 defaultValue={relationOptions?.find(option => option.value === 'business')}
-              // onChange={(e) => handleInputChange2(e, 'shipping_relation')}
+              // onChange={(e) => handleInputChange(e, 'shipping_relation', i)}
               />
             </Col>
           </Row>
           <Row>
             <Col md={12} className="mt-5">
-              <div className="d-flex justify-content-between ">
+              <div className="d-flex justify-content-between">
                 <h4 className="mb-0">Company Address</h4>
-                <div className="d-flex justify-content-around w-50">
+                <div className="d-none justify-content-around w-50">
                   <div className="form-check">
                     <input
                       className="form-check-input"
@@ -441,6 +475,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 className="form-control"
                 value={form.address_line1 ?? ""}
                 onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
@@ -453,6 +488,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 className="form-control"
                 value={form.street ?? ""}
                 onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
@@ -467,6 +503,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 className="form-control"
                 value={form.area_building ?? ""}
                 onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
@@ -479,6 +516,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 className="form-control"
                 value={form.landmark ?? ""}
                 onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
@@ -491,6 +529,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 className="form-control"
                 value={form.city ?? ""}
                 onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
@@ -503,6 +542,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 className="form-control"
                 value={form.state ?? ""}
                 onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
@@ -515,6 +555,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 className="form-control"
                 value={form.pincode ?? ""}
                 onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
@@ -527,7 +568,8 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                 name="country"
                 placeholder="Select Country"
                 onChange={(e) => selectCountry(e, form.id ?? form.formId)}
-              // value={form.country}
+                isDisabled={true}
+                value={country?.filter((curElem) => curElem?.value === form.country)}
               // value={country.find((item) => String(form?.country) === String(item.value))}
               // value={country.filter(option => String(data?.country) === String(option.value))}
               />
@@ -551,6 +593,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                   name="company_twitter"
                   value={form.company_twitter ?? ""}
                   onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                  disabled
                 />
               </div>
             </Col>
@@ -568,6 +611,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                   name="company_fb"
                   value={form.company_fb ?? ""}
                   onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                  disabled
                 />
               </div>
             </Col>
@@ -585,6 +629,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
                   name="insta"
                   value={form.insta ?? ""}
                   onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                  disabled
                 />
               </div>
             </Col>
@@ -595,270 +640,554 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
   )
 
   const SideForm = (<form>
-    {newCompanyPage === 1 && (
-      <Row className="">
-        <Col md={12} className="mt-2">
-          <h4 className="mb-0">Add Customer</h4>
-        </Col>
-        <Col md={12} className="mt-2">
-          <div className="form-check mb-1">
-            <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
-            <label className="form-check-label" htmlFor="flexCheckChecked">
-              Add new company
-            </label>
-          </div>
+    {
+      <>
+        {newCompanyPage === 1 && (
+          <Row className="">
+            <Col md={12} className="mt-2">
+              <h4 className="mb-0">Add Company</h4>
+            </Col>
+            <Col md={12} className="mt-2">
+              <div className="form-check mb-1">
+                <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked" name="mark_parent" checked={newCompany?.mark_parent === "1"} onChange={(e) => {
+                  setNewCompany({...newCompany, mark_parent: e.target.checked ? "1" : "0"})
+                }} />
+                <label className="form-check-label" htmlFor="flexCheckChecked">
+                  Mark as parent company
+                </label>
+              </div>
 
-          <label htmlFor="basicDetails-companyName">Company Name</label>
-          <input
-            required
-            placeholder="Name"
-            type="text"
-            id="basicDetails-name"
-            name="company_name"
-            className="form-control"
-            value={newCompany.company_name ?? ''}
-            onChange={(e) => handleInputChange2(e, "new-company")}
-          />
-          <p id="basicDetails-name_val" className="text-danger m-0 p-0 vaildMessage"></p>
-        </Col>
-        <Col md={12} className="mt-2">
-          <label htmlFor="basicDetails-last-name">Industry</label>
-          <input
-            required
-            placeholder="Industry"
-            type="text"
-            id="basicDetails-industry"
-            name="industry"
-            className="form-control"
-            value={newCompany.industry ?? ''}
-            onChange={(e) => handleInputChange2(e, "new-company")}
-          />
-        </Col>
-        <Col md={12} className="mt-2">
-          <label htmlFor="basicDetails-last-name">GST Number</label>
-          <input
-            required
-            placeholder="GST Number"
-            type="text"
-            id="basicDetails-gstNumber"
-            name="company_gst"
-            className="form-control"
-            value={newCompany.company_gst ?? ''}
-            onChange={(e) => handleInputChange2(e, "new-company")}
-          />
-        </Col>
-        <Col md={12} className="mt-2">
-          <label htmlFor="basicDetails-last-name">
-            Company PAN Card Number
-          </label>
-          <input
-            required
-            placeholder="PNA Card No."
-            type="text"
-            id="basicDetails-panNumber"
-            name="company_pancard"
-            className="form-control"
-            value={newCompany.company_pancard ?? ''}
-            onChange={(e) => handleInputChange2(e, "new-company")}
-          />
-        </Col>
-        <Col md={12} className="mt-2">
-          <label htmlFor="basicDetails-mobile">Phone</label>
-          <input
-            required
-            placeholder="Phone"
-            type="tel"
-            pattern="[789][0-9]{9}"
-            maxLength={10}
-            id="basicDetails-phone"
-            name="company_phone"
-            className="form-control"
-            value={newCompany.company_phone ?? ''}
-            onChange={(e) => handleInputChange2(e, "new-company")}
-          />
-          <p id="basicDetails-phone_val" className="text-danger m-0 p-0 vaildMessage"></p>
-        </Col>
-        <Col md={12} className="mt-2">
-          <label htmlFor="basicDetails-last-name">Email</label>
-          <input
-            required
-            placeholder="Last Name"
-            type="email"
-            id="basicDetails-email"
-            name="company_email"
-            className="form-control"
-            value={newCompany.company_email ?? ''}
-            onChange={(e) => handleInputChange2(e, "new-company")}
-          />
-          <p id="basicDetails-email_val" className="text-danger m-0 p-0 vaildMessage"></p>
-        </Col>
-        <Col md={12} className="mt-2">
-          <label htmlFor="basicDetails-last-name">Website</label>
-          <input
-            required
-            placeholder="Website"
-            type="text"
-            id="basicDetails-website"
-            name="company_website"
-            className="form-control"
-            value={newCompany.company_website ?? ''}
-            onChange={(e) => handleInputChange2(e, "new-company")}
-          />
-        </Col>
-        <Col>
-          <div className="d-flex justify-content-between mt-2">
-            <div>
-              <button className="btn btn-primary" type="button">
-                Cancel
-              </button>
-            </div>
-            <div>
-              <button
-                className="btn btn-primary ms-2"
-                type="button"
-                onClick={() => setNewCompanyPage(2)}
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        </Col>
-      </Row>
-    )}
-    {newCompanyPage === 2 && (
-      <Row className="">
-        <Col md={12} className="mt-2">
-          <label htmlFor="company-name">
-            Flat and/or Building/House Details
-          </label>
-          <input
-            placeholder="Flat and/or Building/House Details"
-            type="text"
-            id="company-name"
-            name="address_line1"
-            className="form-control"
-            value={newCompany.address_line1 ?? ""}
-            onChange={(e) => handleInputChange2(e, "new-company")}
-          />
-        </Col>
-        <Col md={12} className="mt-2">
-          <label htmlFor="company-industry">Street, Lane or Road</label>
-          <input
-            placeholder="Street, Lane or Road"
-            type="text"
-            id="company-industry"
-            name="street"
-            className="form-control"
-            value={newCompany.street ?? ""}
-            onChange={(e) => handleInputChange2(e, "new-company")}
-          />
-        </Col>
-        <Col md={12} className="mt-2">
-          <label htmlFor="company-area">
-            Enter Area, Locality or Suburb e.g. Bandra
-          </label>
-          <input
-            placeholder="Enter Area, Locality or Suburb e.g. Bandra"
-            type="text"
-            id="company-area"
-            name="area_building"
-            className="form-control"
-            value={newCompany.area_building ?? ""}
-            onChange={(e) => handleInputChange2(e, "new-company")}
-          />
-        </Col>
-        <Col md={12} className="mt-2">
-          <label htmlFor="company-landmark">Landmark</label>
-          <input
-            placeholder="Landmark"
-            type="text"
-            id="company-landmark"
-            name="landmark"
-            className="form-control"
-            value={newCompany.landmark ?? ""}
-            onChange={(e) => handleInputChange2(e, "new-company")}
-          />
-        </Col>
-        <Col md={12} className="mt-2">
-          <label htmlFor="company-city">City</label>
-          <input
-            placeholder="City"
-            type="text"
-            id="company-city"
-            name="city"
-            className="form-control"
-            value={newCompany.city ?? ""}
-            onChange={(e) => handleInputChange2(e, "new-company")}
-          />
-        </Col>
-        <Col md={12} className="mt-2">
-          <label htmlFor="company-state">State</label>
-          <input
-            placeholder="State"
-            type="text"
-            id="company-state"
-            name="state"
-            className="form-control"
-            value={newCompany.state ?? ""}
-            onChange={(e) => handleInputChange2(e, "new-company")}
-          />
-        </Col>
-        <Col md={12} className="mt-2">
-          <label htmlFor="company-pincard">Pincode</label>
-          <input
-            placeholder="Pincode"
-            type="text"
-            id="company-pincard"
-            name="pincode"
-            className="form-control"
-            value={newCompany.pincode ?? ""}
-            onChange={(e) => handleInputChange2(e, "new-company")}
-          />
-        </Col>
-        <Col md={12} className="mt-2">
-          <label htmlFor="address-2-country">Country</label>
-          <Select
-            isMulti={false}
-            options={country}
-            inputId="aria-example-input"
-            closeMenuOnSelect={true}
-            name="country"
-            placeholder="Select Country"
-            onChange={(e) => selectCountry(e, "new-company", 'country')}
-          />
-        </Col>
-        <Col md={12} className="mt-2">
-          <div className="d-flex justify-content-between mt-2">
-            <div>
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={() => setNewCompanyPage(1)}
-              >
-                Previous
-              </button>
-              <button className="btn btn-primary ms-2" type="button">
-                Cancel
-              </button>
-            </div>
-            <div>
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={(e) => {
-                  // handleSubmitSection3
-                  postData()
-                  toast.success('Company Added Successfully')
-                  setShow(false)
-                }}
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </Col>
-      </Row>
-    )}
+              <h5>Subsidiary Company Deatils</h5>
+
+              <label htmlFor="basicDetails-companyName">Company Name</label>
+              <input
+                required
+                placeholder="Name"
+                type="text"
+                id="basicDetails-name"
+                name="company_name"
+                className="form-control"
+                value={newCompany.company_name ?? ''}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+              <p id="basicDetails-name_val" className="text-danger m-0 p-0 vaildMessage"></p>
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="basicDetails-last-name">Industry</label>
+              <input
+                required
+                placeholder="Industry"
+                type="text"
+                id="basicDetails-industry"
+                name="industry"
+                className="form-control"
+                value={newCompany.industry ?? ''}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="basicDetails-last-name">GST Number</label>
+              <input
+                required
+                placeholder="GST Number"
+                type="text"
+                id="basicDetails-gstNumber"
+                name="company_gst"
+                className="form-control"
+                value={newCompany.company_gst ?? ''}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="basicDetails-last-name">
+                Company PAN Card Number
+              </label>
+              <input
+                required
+                placeholder="PNA Card No."
+                type="text"
+                id="basicDetails-panNumber"
+                name="company_pancard"
+                className="form-control"
+                value={newCompany.company_pancard ?? ''}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="basicDetails-mobile">Phone</label>
+              <input
+                required
+                placeholder="Phone"
+                type="tel"
+                pattern="[789][0-9]{9}"
+                maxLength={10}
+                id="basicDetails-phone"
+                name="company_phone"
+                className="form-control"
+                value={newCompany.company_phone ?? ''}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+              <p id="basicDetails-phone_val" className="text-danger m-0 p-0 vaildMessage"></p>
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="basicDetails-last-name">Email</label>
+              <input
+                required
+                placeholder="Last Name"
+                type="email"
+                id="basicDetails-email"
+                name="company_email"
+                className="form-control"
+                value={newCompany.company_email ?? ''}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+              <p id="basicDetails-email_val" className="text-danger m-0 p-0 vaildMessage"></p>
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="basicDetails-last-name">Website</label>
+              <input
+                required
+                placeholder="Website"
+                type="text"
+                id="basicDetails-website"
+                name="company_website"
+                className="form-control"
+                value={newCompany.company_website ?? ''}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col>
+              <div className="d-flex justify-content-between mt-2">
+                <div>
+                  <button className="btn btn-primary" type="button">
+                    Cancel
+                  </button>
+                </div>
+                <div>
+                  <button
+                    className="btn btn-primary ms-2"
+                    type="button"
+                    onClick={() => setNewCompanyPage(2)}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        )}
+        {newCompanyPage === 2 && (
+          <Row className="">
+            <h5>Subsidiary Company Address</h5>
+            <Col md={12} className="mt-2">
+              <label htmlFor="company-name">
+                Flat and/or Building/House Details
+              </label>
+              <input
+                placeholder="Flat and/or Building/House Details"
+                type="text"
+                id="company-name"
+                name="address_line1"
+                className="form-control"
+                value={newCompany.address_line1 ?? ""}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="company-industry">Street, Lane or Road</label>
+              <input
+                placeholder="Street, Lane or Road"
+                type="text"
+                id="company-industry"
+                name="street"
+                className="form-control"
+                value={newCompany.street ?? ""}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="company-area">
+                Enter Area, Locality or Suburb e.g. Bandra
+              </label>
+              <input
+                placeholder="Enter Area, Locality or Suburb e.g. Bandra"
+                type="text"
+                id="company-area"
+                name="area_building"
+                className="form-control"
+                value={newCompany.area_building ?? ""}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="company-landmark">Landmark</label>
+              <input
+                placeholder="Landmark"
+                type="text"
+                id="company-landmark"
+                name="landmark"
+                className="form-control"
+                value={newCompany.landmark ?? ""}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="company-city">City</label>
+              <input
+                placeholder="City"
+                type="text"
+                id="company-city"
+                name="city"
+                className="form-control"
+                value={newCompany.city ?? ""}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="company-state">State</label>
+              <input
+                placeholder="State"
+                type="text"
+                id="company-state"
+                name="state"
+                className="form-control"
+                value={newCompany.state ?? ""}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="company-pincard">Pincode</label>
+              <input
+                placeholder="Pincode"
+                type="text"
+                id="company-pincard"
+                name="pincode"
+                className="form-control"
+                value={newCompany.pincode ?? ""}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="address-2-country">Country</label>
+              <Select
+                isMulti={false}
+                options={country}
+                inputId="aria-example-input"
+                closeMenuOnSelect={true}
+                name="country"
+                placeholder="Select Country"
+                onChange={(e) => selectCountry(e, "new-company", 'country')}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <div className="d-flex justify-content-between mt-2">
+                <div>
+                  <button
+                    className="btn btn-primary"
+                    type="button"
+                    onClick={() => setNewCompanyPage(1)}
+                  >
+                    Previous
+                  </button>
+                </div>
+                <div>
+                  {
+                    newCompany?.mark_parent === "1" ? <>
+                      <button
+                        className="btn btn-primary"
+                        type="button"
+                        onClick={(e) => {
+                          // handleSubmitSection3
+                          postData()
+                          toast.success('Company Added Successfully')
+                          setShow(false)
+                        }}
+                      >
+                        Save
+                      </button>
+                    </> : <>
+                    
+                    <button
+                      className="btn btn-primary"
+                      type="button"
+                      onClick={(e) => {
+                        // handleSubmitSection3
+                        setNewCompanyPage(3)
+                      }}
+                    >
+                      Next
+                    </button>
+                    </>
+                  }
+                  
+                </div>
+              </div>
+            </Col>
+          </Row>
+        )}
+
+        {newCompanyPage === 3 && (
+          <Row className="">
+            <Col md={12} className="mt-2">
+              <h4>Parent Company</h4>
+              <hr />
+              <h5>Subsidiary Company Deatils</h5>
+
+              <label htmlFor="basicDetails-companyName">Company Name</label>
+              <input
+                required
+                placeholder="Name"
+                type="text"
+                id="basicDetails-name"
+                name="par_company_name"
+                className="form-control"
+                value={newCompany.par_company_name ?? ''}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+              <p id="basicDetails-name_val" className="text-danger m-0 p-0 vaildMessage"></p>
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="basicDetails-last-name">Industry</label>
+              <input
+                required
+                placeholder="Industry"
+                type="text"
+                id="basicDetails-industry"
+                name="par_industry"
+                className="form-control"
+                value={newCompany.par_industry ?? ''}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="basicDetails-last-name">GST Number</label>
+              <input
+                required
+                placeholder="GST Number"
+                type="text"
+                id="basicDetails-gstNumber"
+                name="par_company_gst"
+                className="form-control"
+                value={newCompany.par_company_gst ?? ''}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="basicDetails-last-name">
+                Company PAN Card Number
+              </label>
+              <input
+                required
+                placeholder="PNA Card No."
+                type="text"
+                id="basicDetails-panNumber"
+                name="par_company_pancard"
+                className="form-control"
+                value={newCompany.par_company_pancard ?? ''}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="basicDetails-mobile">Phone</label>
+              <input
+                required
+                placeholder="Phone"
+                type="tel"
+                pattern="[789][0-9]{9}"
+                maxLength={10}
+                id="basicDetails-phone"
+                name="par_company_phone"
+                className="form-control"
+                value={newCompany.par_company_phone ?? ''}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+              <p id="basicDetails-phone_val" className="text-danger m-0 p-0 vaildMessage"></p>
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="basicDetails-last-name">Email</label>
+              <input
+                required
+                placeholder="Last Name"
+                type="email"
+                id="basicDetails-email"
+                name="par_company_email"
+                className="form-control"
+                value={newCompany.par_company_email ?? ''}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+              <p id="basicDetails-email_val" className="text-danger m-0 p-0 vaildMessage"></p>
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="basicDetails-last-name">Website</label>
+              <input
+                required
+                placeholder="Website"
+                type="text"
+                id="basicDetails-website"
+                name="par_company_website"
+                className="form-control"
+                value={newCompany.par_company_website ?? ''}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col>
+              <div className="d-flex justify-content-between mt-2">
+                <div>
+                  <button onClick={() => setNewCompanyPage(2)} className="btn btn-primary" type="button">
+                    Previous
+                  </button>
+                </div>
+                <div>
+                  <button
+                    className="btn btn-primary ms-2"
+                    type="button"
+                    onClick={() => setNewCompanyPage(4)}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        )}
+
+        {newCompanyPage === 4 && (
+          <Row className="">
+            <h4>Parent Company</h4>
+            <hr />
+            <h5 className="">Subsidiary Company Address</h5>
+            <Col md={12}>
+              <label htmlFor="company-name">
+                Flat and/or Building/House Details
+              </label>
+              <input
+                placeholder="Flat and/or Building/House Details"
+                type="text"
+                id="company-name"
+                name="par_address_line1"
+                className="form-control"
+                value={newCompany.par_address_line1 ?? ""}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="company-industry">Street, Lane or Road</label>
+              <input
+                placeholder="Street, Lane or Road"
+                type="text"
+                id="company-industry"
+                name="par_street"
+                className="form-control"
+                value={newCompany.par_street ?? ""}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="company-area">
+                Enter Area, Locality or Suburb e.g. Bandra
+              </label>
+              <input
+                placeholder="Enter Area, Locality or Suburb e.g. Bandra"
+                type="text"
+                id="company-area"
+                name="par_area_building"
+                className="form-control"
+                value={newCompany.par_area_building ?? ""}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="company-landmark">Landmark</label>
+              <input
+                placeholder="Landmark"
+                type="text"
+                id="company-landmark"
+                name="par_landmark"
+                className="form-control"
+                value={newCompany.par_landmark ?? ""}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="company-city">City</label>
+              <input
+                placeholder="City"
+                type="text"
+                id="company-city"
+                name="par_city"
+                className="form-control"
+                value={newCompany.par_city ?? ""}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="company-state">State</label>
+              <input
+                placeholder="State"
+                type="text"
+                id="company-state"
+                name="par_state"
+                className="form-control"
+                value={newCompany.par_state ?? ""}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="company-pincard">Pincode</label>
+              <input
+                placeholder="Pincode"
+                type="text"
+                id="company-pincard"
+                name="par_pincode"
+                className="form-control"
+                value={newCompany.par_pincode ?? ""}
+                onChange={(e) => handleInputChange2(e, "new-company")}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <label htmlFor="address-2-country">Country</label>
+              <Select
+                isMulti={false}
+                options={country}
+                inputId="aria-example-input"
+                closeMenuOnSelect={true}
+                name="par_country"
+                placeholder="Select Country"
+                onChange={(e) => selectCountry(e, "new-company", 'country')}
+              />
+            </Col>
+            <Col md={12} className="mt-2">
+              <div className="d-flex justify-content-between mt-2">
+                <div>
+                  <button
+                    className="btn btn-primary"
+                    type="button"
+                    onClick={() => setNewCompanyPage(3)}
+                  >
+                    Previous
+                  </button>
+                </div>
+                <div>
+                  <button
+                    className="btn btn-primary"
+                    type="button"
+                    onClick={(e) => {
+                      // handleSubmitSection3
+                      postData()
+                      toast.success('Company Added Successfully')
+                      setShow(false)
+                    }}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        )}
+
+      </>
+    }
   </form>
   )
 
@@ -877,7 +1206,7 @@ const CustomerBasicCompanyInfo = ({ allData }) => {
       </>
       <Container fluid className="px-0 py-1">
         {CompanyForm}
-        <div className="d-flex justify-content-end mt-2">
+        <div className="d-flex justify-content-end mt-2 gap-1">
           <button
             className="btn btn-primary"
             type="button"
