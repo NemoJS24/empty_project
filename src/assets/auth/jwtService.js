@@ -153,7 +153,11 @@ export const configUrl = {
     add_call: "/customers/merchant/Customer_Add_Calls/",
     finance_dashboard: 'finance/finance_dashboard/',
     servicing_dashboard: 'servicing/servicing_dashboard/',
-    insurance_dashboard: 'insurance/insurance_dashboard/'
+    insurance_dashboard: 'insurance/insurance_dashboard/',
+    checkDeptName: "/member/check_department/",
+    getPermissionList: "/member/apps_permission/",
+    addDepartment: "/member/department_details/",
+    saveUser: "/member/member_permission/"
 }
 
 const axiosInstance = axios.create({

@@ -17,7 +17,7 @@ const PermissionWrapper = ({children}) => {
         isAdmin: false,
         currencySymbol: "₹",
         multiUser: "",
-        permissionList: ["crm_view_customer"]
+        permissionList: []
     }
     const [userPermission, setUserPermission] = useState(localStorage.getItem('userPermission') ? JSON.parse(localStorage.getItem('userPermission')) : defaultData)
     const location = useLocation()
@@ -43,9 +43,9 @@ const PermissionWrapper = ({children}) => {
         if (token) {
             console.log("Not Mounted", "Route Permission")
             const currentRoute = Routes?.filter((curRoute) => {
-                return curRoute?.path.toLowerCase() === location?.pathname.toLowerCase()
+                return curRoute?.path.toLowerCase().startsWith(location?.pathname.toLowerCase())
             })
-            console.log(currentRoute[0]?.app, "Route Permission")
+            console.log(currentRoute[0], "isPermission")
 
             if (currentRoute[0]?.app) {
                 if (userPermission?.installedApps?.includes(currentRoute[0]?.app)) {
@@ -60,13 +60,18 @@ const PermissionWrapper = ({children}) => {
 
             }
 
-            // if (currentRoute[0]?.route_type) {
-            //     if (!userPermission?.permissionList?.includes(currentRoute[0]?.route_type)) {
-            //         navigate(-1)
-            //         toast.error("Permission denied")
-            //     }
+            if (currentRoute[0]?.permission) {
+                const permissionList = userPermission?.permissionList.filter((curElem) => curElem.permission__apps === currentRoute[0]?.permission.app && curElem.permission__slug === currentRoute[0]?.permission.route_type)
+                if (permissionList.length > 0) {
+                    const isAccess = permissionList[0][currentRoute[0]?.permission?.action]
+                    // console.log(permissionList[0][currentRoute[0]?.permission?.action], "isPermission")
+                    if (!isAccess) {
+                        navigate("/merchant/apps/")
+                        toast.error("Permission denied")
+                    }
 
-            // }
+                }
+            }
         }
     }
 

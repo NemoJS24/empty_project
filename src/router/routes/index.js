@@ -34,6 +34,7 @@ import { ProductReview_Routes } from './ProductReviews'
 import { OhMyCustomer_Routes } from './OhMyCustomer'
 import Homes_Routes from './Home'
 import HomeLayout from '../../@core/layouts/HomeLayout'
+import Accounts_Routes from './Accounts'
 
 
 const getLayout = {
@@ -90,7 +91,8 @@ const Routes = [
   ...Homes_Routes,
   ...Profile_Routes,
   ...ProductReview_Routes,
-  ...OhMyCustomer_Routes
+  ...OhMyCustomer_Routes,
+  ...Accounts_Routes
 ]
 // if (app_name && Routess[app_name]) {
 //   Routes = [

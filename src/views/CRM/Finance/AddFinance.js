@@ -9,7 +9,7 @@ import { baseURL } from '@src/assets/auth/jwtService.js'
 import toast from "react-hot-toast"
 // import financeData from './financeData'
 import { useParams, useNavigate } from 'react-router-dom'
-import { postReq } from '../../../assets/auth/jwtService'
+import { crmURL, postReq } from '../../../assets/auth/jwtService'
 import { validForm } from '../../Validator'
 
 const AddFinance = () => {
@@ -206,27 +206,40 @@ const AddFinance = () => {
     return inputDate
   }
 
-  const handleInputChange = (e, type) => {
-    if (type === undefined) {
-      const { name, value } = e.target
-      setFormData(prevData => ({
-        ...prevData,
-        [name]: value
-      }))
-    } else if (type === "tel") {
-      const { value } = e.target
-      const { name } = e.target
-      // value = value.replace(/[^0-9]/g, "")
-      setFormData(prevFormData => ({
-        ...prevFormData,
-        [name]: value
-      }))
-    } else if (type) {
-      setFormData(prevFormData => ({
-        ...prevFormData,
-        [type]: e.value
-      }))
+  const handleChange = (options, actionMeta, check = false) => {
+    if (check) {
+        const option_list = options.map((cur) => {
+            return cur.value
+        })
+        setFormData({ ...formData, [actionMeta.name]: option_list })
+    } else {
+        setFormData({ ...formData, [actionMeta.name]: options.value })
     }
+
+  }
+
+  const handleInputChange = (e) => {
+    setFormData({...formData, [e.target.name]: e.target.value})
+    // if (type === undefined) {
+    //   const { name, value } = e.target
+    //   setFormData(prevData => ({
+    //     ...prevData,
+    //     [name]: value
+    //   }))
+    // } else if (type === "tel") {
+    //   const { value } = e.target
+    //   const { name } = e.target
+    //   // value = value.replace(/[^0-9]/g, "")
+    //   setFormData(prevFormData => ({
+    //     ...prevFormData,
+    //     [name]: value
+    //   }))
+    // } else if (type) {
+    //   setFormData(prevFormData => ({
+    //     ...prevFormData,
+    //     [type]: e.value
+    //   }))
+    // }
   }
 
   const fetchFinanceData = (id) => {
@@ -444,7 +457,8 @@ const AddFinance = () => {
     handleNext,
     handleBack,
     handleSubmitSection,
-    setFormData
+    setFormData,
+    handleChange
   }
 
 
