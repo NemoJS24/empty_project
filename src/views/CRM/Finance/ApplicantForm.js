@@ -10,10 +10,12 @@ import AsyncSelect from 'react-select/async'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import { baseURL, getReq, postReq } from '../../../assets/auth/jwtService'
 import { validForm } from '../../Validator'
+import Flatpickr from 'react-flatpickr'
+import moment from 'moment'
 // import toast from "react-hot-toast"
 
 const ApplicantForm = ({ allData }) => {
-    const { formData, handleNext, handleInputChange, setFormData } = allData
+    const { formData, handleNext, handleInputChange, setFormData, handleChange } = allData
     const [productModelOption, setProductModelOption] = useState([])
     const [productVariantOption, setProductVariantOption] = useState([])
     const [allOptions, setAllOptions] = useState([])
@@ -292,25 +294,25 @@ const ApplicantForm = ({ allData }) => {
         }
     }
 
-    const handleChange = (options, actionMeta, check, type = "formData") => {
-        if (check) {
-            const option_list = options.map((cur) => {
-                return cur.value
-            })
-            if (type === "formData") {
-                setFormData(prev => ({ ...prev, [actionMeta.name]: option_list }))
+    // const handleChange = (options, actionMeta, check, type = "formData") => {
+    //     if (check) {
+    //         const option_list = options.map((cur) => {
+    //             return cur.value
+    //         })
+    //         if (type === "formData") {
+    //             setFormData(prev => ({ ...prev, [actionMeta.name]: option_list }))
 
-            } else {
-                setCustomerFormData(prev => ({ ...prev, [actionMeta.name]: option_list }))
-            }
-        } else {
-            if (type === "product") {
-                setCheck(prevData => ({ ...prevData, productForm: { ...prevData?.productForm, [actionMeta.name]: options.value } }))
-            }
+    //         } else {
+    //             setCustomerFormData(prev => ({ ...prev, [actionMeta.name]: option_list }))
+    //         }
+    //     } else {
+    //         if (type === "product") {
+    //             setCheck(prevData => ({ ...prevData, productForm: { ...prevData?.productForm, [actionMeta.name]: options.value } }))
+    //         }
 
-        }
+    //     }
 
-    }
+    // }
 
     const loadBrandOptions = (inputValue, callback) => {
         // const getUrl = new URL(`${crmURL}/vehicle/fetch_car_details/`)
@@ -448,6 +450,7 @@ const ApplicantForm = ({ allData }) => {
     const selectCustomer = () => {
         // handleInputChange(e, 'customer_id')
         // setIsLoading(true)
+        console.log(formData?.customer_id)
         const form_data = new FormData()
         const url = new URL(`${crmURL}/vehicle/fetch_vehicle_details/`)
         form_data.append("id", formData?.customer_id)
@@ -1150,7 +1153,7 @@ const ApplicantForm = ({ allData }) => {
                             components={{ Menu: CustomSelectComponent }}
                             onChange={(e) => {
                                 console.log(e)
-                                selectCustomer(e);
+                                // selectCustomer(e);
                                 // handleInputChange(e, 'customer_id')
                                 const updatedData = {
                                     customer_name: e.label,
@@ -1162,17 +1165,10 @@ const ApplicantForm = ({ allData }) => {
                                     ...updatedData
                                 }))
 
-                                setCheck((preData) => ({
-                                    ...preData,
-                                    productForm: {...preData.productForm, ...updatedData}
-                                }))
-                                // handleAddInputChange({target: {value: e.label, name: "cust_first_name"}}, "productForm")
-
-                                // setFormData((preData) => ({
+                                // setCheck((preData) => ({
                                 //     ...preData,
-                                //     ...updatedData
+                                //     productForm: {...preData.productForm, ...updatedData}
                                 // }))
-                                // console.log(updatedData, "updatedData")
                             }}
                             value={allOptions?.filter((curElem) => Number(curElem?.value) === Number(formData.customer_id))}
                             // onChange={(value, actionMeta) => selectCustomer(value, actionMeta, false)}
@@ -1218,17 +1214,10 @@ const ApplicantForm = ({ allData }) => {
                         <Select
                             placeholder='Client Type'
                             id="basicDetails-client-type"
+                            name="client"
                             options={clientTypeOptions}
                             value={clientTypeOptions?.find(option => option.value === formData?.client)}
-                            // onChange={((event) => {
-                            //     selectCustomer(event)
-                            //     const e = { target: { name: 'client', value: e?.value } }
-                            //     handleAddInputChange(e, "mainForm")
-                            // })}
-                            onChange={(e) => {
-                                // selectCustomer(e);
-                                handleInputChange(e, 'client')
-                            }}
+                            onChange={(value, actionMeta) => handleChange(value, actionMeta)}
                             closeMenuOnSelect={true}
                         // name='client'
                         />
@@ -1261,16 +1250,19 @@ const ApplicantForm = ({ allData }) => {
                             placeholder='Select Product Name'
                             id="product-name"
                             options={productOptions}
+                            name="product_name_id"
                             components={{ Menu: CustomProductSelectComponent }}
+                            onChange={(value, actionMeta) => handleChange(value, actionMeta)}
+                            value={productOptions?.filter((curElem) => curElem?.value === formData?.product_name_id)}
                             // onChange={((event) => {
                             //     selectCustomer(event)
                             //     const e = { target: { name: 'product_name_id', value: e?.value } }
                             //     handleAddInputChange(e, "mainForm")
                             // })}
-                            onChange={(e) => {
-                                selectCustomer(e);
-                                handleInputChange(e, 'product_name_id')
-                            }}
+                            // onChange={(e) => {
+                            //     selectCustomer(e);
+                            //     handleInputChange(e, 'product_name_id')
+                            // }}
                             closeMenuOnSelect={true}
                         />
                         <p id="product_name_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -1283,16 +1275,18 @@ const ApplicantForm = ({ allData }) => {
                             placeholder='Loan Type'
                             id="basicDetails-loan-type"
                             options={loanTypeOptions}
+                            name="Loan_Type"
                             value={loanTypeOptions?.find(option => option.value === formData?.Loan_Type)}
+                            onChange={(value, actionMeta) => handleChange(value, actionMeta)}
                             // onChange={((event) => {
                             //     selectCustomer(event)
                             //     const e = { target: { name: 'Loan_Type', value: e?.value } }
                             //     handleInputChange(e, "mainForm")
                             // })}
-                            onChange={(e) => {
-                                // selectCustomer(e);
-                                handleInputChange(e, 'Loan_Type')
-                            }}
+                            // onChange={(e) => {
+                            //     // selectCustomer(e);
+                            //     handleInputChange(e, 'Loan_Type')
+                            // }}
                             closeMenuOnSelect={true}
                         />
                         <p id="Loan_Type_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -1335,7 +1329,16 @@ const ApplicantForm = ({ allData }) => {
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="loan-disbursement">Loan Disbursement Date</label>
-                        <input
+                        <Flatpickr options={{ // Sets the minimum date as 14 days ago
+                            dateFormat: "Y-m-d"
+                        }} 
+                        className='form-control'
+                        value={formData?.Loan_Disbursement_Date} onChange={(date) => {
+                            setFormData({ ...formData, Loan_Disbursement_Date: moment(date[0]).format("YYYY-MM-DD") })
+                        }}
+                        placeholder='Select date' 
+                        />
+                        {/* <input
 
                             placeholder="Loan Disbursement Date"
                             type="date"
@@ -1344,7 +1347,7 @@ const ApplicantForm = ({ allData }) => {
                             className="form-control"
                             value={formData?.Loan_Disbursement_Date}
                             onChange={handleInputChange}
-                        />
+                        /> */}
                     </Col>
                     <Col xs={12} className='mt-2'>
                         <div className='d-flex justify-content-between mt-2'>
@@ -1352,17 +1355,7 @@ const ApplicantForm = ({ allData }) => {
                                 <button className="btn btn-primary" type="button">Cancel</button>
                             </div>
                             <div>
-                                <button className="btn btn-primary ms-2" type="button"
-                                    // onClick={((e) => {
-                                    //     handleNext
-                                    //     handleSubmitSection(e)
-                                    //     console.log("aa")
-
-                                    // })}
-
-                                    onClick={handleNext}
-                                >
-                                    Next</button>
+                                <button className="btn btn-primary ms-2" type="button" onClick={handleNext}>Next</button>
                             </div>
                         </div>
                     </Col>

@@ -32,7 +32,7 @@ const NavbarUser = ({disableName}) => {
       if (resp.data.installed_apps.includes(userPermission?.appName)) {
         name = userPermission?.appName
       } else {
-        navigate('/merchant/apps/')
+        // navigate('/merchant/apps/')
         name = ""
       }
 

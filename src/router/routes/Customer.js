@@ -44,89 +44,166 @@ const Customers_Routes = [
     route_type: ""
   },
   {
-    path: '/merchant/customers',
+    path: '/merchant/customers/',
     element: <Customers />,
-    route_type: "crm_view_customer"
+    permission: {
+      app: "crm",
+      route_type: "customer",
+      action: "read"
+    }
+  },
+  {
+    path: '/merchant/customers/view_customer/:id',
+    element: <ViewCustomer />,
+    permission: {
+      app: "crm",
+      route_type: "customer",
+      action: "read"
+    }
   },
   {
     path: '/merchant/customer/add_type_of_customer/',
-    element: <CustomerType />,
-    route_type: "crm_add_customer"
+    element: <CustomerType/>,
+    permission: {
+      app: "crm",
+      route_type: "customer",
+      action: "create"
+    }
   },
   {
-    path: '/merchant/customers/add_customer',
-    element: <CustomerProfile />,
-    route_type: "crm_add_individual_customer"
+    path: '/merchant/customers/add_customer/',
+    element: <CustomerProfile/>,
+    permission: {
+      app: "crm",
+      route_type: "customer",
+      action: "create"
+    }
+  },
+  {
+    path: '/merchant/customers/add_business/',
+    element: <AddBusiness/>,
+    permission: {
+      app: "crm",
+      route_type: "customer",
+      action: "create"
+    }
   },
   {
     path: '/merchant/customers/edit_customer/:id',
-    element: <CustomerProfile />,
-    route_type: "crm_edit_individual_customer"
-  },
-  {
-    path: '/merchant/customers/add_business',
-    element: <AddBusiness />,
-    route_type: "crm_add_business_customer"
-  },
-  {
-    path: '/merchant/customer/all_cust_dashboard/add_finance/:id',
-    element: <Finance />,
-    route_type: ""
+    element: <CustomerProfile/>,
+    permission: {
+      app: "crm",
+      route_type: "customer",
+      action: "update"
+    }
   },
   {
     path: '/merchant/customer/all_cust_dashboard/add_finance/',
     element: <Finance />,
-    route_type: "crm_view_finance"
+    permission: {
+      app: "crm",
+      route_type: "finance",
+      action: "read"
+    }
   },
   {
+    path: '/merchant/customers/add_finance/',
+    element: <AddFinance />,
+    permission: {
+      app: "crm",
+      route_type: "finance",
+      action: "create"
+    }
+  },
+  { //change URL
     path: '/merchant/customers/jmd-finance-customers/:id',
     element: <AddFinance />,
-    route_type: "crm_add_customer_finance"
+    permission: {
+      app: "crm",
+      route_type: "finance",
+      action: "read"
+    }
   },
   {
-    path: '/merchant/customers/jmd-finance-customers/',
-    element: <AddFinance />,
-    route_type: "crm_add_finance"
+    path: '/merchant/customer/all_cust_dashboard/add_finance/:id',
+    element: <Finance />,
+    permission: {
+      app: "crm",
+      route_type: "finance",
+      action: "create"
+    }
   },
   {
     path: '/merchant/customers/edit_finance/:id',
-    element: <AddFinance />,
-    route_type: "crm_edit_finance"
+    element: <AddFinance/>,
+    permission: {
+      app: "crm",
+      route_type: "finance",
+      action: "update"
+    }
   },
   {
     path: '/merchant/customer/all_cust_dashboard/add_servicing/',
     element: <Servicing />,
-    route_type: "crm_view_servicing"
+    permission: {
+      app: "crm",
+      route_type: "servicing",
+      action: "read"
+    }
   },
   {
     path: '/merchant/customers/add-servicing/',
     element: <AddServicing />,
-    route_type: "crm_add_servicing"
+    permission: {
+      app: "crm",
+      route_type: "servicing",
+      action: "create"
+    }
   },
   {
     path: '/merchant/customers/add-servicing/:id',
-    element: <AddServicing />,
-    route_type: "crm_edit_servicing"
-  },
-  {
-    path: '/merchant/customers/insurance/edit_insurance/:id',
-    element: <AddInsurance />,
-    route_type: "crm_edit_insurance"
+    element: <AddServicing/>,
+    permission: {
+      app: "crm",
+      route_type: "servicing",
+      action: "update"
+    }
   },
   {
     path: '/merchant/customers/insurance/',
     element: <Insurance />,
-    route_type: "crm_view_insurance"
+    permission: {
+      app: "crm",
+      route_type: "insurance",
+      action: "view"
+    }
   },
   {
     path: '/merchant/customers/add-insurance/',
     element: <AddInsurance />,
-    route_type: "crm_add_insurance"
+    permission: {
+      app: "crm",
+      route_type: "insurance",
+      action: "create"
+    }
+  },
+  {
+    path: '/merchant/customers/insurance/edit_insurance/:id',
+    element: <AddInsurance/>,
+    permission: {
+      app: "crm",
+      route_type: "insurance",
+      action: "update"
+    }
   },
   {
     path: '/merchant/customers/add-insurance/:id',
     element: <AddInsurance />,
-    route_type: "crm_add_customer_insurance"
+    permission: {
+      app: "crm",
+      route_type: "insurance",
+      action: "update"
+    }
   },
   {
     path: '/merchant/customers/add-vehicle/:id',
@@ -155,13 +232,9 @@ const Customers_Routes = [
     path: '/merchant/customers/insurance/',
     element: <Insurance />
   },
-  {
-    path: '/merchant/customers/view_customer/:id',
-    element: <ViewCustomer />
-  },
   // --------------------------------
   {
-    path: '/merchant/customers/customer_details',
+    path: '/merchant/customers/customer_details/',
     element: <CustomerProfileDetails />
   },
   {
@@ -169,11 +242,11 @@ const Customers_Routes = [
     element: <CustomerProfileBasic />
   },
   {
-    path: '/merchant/customers/customer_basic/personal_info',
+    path: '/merchant/customers/customer_basic/personal_info/',
     element: <CustomerBasicPersonal />
   },
   {
-    path: '/merchant/customers/customer_basic/id_proof',
+    path: '/merchant/customers/customer_basic/id_proof/',
     element: <CustomerBasicIdProof />
   },
   {
@@ -240,7 +313,6 @@ const Customers_Routes = [
     path: '/merchant/customers/add_call/:id',
     element: <AddCall />
   }
-
 ]
 
 export default Customers_Routes

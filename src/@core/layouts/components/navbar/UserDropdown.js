@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Avatar from '@components/avatar'
 
 // ** Third Party Components
-import { User, Settings, HelpCircle, Power, Award, Box, Circle } from 'react-feather'
+import { User, Settings, HelpCircle, Power, Award, Box, Circle, Briefcase } from 'react-feather'
 
 // ** Reactstrap Imports
 import { UncontrolledDropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap'
@@ -94,10 +94,14 @@ const UserDropdown = ({disableName}) => {
           <Box size={14} className='me-75' />
           <span className='align-middle'>Domains</span>
         </DropdownItem>
-        {/* <DropdownItem tag={Link} to='/merchant/subcriptions/my-subscriptions/'>
-          <Circle size={14} className='me-75' />
-          <span className='align-middle'>Purchase</span>
-        </DropdownItem> */}
+        <DropdownItem tag={Link} to='/merchant/customers/add-dept/'>
+          <Briefcase size={14} className='me-75' />
+          <span className='align-middle'>Department</span>
+        </DropdownItem>
+        <DropdownItem tag={Link} to='/merchant/customers/Manage-user/'>
+          <Briefcase size={14} className='me-75' />
+          <span className='align-middle'>User</span>
+        </DropdownItem>
         <DropdownItem divider />
         <DropdownItem tag={Link} to='/merchant/admin_view/'>
           <Settings size={14} className='me-75' />

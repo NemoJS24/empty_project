@@ -154,7 +154,11 @@ export const configUrl = {
     finance_dashboard: 'finance/finance_dashboard/',
     servicing_dashboard: 'servicing/servicing_dashboard/',
     insurance_dashboard: 'insurance/insurance_dashboard/',
-    get_vehicle: "/vehicle/cust_all_vehicle/"
+    get_vehicle: "/vehicle/cust_all_vehicle/",
+    checkDeptName: "/member/check_department/",
+    getPermissionList: "/member/apps_permission/",
+    addDepartment: "/member/department_details/",
+    saveUser: "/member/member_permission/"
 }
 
 const axiosInstance = axios.create({
