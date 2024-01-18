@@ -158,7 +158,8 @@ export const configUrl = {
     checkDeptName: "/member/check_department/",
     getPermissionList: "/member/apps_permission/",
     addDepartment: "/member/department_details/",
-    saveUser: "/member/member_permission/"
+    saveUser: "/member/member_permission/",
+    getAllCustomer: "/customers/merchant/get_customer_details/"
 }
 
 const axiosInstance = axios.create({
