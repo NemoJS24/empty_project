@@ -34,6 +34,7 @@ const Service = lazy(() => import('../../views/Leads/Service'))
 // const Customer = lazy(() => import('../../views/Leads/Customers'))
 const Insurance = lazy(() => import('../../views/Leads/Insurance'))
 import AddCall from '../../views/CRM/Call/AddCall'
+import Vehicle from '../../views/Leads/Vehicle'
 
 
 const Customers_Routes = [
@@ -49,22 +50,22 @@ const Customers_Routes = [
   },
   {
     path: '/merchant/customer/add_type_of_customer/',
-    element: <CustomerType/>,
+    element: <CustomerType />,
     route_type: "crm_add_customer"
   },
   {
     path: '/merchant/customers/add_customer',
-    element: <CustomerProfile/>,
+    element: <CustomerProfile />,
     route_type: "crm_add_individual_customer"
   },
   {
     path: '/merchant/customers/edit_customer/:id',
-    element: <CustomerProfile/>,
+    element: <CustomerProfile />,
     route_type: "crm_edit_individual_customer"
   },
   {
     path: '/merchant/customers/add_business',
-    element: <AddBusiness/>,
+    element: <AddBusiness />,
     route_type: "crm_add_business_customer"
   },
   {
@@ -89,7 +90,7 @@ const Customers_Routes = [
   },
   {
     path: '/merchant/customers/edit_finance/:id',
-    element: <AddFinance/>,
+    element: <AddFinance />,
     route_type: "crm_edit_finance"
   },
   {
@@ -104,12 +105,12 @@ const Customers_Routes = [
   },
   {
     path: '/merchant/customers/add-servicing/:id',
-    element: <AddServicing/>,
+    element: <AddServicing />,
     route_type: "crm_edit_servicing"
   },
   {
     path: '/merchant/customers/insurance/edit_insurance/:id',
-    element: <AddInsurance/>,
+    element: <AddInsurance />,
     route_type: "crm_edit_insurance"
   },
   {
@@ -131,6 +132,10 @@ const Customers_Routes = [
     path: '/merchant/customers/add-vehicle/:id',
     element: <AddVehicle />,
     route_type: "crm_add_vehicle"
+  },
+  {
+    path: '/merchant/customers/vehicle/',
+    element: <Vehicle />
   },
   {
     path: '/merchant/customers/edit-vehicle/:id',

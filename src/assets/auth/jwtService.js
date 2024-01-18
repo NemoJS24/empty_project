@@ -129,8 +129,8 @@ export const configUrl = {
     get_company_details: "/customers/merchant/get_company_details/",
     all_cust_dashboard: "/customers/merchant/all_cust_dashboard/",
     add_company_details: "/customers/merchant/add_company_details/",
-    get_customer_vehicle:'/vehicle/get_customer_vehicle/', //crm
-    get_customer_insurance:'/insurance/get_customer_insurance/', //crm
+    get_customer_vehicle: '/vehicle/get_customer_vehicle/', //crm
+    get_customer_insurance: '/insurance/get_customer_insurance/', //crm
     // Flash Account
 
 
@@ -153,7 +153,8 @@ export const configUrl = {
     add_call: "/customers/merchant/Customer_Add_Calls/",
     finance_dashboard: 'finance/finance_dashboard/',
     servicing_dashboard: 'servicing/servicing_dashboard/',
-    insurance_dashboard: 'insurance/insurance_dashboard/'
+    insurance_dashboard: 'insurance/insurance_dashboard/',
+    get_vehicle: "/vehicle/cust_all_vehicle/"
 }
 
 const axiosInstance = axios.create({

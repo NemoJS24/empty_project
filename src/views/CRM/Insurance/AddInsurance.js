@@ -36,7 +36,7 @@ const AddInsurance = () => {
         ncb_declaration: "",
         third_party_date: "",
         inbuilt_discount: "",
-        net_premimum: "", 
+        net_premimum: "",
         health_insurance: ""
     })
     const [customerFormData, setCustomerFormData] = useState({
@@ -373,15 +373,15 @@ const AddInsurance = () => {
         form_data.append("press_btn", 'SAVE')
 
         postReq('add_vehicle', form_data, crmURL)
-        .then((resp) => {
-            console.log("Response:", resp)
-            toast.success('Vehicle saved successfully')
-            handleClose('product')
-        })
-        .catch((error) => {
-            console.error("Error:", error)
-            toast.error('Failed to save Vehicle')
-        })
+            .then((resp) => {
+                console.log("Response:", resp)
+                toast.success('Vehicle saved successfully')
+                handleClose('product')
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+                toast.error('Failed to save Vehicle')
+            })
     }
 
     const getCountries = () => {
@@ -883,6 +883,7 @@ const AddInsurance = () => {
                         options={productModelOption}
                         closeMenuOnSelect={true}
                         name='carmodel'
+                        value={insuranceOptions?.find(option => option.value === productFormData?.car_model)}
                         onChange={(value, actionMeta) => selectChange(value, actionMeta)}
                     // isLoading={loading}
                     />
@@ -1213,7 +1214,7 @@ const AddInsurance = () => {
                                                     id="flexRadioDefault2"
                                                     value="No"
                                                     onChange={(e) => handleInputChange(e)}
-                                                    />
+                                                />
                                                 <label className="form-check-label" htmlFor="flexRadioDefault2">
                                                     No
                                                 </label>
