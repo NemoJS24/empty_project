@@ -161,6 +161,7 @@ const CustomizationParent = () => {
 
     const [allOffers, setAllOffers] = useState([])
     const [allImages, setAllImages] = useState([])
+    const [prodImages, setProdImages] = useState([])
     const [emailTemplate, setEmailTemplate] = useState([])
     const [gotOffers, setGotOffers] = useState(false)
     const [currPosition, setCurrPosition] = useState({
@@ -237,6 +238,7 @@ const CustomizationParent = () => {
     const [filteredData, setFilteredData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [disableIpDrag, setDisableIpDrag] = useState([])
+    const [imageTab, setImageTab] = useState("default")
     // const [textValue, setTextValue] = useState("")
     // const [senderName, setSenderName] = useState("")
     // const [apiLoader, setApiLoader] = useState(false)
@@ -293,74 +295,74 @@ const CustomizationParent = () => {
     const updatePresent = (newState) => {
         const data = JSON.stringify(finalObj)
         const newObj = { ...newState }
-        if (Array.isArray(newState?.responsive)) {
-            newState?.responsive?.forEach((responsive) => {
-                if (Array.isArray(responsive?.position)) {
-                    responsive?.position?.forEach((position) => {
-                        if (Array.isArray(position?.style)) {
-                            position?.style?.forEach((style) => {
-                                if (style?.isSame) {
-                                    if (responsive?.pageName === "close") {
-                                        const closeArr1 = newObj?.crossButtons[`${mobileConditionRev}main`]
-                                        const closeArr2 = newObj?.crossButtons[`${mobileCondition}main`]
+        // if (Array.isArray(newState?.responsive)) {
+        //     newState?.responsive?.forEach((responsive) => {
+        //         if (Array.isArray(responsive?.position)) {
+        //             responsive?.position?.forEach((position) => {
+        //                 if (Array.isArray(position?.style)) {
+        //                     position?.style?.forEach((style) => {
+        //                         if (style?.isSame) {
+        //                             if (responsive?.pageName === "close") {
+        //                                 const closeArr1 = newObj?.crossButtons[`${mobileConditionRev}main`]
+        //                                 const closeArr2 = newObj?.crossButtons[`${mobileCondition}main`]
 
-                                        if (closeArr1.length > 0 && closeArr2.length > 0) {
-                                            closeArr1.style[style?.styleName] = closeArr2?.style[style?.styleName]
-                                        }
+        //                                 if (closeArr1.length > 0 && closeArr2.length > 0) {
+        //                                     closeArr1.style[style?.styleName] = closeArr2?.style[style?.styleName]
+        //                                 }
 
-                                        newObj.crossButtons[`${mobileConditionRev}main`] = closeArr1
-                                        newObj.crossButtons[`${mobileConditionRev}main`] = closeArr2
+        //                                 newObj.crossButtons[`${mobileConditionRev}main`] = closeArr1
+        //                                 newObj.crossButtons[`${mobileConditionRev}main`] = closeArr2
 
-                                    } else {
-                                        const arr1 = currPage === "button" ? newObj[`${mobileConditionRev}button`] : newObj[`${mobileConditionRev}pages`][newObj[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)]?.values || []
-                                        const arr2 = currPage === "button" ? newObj[`${mobileCondition}button`] : newObj[`${mobileCondition}pages`][newObj[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values || []
-                                        if (arr1.length > 0 && arr2.length > 0) {
-                                            const positionIndex = arr1[position?.id?.cur]?.elements?.findIndex($ => $?.positionType === position?.id?.curElem)
-                                            const updateCustom = (list, obj1, obj2) => {
-                                                list.forEach(listName => {
-                                                    obj1[listName] = obj2[listName]
-                                                })
-                                            }
-                                            if (position?.id?.subElem === "grandparent") {
-                                                arr1[position?.id?.cur].style[style?.styleName] = arr2[position?.id?.cur].style[style?.styleName]
-                                                if (style?.styleName === "bgType") {
-                                                    updateCustom(["backgroundColor", "backgroundImage"], arr1[position?.id?.cur]?.style, arr2[position?.id?.cur]?.style)
-                                                }
-                                            } else if (position?.id?.subElem === "parent" && positionIndex !== -1) {
-                                                arr1[position?.id?.cur].elements[positionIndex].style[style?.styleName] = arr2[position?.id?.cur].elements[positionIndex]?.style[style?.styleName]
-                                                if (style?.styleName === "bgType") {
-                                                    updateCustom(["backgroundColor", "backgroundImage"], arr1[position?.id?.cur].elements[positionIndex]?.style, arr2[position?.id?.cur].elements[positionIndex]?.style)
-                                                }
-                                            } else {
-                                                if (positionIndex !== -1) {
-                                                    arr1[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem].style[style?.styleName] = arr2[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem]?.style[style?.styleName]
-                                                    if (style?.styleName === "bgType") {
-                                                        updateCustom(["backgroundColor", "backgroundImage"], arr1[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem]?.style, arr2[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem]?.style)
-                                                    }
+        //                             } else {
+        //                                 const arr1 = currPage === "button" ? newObj[`${mobileConditionRev}button`] : newObj[`${mobileConditionRev}pages`][newObj[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)]?.values || []
+        //                                 const arr2 = currPage === "button" ? newObj[`${mobileCondition}button`] : newObj[`${mobileCondition}pages`][newObj[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values || []
+        //                                 if (arr1.length > 0 && arr2.length > 0) {
+        //                                     const positionIndex = arr1[position?.id?.cur]?.elements?.findIndex($ => $?.positionType === position?.id?.curElem)
+        //                                     const updateCustom = (list, obj1, obj2) => {
+        //                                         list.forEach(listName => {
+        //                                             obj1[listName] = obj2[listName]
+        //                                         })
+        //                                     }
+        //                                     if (position?.id?.subElem === "grandparent") {
+        //                                         arr1[position?.id?.cur].style[style?.styleName] = arr2[position?.id?.cur].style[style?.styleName]
+        //                                         if (style?.styleName === "bgType") {
+        //                                             updateCustom(["backgroundColor", "backgroundImage"], arr1[position?.id?.cur]?.style, arr2[position?.id?.cur]?.style)
+        //                                         }
+        //                                     } else if (position?.id?.subElem === "parent" && positionIndex !== -1) {
+        //                                         arr1[position?.id?.cur].elements[positionIndex].style[style?.styleName] = arr2[position?.id?.cur].elements[positionIndex]?.style[style?.styleName]
+        //                                         if (style?.styleName === "bgType") {
+        //                                             updateCustom(["backgroundColor", "backgroundImage"], arr1[position?.id?.cur].elements[positionIndex]?.style, arr2[position?.id?.cur].elements[positionIndex]?.style)
+        //                                         }
+        //                                     } else {
+        //                                         if (positionIndex !== -1) {
+        //                                             arr1[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem].style[style?.styleName] = arr2[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem]?.style[style?.styleName]
+        //                                             if (style?.styleName === "bgType") {
+        //                                                 updateCustom(["backgroundColor", "backgroundImage"], arr1[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem]?.style, arr2[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem]?.style)
+        //                                             }
 
-                                                }
-                                            }
+        //                                         }
+        //                                     }
 
-                                            if (currPage === "button") {
-                                                newObj[`${mobileConditionRev}button`] = arr1
-                                                newObj[`${mobileCondition}button`] = arr2
-                                            } else {
-                                                const pageIndex = newObj[`${mobileConditionRev}pages`]?.findIndex($ => $.id === currPage)
-                                                newObj[`${mobileConditionRev}pages`][pageIndex].values = arr1
-                                                newObj[`${mobileCondition}pages`][pageIndex].values = arr2
-                                            }
+        //                                     if (currPage === "button") {
+        //                                         newObj[`${mobileConditionRev}button`] = arr1
+        //                                         newObj[`${mobileCondition}button`] = arr2
+        //                                     } else {
+        //                                         const pageIndex = newObj[`${mobileConditionRev}pages`]?.findIndex($ => $.id === currPage)
+        //                                         newObj[`${mobileConditionRev}pages`][pageIndex].values = arr1
+        //                                         newObj[`${mobileCondition}pages`][pageIndex].values = arr2
+        //                                     }
 
-                                        }
-                                    }
+        //                                 }
+        //                             }
 
 
-                                }
-                            })
-                        }
-                    })
-                }
-            })
-        }
+        //                         }
+        //                     })
+        //                 }
+        //             })
+        //         }
+        //     })
+        // }
         const clonedFinalObj = JSON.parse(data)
         setFinalObj({ ...newObj })
         const delay = 200
@@ -535,125 +537,125 @@ const CustomizationParent = () => {
         const transferedData = dataTransfered?.includes("rearrange") ? dataTransfered?.split("rearrange_") : dataTransfered
         const newObj = { ...finalObj }
 
-        let updatedColWise = []
-        let mobile_updatedColWise = []
-        const pageIndex = newObj?.pages?.findIndex($ => $.id === currPage)
-        const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $.id === currPage)
+        let updatedColWise = currPage === "button" ? finalObj?.button : finalObj?.pages[newObj?.pages?.findIndex($ => $.id === currPage)].values
+        let mobile_updatedColWise = currPage === "button" ? finalObj?.mobile_button : finalObj?.mobile_pages[newObj?.mobile_pages?.findIndex($ => $.id === currPage)].values
+        // const pageIndex = newObj?.pages?.findIndex($ => $.id === currPage)
+        // const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $.id === currPage)
 
         if (transferedData && transferedData !== "row") {
             if (transferedData === "col3") {
                 updatedColWise = [
-                    ...finalObj?.pages[pageIndex]?.values, {
-                        id: finalObj?.pages[pageIndex]?.values?.length + 1,
+                    ...updatedColWise, {
+                        id: updatedColWise?.length + 1,
                         col: 3,
                         style: elementStyles?.block,
                         elements: [
                             {
                                 positionType: 'left',
                                 style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: finalObj?.pages[pageIndex]?.values?.length }]
+                                element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
                             },
                             {
                                 positionType: 'center',
                                 style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: finalObj?.pages[pageIndex]?.values?.length }]
+                                element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
                             },
                             {
                                 positionType: 'right',
                                 style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: finalObj?.pages[pageIndex]?.values?.length }]
+                                element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
                             }
                         ]
                     }
                 ]
                 mobile_updatedColWise = [
-                    ...finalObj?.mobile_pages[mobile_pageIndex]?.values, {
-                        id: finalObj?.mobile_pages[mobile_pageIndex]?.values?.length + 1,
+                    ...mobile_updatedColWise, {
+                        id: mobile_updatedColWise?.length + 1,
                         col: 3,
                         style: elementStyles?.block,
                         elements: [
                             {
                                 positionType: 'left',
                                 style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: finalObj?.mobile_pages[mobile_pageIndex]?.values?.length }]
+                                element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
                             },
                             {
                                 positionType: 'center',
                                 style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: finalObj?.mobile_pages[mobile_pageIndex]?.values?.length }]
+                                element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
                             },
                             {
                                 positionType: 'right',
                                 style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: finalObj?.mobile_pages[mobile_pageIndex]?.values?.length }]
+                                element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
                             }
                         ]
                     }
                 ]
             } else if (transferedData === "col2") {
                 updatedColWise = [
-                    ...finalObj?.pages[pageIndex]?.values, {
-                        id: finalObj?.pages[pageIndex]?.values?.length + 1,
+                    ...updatedColWise, {
+                        id: updatedColWise?.length + 1,
                         col: 2,
                         style: elementStyles?.block,
                         elements: [
                             {
                                 positionType: 'left',
                                 style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: finalObj?.pages[pageIndex]?.values?.length }]
+                                element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
                             },
                             {
                                 positionType: 'right',
                                 style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: finalObj?.pages[pageIndex]?.values?.length }]
+                                element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
                             }
                         ]
                     }
                 ]
                 mobile_updatedColWise = [
-                    ...finalObj?.mobile_pages[mobile_pageIndex]?.values, {
-                        id: finalObj?.mobile_pages[mobile_pageIndex]?.values?.length + 1,
+                    ...mobile_updatedColWise, {
+                        id: mobile_updatedColWise?.length + 1,
                         col: 2,
                         style: elementStyles?.block,
                         elements: [
                             {
                                 positionType: 'left',
                                 style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: finalObj?.mobile_pages[mobile_pageIndex]?.values?.length }]
+                                element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
                             },
                             {
                                 positionType: 'right',
                                 style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: finalObj?.mobile_pages[mobile_pageIndex]?.values?.length }]
+                                element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
                             }
                         ]
                     }
                 ]
             } else if (transferedData === "col1") {
                 updatedColWise = [
-                    ...finalObj?.pages[pageIndex]?.values, {
-                        id: finalObj?.pages[pageIndex]?.values?.length + 1,
+                    ...updatedColWise, {
+                        id: updatedColWise?.length + 1,
                         col: 1,
                         style: elementStyles?.block,
                         elements: [
                             {
                                 positionType: 'left',
                                 style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: finalObj?.pages[pageIndex]?.values?.length }]
+                                element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
                             }
                         ]
                     }
                 ]
                 mobile_updatedColWise = [
-                    ...finalObj?.mobile_pages[mobile_pageIndex]?.values, {
-                        id: finalObj?.mobile_pages[mobile_pageIndex]?.values?.length + 1,
+                    ...mobile_updatedColWise, {
+                        id: mobile_updatedColWise?.length + 1,
                         col: 1,
                         style: elementStyles?.block,
                         elements: [
                             {
                                 positionType: 'left',
                                 style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: finalObj?.mobile_pages[mobile_pageIndex]?.values?.length }]
+                                element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
                             }
                         ]
                     }
@@ -661,29 +663,29 @@ const CustomizationParent = () => {
             } else if (transferedData !== "" && !transferedData?.includes("col")) {
                 const inputTypeCondition = draggedInputType === "none" ? commonObj?.inputType : draggedInputType
                 updatedColWise = [
-                    ...finalObj?.pages[pageIndex]?.values, {
-                        id: finalObj?.pages[pageIndex]?.values?.length + 1,
+                    ...updatedColWise, {
+                        id: updatedColWise?.length + 1,
                         col: 1,
                         style: elementStyles?.block,
                         elements: [
                             {
                                 positionType: 'left',
                                 style: elementStyles?.col,
-                                element: [dataTransfered?.includes("rearrange") ? { ...finalObj?.pages[pageIndex]?.values[dragStartIndex?.cur]?.elements[finalObj?.pages[pageIndex]?.values[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, id: finalObj?.pages[pageIndex]?.values?.length, style: elementStyles?.[transferedData] }]
+                                element: [dataTransfered?.includes("rearrange") ? { ...updatedColWise[dragStartIndex?.cur]?.elements[updatedColWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, id: updatedColWise?.length, style: elementStyles?.[transferedData] }]
                             }
                         ]
                     }
                 ]
                 mobile_updatedColWise = [
-                    ...finalObj?.mobile_pages[mobile_pageIndex]?.values, {
-                        id: finalObj?.mobile_pages[mobile_pageIndex]?.values?.length + 1,
+                    ...mobile_updatedColWise, {
+                        id: mobile_updatedColWise?.length + 1,
                         col: 1,
                         style: elementStyles?.block,
                         elements: [
                             {
                                 positionType: 'left',
                                 style: elementStyles?.col,
-                                element: [dataTransfered?.includes("rearrange") ? { ...finalObj?.mobile_pages[mobile_pageIndex]?.values[dragStartIndex?.cur]?.elements[finalObj?.mobile_pages[mobile_pageIndex]?.values[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, id: finalObj?.pages[pageIndex]?.values?.length, style: elementStyles?.[transferedData] }]
+                                element: [dataTransfered?.includes("rearrange") ? { ...mobile_updatedColWise[dragStartIndex?.cur]?.elements[mobile_updatedColWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, id: updatedColWise?.length, style: elementStyles?.[transferedData] }]
                             }
                         ]
                     }
@@ -693,8 +695,8 @@ const CustomizationParent = () => {
 
 
         if (dataTransfered.includes("rearrange")) {
-            updatedColWise[dragStartIndex.cur]?.elements[finalObj?.pages[pageIndex]?.values[dragStartIndex.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex.curElem)]?.element?.splice(dragStartIndex?.subElem, 1, { ...commonObj })
-            mobile_updatedColWise[dragStartIndex.cur]?.elements[finalObj?.mobile_pages[mobile_pageIndex]?.values[dragStartIndex.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex.curElem)]?.element?.splice(dragStartIndex?.subElem, 1, { ...commonObj })
+            updatedColWise[dragStartIndex.cur]?.elements[updatedColWise[dragStartIndex.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex.curElem)]?.element?.splice(dragStartIndex?.subElem, 1, { ...commonObj })
+            mobile_updatedColWise[dragStartIndex.cur]?.elements[mobile_updatedColWise[dragStartIndex.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex.curElem)]?.element?.splice(dragStartIndex?.subElem, 1, { ...commonObj })
         }
 
         setcolWise(isMobile ? mobile_updatedColWise : updatedColWise)
@@ -887,52 +889,110 @@ const CustomizationParent = () => {
                 }
             })
             .catch(err => console.log(err))
+
+
+        getReq('productDetails', `/?app=${userPermission.appName}`)
+            .then((res) => {
+                const imgArray = new Array()
+                res?.data?.data?.product_details?.Product_Details?.products.forEach(prod => {
+                    prod.images.forEach(img => {
+                        imgArray.push({ image: img.src })
+                    })
+                })
+                setProdImages(imgArray)
+            })
+            .catch(err => console.log(err))
     }
 
-    const getMDToggle = ({ label, value }) => {
+    const getMDToggle = ({ label, value }, isMainBg) => {
         const newObj = { ...finalObj }
-        const arr1 = Array.isArray(finalObj?.responsive) ? [...finalObj?.responsive] : []
-        const index1 = arr1?.findIndex($ => {
-            return currPosition?.selectedType === "close" ? $?.pageName === "close" : $?.pageName === currPage
-        })
-        const arr2 = Array.isArray(arr1[index1]?.position) ? [...arr1[index1]?.position] : []
-        const index2 = arr2?.findIndex($ => isEqual($?.id, { ...indexes }))
-        const arr3 = Array.isArray(arr2[index2]?.style) ? [...arr2[index2]?.style] : []
-        const index3 = arr3?.findIndex($ => $?.styleName === value)
-
-        const condition1 = arr1?.some($ => {
-            return currPosition?.selectedType === "close" ? $?.pageName === "close" : $?.pageName === currPage
-        })
-        const condition2 = arr2?.some($ => isEqual($?.id, { ...indexes }))
-        const condition3 = arr3?.some($ => $?.styleName === value)
 
         let icon
-        if (condition1 && condition2 && condition3 && arr3[index3]?.isSame) {
-            icon = <div className="d-flex align-items-center gap-2">
-                <Monitor size={"12px"} /><Smartphone size={"12px"} />
-            </div>
+
+        let setBoolean = false
+
+        if (isMainBg) {
+            setBoolean = Array.isArray(value) ? value.every($ => finalObj?.responsiveStyles?.[`${pageCondition}`].includes($)) : finalObj?.responsiveStyles?.[`${pageCondition}`].includes(value)
+        } else if (currPosition?.selectedType === "close") {
+            setBoolean = Array.isArray(value) ? value.every($ => finalObj?.responsiveStyles?.[`close`].includes($)) : finalObj?.responsiveStyles?.[`close`].includes(value)
+        } else {
+            let responsiveStyles
+            const arr = currPage === "button" ? finalObj?.button : finalObj?.pages[finalObj?.pages?.findIndex($ => $?.id === currPage)]?.values
+            if (indexes?.subElem === "grandparent") {
+                responsiveStyles = arr[indexes?.cur]?.responsiveStyles
+            } else if (indexes?.subElem === "parent") {
+                const positionIndex = arr[indexes.cur]?.elements?.findIndex($ => $?.positionType === indexes.curElem)
+                responsiveStyles = arr[indexes?.cur]?.elements[positionIndex]?.responsiveStyles
+            } else {
+                const positionIndex = arr[indexes.cur]?.elements?.findIndex($ => $?.positionType === indexes.curElem)
+                responsiveStyles = arr[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.responsiveStyles
+            }
+
+            if (Array.isArray(responsiveStyles)) {
+                setBoolean = Array.isArray(value) ? value.every($ => responsiveStyles.includes($)) : responsiveStyles.includes(value)
+            }
+        }
+
+        if (setBoolean) {
+            icon = <><Monitor size={"12px"} /><Smartphone size={"12px"} /></>
         } else {
             icon = isMobile ? <Smartphone size={"15px"} /> : <Monitor size={"15px"} />
         }
 
         const setCondition = (condition) => {
-            if (condition1 && condition2 && condition3) {
-                newObj.responsive[index1].position[index2].style[index3].isSame = condition
+            const arr = currPage === "button" ? finalObj?.button : finalObj?.pages[finalObj?.pages?.findIndex($ => $?.id === currPage)]?.values
+            const mobile_arr = currPage === "button" ? finalObj?.mobile_button : finalObj?.mobile_pages[finalObj?.mobile_pages?.findIndex($ => $?.id === currPage)]?.values
+
+            const setArr = (arr1, arr2) => {
+                if (arr1 && Array.isArray(arr1)) {
+                    if (condition) {
+                        Array.isArray(value) ? value.forEach($ => arr1.push($)) : arr1?.push(value)
+                    } else {
+                        arr1 = Array.isArray(value) ? arr1?.filter($ => !value.includes($)) : arr1?.filter($ => $ !== value)
+                    }
+                    arr2 = arr1
+                } else if (condition) {
+                    let newArr = []
+                    Array.isArray(value) ? value.map($ => newArr.push($)) : newArr = [value]
+                    arr1 = [...newArr]
+                    arr2 = [...newArr]
+                }
+                return { arr1, arr2 }
+            }
+
+            if (isMainBg) {
+                const trObj = setArr(newObj?.responsiveStyles?.[`${isMainBg}`], [])
+                const { arr1 } = trObj
+                newObj.responsiveStyles[`${isMainBg}`] = arr1
+            } else if (currPosition?.selectedType === "close") {
+                const trObj = setArr(newObj?.responsiveStyles?.[`close`], [])
+                const { arr1 } = trObj
+                newObj.responsiveStyles[`close`] = arr1
             } else {
-                if (!condition1) {
-                    newObj.responsive = [...arr1, { pageName: currPosition?.selectedType === "close" ? "close" : currPage, position: [{ id: { ...indexes }, style: [{ styleName: value, isSame: condition, view: isMobile ? "mobile" : "desktop" }] }] }]
-                } else if (!condition2) {
-                    if (newObj?.responsive[index1]) {
-                        newObj.responsive[index1].position = [...arr2, { id: { ...indexes }, style: [{ styleName: value, isSame: condition, view: isMobile ? "mobile" : "desktop" }] }]
-                    } else {
-                        newObj?.responsive?.push({ pageName: currPosition?.selectedType === "close" ? "close" : currPage, position: [{ id: { ...indexes }, style: [{ styleName: value, isSame: condition, view: isMobile ? "mobile" : "desktop" }] }] })
-                    }
-                } else if (!condition3) {
-                    if (newObj?.responsive[index1]?.position[index2]) {
-                        newObj.responsive[index1].position[index2].style = [...arr3, { styleName: value, isSame: condition, view: isMobile ? "mobile" : "desktop" }]
-                    } else {
-                        newObj?.responsive[index1]?.position?.push({ id: { ...indexes }, style: [{ styleName: value, isSame: condition, view: isMobile ? "mobile" : "desktop" }] })
-                    }
+                if (indexes?.subElem === "grandparent") {
+                    const trObj = setArr(arr[indexes?.cur]?.responsiveStyles, mobile_arr[indexes?.cur]?.responsiveStyles)
+                    const { arr1, arr2 } = trObj
+                    arr[indexes?.cur].responsiveStyles = arr1
+                    mobile_arr[indexes?.cur].responsiveStyles = arr2
+                } else if (indexes?.subElem === "parent") {
+                    const positionIndex = arr[indexes.cur]?.elements?.findIndex($ => $?.positionType === indexes.curElem)
+                    const trObj = setArr(arr[indexes?.cur]?.elements[positionIndex]?.responsiveStyles, mobile_arr[indexes?.cur]?.elements[positionIndex]?.responsiveStyles)
+                    const { arr1, arr2 } = trObj
+                    arr[indexes?.cur].elements[positionIndex].responsiveStyles = arr1
+                    mobile_arr[indexes?.cur].elements[positionIndex].responsiveStyles = arr2
+                } else {
+                    const positionIndex = arr[indexes.cur]?.elements?.findIndex($ => $?.positionType === indexes.curElem)
+                    const trObj = setArr(arr[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.responsiveStyles, mobile_arr[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.responsiveStyles)
+                    const { arr1, arr2 } = trObj
+                    arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].responsiveStyles = arr1
+                    mobile_arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].responsiveStyles = arr2
+                }
+                if (currPage === "button") {
+                    newObj.button = arr
+                    newObj.mobile_button = mobile_arr
+                } else {
+                    newObj.pages[newObj?.pages?.findIndex($ => $?.id === currPage)].values = arr
+                    newObj.mobile_pages[newObj?.mobile_pages?.findIndex($ => $?.id === currPage)].values = mobile_arr
                 }
             }
             updatePresent({ ...newObj })
@@ -949,16 +1009,18 @@ const CustomizationParent = () => {
                         <DropdownItem onClick={() => {
                             setCondition(false)
                             setIsMobile(false)
-                        }} className={`w-100 ${(!condition1 && !condition2 && !condition3 && !isMobile && !arr3[index3]?.isSame) ? "btn-primary-main" : ""}`}>
+                        }} className={`w-100`}>
                             Desktop View Only
                         </DropdownItem>
                         <DropdownItem onClick={() => {
                             setCondition(false)
                             setIsMobile(true)
-                        }} className={`w-100 ${(!condition1 && !condition2 && !condition3 && isMobile && !arr3[index3]?.isSame) ? "btn-primary-main" : ""}`}>
+                        }} className={`w-100`}>
                             Mobile View Only
                         </DropdownItem>
-                        <DropdownItem onClick={() => setCondition(true)} className={`w-100 ${(condition1 && condition2 && condition3 && arr3[index3]?.isSame) ? "btn-primary-main" : ""}`}>
+                        <DropdownItem onClick={() => {
+                            setCondition(true)
+                        }} className={`w-100`}>
                             Desktop and Mobile View
                         </DropdownItem>
                     </DropdownMenu>
@@ -1052,7 +1114,7 @@ const CustomizationParent = () => {
                                             label: <>Height: <input value={parseFloat(values?.height)} type='number' className='form-control' style={{ width: "8ch" }} onChange={e => {
                                                 setValues({ ...values, height: `${parseFloat(e.target.value)}px`, maxHeight: `${parseFloat(e.target.value)}px` })
                                             }} />px</>,
-                                            value: "height"
+                                            value: ["height", "maxHeight"]
                                         })}
                                         <div className="d-flex p-0 justify-content-between align-items-center gap-2">
                                             <input value={parseFloat(values?.height)} type='range' className='w-100' onChange={e => {
@@ -1123,7 +1185,7 @@ const CustomizationParent = () => {
                             <AccordionBody accordionId='2'>
                                 <div className='p-0 mx-0 my-1'>
                                     <div className='p-0 mb-1 justify-content-start align-items-center'>
-                                        {getMDToggle({ label: `Background: `, value: "bgType" })}
+                                        {getMDToggle({ label: `Background: `, value: ["bgType", "backgroundColor", "backgroundImage"] })}
                                         <div className="border p-1 rounded mb-2" style={{ backgroundColor: values?.backgroundColor, backgroundImage: values?.backgroundImage }} onClick={() => setBgModal0(!bgModal0)}></div>
                                         {/* <UncontrolledButtonDropdown>
                                             <DropdownToggle color='dark' style={{ padding: "0.5rem" }} className='hide-after-dropdown rounded'>
@@ -1147,7 +1209,7 @@ const CustomizationParent = () => {
                                 <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}>Border and Shadow</p>
                             </AccordionHeader>
                             <AccordionBody accordionId='3'>
-                                <BorderChange getMDToggle={getMDToggle} setStyles={setValues} styles={values} />
+                                <BorderChange pageCondition={pageCondition} getMDToggle={getMDToggle} setStyles={setValues} styles={values} />
                             </AccordionBody>
                         </AccordionItem>
                     </UncontrolledAccordion>
@@ -1296,7 +1358,7 @@ const CustomizationParent = () => {
                             <AccordionBody accordionId='2'>
                                 <div className='p-0 mx-0 my-1'>
                                     <div className='p-0 mb-1 justify-content-start align-items-center'>
-                                        {getMDToggle({ label: `Background`, value: `bgType` })}
+                                        {getMDToggle({ label: `Background`, value: ["bgType", "backgroundColor", "backgroundImage"] })}
                                         <div style={{ backgroundImage: `url(${pixels})` }}>
                                             <div className="p-1 border rounded" style={{ backgroundImage: values?.backgroundImage, backgroundColor: values?.backgroundColor }} onClick={() => setBgModal0(!bgModal0)}></div>
                                         </div>
@@ -1309,7 +1371,7 @@ const CustomizationParent = () => {
                                 <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}>Border and Shadow</p>
                             </AccordionHeader>
                             <AccordionBody accordionId='3'>
-                                <BorderChange getMDToggle={getMDToggle} styles={values} setStyles={setValues} />
+                                <BorderChange pageCondition={pageCondition} getMDToggle={getMDToggle} styles={values} setStyles={setValues} />
                             </AccordionBody>
                         </AccordionItem>
                     </UncontrolledAccordion>
@@ -1355,7 +1417,7 @@ const CustomizationParent = () => {
                                 <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}>Border and Shadow</p>
                             </AccordionHeader>
                             <AccordionBody accordionId='1'>
-                                <BorderChange getMDToggle={getMDToggle} styles={values} setStyles={setValues} />
+                                <BorderChange pageCondition={pageCondition} getMDToggle={getMDToggle} styles={values} setStyles={setValues} />
                             </AccordionBody>
                         </AccordionItem>
                     </UncontrolledAccordion>
@@ -1414,6 +1476,8 @@ const CustomizationParent = () => {
                                     <div className='mb-1'>
                                         {getMDToggle({
                                             label: <>Width: <input value={parseFloat(imgWidth)} type='number' className='form-control' style={{ width: "8ch" }} onChange={e => {
+                                                arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandWidth = false
+                                                setcolWise([...arr])
                                                 setValues({ ...values, width: `${parseFloat(e.target.value)}px` })
                                             }} />px</>,
                                             value: `width`
@@ -1427,7 +1491,14 @@ const CustomizationParent = () => {
                                         </div>
                                     </div>
                                     <div className='mb-1'>
-                                        {getMDToggle({ label: `Height: ${imgHeight}`, value: `height` })}
+                                        {getMDToggle({
+                                            label: <>Height: <input value={parseFloat(imgHeight)} type='number' className='form-control' style={{ width: "8ch" }} onChange={e => {
+                                                arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandHeight = false
+                                                setcolWise([...arr])
+                                                setValues({ ...values, height: `${parseFloat(e.target.value)}px` })
+                                            }} />px</>,
+                                            value: `height`
+                                        })}
                                         <div className="p-0 justify-content-start align-items-center gap-2">
                                             <input value={parseFloat(imgHeight)} onChange={(e) => {
                                                 arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandHeight = false
@@ -1482,7 +1553,7 @@ const CustomizationParent = () => {
                             <AccordionBody accordionId='1'>
                                 <div className='p-0 mx-0 my-1'>
                                     <div className='p-0 mb-1 justify-content-start align-items-center'>
-                                        {getMDToggle({ label: `Background`, value: `bgType` })}
+                                        {getMDToggle({ label: `Background`, value: ["bgType", "backgroundColor", "backgroundImage"] })}
                                         <div className="p-2 border rounded" onClick={() => setBgModal0(!bgModal0)} style={{ backgroundColor: values?.backgroundColor, backgroundImage: values?.backgroundImage }}></div>
                                     </div>
                                 </div>
@@ -1493,7 +1564,7 @@ const CustomizationParent = () => {
                                 <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}>Border and Shadow</p>
                             </AccordionHeader>
                             <AccordionBody accordionId='2'>
-                                <BorderChange getMDToggle={getMDToggle} styles={values} setStyles={setValues} />
+                                <BorderChange pageCondition={pageCondition} getMDToggle={getMDToggle} styles={values} setStyles={setValues} />
                             </AccordionBody>
                         </AccordionItem>
                         {/* <AccordionItem>
@@ -1803,7 +1874,7 @@ const CustomizationParent = () => {
                             <AccordionBody accordionId='11'>
                                 <div className='p-0 mx-0 my-1'>
                                     <div className='p-0 mb-1 justify-content-start align-items-center'>
-                                        {getMDToggle({ label: `Text Color:`, value: `color` })}
+                                        {getMDToggle({ label: `Text Color:`, value: [`color`, "WebkitTextFillColor"] })}
                                         <div className="border rounded" style={{ backgroundImage: `url(${pixels})` }}>
                                             <div className="p-1" style={{ backgroundColor: values.WebkitTextFillColor ? values.WebkitTextFillColor : "#000000" }} onClick={() => { setBgModal5(!bgModal5) }}></div>
 
@@ -1921,7 +1992,7 @@ const CustomizationParent = () => {
                                         </div>
                                     </>)}
                                     {colWise[indexes?.cur].elements[positionIndex]?.element[indexes?.subElem]?.hasLabel && <div className='mb-2'>
-                                        {getMDToggle({ label: `Label and Input gap: ${values?.elemGap ? values?.elemGap : "0px"}`, value: `width` })}
+                                        {getMDToggle({ label: `Label and Input gap: ${values?.elemGap ? values?.elemGap : "0px"}`, value: `elemGap` })}
                                         <div className="d-flex p-0 justify-content-between align-items-center gap-2">
                                             <input value={parseFloat(values?.elemGap ? values?.elemGap : "0px")} type='range' className='w-100' onChange={e => {
                                                 setValues({ ...values, elemGap: `${e.target.value}px` })
@@ -1938,7 +2009,7 @@ const CustomizationParent = () => {
                             <AccordionBody accordionId='3'>
                                 <div className='p-0 mx-0 my-1'>
                                     <div className='p-0 mb-1 justify-content-start align-items-center'>
-                                        {getMDToggle({ label: `Background:`, value: `bgType` })}
+                                        {getMDToggle({ label: `Background:`, value: ["bgType", "backgroundColor", "backgroundImage"] })}
                                         <div className="border rounded" style={{ backgroundImage: `url(${pixels})` }}>
                                             <div className="p-1" style={{ backgroundColor: values?.backgroundColor, backgroundImage: values?.backgroundImage, backgroundRepeat: values?.backgroundRepeat, backgroundSize: values?.backgroundSize }} onClick={() => setBgModal0(!bgModal0)}></div>
                                         </div>
@@ -1951,7 +2022,7 @@ const CustomizationParent = () => {
                                 <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}>Border and Shadow</p>
                             </AccordionHeader>
                             <AccordionBody accordionId='4'>
-                                <BorderChange getMDToggle={getMDToggle} setStyles={setValues} styles={values} />
+                                <BorderChange pageCondition={pageCondition} getMDToggle={getMDToggle} setStyles={setValues} styles={values} />
                             </AccordionBody>
                         </AccordionItem>
                     </UncontrolledAccordion>
@@ -2056,7 +2127,7 @@ const CustomizationParent = () => {
                         </div>
                     </div>
                     <div className='p-0 my-1'>
-                        {getMDToggle({ label: "Background Color", value: `backgroundColor` })}
+                        {getMDToggle({ label: "Background Color", value: ["bgType", "backgroundColor", "backgroundImage"] })}
                         {/* <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Background Color</span> */}
                         <div className="rounded border" style={{ backgroundImage: `url(${pixels})` }}>
                             <div className="p-2 12" style={{ backgroundColor: finalObj?.crossButtons?.[`${mobileCondition}main`]?.backgroundColor, backgroundImage: finalObj?.crossButtons?.[`${mobileCondition}main`]?.backgroundImage }} onClick={() => {
@@ -2087,7 +2158,7 @@ const CustomizationParent = () => {
                         </div> */}
                     </div>
                     <div className='p-0 my-1'>
-                        <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>X Color</span>
+                        {getMDToggle({ label: "X Color", value: `color` })}
                         <div className="rounded border" style={{ backgroundImage: `url(${pixels})` }}>
                             <div className="p-2" style={{ backgroundColor: finalObj?.crossButtons?.[`${mobileCondition}main`]?.color }} onClick={() => {
                                 setColorType("color")
@@ -2096,22 +2167,65 @@ const CustomizationParent = () => {
                         </div>
                     </div>
                     <div className='my-1'>
-                        <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Size: {finalObj?.crossButtons[`${pageCondition}`]?.width}</span>
+                        {getMDToggle({
+                            label: <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Size: {finalObj?.crossButtons[`${pageCondition}`]?.width}</span>,
+                            value: [`width`, 'height', 'maxWidth', 'maxHeight']
+                        })}
                         <div className="p-0 justify-content-start align-items-center gap-2">
                             <input value={parseFloat(finalObj?.crossButtons[`${pageCondition}`]?.width)} type='range' className='w-100' name="height" min="5" max="300"
                                 onChange={(e) => {
-                                    updatePresent({ ...finalObj, crossButtons: { ...finalObj?.crossButtons, [`${pageCondition}`]: { ...finalObj?.crossButtons[`${pageCondition}`], width: `${e.target.value}px`, height: `${e.target.value}px`, maxWidth: `${e.target.value}px`, maxHeight: `${e.target.value}px` } } })
+                                    updatePresent({
+                                        ...finalObj,
+                                        crossButtons:
+                                        {
+                                            ...finalObj?.crossButtons,
+                                            [`${mobileCondition}${pageCondition}`]:
+                                            {
+                                                ...finalObj?.crossButtons[`${mobileCondition}${pageCondition}`],
+                                                width: `${e.target.value}px`,
+                                                height: `${e.target.value}px`,
+                                                maxWidth: `${e.target.value}px`,
+                                                maxHeight: `${e.target.value}px`
+                                            },
+                                            [`${mobileConditionRev}${pageCondition}`]:
+                                            {
+                                                ...finalObj?.crossButtons[`${mobileConditionRev}${pageCondition}`],
+                                                width: finalObj?.responsiveStyles?.close.includes("width") ? `${e.target.value}px` : finalObj?.crossButtons[`${mobileConditionRev}${pageCondition}`]?.width,
+                                                height: finalObj?.responsiveStyles?.close.includes("height") ? `${e.target.value}px` : finalObj?.crossButtons[`${mobileConditionRev}${pageCondition}`]?.height,
+                                                maxWidth: finalObj?.responsiveStyles?.close.includes("maxWidth") ? `${e.target.value}px` : finalObj?.crossButtons[`${mobileConditionRev}${pageCondition}`]?.maxWidth,
+                                                maxHeight: finalObj?.responsiveStyles?.close.includes("maxHeight") ? `${e.target.value}px` : finalObj?.crossButtons[`${mobileConditionRev}${pageCondition}`]?.maxHeight
+                                            }
+                                        }
+                                    })
                                     // setCrossStyle({ ...crossStyle, width: `${e.target.value}px`, height: `${e.target.value}px`, maxWidth: `${e.target.value}px`, maxHeight: `${e.target.value}px` })
                                 }} />
                         </div>
                     </div>
                     <div className='my-1'>
-                        <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Corner radius: {finalObj?.crossButtons[`${pageCondition}`]?.borderRadius}</span>
+                        {getMDToggle({
+                            label: <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Corner radius {finalObj?.crossButtons[`${pageCondition}`]?.width}</span>,
+                            value: `borderRadius`
+                        })}
                         <div className=" p-0 justify-content-start align-items-center gap-2">
                             <input value={parseFloat(finalObj?.crossButtons[`${pageCondition}`]?.borderRadius)} type='range' className='w-100' name="height" min="0" max="300"
                                 onChange={(e) => {
                                     // const newSize = parseInt(e.target.value)
-                                    updatePresent({ ...finalObj, crossButtons: { ...finalObj?.crossButtons, [`${pageCondition}`]: { ...finalObj?.crossButtons[`${pageCondition}`], borderRadius: `${e.target.value}px` } } })
+                                    updatePresent({
+                                        ...finalObj,
+                                        crossButtons: {
+                                            ...finalObj?.crossButtons,
+                                            [`${mobileCondition}${pageCondition}`]:
+                                            {
+                                                ...finalObj?.crossButtons[`${mobileCondition}${pageCondition}`],
+                                                borderRadius: `${e.target.value}px`
+                                            },
+                                            [`${mobileConditionRev}${pageCondition}`]:
+                                            {
+                                                ...finalObj?.crossButtons[`${mobileConditionRev}${pageCondition}`],
+                                                borderRadius: finalObj?.responsiveStyles?.close.includes("borderRadius") ? `${e.target.value}px` : finalObj?.crossButtons[`${mobileConditionRev}${pageCondition}`]?.borderRadius
+                                            }
+                                        }
+                                    })
                                     // updatePresent({...finalObj, crossButtons: {...finalObj?.crossButtons, borderRadius: `${e.target.value}px`}})
                                     // setCrossStyle({ ...crossStyle, borderRadius: `${e.target.value}px` })
                                 }} />
@@ -2126,7 +2240,7 @@ const CustomizationParent = () => {
                             <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Vertical alignment: {finalObj?.crossButtons[`${pageCondition}`]?.translateY}</span>
                             <div className=" p-0 justify-content-start align-items-center gap-2">
                                 <input value={parseFloat(finalObj?.crossButtons[`${pageCondition}`]?.translateY)} onChange={e => {
-                                    updatePresent({ ...finalObj, crossButtons: { ...finalObj?.crossButtons, [`${pageCondition}`]: { ...finalObj?.crossButtons[`${pageCondition}`], translateY: `${e.target.value}px`, transform: `translateX(${finalObj?.crossButtons[`${pageCondition}`]?.translateX}) translateY(${e.target.value}px)` } } })
+                                    updatePresent({ ...finalObj, crossButtons: { ...finalObj?.crossButtons, [`${mobileCondition}${pageCondition}`]: { ...finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], translateY: `${e.target.value}px`, transform: `translateX(${finalObj?.crossButtons[`${mobileCondition}${pageCondition}`]?.translateX}) translateY(${e.target.value}px)` } } })
 
                                     // setCrossStyle({ ...crossStyle, translateY: `${e.target.value}px` })
                                 }} type='range' className='w-100' name="height" min={currPage === "button" ? `-${(finalObj?.backgroundStyles[`${mobileCondition}button`][isMobile ? "maxWidth" : "width"]).replace("px", "")}` : `-${(finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"]).replace("px", "")}`} max={currPage === "button" ? `${(finalObj?.backgroundStyles[`${mobileCondition}button`][isMobile ? "maxWidth" : "width"]).replace("px", "")}` : (finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"]).replace("px", "")} />
@@ -2136,7 +2250,7 @@ const CustomizationParent = () => {
                             <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Horizontal alignment: {finalObj?.crossButtons[`${pageCondition}`]?.translateX}</span>
                             <div className="p-0 justify-content-start align-items-center gap-2">
                                 <input value={parseFloat(finalObj?.crossButtons[`${pageCondition}`]?.translateX)} onChange={e => {
-                                    updatePresent({ ...finalObj, crossButtons: { ...finalObj?.crossButtons, [`${pageCondition}`]: { ...finalObj?.crossButtons[`${pageCondition}`], translateX: `${e.target.value}px`, transform: `translateX(${e.target.value}px) translateY(${finalObj?.crossButtons[`${pageCondition}`]?.translateY})` } } })
+                                    updatePresent({ ...finalObj, crossButtons: { ...finalObj?.crossButtons, [`${mobileCondition}${pageCondition}`]: { ...finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], translateX: `${e.target.value}px`, transform: `translateX(${e.target.value}px) translateY(${finalObj?.crossButtons[`${mobileCondition}${pageCondition}`]?.translateY})` } } })
 
                                     // setCrossStyle({ ...crossStyle, translateX: `${e.target.value}px` })
                                 }} type='range' className='w-100' name="height" min={`-${finalObj?.backgroundStyles[`${mobileCondition}main`]?.minHeight.replace("px", "")}`} max={`${finalObj?.backgroundStyles[`${mobileCondition}main`]?.minHeight.replace("px", "")}`} />
@@ -2159,7 +2273,7 @@ const CustomizationParent = () => {
                             <AccordionBody accordionId='1'>
                                 <div className='p-0 mx-0 my-1'>
                                     <div className=' p-0 justify-content- align-items-center gap-1'>
-                                        {getMDToggle({ label: `Background:`, value: `bgType` })}
+                                        {getMDToggle({ label: `Background:`, value: ["bgType", "backgroundColor", "backgroundImage"] })}
                                         <div className=" rounded border cursor-pointer" style={{ backgroundImage: `url(${pixels})` }}>
                                             <div onClick={() => setBgModal0(!bgModal0)} className="p-2 w-100" style={{ backgroundColor: values?.backgroundColor, backgroundImage: values?.backgroundImage }}></div>
                                         </div>
@@ -2172,7 +2286,7 @@ const CustomizationParent = () => {
                                 <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}>Border and Shadow</p>
                             </AccordionHeader>
                             <AccordionBody accordionId='2'>
-                                <BorderChange getMDToggle={getMDToggle} styles={values} setStyles={setValues} />
+                                <BorderChange pageCondition={pageCondition} getMDToggle={getMDToggle} styles={values} setStyles={setValues} />
                             </AccordionBody>
                         </AccordionItem>
                         <AccordionItem>
@@ -2478,7 +2592,7 @@ const CustomizationParent = () => {
                             <AccordionBody accordionId='2'>
                                 <div className='p-0 mx-0 my-1'>
                                     <div className='p-0 mb-1 justify-content-start align-items-center'>
-                                        {getMDToggle({ label: `Background`, value: `bgType` })}
+                                        {getMDToggle({ label: `Background`, value: ["bgType", "backgroundColor", "backgroundImage"] })}
                                         <div className="border rounded" style={{ backgroundImage: `url(${pixels})` }}>
                                             <div className="p-1" style={{ backgroundColor: values?.backgroundColor, backgroundImage: values?.backgroundImage, backgroundRepeat: values?.backgroundRepeat, backgroundSize: values?.backgroundSize }} onClick={() => setBgModal0(!bgModal0)}></div>
                                         </div>
@@ -3010,6 +3124,8 @@ const CustomizationParent = () => {
                 mobile_dupArray[dragOverIndex.cur]?.elements[mobile_dupArray[dragOverIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragOverIndex?.curElem)]?.element?.splice(dragOverIndex?.subElem + 1, 0, { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
                 setIndexes({ cur, curElem, subElem })
             }
+
+
             setValues({ ...elementStyles[transferedData] })
             setcolWise(isMobile ? [...mobile_dupArray] : [...dupArray])
             const newObj = { ...finalObj }
@@ -3298,24 +3414,49 @@ const CustomizationParent = () => {
     }, [isMobile, currPage])
 
     useEffect(() => {
-        const colWise = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
-        if (colWise.length > 0) {
-            const arr = [...colWise]
-            const positionIndex = colWise[indexes.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
+        const newObj = { ...finalObj }
+        const arr = currPage === "button" ? [...newObj?.[`${mobileCondition}button`]] : [...newObj?.[`${mobileCondition}pages`][newObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
+        const rev_arr = currPage === "button" ? [...newObj?.[`${mobileConditionRev}button`]] : [...newObj?.[`${mobileConditionRev}pages`][newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $.id === currPage)].values]
+        if (arr.length > 0) {
+            const positionIndex = arr[indexes.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
             if (indexes.subElem === "grandparent") {
                 if (arr[indexes?.cur]?.style) {
                     arr[indexes.cur].style = { ...arr[indexes?.cur]?.style, ...values }
+                    if (arr[indexes?.cur]?.responsiveStyles && Array.isArray(arr[indexes?.cur]?.responsiveStyles)) {
+                        arr[indexes?.cur]?.responsiveStyles?.forEach($ => {
+                            rev_arr[indexes?.cur].style[$] = arr[indexes?.cur].style[$]
+                        })
+                    }
                 }
             } else if (indexes.subElem === "parent") {
                 if (arr[indexes?.cur]?.elements[positionIndex]?.style) {
                     arr[indexes.cur].elements[positionIndex].style = { ...arr[indexes.cur]?.elements[positionIndex]?.style, ...values }
+                    if (arr[indexes.cur].elements[positionIndex]?.responsiveStyles && Array.isArray(arr[indexes.cur].elements[positionIndex]?.responsiveStyles)) {
+                        arr[indexes.cur].elements[positionIndex]?.responsiveStyles?.forEach($ => {
+                            rev_arr[indexes.cur].elements[positionIndex].style[$] = arr[indexes.cur].elements[positionIndex].style[$]
+                        })
+                    }
                 }
             } else {
                 if (arr[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style) {
                     arr[indexes.cur].elements[positionIndex].element[indexes.subElem].style = { ...arr[indexes.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style, ...values }
+                    if (arr[indexes.cur].elements[positionIndex].element[indexes.subElem]?.responsiveStyles && Array.isArray(arr[indexes.cur].elements[positionIndex].element[indexes.subElem]?.responsiveStyles)) {
+                        arr[indexes.cur].elements[positionIndex].element[indexes.subElem]?.responsiveStyles?.forEach($ => {
+                            rev_arr[indexes.cur].elements[positionIndex].element[indexes.subElem].style[$] = arr[indexes.cur].elements[positionIndex].element[indexes.subElem].style[$]
+                        })
+                    }
                 }
             }
-            setcolWise([...arr])
+            // setcolWise([...arr])
+            if (currPage === "button") {
+                newObj[`${mobileCondition}button`] = arr
+                newObj[`${mobileConditionRev}button`] = rev_arr
+            } else {
+                const pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $.id === currPage)
+                newObj[`${mobileCondition}pages`][pageIndex].values = arr
+                newObj[`${mobileConditionRev}pages`][pageIndex].values = rev_arr
+            }
+            updatePresent({ ...newObj })
         }
     }, [values])
 
@@ -3345,7 +3486,6 @@ const CustomizationParent = () => {
         fetch(`${SuperLeadzBaseURL}/talks/api/template-placeholders/?app=${userPermission?.appName}`)
             .then((data) => data.json())
             .then((resp) => {
-                console.log(resp, "pfjpsaofjopa")
                 setPlaceholder(resp)
             })
             .catch((error) => {
@@ -3756,7 +3896,7 @@ const CustomizationParent = () => {
                 </Container>
                 <div className="d-flex justify-content-center align-items-stretch border position-relative" style={{ height: "calc(100vh - 55px)" }}>
                     {/* Component for changing background of the selected element */}
-                    {/* <BgModifier styles={bgStyles} setStyles={setBgStyles} /> */}
+                    {/* <BgModifier pageCondition={pageCondition} mobileCondition={mobileCondition} mobileConditionRev={mobileConditionRev} styles={bgStyles} setStyles={setBgStyles} /> */}
                     {/* Component for changing background of the selected element */}
 
                     {/* Sidebar */}
@@ -4070,7 +4210,7 @@ const CustomizationParent = () => {
                                                             </div>
                                                         </div>
                                                         <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}>Border and Shadow</p>
-                                                        {currPage === "button" ? < BorderChange type={`btnStyles`} mainStyle={finalObj} setMainStyle={updatePresent} mobileCondition={mobileCondition} /> : <BorderChange getMDToggle={getMDToggle} type={`bgStyles`} mainStyle={finalObj} setMainStyle={updatePresent} mobileCondition={mobileCondition} />}
+                                                        {currPage === "button" ? <BorderChange pageCondition={pageCondition} type={`btnStyles`} mainStyle={finalObj} setMainStyle={updatePresent} mobileCondition={mobileCondition} /> : <BorderChange pageCondition={pageCondition} type={`bgStyles`} mainStyle={finalObj} setMainStyle={updatePresent} mobileCondition={mobileCondition} />}
                                                     </AccordionBody>
                                                 </AccordionItem>
                                                 <AccordionItem>
@@ -5177,28 +5317,28 @@ const CustomizationParent = () => {
 
                     {/*Modals */}
                     <Modal onClick={() => setBgModal0(!bgModal0)} toggle={() => setBgModal0(!bgModal0)} className='hide-backdrop' isOpen={bgModal0} style={{ width: "300px", maxWidth: "90%", margin: "0px" }}>
-                        <BgModifier closeState={bgModal0} setCloseState={setBgModal0} styles={values} setStyles={setValues} />
+                        <BgModifier pageCondition={pageCondition} mobileCondition={mobileCondition} mobileConditionRev={mobileConditionRev} closeState={bgModal0} setCloseState={setBgModal0} styles={values} setStyles={setValues} mainStyle={finalObj} setMainStyle={setFinalObj} />
                     </Modal>
                     <Modal onClick={() => setBgModal(!bgModal)} toggle={() => setBgModal(!bgModal)} className='hide-backdrop' isOpen={bgModal} style={{ width: "300px", maxWidth: "90%", margin: "0px" }}>
-                        <BgModifier type="btnSetting" setMainStyle={updatePresent} mainStyle={finalObj} closeState={bgModal} setCloseState={setBgModal} styles={finalObj?.overlayStyles} />
+                        <BgModifier pageCondition={pageCondition} mobileCondition={mobileCondition} mobileConditionRev={mobileConditionRev} type="btnSetting" setMainStyle={updatePresent} mainStyle={finalObj} closeState={bgModal} setCloseState={setBgModal} styles={finalObj?.overlayStyles} />
                     </Modal>
                     <Modal onClick={() => setBgModal2(!bgModal2)} toggle={() => setBgModal2(!bgModal2)} className='hide-backdrop' isOpen={bgModal2} style={{ width: "300px", maxWidth: "90%", margin: "0px" }}>
-                        <BgModifier type="bgStyles" styles={finalObj?.backgroundStyles?.[`${mobileCondition}main`]} setMainStyle={updatePresent} mainStyle={finalObj} mobileCondition={mobileCondition} closeState={bgModal2} setCloseState={setBgModal2} />
+                        <BgModifier pageCondition={pageCondition} mobileCondition={mobileCondition} mobileConditionRev={mobileConditionRev} type="bgStyles" styles={finalObj?.backgroundStyles?.[`${mobileCondition}main`]} setMainStyle={updatePresent} mainStyle={finalObj} closeState={bgModal2} setCloseState={setBgModal2} />
                     </Modal>
                     <Modal onClick={() => setBgModal3(!bgModal3)} toggle={() => setBgModal3(!bgModal3)} className='hide-backdrop' isOpen={bgModal3} style={{ width: "300px", maxWidth: "90%", margin: "0px" }}>
-                        <BgModifier type="btnStyles" styles={finalObj?.backgroundStyles?.[`${mobileCondition}button`]} setMainStyle={updatePresent} mainStyle={finalObj} mobileCondition={mobileCondition} colorType={colorType} closeState={bgModal3} setCloseState={setBgModal3} />
+                        <BgModifier pageCondition={pageCondition} mobileCondition={mobileCondition} mobileConditionRev={mobileConditionRev} type="btnStyles" styles={finalObj?.backgroundStyles?.[`${mobileCondition}button`]} setMainStyle={updatePresent} mainStyle={finalObj} colorType={colorType} closeState={bgModal3} setCloseState={setBgModal3} />
                     </Modal>
                     <Modal onClick={() => setBgModal4(!bgModal4)} toggle={() => setBgModal4(!bgModal4)} className='hide-backdrop' isOpen={bgModal4} style={{ width: "300px", maxWidth: "90%", margin: "0px" }}>
-                        <CustomColorModifier type="offerColors" setMainStyle={updatePresent} mainStyle={finalObj} colorType={currOfferColor} />
+                        <CustomColorModifier mobileCondition={mobileCondition} mobileConditionRev={mobileConditionRev} type="offerColors" setMainStyle={updatePresent} mainStyle={finalObj} colorType={currOfferColor} />
                     </Modal>
                     <Modal onClick={() => setBgModal5(!bgModal5)} toggle={() => setBgModal5(!bgModal5)} className='hide-backdrop' isOpen={bgModal5} style={{ width: "300px", maxWidth: "90%", margin: "0px" }}>
-                        <CustomColorModifier styles={values} setStyles={setValues} colorType={"WebkitTextFillColor"} />
+                        <CustomColorModifier mobileCondition={mobileCondition} mobileConditionRev={mobileConditionRev} styles={values} setStyles={setValues} colorType={"WebkitTextFillColor"} />
                     </Modal>
                     <Modal onClick={() => setCustomColorModal(!customColorModal)} toggle={() => setCustomColorModal(!customColorModal)} className='hide-backdrop' isOpen={customColorModal} style={{ width: "300px", maxWidth: "90%", margin: "0px" }}>
-                        <CustomColorModifier type="cross" setMainStyle={updatePresent} mainStyle={finalObj} pageCondition={`${mobileCondition}${pageCondition}`} colorType={colorType} />
+                        <CustomColorModifier mobileCondition={mobileCondition} mobileConditionRev={mobileConditionRev} type="cross" setMainStyle={updatePresent} mainStyle={finalObj} pageCondition={`${pageCondition}`} colorType={colorType} />
                     </Modal>
                     <Modal onClick={() => setCustomColorModal2(!customColorModal2)} toggle={() => setCustomColorModal2(!customColorModal2)} className='hide-backdrop' isOpen={customColorModal2} style={{ width: "300px", maxWidth: "90%", margin: "0px" }}>
-                        <CustomColorModifier styles={defColors} setStyles={setDefColors} colorType={currColor} />
+                        <CustomColorModifier mobileCondition={mobileCondition} mobileConditionRev={mobileConditionRev} styles={defColors} setStyles={setDefColors} colorType={currColor} />
                     </Modal>
                     <Modal style={{ filter: "drop-shadow(0px 0px 15px rgba(0,0,0,0.75))" }} isOpen={imgModal} toggle={() => setImgModal(!imgModal)} size='xl'>
                         <div className="w-100 p-1 d-flex justify-content-between align-items-center">
@@ -5209,7 +5349,15 @@ const CustomizationParent = () => {
                             {imgLoading && <div className="position-fixed d-flex justify-content-center align-items-center" style={{ inset: "0px", backgroundColor: "rgba(255,255,255,0.5)" }}>
                                 <Spinner />
                             </div>}
-                            <div className="p-1 pt-0 d-flex justify-content-center border-bottom">
+                            <div className="p-1 d-flex gap-1">
+                                <button onClick={() => setImageTab("default")} className={`${imageTab === "default" ? "btn-primary-main" : ""} btn w-50`}>
+                                    Your Images
+                                </button>
+                                <button onClick={() => setImageTab("product")} className={`${imageTab === "product" ? "btn-primary-main" : ""} btn w-50`}>
+                                    Product Images
+                                </button>
+                            </div>
+                            {imageTab !== "product" && <div className="p-1 pt-0 d-flex justify-content-center border-bottom">
                                 <label htmlFor='uploadImg' className="btn btn-dark">Upload an Image <input onChange={e => {
                                     setImgLoading(true)
                                     const form_data = new FormData()
@@ -5231,11 +5379,10 @@ const CustomizationParent = () => {
                                                 toast.error("The image could not be uploaded. Try again later.")
                                             }
                                         })
-
                                 }} type="file" className="d-none" id='uploadImg' accept='image/*' /></label>
-                            </div>
+                            </div>}
                             <div className="p-1 row">
-                                {allImages.length >= 0 ? allImages.map((ele, key) => {
+                                {imageTab === "default" && allImages.length >= 0 ? allImages.map((ele, key) => {
                                     return (
                                         <div key={key} className="col-2 img-array-item" style={{ padding: "0.5rem" }}>
                                             <div style={{ aspectRatio: "1", backgroundImage: `url(${ele?.image})`, backgroundSize: "contain", boxShadow: "0px 5px 7.5px rgba(0,0,0,0.25)", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} className="w-100 h-100 rounded-3 border overflow-hidden">
@@ -5291,7 +5438,66 @@ const CustomizationParent = () => {
                                     )
                                 }) : (
                                     <div className="d-flex justify-content-center align-items-center">
-                                        <span>No images to show. Try uploading more images</span>
+                                        {/* <span>No images to show. Try uploading more images</span> */}
+                                    </div>
+                                )}
+                                {imageTab === "product" && prodImages.length >= 0 ? prodImages.map((ele, key) => {
+                                    return (
+                                        <div key={key} className="col-2 img-array-item" style={{ padding: "0.5rem" }}>
+                                            <div style={{ aspectRatio: "1", backgroundImage: `url(${ele?.image})`, backgroundSize: "contain", boxShadow: "0px 5px 7.5px rgba(0,0,0,0.25)", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} className="w-100 h-100 rounded-3 border overflow-hidden">
+                                                <div className="revealSection w-100 h-100 d-flex flex-column gap-1 justify-content-between align-items-center p-2" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+                                                    <div className="p-1 bg-white text-black rounded-3 w-100">{ele?.image?.split("/")?.at("-1")}</div>
+                                                    <button className="btn btn-dark w-100" onClick={() => {
+                                                        if (imageType === "SINGLE") {
+                                                            const colWise = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
+                                                            const arr = [...colWise]
+                                                            if (arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type) {
+                                                                arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type = "image"
+                                                            }
+                                                            if (arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src) {
+                                                                arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src = ele.image
+                                                            }
+                                                            if (arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].isBrandLogo) {
+                                                                arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].isBrandLogo = false
+                                                            }
+                                                            const newFinalObj = finalObj
+                                                            currPage === "button" ? newFinalObj[`${mobileCondition}button`] = arr : newFinalObj[`${mobileCondition}pages`][finalObj[`${mobileCondition}pages`].findIndex($ => $?.id === currPage)].values = arr
+                                                            updatePresent(newFinalObj)
+                                                            setcolWise(currPage === "button" ? newFinalObj?.[`${mobileCondition}button`] : newFinalObj?.[`${mobileCondition}pages`]?.[finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values)
+                                                            setImgModal(!imgModal)
+
+                                                        } else {
+                                                            const finalData = finalObj
+
+                                                            // const imageList = arr?.filter((curElem) => curElem?.elements).filter((subElem) => subElem?.element).filter((childElem) => childElem.type === "image" ? isBrandLogo)
+                                                            updatePresent({ ...finalData, defaultThemeColors: { ...finalData.defaultThemeColors, brandLogo: ele.image } })
+                                                            setImgModal(!imgModal)
+                                                        }
+                                                    }}>Use Image</button>
+                                                    <Trash2 className='cursor-pointer' fill='#fff' stroke='#000' strokeWidth={"1px"} size={35} onClick={() => {
+                                                        setImgLoading(true)
+                                                        const form_data = new FormData()
+                                                        form_data.append("shop", outletData[0]?.web_url)
+                                                        form_data.append("app", "superleadz")
+                                                        const imgUrl = new URL(`${SuperLeadzBaseURL}/api/v1/delete_bucket_image/?shop=${outletData[0]?.web_url}&app=superleadz&image_id=${ele.id}`)
+                                                        axios({
+                                                            method: "DELETE",
+                                                            url: imgUrl,
+                                                            data: form_data
+                                                        })
+                                                            .then((data) => {
+                                                                if (data.status === 200) {
+                                                                    triggerImage()
+                                                                }
+                                                            })
+                                                    }} color='white' />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                }) : (
+                                    <div className="d-flex justify-content-center align-items-center">
+                                        {/* <span>No images to show. Try uploading more images</span> */}
                                     </div>
                                 )}
                             </div>

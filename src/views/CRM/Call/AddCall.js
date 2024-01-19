@@ -54,7 +54,7 @@ const AddCall = () => {
       Call_Purpose: "",
       Lead_Status: "",
       customer_id: "",
-      Note: "",
+      Notes: "",
       Interested: "",
       schedule_Next_Call: false,
       schedule_Next_Call_date: "",
@@ -198,7 +198,7 @@ const AddCall = () => {
                Call_Status: resp?.data?.success[0]?.Call_Status,
                Call_Purpose: resp?.data?.success[0]?.Call_Purpose,
                Lead_Status: resp?.data?.success[0]?.Lead_Status,
-               Note: resp?.data?.success[0]?.Note,
+               Notes: resp?.data?.success[0]?.Notes,
                Interested: resp?.data?.success[0]?.Interested,
                schedule_Next_Call: resp?.data?.success[0]?.schedule_Next_Call,
                schedule_Next_Call_date: resp?.data?.success[0]?.schedule_Next_Call_date,
@@ -309,8 +309,8 @@ const AddCall = () => {
                               <textarea className="form-control" placeholder="Leave a note here" id="notes-label" style={{ minHeight: '90px' }}
                                  onChange={(e) => {
                                     console.log(e.target.value)
-                                    inputChangeHandler({ target: { name: 'Note', value: e.target.value } })
-                                 }} value={data?.Note} />
+                                    inputChangeHandler({ target: { name: 'Notes', value: e.target.value } })
+                                 }} value={data?.Notes} />
                            </Col>
                            <Col md={6} className="mt-2">
                               <label htmlFor="interested" className="" style={{ margin: '0px' }}>
