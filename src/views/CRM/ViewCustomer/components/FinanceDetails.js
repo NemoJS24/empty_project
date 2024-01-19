@@ -69,7 +69,7 @@ const FinanceDetails = () => {
             <h4 className='m-0'>Finance Details</h4>
         </Col>
         <Col className='d-flex align-items-center justify-content-end' md='4' sm='12'>
-            <Link className='btn btn-primary-main' to={`/merchant/customers/jmd-finance-customers/${id}`}>Add Finance</Link>
+            <Link className='btn btn-primary-main' to={`/merchant/customers/jmd-finance-customers/${id}?type=customer`}>Add Finance</Link>
             <Input
                 className='dataTable-filter form-control ms-1'
                 style={{ width: `180px`, height: `2.714rem` }}

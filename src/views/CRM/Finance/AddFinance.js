@@ -5,16 +5,19 @@ import AddFinanceNav from './AddFinanceNav'
 import CoApplicantForm from './CoApplicantForm'
 import EMIForm from './EMIForm'
 import ReferralForm from './ReferralForm'
-import { baseURL } from '@src/assets/auth/jwtService.js'
+// import { baseURL } from '@src/assets/auth/jwtService.js'
 import toast from "react-hot-toast"
 // import financeData from './financeData'
 import { useParams, useNavigate } from 'react-router-dom'
-import { crmURL, postReq } from '../../../assets/auth/jwtService'
+import { crmURL, getReq, postReq } from '../../../assets/auth/jwtService'
 import { validForm } from '../../Validator'
 
 const AddFinance = () => {
 
   const parmas = new URLSearchParams(location.search)
+  const { id } = useParams()
+  const isEdit = parmas.get("type") === "edit"
+  const isCustomer = parmas.get("type") === "customer"
 
   const mainFormvalueToCheck = [
     {
@@ -134,7 +137,7 @@ const AddFinance = () => {
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState({
     SE_DSA_Name: "",
-    customer_id: "",
+    customer_id: isCustomer ? id : "",
     customer_name: "",
     Bank_Name: "",
     client: '',
@@ -192,36 +195,36 @@ const AddFinance = () => {
   // const [addWithCustId, setAddWithCustId] = useState(false)
 
   // console.log(formData, 'formData')
+  const [country, setCountry] = useState([])
 
   const navigate = useNavigate()
-  const { id } = useParams()
 
   let PageTitle = 'Add Finance'
 
-  const formatDate = (inputDate) => {
-    const parts = inputDate.split('-')
-    if (parts.length === 3 && parts[0].length === 2 && parts[1].length === 2 && parts[2].length === 4) {
-      const parsedDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`)
-      const formattedDate = parsedDate.toISOString().split('T')[0]
-      return formattedDate
-    }
-    return inputDate
-  }
+  // const formatDate = (inputDate) => {
+  //   const parts = inputDate.split('-')
+  //   if (parts.length === 3 && parts[0].length === 2 && parts[1].length === 2 && parts[2].length === 4) {
+  //     const parsedDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`)
+  //     const formattedDate = parsedDate.toISOString().split('T')[0]
+  //     return formattedDate
+  //   }
+  //   return inputDate
+  // }
 
   const handleChange = (options, actionMeta, check = false) => {
     if (check) {
-        const option_list = options.map((cur) => {
-            return cur.value
-        })
-        setFormData({ ...formData, [actionMeta.name]: option_list })
+      const option_list = options.map((cur) => {
+        return cur.value
+      })
+      setFormData({ ...formData, [actionMeta.name]: option_list })
     } else {
-        setFormData({ ...formData, [actionMeta.name]: options.value })
+      setFormData({ ...formData, [actionMeta.name]: options.value })
     }
 
   }
 
   const handleInputChange = (e) => {
-    setFormData({...formData, [e.target.name]: e.target.value})
+    setFormData({ ...formData, [e.target.name]: e.target.value })
     // if (type === undefined) {
     //   const { name, value } = e.target
     //   setFormData(prevData => ({
@@ -244,33 +247,33 @@ const AddFinance = () => {
     // }
   }
 
-  const fetchFinanceData = (id) => {
-    const form_data = new FormData()
-    form_data.append("id", id)
-    form_data.append('edit_type', 'is_finance')
+  // const fetchFinanceData = (id) => {
+  //   const form_data = new FormData()
+  //   form_data.append("id", id)
+  //   form_data.append('edit_type', 'is_finance')
 
-    postReq("get_view_customer", form_data, baseURL)
-    .then((resp) => {
-      // if (!addWithCustId) {
-        const newObject = {}
-        for (const key in resp.success[0]) {
-          if (resp.success[0].hasOwnProperty(key) && resp.success[0][key] !== null) {
-            newObject[key] = resp.success[0][key]
-          }
-        }
-        setFormData(newObject)
-        setFormData(prefData => ({
-          ...prefData,
-          Loan_Disbursement_Date: prefData?.Loan_Disbursement_Date ? formatDate(prefData?.Loan_Disbursement_Date.substring(0, 10)) : '',
-          policy_expiry_date: prefData?.policy_expiry_date ? formatDate(prefData?.policy_expiry_date.substring(0, 10)) : ''
-        }))
-      // }
-    })
-    .catch((error) => {
-      console.error("Error:", error)
-      toast.error('Failed to fetch Servicing Detail')
-    })
-  }
+  //   postReq("get_view_customer", form_data, baseURL)
+  //   .then((resp) => {
+  //     // if (!addWithCustId) {
+  //       const newObject = {}
+  //       for (const key in resp.success[0]) {
+  //         if (resp.success[0].hasOwnProperty(key) && resp.success[0][key] !== null) {
+  //           newObject[key] = resp.success[0][key]
+  //         }
+  //       }
+  //       setFormData(newObject)
+  //       setFormData(prefData => ({
+  //         ...prefData,
+  //         Loan_Disbursement_Date: prefData?.Loan_Disbursement_Date ? formatDate(prefData?.Loan_Disbursement_Date.substring(0, 10)) : '',
+  //         policy_expiry_date: prefData?.policy_expiry_date ? formatDate(prefData?.policy_expiry_date.substring(0, 10)) : ''
+  //       }))
+  //     // }
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error:", error)
+  //     toast.error('Failed to fetch Servicing Detail')
+  //   })
+  // }
 
   const checkVaildation = () => {
     let checkForm = true
@@ -307,20 +310,20 @@ const AddFinance = () => {
       }
 
       postReq("add_finance", form_data, crmURL)
-      .then((resp) => {
-        console.log("Response:", resp)
-        toast.success('Finance saved successfully')
-        resp.data?.is_edit_url ? navigate(`/merchant/customers/edit_finance/${resp.data?.finance_code}?type=edit`) : navigate(`/merchant/customer/all_cust_dashboard/add_finance/`)
-        fetchFinanceData(resp.finance_code)
-      })
-      .catch((error) => {
-        console.error("Error:", error)
-        if (error.message === 'Customer already exists') {
-          toast.error('Customer already exists')
-        } else {
-          toast.error('Failed to save customer')
-        }
-      })
+        .then((resp) => {
+          console.log("Response:", resp)
+          toast.success('Finance saved successfully')
+          resp.data?.is_edit_url ? navigate(`/merchant/customers/edit_finance/${resp.data?.finance_code}?type=edit`) : navigate(`/merchant/customer/all_cust_dashboard/add_finance/`)
+          // fetchFinanceData(resp.finance_code)
+        })
+        .catch((error) => {
+          console.error("Error:", error)
+          if (error.message === 'Customer already exists') {
+            toast.error('Customer already exists')
+          } else {
+            toast.error('Failed to save customer')
+          }
+        })
     }
   }
 
@@ -331,73 +334,73 @@ const AddFinance = () => {
       form_data.append("edit_type", "is_finance")
     }
     postReq("get_customer_finance", form_data, crmURL)
-    .then((resp) => {
-      console.log(resp)
-      const data = resp?.data?.success[0]
-      console.log(data, "fdata")
-      const updateData = {
-        SE_DSA_Name: data?.SE_DSA_Name,
-        customer_id: data?.xircls_customer,
-        customer_name: data?.customer_name,
-        Bank_Name: data?.Bank_Name,
-        client: data?.client,
-        product_name_id: data?.product_name_id,
-        Loan_Type: data?.Loan_Type,
-        Rate_of_Interest: data?.Rate_of_Interest,
-        Loan_Number: data?.Loan_Number,
-        Bank_Number: data?.Bank_Number,
-        Loan_amount: data?.Loan_amount,
-        Loan_Disbursement_Date: data?.Loan_Disbursement_Date,
-        title: data?.title,
-        cust_first_name: data?.cust_first_name,
-        cust_last_name: data?.cust_last_name,
-        email: data?.email,
-        phone_no: data?.phone_no,
-        cust_dob: data?.cust_dob,
-        phone_no2: data?.phone_no2,
-        address_line1: data?.address_line1,
-        address_line2: data?.address_line2,
-        area_building: data?.area_building,
-        landmark: data?.landmark,
-        city: data?.city,
-        state: data?.state,
-        pincode: data?.pincode,
-        country: data?.country,
-        pancard: data?.pancard,
-        Adharcard: data?.Adharcard,
-        gender: data?.gender,
-        children: data?.children,
-        marital_status: data?.marital_status,
-        occupation: data?.occupation,
-        Emi_Amount: data?.Emi_Amount,
-        no_of_tenure: data?.no_of_tenure,
-        frequency: data?.frequency,
-        no_of_installment: data?.no_of_installment,
-        Ex_Showroom_Amount: data?.Ex_Showroom_Amount,
-        No_Advance_EMI: data?.No_Advance_EMI,
-        Dealer_Name: data?.Dealer_Name,
-        Account_Type: data?.Account_Type,
-        Emi_Start_Date: data?.Emi_Start_Date,
-        Emi_End_Date: data?.Emi_End_Date,
-        Ref_title: data?.Ref_title,
-        Ref_first_name: data?.Ref_first_name,
-        Ref_last_name: data?.Ref_last_name,
-        Ref_phone_no: data?.Ref_phone_no,
-        Ref_address1: data?.Ref_address1,
-        Ref_address2: data?.Ref_address2,
-        area_building_ref: data?.area_building_ref,
-        landmark_ref: data?.landmark_ref,
-        Ref_city: data?.Ref_city,
-        Ref_state: data?.Ref_state,
-        Ref_pincode: data?.Ref_pincode,
-        Ref_country: data?.Ref_country
-      }
+      .then((resp) => {
+        console.log(resp)
+        const data = resp?.data?.success[0]
+        console.log(data, "fdata")
+        const updateData = {
+          SE_DSA_Name: data?.SE_DSA_Name,
+          customer_id: data?.xircls_customer,
+          customer_name: data?.customer_name,
+          Bank_Name: data?.Bank_Name,
+          client: data?.client,
+          product_name_id: data?.product_name_id,
+          Loan_Type: data?.Loan_Type,
+          Rate_of_Interest: data?.Rate_of_Interest,
+          Loan_Number: data?.Loan_Number,
+          Bank_Number: data?.Bank_Number,
+          Loan_amount: data?.Loan_amount,
+          Loan_Disbursement_Date: data?.Loan_Disbursement_Date || "",
+          title: data?.title,
+          cust_first_name: data?.cust_first_name,
+          cust_last_name: data?.cust_last_name,
+          email: data?.email,
+          phone_no: data?.phone_no,
+          cust_dob: data?.cust_dob || "",
+          phone_no2: data?.phone_no2,
+          address_line1: data?.address_line1,
+          address_line2: data?.address_line2,
+          area_building: data?.area_building,
+          landmark: data?.landmark,
+          city: data?.city,
+          state: data?.state,
+          pincode: data?.pincode,
+          country: data?.country,
+          pancard: data?.pancard,
+          Adharcard: data?.Adharcard,
+          gender: data?.gender,
+          children: data?.children,
+          marital_status: data?.marital_status,
+          occupation: data?.occupation,
+          Emi_Amount: data?.Emi_Amount,
+          no_of_tenure: data?.no_of_tenure,
+          frequency: data?.frequency,
+          no_of_installment: data?.no_of_installment,
+          Ex_Showroom_Amount: data?.Ex_Showroom_Amount,
+          No_Advance_EMI: data?.No_Advance_EMI,
+          Dealer_Name: data?.Dealer_Name,
+          Account_Type: data?.Account_Type,
+          Emi_Start_Date: data?.Emi_Start_Date || "",
+          Emi_End_Date: data?.Emi_End_Date || "",
+          Ref_title: data?.Ref_title,
+          Ref_first_name: data?.Ref_first_name,
+          Ref_last_name: data?.Ref_last_name,
+          Ref_phone_no: data?.Ref_phone_no,
+          Ref_address1: data?.Ref_address1,
+          Ref_address2: data?.Ref_address2,
+          area_building_ref: data?.area_building_ref,
+          landmark_ref: data?.landmark_ref,
+          Ref_city: data?.Ref_city,
+          Ref_state: data?.Ref_state,
+          Ref_pincode: data?.Ref_pincode,
+          Ref_country: data?.Ref_country
+        }
 
-      setFormData(updateData)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+        setFormData(updateData)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   useEffect(() => {
@@ -410,7 +413,7 @@ const AddFinance = () => {
     //   fetchFinanceData(id)
     // }
 
-    if (id) {
+    if (isEdit) {
       getData()
       PageTitle = 'Edit Page'
     }
@@ -434,7 +437,7 @@ const AddFinance = () => {
 
   const NavCurrentStep = (step) => {
     const check = checkVaildation()
-  
+
     if (check) {
       setCurrentStep(step)
     }
@@ -460,8 +463,31 @@ const AddFinance = () => {
     handleBack,
     handleSubmitSection,
     setFormData,
-    handleChange
+    handleChange,
+    country,
+    isEdit,
+    isCustomer
   }
+
+
+  const getCountries = () => {
+    getReq("countries")
+      .then((resp) => {
+        console.log(resp)
+        setCountry(
+          resp.data.data.countries.map((curElem) => {
+            return { value: curElem.name, label: `${curElem.name}` }
+          })
+        )
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  useEffect(() => {
+    getCountries()
+  }, [])
 
 
   return (
@@ -469,7 +495,7 @@ const AddFinance = () => {
       <div className="customer-profile">
         <Card>
           <CardBody>
-            <h3 className="mb-0">{PageTitle}</h3>
+            <h3 className="mb-0">{isEdit ? "Edit Finance" : "Add Finance"}</h3>
           </CardBody>
         </Card>
         <Card>
