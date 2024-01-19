@@ -91,7 +91,7 @@ const Vehicle = () => {
             minWidth: "80px",
             selector: (row) => (
                 <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
-                    <Link to={`view_customer/${row?.vehicle_customer_id}`}><Eye size={15} /></Link>
+                    <Link to={`/merchant/customers/view_customer/${row?.vehicle_customer_id}`}><Eye size={15} /></Link>
                     <Link to={`/merchant/customers/edit-vehicle/${row?.vehicle_id}?type=edit`}> <Edit3 size={15} /></Link>
                 </div>
             )

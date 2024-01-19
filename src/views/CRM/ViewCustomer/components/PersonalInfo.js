@@ -29,7 +29,7 @@ const PersonalInfo = ({ AllFormData }) => {
 
   const occupation = [
     { value: "Employed", label: "Employed" },
-    { value: "business owner", label: "Business Owner" },
+    { value: "Business_Owner", label: "Business Owner" },
     { value: "retired professional", label: "Retired Professional" },
     { value: "student", label: "Student" },
     { value: "homemaker", label: "Homemaker" }
