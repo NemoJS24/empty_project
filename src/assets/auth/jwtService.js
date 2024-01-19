@@ -2,9 +2,9 @@ import axios from "axios"
 import { getToken, removeToken, setToken } from "./auth"
 import jwtDecode from "jwt-decode"
 
-export const baseURL = "https://api.demo.xircls.in"
-export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
-export const crmURL = "https://crm.demo.xircls.in"
+// export const baseURL = "https://api.demo.xircls.in"
+// export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
+// export const crmURL = "https://crm.demo.xircls.in"
 
 // const URLs = {
 //     baseURL,
@@ -13,9 +13,9 @@ export const crmURL = "https://crm.demo.xircls.in"
 // }
 
 // Live 
-// export const baseURL = "https://api.xircls.com"
-// export const SuperLeadzBaseURL = "https://apps.xircls.com"
-// export const crmURL = "https://crm.xircls.com"
+export const baseURL = "https://api.xircls.com"
+export const SuperLeadzBaseURL = "https://apps.xircls.com"
+export const crmURL = "https://crm.xircls.com"
 
 export const configUrl = {
 
@@ -132,7 +132,6 @@ export const configUrl = {
     get_customer_vehicle: '/vehicle/get_customer_vehicle/', //crm
     get_customer_insurance: '/insurance/get_customer_insurance/', //crm
     // Flash Account
-
 
     fetch_vehicle_details: "/vehicle/fetch_vehicle_details/",
     fetch_car_details: '/vehicle/fetch_car_details/',

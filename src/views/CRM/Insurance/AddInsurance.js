@@ -62,6 +62,7 @@ const AddInsurance = () => {
     const [isAddProductHidden, setIsAddProductHidden] = useState(false)
     const [isHidden, setIsHidden] = useState(false)
     const [productOptions, setProductOptions] = useState([])
+    const [usedProductOptions, setUsedProductOptions] = useState([])
     const [vehicleOptions, setVehicleOptions] = useState([])
     const [country, setCountry] = useState("")
     const [productModelOption, setProductModelOption] = useState([])
@@ -108,6 +109,12 @@ const AddInsurance = () => {
             message: 'Please enter you Insurance Company Name',
             type: 'string',
             id: 'insurance_company'
+        },
+        {
+            name: 'policy_purchase_date',
+            message: 'Please enter you Insurance Company Name',
+            type: 'string',
+            id: 'policy_purchase_date'
         }
     ]
 
@@ -315,15 +322,15 @@ const AddInsurance = () => {
 
     const getCustomer = () => {
         getReq("getAllCustomer")
-        .then((resp) => {
-            console.log(resp)
-            setCustomerList(resp?.data?.success?.map((curElem) => {
-                return { label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id }
-            }))
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((resp) => {
+                console.log(resp)
+                setCustomerList(resp?.data?.success?.map((curElem) => {
+                    return { label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id }
+                }))
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     const postData = (btn) => {
@@ -538,6 +545,15 @@ const AddInsurance = () => {
             }
         })
         setProductOptions(productOptions)
+
+        setUsedProductOptions(data.car_variant.map(item => {
+            const value = item[0]
+            const label = item[4]
+            return {
+                value,
+                label
+            }
+        }))
         // const V_type = data.car_variant.map((ele) => {
         //     return { value: ele[4], label: ele[4], slug: ele[0] }
         // })
@@ -818,11 +834,28 @@ const AddInsurance = () => {
                         disabled
                     /> */}
 
-                    <Select
+                    {/* <Select
                         id='customer-name'
                         placeholder='Customer Name'
-                        value={{ value: formData?.customer_id, label: formData?.customer_id }}
+                        // value={{ value: formData?.customer_id, label: formData?.customer_id }}
+                        value={customerList?.find($ => Number($.value) === Number(formData?.customer_id))}
                         isDisabled={true}
+                    /> */}
+                    <Select
+                        placeholder='Customer Name'
+                        id="insurance-type"
+                        options={customerList}
+                        closeMenuOnSelect={true}
+                        name='customer_id'
+                        value={customerList?.find($ => Number($.value) === Number(formData?.customer_id))}
+                        // onMenuScrollToBottom={() => getCustomer(currentPage, null, () => { })}
+                        components={{ Menu: CustomSelectComponent }}
+                        onChange={(value, actionMeta) => {
+                            // selectCustomer(value, actionMeta, false)
+                            setFormData(prevData => ({ ...prevData, customer_id: value.value }))
+                        }}
+                        isDisabled={true}
+                    // onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                     />
 
                 </Col>
@@ -980,7 +1013,7 @@ const AddInsurance = () => {
             </Row>
         </form>
     )
-    
+
     useEffect(() => {
         if (formData?.customer_id) {
             selectCustomer()
@@ -1085,17 +1118,17 @@ const AddInsurance = () => {
                                             <label htmlFor="Vehicle-type" className="" style={{ margin: '0px' }}>
                                                 Vehicle Type
                                             </label>
-                                            {/* <Select
-                                                placeholder='Vehicle Type'
-                                                id="Vehicle-type"
-                                                name="vehicle"
-                                                options={productOptions}
-                                                // defaultValue={productOptions[0]}
-                                                value={productOptions?.find(option => option.value === formData?.vehicle)}
-                                                onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
+                                            <Select
+                                                placeholder='Select Vehicle Type'
+                                                id="product-name"
+                                                options={usedProductOptions?.filter(option => Number(option.value) === Number(formData?.insurance_product_name))}
+                                                name="insurance_product_name"
+                                                value={usedProductOptions?.filter(option => Number(option.value) === Number(formData?.insurance_product_name))}
+                                                isDisabled
+                                                // onChange={e => handleInputChange(e, 'insurance_product_name')}
                                                 closeMenuOnSelect={true}
-                                            /> */}
-                                            <input className='form-control' value={type} id="Vehicle-type" name="vehicle" placeholder='Vehicle Type' />
+                                            />
+                                            {/* <input className='form-control' value={type} id="Vehicle-type" name="vehicle" placeholder='Vehicle Type' /> */}
                                             <p id="vehicle_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                         </Col>
                                     </>}
@@ -1144,6 +1177,7 @@ const AddInsurance = () => {
                                                 setFormData({ ...formData, policy_purchase_date: moment(date[0]).format("YYYY-MM-DD") })
                                             }}
                                         />
+                                        <p id="policy_purchase_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                     </Col>
                                     <Col md={6} className="mt-2">
                                         <label htmlFor="Policy-expiry-date">
@@ -1335,9 +1369,13 @@ const AddInsurance = () => {
                                         </div>
                                     </Col>
                                 </Row>
-                                <div className='w-100 d-flex justify-content-end mt-2'>
-                                    <button className="btn btn-primary" type="button" onClick={e => handleSubmitSection(e, 'SAVE & CLOSE')} >Save & Close</button>
-                                    <button className="btn btn-primary ms-2" type="button" onClick={e => handleSubmitSection(e, 'SAVE')} >Save</button>
+                                <div className='w-100 d-flex justify-content-between mt-2'>
+                                    <button className="btn btn-primary" type="button" onClick={e => navigate(-1)} >Cancel</button>
+
+                                    <div className='d-flex gap-1'>
+                                        <button className="btn btn-primary" type="button" onClick={e => handleSubmitSection(e, 'SAVE')} >Save</button>
+                                        <button className="btn btn-primary" type="button" onClick={e => handleSubmitSection(e, 'SAVE & CLOSE')} >Save & Close</button>
+                                    </div>
                                 </div>
                             </Container>
                         </form>

@@ -47,43 +47,47 @@ const CrossLeads = () => {
             name: "Customer Name",
             minWidth: "180px",
             selector: (row) => (
-                <Link to={`view_customer/${row?.id}`}>{row?.customer_name}</Link>
+                <Link to={`/merchant/customers/view_customer/${row?.id}`}>{row?.customer_name}</Link>
             ),
             type: 'text',
             isEnable: false
         },
-        {
-            name: "Customer Group",
-            maxWidth: "180px",
-            type: 'select',
-            options: [
-                { label: "Select Customer Group", value: '' },
-            ],
-            isEnable: true
-        },
+        // {
+        //     name: "Customer Group",
+        //     maxWidth: "180px",
+        //     type: 'select',
+        //     options: [
+        //         { label: "Select Customer Group", value: '' },
+        //     ],
+        //     isEnable: true
+        // },
         {
             name: "Mobile No",
             maxWidth: "180px",
-            selector: (row) => row?.phone_no ?? '',
+            selector: (row) => row?.phone_no ?? '-',
             type: 'text',
         },
         {
             name: "Email",
             maxWidth: "300px",
-            selector: (row) => row?.email ?? '',
+            selector: (row) => row?.email ?? '-',
             type: 'email',
         },
         {
             name: "Location",
             maxWidth: "180px",
-            selector: (row) => row?.location ?? '',
+            selector: (row) => row?.location ?? '-',
             type: 'text',
             isEnable: true
         },
         {
             name: "Is Finanace",
-            maxWidth: "150px",
-            selector: (row) => row?.is_finance ?? '',
+            maxWidth: "120px",
+            selector: (row) => (
+                row?.is_finance === true ? (
+                    <div>True</div>
+                ) : <div>False</div>
+            ),
             type: 'select',
             options: [
                 { label: "True", value: 'true' },
@@ -93,8 +97,12 @@ const CrossLeads = () => {
         },
         {
             name: "Is Insurance",
-            maxWidth: "150px",
-            selector: (row) => row?.is_insurance ?? '',
+            maxWidth: "120px",
+            selector: (row) => (
+                row?.is_insurance === true ? (
+                    <div>True</div>
+                ) : <div>False</div>
+            ),
             type: 'select',
             options: [
                 { label: "True", value: 'true' },
@@ -104,8 +112,12 @@ const CrossLeads = () => {
         },
         {
             name: "Is Servicing",
-            maxWidth: "150px",
-            selector: (row) => row?.is_servicing ?? '',
+            maxWidth: "120px",
+            selector: (row) => (
+                row?.is_servicing === true ? (
+                    <div>True</div>
+                ) : <div>False</div>
+            ),
             type: 'select',
             options: [
                 { label: "True", value: 'true' },
@@ -118,9 +130,8 @@ const CrossLeads = () => {
             maxWidth: "150px",
             selector: (row) => (
                 <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
-                    <Link to={`view_customer/${row?.customer_details_id}`}><Eye size={15} /></Link>
-                    <Link to={`/merchant/customers/edit_customer/${row?.customer_details_id}`}> <Edit3 size={15} /></Link>
-                    <Trash2 size={15} />
+                    <Link to={`view_customer/${row?.id}`}><Eye size={15} /></Link>
+                    <Link to={`/merchant/customers/edit_customer/${row?.id}?type=edit`}> <Edit3 size={15} /></Link>
                 </div>
             )
         }

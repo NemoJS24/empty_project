@@ -31,7 +31,7 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
     //     brand: "",
     //     car_model: "",
     //     variant: "",
-    //     manufacture_date: "",
+    //     manufacture_year: "",
     //     delivery_date: "",
     //     registeration_date: ""
     // })
@@ -73,10 +73,10 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
             id: 'variant'
         },
         {
-            name: 'manufacture_date',
+            name: 'manufacture_year',
             message: 'Select Manufacture Date',
             type: 'string',
-            id: 'manufacture_date'
+            id: 'manufacture_year'
         }
     ]
 
@@ -122,33 +122,33 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
     const getBrand = () => {
         const getUrl = new URL(`${crmURL}/vehicle/fetch_car_details/`)
         axios.get(getUrl.toString())
-        .then((response) => {
-            const successData = response.data.car_brand
-            const brandOptions = successData
-                .filter((item) => item[0] !== "")
-                .map((item) => ({
-                    value: item[0],
-                    label: item[0]
-                }))
-            console.log(brandOptions, "brandOptions")
-            setBrand(brandOptions)
-        })
-        .catch((error) => {
-            console.error("Error fetching data:", error.message)
-        })
+            .then((response) => {
+                const successData = response.data.car_brand
+                const brandOptions = successData
+                    .filter((item) => item[0] !== "")
+                    .map((item) => ({
+                        value: item[0],
+                        label: item[0]
+                    }))
+                console.log(brandOptions, "brandOptions")
+                setBrand(brandOptions)
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error.message)
+            })
     }
 
     const getCustomer = () => {
         getReq("getAllCustomer")
-        .then((resp) => {
-            console.log(resp)
-            setCustomerList(resp?.data?.success?.map((curElem) => {
-                return {label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id}
-            }))
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((resp) => {
+                console.log(resp)
+                setCustomerList(resp?.data?.success?.map((curElem) => {
+                    return { label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id }
+                }))
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     const fetchModel = () => {
@@ -156,15 +156,15 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
         form_data.append("brand", defaultData.brand)
 
         postReq('fetch_car_details', form_data, crmURL)
-        .then((resp) => {
-            console.log(resp, "fetch_car_details")
-            setProductModelOption(resp?.data?.car_model?.map((curElem) => {
-                return {label: curElem, value: curElem}
-            }))
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((resp) => {
+                console.log(resp, "fetch_car_details")
+                setProductModelOption(resp?.data?.car_model?.map((curElem) => {
+                    return { label: curElem, value: curElem }
+                }))
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     const fetchVariant = () => {
@@ -172,15 +172,15 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
         form_data.append("carmodel", defaultData.car_model)
 
         postReq('fetch_car_details', form_data, crmURL)
-        .then((resp) => {
-            console.log(resp, "fetch_car_details")
-            setProductVariantOption(resp?.data?.car_variant?.map((curElem) => {
-                return {label: curElem, value: curElem}
-            }))
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((resp) => {
+                console.log(resp, "fetch_car_details")
+                setProductVariantOption(resp?.data?.car_variant?.map((curElem) => {
+                    return { label: curElem, value: curElem }
+                }))
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     useEffect(() => {
@@ -221,11 +221,12 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
                             id="vehicle-type"
                             options={customerList}
                             closeMenuOnSelect={true}
-                            isDisabled={isView}
+                            // isDisabled={isView}
+                            isDisabled={true}
                             value={customerList?.filter((curElem) => defaultData?.customer_id === curElem?.value)}
                             onChange={selectedOption => {
                                 handleInputChange({
-                                    target: { name: 'customer_id', value:selectedOption.value}
+                                    target: { name: 'customer_id', value: selectedOption.value }
                                 })
                             }}
                         />
@@ -278,7 +279,7 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
                             value={vehicleTypeOptions?.filter((curElem) => defaultData?.vehicle_type === curElem?.value)}
                             onChange={selectedOption => {
                                 handleInputChange({
-                                    target: { name: 'vehicle_type', value: selectedOption.value}
+                                    target: { name: 'vehicle_type', value: selectedOption.value }
                                 })
                             }}
                         />
@@ -323,7 +324,7 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
                             value={productModelOption?.filter((curElem) => defaultData?.car_model === curElem?.value)}
                             onChange={selectedOption => {
                                 handleInputChange({
-                                    target: { name: 'car_model', value: selectedOption.value}
+                                    target: { name: 'car_model', value: selectedOption.value }
                                 })
                             }}
                         />
@@ -344,7 +345,7 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
                             onChange={selectedOption => {
                                 // document.getElementById('variant').value = selectedOption ? selectedOption.value : ''
                                 handleInputChange({
-                                    target: { name: 'variant', value: selectedOption.value}
+                                    target: { name: 'variant', value: selectedOption.value }
                                 })
                             }}
                         />
@@ -360,17 +361,17 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
                             id="manufacture-select"
                             options={vehicleYearOption}
                             closeMenuOnSelect={true}
-                            value={vehicleYearOption?.filter((curElem) => defaultData?.manufacture_date === curElem?.value)}
+                            value={vehicleYearOption?.filter((curElem) => defaultData?.manufacture_year === curElem?.value)}
                             isDisabled={isView}
                             onChange={selectedOption => {
-                                // document.getElementById('manufacture_date').value = selectedOption ? selectedOption.value : ''
+                                // document.getElementById('manufacture_year').value = selectedOption ? selectedOption.value : ''
                                 handleInputChange({
-                                    target: { name: 'manufacture_date', value: selectedOption.value}
+                                    target: { name: 'manufacture_year', value: selectedOption.value }
                                 })
                             }}
                         />
-                        <input type='hidden' value={defaultData?.manufacture_date} id='manufacture_date' name='manufacture_date' />
-                        <p id="manufacture_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                        <input type='hidden' value={defaultData?.manufacture_year} id='manufacture_year' name='manufacture_year' />
+                        <p id="manufacture_year_val" className="text-danger m-0 p-0 vaildMessage"></p>
 
                     </Col>
                     <Col md={6} className="mt-2">
@@ -383,7 +384,7 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
                             className='form-control'
                             value={defaultData?.delivery_date}
                             onChange={(date) => {
-                                setData({...defaultData, delivery_date: moment(date[0]).format("YYYY-MM-DD")})
+                                setData({ ...defaultData, delivery_date: moment(date[0]).format("YYYY-MM-DD") })
                             }}
                         />
                     </Col>
@@ -397,10 +398,10 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
                             className='form-control'
                             value={defaultData.registeration_date}
                             onChange={(date) => {
-                                setData({...defaultData, registeration_date: moment(date[0]).format("YYYY-MM-DD")})
+                                setData({ ...defaultData, registeration_date: moment(date[0]).format("YYYY-MM-DD") })
                             }}
                         />
-                            
+
                         {/* disabled={isView} */}
                     </Col>
                 </Row>

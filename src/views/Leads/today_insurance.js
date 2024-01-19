@@ -120,7 +120,7 @@ const Customers = () => {
       width: "130px",
       selector: (row) => (
         <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
-          <Link to={`/merchant/customers/view_customer/${row?.customer_id}`}><Eye size={15} /></Link>
+          <Link to={`/merchant/customers/view_customer/${row?.insurance_customer_id}`}><Eye size={15} /></Link>
           <Link to={`/merchant/customers/insurance/edit_insurance/${row?.insurance_id}?type=edit`}> <Edit3 size={15} /></Link>
         </div>
       )
@@ -132,29 +132,29 @@ const Customers = () => {
       name: "All Insurance",
       data: custData.recordsTotal ?? "0",
       type: "number",
-      icon: <LuTrendingUp size={30} className="text-warning" />,
-      iconStyle: "bg-warning bg-opacity-25"
+      icon: <LuTrendingUp size={30} className="text-dark" />,
+      iconStyle: ""
     },
     {
       name: "Today's Insurance",
       data: custData.recordsFiltered ?? "0",
       type: "number",
-      icon: <LiaUserSolid size={30} className="text-info" />,
-      iconStyle: "bg-info bg-opacity-25"
+      icon: <LiaUserSolid size={30} className="text-dark" />,
+      iconStyle: ""
     },
     {
       name: "Total Customers Insured",
       data: custData.total_customers ?? "0",
       type: "number",
-      icon: <LiaUserSlashSolid size={30} className="text-danger" />,
-      iconStyle: "bg-danger bg-opacity-25"
+      icon: <LiaUserSlashSolid size={30} className="text-dark" />,
+      iconStyle: ""
     },
     {
       name: "Total Amount",
       data: custData.total_amount ?? "0",
       type: "money",
-      icon: <PiMoneyThin size={30} className="text-success" />,
-      iconStyle: "bg-success bg-opacity-25"
+      icon: <PiMoneyThin size={30} className="text-dark" />,
+      iconStyle: ""
     }
   ]
   console.log("Main TableData", tableData)

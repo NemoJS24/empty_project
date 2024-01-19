@@ -55,7 +55,7 @@ const CompanyInfo = ({ AllFormData }) => {
                           id="name"
                           name="company"
                           type="text"
-                          value={company.company_name}
+                          value={company?.company_name}
                           disabled={!editMode}
                           onChange={handleInputChange}
                         />
@@ -195,7 +195,7 @@ const CompanyInfo = ({ AllFormData }) => {
                         <Input
                           type='text'
                           name='company_twitter'
-                          value={userData.company_twitter}
+                          value={userData?.company_twitter}
                           disabled={!editMode}
                           onChange={handleInputChange}
                         />
@@ -213,7 +213,7 @@ const CompanyInfo = ({ AllFormData }) => {
                         <Input
                           type='text'
                           name='company_fb'
-                          value={userData.company_fb}
+                          value={userData?.company_fb}
                           disabled={!editMode}
                           onChange={handleInputChange}
                         />
@@ -231,7 +231,7 @@ const CompanyInfo = ({ AllFormData }) => {
                         <Input
                           type='text'
                           name='company_insta'
-                          value={userData.company_insta}
+                          value={userData?.company_insta}
                           disabled={!editMode}
                           onChange={handleInputChange}
                         />

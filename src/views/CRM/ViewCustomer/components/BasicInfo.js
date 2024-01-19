@@ -9,10 +9,10 @@ const BasicInfo = ({ AllFormData }) => {
 
     const titleOptions = [
         { value: "mr", label: "Mr." },
-        { value: "ms.", label: "Ms." },
-        { value: "mrs.", label: "Mrs." },
-        { value: "dr.", label: "Dr." },
-        { value: "prof.", label: "Prof." }
+        { value: "ms", label: "Ms." },
+        { value: "mrs", label: "Mrs." },
+        { value: "dr", label: "Dr." },
+        { value: "prof", label: "Prof." }
     ]
 
     const dropdownOptions = [
@@ -182,7 +182,7 @@ const BasicInfo = ({ AllFormData }) => {
                                             id="alt_land_number"
                                             name="landline2"
                                             type="number"
-                                            isDisabled={!editMode}
+                                            disabled={!editMode}
                                             value={userData.landline2}
                                             onChange={handleInputChange}
                                         />
@@ -196,7 +196,7 @@ const BasicInfo = ({ AllFormData }) => {
                                     <Select
                                         id="basicDetails-customerType"
                                         options={dropdownOptions}
-                                        value={dropdownOptions.find(option => option.value === userData.cust_type_dropdown) ?? ''}
+                                        value={dropdownOptions.find(option => option.value === userData.dropdown) ?? ''}
                                         // value={dropdownOptions[0]} // Set the default value to 'regular'   -- dropdownOptions.find(option => option.value === formData.dropdown) || --
                                         onChange={(e) => handleInputChange(e, 'dropdown')}
                                         closeMenuOnSelect={true}

@@ -351,28 +351,35 @@ const AddServicing = () => {
             })
     }
 
-    const selectCustomer = (e) => {
-        if (e) {
-            setFormData(prev => ({ ...prev, mainForm: { ...prev.mainForm, customer: (id && isCustomer) ? id : e.value } }))
-            const form_data = new FormData()
-            form_data.append("id", (id && isCustomer) ? id : e.value)
-            // "SHIVAM KALE"
-            getReq(`fetch_vehicle_number`, `/?id=${(id && isCustomer) ? id : e.value}`, crmURL)
-                .then((resp) => {
-                    console.log("Response: selectCustomer", resp)
-                    const vehicleOptions = resp.data.car_variant
-                        .map((vehicle) => ({
-                            value: vehicle.id,
-                            label: vehicle.registration_number
-                        }))
-                    setVehicleOptions(vehicleOptions)
-                })
-                .catch((error) => {
-                    console.error("Error:", error)
-                        (error.message) ? toast.error(error.message) : toast.error(error)
-                })
-        }
+    const selectCustomer = () => {
+        // if () {
+        setFormData(prev => ({ ...prev, mainForm: { ...prev.mainForm, customer: (id && isCustomer) ? id : formData?.mainForm?.customer_id } }))
+        const form_data = new FormData()
+        form_data.append("id", (id && isCustomer) ? id : formData?.mainForm?.customer_id)
+        // "SHIVAM KALE"
+        getReq(`fetch_vehicle_number`, `/?id=${(id && isCustomer) ? id : formData?.mainForm?.customer_id}`, crmURL)
+            .then((resp) => {
+                console.log("Response: selectCustomer", resp)
+                const vehicleOptions = resp.data.car_variant
+                    .map((vehicle) => ({
+                        value: vehicle.id,
+                        label: vehicle.registration_number
+                    }))
+                setVehicleOptions(vehicleOptions)
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+                    (error.message) ? toast.error(error.message) : toast.error(error)
+            })
+        // }
     }
+
+    useEffect(() => {
+        if (formData?.mainForm?.customer_id) {
+            console.log("pppp")
+            selectCustomer()
+        }
+    }, [formData?.mainForm?.customer_id])
 
     const postNewCustomerData = () => {
         // console.log(customerFormData)
@@ -428,7 +435,7 @@ const AddServicing = () => {
         if (id) {
             setFormData({ ...formData, main: { ...formData.main, customer_id: id } })
             fetchServiceData(id)
-            selectCustomer()
+            // selectCustomer()
         }
     }, [])
 
@@ -773,11 +780,11 @@ const AddServicing = () => {
                             // onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
                             components={{ Menu: CustomSelectComponent }}
                             onChange={(event) => {
-                                selectCustomer(event)
+                                // selectCustomer()
                                 const e = { target: { name: 'customer_id', value: event?.value } }
                                 handleInputChange(e, "mainForm")
                             }}
-                            value={customerList?.filter($ => parseFloat($.value) === parseFloat(formData?.mainForm?.customer_id))}
+                            value={customerList?.filter($ => Number($.value) === Number(formData?.mainForm?.customer_id))}
                             isDisabled={isCustomer}
                         />
                         <p id="customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -795,8 +802,8 @@ const AddServicing = () => {
                             id="vehicle-name"
                             options={vehicleOptions}
                             // defaultValue={vehicleOptions[0]}
-                            value={id && { value: formData.mainForm?.registration_number, label: formData.mainForm?.registration_number }}
-                            isDisabled={formData.mainForm?.registration_number}
+                            value={id && { value: formData.mainForm?.vehicle, label: formData.mainForm?.vehicle }}
+                            // isDisabled={formData.mainForm?.vehicle}
                             closeMenuOnSelect={true}
                             // onChange={e => setFormData(prev => ({ ...prev, vehicle: e.value }))}
                             onChange={(event) => {
@@ -863,7 +870,7 @@ const AddServicing = () => {
                         <Flatpickr
                             name="job_card_date"
                             className='form-control'
-                            value={formData.mainForm.service_invoice_date ?? ""}
+                            value={formData.mainForm.service_invoice_date}
                             onChange={(date) => {
                                 setFormData({ ...formData, mainForm: { ...formData.mainForm, service_invoice_date: moment(date[0]).format("YYYY-MM-DD") } })
                             }}
@@ -888,7 +895,7 @@ const AddServicing = () => {
                         <Flatpickr
                             name="job_card_date"
                             className='form-control'
-                            value={formData.mainForm.service_expiry_date ?? ""}
+                            value={formData.mainForm.next_service_date ?? ""}
                             onChange={(date) => {
                                 setFormData({ ...formData, mainForm: { ...formData.mainForm, service_expiry_date: moment(date[0]).format("YYYY-MM-DD") } })
                             }}

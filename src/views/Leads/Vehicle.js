@@ -91,7 +91,7 @@ const Vehicle = () => {
             minWidth: "80px",
             selector: (row) => (
                 <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
-                    <Link to={`view_customer/${row?.vehicle_customer_id}`}><Eye size={15} /></Link>
+                    <Link to={`/merchant/customers/view_customer/${row?.vehicle_customer_id}`}><Eye size={15} /></Link>
                     <Link to={`/merchant/customers/edit-vehicle/${row?.vehicle_id}?type=edit`}> <Edit3 size={15} /></Link>
                 </div>
             )
@@ -103,22 +103,22 @@ const Vehicle = () => {
             name: "All Vehicles",
             data: custData?.customer_detailsrecordsTotal ?? '0',
             type: "number",
-            icon: <LuTrendingUp size={30} className="text-warning" />,
-            iconStyle: "bg-warning bg-opacity-25"
+            icon: <LuTrendingUp size={30} className="text-dark" />,
+            iconStyle: ""
         },
         {
             name: "Today's Vehicle",
             data: custData?.customer_detailsrecordsFiltered ?? '0',
             type: "number",
-            icon: <LiaUserSolid size={30} className="text-info" />,
-            iconStyle: "bg-info bg-opacity-25"
+            icon: <LiaUserSolid size={30} className="text-dark" />,
+            iconStyle: ""
         },
         {
             name: "Delivery To Be Made Today",
             data: custData?.total_loan_amount ?? '0',
             type: "number",
-            icon: <LuBox Solid size={30} className="text-danger" />,
-            iconStyle: "bg-danger bg-opacity-25"
+            icon: <LuBox Solid size={30} className="text-dark" />,
+            iconStyle: ""
         }
     ]
 

@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Card, CardBody, Col, Input, Row } from 'reactstrap'
 import ComTable from '../Components/DataTable/ComTable'
 import { Link } from 'react-router-dom'
 import { getReq } from '../../assets/auth/jwtService'
+import { PermissionProvider } from '../../Helper/Context'
 
 const ProductView = () => {
     const [data, setdata] = useState([])
     const [searchValue, setSearchValue] = useState('')
     const [filteredData, setFilteredData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+
+
+    const { userPermission } = useContext(PermissionProvider)
 
     const handleFilter = e => {
         const value = e.target.value
@@ -96,7 +100,7 @@ const ProductView = () => {
     ]
 
     const getData = () => {
-        getReq('productDetails')
+        getReq('productDetails', `/?app=${userPermission.appName}`)
         .then((resp) => {
             setdata(resp.data.data.product_details.Product_Details.products)
             setIsLoading(false)

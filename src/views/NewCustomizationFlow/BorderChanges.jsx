@@ -23,7 +23,7 @@ const getLinked = (obj) => {
     }
 }
 
-const BorderChange = ({ styles, setStyles, type, mainStyle, setMainStyle, mobileCondition, getMDToggle }) => {
+const BorderChange = ({ styles, setStyles, type, mainStyle, setMainStyle, mobileCondition, getMDToggle, pageCondition }) => {
     let conditionVariable
 
     if (type === "bgStyles") {
@@ -152,7 +152,7 @@ const BorderChange = ({ styles, setStyles, type, mainStyle, setMainStyle, mobile
         <div>
             <div className='p-0 mx-0 my-1'>
                 <div className='p-0 mb-2 justify-content-start align-items-center'>
-                    {getMDToggle ? getMDToggle({ label: "Border Type: ", value: "borderType" }) : <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Border:</span>}
+                    {getMDToggle ? getMDToggle({ label: "Border Type: ", value: "borderType"}, type === "bgStyles" || type === "btnStyles" ? pageCondition : false) : <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Border:</span>}
                     <Select value={borderTypes[borderTypes.findIndex($ => $.value === conditionVariable?.borderType)]} onChange={e => {
                         const newDefBorderWidth = conditionVariable?.defBorderWidth === "0px" ? "10px" : conditionVariable?.defBorderWidth
                         let borderWidth
@@ -184,6 +184,7 @@ const BorderChange = ({ styles, setStyles, type, mainStyle, setMainStyle, mobile
                     }} options={borderTypes} />
                 </div>
                 {conditionVariable?.borderType !== "none" && <div className='p-0 mb-2 justify-content-start align-items-center'>
+                    {getMDToggle ? getMDToggle({ label: "Border Style: ", value: "borderStyle" }, type === "bgStyles" || type === "btnStyles" ? pageCondition : false) : <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Border Style:</span>}
                     <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Border Style:</span>
                     <Select value={borderStyles[borderStyles?.findIndex($ => $.value === conditionVariable?.borderStyle)]} onChange={e => {
                         if (type === "bgStyles") {
@@ -196,14 +197,14 @@ const BorderChange = ({ styles, setStyles, type, mainStyle, setMainStyle, mobile
                     }} options={borderStyles} />
                 </div>}
                 {conditionVariable?.borderType !== "none" && <div className='p-0 mb-2 justify-content-start align-items-center'>
-                    <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Border Color:</span>
+                    {getMDToggle ? getMDToggle({ label: "Border Color: ", value: "borderColor" }, type === "bgStyles" || type === "btnStyles" ? pageCondition : false) : <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Border Color:</span>}
                     <div className="p-1 w-100 border cursor-pointer rounded" style={{ backgroundColor: shadowColor?.borderColor }} onClick={() => {
                         setColorType("borderColor")
                         setCustomColorModal(!customColorModal)
                     }}></div>
                 </div>}
                 {conditionVariable?.borderType !== "none" && <div className='mb-2'>
-                    <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Border Width: {conditionVariable?.defBorderWidth}</span>
+                    {getMDToggle ? getMDToggle({ label: "Border Width: ", value: ["borderWidth", "defBorderWidth"] }, type === "bgStyles" || type === "btnStyles" ? pageCondition : false) : <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Border Width:</span>}
                     <div className="p-0 justify-content-start align-items-center gap-2">
                         <input type='range' value={parseFloat(conditionVariable?.defBorderWidth)} className='w-100' onChange={e => {
                             if (type === "bgStyles") {
@@ -217,7 +218,7 @@ const BorderChange = ({ styles, setStyles, type, mainStyle, setMainStyle, mobile
                     </div>
                 </div>}
                 <div className='d-flex flex-column text-start mb-2'>
-                    <span className='fw-bolder text-black' style={{ fontSize: "0.75rem", marginBottom: '0.25rem' }}>Corner radius:</span>
+                    {getMDToggle ? getMDToggle({ label: "Corner radius: ", value: ["borderTopLeftRadius", "borderTopRightRadius", "borderBottomRightRadius", "borderBottomLeftRadius"] }, type === "bgStyles" || type === "btnStyles" ? pageCondition : false) : <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Corner radius:</span>}
                     <div className='match-height m-auto' style={{ aspectRatio: '1', gridTemplateColumns: '1fr 1fr 1fr', display: 'grid', width: '100%' }}>
                         <div style={{ aspectRatio: "1" }} className="p-0 m-0 d-flex justify-content-center align-items-center">
                             <input onChange={handleInputChange} value={parseFloat(conditionVariable?.borderTopLeftRadius)} name='borderTopLeftRadius' type="number" min="0" step="1" placeholder="0" className="form-control w-100" />
@@ -242,20 +243,21 @@ const BorderChange = ({ styles, setStyles, type, mainStyle, setMainStyle, mobile
                     </div>
                 </div>
                 <div className='p-0 mb-2 justify-content-start align-items-center'>
-                    <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Shadow:</span>
+                    {getMDToggle ? getMDToggle({ label: "Shadow: ", value: "boxShadow" }, type === "bgStyles" || type === "btnStyles" ? pageCondition : false) : <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Shadow:</span>}
+                    <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Size:</span>
                     <Select value={styles?.boxShadow === "none" ? boxShadowOptions[boxShadowOptions?.findIndex($ => $.value === "0px 0px 0px 0px")] : boxShadowOptions[boxShadowOptions.findIndex($ => $.value === shadowSize.trim())]} onChange={e => {
                         setShadowSize(e.value)
                     }} options={boxShadowOptions} />
                 </div>
                 {shadowSize.trim() !== "0px 0px 0px 0px" && <div className='p-0 mb-2 justify-content-start align-items-center'>
-                    <span className='fw-bolder text-black mb-1' style={{ fontSize: "0.75rem" }}>Shadow Color:</span>
+                    <span className='fw-bolder text-black mb-1' style={{ fontSize: "0.75rem" }}>Color:</span>
                     <div className="p-1 w-100 border cursor-pointer rounded" style={{ backgroundColor: shadowColor.color }} onClick={() => {
                         setColorType("color")
                         setCustomColorModal(!customColorModal)
                     }}></div>
                 </div>}
                 {shadowSize.trim() !== "0px 0px 0px 0px" && <div className="form-check form-check-success mb-2 mx-0 p-0 d-flex align-items-center justify-content-between">
-                    <label className='fw-bolder text-black form-check-label m-0 p-0' style={{ fontSize: "0.75rem" }}>Shadow Inset</label><input checked={shInset} onChange={(e) => {
+                    <label className='fw-bolder text-black form-check-label m-0 p-0' style={{ fontSize: "0.75rem" }}>Inset</label><input checked={shInset} onChange={(e) => {
                         setShInset(e.target.checked)
                     }} type="checkbox" className="form-check-input m-0" /></div>}
             </div>

@@ -2,8 +2,8 @@ import React from 'react'
 import { SketchPicker } from 'react-color'
 import { Card, CardBody } from 'reactstrap'
 
-const CustomColorModifier = ({ type, setMainStyle, mainStyle, pageCondition, styles, setStyles, colorType, isHex }) => {
-    console.log(pageCondition, "pageCondition")
+const CustomColorModifier = ({ type, setMainStyle, mainStyle, pageCondition, styles, setStyles, colorType, isHex, mobileCondition, mobileConditionRev }) => {
+    console.log("mobileConditionRev", `${mobileCondition}${pageCondition}`, `${mobileConditionRev}${pageCondition}`)
     const getBgColor = (colorArg) => {
         if (colorArg) {
             // console.log(colorArg)
@@ -55,9 +55,22 @@ const CustomColorModifier = ({ type, setMainStyle, mainStyle, pageCondition, sty
                             {
                                 colorType ? (
                                     type === "cross" ? (
-                                        <SketchPicker color={getBgColor(mainStyle?.crossButtons[`${pageCondition}`][`${colorType}`])} onChange={(e) => {
+                                        <SketchPicker color={getBgColor(mainStyle?.crossButtons?.[`${mobileCondition}${pageCondition}`]?.[`${colorType}`])} onChange={(e) => {
                                             const { r, g, b, a } = e.rgb
-                                            setMainStyle({ ...mainStyle, crossButtons: { ...mainStyle?.crossButtons, [`${pageCondition}`]: { ...mainStyle?.crossButtons[`${pageCondition}`], [colorType]: `rgba(${r},${g},${b},${a})` } } })
+                                            setMainStyle({
+                                                ...mainStyle,
+                                                crossButtons: {
+                                                    ...mainStyle?.crossButtons,
+                                                    [`${mobileCondition}${pageCondition}`]: {
+                                                        ...mainStyle?.crossButtons[`${mobileCondition}${pageCondition}`],
+                                                        [colorType]: `rgba(${r},${g},${b},${a})`
+                                                    },
+                                                    [`${mobileConditionRev}${pageCondition}`]: {
+                                                        ...mainStyle?.crossButtons[`${mobileConditionRev}${pageCondition}`],
+                                                        [colorType]: mainStyle?.responsiveStyles.close.includes(colorType) ? `rgba(${r},${g},${b},${a})` : mainStyle?.crossButtons[`${mobileConditionRev}${pageCondition}`]?.[colorType]
+                                                    }
+                                                }
+                                            })
                                         }} />
 
                                     ) : type === "offerColors" ? (
@@ -80,9 +93,22 @@ const CustomColorModifier = ({ type, setMainStyle, mainStyle, pageCondition, sty
 
                                 ) : (
                                     type === "cross" ? (
-                                        <SketchPicker color={getBgColor(mainStyle?.crossButtons[`${pageCondition}`][`${colorType}`])} onChange={(e) => {
+                                        <SketchPicker color={getBgColor(mainStyle?.crossButtons?.[`${mobileCondition}${pageCondition}`]?.[`${colorType}`])} onChange={(e) => {
                                             const { r, g, b, a } = e.rgb
-                                            setMainStyle({ ...mainStyle, crossButtons: { ...mainStyle?.crossButtons, [`${pageCondition}`]: { ...mainStyle?.crossButtons[`${pageCondition}`], [colorType]: `rgba(${r},${g},${b},${a})` } } })
+                                            setMainStyle({
+                                                ...mainStyle,
+                                                crossButtons: {
+                                                    ...mainStyle?.crossButtons,
+                                                    [`${mobileCondition}${pageCondition}`]: {
+                                                        ...mainStyle?.crossButtons[`${mobileCondition}${pageCondition}`],
+                                                        [colorType]: `rgba(${r},${g},${b},${a})`
+                                                    },
+                                                    [`${mobileConditionRev}${pageCondition}`]: {
+                                                        ...mainStyle?.crossButtons[`${mobileConditionRev}${pageCondition}`],
+                                                        [colorType]: mainStyle?.responsiveStyles.close.includes(colorType) ? `rgba(${r},${g},${b},${a})` : mainStyle?.crossButtons[`${mobileConditionRev}${pageCondition}`]?.[colorType]
+                                                    }
+                                                }
+                                            })
                                         }} />
 
                                     ) : type === "offerColors" ? (

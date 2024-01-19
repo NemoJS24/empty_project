@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { SketchPicker } from 'react-color'
 import pixels from "../../../assets/images/superLeadz/pixels.png"
 import { Card, CardBody, Modal, ModalBody } from 'reactstrap'
@@ -6,15 +6,20 @@ import { PlusCircle, Trash2, X } from 'react-feather'
 import axios from 'axios'
 import Select from 'react-select'
 import toast from 'react-hot-toast'
-import { SuperLeadzBaseURL } from '../../../assets/auth/jwtService'
+import { SuperLeadzBaseURL, getReq } from '../../../assets/auth/jwtService'
 import { getCurrentOutlet } from '../../Validator'
 import Spinner from '../../Components/DataTable/Spinner'
+import { PermissionProvider } from '../../../Helper/Context'
 
 const BgModifier = ({ type, setMainStyle, mainStyle, mobileCondition, styles, setStyles, closeState, setCloseState }) => {
+
+    const { userPermission } = useContext(PermissionProvider)
     const outletData = getCurrentOutlet()
 
     // const [conditionVariable?.bgType, setActiveBg] = useState("solid")
     const [allImages, setAllImages] = useState([])
+    const [prodImages, setProdImages] = useState([])
+    const [imageTab, setImageTab] = useState("default")
     const [imgModal, setImgModal] = useState(false)
     const [imgLoading, setImgLoading] = useState(false)
     let conditionVariable
@@ -97,6 +102,20 @@ const BgModifier = ({ type, setMainStyle, mainStyle, mobileCondition, styles, se
                 } else {
                     toast.error("request image failed")
                 }
+            })
+            .catch(err => console.log(err))
+
+
+        getReq('productDetails', `/?app=${userPermission.appName}`)
+            .then((res) => {
+                const imgArray = new Array()
+                res?.data?.data?.product_details?.Product_Details?.products.forEach(prod => {
+                    prod.images.forEach(img => {
+                        imgArray.push({ image: img.src })
+                    })
+                })
+                console.log("prod", res?.data?.data?.product_details?.Product_Details, prodImages)
+                setProdImages(imgArray)
             })
             .catch(err => console.log(err))
     }
@@ -456,7 +475,15 @@ const BgModifier = ({ type, setMainStyle, mainStyle, mobileCondition, styles, se
                     {imgLoading && <div className="position-fixed d-flex justify-content-center align-items-center" style={{ inset: "0px", backgroundColor: "rgba(255,255,255,0.5)" }}>
                         <Spinner />
                     </div>}
-                    <div className="p-1 pt-0 d-flex justify-content-center border-bottom">
+                    <div className="p-1 d-flex gap-1">
+                        <button onClick={() => setImageTab("default")} className={`${imageTab === "default" ? "btn-primary-main" : ""} btn w-50`}>
+                            Your Images
+                        </button>
+                        <button onClick={() => setImageTab("product")} className={`${imageTab === "product" ? "btn-primary-main" : ""} btn w-50`}>
+                            Product Images
+                        </button>
+                    </div>
+                    {imageTab !== "product" && <div className="p-1 pt-0 d-flex justify-content-center border-bottom">
                         <label htmlFor='uploadImg' className="btn btn-dark">Upload an Image <input onChange={e => {
                             setImgLoading(true)
                             const form_data = new FormData()
@@ -480,9 +507,9 @@ const BgModifier = ({ type, setMainStyle, mainStyle, mobileCondition, styles, se
                                 })
 
                         }} type="file" className="d-none" id='uploadImg' accept='image/*' /></label>
-                    </div>
+                    </div>}
                     <div className="p-1 row">
-                        {allImages.length >= 0 ? allImages.map((ele, key) => {
+                        {imageTab === "default" && allImages.length >= 0 ? allImages.map((ele, key) => {
                             return (
                                 <div key={key} className="col-2 img-array-item" style={{ padding: "0.5rem" }}>
                                     <div style={{ aspectRatio: "1", backgroundImage: `url(${ele?.image})`, backgroundSize: "contain", boxShadow: "0px 5px 7.5px rgba(0,0,0,0.25)", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} className="w-100 h-100 rounded-3 border overflow-hidden">
@@ -515,7 +542,43 @@ const BgModifier = ({ type, setMainStyle, mainStyle, mobileCondition, styles, se
                             )
                         }) : (
                             <div className="d-flex justify-content-center align-items-center">
-                                <span>No images to show. Try uploading more images</span>
+                                {/* <span>No images to show. Try uploading more images</span> */}
+                            </div>
+                        )}
+                        {imageTab === "product" && prodImages.length >= 0 ? prodImages.map((ele, key) => {
+                            return (
+                                <div key={key} className="col-2 img-array-item" style={{ padding: "0.5rem" }}>
+                                    <div style={{ aspectRatio: "1", backgroundImage: `url(${ele?.image})`, backgroundSize: "contain", boxShadow: "0px 5px 7.5px rgba(0,0,0,0.25)", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} className="w-100 h-100 rounded-3 border overflow-hidden">
+                                        <div className="revealSection w-100 h-100 d-flex flex-column gap-1 justify-content-between align-items-center p-2" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+                                            <div className="p-1 bg-white text-black rounded-3 w-100">{ele?.image?.split("/")?.at("-1")}</div>
+                                            <button className="btn btn-dark w-100" onClick={() => {
+                                                setBgImage(ele.image)
+                                                setImgModal(!imgModal)
+                                            }}>Use Image</button>
+                                            <Trash2 className='cursor-pointer' fill='#fff' stroke='#000' strokeWidth={"1px"} size={35} onClick={() => {
+                                                setImgLoading(true)
+                                                const form_data = new FormData()
+                                                form_data.append("shop", outletData[0]?.web_url)
+                                                form_data.append("app", "superleadz")
+                                                const imgUrl = new URL(`${SuperLeadzBaseURL}/api/v1/delete_bucket_image/?shop=${outletData[0]?.web_url}&app=superleadz&image_id=${ele.id}`)
+                                                axios({
+                                                    method: "DELETE",
+                                                    url: imgUrl,
+                                                    data: form_data
+                                                })
+                                                    .then((data) => {
+                                                        if (data.status === 200) {
+                                                            triggerImage()
+                                                        }
+                                                    })
+                                            }} color='white' />
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        }) : (
+                            <div className="d-flex justify-content-center align-items-center">
+                                {/* <span>No images to show. Try uploading more images</span> */}
                             </div>
                         )}
                     </div>
