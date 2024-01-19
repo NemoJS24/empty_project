@@ -45,6 +45,8 @@ const AddCall = () => {
    const navigate = useNavigate()
 
    const { id } = useParams()
+
+   // console.log(useParams(), "params")
    const params = new URLSearchParams(location.search)
 
    // const [formData, setFormData] = useState({ schedule_call: false })
