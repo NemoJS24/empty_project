@@ -190,7 +190,7 @@ const Customers_Routes = [
   },
   {
     path: '/merchant/customers/insurance/edit_insurance/:id',
-    element: <AddServicing />,
+    element: <AddInsurance />,
     permission: {
       app: "crm",
       route_type: "insurance",

@@ -297,40 +297,44 @@ const AddServicing = () => {
             })
     }
 
-    const fetchCustomerData = async (page, inputValue, callback) => {
-        // console.log(callback, 'callback2')
-        try {
-            const response = await getReq("get_customer_details", `/?page=${page}`)
-            // const response = await axios.get(
-            //     `https://api.demo.xircls.in/customers/merchant/get_customer_details/?page=${page}`
-            // )
-            const successData = response.data.success
-            // console.log(successData)
-            console.log("successData", successData)
-            if (successData && Array.isArray(successData)) {
-                const customerOptions = successData
-                    .filter((item) => item.customer_name !== "")
-                    .map((customer) => ({
-                        value: customer.id,
-                        label: customer.customer_name
-                    }))
-                const option = [...allOptions, ...customerOptions]
-                console.log(option, "option")
-                setAllOptions(option)
-                callback(option)
-                // setCurrentPage((prevPage) => prevPage + 1)
-                setCurrentPage((prevPage) => {
-                    const nextPage = Math.min(prevPage + 1, (response.data.total_count / 100))
-                    return nextPage
-                })
-            } else {
-                console.error("Invalid or missing data in the API response")
-                callback([])
-            }
-        } catch (error) {
-            console.error("Error fetching data:", error.message)
-        }
-    }
+    // useEffect(() => {
+    //     getCustomer()
+    // }, [])
+
+    // const fetchCustomerData = async (page, inputValue, callback) => {
+    //     // console.log(callback, 'callback2')
+    //     try {
+    //         const response = await getReq("get_customer_details", `/?page=${page}`)
+    //         // const response = await axios.get(
+    //         //     `https://api.demo.xircls.in/customers/merchant/get_customer_details/?page=${page}`
+    //         // )
+    //         const successData = response.data.success
+    //         // console.log(successData)
+    //         console.log("successData", successData)
+    //         if (successData && Array.isArray(successData)) {
+    //             const customerOptions = successData
+    //                 .filter((item) => item.customer_name !== "")
+    //                 .map((customer) => ({
+    //                     value: customer.id,
+    //                     label: customer.customer_name
+    //                 }))
+    //             const option = [...allOptions, ...customerOptions]
+    //             console.log(option, "option")
+    //             setAllOptions(option)
+    //             callback(option)
+    //             // setCurrentPage((prevPage) => prevPage + 1)
+    //             setCurrentPage((prevPage) => {
+    //                 const nextPage = Math.min(prevPage + 1, (response.data.total_count / 100))
+    //                 return nextPage
+    //             })
+    //         } else {
+    //             console.error("Invalid or missing data in the API response")
+    //             callback([])
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching data:", error.message)
+    //     }
+    // }
 
     const getCountries = () => {
         getReq("countries")
@@ -403,7 +407,7 @@ const AddServicing = () => {
                 console.log("Response:", resp)
                 toast.success('Customer saved successfully')
                 handleClose('customer')
-                fetchCustomerData(currentPage, null, () => { })
+                // fetchCustomerData(currentPage, null, () => { })
 
             })
             .catch((error) => {
@@ -417,15 +421,16 @@ const AddServicing = () => {
     }
 
     useEffect(() => {
+        
+        // fetchCustomerData(currentPage, null, () => { })
         getCustomer()
-        fetchCustomerData(currentPage, null, () => { })
         getCountries()
         if (id) {
             setFormData({ ...formData, main: { ...formData.main, customer_id: id } })
             fetchServiceData(id)
             selectCustomer()
         }
-    }, [getCustomer])
+    }, [])
 
     const handleInputChange = (e, keyType) => {
         console.log(e)
@@ -765,7 +770,7 @@ const AddServicing = () => {
                             id='company-name'
                             options={customerList}
                             closeMenuOnSelect={true}
-                            onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
+                            // onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
                             components={{ Menu: CustomSelectComponent }}
                             onChange={(event) => {
                                 selectCustomer(event)
