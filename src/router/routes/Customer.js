@@ -13,31 +13,31 @@ const AddFinance = lazy(() => import('@src/views/CRM/Finance/AddFinance'))
 const CustomerProfile = lazy(() => import('@src/views/CRM/Customers/CustomerProfile.jsx'))
 const Leads = lazy(() => import('@src/views/Leads/Leads'))
 const Customers = lazy(() => import('@src/views/Leads/Customers'))
-const AddCustomerGroups = lazy(() => import('@src/views/CrossMarketing/AddCustomerGroups'))
-const CustomerProfileBasic = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBasic'))
-const CustomerProfileBooking = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBooking'))
-const CustomerProfileCall = lazy(() => import('@src/views/CRM/Customers/CustomerProfileCall'))
-const CustomerProfileDetails = lazy(() => import('@src/views/CRM/Customers/CustomerProfileDetails'))
-const CustomerProfileInvoice = lazy(() => import('@src/views/CRM/Customers/CustomerProfileInvoice'))
-const CustomerProfileLoyalty = lazy(() => import('@src/views/CRM/Customers/CustomerProfileLoyalty'))
-const CustomerProfileOffer = lazy(() => import('@src/views/CRM/Customers/CustomerProfileOffer'))
-const CustomerProfileProducts = lazy(() => import('@src/views/CRM/Customers/CustomerProfileProducts'))
-const CustomerProfileVehicle = lazy(() => import('@src/views/CRM/Customers/CustomerProfileVehicle'))
-const CustomerBasicAccount = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBasic/CustomerBasicAccount'))
-const CustomerBasicAddress = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBasic/CustomerBasicAddress'))
-const CustomerBasicCompanyInfo = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBasic/CustomerBasicCompanyInfo'))
-const CustomerBasicIdProof = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBasic/CustomerBasicIdProof'))
-const CustomerBasicPersonal = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBasic/CustomerBasicPersonal'))
+// const AddCustomerGroups = lazy(() => import('@src/views/CrossMarketing/AddCustomerGroups'))
+// const CustomerProfileBasic = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBasic'))
+// const CustomerProfileBooking = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBooking'))
+// const CustomerProfileCall = lazy(() => import('@src/views/CRM/Customers/CustomerProfileCall'))
+// const CustomerProfileDetails = lazy(() => import('@src/views/CRM/Customers/CustomerProfileDetails'))
+// const CustomerProfileInvoice = lazy(() => import('@src/views/CRM/Customers/CustomerProfileInvoice'))
+// const CustomerProfileLoyalty = lazy(() => import('@src/views/CRM/Customers/CustomerProfileLoyalty'))
+// const CustomerProfileOffer = lazy(() => import('@src/views/CRM/Customers/CustomerProfileOffer'))
+// const CustomerProfileProducts = lazy(() => import('@src/views/CRM/Customers/CustomerProfileProducts'))
+// const CustomerProfileVehicle = lazy(() => import('@src/views/CRM/Customers/CustomerProfileVehicle'))
+// const CustomerBasicAccount = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBasic/CustomerBasicAccount'))
+// const CustomerBasicAddress = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBasic/CustomerBasicAddress'))
+// const CustomerBasicCompanyInfo = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBasic/CustomerBasicCompanyInfo'))
+// const CustomerBasicIdProof = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBasic/CustomerBasicIdProof'))
+// const CustomerBasicPersonal = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBasic/CustomerBasicPersonal'))
 const AddCustomerForm = lazy(() => import('@src/views/CRM/Customers/AddCustomerForm'))
 const Finance = lazy(() => import('../../views/Leads/Finance'))
-const Service = lazy(() => import('../../views/Leads/Service'))
+// const Service = lazy(() => import('../../views/Leads/Service'))
 // const Customer = lazy(() => import('../../views/Leads/Customers'))
 const Insurance = lazy(() => import('../../views/Leads/Insurance'))
 import AddCall from '../../views/CRM/Call/AddCall'
 import Vehicle from '../../views/Leads/Vehicle'
 import CrossLeads from '../../views/Leads/CrossLeads'
 
-
+const appName = "crm"
 const Customers_Routes = [
   {
     path: '/merchant/leads',
@@ -47,8 +47,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/',
     element: <Customers />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "customer",
       action: "read"
     }
@@ -56,8 +56,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/view_customer/:id',
     element: <ViewCustomer />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "customer",
       action: "read"
     }
@@ -65,8 +65,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customer/add_type_of_customer/',
     element: <CustomerType />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "customer",
       action: "create"
     }
@@ -74,8 +74,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/add_customer/',
     element: <CustomerProfile />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "customer",
       action: "create"
     }
@@ -83,8 +83,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/add_business/',
     element: <AddBusiness />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "customer",
       action: "create"
     }
@@ -92,8 +92,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/edit_customer/:id',
     element: <CustomerProfile />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "customer",
       action: "update"
     }
@@ -101,8 +101,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customer/all_cust_dashboard/add_finance/',
     element: <Finance />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "finance",
       action: "read"
     }
@@ -110,8 +110,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/add_finance/',
     element: <AddFinance />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "finance",
       action: "create"
     }
@@ -119,8 +119,8 @@ const Customers_Routes = [
   { //change URL
     path: '/merchant/customers/jmd-finance-customers/:id',
     element: <AddFinance />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "finance",
       action: "read"
     }
@@ -128,8 +128,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customer/all_cust_dashboard/add_finance/:id',
     element: <Finance />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "finance",
       action: "create"
     }
@@ -137,8 +137,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/edit_finance/:id',
     element: <AddFinance />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "finance",
       action: "update"
     }
@@ -146,8 +146,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customer/all_cust_dashboard/add_servicing/',
     element: <Servicing />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "servicing",
       action: "read"
     }
@@ -155,8 +155,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/add-servicing/',
     element: <AddServicing />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "servicing",
       action: "create"
     }
@@ -164,8 +164,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/add-servicing/:id',
     element: <AddServicing />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "servicing",
       action: "update"
     }
@@ -173,8 +173,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/insurance/',
     element: <Insurance />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "insurance",
       action: "view"
     }
@@ -182,8 +182,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/add-insurance/',
     element: <AddInsurance />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "insurance",
       action: "create"
     }
@@ -191,8 +191,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/insurance/edit_insurance/:id',
     element: <AddInsurance />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "insurance",
       action: "update"
     }
@@ -204,8 +204,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/add-insurance/:id',
     element: <AddInsurance />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "insurance",
       action: "update"
     }
@@ -213,21 +213,26 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/vehicle/',
     element: <Vehicle />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "vehicle",
       action: "read"
     }
   },
   {
     path: '/merchant/customers/cross_leads',
-    element: <CrossLeads />
+    element: <CrossLeads />,
+    app: appName,
+    permission: {
+      route_type: "customer",
+      action: "read"
+    }
   },
   {
     path: '/merchant/customers/add-vehicle/',
     element: <AddVehicle />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "vehicle",
       action: "create"
     }
@@ -235,8 +240,8 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/edit-vehicle/:id',
     element: <AddVehicle />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "vehicle",
       action: "update"
     }
@@ -244,86 +249,91 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/add-vehicle/:id',
     element: <AddVehicle />,
+    app: appName,
     permission: {
-      app: "crm",
       route_type: "vehicle",
       action: "create"
     }
   },
   // --------------------------------
-  {
-    path: '/merchant/customers/finance/',
-    element: <Finance />
-  },
-  {
-    path: '/merchant/customers/service/',
-    element: <Service />
-  },
+  // {
+  //   path: '/merchant/customers/finance/',
+  //   element: <Finance />
+  // },
+  // {
+  //   path: '/merchant/customers/service/',
+  //   element: <Service />
+  // },
   {
     path: '/merchant/customers/insurance/',
-    element: <Insurance />
+    element: <Insurance />,
+    app: appName,
+    permission: {
+      route_type: "insurance",
+      action: "view"
+    }
   },
   // --------------------------------
-  {
-    path: '/merchant/customers/customer_details/',
-    element: <CustomerProfileDetails />
-  },
-  {
-    path: '/merchant/customers/customer_basic/',
-    element: <CustomerProfileBasic />
-  },
-  {
-    path: '/merchant/customers/customer_basic/personal_info/',
-    element: <CustomerBasicPersonal />
-  },
-  {
-    path: '/merchant/customers/customer_basic/id_proof/',
-    element: <CustomerBasicIdProof />
-  },
-  {
-    path: '/merchant/customers/customer_basic/address',
-    element: <CustomerBasicAddress />
-  },
-  {
-    path: '/merchant/customers/customer_basic/company_info',
-    element: <CustomerBasicCompanyInfo />
-  },
-  {
-    path: '/merchant/customers/customer_basic/account',
-    element: <CustomerBasicAccount />
-  },
-  {
-    path: '/merchant/customers/customer_booking',
-    element: <CustomerProfileBooking />
-  },
-  {
-    path: '/merchant/customers/customer_call',
-    element: <CustomerProfileCall />
-  },
-  {
-    path: '/merchant/customers/customer_invoice',
-    element: <CustomerProfileInvoice />
-  },
-  {
-    path: '/merchant/customers/customer_loyalty',
-    element: <CustomerProfileLoyalty />
-  },
-  {
-    path: '/merchant/customers/customer_offer',
-    element: <CustomerProfileOffer />
-  },
-  {
-    path: '/merchant/customers/customer_products',
-    element: <CustomerProfileProducts />
-  },
-  {
-    path: '/merchant/customers/customer_vehicle',
-    element: <CustomerProfileVehicle />
-  },
-  {
-    path: "/merchant/customers/create-groups/",
-    element: <AddCustomerGroups />
-  },
+  // {
+  //   path: '/merchant/customers/customer_details/',
+  //   element: <CustomerProfileDetails />
+  // },
+  // {
+  //   path: '/merchant/customers/customer_basic/',
+  //   element: <CustomerProfileBasic />
+  // },
+  // {
+  //   path: '/merchant/customers/customer_basic/personal_info/',
+  //   element: <CustomerBasicPersonal />
+  // },
+  // {
+  //   path: '/merchant/customers/customer_basic/id_proof/',
+  //   element: <CustomerBasicIdProof />
+  // },
+  // {
+  //   path: '/merchant/customers/customer_basic/address',
+  //   element: <CustomerBasicAddress />
+  // },
+  // {
+  //   path: '/merchant/customers/customer_basic/company_info',
+  //   element: <CustomerBasicCompanyInfo />
+  // },
+  // {
+  //   path: '/merchant/customers/customer_basic/account',
+  //   element: <CustomerBasicAccount />
+  // },
+  // {
+  //   path: '/merchant/customers/customer_booking',
+  //   element: <CustomerProfileBooking />
+  // },
+  // {
+  //   path: '/merchant/customers/customer_call',
+  //   element: <CustomerProfileCall />
+  // },
+  // {
+  //   path: '/merchant/customers/customer_invoice',
+  //   element: <CustomerProfileInvoice />
+  // },
+  // {
+  //   path: '/merchant/customers/customer_loyalty',
+  //   element: <CustomerProfileLoyalty />
+  // },
+  // {
+  //   path: '/merchant/customers/customer_offer',
+  //   element: <CustomerProfileOffer />
+  // },
+  // {
+  //   path: '/merchant/customers/customer_products',
+  //   element: <CustomerProfileProducts />
+  // },
+  // {
+  //   path: '/merchant/customers/customer_vehicle',
+  //   element: <CustomerProfileVehicle />
+  // },
+  // {
+  //   path: "/merchant/customers/create-groups/",
+  //   element: <AddCustomerGroups />
+  // },
   {
     path: "/:outletName/add_customer/",
     meta: {
