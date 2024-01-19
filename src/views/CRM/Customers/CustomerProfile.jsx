@@ -185,7 +185,7 @@ export default function CustomerProfile() {
         console.log("Response:", resp)
         toast.success('Customer saved successfully')
         if (resp.data.is_edit_url) {
-          navigate(`/merchant/customers/edit_customer/${resp.data.cust_id}`)
+          navigate(`/merchant/customers/edit_customer/${resp.data.cust_id}?type=edit`)
         } else {
           navigate(`/merchant/customers`)
         }

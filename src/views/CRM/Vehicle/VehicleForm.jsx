@@ -139,11 +139,11 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
     }
 
     const getCustomer = () => {
-        getReq("getAllCustomer")
+        getReq("getAllCustomer", "", crmURL)
             .then((resp) => {
                 console.log(resp)
                 setCustomerList(resp?.data?.success?.map((curElem) => {
-                    return { label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id }
+                    return { label: curElem?.customer_name ? curElem?.customer_name : '-', value: curElem?.id }
                 }))
             })
             .catch((error) => {

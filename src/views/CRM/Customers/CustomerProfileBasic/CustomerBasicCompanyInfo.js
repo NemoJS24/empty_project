@@ -327,7 +327,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 options={options}
                 closeMenuOnSelect={true}
                 components={{ Menu: CustomSelectComponent }}
-                placeholder="Select company Name"
+                placeholder="Select Company"
                 onChange={(e) => {
                   selectCompany(e, form.id ?? form.formId, i)
                 }}
@@ -657,7 +657,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 </label>
               </div>
 
-              <h5>Subsidiary Company Deatils</h5>
+              <h5>Subsidiary Company Details</h5>
 
               <label htmlFor="basicDetails-companyName">Company Name</label>
               <input
@@ -700,11 +700,11 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
             </Col>
             <Col md={12} className="mt-2">
               <label htmlFor="basicDetails-last-name">
-                Company PAN Card Number
+                PAN
               </label>
               <input
                 required
-                placeholder="PNA Card No."
+                placeholder="PAN"
                 type="text"
                 id="basicDetails-panNumber"
                 name="company_pancard"
@@ -733,7 +733,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
               <label htmlFor="basicDetails-last-name">Email</label>
               <input
                 required
-                placeholder="Last Name"
+                placeholder="Email"
                 type="email"
                 id="basicDetails-email"
                 name="company_email"
