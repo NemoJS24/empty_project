@@ -108,6 +108,12 @@ const AddInsurance = () => {
             message: 'Please enter you Insurance Company Name',
             type: 'string',
             id: 'insurance_company'
+        },
+        {
+            name: 'policy_purchase_date',
+            message: 'Please enter you Insurance Company Name',
+            type: 'string',
+            id: 'policy_purchase_date'
         }
     ]
 
@@ -315,15 +321,15 @@ const AddInsurance = () => {
 
     const getCustomer = () => {
         getReq("getAllCustomer")
-        .then((resp) => {
-            console.log(resp)
-            setCustomerList(resp?.data?.success?.map((curElem) => {
-                return { label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id }
-            }))
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((resp) => {
+                console.log(resp)
+                setCustomerList(resp?.data?.success?.map((curElem) => {
+                    return { label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id }
+                }))
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     const postData = (btn) => {
@@ -821,7 +827,8 @@ const AddInsurance = () => {
                     <Select
                         id='customer-name'
                         placeholder='Customer Name'
-                        value={{ value: formData?.customer_id, label: formData?.customer_id }}
+                        // value={{ value: formData?.customer_id, label: formData?.customer_id }}
+                        value={customerList?.find($ => Number($.value) === Number(formData?.customer_id))}
                         isDisabled={true}
                     />
 
@@ -980,7 +987,7 @@ const AddInsurance = () => {
             </Row>
         </form>
     )
-    
+
     useEffect(() => {
         if (formData?.customer_id) {
             selectCustomer()
@@ -1144,6 +1151,7 @@ const AddInsurance = () => {
                                                 setFormData({ ...formData, policy_purchase_date: moment(date[0]).format("YYYY-MM-DD") })
                                             }}
                                         />
+                                        <p id="policy_purchase_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                     </Col>
                                     <Col md={6} className="mt-2">
                                         <label htmlFor="Policy-expiry-date">
