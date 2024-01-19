@@ -19,11 +19,58 @@ const Apps = () => {
   const { setUserPermission, userPermission } = useContext(PermissionProvider)
   const [editModal, setEditModal] = useState(false)
   const [apiLoader, setApiLoader] = useState(false)
+  // const [platforms, setPlatforms] = useState()
+  const [pending, setPending] = useState(["shopify", "other"])
+
+  const platforms = [
+    {
+      name: "shopify",
+      title: "Shopify",
+      image: shopifyLogo
+    },
+    {
+      name: "woocommerce",
+      title: "Woo Commerce",
+      image: wooCommerceLogo
+    },
+    {
+      name: "magento",
+      title: "Magento",
+      image: magentoLogo
+    },
+    {
+      name: "other",
+      title: "Other",
+      image: oyeconLogo
+    }
+  ]
+
   const [data, setData] = useState({
     selectApp: "",
     isLoading: true
   })
-  const pending = ["woocommerce", "magento"]
+  // const pending = ["woocommerce", "magento"]
+
+  const openModal = () => {
+    // const dupArry = platforms
+    // console.log(data?.selectApp)
+
+    // if (platformIndex !== -1) {
+    if (data?.selectApp === "crm") {
+      setPending(["other"])
+    } else {
+      setPending(["shopify", "other"])
+    }
+    // }
+    // setPlatforms([...dupArry])
+    setEditModal(!editModal)
+  }
+
+  useEffect(() => {
+    if (data?.selectApp) {
+      openModal()
+    }
+  }, [data?.selectApp])
 
   const getAppsData = () => {
     getReq('getAllApps')
@@ -52,38 +99,33 @@ const Apps = () => {
 
   const installApp = (name) => {
     
-    if (pending.includes(name)) {
-      // toast.success("Coming Soon!")
-    } else {
-      setEditModal(false)
-      setApiLoader(true)
-      const form_data = new FormData()
-      form_data.append('plugin_name', name)
-      form_data.append('app', data?.selectApp)
-      postReq('installPlugin', form_data)
-      .then((resp) => {
-        console.log(resp)
-        // setApiLoader(false)
-        if (name === "other") {
-          navigate("/merchant/customers/")
-          setUserPermission({...userPermission, appName: data?.selectApp})
-        } else {
-          window.location.href = resp?.data?.data
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-        setApiLoader(false)
-  
-      })
+    setEditModal(false)
+    setApiLoader(true)
+    const form_data = new FormData()
+    form_data.append('plugin_name', name)
+    form_data.append('app', data?.selectApp)
+    postReq('installPlugin', form_data)
+    .then((resp) => {
+      console.log(resp)
+      // setApiLoader(false)
+      if (name === "other") {
+        navigate("/merchant/customers/")
+        setUserPermission({...userPermission, appName: data?.selectApp})
+      } else {
+        window.location.href = resp?.data?.data
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+      setApiLoader(false)
 
-    }
+    })
+
   }
 
   useEffect(() => {
     getAppsData()
   }, [])
-  
 
   return (
     <Container>
@@ -118,7 +160,8 @@ const Apps = () => {
                       ) : (
                         <a onClick={() => {
                           setData({...data, selectApp: curElem?.slug?.toLowerCase()})
-                          setEditModal(!editModal)
+                          // openModal(curElem?.slug?.toLowerCase())
+                          // setEditModal(!editModal)
                         }} className="btn btn-primary">
                           Install App
                         </a>
@@ -145,12 +188,26 @@ const Apps = () => {
         <ModalHeader toggle={() => setEditModal(!editModal)}>Select Platform</ModalHeader>
         <ModalBody>
           <div className="row">
-            <div className="col-md-3" title="Shopify" onClick={() => installApp('shopify')}>
-              <div className="d-flex justify-content-center align-items-center cursor-pointer" style={{width: '110px', height: '110px'}}>
-                <img width={'100%'} className="p-2" src={shopifyLogo} alt="" />
-              </div>
-            </div>
-            <div className="col-md-3" title="Woo Commerce" onClick={() => installApp('woocommerce')}>
+            {
+              platforms?.map((curElem) => {
+                return pending?.includes(curElem?.name) ? <>
+                  <div className="col-md-3" title={curElem?.title} onClick={() => installApp(curElem?.name)}>
+                    <div className="d-flex justify-content-center align-items-center cursor-pointer" style={{width: '110px', height: '110px'}}>
+                      <img width={'100%'} className="p-2" src={curElem?.image} alt="" />
+                    </div>
+                  </div>
+                </> : <>
+                  <div className="col-md-3" title={curElem?.title}>
+                    <div className="d-flex justify-content-center align-items-center cursor-pointer" style={{width: '110px', height: '110px', filter: 'brightness(40%)'}}>
+                      <img width={'100%'} className="p-2" src={curElem?.image} alt="" />
+                    </div>
+                    <h6>Coming Soon!</h6>
+                  </div>
+                </>
+              })
+            }
+
+            {/* <div className="col-md-3" title="Woo Commerce" onClick={() => installApp('woocommerce')}>
               <div className="d-flex justify-content-center align-items-center cursor-pointer" style={{width: '110px', height: '110px', filter: 'brightness(40%)'}}>
                 <img width={'100%'} className="p-2" src={wooCommerceLogo} alt="" />
               </div>
@@ -166,7 +223,7 @@ const Apps = () => {
               <div className="d-flex justify-content-center align-items-center cursor-pointer" style={{width: '110px', height: '110px'}}>
                 <img width={'100%'} className="p-2" src={oyeconLogo} alt="" />
               </div>
-            </div>
+            </div> */}
           </div>
         </ModalBody>
         {/* <ModalFooter>
