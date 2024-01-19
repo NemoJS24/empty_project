@@ -110,10 +110,11 @@ const Apps = () => {
       // setApiLoader(false)
       if (name === "other") {
         navigate("/merchant/customers/")
-        setUserPermission({...userPermission, appName: data?.selectApp})
+        setUserPermission({...userPermission, appName: data?.selectApp, installedApps: [...resp?.data?.install_app]})
       } else {
         window.location.href = resp?.data?.data
       }
+
     })
     .catch((error) => {
       console.log(error)
@@ -154,9 +155,9 @@ const Apps = () => {
                             navigate(dashboardURL[curElem?.slug?.toLowerCase()])
                           }}
                           className="btn btn-primary"
-                        >
-                        Dashboard
-                      </a>
+                          >
+                          Dashboard
+                        </a>
                       ) : (
                         <a onClick={() => {
                           setData({...data, selectApp: curElem?.slug?.toLowerCase()})

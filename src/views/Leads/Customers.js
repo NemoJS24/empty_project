@@ -6,7 +6,7 @@ import { LuTrendingUp } from "react-icons/lu"
 import { LiaUserSlashSolid, LiaUserSolid } from "react-icons/lia"
 import { PiMoneyThin } from "react-icons/pi"
 import { Link } from "react-router-dom"
-import { baseURL } from "../../assets/auth/jwtService"
+import { baseURL, postReq } from "../../assets/auth/jwtService"
 
 /* eslint-disable */
 const Customers = () => {
@@ -31,15 +31,17 @@ const Customers = () => {
     form_data.append("searchValue", searchValue)
 
 
-    fetch(url, {
-      method: "POST",
-      body: form_data
-    })
-      .then((data) => data.json())
+    // fetch(url, {
+    //   method: "POST",
+    //   body: form_data
+    // })
+      // .then((data) => data.json())
+      postReq("all_cust_dashboard", form_data)
       .then((resp) => {
-        setCustData(resp.success)
-        console.log("hh", resp.success)
-        setTableData(resp.success)
+        console.log(resp, "all_cust_dashboard")
+        setCustData(resp?.data?.success)
+        console.log("hh", resp?.data?.success)
+        setTableData(resp?.data?.success)
         setIsLoading(false)
       })
       .catch((error) => {
