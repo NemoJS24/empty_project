@@ -5,7 +5,7 @@ import Select from "react-select"
 
 const ReferralForm = ({ allData }) => {
 
-    const { formData, handleNext, handleBack, handleInputChange, currentStep, handleSubmitSection, country } = allData
+    const { formData, handleBack, handleInputChange, currentStep, handleSubmitSection, country } = allData
     // const refferalFormvalueToCheck = [
     //     {
     //         name: 'Ref_title',
@@ -250,7 +250,7 @@ const ReferralForm = ({ allData }) => {
                                         <button className="btn btn-primary" type="button" onClick={() => {
                                             handleSubmitSection("SAVE")
                                         }}>Save</button>
-                                        <button className="btn btn-primary" type="button" onClick={handleNext} >Save & Close</button>
+                                        <button className="btn btn-primary" type="button" onClick={() => handleSubmitSection("SAVE & CLOSE")} >Save & Close</button>
                                     </div>
                                 </div>
                             </>
