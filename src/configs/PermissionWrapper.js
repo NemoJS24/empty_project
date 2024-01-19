@@ -61,7 +61,7 @@ const PermissionWrapper = ({children}) => {
             }
 
             if (currentRoute[0]?.permission) {
-                const permissionList = userPermission?.permissionList.filter((curElem) => curElem.permission__apps === currentRoute[0]?.permission.app && curElem.permission__slug === currentRoute[0]?.permission.route_type)
+                const permissionList = userPermission?.permissionList.filter((curElem) => curElem.permission__apps === currentRoute[0]?.app && curElem.permission__slug === currentRoute[0]?.permission.route_type)
                 if (permissionList.length > 0) {
                     const isAccess = permissionList[0][currentRoute[0]?.permission?.action]
                     // console.log(permissionList[0][currentRoute[0]?.permission?.action], "isPermission")
