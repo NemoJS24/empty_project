@@ -362,6 +362,7 @@ const RenderPreview = (props) => {
                                             handleDragOver(e)
                                         }}
                                             onDrop={(e) => {
+                                                e.stopPropagation()
                                                 const transferType = e.dataTransfer.getData("type")
                                                 setGotDragOver({ cur: false, curElem: false, subElem: false })
                                                 if (transferType !== "") {
@@ -380,8 +381,7 @@ const RenderPreview = (props) => {
                                                 navigate("/")
                                             }} className="text-decoration-underline">XIRCLS</span></span></div>}
                                             {/* render layout Here */}
-                                            {
-                                                colWise?.map((cur, key) => {
+                                            {colWise.length > 0 ? colWise?.map((cur, key) => {
                                                     return <div style={{ ...cur?.style, display: "flex", justifyContent: "center", alignItems: "center", position: "relative", zIndex: cur === indexes.cur ? "2" : "0" }} key={key}
                                                         onClick={(e) => {
                                                             e.stopPropagation()
@@ -1366,8 +1366,27 @@ const RenderPreview = (props) => {
                                                             }
                                                         </div>
                                                     </div>
-                                                })
-                                            }
+                                                }) : (
+                                                    <div onDragOver={(e) => {
+                                                        handleDragOver(e)
+                                                    }}
+                                                        onDrop={(e) => {
+                                                            e.stopPropagation()
+                                                            const transferType = e.dataTransfer.getData("type")
+                                                            setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                            if (transferType !== "") {
+                                                                handleLayoutDrop(e)
+                                                                setIndexes(transferType.includes("col") ? { cur: colWise.length, curElem: "parent", subElem: "grandparent" } : { cur: colWise.length, curElem: "left", subElem: 0 })
+                                                                setCurrPosition({ ...currPosition, id: colWise.length, selectedType: transferType.includes("col") ? "block" : transferType })
+                                                                setValues(elementStyles[transferType.includes("col") ? "block" : transferType])
+                                                            }
+                                                        }} className='' style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", padding: "1rem" }}
+                                                    // onClick={(e) => makActive(e, cur)}
+                                                    >
+                                                    <Download size={10} style={{ color: 'grey' }} />
+                                                    <p style={{ margin: '0px', fontSize: '10px', color: 'grey' }}>Drop an element here</p>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -1585,20 +1604,14 @@ const RenderPreview = (props) => {
                                                                         const newObj = finalObj
                                                                         const pageCurrentIndex = newObj?.pages?.findIndex(($) => $?.id === ele?.id)
                                                                         const mobilePageCurrentIndex = newObj?.mobile_pages?.findIndex(($) => $?.id === ele?.id)
-                                                                        const responsivePageArray = newObj?.responsive?.findIndex($ => $?.pageName === ele?.id)
 
                                                                         const page = newObj?.pages[pageCurrentIndex]
                                                                         const mobilePage = newObj?.mobile_pages[mobilePageCurrentIndex]
-                                                                        const responsiveArray = newObj?.responsive[responsivePageArray]
 
                                                                         const duplicatedPage = { ...page, id: `Page${newObj?.pages.length + 1}`, pageName: `Page ${newObj?.pages.length + 1}` }
                                                                         const duplicatedMobilePage = { ...mobilePage, id: `Page${newObj?.mobile_pages.length + 1}`, pageName: `Page ${newObj?.mobile_pages.length + 1}` }
-                                                                        const duplicatedresponsiveArray = { ...responsiveArray, pageName: `Page${newObj?.pages.length + 1}` }
-
-
                                                                         newObj?.pages?.splice(pageCurrentIndex + 1, 0, duplicatedPage)
                                                                         newObj?.mobile_pages?.splice(mobilePageCurrentIndex + 1, 0, duplicatedMobilePage)
-                                                                        newObj?.responsive?.splice(responsivePageArray + 1, 0, duplicatedresponsiveArray)
                                                                         setFinalObj({ ...newObj })
                                                                     }}>
                                                                         <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
@@ -1610,12 +1623,11 @@ const RenderPreview = (props) => {
 
                                                                         const pageArray = newObj?.pages?.filter($ => $?.id !== ele?.id)
                                                                         const mobilePageArray = newObj?.mobile_pages?.filter($ => $?.id !== ele?.id)
-                                                                        const responsivePageArray = newObj?.responsive?.filter($ => $?.pageName !== ele?.id)
                                                                         if (currPage === ele?.id) {
                                                                             setCurrPage(pageArray[0]?.id)
                                                                         }
                                                                         toast.success(<div className="d-flex gap-1 align-items-center">Page removed! <button onClick={undo} className="btn-primary btn">Undo</button></div>)
-                                                                        setFinalObj({ ...finalObj, pages: pageArray, mobile_pages: mobilePageArray, responsive: responsivePageArray })
+                                                                        setFinalObj({ ...finalObj, pages: pageArray, mobile_pages: mobilePageArray })
                                                                     }} className='w-100'>
                                                                         <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
                                                                             <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Delete</span>
@@ -1626,13 +1638,12 @@ const RenderPreview = (props) => {
 
                                                                         const pageArray = newObj?.pages?.filter($ => $?.id !== ele?.id)
                                                                         const mobilePageArray = newObj?.mobile_pages?.filter($ => $?.id !== ele?.id)
-                                                                        const responsivePageArray = newObj?.responsive?.filter($ => $?.pageName !== ele?.id)
 
                                                                         if (currPage === ele?.id) {
                                                                             setCurrPage(pageArray[0]?.id)
                                                                         }
                                                                         toast.success(<div className="d-flex gap-1 align-items-center">Page removed! <button onClick={undo} className="btn-primary btn">Undo</button></div>)
-                                                                        setFinalObj({ ...finalObj, pages: pageArray, mobile_pages: mobilePageArray, responsive: responsivePageArray })
+                                                                        setFinalObj({ ...finalObj, pages: pageArray, mobile_pages: mobilePageArray })
                                                                     }} className='w-100'>
                                                                         <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
                                                                             <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Delete</span>

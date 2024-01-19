@@ -41,7 +41,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
     const [currDetails, setCurrDetails] = useState({})
     const [checkedThemes, setCheckedThemes] = useState([])
     const [deleteMode, setDeleteMode] = useState("single")
-
+    const condition = ''
 
     const [modal1, setModal1] = useState(false)
 
@@ -511,13 +511,13 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                                                             </div>
                                                             <Row className='mt-2' style={{ height: '145px', overflow: 'auto' }}>
 
-                                                                <GridCard title="Impressions" data={curElem?.impression} info={`Number of times pop-up was shown.`} />
+                                                                <GridCard title="Impressions" data={curElem[`${condition}pop_up_view`]} info={`Number of times pop-up was shown.`} />
 
-                                                                <GridCard title="Leads" data={curElem?.leads} info={`Number of leads (total)`} />
+                                                                <GridCard title="Leads" data={curElem?.total_leads} info={`Number of leads (total)`} />
 
                                                                 <GridCard title="Conversion %" data={`${curElem?.conversion_rate}%`} info={`Number of leads (total) / Number of redemptions`} />
 
-                                                                <GridCard title="CTR" data={curElem?.clicks && curElem?.pop_up_view ? Number(curElem?.clicks / curElem?.pop_up_view * 100).toFixed(2) : 0} info={`Number of clicks / Number of impressions * 100`} />
+                                                                <GridCard title="CTR" data={`${(curElem?.clicks && curElem[`${condition}pop_up_view`]) ? Number(curElem[`${condition}clicks`] / curElem[`${condition}pop_up_view`] * 100).toFixed(2) : 0}%`} info={`Number of clicks / Number of impressions * 100`} />
 
                                                                 <Col md="6" className='d-none'>
                                                                     <GridCard title="Conversions" data={curElem?.conversion} info={`Number of redemptions.`} />

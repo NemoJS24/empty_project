@@ -3563,6 +3563,12 @@ export const allThemes = [
                     ]
                 }
             ],
+            responsiveStyles: {
+                close: [],
+                main: [],
+                button: [],
+                overlay: []
+            },
             brandStyles: {
                 justifyContent: "end",
                 backgroundColor: "rgba(255,255,255,0)",
@@ -6424,6 +6430,12 @@ export const allThemes = [
                     ]
                 }
             ],
+            responsiveStyles: {
+                close: [],
+                main: [],
+                button: [],
+                overlay: []
+            },
             brandStyles: {
                 justifyContent: "end",
                 backgroundColor: "rgba(255,255,255,0)",
