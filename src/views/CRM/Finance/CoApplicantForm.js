@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Container, Row, Col } from 'reactstrap'
 import Select from "react-select"
 // import { validForm } from '../../Validator'
 import Flatpickr from 'react-flatpickr'
 import moment from 'moment'
-import { getReq } from '../../../assets/auth/jwtService'
 
 /* eslint-disable */
 const CoApplicantForm = ({ allData }) => {
     const [children, setChildren] = useState(false)
-    const [country, setCountry] = useState([])
-    const { formData, handleNext, handleBack, handleInputChange } = allData
+    const { formData, handleNext, handleBack, handleInputChange, country } = allData
 
     // const coApplicantvalueToCheck = [
     //     {
@@ -132,26 +130,6 @@ const CoApplicantForm = ({ allData }) => {
         { value: 'student', label: 'Student' },
         { value: 'homemaker', label: 'Homemaker' }
     ]
-
-
-    const getCountries = () => {
-        getReq("countries")
-          .then((resp) => {
-            console.log(resp)
-            setCountry(
-              resp.data.data.countries.map((curElem) => {
-                return { value: curElem.name, label: `${curElem.name}` }
-              })
-            )
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-    }
-
-    useEffect(() => {
-        getCountries()
-    }, [])
 
     return (
         <>

@@ -47,6 +47,7 @@ const Processing = lazy(() => import('../../views/Flow/Processing'))
 const MerchantHome = lazy(() => import('../../views/Apps/Home'))
 const FlowLogin = lazy(() => import("../../views/Flow/Login"))
 const FlowSignUp = lazy(() => import("../../views/Flow/SignUp"))
+import Skin_type_form from '../../views/XirclsFrontend/test/Skin_type_form'
 
 const appName = ""
 
@@ -481,6 +482,14 @@ const Xircls_Frontend_Routes = [
     element: <ProductSuperleads />,
     meta: {
       layout: 'blank',
+      publicRoute: true
+    }
+  },
+  {
+    path: '/codeskin/skin-type-test',
+    element: <Skin_type_form />,
+    meta: {
+      layout: "NewBlank",
       publicRoute: true
     }
   }

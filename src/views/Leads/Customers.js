@@ -6,7 +6,7 @@ import { LuTrendingUp } from "react-icons/lu"
 import { LiaUserSlashSolid, LiaUserSolid } from "react-icons/lia"
 import { PiMoneyThin } from "react-icons/pi"
 import { Link } from "react-router-dom"
-import { baseURL } from "../../assets/auth/jwtService"
+import { baseURL, postReq } from "../../assets/auth/jwtService"
 
 /* eslint-disable */
 const Customers = () => {
@@ -31,15 +31,17 @@ const Customers = () => {
     form_data.append("searchValue", searchValue)
 
 
-    fetch(url, {
-      method: "POST",
-      body: form_data
-    })
-      .then((data) => data.json())
+    // fetch(url, {
+    //   method: "POST",
+    //   body: form_data
+    // })
+      // .then((data) => data.json())
+      postReq("all_cust_dashboard", form_data)
       .then((resp) => {
-        setCustData(resp.success)
-        console.log("hh", resp.success)
-        setTableData(resp.success)
+        console.log(resp, "all_cust_dashboard")
+        setCustData(resp?.data?.success)
+        console.log("hh", resp?.data?.success)
+        setTableData(resp?.data?.success)
         setIsLoading(false)
       })
       .catch((error) => {
@@ -110,28 +112,28 @@ const Customers = () => {
   const customerStatisticsData = [
     {
       name: "Total Customers",
-      data: custData.customer_detailsrecordsTotal ?? '0',
+      data: custData?.customer_detailsrecordsTotal ?? '0',
       type: "number",
       icon: <LuTrendingUp size={30} className="text-dark" />,
       iconStyle: ""
     },
     {
       name: "Active Customers",
-      data: custData.customer_detailsrecordsFiltered ?? '0',
+      data: custData?.customer_detailsrecordsFiltered ?? '0',
       type: "number",
       icon: <LiaUserSolid size={30} className="text-dark" />,
       iconStyle: ""
     },
     {
       name: "Inactive Customers",
-      data: custData.total_loan_amount ?? '0',
+      data: custData?.total_loan_amount ?? '0',
       type: "number",
       icon: <LiaUserSlashSolid size={30} className="text-dark" />,
       iconStyle: ""
     },
     {
       name: "Earnings Today",
-      data: custData.total_emi_amt ?? '0',
+      data: custData?.total_emi_amt ?? '0',
       type: "money",
       icon: <PiMoneyThin size={30} className="text-dark" />,
       iconStyle: ""
