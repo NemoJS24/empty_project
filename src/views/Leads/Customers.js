@@ -110,28 +110,28 @@ const Customers = () => {
   const customerStatisticsData = [
     {
       name: "Total Customers",
-      data: custData.customer_detailsrecordsTotal ?? '0',
+      data: custData?.customer_detailsrecordsTotal ?? '0',
       type: "number",
       icon: <LuTrendingUp size={30} className="text-dark" />,
       iconStyle: ""
     },
     {
       name: "Active Customers",
-      data: custData.customer_detailsrecordsFiltered ?? '0',
+      data: custData?.customer_detailsrecordsFiltered ?? '0',
       type: "number",
       icon: <LiaUserSolid size={30} className="text-dark" />,
       iconStyle: ""
     },
     {
       name: "Inactive Customers",
-      data: custData.total_loan_amount ?? '0',
+      data: custData?.total_loan_amount ?? '0',
       type: "number",
       icon: <LiaUserSlashSolid size={30} className="text-dark" />,
       iconStyle: ""
     },
     {
       name: "Earnings Today",
-      data: custData.total_emi_amt ?? '0',
+      data: custData?.total_emi_amt ?? '0',
       type: "money",
       icon: <PiMoneyThin size={30} className="text-dark" />,
       iconStyle: ""
