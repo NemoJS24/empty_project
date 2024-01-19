@@ -21,10 +21,10 @@ const AddFinance = () => {
 
   const mainFormvalueToCheck = [
     {
-      name: 'customer_id',
+      name: 'xircls_customer_id',
       message: 'Select Customer Name',
       type: 'string',
-      id: 'customer_id'
+      id: 'xircls_customer_id'
     },
     {
       name: 'client',
@@ -137,7 +137,7 @@ const AddFinance = () => {
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState({
     SE_DSA_Name: "",
-    customer_id: isCustomer ? id : "",
+    xircls_customer_id: isCustomer ? id : "",
     customer_name: "",
     Bank_Name: "",
     client: '',
@@ -313,7 +313,7 @@ const AddFinance = () => {
         .then((resp) => {
           console.log("Response:", resp)
           toast.success('Finance saved successfully')
-          resp.data?.is_edit_url ? navigate(`/merchant/customers/edit_finance/${resp.data?.finance_code}?type=edit`) : navigate(`/merchant/customer/all_cust_dashboard/add_finance/`)
+          resp.data?.is_edit_url ? navigate(`/merchant/customers/edit_finance/${resp.data?.finance_code}?type=edit`) : navigate(-1)
           // fetchFinanceData(resp.finance_code)
         })
         .catch((error) => {
@@ -340,7 +340,7 @@ const AddFinance = () => {
         console.log(data, "fdata")
         const updateData = {
           SE_DSA_Name: data?.SE_DSA_Name,
-          customer_id: data?.xircls_customer,
+          xircls_customer_id: data?.xircls_customer,
           customer_name: data?.customer_name,
           Bank_Name: data?.Bank_Name,
           client: data?.client,

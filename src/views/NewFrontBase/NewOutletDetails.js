@@ -59,7 +59,7 @@ const NewOutletDetails = () => {
                 return {value: curElem.id, label: `${curElem.currency_symbol}`}
             }))
             setCountry(resp.data.data.countries.map((curElem) => {
-                return {value: curElem.id, label: `${curElem.name}`}
+                return {value: `${curElem.name}`, label: `${curElem.name}`}
             }))
         })
         .catch((error) => {
