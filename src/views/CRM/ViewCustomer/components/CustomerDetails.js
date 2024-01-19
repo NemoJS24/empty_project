@@ -113,8 +113,8 @@ const CustomerDetails = ({ userData }) => {
                                         <Row>
                                             <Col md='2' className='d-flex gap-1 justify-content-center align-items-center'>
                                                 <div>
-                                                    <div className='bg-warning bg-opacity-25 d-flex justify-content-center align-items-center' style={{ width: "35px", height: "36px", borderRadius: "100%" }}>
-                                                        <LuTrendingUp size={18} className="text-warning" />
+                                                    <div className='d-flex justify-content-center align-items-center' style={{ width: "35px", height: "36px", borderRadius: "100%" }}>
+                                                        <LuTrendingUp size={18} className="text-dark" />
                                                     </div>
                                                 </div>
                                                 <div>
@@ -125,8 +125,8 @@ const CustomerDetails = ({ userData }) => {
 
                                             <Col md='2' className='d-flex gap-1 justify-content-center align-items-center'>
                                                 <div>
-                                                    <div className='bg-success bg-opacity-25 d-flex justify-content-center align-items-center' style={{ width: "35px", height: "36px", borderRadius: "100%" }}>
-                                                        <LiaUserSolid size={18} className="text-success" />
+                                                    <div className='d-flex justify-content-center align-items-center' style={{ width: "35px", height: "36px", borderRadius: "100%" }}>
+                                                        <LiaUserSolid size={18} className="text-dark" />
                                                     </div>
                                                 </div>
                                                 <div>
@@ -137,8 +137,8 @@ const CustomerDetails = ({ userData }) => {
 
                                             <Col md='2' className='d-flex gap-1 justify-content-center align-items-center'>
                                                 <div>
-                                                    <div className='bg-danger bg-opacity-25 d-flex justify-content-center align-items-center' style={{ width: "35px", height: "36px", borderRadius: "100%" }}>
-                                                        <LiaUserSlashSolid size={18} className="text-danger" />
+                                                    <div className='d-flex justify-content-center align-items-center' style={{ width: "35px", height: "36px", borderRadius: "100%" }}>
+                                                        <LiaUserSlashSolid size={18} className="text-dark" />
                                                     </div>
                                                 </div>
                                                 <div>
@@ -149,8 +149,8 @@ const CustomerDetails = ({ userData }) => {
 
                                             <Col md='2' className='d-flex gap-1 justify-content-center align-items-center'>
                                                 <div>
-                                                    <div className='bg-info bg-opacity-25 d-flex justify-content-center align-items-center' style={{ width: "35px", height: "36px", borderRadius: "100%" }}>
-                                                        <PiMoneyThin size={18} className="text-info" />
+                                                    <div className='d-flex justify-content-center align-items-center' style={{ width: "35px", height: "36px", borderRadius: "100%" }}>
+                                                        <PiMoneyThin size={18} className="text-dark" />
                                                     </div>
                                                 </div>
                                                 <div>
@@ -161,8 +161,8 @@ const CustomerDetails = ({ userData }) => {
 
                                             <Col md='2' className='d-flex gap-1 justify-content-center align-items-center'>
                                                 <div>
-                                                    <div className='bg-success bg-opacity-25 d-flex justify-content-center align-items-center' style={{ width: "35px", height: "36px", borderRadius: "100%" }}>
-                                                        <PiMoneyThin size={18} className="text-success" />
+                                                    <div className='d-flex justify-content-center align-items-center' style={{ width: "35px", height: "36px", borderRadius: "100%" }}>
+                                                        <PiMoneyThin size={18} className="text-dark" />
                                                     </div>
                                                 </div>
                                                 <div>
@@ -173,8 +173,8 @@ const CustomerDetails = ({ userData }) => {
 
                                             <Col md='2' className='d-flex gap-1 justify-content-center align-items-center'>
                                                 <div>
-                                                    <div className='bg-warning bg-opacity-25 d-flex justify-content-center align-items-center' style={{ width: "35px", height: "36px", borderRadius: "100%" }}>
-                                                        <PiMoneyThin size={18} className="text-warning" />
+                                                    <div className='d-flex justify-content-center align-items-center' style={{ width: "35px", height: "36px", borderRadius: "100%" }}>
+                                                        <PiMoneyThin size={18} className="text-dark" />
                                                     </div>
                                                 </div>
                                                 <div>
@@ -268,8 +268,8 @@ const CustomerDetails = ({ userData }) => {
                             <Card>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
-                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px", background: "rgb(215 247 229)" }}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" color='#28c76f' viewBox="0 0 24 24" fill="rgb(215 247 229)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle font-medium-5" onclick="ischeckboxselected()"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px" }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" color='#454545' viewBox="0 0 24 24" fill="#fff" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle font-medium-5" onclick="ischeckboxselected()"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                                         </div>
                                         <div className='mt-1'>
                                             <h5>Add to group</h5>
@@ -283,8 +283,8 @@ const CustomerDetails = ({ userData }) => {
                             <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/add-vehicle/${id}`)}>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
-                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px", background: "rgb(215 247 229)" }}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" color='#28c76f' stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-key font-medium-5"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px" }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" color='#454545' stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-key font-medium-5"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
                                         </div>
                                         <div className='mt-1'>
                                             <h5>Add Vehicle</h5>
@@ -298,8 +298,8 @@ const CustomerDetails = ({ userData }) => {
                             <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/add-insurance/${id}`)}>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
-                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px", background: "rgb(215 247 229)" }}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" color='#28c76f' width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye font-medium-5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px" }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" color='#454545' width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye font-medium-5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                         </div>
                                         <div className='mt-1'>
                                             <h5>Add Insurance</h5>
@@ -314,8 +314,8 @@ const CustomerDetails = ({ userData }) => {
                             <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/add-servicing/${id}`)}>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
-                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px", background: "rgb(215 247 229)" }}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" color='#28c76f' stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tool font-medium-5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px" }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" color='#454545' stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tool font-medium-5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
                                         </div>
                                         <div className='mt-1'>
                                             <h5>Add Servicing</h5>
@@ -329,8 +329,8 @@ const CustomerDetails = ({ userData }) => {
                             <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/jmd-finance-customers/${id}`)}>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
-                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px", background: "rgb(215 247 229)" }}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" color='#28c76f' class="feather feather-tool font-medium-5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px" }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" color='#454545' class="feather feather-tool font-medium-5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
                                         </div>
                                         <div className='mt-1'>
                                             <h5>Add Finance</h5>
@@ -344,8 +344,8 @@ const CustomerDetails = ({ userData }) => {
                             <Card>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
-                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px", background: "rgb(215 247 229)" }}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" color='#28c76f' stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock font-medium-5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px" }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" color='#454545' stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock font-medium-5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                                         </div>
                                         <div className='mt-1'>
                                             <h5>Send Reminder</h5>
@@ -360,8 +360,8 @@ const CustomerDetails = ({ userData }) => {
                             <Card>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
-                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px", background: "rgb(215 247 229)" }}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" color='#28c76f' stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell font-medium-5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px" }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" color='#454545' stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell font-medium-5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                                         </div>
                                         <div className='mt-1'>
                                             <h5>Send Notification</h5>
@@ -375,8 +375,8 @@ const CustomerDetails = ({ userData }) => {
                             <Card className=' cursor-pointer' onClick={() => navigate('/merchant/customers/add_call/')}>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
-                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px", background: "rgb(215 247 229)" }}>
-                                            <Phone color='#28c76f' size='23px' />
+                                        <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px" }}>
+                                            <Phone color='#454545' size='23px' />
                                         </div>
                                         <div className='mt-1'>
                                             <h5>Add Call</h5>

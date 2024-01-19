@@ -33,7 +33,7 @@ const NavbarUser = ({disableName}) => {
         name = userPermission?.appName
       } else {
         // navigate('/merchant/apps/')
-        name = ""
+        name = userPermission?.appName
       }
 
       const updatedPermission = {

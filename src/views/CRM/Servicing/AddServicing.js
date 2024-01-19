@@ -870,7 +870,7 @@ const AddServicing = () => {
                         <Flatpickr
                             name="job_card_date"
                             className='form-control'
-                            value={formData.mainForm.service_invoice_date ?? ""}
+                            value={formData.mainForm.service_invoice_date}
                             onChange={(date) => {
                                 setFormData({ ...formData, mainForm: { ...formData.mainForm, service_invoice_date: moment(date[0]).format("YYYY-MM-DD") } })
                             }}
@@ -895,7 +895,7 @@ const AddServicing = () => {
                         <Flatpickr
                             name="job_card_date"
                             className='form-control'
-                            value={formData.mainForm.service_expiry_date ?? ""}
+                            value={formData.mainForm.next_service_date ?? ""}
                             onChange={(date) => {
                                 setFormData({ ...formData, mainForm: { ...formData.mainForm, service_expiry_date: moment(date[0]).format("YYYY-MM-DD") } })
                             }}

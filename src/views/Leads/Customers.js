@@ -83,7 +83,7 @@ const Customers = () => {
       name: "Email",
       minWidth: "200px",
       selector: (row) => row?.customer_details_email,
-      type: 'email',
+      type: 'text',
       isEnable: true
     },
     {
@@ -112,29 +112,29 @@ const Customers = () => {
       name: "Total Customers",
       data: custData.customer_detailsrecordsTotal ?? '0',
       type: "number",
-      icon: <LuTrendingUp size={30} className="text-warning" />,
-      iconStyle: "bg-warning bg-opacity-25"
+      icon: <LuTrendingUp size={30} className="text-dark" />,
+      iconStyle: ""
     },
     {
       name: "Active Customers",
       data: custData.customer_detailsrecordsFiltered ?? '0',
       type: "number",
-      icon: <LiaUserSolid size={30} className="text-info" />,
-      iconStyle: "bg-info bg-opacity-25"
+      icon: <LiaUserSolid size={30} className="text-dark" />,
+      iconStyle: ""
     },
     {
       name: "Inactive Customers",
       data: custData.total_loan_amount ?? '0',
       type: "number",
-      icon: <LiaUserSlashSolid size={30} className="text-danger" />,
-      iconStyle: "bg-danger bg-opacity-25"
+      icon: <LiaUserSlashSolid size={30} className="text-dark" />,
+      iconStyle: ""
     },
     {
       name: "Earnings Today",
       data: custData.total_emi_amt ?? '0',
       type: "money",
-      icon: <PiMoneyThin size={30} className="text-success" />,
-      iconStyle: "bg-success bg-opacity-25"
+      icon: <PiMoneyThin size={30} className="text-dark" />,
+      iconStyle: ""
     }
   ]
 
