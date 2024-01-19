@@ -166,7 +166,8 @@ const AddFinance = () => {
     pancard: "",
     Adharcard: "",
     gender: "",
-    children: "",
+    children: "", 
+    NO_Of_Children: "", 
     marital_status: "",
     occupation: "",
     Emi_Amount: "",
@@ -305,7 +306,7 @@ const AddFinance = () => {
         form_data.append(key, value)
       })
       form_data.append("press_btn", btn)
-      if (id) {
+      if (isEdit) {
         form_data.append("finance_instance_id", id)
       }
 
@@ -370,6 +371,7 @@ const AddFinance = () => {
           Adharcard: data?.Adharcard,
           gender: data?.gender,
           children: data?.children,
+          NO_Of_Children: data?.NO_Of_Children,
           marital_status: data?.marital_status,
           occupation: data?.occupation,
           Emi_Amount: data?.Emi_Amount,
