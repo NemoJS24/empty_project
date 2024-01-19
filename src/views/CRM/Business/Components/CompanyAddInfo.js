@@ -13,6 +13,11 @@ const CompanyAddInfo = ({ allData }) => {
     handleBack
   } = allData
 
+
+  //------------
+
+  //---------------
+
   return (
     <>
       <Container fluid className="px-0 py-1">
@@ -138,8 +143,8 @@ const CompanyAddInfo = ({ allData }) => {
                 className="form-control"
                 aria-label=""
                 name="company_twitter"
-              value={formData?.company_twitter ?? ''}
-              onChange={handleInputChange}
+                value={formData?.company_twitter ?? ''}
+                onChange={handleInputChange}
               />
             </div>
           </Col>
@@ -155,8 +160,8 @@ const CompanyAddInfo = ({ allData }) => {
                 className="form-control"
                 aria-label=""
                 name="company_fb"
-              value={formData?.company_fb ?? ''}
-              onChange={handleInputChange}
+                value={formData?.company_fb ?? ''}
+                onChange={handleInputChange}
               />
             </div>
           </Col>
@@ -172,8 +177,8 @@ const CompanyAddInfo = ({ allData }) => {
                 className="form-control"
                 aria-label=""
                 name="company_insta"
-              value={formData?.company_insta ?? ''}
-              onChange={handleInputChange}
+                value={formData?.company_insta ?? ''}
+                onChange={handleInputChange}
               />
             </div>
           </Col>
@@ -183,7 +188,7 @@ const CompanyAddInfo = ({ allData }) => {
             <Row>
               <Col md={12} className="mt-2 d-flex justify-content-between">
                 <h4 className="mb-0">Parent Company Address Details</h4>
-                <div>
+                {/* <div>
                   <span className="form-check form-check-success">
                     <input
                       type="checkbox"
@@ -195,7 +200,7 @@ const CompanyAddInfo = ({ allData }) => {
                     />
                     <label htmlFor="same-Subsidiary-company">Same as Subsidiary Company</label>
                   </span>
-                </div>
+                </div> */}
               </Col>
               <Col md={6} lg={4} className="mt-2">
                 <label htmlFor="address-1-house-details2">

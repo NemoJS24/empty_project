@@ -326,6 +326,36 @@ const AddBusiness = () => {
       getCountries()
    }, [])
 
+   const handleSameAsSubsidiaryCompany = () => {
+      if (formData.SameSubsidiaryCompany) {
+         setFormData((prevData) => ({
+            ...prevData,
+            par_address_com: prevData.address_line1,
+            par_street_com: prevData.address_line2,
+            par_area_building_com: prevData.area_building,
+            par_landmark_com: prevData.landmark,
+            par_city_com: prevData.city,
+            par_state_com: prevData.state,
+            par_pincode_com: prevData.pincode,
+            par_country_selection_com: prevData.country
+         }))
+      } else {
+         // Clear subsidiary company details
+         setFormData((prevData) => ({
+            ...prevData,
+            par_address_com: "",
+            par_street_com: "",
+            par_area_building_com: "",
+            par_landmark_com: "",
+            par_city_com: "",
+            par_state_com: "",
+            par_pincode_com: "",
+            par_country_selection_com: ""
+         }))
+      }
+   }
+
+
    const handleInputChange = (e, addressType) => {
       if (addressType === undefined) {
          let { name, value, type, checked } = e.target
@@ -350,7 +380,10 @@ const AddBusiness = () => {
                setFormData((prevData) => ({
                   ...prevData,
                   parentCountry: checked ? prevData?.country : ''
-               }))
+               }));
+
+               // Call the function to fill in Parent Company Address Details
+               handleSameAsSubsidiaryCompany();
             }
             else if (name === 'billingShippingAddressSame') {
                setFormData((prevData) => ({
@@ -378,6 +411,32 @@ const AddBusiness = () => {
          }))
       }
    }
+
+   // const handleInputChange = (e, addressType) => {
+   //    if (addressType === undefined) {
+   //       let { name, value, type, checked } = e.target;
+
+   //       // ... (your existing code)
+
+   //       if (name === 'SameSubsidiaryCompany') {
+   //          setFormData((prevData) => ({
+   //             ...prevData,
+   //             parentCountry: checked ? prevData?.country : ''
+   //          }));
+
+   //          // Call the function to fill in Parent Company Address Details
+   //          handleSameAsSubsidiaryCompany();
+   //       } else if (name === 'billingShippingAddressSame') {
+   //          // ... (your existing code)
+   //       }
+   //    } else if (addressType === 'file') {
+   //       // ... (your existing code)
+   //    } else if (addressType) {
+   //       // ... (your existing code)
+   //    }
+   // }
+
+   // ... (rest of your component)
 
    const handleSubmitSection = (event, btn) => {
       event.preventDefault()
@@ -407,6 +466,7 @@ const AddBusiness = () => {
 
    const allData = {
       formData,
+      setFormData,
       currentStep,
       country,
       handleInputChange,
