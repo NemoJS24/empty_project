@@ -22,7 +22,7 @@ const ApplicantForm = ({ allData }) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [customerList, setCustomerList] = useState([])
 
-    
+
     // const mainFormvalueToCheck = [
     //     {
     //         name: 'customer_name',
@@ -58,10 +58,10 @@ const ApplicantForm = ({ allData }) => {
             id: 'title'
         },
         {
-            name: 'customer_name',
+            name: 'cust_first_name',
             message: 'Enter customer name',
             type: 'string',
-            id: 'customer_name'
+            id: 'cust_first_name'
         },
         {
             name: 'cust_last_name',
@@ -211,7 +211,9 @@ const ApplicantForm = ({ allData }) => {
 
         const checkForm = validForm(addFormvalueToCheck, check.addForm)  // Use addFormvalueToCheck for validation
         console.log(checkForm, "dd");
-        postNewCustomerData()
+        if (checkForm) {
+            postNewCustomerData()
+        }
 
         // if (checkForm) {
         //     console.log('Form is valid')
@@ -673,10 +675,10 @@ const ApplicantForm = ({ allData }) => {
                     <p id="title_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
-                    <label htmlFor="basicDetails-first-name">
+                    <label htmlFor="cust_first_name">
                         First Name
                     </label>
-                    <input placeholder="First Name" type='text' id='basicDetails-first-name' name='cust_first_name' className="form-control"
+                    <input placeholder="First Name" type='text' id='cust_first_name' name='cust_first_name' className="form-control"
                         // value={formData?.basicDetail?.cust_first_name} 
                         // onChange={handleInputChange} 
                         // onChange={}
@@ -689,10 +691,10 @@ const ApplicantForm = ({ allData }) => {
                     <p id="cust_first_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
-                    <label htmlFor="basicDetails-last-name">
+                    <label htmlFor="cust_last_name">
                         Last Name
                     </label>
-                    <input placeholder="Last Name" type='text' id='basicDetails-last-name' name='cust_last_name' className="form-control"
+                    <input placeholder="Last Name" type='text' id='cust_last_name' name='cust_last_name' className="form-control"
                         // value={formData?.basicDetail?.cust_last_name} 
                         // onChange={handleInputChange} 
                         onChange={(e) => {
