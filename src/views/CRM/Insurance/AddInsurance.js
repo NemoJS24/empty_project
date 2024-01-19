@@ -21,10 +21,10 @@ const AddInsurance = () => {
     const isEdit = urlParams.get("type") === "edit"
     const isCustomer = urlParams.get("type") === "customer"
 
-    const [type, setType] = useState("")
+    // const [type, setType] = useState("")
 
     const [formData, setFormData] = useState({
-        customer_id: isCustomer ? id : "",
+        xircls_customer_id: isCustomer ? id : "",
         policy_number: "",
         insurance_type: "Motor",
         insurance_company: "",
@@ -75,10 +75,10 @@ const AddInsurance = () => {
 
     const insuranceFormToCheck = [
         {
-            name: 'customer_id',
+            name: 'xircls_customer_id',
             message: 'Please select a Customer',
             type: 'string',
-            id: 'customer_id'
+            id: 'xircls_customer_id'
         },
         {
             name: 'insurance_type',
@@ -290,7 +290,7 @@ const AddInsurance = () => {
                     console.log("ResponseId:", resp.data.success[0])
                     const data = resp.data.success[0]
                     const updatedData = {
-                        customer_id: data?.xircls_customer,
+                        xircls_customer_id: data?.xircls_customer,
                         insurance_type: "Motor",
                         policy_number: data?.policy_number,
                         insurance_product_name: data?.insurance_product_name,
@@ -325,7 +325,7 @@ const AddInsurance = () => {
             .then((resp) => {
                 console.log(resp)
                 setCustomerList(resp?.data?.success?.map((curElem) => {
-                    return { label: curElem?.customer_name ? curElem?.customer_name : '-', value: curElem?.id }
+                    return { label: curElem?.customer_name ? curElem?.customer_name : '-', value: curElem?.xircls_customer_id }
                 }))
             })
             .catch((error) => {
@@ -339,7 +339,7 @@ const AddInsurance = () => {
             form_data.append(key, value)
         })
         form_data.append("press_btn", btn)
-        if (id) {
+        if (isEdit) {
             form_data.append("insurance_id", id)
         }
         postReq('add_insurance', form_data, crmURL)
@@ -386,6 +386,70 @@ const AddInsurance = () => {
             })
     }
 
+    const changeProductName = (data) => {
+        console.log(data)
+        const productOptions = data.car_variant.map(item => {
+            const value = item[0]
+            const slug = item[4]
+            const label = item.slice(1).filter(Boolean).join(' -- ')
+            return {
+                value,
+                label,
+                slug
+            }
+        })
+        setProductOptions(productOptions)
+
+        setUsedProductOptions(data.car_variant.map(item => {
+            const value = item[0]
+            const label = <div style={{textTransform: "capitalize"}}>{item[4]}</div>
+            return {
+                value,
+                label
+            }
+        }))
+        // const V_type = data.car_variant.map((ele) => {
+        //     return { value: ele[4], label: ele[4], slug: ele[0] }
+        // })
+        // setType(V_type)
+    }
+
+    const changeVehicleOptions = (data) => {
+        const vehicleOptionss = data.car_variant.map(item => {
+            return {
+                value: item[4],
+                label: item[4] === null ? 'null' : item[4]
+            }
+        })
+        setVehicleOptions(vehicleOptionss)
+    }
+
+    const selectCustomer = (value, actionMeta, check) => {
+        setProductFormData(prev => ({ ...prev, insurance_product_name: '' }))
+        setProductOptions([])
+        // handleChange(value, { name: "xircls_customer_id" }, check)
+        setProductFormData(prev => ({ ...prev, xircls_customer_id: formData?.xircls_customer_id }))
+        // setFormData(prevData => ({ ...prevData, customer_name: value.label, xircls_customer_id: formData?.xircls_customer_id }))
+        const form_data = new FormData()
+        form_data.append("id", formData?.xircls_customer_id)
+        // "SHIVAM KALE"
+        getReq(`fetch_vehicle_details`, `?id=${formData?.xircls_customer_id}`, crmURL)
+            .then((resp) => {
+                console.log("Response:", resp)
+                // setType(resp.data.car_variant.map((ele) => ele[4]))
+                if (resp.data.car_variant) {
+                    changeProductName(resp.data)
+                    changeVehicleOptions(resp.data)
+
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+                toast.error('Something went wrong')
+                error.message ? toast.error(error.message) : toast.error(error)
+            })
+    }
+
     const postVehicleDetails = () => {
         const form_data = new FormData()
         Object.entries(productFormData).map(([key, value]) => {
@@ -398,6 +462,7 @@ const AddInsurance = () => {
                 console.log("Response:", resp)
                 toast.success('Vehicle saved successfully')
                 handleClose('product')
+                selectCustomer()
             })
             .catch((error) => {
                 console.error("Error:", error)
@@ -532,70 +597,6 @@ const AddInsurance = () => {
             })
     }
 
-    const changeProductName = (data) => {
-        console.log(data)
-        const productOptions = data.car_variant.map(item => {
-            const value = item[0]
-            const slug = item[4]
-            const label = item.slice(1).filter(Boolean).join(' -- ')
-            return {
-                value,
-                label,
-                slug
-            }
-        })
-        setProductOptions(productOptions)
-
-        setUsedProductOptions(data.car_variant.map(item => {
-            const value = item[0]
-            const label = item[4]
-            return {
-                value,
-                label
-            }
-        }))
-        // const V_type = data.car_variant.map((ele) => {
-        //     return { value: ele[4], label: ele[4], slug: ele[0] }
-        // })
-        // setType(V_type)
-    }
-
-    const changeVehicleOptions = (data) => {
-        const vehicleOptionss = data.car_variant.map(item => {
-            return {
-                value: item[4],
-                label: item[4] === null ? 'null' : item[4]
-            }
-        })
-        setVehicleOptions(vehicleOptionss)
-    }
-
-    const selectCustomer = (value, actionMeta, check) => {
-        setProductFormData(prev => ({ ...prev, insurance_product_name: '' }))
-        setProductOptions([])
-        // handleChange(value, { name: "customer_id" }, check)
-        setProductFormData(prev => ({ ...prev, customer_id: formData?.customer_id }))
-        // setFormData(prevData => ({ ...prevData, customer_name: value.label, customer_id: formData?.customer_id }))
-        const form_data = new FormData()
-        form_data.append("id", formData?.customer_id)
-        // "SHIVAM KALE"
-        getReq(`fetch_vehicle_details`, `?id=${formData?.customer_id}`, crmURL)
-            .then((resp) => {
-                console.log("Response:", resp)
-                // setType(resp.data.car_variant.map((ele) => ele[4]))
-                if (resp.data.car_variant) {
-                    changeProductName(resp.data)
-                    changeVehicleOptions(resp.data)
-
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error)
-                toast.error('Something went wrong')
-                error.message ? toast.error(error.message) : toast.error(error)
-            })
-    }
-
     const CustomSelectComponent = ({ innerProps, children }) => (
         <div {...innerProps} className="position-absolute w-100 bg-white border">
             <p className="m-1">
@@ -613,7 +614,7 @@ const AddInsurance = () => {
     const CustomProductSelectComponent = ({ innerProps, children }) => (
         <div {...innerProps} className="position-absolute w-100 bg-white border">
             <p className="m-1">
-                {formData.customer_id &&
+                {formData.xircls_customer_id &&
                     <a
                         onClick={() => handleShow("product")}
                         className="link-success link-underline-opacity-0"
@@ -837,8 +838,8 @@ const AddInsurance = () => {
                     {/* <Select
                         id='customer-name'
                         placeholder='Customer Name'
-                        // value={{ value: formData?.customer_id, label: formData?.customer_id }}
-                        value={customerList?.find($ => Number($.value) === Number(formData?.customer_id))}
+                        // value={{ value: formData?.xircls_customer_id, label: formData?.xircls_customer_id }}
+                        value={customerList?.find($ => Number($.value) === Number(formData?.xircls_customer_id))}
                         isDisabled={true}
                     /> */}
                     <Select
@@ -846,13 +847,13 @@ const AddInsurance = () => {
                         id="insurance-type"
                         options={customerList}
                         closeMenuOnSelect={true}
-                        name='customer_id'
-                        value={customerList?.find($ => Number($.value) === Number(formData?.customer_id))}
+                        name='xircls_customer_id'
+                        value={customerList?.find($ => Number($.value) === Number(formData?.xircls_customer_id))}
                         // onMenuScrollToBottom={() => getCustomer(currentPage, null, () => { })}
                         components={{ Menu: CustomSelectComponent }}
                         onChange={(value, actionMeta) => {
                             // selectCustomer(value, actionMeta, false)
-                            setFormData(prevData => ({ ...prevData, customer_id: value.value }))
+                            setFormData(prevData => ({ ...prevData, xircls_customer_id: value.value }))
                         }}
                         isDisabled={true}
                     // onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
@@ -1015,10 +1016,10 @@ const AddInsurance = () => {
     )
 
     useEffect(() => {
-        if (formData?.customer_id) {
+        if (formData?.xircls_customer_id) {
             selectCustomer()
         }
-    }, [formData?.customer_id])
+    }, [formData?.xircls_customer_id])
 
     return (
         <>
@@ -1063,18 +1064,18 @@ const AddInsurance = () => {
                                             id="insurance-type"
                                             options={customerList}
                                             closeMenuOnSelect={true}
-                                            name='customer_id'
-                                            value={customerList?.find($ => Number($.value) === Number(formData?.customer_id))}
+                                            name='xircls_customer_id'
+                                            value={customerList?.find($ => Number($.value) === Number(formData?.xircls_customer_id))}
                                             // onMenuScrollToBottom={() => getCustomer(currentPage, null, () => { })}
                                             components={{ Menu: CustomSelectComponent }}
                                             onChange={(value, actionMeta) => {
                                                 // selectCustomer(value, actionMeta, false)
-                                                setFormData(prevData => ({ ...prevData, customer_id: value.value }))
+                                                setFormData(prevData => ({ ...prevData, xircls_customer_id: value.value }))
                                             }}
                                             isDisabled={isCustomer}
                                         // onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                         />
-                                        <p id="customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                                        <p id="xircls_customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                     </Col>
                                     <Col md={6} className="mt-2 d-none">
                                         <label htmlFor="insurance-type" className="" style={{ margin: '0px' }}>
@@ -1209,7 +1210,7 @@ const AddInsurance = () => {
                                         <label htmlFor="Insurance-sales-executive">
                                             Insurance Sales Executive
                                         </label>
-                                        <input placeholder="Insurance Company" type='text' id='Insurance-sales-executive' name='executive_name' className="form-control"
+                                        <input placeholder="Insurance Sales Executive" type='text' id='Insurance-sales-executive' name='executive_name' className="form-control"
                                             value={formData?.executive_name}
                                             onChange={handleInputChange}
                                         />

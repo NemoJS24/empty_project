@@ -30,15 +30,15 @@ const Vehicle = () => {
         form_data.append("searchValue", searchValue)
 
         postReq('get_vehicle', form_data, crmURL)
-            .then((resp) => {
-                console.log("vehicle", resp.data.customers_obj)
-                setTableData(resp.data)
-                setIsLoading(false)
-            })
-            .catch((error) => {
-                console.log(error)
-                setIsLoading(false)
-            })
+        .then((resp) => {
+            console.log("vehicle", resp.data.customers_obj)
+            setTableData(resp.data)
+            setIsLoading(false)
+        })
+        .catch((error) => {
+            console.log(error)
+            setIsLoading(false)
+        })
     }
 
     const columns = [
@@ -46,7 +46,7 @@ const Vehicle = () => {
             name: "Customer Name",
             minWidth: "200px",
             selector: (row) => (
-                <Link to={`/merchant/customers/view_customer/${row?.vehicle_customer_id}`}>{row?.vehicle_customer_name ?? '-'}</Link>
+                <Link to={`/merchant/customers/view_customer/${row?.xircls_customer_id}`}>{row?.vehicle_customer_name ?? '-'}</Link>
             ),
             type: 'text',
             isEnable: true
@@ -91,7 +91,7 @@ const Vehicle = () => {
             minWidth: "80px",
             selector: (row) => (
                 <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
-                    <Link to={`/merchant/customers/view_customer/${row?.vehicle_customer_id}`}><Eye size={15} /></Link>
+                    <Link to={`/merchant/customers/view_customer/${row?.xircls_customer_id}`}><Eye size={15} /></Link>
                     <Link to={`/merchant/customers/edit-vehicle/${row?.vehicle_id}?type=edit`}> <Edit3 size={15} /></Link>
                 </div>
             )

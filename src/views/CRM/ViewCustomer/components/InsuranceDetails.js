@@ -6,6 +6,7 @@ import { crmURL, postReq } from '../../../../assets/auth/jwtService'
 import { Link, useParams } from 'react-router-dom'
 import moment from 'moment'
 import ComTable from '../../../Components/DataTable/ComTable'
+import { Edit3 } from 'react-feather'
 
 const InsuranceDetails = () => {
 
@@ -30,8 +31,8 @@ const InsuranceDetails = () => {
         // })
         postReq('get_customer_insurance', form_data, crmURL)
         .then((res) => {
-            console.log(res.success, "ll")
-            setTableData(res.success)
+            console.log(res, "ll")
+            setTableData(res?.data?.success)
             setIsLoading(false)
         })
         .catch((error) => {
@@ -88,19 +89,19 @@ const InsuranceDetails = () => {
     }, [])
 
     const columns = [
-        {
-            name: "CUSTOMER NAME",
-            minWidth: "240px",
-            selector: (row) => (
-                row?.customer_name !== undefined && row?.customer_name !== null ? row.customer_name : "None"
-            ),
-            type: 'text'
-        },
+        // {
+        //     name: "CUSTOMER NAME",
+        //     minWidth: "240px",
+        //     selector: (row) => (
+        //         row?.customer_name
+        //     ),
+        //     type: 'text'
+        // },
         {
             name: <>BRAND</>,
             minWidth: "100px",
             selector: (row) => (
-                row?.brand !== undefined && row?.brand !== null ? row.brand : "None"
+                row?.brand
             ),
             type: 'text'
         },
@@ -108,7 +109,7 @@ const InsuranceDetails = () => {
             name: "MODEL",
             minWidth: "100px",
             selector: (row) => (
-                row?.car_model !== undefined && row?.car_model !== null ? row.car_model : "None"
+                row?.car_model
             ),
             type: 'text'
         },
@@ -116,7 +117,7 @@ const InsuranceDetails = () => {
             name: "VARIANT",
             minWidth: "100px",
             selector: (row) => (
-                row?.variant !== undefined && row?.variant !== null ? row.variant : "None"
+                row?.variant
             ),
             type: 'text'
         },
@@ -124,7 +125,7 @@ const InsuranceDetails = () => {
             name: <>POLICY NUMBER</>,
             minWidth: "100px",
             selector: (row) => (
-                row?.policy_number !== undefined && row?.policy_number !== null ? row.policy_number : "None"
+                row?.policy_number
             ),
             type: 'text'
         },
@@ -132,7 +133,7 @@ const InsuranceDetails = () => {
             name: <>INSURANCE COMPANY</>,
             minWidth: "120px",
             selector: (row) => (
-                row?.insurance_company !== undefined && row?.insurance_company !== null ? row.insurance_company : "None"
+                row?.insurance_company
             ),
             type: 'text'
         },
@@ -140,7 +141,7 @@ const InsuranceDetails = () => {
             name: <>POLICY PURCHASE DATE</>,
             minWidth: "150px",
             selector: (row) => (
-                row?.policy_purchase_date !== undefined && row?.policy_purchase_date !== null ? moment(row.policy_purchase_date).format("YYYY-MM-DD") : 'None'
+                row?.policy_purchase_date ? moment(row.policy_purchase_date).format("YYYY-MM-DD") : ''
             ),
             type: 'text'
         },
@@ -148,7 +149,7 @@ const InsuranceDetails = () => {
             name: <>POLICY EXPIRY DATE </>,
             minWidth: "150px",
             selector: (row) => (
-                row?.policy_expiry_date !== undefined && row?.policy_expiry_date !== null ? moment(row.policy_expiry_date).format("YYYY-MM-DD") : 'None'
+                row?.policy_expiry_date ? moment(row.policy_expiry_date).format("YYYY-MM-DD") : ''
             ),
             type: 'text'
         },
@@ -156,9 +157,18 @@ const InsuranceDetails = () => {
             name: "AMOUNT",
             minWidth: "100px",
             selector: (row) => (
-                row?.amount !== undefined && row?.amount !== null ? row.amount : "None"
+                row?.amount ? row.amount : "None"
             ),
             type: 'text'
+        },
+        {
+            name: "Action",
+            width: "130px",
+            selector: (row) => (
+              <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
+                <Link to={`/merchant/customers/insurance/edit_insurance/${row?.id}?type=edit`}> <Edit3 size={15} /></Link>
+              </div>
+            )
         }
 
     ]

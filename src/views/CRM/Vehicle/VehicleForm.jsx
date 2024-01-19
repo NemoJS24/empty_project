@@ -235,7 +235,7 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="registration-name">
-                            Registration Name
+                            Registration Number
                         </label>
                         <input
                             placeholder='Registration Number'

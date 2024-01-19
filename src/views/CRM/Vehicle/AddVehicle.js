@@ -16,7 +16,7 @@ const AddVehicle = () => {
    const navigate = useNavigate()
    const [editData, setEditData] = useState({
       // customer_name: "",
-      customer_id: urlParams.get("type") === "customer" ? id : "",
+      xircls_customer_id: urlParams.get("type") === "customer" ? id : "",
       registration_number: "",
       sales_person: "",
       vehicle_number: "",
@@ -73,7 +73,7 @@ const AddVehicle = () => {
                if (urlParams.get("type") === "edit") {
                   updatedData = {
                      // customer_name: data?.xircls_customer,
-                     customer_id: data?.xircls_customer,
+                     xircls_customer_id: data?.xircls_customer,
                      registration_number: data?.registration_number,
                      sales_person: data?.sales_person,
                      vehicle_number: data?.vehicle_number,

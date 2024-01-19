@@ -35,7 +35,7 @@ const AddServicing = () => {
             .then((resp) => {
                 console.log(resp)
                 setCustomerList(resp?.data?.success?.map((curElem) => {
-                    return { label: curElem?.customer_name ? curElem?.customer_name : '-', value: curElem?.id }
+                    return { label: curElem?.customer_name ? curElem?.customer_name : '-', value: curElem?.xircls_customer_id }
                 }))
             })
             .catch((error) => {
@@ -47,10 +47,10 @@ const AddServicing = () => {
 
     const mainFormvalueToCheck = [
         {
-            name: 'customer_id',
+            name: 'xircls_customer_id',
             message: 'Enter Customer Name',
             type: 'string',
-            id: 'customer_id'
+            id: 'xircls_customer_id'
         },
         {
             name: 'vehicle',
@@ -149,7 +149,7 @@ const AddServicing = () => {
 
     const [formData, setFormData] = useState({
         mainForm: {
-            customer_id: isCustomer ? id : "",
+            xircls_customer_id: isCustomer ? id : "",
             vehicle: '',
             service_advisor: '',
             job_card_date: '',
@@ -196,7 +196,7 @@ const AddServicing = () => {
                         return {
                             ...prev, mainForm: {
                                 ...prev.mainForm,
-                                customer_id: resp?.data?.success[0]?.xircls_customer,
+                                xircls_customer_id: resp?.data?.success[0]?.xircls_customer,
                                 vehicle: resp?.data?.success[0]?.vehicle?.registration_number,
                                 service_advisor: resp?.data?.success[0]?.service_advisor,
                                 job_card_date: resp?.data?.success[0]?.job_card_date,
@@ -254,7 +254,7 @@ const AddServicing = () => {
         // if (isEdit) {
 
         // }
-        // // form_data.append("customer_id", func_id)
+        // // form_data.append("xircls_customer_id", func_id)
         // form_data.append('tab_type', 'servicing')
         // // form_data.append('edit_type', !isEdit ? "is_customer_detail" : 'is_servicing')
         // fetch(url, {
@@ -271,7 +271,9 @@ const AddServicing = () => {
             form_data.append(key, value)
         })
         form_data.append("press_btn", "SAVE")
-        id && form_data.append("servicing_id", id)
+        if (isEdit) {
+            form_data.append("servicing_id", id)
+        }
 
         // fetch(url, {
         //     method: "POST",
@@ -353,11 +355,11 @@ const AddServicing = () => {
 
     const selectCustomer = () => {
         // if () {
-        setFormData(prev => ({ ...prev, mainForm: { ...prev.mainForm, customer: (id && isCustomer) ? id : formData?.mainForm?.customer_id } }))
+        setFormData(prev => ({ ...prev, mainForm: { ...prev.mainForm, customer: (id && isCustomer) ? id : formData?.mainForm?.xircls_customer_id } }))
         const form_data = new FormData()
-        form_data.append("id", (id && isCustomer) ? id : formData?.mainForm?.customer_id)
+        form_data.append("id", (id && isCustomer) ? id : formData?.mainForm?.xircls_customer_id)
         // "SHIVAM KALE"
-        getReq(`fetch_vehicle_number`, `/?id=${(id && isCustomer) ? id : formData?.mainForm?.customer_id}`, crmURL)
+        getReq(`fetch_vehicle_number`, `/?id=${(id && isCustomer) ? id : formData?.mainForm?.xircls_customer_id}`, crmURL)
             .then((resp) => {
                 console.log("Response: selectCustomer", resp)
                 const vehicleOptions = resp.data.car_variant
@@ -375,11 +377,11 @@ const AddServicing = () => {
     }
 
     useEffect(() => {
-        if (formData?.mainForm?.customer_id) {
+        if (formData?.mainForm?.xircls_customer_id) {
             console.log("pppp")
             selectCustomer()
         }
-    }, [formData?.mainForm?.customer_id])
+    }, [formData?.mainForm?.xircls_customer_id])
 
     const postNewCustomerData = () => {
         // console.log(customerFormData)
@@ -433,7 +435,7 @@ const AddServicing = () => {
         getCustomer()
         getCountries()
         if (id) {
-            setFormData({ ...formData, main: { ...formData.main, customer_id: id } })
+            setFormData({ ...formData, main: { ...formData.main, xircls_customer_id: id } })
             fetchServiceData(id)
             // selectCustomer()
         }
@@ -781,13 +783,13 @@ const AddServicing = () => {
                             components={{ Menu: CustomSelectComponent }}
                             onChange={(event) => {
                                 // selectCustomer()
-                                const e = { target: { name: 'customer_id', value: event?.value } }
+                                const e = { target: { name: 'xircls_customer_id', value: event?.value } }
                                 handleInputChange(e, "mainForm")
                             }}
-                            value={customerList?.filter($ => Number($.value) === Number(formData?.mainForm?.customer_id))}
+                            value={customerList?.filter($ => Number($.value) === Number(formData?.mainForm?.xircls_customer_id))}
                             isDisabled={isCustomer}
                         />
-                        <p id="customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                        <p id="xircls_customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label

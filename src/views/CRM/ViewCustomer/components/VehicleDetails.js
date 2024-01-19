@@ -102,11 +102,13 @@ const VehicleDetails = () => {
         {
             name: "ACTION",
             minWidth: "50px",
-            selector: () => (
+            selector: (row) => (
                 <>
                     <div className='d-flex justify-content-center align-items-center gap-2'>
                         <Eye size='17px' style={{ cursor: "pointer" }} />
-                        <Edit size='17px' style={{ cursor: "pointer" }} />
+                        <Link to={`/merchant/customers/edit-vehicle/${row?.id}?type=edit`}>
+                            <Edit size='17px' style={{ cursor: "pointer" }} />
+                        </Link>
                     </div>
                 </>
             ),

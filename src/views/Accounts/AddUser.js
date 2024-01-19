@@ -159,33 +159,33 @@ const AddUser = () => {
                             <div className="col-md-4 mb-1">
                                 <div className="form-group">
                                     <label htmlFor="first_name">First Name</label>
-                                    <input className='form-control' type="text" name="first_name" placeholder='Enter first name' value={data?.first_name} onChange={(e) => updateData(e)} />
+                                    <input className='form-control' type="text" name="first_name" placeholder='First Name' value={data?.first_name} onChange={(e) => updateData(e)} />
                                 </div>
                             </div>
                             <div className="col-md-4 mb-1">
                                 <div className="form-group">
                                     <label htmlFor="last_name">Last Name</label>
-                                    <input className='form-control' type="text" name="last_name" placeholder='Enter last name' value={data?.last_name} onChange={(e) => updateData(e)} />
+                                    <input className='form-control' type="text" name="last_name" placeholder='Last Name' value={data?.last_name} onChange={(e) => updateData(e)} />
                                 </div>
                             </div>
                             <div className="col-md-4 mb-1">
                                 <div className="form-group">
                                     <label htmlFor="email_id">Email ID</label>
-                                    <input className='form-control' type="text" name="email_id" placeholder='Enter email id' value={data?.email_id} onChange={(e) => updateData(e)} />
+                                    <input className='form-control' type="text" name="email_id" placeholder='Email ID' value={data?.email_id} onChange={(e) => updateData(e)} />
                                 </div>
                             </div>
 
                             <div className="col-md-4 mb-1">
                                 <div className="form-group">
                                     <label htmlFor="password">Password</label>
-                                    <input className='form-control' type="text" name="password" placeholder='Enter password' value={data?.password} onChange={(e) => updateData(e)} />
+                                    <input className='form-control' type="text" name="password" placeholder='Password' value={data?.password} onChange={(e) => updateData(e)} />
                                 </div>
                             </div>
 
                             <div className="col-md-4 mb-1">
                                 <div className="form-group">
                                     <label htmlFor="confirm_password">Confirm Password</label>
-                                    <input className='form-control' type="text" name="confirm_password" placeholder='Enter confirm password' value={data?.confirm_password} onChange={(e) => updateData(e)} />
+                                    <input className='form-control' type="text" name="confirm_password" placeholder='Confirm Password' value={data?.confirm_password} onChange={(e) => updateData(e)} />
                                 </div>
                             </div>
 
@@ -198,7 +198,7 @@ const AddUser = () => {
                                         inputId="aria-example-input"
                                         closeMenuOnSelect={true}
                                         name="assign_department"
-                                        placeholder="Select department"
+                                        placeholder="Assign Department"
                                         value={departmentList?.filter(option => data?.assign_department  === option.value)}
                                         onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                     />
@@ -214,7 +214,7 @@ const AddUser = () => {
                                         inputId="aria-example-input"
                                         closeMenuOnSelect={true}
                                         name="commision"
-                                        placeholder="Select Commission"
+                                        placeholder="Commission"
                                         value={commissionOptions?.filter(option => data?.commision  === option.value)}
                                         onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                     />
@@ -231,7 +231,7 @@ const AddUser = () => {
                                         inputId="aria-example-input"
                                         closeMenuOnSelect={true}
                                         name="assign_role"
-                                        placeholder="Select Role"
+                                        placeholder="Assign Role"
                                         value={rolesOptions?.filter(option => data?.assign_role  === option.value)}
                                         onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                     />
@@ -244,7 +244,7 @@ const AddUser = () => {
                                     <Flatpickr options={{ // Sets the minimum date as 14 days ago
                                         minDate: "today",
                                         dateFormat: "Y-m-d"
-                                    }} className='form-control' value={data?.selectedData} onChange={(date) => setData({ ...data, selectedData: date })} placeholder='Select date' />
+                                    }} className='form-control' value={data?.selectedData} onChange={(date) => setData({ ...data, selectedData: date })} placeholder='Start Date' />
                                 </div>
                             </div>
 
