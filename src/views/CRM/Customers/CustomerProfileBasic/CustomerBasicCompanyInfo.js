@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom"
 /* eslint-disable */
 const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) => {
   const [companyData, getCompanyData] = useState([])
-  
+
   const [country, setCountry] = useState([])
   const [isHidden, setIsHidden] = useState(false)
   const [newCompany, setNewCompany] = useState({
@@ -650,7 +650,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
             <Col md={12} className="mt-2">
               <div className="form-check mb-1">
                 <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked" name="mark_parent" checked={newCompany?.mark_parent === "1"} onChange={(e) => {
-                  setNewCompany({...newCompany, mark_parent: e.target.checked ? "1" : "0"})
+                  setNewCompany({ ...newCompany, mark_parent: e.target.checked ? "1" : "0" })
                 }} />
                 <label className="form-check-label" htmlFor="flexCheckChecked">
                   Mark as parent company
@@ -906,20 +906,20 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                         Save
                       </button>
                     </> : <>
-                    
-                    <button
-                      className="btn btn-primary"
-                      type="button"
-                      onClick={(e) => {
-                        // handleSubmitSection3
-                        setNewCompanyPage(3)
-                      }}
-                    >
-                      Next
-                    </button>
+
+                      <button
+                        className="btn btn-primary"
+                        type="button"
+                        onClick={(e) => {
+                          // handleSubmitSection3
+                          setNewCompanyPage(3)
+                        }}
+                      >
+                        Next
+                      </button>
                     </>
                   }
-                  
+
                 </div>
               </div>
             </Col>
@@ -1206,7 +1206,8 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
       </>
       <Container fluid className="px-0 py-1">
         {CompanyForm}
-        <div className="d-flex justify-content-end mt-2 gap-1">
+        <div className="d-flex justify-content-center align-items-center mt-2">
+          {filteredData.length === 0 && <span className="me-1">No company found.</span>}
           <button
             className="btn btn-primary"
             type="button"

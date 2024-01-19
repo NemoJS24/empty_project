@@ -15,12 +15,14 @@ import moment from 'moment'
 // import toast from "react-hot-toast"
 
 const ApplicantForm = ({ allData }) => {
-    const { formData, handleNext, handleInputChange, setFormData, handleChange } = allData
+    const { formData, handleNext, handleInputChange, setFormData, handleChange, country, isCustomer } = allData
     const [productModelOption, setProductModelOption] = useState([])
     const [productVariantOption, setProductVariantOption] = useState([])
     // const [allOptions, setAllOptions] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [customerList, setCustomerList] = useState([])
+
+
     // const mainFormvalueToCheck = [
     //     {
     //         name: 'customer_name',
@@ -56,10 +58,10 @@ const ApplicantForm = ({ allData }) => {
             id: 'title'
         },
         {
-            name: 'customer_name',
+            name: 'cust_first_name',
             message: 'Enter customer name',
             type: 'string',
-            id: 'customer_name'
+            id: 'cust_first_name'
         },
         {
             name: 'cust_last_name',
@@ -153,6 +155,14 @@ const ApplicantForm = ({ allData }) => {
             .then((resp) => {
                 console.log("Response:", resp)
                 toast.success('Customer saved successfully')
+                const addForm = { ...check.addForm }
+                Object.keys(check.addForm).forEach((key) => {
+                    addForm[key] = ""
+                })
+                setCheck(prev => {
+                    return { ...prev, addForm }
+                })
+                handleClose("customer")
             })
             .catch((error) => {
                 console.error("Error:", error)
@@ -161,6 +171,7 @@ const ApplicantForm = ({ allData }) => {
                 } else {
                     toast.error('Failed to save customer')
                 }
+                handleClose("customer")
             })
     }
 
@@ -200,7 +211,9 @@ const ApplicantForm = ({ allData }) => {
 
         const checkForm = validForm(addFormvalueToCheck, check.addForm)  // Use addFormvalueToCheck for validation
         console.log(checkForm, "dd");
-        postNewCustomerData()
+        if (checkForm) {
+            postNewCustomerData()
+        }
 
         // if (checkForm) {
         //     console.log('Form is valid')
@@ -597,15 +610,15 @@ const ApplicantForm = ({ allData }) => {
 
     const getCustomer = () => {
         getReq("getAllCustomer")
-        .then((resp) => {
-            console.log(resp)
-            setCustomerList(resp?.data?.success?.map((curElem) => {
-                return { label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id }
-            }))
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((resp) => {
+                console.log(resp)
+                setCustomerList(resp?.data?.success?.map((curElem) => {
+                    return { label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id }
+                }))
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     useEffect(() => {
@@ -616,23 +629,23 @@ const ApplicantForm = ({ allData }) => {
     const InnerStyles = (
         <style>
             {`
-          .hiddenRight{
-            right: 0 !important
-          }
-          .hiddenEle{
-            overflow: auto;
-            width: 30%;
-            height: 100vh; 
-            z-index: 1000;
-            top: 0; 
-            right: -100vh; 
-            transform: translateX(0);  
-            transition: right 0.8s ease-in-out;
-          }
-          #customer-name > div {
-            z-index: 9;
-          }
-          `}
+            .hiddenRight{
+                right: 0 !important
+            }
+            .hiddenEle{
+                overflow: auto;
+                width: 30%;
+                height: 100vh; 
+                z-index: 1000;
+                top: 0; 
+                right: -100vh; 
+                transform: translateX(0);  
+                transition: right 0.8s ease-in-out;
+            }
+            #customer-name > div {
+                z-index: 9;
+            }
+            `}
         </style>
     )
 
@@ -662,10 +675,10 @@ const ApplicantForm = ({ allData }) => {
                     <p id="title_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
-                    <label htmlFor="basicDetails-first-name">
+                    <label htmlFor="cust_first_name">
                         First Name
                     </label>
-                    <input placeholder="First Name" type='text' id='basicDetails-first-name' name='cust_first_name' className="form-control"
+                    <input placeholder="First Name" type='text' id='cust_first_name' name='cust_first_name' className="form-control"
                         // value={formData?.basicDetail?.cust_first_name} 
                         // onChange={handleInputChange} 
                         // onChange={}
@@ -678,10 +691,10 @@ const ApplicantForm = ({ allData }) => {
                     <p id="cust_first_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
-                    <label htmlFor="basicDetails-last-name">
+                    <label htmlFor="cust_last_name">
                         Last Name
                     </label>
-                    <input placeholder="Last Name" type='text' id='basicDetails-last-name' name='cust_last_name' className="form-control"
+                    <input placeholder="Last Name" type='text' id='cust_last_name' name='cust_last_name' className="form-control"
                         // value={formData?.basicDetail?.cust_last_name} 
                         // onChange={handleInputChange} 
                         onChange={(e) => {
@@ -723,19 +736,16 @@ const ApplicantForm = ({ allData }) => {
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="address-1-country">Country</label>
-                    <select
-                        placeholder="Country"
-                        type="select"
+                    <Select
                         id="address-1-country"
-                        name="billingAddress.country"
-                        className="form-select"
-                    // value={formData.billingAddress.country}
-                    // onChange={handleInputChange}
-                    >
-                        <option value="india" selected>
-                            India
-                        </option>
-                    </select>
+                        placeholder="Country"
+                        options={country}
+                        value={country?.find(option => option.value === check?.addForm?.country)}
+                        onChange={(value) => {
+                            handleAddInputChange({ target: { value: value?.value, name: "country" } }, "addForm")
+                        }}
+                        closeMenuOnSelect={true}
+                    />
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="address-1-city">City</label>
@@ -745,6 +755,10 @@ const ApplicantForm = ({ allData }) => {
                         id="address-1-city"
                         name="billingAddress.city"
                         className="form-control"
+                        onChange={(e) => {
+                            handleAddInputChange(e, "addForm")
+                            // addInputChangeHandler(e)
+                        }}
                     // value={formData.billingAddress.city}
                     // onChange={handleInputChange}
                     />
@@ -757,6 +771,10 @@ const ApplicantForm = ({ allData }) => {
                         id="address-1-state"
                         name="billingAddress.state"
                         className="form-control"
+                        onChange={(e) => {
+                            handleAddInputChange(e, "addForm")
+                            // addInputChangeHandler(e)
+                        }}
                     // value={formData.billingAddress.state}
                     // onChange={handleInputChange}
                     />
@@ -769,6 +787,10 @@ const ApplicantForm = ({ allData }) => {
                         id="address-1-pincode"
                         name="billingAddress.pincode"
                         className="form-control"
+                        onChange={(e) => {
+                            handleAddInputChange(e, "addForm")
+                            // addInputChangeHandler(e)
+                        }}
                     // value={formData.billingAddress.pincode}
                     // onChange={handleInputChange}
                     />
@@ -779,7 +801,7 @@ const ApplicantForm = ({ allData }) => {
                         <button className="btn btn-primary" type="button" onClick={((e) => {
                             handleAddSubmitSection(e)
                         })}>Add</button>
-                        <button className="btn btn-primary ms-2" type="button">Cancel</button>
+                        <button onClick={() => handleClose("customer")} className="btn btn-primary ms-2" type="button">Cancel</button>
                     </div>
                     <div>
                         {/* <button className="btn btn-primary" type="submit" onClick={handleSubmitSection1}>Save</button>
@@ -1160,6 +1182,7 @@ const ApplicantForm = ({ allData }) => {
                         </label>
                         <Select
                             placeholder='Customer Name'
+                            isDisabled={isCustomer}
                             id="insurance-type"
                             options={customerList}
                             closeMenuOnSelect={true}

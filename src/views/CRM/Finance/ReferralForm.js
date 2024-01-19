@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Container, Row, Col } from "reactstrap"
 import Select from "react-select"
-import { getReq } from '../../../assets/auth/jwtService'
 // import { validForm } from '../../Validator'
 
 const ReferralForm = ({ allData }) => {
 
-    const { formData, handleNext, handleBack, handleInputChange, currentStep, handleSubmitSection } = allData
-    const [country, setCountry] = useState([])
+    const { formData, handleNext, handleBack, handleInputChange, currentStep, handleSubmitSection, country } = allData
     // const refferalFormvalueToCheck = [
     //     {
     //         name: 'Ref_title',
@@ -72,24 +70,6 @@ const ReferralForm = ({ allData }) => {
         { value: 'mrs', label: 'Mrs.' }
     ]
 
-    const getCountries = () => {
-        getReq("countries")
-          .then((resp) => {
-            console.log(resp)
-            setCountry(
-              resp.data.data.countries.map((curElem) => {
-                return { value: curElem.name, label: `${curElem.name}` }
-              })
-            )
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-    }
-
-    useEffect(() => {
-        getCountries()
-    }, [])
 
     // const countryOptions = [{ value: 'India', label: 'India' }]
 
@@ -108,7 +88,7 @@ const ReferralForm = ({ allData }) => {
                             value={titleOptions?.find(option => option.value === formData?.Ref_title)}
                             // onChange={e => (handleInputChange(e, 'Ref_title'))}
                             onChange={(value) => {
-                                handleInputChange({target: {value: value?.value, name: "Ref_title"}})
+                                handleInputChange({ target: { value: value?.value, name: "Ref_title" } })
                             }}
                         />
                         <p id="Ref_title_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -251,7 +231,7 @@ const ReferralForm = ({ allData }) => {
                             options={country}
                             value={country?.find(option => option.value === formData?.Ref_country)}
                             onChange={(value) => {
-                                handleInputChange({target: {value: value?.value, name: "Ref_country"}})
+                                handleInputChange({ target: { value: value?.value, name: "Ref_country" } })
                             }}
                             closeMenuOnSelect={true}
                         />
@@ -267,10 +247,10 @@ const ReferralForm = ({ allData }) => {
                                         <button className="btn btn-primary" type="button">Cancel</button>
                                     </div>
                                     <div className='d-flex gap-2'>
-                                        <button className="btn btn-primary" type="button" onClick={handleNext} >Save & Close</button>
                                         <button className="btn btn-primary" type="button" onClick={() => {
                                             handleSubmitSection("SAVE")
                                         }}>Save</button>
+                                        <button className="btn btn-primary" type="button" onClick={handleNext} >Save & Close</button>
                                     </div>
                                 </div>
                             </>
