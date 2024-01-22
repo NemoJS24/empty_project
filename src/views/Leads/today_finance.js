@@ -78,9 +78,9 @@ const Customers = () => {
       isEnable: true
     },
     {
-      name: "Vehicle Name",
+      name: "Registration Number",
       minWidth: "200px",
-      selector: (row) => row?.finance_vehicle_number ? row.finance_vehicle_number : "-",
+      selector: (row) => row?.finance_registration_number ? row.finance_registration_number : "-",
       type: 'text',
       isEnable: true
     },

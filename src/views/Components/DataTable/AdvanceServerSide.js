@@ -78,24 +78,24 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
     )
   }
 
-  // useEffect(() => {
-  //   // if (searchValue) {
-  //   const delay = 1000
-  //   const request = setTimeout(() => {
-  //     getData({ currentPage, currentEntry, advanceSearchValue, searchValue })
-  //   }, delay)
+  useEffect(() => {
+    if (searchValue) {
+      const delay = 1000
+      const request = setTimeout(() => {
+        getData(currentPage, currentEntry, searchValue, advanceSearchValue)
+      }, delay)
 
-  //   return () => {
-  //     clearTimeout(request)
-  //   }
-  //   // }
-  // }, [currentPage, currentEntry, advanceSearchValue, searchValue])
+      return () => {
+        clearTimeout(request)
+      }
+    }
+  }, [searchValue])
 
 
   //------------------------
   useEffect(() => {
     getData(currentPage, currentEntry, searchValue, advanceSearchValue)
-  }, [currentPage, currentEntry, searchValue])
+  }, [currentPage, currentEntry])
 
   // useEffect(() => {
   //   getData({currentPage, currentEntry, advanceSearchValue, searchValue})
