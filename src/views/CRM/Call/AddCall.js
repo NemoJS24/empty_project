@@ -5,6 +5,8 @@ import { validForm } from '../../Validator'
 import { postReq } from '../../../assets/auth/jwtService'
 import { useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import Flatpickr from 'react-flatpickr'
+import moment from 'moment'
 // import { validForm } from "../Validator"
 
 const AddCall = () => {
@@ -45,6 +47,8 @@ const AddCall = () => {
    const navigate = useNavigate()
 
    const { id } = useParams()
+
+   // console.log(useParams(), "params")
    const params = new URLSearchParams(location.search)
 
    // const [formData, setFormData] = useState({ schedule_call: false })
@@ -53,7 +57,7 @@ const AddCall = () => {
       Call_Status: "",
       Call_Purpose: "",
       Lead_Status: "",
-      customer_id: "",
+      xircls_customer_id: "",
       Notes: "",
       Interested: "",
       schedule_Next_Call: false,
@@ -68,7 +72,7 @@ const AddCall = () => {
    //    "Call_Status": "Junk Lead",
    //    "Call_Purpose": "sale_call",
    //    "Lead_Status": "Cold",
-   //    "customer_id": 57154,
+   //    "xircls_customer_id": 57154,
    //    "schedule_call": false,
    //    "Note": "asfsdf",
    //    "Interested": "Maybe",
@@ -98,6 +102,8 @@ const AddCall = () => {
          console.log(resp)
          if (action === "SAVE & CLOSE") {
             navigate(-1)
+         } else {
+            navigate(`/merchant/customers/add_call/${resp?.data?.data?.id}?type=edit`)
          }
 
          toast.success("Saved Successfully")
@@ -188,13 +194,13 @@ const AddCall = () => {
          if (params.get('type') === "customer") {
             updatedData = {
                customer_name: resp?.data?.success[0]?.customer_name,
-               customer_id: resp?.data?.success[0]?.id
+               xircls_customer_id: resp?.data?.success[0]?.id
             }
 
          } else if (params.get('type') === "edit") {
             updatedData = {
                customer_name: resp?.data?.success[0]?.customer?.customer_name,
-               customer_id: resp?.data?.success[0]?.customer?.id,
+               xircls_customer_id: resp?.data?.success[0]?.customer?.id,
                Call_Status: resp?.data?.success[0]?.Call_Status,
                Call_Purpose: resp?.data?.success[0]?.Call_Purpose,
                Lead_Status: resp?.data?.success[0]?.Lead_Status,
@@ -349,7 +355,15 @@ const AddCall = () => {
                                     {/* ... (previous code) */}
                                     <Col md={6} className="mt-2">
                                        <label htmlFor="vehicle-delivery-date">Date:</label>
-                                       <input
+                                       <Flatpickr className='form-control' 
+                                          onChange={(e) => {
+                                             handleInputChange({target: {name: "schedule_Next_Call_date", value: moment(e[0]).format("YYYY-MM-DD")}})
+                                          }} 
+                                          options={{ minDate: "today", dateFormat: "Y-m-d" }} 
+                                          placeholder="Date"
+                                          value={data.schedule_Next_Call_date} 
+                                       />
+                                       {/* <input
                                           placeholder="Date"
                                           type="date"
                                           id="vehicle-delivery-date"
@@ -357,7 +371,7 @@ const AddCall = () => {
                                           className="form-control"
                                           value={data.schedule_Next_Call_date}
                                           onChange={handleInputChange}
-                                       />
+                                       /> */}
                                     </Col>
                                     <Col md={6} className="mt-2">
                                        <label htmlFor="vehicle-delivery-date">Time:</label>

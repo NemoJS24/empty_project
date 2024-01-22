@@ -7,7 +7,6 @@ import { Col, Container, Row } from 'reactstrap'
 import AsyncSelect from 'react-select/async'
 import Select from "react-select"
 import { crmURL, getReq, postReq } from '../../../assets/auth/jwtService'
-import axios from 'axios'
 import { validForm } from '../../Validator'
 // import toast from 'react-hot-toast'
 // import { useParams } from 'react-router-dom'
@@ -17,7 +16,7 @@ import { useNavigate } from 'react-router-dom'
 
 const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
     // const { id } = useParams()
-    const [brand, setBrand] = useState()
+    const [brand, setBrand] = useState([])
     const navigate = useNavigate()
     console.log(defaultData)
     // const [defaultState, setDefaultState] = useState(edit ? defaultData : {
@@ -43,10 +42,10 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
 
     const checkMessage = [
         {
-            name: 'customer_id',
+            name: 'xircls_customer_id',
             message: 'Enter Customer Name',
             type: 'string',
-            id: 'customer_id'
+            id: 'xircls_customer_id'
         },
         {
             name: 'vehicle_type',
@@ -120,8 +119,9 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
     console.log(productModelOption, productVariantOption, "productModelOption")
 
     const getBrand = () => {
-        const getUrl = new URL(`${crmURL}/vehicle/fetch_car_details/`)
-        axios.get(getUrl.toString())
+        // const getUrl = new URL(`${crmURL}/vehicle/fetch_car_details/`)
+        // axios.get(getUrl.toString())
+        getReq("fetch_car_details", "", crmURL)
             .then((response) => {
                 const successData = response.data.car_brand
                 const brandOptions = successData
@@ -139,11 +139,11 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
     }
 
     const getCustomer = () => {
-        getReq("getAllCustomer")
+        getReq("getAllCustomer", "", crmURL)
             .then((resp) => {
                 console.log(resp)
                 setCustomerList(resp?.data?.success?.map((curElem) => {
-                    return { label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id }
+                    return { label: curElem?.customer_name ? curElem?.customer_name : '-', value: curElem?.xircls_customer_id }
                 }))
             })
             .catch((error) => {
@@ -217,25 +217,25 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
                             Customer Name
                         </label>
                         <Select
-                            placeholder='Customer name'
+                            placeholder='Customer Name'
                             id="vehicle-type"
                             options={customerList}
                             closeMenuOnSelect={true}
                             // isDisabled={isView}
-                            isDisabled={true}
-                            value={customerList?.filter((curElem) => defaultData?.customer_id === curElem?.value)}
+                            // isDisabled={true}
+                            value={customerList?.filter((curElem) => defaultData?.xircls_customer_id === curElem?.value)}
                             onChange={selectedOption => {
                                 handleInputChange({
-                                    target: { name: 'customer_id', value: selectedOption.value }
+                                    target: { name: 'xircls_customer_id', value: selectedOption.value }
                                 })
                             }}
                         />
                         {/* <input value={defaultData.customer_name} type='text' id='customer-name' name='customer_name' className="form-control" onChange={(e) => handleInputChange(e)} /> */}
-                        <p id="customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                        <p id="xircls_customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="registration-name">
-                            Registration Name
+                            Registration Number
                         </label>
                         <input
                             placeholder='Registration Number'

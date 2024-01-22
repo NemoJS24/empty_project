@@ -84,7 +84,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
         console.log(resp)
         setCountry(
           resp.data.data.countries.map((curElem) => {
-            return { value: curElem.id, label: `${curElem.name}` }
+            return { value: curElem.name, label: `${curElem.name}` }
           })
         )
       })
@@ -106,6 +106,13 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
       .then((resp) => {
         console.log({ resp })
         fetchCompanyData()
+        
+        const addForm = { ...newCompany }
+        Object.keys(newCompany).forEach((key) => {
+          addForm[key] = ""
+        })
+        setNewCompany(addForm)
+        setNewCompanyPage(1)
         if (resp.status === 409) {
           throw new Error('Customer already exists')
         } else {
@@ -327,7 +334,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 options={options}
                 closeMenuOnSelect={true}
                 components={{ Menu: CustomSelectComponent }}
-                placeholder="Select company Name"
+                placeholder="Select Company"
                 onChange={(e) => {
                   selectCompany(e, form.id ?? form.formId, i)
                 }}
@@ -414,7 +421,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 disabled
               />
             </Col>
-            <Col md={6} lg={4} className="mt-2">
+            <Col md={6} lg={4} className="mt-2 d-none">
               <label htmlFor="address-2-relation">Relation</label>
               <Select
                 placeholder="Relation"
@@ -423,7 +430,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 closeMenuOnSelect={true}
                 value={relationOptions?.find(option => option.value === formData?.shipping_relation)}
                 defaultValue={relationOptions?.find(option => option.value === 'business')}
-              // onChange={(e) => handleInputChange(e, 'shipping_relation', i)}
+                onChange={(e) => handleInputChange(e, 'shipping_relation', i)}
               />
             </Col>
           </Row>
@@ -657,7 +664,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 </label>
               </div>
 
-              <h5>Subsidiary Company Deatils</h5>
+              <h5>Subsidiary Company Details</h5>
 
               <label htmlFor="basicDetails-companyName">Company Name</label>
               <input
@@ -700,11 +707,11 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
             </Col>
             <Col md={12} className="mt-2">
               <label htmlFor="basicDetails-last-name">
-                Company PAN Card Number
+                PAN
               </label>
               <input
                 required
-                placeholder="PNA Card No."
+                placeholder="PAN"
                 type="text"
                 id="basicDetails-panNumber"
                 name="company_pancard"
@@ -733,7 +740,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
               <label htmlFor="basicDetails-last-name">Email</label>
               <input
                 required
-                placeholder="Last Name"
+                placeholder="Email"
                 type="email"
                 id="basicDetails-email"
                 name="company_email"
@@ -1007,7 +1014,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
               <label htmlFor="basicDetails-last-name">Email</label>
               <input
                 required
-                placeholder="Last Name"
+                placeholder="Email"
                 type="email"
                 id="basicDetails-email"
                 name="par_company_email"

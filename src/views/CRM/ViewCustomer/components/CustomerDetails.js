@@ -68,7 +68,7 @@ const CustomerDetails = ({ userData }) => {
                                         }
 
                                         <div className='d-flex flex-column justify-content-center'>
-                                            <h4>{userData?.title} {userData?.customer_name}</h4>
+                                            <h4><span style={{textTransform: "capitalize"}}>{userData?.title}</span> {userData?.customer_name}</h4>
                                             <div><span className='font-small-4'>{userData?.email}</span></div>
                                             <button type="button" className="btn btn-primary mt-1" style={{ width: "fit-content" }} onClick={() => navigate(`/merchant/customers/edit_customer/${userData.id}`)}>Edit</button>
                                         </div>

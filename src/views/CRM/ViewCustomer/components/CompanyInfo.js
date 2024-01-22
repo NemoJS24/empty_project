@@ -163,7 +163,7 @@ const CompanyInfo = ({ AllFormData }) => {
                       </FormGroup>
                     </Col>
 
-                    <Col md='4'>
+                    <Col md='4' className='d-none'>
                       <FormGroup>
                         <Label for="relation">
                           Relation

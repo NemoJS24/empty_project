@@ -12,9 +12,13 @@ import { baseURL, getReq, postReq } from '../../../assets/auth/jwtService'
 import { validForm } from '../../Validator'
 import Flatpickr from 'react-flatpickr'
 import moment from 'moment'
+import { useNavigate } from 'react-router-dom'
 // import toast from "react-hot-toast"
 
 const ApplicantForm = ({ allData }) => {
+    // const { id } = useParams()
+
+    const navigate = useNavigate()
     const { formData, handleNext, handleInputChange, setFormData, handleChange, country, isCustomer } = allData
     const [productModelOption, setProductModelOption] = useState([])
     const [productVariantOption, setProductVariantOption] = useState([])
@@ -134,7 +138,7 @@ const ApplicantForm = ({ allData }) => {
             phone_no: ""
         },
         productForm: {
-            customer_name: '',
+            xircls_customer_id: '',
             engine_number: '',
             // brand: '',
             model: ''
@@ -254,7 +258,7 @@ const ApplicantForm = ({ allData }) => {
     //             form_data.append(key, value)
     //         })
     //         form_data.append("press_btn", 'SAVE')
-    //         form_data.append("customer_id", formData?.customer_id)
+    //         form_data.append("xircls_customer_id", formData?.xircls_customer_id)
 
     //         postReq('add_vehicle', form_data, crmURL)
     //         .then((resp) => {
@@ -270,6 +274,28 @@ const ApplicantForm = ({ allData }) => {
     //     }
     // }
 
+    const selectCustomer = () => {
+        // handleInputChange(e, 'xircls_customer_id')
+        // setIsLoading(true)
+        console.log(formData?.xircls_customer_id)
+        const form_data = new FormData()
+        const url = new URL(`${crmURL}/vehicle/fetch_vehicle_details/`)
+        form_data.append("id", formData?.xircls_customer_id)
+        // "SHIVAM KALE"
+        getReq(`fetch_vehicle_details`, `?id=${formData?.xircls_customer_id}`, crmURL)
+            .then((resp) => {
+                console.log("Response:", resp)
+                if (resp?.data?.car_variant) {
+                    changeProductName(resp)
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+                toast.error('Something went wrong')
+
+            })
+    }
+
     const postVehicleDetails = () => {
         const form_data = new FormData()
         Object.entries(check?.productForm).map(([key, value]) => {
@@ -282,18 +308,7 @@ const ApplicantForm = ({ allData }) => {
                 console.log("Response:", resp)
                 toast.success('Vehicle saved successfully')
                 handleClose('product')
-                getReq(`fetch_vehicle_details`, `?id=${formData?.customer_id}`, crmURL)
-                    .then((resp) => {
-                        console.log("Response:", resp)
-                        if (resp?.data?.car_variant) {
-                            changeProductName(resp)
-                        }
-                    })
-                    .catch((error) => {
-                        console.error("Error:", error)
-                        toast.error('Something went wrong')
-
-                    })
+                selectCustomer()
             })
             .catch((error) => {
                 console.error("Error:", error)
@@ -303,6 +318,7 @@ const ApplicantForm = ({ allData }) => {
 
     const handleProductSubmit = () => {
         const checkForm = validForm(addProductFormToCheck, check?.productForm)
+        console.log({ checkForm }, addProductFormToCheck, check?.productForm)
         if (checkForm) {
             postVehicleDetails()
         }
@@ -349,17 +365,19 @@ const ApplicantForm = ({ allData }) => {
     }
 
     const selectChange = (value, actionMeta) => {
-        console.log('getProductOptions runned')
+        console.log('checkForm 1212', { value, actionMeta })
         const form_data = new FormData()
         if (actionMeta.name === 'brand') {
             form_data.append("brand", value.value)
-            handleChange(value, actionMeta, false, "product")
+            // handleChange(value, actionMeta, false, "product")
+            handleAddInputChange({ target: { name: actionMeta.name, value: value.value } }, "productForm")
             setProductModelOption([])
             setProductVariantOption([])
         } else if (actionMeta.name === 'carmodel') {
             form_data.append("carmodel", value.value)
             actionMeta.name = 'car_model'
-            handleChange(value, actionMeta, false, "product")
+            handleAddInputChange({ target: { name: "car_model", value: value.value } }, "productForm")
+            // handleChange(value, actionMeta, false, "product")
             setProductVariantOption([])
         }
         postReq('fetch_car_details', form_data, crmURL)
@@ -461,59 +479,38 @@ const ApplicantForm = ({ allData }) => {
     //     }
     // }
 
-    const selectCustomer = () => {
-        // handleInputChange(e, 'customer_id')
-        // setIsLoading(true)
-        console.log(formData?.customer_id)
-        const form_data = new FormData()
-        const url = new URL(`${crmURL}/vehicle/fetch_vehicle_details/`)
-        form_data.append("id", formData?.customer_id)
-        // "SHIVAM KALE"
-        getReq(`fetch_vehicle_details`, `?id=${formData?.customer_id}`, crmURL)
-            .then((resp) => {
-                console.log("Response:", resp)
-                if (resp?.data?.car_variant) {
-                    changeProductName(resp)
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error)
-                toast.error('Something went wrong')
-
-            })
-    }
 
 
     useEffect(() => {
-        if (formData.customer_id) {
+        if (formData.xircls_customer_id) {
             selectCustomer()
         }
-    }, [formData.customer_id])
+    }, [formData.xircls_customer_id])
 
-    const loadOptions = (inputValue, callback) => {
-        const getUrl = new URL(`${baseURL}/customers/merchant/get_customer_details/`);
-        // getUrl.searchParams.set("q", inputValue)
-        axios.get(getUrl.toString())
-            .then((response) => {
-                const successData = response.data.success;
-                if (successData && Array.isArray(successData)) {
-                    const customerOptions = successData
-                        .filter((item) => item.customer_name !== "")
-                        .map((customer) => ({
-                            value: customer.id,
-                            label: customer.customer_name,
-                        }));
-                    callback(customerOptions);
-                } else {
-                    console.error("Invalid or missing data in the API response");
-                    callback([]);
-                }
-            })
-            .catch((error) => {
-                console.error("Error fetching data:", error.message);
-                callback([]);
-            });
-    };
+    // const loadOptions = (inputValue, callback) => {
+    //     const getUrl = new URL(`${baseURL}/customers/merchant/get_customer_details/`);
+    //     // getUrl.searchParams.set("q", inputValue)
+    //     axios.get(getUrl.toString())
+    //         .then((response) => {
+    //             const successData = response.data.success;
+    //             if (successData && Array.isArray(successData)) {
+    //                 const customerOptions = successData
+    //                     .filter((item) => item.customer_name !== "")
+    //                     .map((customer) => ({
+    //                         value: customer.id,
+    //                         label: customer.customer_name,
+    //                     }));
+    //                 callback(customerOptions);
+    //             } else {
+    //                 console.error("Invalid or missing data in the API response");
+    //                 callback([]);
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error fetching data:", error.message);
+    //             callback([]);
+    //         });
+    // };
     // const fetchData = async () => {
     //     try {
     //     const getUrl = new URL(`${crmURL}/customers/merchant/get_customer_details/`);
@@ -609,11 +606,11 @@ const ApplicantForm = ({ allData }) => {
     ]
 
     const getCustomer = () => {
-        getReq("getAllCustomer")
+        getReq("getAllCustomer", "", crmURL)
             .then((resp) => {
                 console.log(resp)
                 setCustomerList(resp?.data?.success?.map((curElem) => {
-                    return { label: curElem?.company_name ? curElem?.company_name : '-', value: curElem?.id }
+                    return { label: curElem?.customer_name ? curElem?.customer_name : '-', value: curElem?.xircls_customer_id }
                 }))
             })
             .catch((error) => {
@@ -1048,7 +1045,7 @@ const ApplicantForm = ({ allData }) => {
                     </label>
                     <input
                         placeholder='Engine Number'
-                        type='text' id='engine-number' name='engine_no' className="form-control"
+                        type='text' id='engine-number' name='engine_number' className="form-control"
                         value={check?.productForm?.engine_no}
                         onChange={e => handleAddInputChange(e, 'productForm')}
                     />
@@ -1065,6 +1062,9 @@ const ApplicantForm = ({ allData }) => {
                         options={vehicleTypeOptions}
                         closeMenuOnSelect={true}
                         value={insuranceOptions?.find(option => option.value === check?.productForm?.vehicle_type)}
+                        onChange={(e) => {
+                            handleAddInputChange({ target: { name: "vehicle_type", value: e.value } }, "productForm")
+                        }}
                     // onChange={(value, actionMeta) => handleChange(value, actionMeta, false, "customerData")}
                     // onChange={e => e => handleInputChange(e, 'product')}
                     // onChange={(value) => {
@@ -1118,7 +1118,9 @@ const ApplicantForm = ({ allData }) => {
                         options={productVariantOption}
                         closeMenuOnSelect={true}
                         // onChange={e => e => handleInputChange(e, 'product')}
-                        onChange={(value, actionMeta) => handleChange(value, actionMeta, false, "product")}
+                        onChange={e => {
+                            handleAddInputChange({ target: { name: "variant", value: e.value } }, "productForm")
+                        }}
 
                     />
                 </Col>
@@ -1192,10 +1194,10 @@ const ApplicantForm = ({ allData }) => {
                             onChange={(e) => {
                                 console.log(e)
                                 // selectCustomer(e);
-                                // handleInputChange(e, 'customer_id')
+                                // handleInputChange(e, 'xircls_customer_id')
                                 const updatedData = {
                                     customer_name: e.label,
-                                    customer_id: e.value
+                                    xircls_customer_id: e.value
                                 }
 
                                 setFormData((preData) => ({
@@ -1203,14 +1205,14 @@ const ApplicantForm = ({ allData }) => {
                                     ...updatedData
                                 }))
 
-                                handleAddInputChange({ target: { value: e.value, name: "customer_name" } }, 'productForm')
+                                handleAddInputChange({ target: { value: e.value, name: "xircls_customer_id" } }, 'productForm')
 
                                 // setCheck((preData) => ({
                                 //     ...preData,
                                 //     productForm: {...preData.productForm, ...updatedData}
                                 // }))
                             }}
-                            value={customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.customer_id))}
+                            value={customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.xircls_customer_id))}
                         // onChange={(value, actionMeta) => selectCustomer(value, actionMeta, false)}
                         // onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                         />
@@ -1226,7 +1228,7 @@ const ApplicantForm = ({ allData }) => {
                                 handleInputChange(e, 'customer_name')
                                 const updatedData = {
                                     cust_first_name: e.label,
-                                    customer_id: e.value
+                                    xircls_customer_id: e.value
                                 }
 
                                 setCheck((preData) => ({
@@ -1245,7 +1247,7 @@ const ApplicantForm = ({ allData }) => {
                           //value={selectedOption}
                         // name='customer_name'
                         /> */}
-                        <p id="customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                        <p id="xircls_customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
                         <label htmlFor="basicDetails-client-type" className="form-label" style={{ margin: '0px' }}>
@@ -1393,7 +1395,9 @@ const ApplicantForm = ({ allData }) => {
                     <Col xs={12} className='mt-2'>
                         <div className='d-flex justify-content-between mt-2'>
                             <div>
-                                <button className="btn btn-primary" type="button">Cancel</button>
+                                <button className="btn btn-primary" onClick={() => {
+                                    navigate(-1)
+                                }} type="button">Cancel</button>
                             </div>
                             <div>
                                 <button className="btn btn-primary ms-2" type="button" onClick={handleNext}>Next</button>

@@ -79,7 +79,7 @@ const AddInnerXircl = () => {
             }))
 
             setCountry(resp.data.data.countries.map((curElem) => {
-                return {value: curElem.id, label: `${curElem.name}`}
+                return {value: `${curElem.name}`, label: `${curElem.name}`}
             }))
 
             // const updatedData = {
