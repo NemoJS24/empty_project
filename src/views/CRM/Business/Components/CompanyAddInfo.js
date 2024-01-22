@@ -105,7 +105,13 @@ const CompanyAddInfo = ({ allData }) => {
               name="pincode"
               className="form-control"
               value={formData?.pincode ?? ''}
-              onChange={handleInputChange}
+              // onChange={handleInputChange}
+              onChange={(e) => {
+                if (!isNaN(e.target.value)) {
+                  handleInputChange(e)
+                  console.log("this is a number")
+                }
+              }}
             />
           </Col>
           <Col md={6} lg={4} className="mt-2">
@@ -282,7 +288,13 @@ const CompanyAddInfo = ({ allData }) => {
                   name="par_pincode_com"
                   className="form-control"
                   value={formData?.par_pincode_com ?? ''}
-                  onChange={handleInputChange}
+                  // onChange={handleInputChange}
+                  onChange={(e) => {
+                    if (!isNaN(e.target.value)) {
+                      handleInputChange(e)
+                      console.log("this is a number")
+                    }
+                  }}
                 />
               </Col>
               <Col md={6} lg={4} className="mt-2">

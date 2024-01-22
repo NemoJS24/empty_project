@@ -81,7 +81,7 @@ const CustomerBasicPersonal = ({ allData }) => {
               className='form-control'
               value={formData?.cust_dob}
               onChange={(date) => {
-                setFormData({...formData, cust_dob: moment(date[0]).format("YYYY-MM-DD")})
+                setFormData({ ...formData, cust_dob: moment(date[0]).format("YYYY-MM-DD") })
               }}
             />
             {/* <input
@@ -177,7 +177,13 @@ const CustomerBasicPersonal = ({ allData }) => {
                 className="form-control"
                 min="0"
                 value={formData?.NO_Of_Children ?? ''}
-                onChange={handleInputChange}
+                // onChange={handleInputChange}
+                onChange={(e) => {
+                  if (!isNaN(e.target.value)) {
+                    handleInputChange(e)
+                    console.log("this is a number")
+                  }
+                }}
               />
               <p id="personalDetails-noChildren_val" className="text-danger m-0 p-0 vaildMessage"></p>
             </Col>

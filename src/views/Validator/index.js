@@ -156,7 +156,6 @@ export function validForm(validator, value) {
             } else {
                 $(`#${currentObject.id}_val`).html('')
                 console.log(currentObject.type, "typeof Object")
-                console.log("PPPP")
 
                 if (currentObject.type === "email") {
                     if (validateEmail(fieldValue)) {
