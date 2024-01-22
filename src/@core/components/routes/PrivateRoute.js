@@ -10,7 +10,7 @@ import { PermissionProvider } from '../../../Helper/Context'
 const PrivateRoute = ({ children, route }) => {
 
   const navigate = useNavigate()
-  const {setUserPermission, userPermission} = useContext(PermissionProvider)
+  const { setUserPermission, userPermission } = useContext(PermissionProvider)
   const location = useLocation()
 
   const checkUserToken = async () => {
@@ -32,15 +32,15 @@ const PrivateRoute = ({ children, route }) => {
         if (userPermission?.installedApps?.includes(route?.app)) {
           // console.log("INSTALLED", "Route Permission")
           if (route?.app !== userPermission?.appName) {
-            setUserPermission({...userPermission, appName: route?.app})
+            setUserPermission({ ...userPermission, appName: route?.app })
           }
-  
+
         } else {
           // console.log("NOT INSTALLED", "Route Permission")
           toast.error("You don't have access of that App")
           navigate("/merchant/apps/")
         }
-  
+
       }
       
       if (userPermission?.multiUser !== "all" && route?.permission) {

@@ -112,13 +112,13 @@ const AddServicing = () => {
         {
             name: 'email',
             message: 'Enter email',
-            type: 'string',
+            type: 'email',
             id: 'email'
         },
         {
             name: 'phone_no',
             message: 'Enter Phone no',
-            type: 'string',
+            type: 'number',
             id: 'phone_no'
         },
         {
