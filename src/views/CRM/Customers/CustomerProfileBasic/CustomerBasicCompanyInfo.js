@@ -269,7 +269,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
           onClick={handleShow}
           className="link-success link-underline-opacity-0 "
         >
-          Add new company
+          Add Company
         </a>
       </p>
       {children}
@@ -415,9 +415,9 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="company-pancard">Company Pan Card Number</label>
+              <label htmlFor="company-pancard">Company PAN</label>
               <input
-                placeholder="Company Pan Card Number"
+                placeholder="Company PAN"
                 type="text"
                 id="company-pancard"
                 name="company_panCard"
@@ -719,11 +719,11 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
             </Col>
             <Col md={12} className="mt-2">
               <label htmlFor="basicDetails-last-name">
-                PAN
+                Company PAN
               </label>
               <input
                 required
-                placeholder="PAN"
+                placeholder="Company PAN"
                 type="text"
                 id="basicDetails-panNumber"
                 name="company_pancard"
@@ -1005,11 +1005,11 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
             </Col>
             <Col md={12} className="mt-2">
               <label htmlFor="basicDetails-last-name">
-                Company PAN Card Number
+                Company PAN
               </label>
               <input
                 required
-                placeholder="PNA Card No."
+                placeholder="Company PAN"
                 type="text"
                 id="basicDetails-panNumber"
                 name="par_company_pancard"

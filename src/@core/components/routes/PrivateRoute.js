@@ -42,18 +42,23 @@ const PrivateRoute = ({ children, route }) => {
         }
 
       }
-
-      if (route?.permission) {
-        const permissionList = userPermission?.permissionList?.filter((curElem) => curElem.permission__apps === route?.app && curElem.permission__slug === route?.permission.route_type)
-        if (permissionList?.length > 0) {
-          const isAccess = permissionList[0][route?.permission?.action]
-          // console.log(permissionList[0][currentRoute[0]?.permission?.action], "isPermission")
-          if (!isAccess) {
+      
+      if (!userPermission?.is_super_user && route?.permission) {
+        // if (route?.permission) {
+          const permissionList = userPermission?.permissionList?.filter((curElem) => curElem.permission__apps === route?.app && curElem.permission__slug === route?.permission.route_type)
+          if (permissionList?.length > 0) {
+            const isAccess = permissionList[0][route?.permission?.action]
+            // console.log(permissionList[0][currentRoute[0]?.permission?.action], "isPermission")
+            if (!isAccess) {
+              navigate("/merchant/apps/")
+              toast.error("Permission denied")
+            }
+    
+          } else {
             navigate("/merchant/apps/")
             toast.error("Permission denied")
           }
-
-        }
+        //}
       }
 
     }

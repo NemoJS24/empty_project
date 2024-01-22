@@ -16,8 +16,10 @@ const PermissionWrapper = ({children}) => {
         isSupport: false,
         isAdmin: false,
         currencySymbol: "₹",
-        multiUser: "",
-        permissionList: []
+        multi_user_key: "",
+        permissionList: [],
+        super_user: "",
+        is_super_user: true
     }
     const [userPermission, setUserPermission] = useState(localStorage.getItem('userPermission') ? JSON.parse(localStorage.getItem('userPermission')) : defaultData)
     const location = useLocation()

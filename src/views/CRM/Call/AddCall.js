@@ -166,8 +166,8 @@ const AddCall = () => {
    const leadStatusOptions = [
       { value: 'Cold', label: 'Cold' },
       { value: 'Warm', label: 'Warm' },
-      { value: 'Hot', label: 'Hot' },
-      { value: 'File Pickup', label: 'File Pickup' }
+      { value: 'Hot', label: 'Hot' }
+      // { value: 'File Pickup', label: 'File Pickup' }
    ]
 
    const linterestedOptions = [
@@ -388,7 +388,7 @@ const AddCall = () => {
                               )}
                            </Row>
 
-                           <Row>
+                           <Row className='d-none'>
                               <Col md={12} className="mt-2">
                                  <h4 className="mb-0">Send</h4>
                               </Col>
