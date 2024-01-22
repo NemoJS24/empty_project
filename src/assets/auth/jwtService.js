@@ -206,6 +206,8 @@ axiosInstance.interceptors.request.use(
                 if (newAccessToken) {
                     config.headers['Authorization'] = `Bearer ${newAccessToken.data.access}`
                     config.headers['Api-Key'] = userPermission.apiKey // to get this use HTTP_API_KEY
+                    config.headers['Super-User'] = userPermission.super_user // to get this use HTTP_API_KEY
+                    config.headers['Multi-User-Key'] = userPermission.multi_user_key // to get this use HTTP_API_KEY
                     config.headers['Outlet'] = currentUser[0]?.id
                     const newToken = JSON.stringify({ access: newAccessToken.data.access, refresh: token.refresh })
                     setToken(newToken)
@@ -219,6 +221,8 @@ axiosInstance.interceptors.request.use(
                 config.headers['Authorization'] = `Bearer ${accessToken}`
                 config.headers['Api-Key'] = userPermission.apiKey // to get this use HTTP_API_KEY
                 config.headers['Outlet'] = currentUser[0]?.id
+                config.headers['Super-User'] = userPermission.super_user
+                config.headers['Multi-User-Key'] = userPermission.multi_user_key
             }
         }
         return config

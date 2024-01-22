@@ -43,7 +43,7 @@ const PrivateRoute = ({ children, route }) => {
 
       }
       
-      if (userPermission?.multiUser !== "all" && route?.permission) {
+      if (!userPermission?.is_super_user && route?.permission) {
         // if (route?.permission) {
           const permissionList = userPermission?.permissionList?.filter((curElem) => curElem.permission__apps === route?.app && curElem.permission__slug === route?.permission.route_type)
           if (permissionList?.length > 0) {

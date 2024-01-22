@@ -153,7 +153,7 @@ const FinanceDetails = () => {
             name: <>EMI START<br />DATE</>,
             minWidth: "150px",
             selector: (row) => (
-                row?.Emi_End_Date ? moment(row.Emi_End_Date).format("YYYY-MM-DD") : ''
+                row?.Emi_Start_Date ? moment(row.Emi_Start_Date).format("YYYY-MM-DD") : ''
             ),
             type: 'date'
         },
@@ -161,7 +161,7 @@ const FinanceDetails = () => {
             name: <>EMI END <br /> DATE</>,
             minWidth: "150px",
             selector: (row) => (
-                row?.Emi_Start_Date ? moment(row.Emi_Start_Date).format("YYYY-MM-DD") : ''
+                row?.Emi_End_Date ? moment(row.Emi_End_Date).format("YYYY-MM-DD") : ''
             ),
             type: 'date'
         },

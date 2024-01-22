@@ -175,6 +175,26 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
               containerClassName={'pagination react-paginate pagination-sm justify-content-end pe-1 mt-1'}
             />
         </div>
+        <ReactPaginate
+          previousLabel={<Previous size={15} />}
+          nextLabel={<Next size={15} />}
+          forcePage={currentPage}
+          onPageChange={page => handlePagination(page)}
+          pageCount={Math.ceil(count / currentEntry) || 1}
+          breakLabel={'...'}
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          activeClassName={'active'}
+          pageClassName={'page-item'}
+          nextLinkClassName={'page-link'}
+          nextClassName={'page-item next'}
+          previousClassName={'page-item prev'}
+          previousLinkClassName={'page-link'}
+          pageLinkClassName={'page-link'}
+          breakClassName='page-item'
+          breakLinkClassName='page-link'
+          containerClassName={'pagination react-paginate pagination-sm justify-content-end pe-1 mt-1'}
+        />
       </div>
     )
   }

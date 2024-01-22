@@ -7,16 +7,18 @@ import toast from 'react-hot-toast'
 
 const AddDepartment = () => {
 
-    const [product, setProduct] = useState([])
-    const [permisionList, setPermissionList] = useState([])
-    const [valid, setValid] = useState(false)
-    const {userPermission} = useContext(PermissionProvider)
-    const [data, setData] = useState({
+    const defaultData = {
         apps: [],
         department: "",
         description: "",
         permission: []  
-    })
+    }
+
+    const [product, setProduct] = useState([])
+    const [permisionList, setPermissionList] = useState([])
+    const [valid, setValid] = useState(false)
+    const {userPermission} = useContext(PermissionProvider)
+    const [data, setData] = useState(defaultData)
 
     const handleChange = (options, actionMeta, check) => {
         if (check) {
@@ -108,6 +110,8 @@ const AddDepartment = () => {
             .then((resp) => {
                 console.log(resp)
                 toast.success("Department added successfully")
+                setData(defaultData)
+                setPermissionList([])
             })
             .catch((error) => {
                 console.log(error)
