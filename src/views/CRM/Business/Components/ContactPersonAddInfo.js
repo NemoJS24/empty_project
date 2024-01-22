@@ -104,7 +104,13 @@ const ContactPersonAddInfo = ({ allData }) => {
               name="pincode"
               className="form-control"
               value={formData?.pincode ?? ''}
-              onChange={handleInputChange}
+              // onChange={handleInputChange}
+              onChange={(e) => {
+                if (!isNaN(e.target.value)) {
+                  handleInputChange(e)
+                  console.log("this is a number")
+                }
+              }}
             />
           </Col>
           <Col md={6} lg={4} className="mt-2">
@@ -223,7 +229,13 @@ const ContactPersonAddInfo = ({ allData }) => {
               name="shipping_pincode"
               className="form-control"
               value={formData?.shipping_pincode ?? ''}
-              onChange={handleInputChange}
+              // onChange={handleInputChange}
+              onChange={(e) => {
+                if (!isNaN(e.target.value)) {
+                  handleInputChange(e)
+                  console.log("this is a number")
+                }
+              }}
             />
           </Col>
           <Col md={6} lg={4} className="mt-2">

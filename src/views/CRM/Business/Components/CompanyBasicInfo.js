@@ -80,7 +80,13 @@ const CompanyBasicInfo = ({ allData }) => {
           </label>
           <input placeholder="Company Phone" type='tel' maxLength={10} id='Company-Phone' name='company_phone' className="form-control "
             value={formData?.company_phone ?? ''}
-            onChange={handleInputChange}
+            // onChange={handleInputChange}
+            onChange={(e) => {
+              if (!isNaN(e.target.value)) {
+                handleInputChange(e)
+                console.log("this is a number")
+              }
+            }}
           />
           <p id="company_phone_val" className="text-danger m-0 p-0 vaildMessage"></p>
 
@@ -168,7 +174,13 @@ const CompanyBasicInfo = ({ allData }) => {
             </label>
             <input placeholder="Company Phone" type='tel' maxLength={10} id='Company-Phone2' name='par_company_phone' className="form-control "
               value={formData?.par_company_phone ?? ''}
-              onChange={handleInputChange}
+              // onChange={handleInputChange}
+              onChange={(e) => {
+                if (!isNaN(e.target.value)) {
+                  handleInputChange(e)
+                  console.log("this is a number")
+                }
+              }}
             />
             <p id="par_company_phone_val" className="text-danger m-0 p-0 vaildMessage"></p>
 

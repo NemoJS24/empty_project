@@ -106,7 +106,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
       .then((resp) => {
         console.log({ resp })
         fetchCompanyData()
-        
+
         const addForm = { ...newCompany }
         Object.keys(newCompany).forEach((key) => {
           addForm[key] = ""
@@ -378,7 +378,13 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 name="company_phone"
                 className="form-control"
                 value={form.company_phone ?? ""}
-                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                onChange={(e) => {
+                  if (!isNaN(e.target.value)) {
+                    handleInputChange2(e, form.id ?? form.formId)
+                    console.log("this is a number")
+                  }
+                }}
                 disabled
               />
             </Col>
@@ -561,7 +567,13 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 name="pincode"
                 className="form-control"
                 value={form.pincode ?? ""}
-                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                onChange={(e) => {
+                  if (!isNaN(e.target.value)) {
+                    handleInputChange2(e, form.id ?? form.formId)
+                    console.log("this is a number")
+                  }
+                }}
                 disabled
               />
             </Col>
@@ -732,7 +744,13 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 name="company_phone"
                 className="form-control"
                 value={newCompany.company_phone ?? ''}
-                onChange={(e) => handleInputChange2(e, "new-company")}
+                // onChange={(e) => handleInputChange2(e, "new-company")}
+                onChange={(e) => {
+                  if (!isNaN(e.target.value)) {
+                    handleInputChange2(e, "new-company")
+                    console.log("this is a number")
+                  }
+                }}
               />
               <p id="basicDetails-phone_val" className="text-danger m-0 p-0 vaildMessage"></p>
             </Col>
@@ -871,7 +889,13 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 name="pincode"
                 className="form-control"
                 value={newCompany.pincode ?? ""}
-                onChange={(e) => handleInputChange2(e, "new-company")}
+                // onChange={(e) => handleInputChange2(e, "new-company")}
+                onChange={(e) => {
+                  if (!isNaN(e.target.value)) {
+                    handleInputChange2(e, "new-company")
+                    console.log("this is a number")
+                  }
+                }}
               />
             </Col>
             <Col md={12} className="mt-2">
@@ -1006,7 +1030,13 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 name="par_company_phone"
                 className="form-control"
                 value={newCompany.par_company_phone ?? ''}
-                onChange={(e) => handleInputChange2(e, "new-company")}
+                // onChange={(e) => handleInputChange2(e, "new-company")}
+                onChange={(e) => {
+                  if (!isNaN(e.target.value)) {
+                    handleInputChange2(e, "new-company")
+                    console.log("this is a number")
+                  }
+                }}
               />
               <p id="basicDetails-phone_val" className="text-danger m-0 p-0 vaildMessage"></p>
             </Col>
@@ -1148,7 +1178,13 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 name="par_pincode"
                 className="form-control"
                 value={newCompany.par_pincode ?? ""}
-                onChange={(e) => handleInputChange2(e, "new-company")}
+                // onChange={(e) => handleInputChange2(e, "new-company")}
+                onChange={(e) => {
+                  if (!isNaN(e.target.value)) {
+                    handleInputChange2(e, "new-company")
+                    console.log("this is a number")
+                  }
+                }}
               />
             </Col>
             <Col md={12} className="mt-2">
