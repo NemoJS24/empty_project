@@ -160,13 +160,13 @@ const AddBusiness = () => {
       {
          name: 'company_phone',
          message: 'Please enter your company phone',
-         type: 'string',
+         type: 'number',
          id: 'company_phone'
       },
       {
          name: 'company_email',
          message: 'Please enter your company email',
-         type: 'string',
+         type: 'email',
          id: 'company_email'
       }
    ]
@@ -187,13 +187,13 @@ const AddBusiness = () => {
       {
          name: 'par_company_phone',
          message: 'Please enter your company phone',
-         type: 'string',
+         type: 'number',
          id: 'par_company_phone'
       },
       {
          name: 'par_company_email',
          message: 'Please enter your company email',
-         type: 'string',
+         type: 'email',
          id: 'par_company_email'
       }
    ]
@@ -220,13 +220,13 @@ const AddBusiness = () => {
       {
          name: 'email',
          message: 'Please enter your email',
-         type: 'string',
+         type: 'email',
          id: 'email'
       },
       {
          name: 'phone_no',
          message: 'Please enter your phone no',
-         type: 'string',
+         type: 'number',
          id: 'phone_no'
       },
       {

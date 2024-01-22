@@ -52,39 +52,6 @@ const AddFinance = () => {
     }
   ]
 
-  // const coApplicantvalueToCheck = [
-  //   {
-  //     name: 'title',
-  //     message: 'Select Title',
-  //     type: 'string',
-  //     id: 'title'
-  //   },
-  //   {
-  //     name: 'cust_first_name',
-  //     message: 'Enter First Name',
-  //     type: 'string',
-  //     id: 'cust_first_name'
-  //   },
-  //   {
-  //     name: 'cust_last_name',
-  //     message: 'Enter Last Name',
-  //     type: 'string',
-  //     id: 'cust_last_name'
-  //   },
-  //   {
-  //     name: 'email',
-  //     message: 'Enter Email',
-  //     type: 'string',
-  //     id: 'email'
-  //   },
-  //   {
-  //     name: 'phone_no',
-  //     message: 'Enter Phone Number',
-  //     type: 'string',
-  //     id: 'phone_no'
-  //   }
-  // ]
-
   const EMIFormvalueToCheck = [
     {
       name: 'Emi_Amount',
@@ -128,7 +95,7 @@ const AddFinance = () => {
     {
       name: 'Ref_phone_no',
       message: 'Enter Mobile Number',
-      type: 'string',
+      type: 'number',
       id: 'Ref_phone_no'
     }
   ]

@@ -6,72 +6,12 @@ import Select from "react-select"
 const ReferralForm = ({ allData }) => {
 
     const { formData, handleBack, handleInputChange, currentStep, handleSubmitSection, country } = allData
-    // const refferalFormvalueToCheck = [
-    //     {
-    //         name: 'Ref_title',
-    //         message: 'Select Title',
-    //         type: 'string',
-    //         id: 'Ref_title'
-    //     },
-    //     {
-    //         name: 'Ref_first_name',
-    //         message: 'Enter First Name',
-    //         type: 'string',
-    //         id: 'Ref_first_name'
-    //     },
-    //     {
-    //         name: 'Ref_last_name',
-    //         message: 'Enter Last Name',
-    //         type: 'string',
-    //         id: 'Ref_last_name'
-    //     },
-    //     {
-    //         name: 'Ref_phone_no',
-    //         message: 'Enter Mobile Number',
-    //         type: 'string',
-    //         id: 'Ref_phone_no'
-    //     }
-    // ]
-
-    // const [check, setCheck] = useState({
-    //     mainForm: {
-    //         Ref_title: "",
-    //         Ref_first_name: '',
-    //         Ref_last_name: "",
-    //         Ref_phone_no: ""
-    //     }
-    // })
-
-    // const handleAddInputChange = (e, keyType) => {
-    //     console.log(e)
-    //     setCheck(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
-    // }
-
-    // const handleSubmitSection = (e, action) => {
-    //     e.preventDefault()
-
-    //     const checkForm = validForm(mainFormvalueToCheck, check.mainForm)  // Use mainFormvalueToCheck for validation
-    //     console.log(checkForm)
-
-    //     if (checkForm.isValid) {
-    //         console.log('Form is valid')
-    //         // handleNext()
-    //         if (action === 'SAVE') {
-    //             // Save
-    //         } else if (action === 'SAVE & CLOSE') {
-    //             // Save and close
-    //         }
-    //     }
-    // }
 
     const titleOptions = [
         { value: 'mr', label: 'Mr.' },
         { value: 'ms', label: 'Ms.' },
         { value: 'mrs', label: 'Mrs.' }
     ]
-
-
-    // const countryOptions = [{ value: 'India', label: 'India' }]
 
     return (
         <>

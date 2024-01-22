@@ -76,43 +76,16 @@ const ApplicantForm = ({ allData }) => {
         {
             name: 'email',
             message: 'Enter Email',
-            type: 'string',
+            type: 'email',
             id: 'email'
         },
         {
             name: 'phone_no',
             message: 'Enter Phone No',
-            type: 'string',
+            type: 'number',
             id: 'phone_no'
         }
     ]
-
-    // const productFormvalueToCheck = [
-    //     {
-    //         name: 'cust_first_name',
-    //         message: 'Enter Customer Name',
-    //         type: 'string',
-    //         id: 'cust_first_name'
-    //     },
-    //     {
-    //         name: 'engine_number',
-    //         message: 'Enter Engine Number',
-    //         type: 'string',
-    //         id: 'engine_number'
-    //     },
-    //     {
-    //         name: 'brand',
-    //         message: 'Enter Brad',
-    //         type: 'string',
-    //         id: 'brand'
-    //     },
-    //     {
-    //         name: 'model',
-    //         message: 'Enter Model',
-    //         type: 'string',
-    //         id: 'model'
-    //     }
-    // ]
 
     const addProductFormToCheck = [
         {

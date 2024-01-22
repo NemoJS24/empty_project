@@ -13,11 +13,6 @@ const CompanyAddInfo = ({ allData }) => {
     handleBack
   } = allData
 
-
-  //------------
-
-  //---------------
-
   return (
     <>
       <Container fluid className="px-0 py-1">

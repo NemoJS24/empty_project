@@ -145,7 +145,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
     {
       name: 'company_email',
       message: 'Please enter your Company Email',
-      type: 'string',
+      type: 'email',
       id: 'basicDetails-email'
     }
   ]
