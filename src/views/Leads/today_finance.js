@@ -78,7 +78,7 @@ const Customers = () => {
       isEnable: true
     },
     {
-      name: "Vehical Number",
+      name: "Vehicle Name",
       minWidth: "200px",
       selector: (row) => row?.finance_vehicle_number ? row.finance_vehicle_number : "-",
       type: 'text',
@@ -145,7 +145,7 @@ const Customers = () => {
       width: "130px",
       selector: (row) => (
         <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
-          <Link to={`/merchant/customers/view_customer/${row?.xircls_customer_id}`}><Eye size={15} /></Link>
+          {/* <Link to={`/merchant/customers/view_customer/${row?.xircls_customer_id}`}><Eye size={15} /></Link> */}
           <Link to={`/merchant/customers/edit_finance/${row?.finance_customer_id}`}> <Edit3 size={15} /></Link>
         </div>
       )

@@ -4,7 +4,7 @@ import AdvanceServerSide from "@src/views/Components/DataTable/AdvanceServerSide
 // import axios from 'axios'
 import { crmURL, postReq } from '../../../../assets/auth/jwtService'
 import { Link, useParams } from 'react-router-dom'
-import { Edit, Eye } from 'react-feather'
+import { Edit, Edit3, Eye } from 'react-feather'
 import moment from 'moment'
 import ComTable from '../../../Components/DataTable/ComTable'
 
@@ -30,8 +30,8 @@ const FinanceDetails = () => {
         // })
         postReq('get_customer_finance', form_data, crmURL)
         .then((res) => {
-            console.log(res.success, "pp")
-            setTableData(res.success)
+            console.log(res?.data?.success, "pp")
+            setTableData(res?.data?.success)
             setIsLoading(false)
         })
         .catch((error) => {
@@ -89,7 +89,7 @@ const FinanceDetails = () => {
             name: <>VEHICLE <br /> NUMBER</>,
             minWidth: "110px",
             selector: (row) => (
-                row?.vehicle_number !== undefined && row?.vehicle_number !== null ? row.vehicle_number : "None"
+                row?.vehicle_number
             ),
             type: 'text'
         },
@@ -97,7 +97,7 @@ const FinanceDetails = () => {
             name: <>BANK <br /> NAME</>,
             minWidth: "100px",
             selector: (row) => (
-                row?.Bank_Name !== undefined && row?.Bank_Name !== null ? row.Bank_Name : "None"
+                row?.Bank_Name
             ),
             type: 'text'
         },
@@ -105,7 +105,7 @@ const FinanceDetails = () => {
             name: <>LOAN <br /> NUMBER</>,
             minWidth: "110px",
             selector: (row) => (
-                row?.Loan_Number !== undefined && row?.Loan_Number !== null ? row.Loan_Number : "None"
+                row?.Loan_Number
             ),
             type: 'text'
         },
@@ -113,7 +113,7 @@ const FinanceDetails = () => {
             name: <>LOAN <br /> TYPE</>,
             minWidth: "100px",
             selector: (row) => (
-                row?.Loan_Type !== undefined && row?.Loan_Type !== null ? row.Loan_Type : "None"
+                row?.Loan_Type
             ),
             type: 'text'
         },
@@ -121,7 +121,7 @@ const FinanceDetails = () => {
             name: <>DISBURSE <br /> DATE</>,
             minWidth: "150px",
             selector: (row) => (
-                row?.Loan_Disbursement_Date !== undefined && row?.Loan_Disbursement_Date !== null ? moment(row.Loan_Disbursement_Date).format("YYYY-MM-DD") : 'None'
+                row?.Loan_Disbursement_Date ? moment(row.Loan_Disbursement_Date).format("YYYY-MM-DD") : ''
             ),
             type: 'date'
         },
@@ -129,7 +129,7 @@ const FinanceDetails = () => {
             name: <>RATE OF <br /> INTEREST</>,
             minWidth: "110px",
             selector: (row) => (
-                row?.Rate_of_Interest !== undefined && row?.Rate_of_Interest !== null ? row.Rate_of_Interest : "None"
+                row?.Rate_of_Interest ? row.Rate_of_Interest : ""
             ),
             type: 'text'
         },
@@ -137,7 +137,7 @@ const FinanceDetails = () => {
             name: <>LOAN <br /> AMOUNT</>,
             minWidth: "100px",
             selector: (row) => (
-                row?.Loan_amount !== undefined && row?.Loan_amount !== null ? row.Loan_amount : "None"
+                row?.Loan_amount ? row.Loan_amount : ""
             ),
             type: 'text'
         },
@@ -145,7 +145,7 @@ const FinanceDetails = () => {
             name: <>EMI <br /> AMOUNT</>,
             minWidth: "100px",
             selector: (row) => (
-                row?.Emi_Amount !== undefined && row?.Emi_Amount !== null ? row.Emi_Amount : "None"
+                row?.Emi_Amount ? row.Emi_Amount : ""
             ),
             type: 'text'
         },
@@ -153,7 +153,7 @@ const FinanceDetails = () => {
             name: <>EMI START<br />DATE</>,
             minWidth: "150px",
             selector: (row) => (
-                row?.Emi_End_Date !== undefined && row?.Emi_End_Date !== null ? moment(row.Emi_End_Date).format("YYYY-MM-DD") : 'None'
+                row?.Emi_End_Date ? moment(row.Emi_End_Date).format("YYYY-MM-DD") : ''
             ),
             type: 'date'
         },
@@ -161,22 +161,19 @@ const FinanceDetails = () => {
             name: <>EMI END <br /> DATE</>,
             minWidth: "150px",
             selector: (row) => (
-                row?.Emi_Start_Date !== undefined && row?.Emi_Start_Date !== null ? moment(row.Emi_Start_Date).format("YYYY-MM-DD") : 'None'
+                row?.Emi_Start_Date ? moment(row.Emi_Start_Date).format("YYYY-MM-DD") : ''
             ),
             type: 'date'
         },
         {
-            name: "ACTION",
-            minWidth: "80px",
-            selector: () => (
-                <>
-                    <div className='d-flex justify-content-center align-items-center gap-1'>
-                        <Eye size='15px' />
-                        <Edit size='15px' />
-                    </div>
-                </>
-            ),
-            type: 'date'
+            name: "Action",
+            width: "130px",
+            selector: (row) => (
+              <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
+                {/* <Link to={`/merchant/customers/view_customer/${row?.xircls_customer_id}`}><Eye size={15} /></Link> */}
+                <Link to={`/merchant/customers/edit_finance/${row?.id}?type=edit`}> <Edit3 size={15} /></Link>
+              </div>
+            )
         }
     ]
 

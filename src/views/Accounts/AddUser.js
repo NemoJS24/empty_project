@@ -205,7 +205,7 @@ const AddUser = () => {
                                 </div>
                             </div>
 
-                            <div className="col-md-4 mb-1">
+                            <div className="col-md-4 mb-1 d-none">
                                 <div className="form-group">
                                     <label htmlFor="confirm_password">Commission</label>
                                     <Select
@@ -238,7 +238,7 @@ const AddUser = () => {
                                 </div>
                             </div>
 
-                            <div className="col-md-4 mb-1">
+                            <div className="col-md-4 mb-1 d-none">
                                 <div className="form-group">
                                     <label htmlFor="confirm_password">Start Date</label>
                                     <Flatpickr options={{ // Sets the minimum date as 14 days ago
