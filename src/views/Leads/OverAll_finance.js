@@ -73,7 +73,7 @@ const Customers = () => {
       isEnable: true
     },
     {
-      name: "REGISTRATION NUMBER",
+      name: "Registration Number",
       minWidth: "200px",
       selector: (row) => row?.finance_registration_number ? row.finance_registration_number : "-",
       type: 'text',
@@ -96,7 +96,7 @@ const Customers = () => {
     {
       name: "Disburse Date",
       minWidth: "200px",
-      selector: (row) => row?.finance_loan_disbursement_date ? moment(row.finance_loan_disbursement_date).format("YYYY-MM-DD") : "-",
+      selector: (row) => row?.finance_loan_disbursement_date ? row?.finance_loan_disbursement_date : "-",
       type: 'date',
       isEnable: true
     },

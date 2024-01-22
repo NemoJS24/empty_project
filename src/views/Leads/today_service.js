@@ -103,7 +103,7 @@ const Customers = () => {
     {
       name: "Service Expiry Date",
       minWidth: "200px",
-      selector: (row) => row?.servicing_service_expiry_date ? row.servicing_service_expiry_date : "-",
+      selector: (row) => row?.servicing_service_expiry_date ? moment(row.servicing_service_expiry_date).format("YYYY-MM-DD") : "-",
       type: 'text',
       isEnable: true
     },
