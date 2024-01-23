@@ -611,7 +611,7 @@ const RenderPreview = (props) => {
                                                                                                     }} />
                                                                                                     <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />
                                                                                                 </span>}
-                                                                                                {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
+                                                                                                {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute resizeDiv" style={{ inset: "0px", outline: "2px solid #727272", zIndex: "2", backgroundColor: "rgb(114, 114, 114, 0.3)", resize: "vertical", overflow: "auto" }}></div>}
                                                                                                 <div style={{ width: "100%", resize: isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) ? "vertical" : "none" }} id={`textField-${key}-${curElem?.positionType}-${j}`} className="text-field" >
                                                                                                     <Editor
                                                                                                         customElemnt={(
@@ -1356,7 +1356,7 @@ const RenderPreview = (props) => {
                                                                                             </div>
                                                                                         )
                                                                                     default:
-                                                                                        return <div key={i} className='' style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", padding: "1rem" }}
+                                                                                        return <div key={i} className='' style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}
                                                                                             // onClick={(e) => makActive(e, cur)}
                                                                                             onDragOver={(e) => {
                                                                                                 e.preventDefault()
@@ -1376,7 +1376,7 @@ const RenderPreview = (props) => {
                                                                                                 handleElementDrop(e, curElem?.positionType, key, i, curElem, j)
                                                                                             }}>
                                                                                             <Download size={10} style={{ color: 'grey' }} />
-                                                                                            <p style={{ margin: '0px', fontSize: '10px', color: 'grey' }}>Drop an element here</p>
+                                                                                            {/* <p style={{ margin: '0px', fontSize: '10px', color: 'grey' }}>Drop an element here</p> */}
                                                                                         </div>
                                                                                 }
                                                                             })}
@@ -1400,11 +1400,11 @@ const RenderPreview = (props) => {
                                                                 setCurrPosition({ ...currPosition, id: colWise.length, selectedType: transferType.includes("col") ? "block" : transferType })
                                                                 setValues(elementStyles[transferType.includes("col") ? "block" : transferType])
                                                             }
-                                                        }} className='' style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", padding: "1rem" }}
+                                                        }} className='' style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}
                                                     // onClick={(e) => makActive(e, cur)}
                                                     >
                                                     <Download size={10} style={{ color: 'grey' }} />
-                                                    <p style={{ margin: '0px', fontSize: '10px', color: 'grey' }}>Drop an element here</p>
+                                                    {/* <p style={{ margin: '0px', fontSize: '10px', color: 'grey' }}>Drop an element here</p> */}
                                                 </div>
                                             )}
                                         </div>

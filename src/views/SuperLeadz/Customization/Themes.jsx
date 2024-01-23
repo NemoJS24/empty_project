@@ -76,6 +76,7 @@ const Themes = () => {
                                                 setSelectedThemeId(theme.theme_id)
                                                 navigate(`/merchant/SuperLeadz/new_customization/?isMobile=${phoneView[key]}`)
                                                 localStorage.setItem("defaultThemeId", theme.theme_id)
+                                                localStorage.removeItem("defaultTheme")
                                             }} state={{ len: themeLength }} className="btn btn-primary">Use Template</button>
                                         </div>
                                         <div className="d-flex justify-content-between align-items-center gap-2 mt-2">

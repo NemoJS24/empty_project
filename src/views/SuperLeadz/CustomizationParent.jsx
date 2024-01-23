@@ -96,9 +96,9 @@ const CustomizationParent = () => {
     // const dateFormat = "%Y-%m-%d %H:%M:%S"
 
     // status variable shows whether the user has monile view or desktop view selected while visiting the page
-    const status = (defaultIsMobile.get('isMobile') !== "false" && defaultIsMobile.get('isMobile') !== undefined && defaultIsMobile.get('isMobile') !== null && defaultIsMobile.get('isMobile') !== false)
+    // const status = (defaultIsMobile.get('isMobile') !== "false" && defaultIsMobile.get('isMobile') !== undefined && defaultIsMobile.get('isMobile') !== null && defaultIsMobile.get('isMobile') !== false)
 
-    const [isMobile, setIsMobile] = useState(false)
+    const [isMobile, setIsMobile] = useState(defaultIsMobile.get('isMobile') !== "false" && defaultIsMobile.get('isMobile') !== undefined && defaultIsMobile.get('isMobile') !== null && defaultIsMobile.get('isMobile') !== false)
 
     // const [isDragging, setIsDragging] = useState(false)
 
@@ -111,12 +111,14 @@ const CustomizationParent = () => {
 
     const allPreviews = [...allThemes]
 
+    console.log("finalObj: ", localStorage.getItem("defaultThemeId"))
+
     const navigate = useNavigate()
     const [mousePos, setMousePos] = useState({})
-    const [finalObj, setFinalObj] = useState(themeLoc?.state?.custom_theme ? JSON.parse(themeLoc?.state?.custom_theme) : localStorage.getItem("defaultThemeId") !== "" ? { ...allPreviews[allPreviews?.findIndex($ => $?.theme_id === Number(localStorage.getItem("defaultThemeId")))]?.object, campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") } : selectedThemeId !== "" ? { ...allPreviews[allPreviews?.findIndex($ => $?.theme_id === selectedThemeId)]?.object, campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") } : defaultObj)
+    const [finalObj, setFinalObj] = useState(themeLoc?.state?.custom_theme ? JSON.parse(themeLoc?.state?.custom_theme) : Boolean(localStorage.getItem("defaultTheme")) ? JSON.parse(localStorage.getItem("defaultTheme")) : Boolean(localStorage.getItem("defaultThemeId")) ? allPreviews[allPreviews.findIndex($ => $?.theme_id === parseFloat(localStorage.getItem("defaultThemeId")))]?.object : selectedThemeId !== "" ? { ...allPreviews[allPreviews?.findIndex($ => $?.theme_id === selectedThemeId)]?.object, campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") } : defaultObj)
     const [past, setPast] = useState([])
     const [future, setFuture] = useState([])
-    const [themeName, setThemeName] = useState(themeLoc?.state?.custom_theme ? finalObj.theme_name : `Campaign-${generateRandomString()}`)
+    const [themeName, setThemeName] = useState(themeLoc?.state?.custom_theme ? finalObj?.theme_name : `Campaign-${generateRandomString()}`)
     const [defColors, setDefColors] = useState(finalObj.defaultThemeColors || {})
     const [textValue, setTextValue] = useState("")
     const [senderName, setSenderName] = useState("")
@@ -241,7 +243,7 @@ const CustomizationParent = () => {
     const [imageTab, setImageTab] = useState("default")
     const [dropImage, setDropImage] = useState(false)
 
-    console.log({ dropImage, imageType })
+    console.log({ dropImage, imageType, finalObj })
     // const [textValue, setTextValue] = useState("")
     // const [senderName, setSenderName] = useState("")
     // const [apiLoader, setApiLoader] = useState(false)
@@ -272,7 +274,7 @@ const CustomizationParent = () => {
     }
 
     const handleFilter = e => {
-        const value = e.target.value
+        const { value } = e.target
         let updatedData = []
         setSearchValue(value)
 
@@ -298,74 +300,6 @@ const CustomizationParent = () => {
     const updatePresent = (newState) => {
         const data = JSON.stringify(finalObj)
         const newObj = { ...newState }
-        // if (Array.isArray(newState?.responsive)) {
-        //     newState?.responsive?.forEach((responsive) => {
-        //         if (Array.isArray(responsive?.position)) {
-        //             responsive?.position?.forEach((position) => {
-        //                 if (Array.isArray(position?.style)) {
-        //                     position?.style?.forEach((style) => {
-        //                         if (style?.isSame) {
-        //                             if (responsive?.pageName === "close") {
-        //                                 const closeArr1 = newObj?.crossButtons[`${mobileConditionRev}main`]
-        //                                 const closeArr2 = newObj?.crossButtons[`${mobileCondition}main`]
-
-        //                                 if (closeArr1.length > 0 && closeArr2.length > 0) {
-        //                                     closeArr1.style[style?.styleName] = closeArr2?.style[style?.styleName]
-        //                                 }
-
-        //                                 newObj.crossButtons[`${mobileConditionRev}main`] = closeArr1
-        //                                 newObj.crossButtons[`${mobileConditionRev}main`] = closeArr2
-
-        //                             } else {
-        //                                 const arr1 = currPage === "button" ? newObj[`${mobileConditionRev}button`] : newObj[`${mobileConditionRev}pages`][newObj[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)]?.values || []
-        //                                 const arr2 = currPage === "button" ? newObj[`${mobileCondition}button`] : newObj[`${mobileCondition}pages`][newObj[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values || []
-        //                                 if (arr1.length > 0 && arr2.length > 0) {
-        //                                     const positionIndex = arr1[position?.id?.cur]?.elements?.findIndex($ => $?.positionType === position?.id?.curElem)
-        //                                     const updateCustom = (list, obj1, obj2) => {
-        //                                         list.forEach(listName => {
-        //                                             obj1[listName] = obj2[listName]
-        //                                         })
-        //                                     }
-        //                                     if (position?.id?.subElem === "grandparent") {
-        //                                         arr1[position?.id?.cur].style[style?.styleName] = arr2[position?.id?.cur].style[style?.styleName]
-        //                                         if (style?.styleName === "bgType") {
-        //                                             updateCustom(["backgroundColor", "backgroundImage"], arr1[position?.id?.cur]?.style, arr2[position?.id?.cur]?.style)
-        //                                         }
-        //                                     } else if (position?.id?.subElem === "parent" && positionIndex !== -1) {
-        //                                         arr1[position?.id?.cur].elements[positionIndex].style[style?.styleName] = arr2[position?.id?.cur].elements[positionIndex]?.style[style?.styleName]
-        //                                         if (style?.styleName === "bgType") {
-        //                                             updateCustom(["backgroundColor", "backgroundImage"], arr1[position?.id?.cur].elements[positionIndex]?.style, arr2[position?.id?.cur].elements[positionIndex]?.style)
-        //                                         }
-        //                                     } else {
-        //                                         if (positionIndex !== -1) {
-        //                                             arr1[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem].style[style?.styleName] = arr2[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem]?.style[style?.styleName]
-        //                                             if (style?.styleName === "bgType") {
-        //                                                 updateCustom(["backgroundColor", "backgroundImage"], arr1[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem]?.style, arr2[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem]?.style)
-        //                                             }
-
-        //                                         }
-        //                                     }
-
-        //                                     if (currPage === "button") {
-        //                                         newObj[`${mobileConditionRev}button`] = arr1
-        //                                         newObj[`${mobileCondition}button`] = arr2
-        //                                     } else {
-        //                                         const pageIndex = newObj[`${mobileConditionRev}pages`]?.findIndex($ => $.id === currPage)
-        //                                         newObj[`${mobileConditionRev}pages`][pageIndex].values = arr1
-        //                                         newObj[`${mobileCondition}pages`][pageIndex].values = arr2
-        //                                     }
-
-        //                                 }
-        //                             }
-
-
-        //                         }
-        //                     })
-        //                 }
-        //             })
-        //         }
-        //     })
-        // }
         const clonedFinalObj = JSON.parse(data)
         setFinalObj({ ...newObj })
         const delay = 200
@@ -3806,6 +3740,7 @@ const CustomizationParent = () => {
         })
 
         setDisableIpDrag([...draggedTypes])
+        localStorage.setItem("defaultTheme", JSON.stringify(finalObj))
         const draftIntervalTimer = 30000
         const draftInterval = setInterval(() => {
             if (themeLoc?.pathname?.includes("/merchant/SuperLeadz/new_customization/")) {
@@ -3849,7 +3784,7 @@ const CustomizationParent = () => {
         addEvents()
         getData()
         const colWise = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
-        const onLoadMobile = status ? "mobile_" : ""
+        // const onLoadMobile = status ? "mobile_" : ""
         getOffers()
         refreshOfferDraggable()
         getPlan()
@@ -3861,34 +3796,35 @@ const CustomizationParent = () => {
         if (themeLoc?.pathname?.includes("/merchant/SuperLeadz/new_customization/")) {
             saveDraft()
         }
-        if (currPage === "button") {
-            setcolWise(finalObj?.[`${onLoadMobile}button`])
-            // setBtnStyles({ ...finalObj?.backgroundStyles?.[`${onLoadMobile}button`] })
-        } else {
-            const pageIndex = finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)
-            setcolWise(finalObj?.[`${onLoadMobile}pages`][pageIndex]?.values)
-            // setCrossStyle({ ...finalObj?.crossButtons?.[`${onLoadMobile}main`] })
-        }
+        // if (currPage === "button") {
+        //     setcolWise(finalObj?.[`${onLoadMobile}button`])
+        //     // setBtnStyles({ ...finalObj?.backgroundStyles?.[`${onLoadMobile}button`] })
+        // } else {
+        //     const pageIndex = finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)
+        //     setcolWise(finalObj?.[`${onLoadMobile}pages`][pageIndex]?.values)
+        //     // setCrossStyle({ ...finalObj?.crossButtons?.[`${onLoadMobile}main`] })
+        // }
 
-        setBrandStyles({ ...finalObj?.[`${onLoadMobile}brandStyles`] })
+        setBrandStyles({ ...finalObj?.[`${mobileCondition}brandStyles`] })
 
         const positionIndex = colWise[indexes.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
         if (indexes.subElem === "grandparent") {
-            setValues(currPage === "button" ? { ...finalObj?.[`${onLoadMobile}button`][indexes.cur]?.style } : { ...finalObj?.[`${onLoadMobile}pages`][finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.style })
+            setValues(currPage === "button" ? { ...finalObj?.[`${mobileCondition}button`][indexes.cur]?.style } : { ...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.style })
         } else if (indexes.subElem === "parent") {
-            setValues(currPage === "button" ? { ...finalObj?.[`${onLoadMobile}button`][indexes.cur]?.elements[positionIndex]?.style } : { ...finalObj?.[`${onLoadMobile}pages`][finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.style })
+            setValues(currPage === "button" ? { ...finalObj?.[`${mobileCondition}button`][indexes.cur]?.elements[positionIndex]?.style } : { ...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.style })
         } else {
-            setValues(currPage === "button" ? { ...finalObj?.[`${onLoadMobile}button`][indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style } : { ...finalObj?.[`${onLoadMobile}pages`][finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style })
+            setValues(currPage === "button" ? { ...finalObj?.[`${mobileCondition}button`][indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style } : { ...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style })
         }
 
-        if (status) {
-            document.getElementById("phone").click()
-        } else if (defaultIsMobile.get('isMobile') === 'false') {
-            document.getElementById("desktop").click()
-        }
+        // if (status) {
+        //     document.getElementById("phone").click()
+        // } else if (defaultIsMobile.get('isMobile') === 'false') {
+        //     document.getElementById("desktop").click()
+        // }
         return () => {
             localStorage.removeItem("draftId")
             localStorage.removeItem("defaultThemeId")
+            localStorage.removeItem("defaultTheme")
         }
 
     }, [])
@@ -4250,7 +4186,7 @@ const CustomizationParent = () => {
                                                                         value={parseFloat(currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]["width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"])}
                                                                         className='w-100' onChange={e => {
                                                                             currPage === "button" ? updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}button`]: { ...finalObj?.backgroundStyles[`${mobileCondition}button`], [e.target.name]: `${e.target.value}${isMobile ? "%" : "px"}` } } }) : updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: { ...finalObj?.backgroundStyles[`${mobileCondition}main`], [e.target.name]: `${e.target.value}${isMobile ? "%" : "px"}` } } })
-                                                                        }} name={currPage === "button" ? "width" : isMobile ? "maxWidth" : "width"} min="25" max={isMobile ? "100" : "800"} />
+                                                                        }} name={currPage === "button" ? "width" : isMobile ? "maxWidth" : "width"} min="0" max={isMobile ? "100" : "800"} />
                                                                 </div>
                                                             </div>
                                                             <div className=''>
@@ -4258,7 +4194,7 @@ const CustomizationParent = () => {
                                                                 <div className="d-flex p-0 justify-content-between align-items-center gap-2">
                                                                     <input type='range' value={parseFloat(currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]?.minHeight : finalObj?.backgroundStyles[`${mobileCondition}main`]?.minHeight)} onChange={e => {
                                                                         currPage === "button" ? updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}button`]: { ...finalObj?.backgroundStyles[`${mobileCondition}button`], minHeight: `${e.target.value}px` } } }) : updatePresent({ ...finalObj, backgroundStyles: { ...finalObj.backgroundStyles, [`${mobileCondition}main`]: { ...finalObj?.backgroundStyles[`${mobileCondition}main`], minHeight: `${e.target.value}px` } } })
-                                                                    }} className='w-100' name="height" min="50" max="800" />
+                                                                    }} className='w-100' name="height" min="0" max="800" />
                                                                 </div>
                                                             </div>
                                                         </div>
