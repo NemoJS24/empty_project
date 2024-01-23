@@ -15,7 +15,7 @@ import { isObjEmpty } from '@utils'
 
 import Dashboard_Routes from './Dashboard'
 import Customers_Routes from './Customer'
-import Xircls_Frontend_Routes from './Xircls_Frontend'
+// import Xircls_Frontend_Routes from './Xircls_Frontend'
 import Reports_Routes from './Reports'
 import Auth_merhant_Routes from './Auth_merchant'
 import Outlet_Routes from './Outlet'
@@ -32,7 +32,7 @@ import Referral_Routes from './Referral'
 import FlashAccounts_Routes from './FlashAccounts'
 import { ProductReview_Routes } from './ProductReviews'
 import { OhMyCustomer_Routes } from './OhMyCustomer'
-// import Homes_Routes from './Home'
+import Homes_Routes from './Home'
 import HomeLayout from '../../@core/layouts/HomeLayout'
 import Accounts_Routes from './Accounts'
 import NewBlankLayout from '../../@core/layouts/NewBlankLayout'
@@ -89,8 +89,8 @@ const Routes = [
   ...SuperLeads_Routes,
   ...Referral_Routes,
   ...FlashAccounts_Routes,
-  ...Xircls_Frontend_Routes,
-  // ...Homes_Routes,
+  // ...Xircls_Frontend_Routes,
+  ...Homes_Routes,
   ...Profile_Routes,
   ...ProductReview_Routes,
   ...OhMyCustomer_Routes,

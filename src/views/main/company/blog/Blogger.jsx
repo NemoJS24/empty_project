@@ -51,9 +51,9 @@ const Blogger = () => {
       <Container fluid='sm'>
         <Row className="justify-content-center mt100 ">
           <Col xs='11' lg='12'>
-            <Row className='justify-content-md-between justify-content-center text-start mt-3'>
-              <Col xs='12' lg='4' className='d-flex flex-column align-items-center pt-0 pt-md-5'>
-                <div className='d-flex justify-content-center pt-0'>
+            <Row className='justify-content-md-between justify-content-center text-start '>
+              <Col xs='12' lg='4' className='d-flex flex-column align-items-center '>
+                <div className='d-flex justify-content-center '>
                   <img src={(authorsData.authorImg) ? authorsData.authorImg : defaultProfileImg} className="img-thumbnail rounded-circle" alt={authorsData.author}
                     style={{
                       maxHeight: '300px',

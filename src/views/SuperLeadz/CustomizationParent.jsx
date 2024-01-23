@@ -715,7 +715,27 @@ const CustomizationParent = () => {
             const newObj = { ...finalObj }
             const pageIndex = newObj?.pages?.findIndex($ => $.id === currPage)
             const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $.id === currPage)
-            const updatedColWise = newObj?.pages[pageIndex]?.values?.map((col, index) => {
+            const updatedColWise = currPage === "button" ? newObj?.button?.map((col, index) => {
+                if (index === id) {
+                    const updatedElements = col?.elements?.map((ele) => {
+                        if (ele?.positionType === position) {
+                            const dupArray = [...ele?.element]
+                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles?.[transferedData] }
+                            return {
+                                ...ele,
+                                element: [...dupArray]
+                            }
+                        }
+                        return ele
+                    })
+
+                    return {
+                        ...col,
+                        elements: updatedElements
+                    }
+                }
+                return col
+            }) : newObj?.pages[pageIndex]?.values?.map((col, index) => {
                 if (index === id) {
                     const updatedElements = col?.elements?.map((ele) => {
                         if (ele?.positionType === position) {
@@ -736,7 +756,27 @@ const CustomizationParent = () => {
                 }
                 return col
             })
-            const mobile_updatedColWise = newObj?.mobile_pages[mobile_pageIndex]?.values?.map((col, index) => {
+            const mobile_updatedColWise = currPage === "button" ? newObj?.mobile_button?.map((col, index) => {
+                if (index === id) {
+                    const updatedElements = col?.elements?.map((ele) => {
+                        if (ele?.positionType === position) {
+                            const dupArray = [...ele?.element]
+                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles?.[transferedData] }
+                            return {
+                                ...ele,
+                                element: [...dupArray]
+                            }
+                        }
+                        return ele
+                    })
+
+                    return {
+                        ...col,
+                        elements: updatedElements
+                    }
+                }
+                return col
+            }) : newObj?.mobile_pages[mobile_pageIndex]?.values?.map((col, index) => {
                 if (index === id) {
                     const updatedElements = col?.elements?.map((ele) => {
                         if (ele?.positionType === position) {
@@ -768,9 +808,9 @@ const CustomizationParent = () => {
             }
             setcolWise(isMobile ? mobile_updatedColWise : updatedColWise)
 
-            newObj.pages[pageIndex].values = [...updatedColWise]
-            newObj.mobile_pages[mobile_pageIndex].values = [...mobile_updatedColWise]
-            updatePresent({ ...newObj })
+            // newObj.pages[pageIndex].values = [...updatedColWise]
+            // newObj.mobile_pages[mobile_pageIndex].values = [...mobile_updatedColWise]
+            // updatePresent({ ...newObj })
         }
     }
 

@@ -1,3 +1,26 @@
+// media queries generator ----------------------------------------------------------------------------
+$breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    xxl: 1440px
+);
+
+// Generate media queries using a mixin
+@mixin media-query($breakpoint) {
+    @if map-has-key($breakpoints, $breakpoint) {
+        @media (max-width: #{map-get($breakpoints, $breakpoint)}) {
+            @content;
+        }
+    }
+
+    @else {
+        @error "Invalid breakpoint: #{$breakpoint}. Make sure it is defined in $breakpoints map.";
+    }
+}
+
 .customeHomeDiv {
 
 
@@ -15,6 +38,35 @@
 
     .nav_logo_img {
         width: 180px;
+        @include media-query(md)
+        {
+        width: 120px;
+
+        }
+    }
+
+    .nav-list-logo {
+        min-width: 50px;
+        min-height: 50px;
+        background: #F0F0F0;
+
+        @include media-query(md) {
+            min-width: 40px;
+            min-height: 40px;
+        }
+    }
+
+
+    .subtitle {
+        @include media-query(md) {
+            margin: 0px;
+
+        }
+
+    }
+
+    .subdesc {
+        margin: 0px;
     }
 
     .menuBtn {
@@ -52,10 +104,12 @@
 
     .subMenu {
         position: absolute;
-        width: 500px;
+        width: 450px;
+        margin-left: -30px;
         background-color: rgb(255, 255, 255);
         z-index: 10;
         transition: 0.8s ease-in-out;
+
 
         .hoverItems {
             &:hover {
@@ -101,8 +155,16 @@
         display: none;
     }
 
+    .subMenu {
+        @include media-query(md) {
+            // border-bottom: 1px solid rgba(61, 61, 61, 0.3) !important;
+
+        }
+    }
+
     .subMenu li {
         border-bottom: 1px solid rgba(61, 61, 61, 0.3);
+
     }
 
     .subMenu li:last-child {
@@ -133,10 +195,11 @@
             background-color: rgb(255, 255, 255);
             display: block;
             position: absolute;
-            margin-left: 50% !important;
-            transform: translateX(-50%);
-            transition: 0.5s linear;
+            // transition: .5s linear;
+            // transition-delay: .2s;
             z-index: 10;
+            z-index: 9999;
+            border-bottom: solid 1px #c1c1c1;
         }
 
         .toggleMenuDown {
@@ -144,7 +207,7 @@
         }
 
         .toggleMenuUp {
-            top: -800px;
+            top: -1500px;
         }
 
         .toggleMenu ul {
@@ -181,9 +244,6 @@
             width: 350px;
         }
 
-        .nav_logo_img {
-            width: 120px;
-        }
     }
 
 
@@ -211,15 +271,17 @@
     .Container-subNav {
 
         @media (min-width: 0px) {
-            width: 98%;
+            width: 100%;
         }
 
         @media (min-width: 576px) {
-            width: 573px;
+            width: 100%;
         }
 
         @media (min-width: 768px) {
-            width: 765px;
+            // width: 768px;
+            width: 100%;
+
         }
 
         @media (min-width: 992px) {

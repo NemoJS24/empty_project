@@ -144,8 +144,7 @@ const BlogDetails = ({  }) => {
             </Col>
             <Col xs='11' xxl='12' className='text-secondary text-start mt-lg-5 mt-2 lh-lg blog-content-container'>
               {BlogPost(blogPost.data)}
-              <Row className='justify-content-between align-items-start mt-5' >
-                <Col xs='12' md=''>
+              <div className='t mt-5' >
                   <h3 className='fs-4 '>Share This Post:
                     <div className='d-inline-block' >
                       <a href="http://twitter.com/share?text=XIRCLS&url=www.xircls.com" target="_blank" style={{ color: 'inherit' }}>
@@ -163,15 +162,8 @@ const BlogDetails = ({  }) => {
                       </a>
                     </div>
                   </h3>
-                </Col>
-                <Col xs='12' md='' className='justify-content-md-end justify-content-start d-flex mt-3 mt-md-0'>
-                  <h5>
-                    <a href='https://www.xircls.com' className='link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover'>
-                      Disclaimer
-                    </a>
-                  </h5>
-                </Col>
-              </Row>
+              
+              </div>
             </Col>
           </Row>
 

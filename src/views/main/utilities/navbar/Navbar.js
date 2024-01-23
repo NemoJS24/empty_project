@@ -6,7 +6,7 @@ import { PiCodeBlockLight } from "react-icons/pi"
 import { TfiTarget } from "react-icons/tfi"
 import { TiFlashOutline } from "react-icons/ti"
 import { VscTarget } from "react-icons/vsc"
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import "../../mainCustome.scss"
 import logo from "../logo.png"
 import "./navbar.scss"
@@ -36,9 +36,16 @@ export const productList = [
     desc: "Customer Acquisition",
     logo: <TfiTarget size={20} color='' className='text-dark' />,
     link: "/products/sniper/customer-acquisition/"
+  },
+  {
+    title: "Flash Accounts",
+    desc: "dummy content",
+    logo: <TfiTarget size={20} color='' className='text-dark' />,
+    link: "/products/flash-accounts/"
   }
 
 ]
+
 export const aboutList = [
   {
     title: "Why XIRCLS?",
@@ -64,28 +71,33 @@ export const aboutList = [
 ]
 
 const Navbar = ({ position }) => {
+  const { pathname } = useLocation()
+  const [ShowProducts, setShowProducts] = useState(false)
+  const [ShowCompany, setShowCompany] = useState(false)
 
+  const [toggleMenu, setToggleMenu] = useState(true)
 
   useEffect(() => {
-    window.addEventListener('scroll', async () => {
+    window.addEventListener('scroll', () => {
       const Yscroll = window.scrollY
-      const first_navbar = await document.getElementById("first_navbar")
-      try {
+      const first_navbar = document.getElementById("first_navbar")
+      if (first_navbar) {
         if (Yscroll > 50) {
           first_navbar.style.boxShadow = " 0 0px 8px rgba(0,0,0,0.16)"
         } else {
           first_navbar.style.boxShadow = " none"
+
         }
-      } catch (error) {
-        console.log(error)
       }
     })
-
   }, [])
+
+  useEffect(() => {
+    setToggleMenu(true)
+  }, [pathname])
 
 
   const width = window.innerWidth
-  const [toggleMenu, setToggleMenu] = useState(true)
   const positionCal = () => {
     if (width > 1000) {
       return position
@@ -97,8 +109,6 @@ const Navbar = ({ position }) => {
   const isFixed = positionCal()
   // console.log(isFixed)
 
-  const [ShowProducts, setShowProducts] = useState(false)
-  const [ShowCompany, setShowCompany] = useState(false)
 
   function mouseEnter(name) {
     if (width > 1000) {
@@ -130,6 +140,7 @@ const Navbar = ({ position }) => {
     if (name === "company") {
       setShowCompany(!ShowCompany)
       setShowProducts(false)
+
     }
   }
 
@@ -141,27 +152,24 @@ const Navbar = ({ position }) => {
             <img src={logo} alt="logo" className='mx-2 nav_logo_img' />
           </Link>
 
-          <div className={`toggleMenu py-2 ${toggleMenu ? "toggleMenuUp" : "toggleMenuDown"}`}>
+          <div className={`toggleMenu py-2 ${toggleMenu ? "toggleMenuUp" : "toggleMenuDown"}`} >
             <ul className=' list-unstyled d-inline-flex gap-5 pt-1'>
 
               <li className='productLi ItemsList' onClick={() => mouseClick("products")} onMouseEnter={() => mouseEnter("products")} onMouseLeave={() => mouseLeave("products")}>
-                <h4 className='fs-4 text-dark'  >Products <IoIosArrowDown className={ShowProducts ? "rotate-180" : ""} /></h4>
-                <div className={`subMenu ${ShowProducts ? "productSubMenuDown" : "productSubMenuUp"} p-1 border border-1 rounded-3 px-md-3`}>
-                  {/* <div className={`subMenu ItemsList-cont  p-1 border border-1 rounded-3 px-md-3`}> */}
+                <h4 className='navTitle fs-4 text-dark'  >Products <IoIosArrowDown color="#9e9e9eff" className={ShowProducts ? "rotate-180" : ""} /></h4>
+                <div className={`subMenu ${ShowProducts ? "productSubMenuDown" : "productSubMenuUp"} p-1 ps-3 pt-0 border border-1 rounded-3 px-md-3`}>
                   <ul className=' list-unstyled '>
                     {
                       productList.map((ele, index) => (
-                        <li key={index} i className='mt-1 hoverItems' style={{ padding: "5px 5px" }}>
+                        <li key={index} className='mt-1 hoverItems' style={{ padding: "5px 5px" }} >
                           <Link to={ele.link}>
-                            <div className=' d-flex flex-md-row flex-column align-items-center gap-2' style={{ marginBottom: "12px" }}>
-                              {/* <img src={ele.img} alt="XIRCLSLogo" width={50} /> */}
-                              <div className='nav-list-logo d-flex align-items-center justify-content-center  rounded-circle' style={{ minWidth: "50px", minHeight: "50px", background: "#F0F0F0" }}>
-                                {/* <BsCodeSquare size={25} color='' className='text-dark'/> */}
+                            <div className=' d-flex   align-items-center gap-2' style={{ marginBottom: "5px" }}>
+                              <div className='nav-list-logo d-flex align-items-center justify-content-center  rounded-circle' >
                                 {ele.logo}
                               </div>
-                              <div className='d-flex flex-column justify-content-center w-100 '>
-                                <h4 className='text-capitalize text-black fw-bolder' >{ele.title}</h4>
-                                <p className='m-0 text-dark fw-bold fs-6 ' style={{ marginBottom: "5px", marginTop: "5px" }}>For {ele.desc}</p>
+                              <div className='d-flex flex-column justify-content-center accordion text-start w-100 '>
+                                <h4 className='subtitle text-capitalize text-black fw-bolder  ' >{ele.title}</h4>
+                                <p className='subdesc text-dark fw-bold fs-6 ' > {ele.desc}</p>
                               </div>
                             </div>
                           </Link>
@@ -171,28 +179,25 @@ const Navbar = ({ position }) => {
                   </ul>
                 </div>
               </li>
-              <Link to='/partners' className='fs-4 text-dark text-center'> <li ><p>Partners</p></li></Link>
+              <Link to='/partners' className='navTitle fs-4 text-dark text-center' > <li ><p>Partners</p></li></Link>
               {/* <Link to='/developers' className='fs-4 text-dark text-center'> <li ><p>Developers</p></li></Link> */}
-              <Link to='/blog' className='fs-4 text-dark text-center'> <li ><p>Blog</p></li></Link>
+              <Link to='/blog' className='navTitle fs-4 text-dark text-center' > <li ><p>Blog</p></li></Link>
 
               <li className='aboutLi ItemsList' onClick={() => mouseClick("company")} onMouseEnter={() => mouseEnter("company")} onMouseLeave={() => mouseLeave("company")}>
-                <p className='text-dark fs-4'>Company <IoIosArrowDown className={ShowCompany ? "rotate-180" : ""} /></p>
-                <div className={`subMenu ${ShowCompany ? "aboutSubMenuDown" : "aboutSubMenuUp"} p-1 border border-1 rounded-3 px-md-3`}>
-                  {/* <div className={`subMenu ItemsList-cont  p-1 border border-1 rounded-3 px-md-3`}> */}
+                <p className='navTitle text-dark fs-4 '>Company <IoIosArrowDown color="#9e9e9eff" className={ShowCompany ? "rotate-180" : ""} /></p>
+                <div className={`subMenu  ${ShowCompany ? "aboutSubMenuDown" : "aboutSubMenuUp"} p-1 ps-3 pt-0 border border-1 rounded-3 px-md-3`}>
                   <ul className=' list-unstyled'>
                     {
                       aboutList.map((ele, index) => (
-                        <li key={index} i className='mt-1 hoverItems' style={{ padding: "5px 5px" }}>
+                        <li key={index} className='mt-1 hoverItems' style={{ padding: "5px 5px" }} >
                           <Link to={ele.link}>
-                            <div className=' d-flex flex-md-row flex-column align-items-center gap-2' style={{ marginBottom: "5px" }}>
-                              {/* <img src={ele.img} alt="XIRCLSLogo" width={50} /> */}
-                              <div className='nav-list-logo d-flex align-items-center justify-content-center  rounded-circle' style={{ minWidth: "50px", minHeight: "50px", background: "#F0F0F0" }}>
-                                {/* <BsCodeSquare size={25} color='' className='text-dark'/> */}
+                            <div className=' d-flex   align-items-center gap-2' style={{ marginBottom: "5px" }}>
+                              <div className='nav-list-logo d-flex align-items-center justify-content-center  rounded-circle' >
                                 {ele.logo}
                               </div>
-                              <div className='d-flex flex-column justify-content-center w-100 '>
-                                <h4 className='text-capitalize text-black fw-bolder' >{ele.title}</h4>
-                                <p className='m-0 text-dark fw-bold fs-6 ' style={{ marginBottom: "5px", marginTop: "5px" }}> {ele.desc}</p>
+                              <div className='d-flex flex-column justify-content-center accordion text-start w-100 '>
+                                <h4 className='subtitle text-capitalize text-black fw-bolder  ' >{ele.title}</h4>
+                                <p className='subdesc text-dark fw-bold fs-6 ' > {ele.desc}</p>
                               </div>
                             </div>
                           </Link>
@@ -205,7 +210,7 @@ const Navbar = ({ position }) => {
 
             </ul>
             <div className='navBtn gap-1'>
-              <Link to='/merchant/signup' className=' btn  btn-lg main-btn-blue-gra  fs-3 fw-lig'>Signup for Free</Link>
+              <Link  to='/merchant/signup' className=' btn  btn-lg main-btn-blue-gra  fs-3 fw-lig'>Signup for Free</Link>
 
               <Link to='/merchant/login' className=' btn btn-lg main-btn-dark fs-3 fw-lig' >Login</Link>
             </div>
