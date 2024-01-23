@@ -533,6 +533,7 @@ const RenderPreview = (props) => {
                                                                                                     setCurrPosition({ ...currPosition, selectedType: "text" })
                                                                                                     setIndexes({ cur: key, curElem: curElem.positionType, subElem: j })
                                                                                                     setValues(subElem?.style)
+                                                                                                    setSelectedOffer({})
                                                                                                 }}
                                                                                                 onDrop={e => {
                                                                                                     e.stopPropagation()
@@ -706,6 +707,7 @@ const RenderPreview = (props) => {
                                                                                                         setCurrPosition({ ...currPosition, selectedType: "image" })
                                                                                                         setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                         setValues(subElem?.style)
+                                                                                                        setSelectedOffer({})
                                                                                                     }}
                                                                                                     onDrop={e => {
                                                                                                         e.stopPropagation()
@@ -826,6 +828,7 @@ const RenderPreview = (props) => {
                                                                                                     setCurrPosition({ ...currPosition, selectedType: "button" })
                                                                                                     setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                     setValues(subElem?.style)
+                                                                                                    setSelectedOffer({})
                                                                                                 }}
                                                                                                 onDrop={e => {
                                                                                                     e.stopPropagation()
@@ -965,6 +968,7 @@ const RenderPreview = (props) => {
                                                                                                     setCurrPosition({ ...currPosition, selectedType: "input" })
                                                                                                     setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                     setValues(subElem.style)
+                                                                                                    setSelectedOffer({})
                                                                                                 }}
                                                                                                 onDrop={e => {
                                                                                                     e.stopPropagation()
@@ -1110,6 +1114,11 @@ const RenderPreview = (props) => {
                                                                                                     setCurrPosition({ ...currPosition, selectedType: "offer" })
                                                                                                     setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                     setValues(subElem?.style)
+                                                                                                    if (!isEqual(indexes, { cur: key, curElem: curElem?.positionType, subElem: j })) {
+                                                                                                        setSelectedOffer({})
+                                                                                                    } else if (finalObj?.selectedOffers.length > 0) {
+                                                                                                        setSelectedOffer(finalObj?.selectedOffers[0])
+                                                                                                    }
                                                                                                 }}
                                                                                                 onDrop={e => {
                                                                                                     e.stopPropagation()
@@ -1190,7 +1199,17 @@ const RenderPreview = (props) => {
                                                                                                 {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
                                                                                                 {gotOffers ? finalObj?.selectedOffers?.map((ele, key) => {
                                                                                                     return (
-                                                                                                        <div title="Click on offer to edit more settings" style={{ position: "relative" }} onClick={() => {
+                                                                                                        <div title="Click on offer to edit more settings" style={{ position: "relative" }} 
+                                                                                                        // onClick={(e) => {
+                                                                                                        //     e.stopPropagation()
+                                                                                                        //     setSelectedOffer(ele)
+                                                                                                        // }}
+                                                                                                        onClick={(e) => {
+                                                                                                            e.stopPropagation()
+                                                                                                            makActive(e, cur, curElem, curElem?.positionType, key, i, j)
+                                                                                                            setCurrPosition({ ...currPosition, selectedType: "offer" })
+                                                                                                            setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                            setValues(subElem?.style)
                                                                                                             setSelectedOffer(ele)
                                                                                                         }}>
                                                                                                             {isEqual(ele, selectedOffer) && (
@@ -1244,6 +1263,7 @@ const RenderPreview = (props) => {
                                                                                                     setCurrPosition({ ...currPosition, selectedType: "tnc" })
                                                                                                     setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                     setValues(subElem?.style)
+                                                                                                    setSelectedOffer({})
                                                                                                 }}
                                                                                                 onDrop={e => {
                                                                                                     e.stopPropagation()
