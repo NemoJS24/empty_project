@@ -43,10 +43,10 @@ const dragData = [
   {
     title: "Build like a developer.",
     desc: [
-      "Create pop-ups from scratch with layout container elements.",
-      "Build mobile-responsive pop-ups.",
-      "Create full-screen overlays.",
-      "Embed into your website effortlessly."
+      "Create pop-ups from scratch with layout container elements",
+      "Build mobile-responsive pop-ups",
+      "Create full-screen overlays",
+      "Embed into your website effortlessly"
     ],
     img: dev
   },
@@ -54,7 +54,7 @@ const dragData = [
     title: "Create like a designer.",
     desc: [
       "Customize colour, background, font, spacing, borders & more!",
-      "See a live preview of pop-ups on your website."
+      "See a live preview of pop-ups on your website"
     ],
     img: design
   },

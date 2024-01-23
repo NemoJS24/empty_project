@@ -128,141 +128,141 @@ export const superFaqData = [
     {
         q: "What is a Hot Lead?",
         a: "Hot Lead is a lead who clicks on the Redeem button of a SuperLeadz pop-up with the intent to redeem an offer but ultimately abandons the purchase."
-    },
-
-    {
-        q: "What kind of offers can I create?",
-        a: "Lead/Live Activity is a section on your SuperLeadz dashboard that displays real-time information about visitors currently active on your website, including the pages they are currently viewing or have recently navigated to."
-    },
-
-    {
-        q: "What types of offers can I create?",
-        a: (
-            <div>
-                <p>
-                     Types of offers can I create?</p>
-                     <p>  There are 3 types of offers you can create on SuperLeadz:</p>
-                     <p>a. Discount on Total Order Value: A discount applied to the total purchase.</p>
-                     <p>b. Discount on Select Products: A discount applied to specific items or categories
-                    within a product catalog. Instead of offering a discount across the entire range of
-                    products, this type of promotion targets particular items, groups of items, or
-                    product categories.</p>
-                    <p> c. Buy X, Get Y: Customers receive a discount on the second or subsequent
-                    products when they purchase the first product in a specified quantity or reach a
-                    certain total purchase amount.</p>
-                
-            </div>
-        )
-    },
-    {
-        q: "What kinds of discount values can I create?",
-        a: (
-            <div>
-                <p>
-                    You can create two types of discount values:</p>
-                    <p> a. Percentage Off - A percentage amount deducted from the original price of a
-                    product or the total purchase amount.</p>
-                    <p> b. Flat Amount off - A specific monetary value deducted from the original price of a
-                    product or the total purchase amount.</p>
-                
-            </div>
-        )
-    },
-    {
-        q: " What type of cart conditions can I apply to an offer?",
-        a: (
-            <div>
-                <p>
-                    Cart conditions are criteria or requirements that must be met in a shopping cart for an
-                    offer to be applied. The types of cart conditions you can apply to an offer on SuperLeadz
-                    are:</p>
-                    <p> a. Minimum Purchase Amount: Requires that customers spend a certain minimum amount
-                    to be eligible for the offer</p>
-                    <p> b. Cart Quantity: Set conditions based on the number of items or quantity of products in the
-                    shopping cart.</p>
-                
-            </div>
-        )
-    },
-    {
-        q: "What does Maximum Use Count mean?",
-        a: (
-            <div>
-                <p>
-                    In offer creation, "Maximum Use Count" refers to the maximum number of times a
-                    particular discount code or offer can be used. This feature helps businesses control the
-                    distribution and utilization of discounts based on a predetermined usage limit.
-                </p>
-                <p>
-                    In SuperLeadz, discount use can be limited to one time per customer or a limit can be
-                    set on the total usage of the discount, restricting the number of times customers can
-                    apply the discount code to their purchases. Once the maximum use count is reached,
-                    the discount code becomes invalid or inactive.
-                </p>
-            </div>
-        )
-    },
-    {
-        q: "How do I change the Offer Design?",
-        a:
-            (
-                <div>
-                    <p>
-                        The offer design can be modified after adding that particular offer to a Campaign</p>
-                        <p>Thereafter, you can customize the design in the Offer section of the Campaign Settings.
-                    </p>
-                </div>
-            )
-    },
-    {
-        q: "What is a SuperLeadz campaign?",
-        a: "A SuperLeadz campaign involves directing a pop-up template toward specific visitor segments such as first-time shoppers, returning visitors, and registered users. The objective is to incentivize purchases through enticing offers in exchange for their contact information, whether verified or not. The pop-up templates are customizable by design, visitor type and behaviour."
-    },
-    {
-        q: "What is a Quick Setup?",
-        a: " Quick Setup in the Theme section enables quick customization of the main elements of the pop-up to save time. Alternately, you can use the Brand Theme Preset option to apply your company’s branding to every pop-up campaign you create."
-    },
-    {
-        q: "What is a Brand Theme Preset?",
-        a: "A Brand Theme preset refers to a predefined set of design elements, including colors, fonts, logo, and other visual components, that collectively represent the distinctive and consistent visual identity of your brand. With a Brand Theme preset, you can give all your campaigns a unified look with a single click."
-    },
-    {
-        q: "How do I see a live preview of the pop-up template?",
-        a: " To preview how the pop-up will appear on your website, click the Preview button located at the top right of the Create/Edit Campaign page"
-    },
-
-    {
-        q: "Can I try out SuperLeadz for free?",
-        a: " Yes, you can try out all features of SuperLeadz at no cost, for up to 1,000 pop-up views per month."
-    },
-    {
-        q: "How does the pricing work?",
-        a: " You can try out SuperLeadz for free, with a limit of up to 1,000 pop-up views per month. Once you surpass this limit, choose a plan based on the monthly average of pop-up views you anticipate on your website."
-    },
-    {
-        q: "What happens if I surpass the allocated number of pop-up views in my current plan?",
-        a: " If you exceed the allocated number of pop-up views within your current plan, your SuperLeadz campaign will temporarily stop and resume in the next billing cycle. To resume the campaign immediately, upgrade to a higher plan."
-    },
-    {
-        q: "What is the billing date?",
-        a: " Billing will occur monthly, and the billing date will be the same as the date of your first purchase."
-    },
-    {
-        q: "Can I cancel at any time?",
-        a: (
-            <div>
-                <p>
-                    We prioritize your satisfaction above all else. Should you encounter any challenges or
-                    have concerns, please reach out to <Link to="#" className='text-primary'>support@xircls.com</Link>  or call/WhatsApp +91 9969 333
-                    666. We will do our best to assist you.
-                </p>
-                <p>To cancel your plan subscription, navigate to the Billing section of your SuperLeadz
-                    dashboard.</p>
-                <p>Please note: After you cancel your subscription, your account will automatically revert to the
-                    free plan, which has no expiry date, allowing you to use it indefinitely.</p>
-            </div>
-        )
     }
+
+    // {
+    //     q: "What kind of offers can I create?",
+    //     a: "Lead/Live Activity is a section on your SuperLeadz dashboard that displays real-time information about visitors currently active on your website, including the pages they are currently viewing or have recently navigated to."
+    // },
+
+    // {
+    //     q: "What types of offers can I create?",
+    //     a: (
+    //         <div>
+    //             <p>
+    //                  Types of offers can I create?</p>
+    //                  <p>  There are 3 types of offers you can create on SuperLeadz:</p>
+    //                  <p>a. Discount on Total Order Value: A discount applied to the total purchase.</p>
+    //                  <p>b. Discount on Select Products: A discount applied to specific items or categories
+    //                 within a product catalog. Instead of offering a discount across the entire range of
+    //                 products, this type of promotion targets particular items, groups of items, or
+    //                 product categories.</p>
+    //                 <p> c. Buy X, Get Y: Customers receive a discount on the second or subsequent
+    //                 products when they purchase the first product in a specified quantity or reach a
+    //                 certain total purchase amount.</p>
+                
+    //         </div>
+    //     )
+    // },
+    // {
+    //     q: "What kinds of discount values can I create?",
+    //     a: (
+    //         <div>
+    //             <p>
+    //                 You can create two types of discount values:</p>
+    //                 <p> a. Percentage Off - A percentage amount deducted from the original price of a
+    //                 product or the total purchase amount.</p>
+    //                 <p> b. Flat Amount off - A specific monetary value deducted from the original price of a
+    //                 product or the total purchase amount.</p>
+                
+    //         </div>
+    //     )
+    // },
+    // {
+    //     q: " What type of cart conditions can I apply to an offer?",
+    //     a: (
+    //         <div>
+    //             <p>
+    //                 Cart conditions are criteria or requirements that must be met in a shopping cart for an
+    //                 offer to be applied. The types of cart conditions you can apply to an offer on SuperLeadz
+    //                 are:</p>
+    //                 <p> a. Minimum Purchase Amount: Requires that customers spend a certain minimum amount
+    //                 to be eligible for the offer</p>
+    //                 <p> b. Cart Quantity: Set conditions based on the number of items or quantity of products in the
+    //                 shopping cart.</p>
+                
+    //         </div>
+    //     )
+    // },
+    // {
+    //     q: "What does Maximum Use Count mean?",
+    //     a: (
+    //         <div>
+    //             <p>
+    //                 In offer creation, "Maximum Use Count" refers to the maximum number of times a
+    //                 particular discount code or offer can be used. This feature helps businesses control the
+    //                 distribution and utilization of discounts based on a predetermined usage limit.
+    //             </p>
+    //             <p>
+    //                 In SuperLeadz, discount use can be limited to one time per customer or a limit can be
+    //                 set on the total usage of the discount, restricting the number of times customers can
+    //                 apply the discount code to their purchases. Once the maximum use count is reached,
+    //                 the discount code becomes invalid or inactive.
+    //             </p>
+    //         </div>
+    //     )
+    // },
+    // {
+    //     q: "How do I change the Offer Design?",
+    //     a:
+    //         (
+    //             <div>
+    //                 <p>
+    //                     The offer design can be modified after adding that particular offer to a Campaign</p>
+    //                     <p>Thereafter, you can customize the design in the Offer section of the Campaign Settings.
+    //                 </p>
+    //             </div>
+    //         )
+    // },
+    // {
+    //     q: "What is a SuperLeadz campaign?",
+    //     a: "A SuperLeadz campaign involves directing a pop-up template toward specific visitor segments such as first-time shoppers, returning visitors, and registered users. The objective is to incentivize purchases through enticing offers in exchange for their contact information, whether verified or not. The pop-up templates are customizable by design, visitor type and behaviour."
+    // },
+    // {
+    //     q: "What is a Quick Setup?",
+    //     a: " Quick Setup in the Theme section enables quick customization of the main elements of the pop-up to save time. Alternately, you can use the Brand Theme Preset option to apply your company’s branding to every pop-up campaign you create."
+    // },
+    // {
+    //     q: "What is a Brand Theme Preset?",
+    //     a: "A Brand Theme preset refers to a predefined set of design elements, including colors, fonts, logo, and other visual components, that collectively represent the distinctive and consistent visual identity of your brand. With a Brand Theme preset, you can give all your campaigns a unified look with a single click."
+    // },
+    // {
+    //     q: "How do I see a live preview of the pop-up template?",
+    //     a: " To preview how the pop-up will appear on your website, click the Preview button located at the top right of the Create/Edit Campaign page"
+    // },
+
+    // {
+    //     q: "Can I try out SuperLeadz for free?",
+    //     a: " Yes, you can try out all features of SuperLeadz at no cost, for up to 1,000 pop-up views per month."
+    // },
+    // {
+    //     q: "How does the pricing work?",
+    //     a: " You can try out SuperLeadz for free, with a limit of up to 1,000 pop-up views per month. Once you surpass this limit, choose a plan based on the monthly average of pop-up views you anticipate on your website."
+    // },
+    // {
+    //     q: "What happens if I surpass the allocated number of pop-up views in my current plan?",
+    //     a: " If you exceed the allocated number of pop-up views within your current plan, your SuperLeadz campaign will temporarily stop and resume in the next billing cycle. To resume the campaign immediately, upgrade to a higher plan."
+    // },
+    // {
+    //     q: "What is the billing date?",
+    //     a: " Billing will occur monthly, and the billing date will be the same as the date of your first purchase."
+    // },
+    // {
+    //     q: "Can I cancel at any time?",
+    //     a: (
+    //         <div>
+    //             <p>
+    //                 We prioritize your satisfaction above all else. Should you encounter any challenges or
+    //                 have concerns, please reach out to <Link to="#" className='text-primary'>support@xircls.com</Link>  or call/WhatsApp +91 9969 333
+    //                 666. We will do our best to assist you.
+    //             </p>
+    //             <p>To cancel your plan subscription, navigate to the Billing section of your SuperLeadz
+    //                 dashboard.</p>
+    //             <p>Please note: After you cancel your subscription, your account will automatically revert to the
+    //                 free plan, which has no expiry date, allowing you to use it indefinitely.</p>
+    //         </div>
+    //     )
+    // }
 ]
 export default function SuperLeadz() {
 
