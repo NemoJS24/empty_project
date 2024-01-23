@@ -274,7 +274,7 @@ const CustomizationParent = () => {
     }
 
     const handleFilter = e => {
-        const value = e.target.value
+        const { value } = e.target
         let updatedData = []
         setSearchValue(value)
 
