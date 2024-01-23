@@ -981,11 +981,11 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
             </Col>
             <Col md={12} className="mt-2">
               <label htmlFor="basicDetails-last-name">
-                Company PAN Card Number
+                Company PAN
               </label>
               <input
                 required
-                placeholder="PNA Card No."
+                placeholder="PAN"
                 type="text"
                 id="basicDetails-panNumber"
                 name="par_company_pancard"
