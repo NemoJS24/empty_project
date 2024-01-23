@@ -258,7 +258,7 @@ export default function Partner() {
                                 <Col lg="6" md="6" className=''>
                                     <Card className=' border-none  shadow-none  d-flex flex-column p-1 justify-content-start align-items-start' style={{ background: "#000", border: 'none' }}>
                                         <h4 className=' fs-2  fw-lig w-75 text-light' >Performing at the highest degree possible, these are the common traits reps accepted to XIRCLS have in common.</h4>
-                                        <Link to="/merchant/signup" className=' btn  btn-lg main-btn-white fw-bolder  mt-3 px-3 py-1'> Apply Now</Link>
+                                        <Link to="/contact-us" className=' btn  btn-lg main-btn-white fw-bolder  mt-3 px-3 py-1'> Apply Now</Link>
                                         <div className='ms-auto arrow' >
                                             <img className='d-none d-lg-block ' src="https://uploads-ssl.webflow.com/5fac11c3554384e2baf6481c/61fa78aa61452b33bdbd7c9c_Arrow_01.svg" alt="" width={220} style={{ position: "relative", top: '-30px', left: "40px" }} />
                                         </div>
@@ -301,7 +301,7 @@ export default function Partner() {
                             }
                         </Row>
                         <div className='text-center mt-1 mt-sm-0'>
-                            <Link to="/merchant/signup" className=' btn  btn-lg main-btn-dark fs-3 mt-3 '> Start for Free</Link>
+                            <Link to="/contact-us" className=' btn  btn-lg main-btn-dark fs-3 mt-3 '> Start for Free</Link>
                         </div>
                     </Col>
                 </Row>
@@ -329,12 +329,12 @@ export default function Partner() {
                                 <Row className=''>
                                     <Col className='mb-2' xs="10" md="7" xl="6">
                                         <div className='d-flex gap-2 flex-wrap'>
-                                            <Link to='/merchant/signup' className='btn main-btn-black btn-lg fs-3 px-3 py-1 '>Get Started</Link>
+                                            <Link to='/contact-us' className='btn main-btn-black btn-lg fs-3 px-3 py-1 '>Get Started</Link>
                                             <Link to='/contact-us' className='btn main-btn-dark btn-lg  fs-3 px-3 py-1' >Speak with our team</Link>
                                         </div>
                                     </Col>
                                     <Col xs="12" md="4  " xl="6" className='text-end'>
-                                        <Link to='/merchant/signup' className=' text-black fw-bold fs-3' style={{ boxShadow: 'none' }}>Sign up as a XIRCLS Partner<BiRightArrowAlt /></Link>
+                                        <Link to='/contact-us' className=' text-black fw-bold fs-3' style={{ boxShadow: 'none' }}>Sign up as a XIRCLS Partner<BiRightArrowAlt /></Link>
                                         
                                     </Col>
 

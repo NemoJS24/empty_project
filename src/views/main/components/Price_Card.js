@@ -37,7 +37,7 @@ export default function Price_Card({ data, isFeature }) {
                     </div>
                 </div>
 
-                <button className='mt-3 w-100  btn border-black fs-3  main-btn-dark fw-lig ' style={{ padding: "6px" }}>{data.button}</button>
+                <a className='mt-3 w-100  btn border-black fs-3  main-btn-dark fw-lig ' style={{ padding: "6px" }} target='_blank' href='https://apps.shopify.com/superleadz-by-xircls'>{data.button}</a>
             </CardBody>
         </Card>
     )

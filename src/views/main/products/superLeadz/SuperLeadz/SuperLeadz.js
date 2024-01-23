@@ -18,9 +18,9 @@ import { TbArrowGuide } from "react-icons/tb"
 import { IoShieldCheckmarkOutline } from 'react-icons/io5'
 import CardLeft from '../../../components/CardLeft'
 // import gif1 from './images/Horizontal.gif'
-import arrow from './images/arrow.png'
+// import arrow from './images/arrow.png'
 import giff1 from './images/gif1.gif'
-import { X } from 'react-feather'
+import { Check, X } from 'react-feather'
 
 // faq data
 export const superFaqData = [
@@ -354,7 +354,7 @@ export default function SuperLeadz() {
                                         <h1 className=' text-black  mt-1 text-start'  >Strengthen your sales cycle with high-intent, verified leads.<br />
                                             Reduce marketing wastage. Increase Revenue.</h1>
                                         <div className=' d-flex  justify-content-start align-items-center gap-1  mt-2' >
-                                            <h3 className=' btn  main-btn-blue fs-3  '>Install on Shopify</h3>
+                                            <a target='_blank' href='https://apps.shopify.com/superleadz-by-xircls' className='btn  main-btn-blue fs-3'>Install on Shopify</a>
                                             <Link to="/contact-us" className="fs-3 text-primary"> Schedule a demo<BsArrowRight /></Link>
                                         </div>
                                     </div>
@@ -422,7 +422,8 @@ export default function SuperLeadz() {
                                 <p className='fs-1 fw-lig'>Self-verification</p>
                                 <p className='fs-1 fw-lig'>=</p>
                                 <div className='d-flex  justify-content-center align-items-center '>
-                                    <img src={arrow} alt="" style={{ transform: "rotate(-90deg)", height: "50px" }} />
+                                    {/* <img src={arrow} alt="" style={{ transform: "rotate(-90deg)", height: "50px" }} /> */}
+                                    <Check size={'50px'} />
                                     <p className='display-1 '>100 %</p>
                                 </div>
                                 <p className='fs-1 fw-lig'>verified, real high-intent leads</p>
