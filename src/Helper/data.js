@@ -1573,758 +1573,758 @@ export const faqs = {
     ],
     Integration: [
     {
-        question:
-        "1. Can I customize the button and pop-up box that appears on my website?",
-        answer:
-        "Absolutely. You can customize the button type, position and appearance of the pop-up box via the plugin settings."
+      question:
+      "1. Can I customize the button and pop-up box that appears on my website?",
+      answer:
+      "Absolutely. You can customize the button type, position and appearance of the pop-up box via the plugin settings."
     },
     {
-        question:
-        "2. I don’t have a technical team to do the website integration for me. Can you help?",
-        answer: "Yes, XIRCLS will remotely handle the integration for you."
+      question:
+      "2. I don’t have a technical team to do the website integration for me. Can you help?",
+      answer: "Yes, XIRCLS will remotely handle the integration for you."
     },
     {
-        question:
-        "3. I want to try this out but don’t want to do any integration with my website/POS.",
-        answer:
-        "No problem! You can always manually issue offers to your customers. Simply login to the  the XIRCLS dashboard on your computer or mobile phone, enter the customer’s email address/mobile number and amount spent and issue rewards instantly - anywhere you are!"
+      question:
+      "3. I want to try this out but don’t want to do any integration with my website/POS.",
+      answer:
+      "No problem! You can always manually issue offers to your customers. Simply login to the  the XIRCLS dashboard on your computer or mobile phone, enter the customer’s email address/mobile number and amount spent and issue rewards instantly - anywhere you are!"
     },
     {
-        question:
-        "4. I already have an SMS provider. Can I send SMSes via that service?",
-        answer: "Yes, you can. XIRCLS will assist you with SMS integration."
+      question:
+      "4. I already have an SMS provider. Can I send SMSes via that service?",
+      answer: "Yes, you can. XIRCLS will assist you with SMS integration."
     },
     {
-        question:
-        "5. Will email addresses & mobile numbers of my customers be shared with other businesses?",
-        answer:
-        "Never. Your customer data remains yours alone. It is never shared with any other business, nor does XIRCLS have access to it."
+      question:
+      "5. Will email addresses & mobile numbers of my customers be shared with other businesses?",
+      answer:
+      "Never. Your customer data remains yours alone. It is never shared with any other business, nor does XIRCLS have access to it."
     },
     {
-        question: "6. I’m not sure about this yet. Can I get a free trial first?",
-        answer:
-        "Yes, you can sign up for a 14-day free trial and see how your campaign performs. This will help you decide if XIRCLS is the right thing for your business."
+      question: "6. I’m not sure about this yet. Can I get a free trial first?",
+      answer:
+      "Yes, you can sign up for a 14-day free trial and see how your campaign performs. This will help you decide if XIRCLS is the right thing for your business."
     }
     ],
     Pricing_Billing_Payments: [
     {
-        question:
-        "1. What is the difference between the Lite, Grow and Pro plans?",
-        answer:
-        "The Lite Plan costs Rs.499/month and contains everything you need to begin issuing rewards to your customers. It is ideal for small businesses looking for an automated loyalty solution with minimal involvement or for budding digital marketers who want to keep things simple to start with.\n\n                                                    The Grow Plan costs Rs.999/month and is ideal for businesses looking to scale up and grow. It allows you to get more in-depth in your cross-marketing strategy and fine-tune your campaign to push for greater conversions.\n\n                                                    The Grow Plan allows you to create upto 2 users, block upto 5 outlets, create more types of offers, get email template options (3 only), retarget via your partners, send offer reminders and create an exclusive Inner XIRCL (1 only) with your choice of partners.\n\n                                                    The Grow Plan also includes email + phone support, more detailed reports/analytics, data backups and disaster recovery.\n\n                                                    The Pro Plan costs Rs.1799/month and is recommended for larger companies seeking partner exclusivity in their cross-marketing campaigns and who need advanced customizations to suit their business needs.\n\n                                                    The Pro Plan is basically the Grow Plan on steroids. You can block upto 10 outlets, create 3 Inner XIRCLs for multi-level partnerships and create multiple outlets with upto 5 users with customizable user level settings. It also includes all the features from the Grow Plan, such as more types of offer creation, more email template options (10), retargeting via your partners and offer reminders.\n\n                                                    The Pro Plan includes email + phone support, detailed analytics and reports that include customer behaviour across partner outlets, data backups and disaster recovery.\n\n                                                    The Pro Plan also includes a personal alliances manager who will work closely with you to understand your business goals and partnership requirements. S/he will reach out to businesses of your choice - both online and offline - and get them onboard XIRCLS for you to cross-market with."
+      question:
+      "1. What is the difference between the Lite, Grow and Pro plans?",
+      answer:
+      "The Lite Plan costs Rs.499/month and contains everything you need to begin issuing rewards to your customers. It is ideal for small businesses looking for an automated loyalty solution with minimal involvement or for budding digital marketers who want to keep things simple to start with.\n\n                                                    The Grow Plan costs Rs.999/month and is ideal for businesses looking to scale up and grow. It allows you to get more in-depth in your cross-marketing strategy and fine-tune your campaign to push for greater conversions.\n\n                                                    The Grow Plan allows you to create upto 2 users, block upto 5 outlets, create more types of offers, get email template options (3 only), retarget via your partners, send offer reminders and create an exclusive Inner XIRCL (1 only) with your choice of partners.\n\n                                                    The Grow Plan also includes email + phone support, more detailed reports/analytics, data backups and disaster recovery.\n\n                                                    The Pro Plan costs Rs.1799/month and is recommended for larger companies seeking partner exclusivity in their cross-marketing campaigns and who need advanced customizations to suit their business needs.\n\n                                                    The Pro Plan is basically the Grow Plan on steroids. You can block upto 10 outlets, create 3 Inner XIRCLs for multi-level partnerships and create multiple outlets with upto 5 users with customizable user level settings. It also includes all the features from the Grow Plan, such as more types of offer creation, more email template options (10), retargeting via your partners and offer reminders.\n\n                                                    The Pro Plan includes email + phone support, detailed analytics and reports that include customer behaviour across partner outlets, data backups and disaster recovery.\n\n                                                    The Pro Plan also includes a personal alliances manager who will work closely with you to understand your business goals and partnership requirements. S/he will reach out to businesses of your choice - both online and offline - and get them onboard XIRCLS for you to cross-market with."
     },
     {
-        question: "2. Do the plan costs include GST?",
-        answer:
-        "No, the plan costs do not include GST. GST will be charged at the prevalent rate at the time of collecting payment/generating invoice."
+      question: "2. Do the plan costs include GST?",
+      answer:
+      "No, the plan costs do not include GST. GST will be charged at the prevalent rate at the time of collecting payment/generating invoice."
     },
     {
-        question: "3. What do I get in the 14-Day Free Trial?",
-        answer:
-        "The 14-Day Free Trial allows you to instantly create a campaign and begin cross-marketing with your Preferred Partners and other compatible merchants on the XIRCLS network. During the trial period, you will have full access to all the features listed in the plan you’ve chosen, at zero cost."
+      question: "3. What do I get in the 14-Day Free Trial?",
+      answer:
+      "The 14-Day Free Trial allows you to instantly create a campaign and begin cross-marketing with your Preferred Partners and other compatible merchants on the XIRCLS network. During the trial period, you will have full access to all the features listed in the plan you’ve chosen, at zero cost."
     },
     {
-        question: "4. When does my 14-Day Free Trial start?",
-        answer:
-        "Your 14-Day Free Trial begins the moment you start your cross-marketing campaign. You are notified of this via email."
+      question: "4. When does my 14-Day Free Trial start?",
+      answer:
+      "Your 14-Day Free Trial begins the moment you start your cross-marketing campaign. You are notified of this via email."
     },
     {
-        question: "5. What happens after the 14-Day Free Trial ends?",
-        answer:
-        "At the end of your trial period, you must buy a plan to continue running the Semper FI campaign. If you choose not to subscribe to a plan, distribution of your Loyalty Offers and partner offers to your customers will be stopped."
+      question: "5. What happens after the 14-Day Free Trial ends?",
+      answer:
+      "At the end of your trial period, you must buy a plan to continue running the Semper FI campaign. If you choose not to subscribe to a plan, distribution of your Loyalty Offers and partner offers to your customers will be stopped."
     },
     {
-        question: "6. Why do I need to pay separately for SMS?",
-        answer:
-        "Alternatively, you can opt for SMS Gateway Integration if you want to use your own SMS service provider. Please contact us for more information."
+      question: "6. Why do I need to pay separately for SMS?",
+      answer:
+      "Alternatively, you can opt for SMS Gateway Integration if you want to use your own SMS service provider. Please contact us for more information."
     },
     {
-        question: "7. Is it compulsory to purchase SMS Packs?",
-        answer:
-        "SMS Packs are required if you wish to send Loyalty Offers and partner offers to your customers via SMS. \n\n                                                    If your business is a website or mobile app, offers are sent via email to your customers by default. In this case, SMS Packs are not compulsory but still highly recommended. \n\n                                                    However, if you’re a physical, offline outlet such as a store, restaurant, gym, etc., do not collect email addresses of customers and wish to deliver offers to your customers against their mobile number, offer delivery via SMS is the only option. In such a case, purchase of SMS Packs becomes mandatory."
+      question: "7. Is it compulsory to purchase SMS Packs?",
+      answer:
+      "SMS Packs are required if you wish to send Loyalty Offers and partner offers to your customers via SMS. \n\n                                                    If your business is a website or mobile app, offers are sent via email to your customers by default. In this case, SMS Packs are not compulsory but still highly recommended. \n\n                                                    However, if you’re a physical, offline outlet such as a store, restaurant, gym, etc., do not collect email addresses of customers and wish to deliver offers to your customers against their mobile number, offer delivery via SMS is the only option. In such a case, purchase of SMS Packs becomes mandatory."
     },
     {
-        question:
-        "8. Is billing for plan subscription done monthly or quarterly?",
-        answer:
-        "All our plans give you the choice of either Quarterly, Half Yearly or Yearly payments, payable before the selected period begins. \n\n                                                    Note: Choosing Yearly billing under the Plans results in greater savings."
+      question:
+      "8. Is billing for plan subscription done monthly or quarterly?",
+      answer:
+      "All our plans give you the choice of either Quarterly, Half Yearly or Yearly payments, payable before the selected period begins. \n\n                                                    Note: Choosing Yearly billing under the Plans results in greater savings."
     },
     {
-        question:
-        "9. I’ve purchased a plan but haven’t started my campaign yet. Is my plan already active?",
-        answer: "Yes, the plan is active from the moment of your purchase."
+      question:
+      "9. I’ve purchased a plan but haven’t started my campaign yet. Is my plan already active?",
+      answer: "Yes, the plan is active from the moment of your purchase."
     },
     {
-        question:
-        "10. I’m currently on a plan but I’ve stopped my campaign temporarily. Will my plan remain active?",
-        answer:
-        "Yes, the plan will remain active even if you’ve temporarily stopped your campaign."
+      question:
+      "10. I’m currently on a plan but I’ve stopped my campaign temporarily. Will my plan remain active?",
+      answer:
+      "Yes, the plan will remain active even if you’ve temporarily stopped your campaign."
     },
     {
-        question:
-        "11. What if my plan expires before I’ve used up the allocated number of deliverable offers in my plan?",
-        answer:
-        "If you do not use up the allocated number of deliverable offers in your plan before expiry, the offers will get carried over when you renew/upgrade your plan. Your dashboard will reflect this once you’ve purchased the plan."
+      question:
+      "11. What if my plan expires before I’ve used up the allocated number of deliverable offers in my plan?",
+      answer:
+      "If you do not use up the allocated number of deliverable offers in your plan before expiry, the offers will get carried over when you renew/upgrade your plan. Your dashboard will reflect this once you’ve purchased the plan."
     },
     {
-        question:
-        "12. My plan hasn’t expired yet but I would like to renew/upgrade to a new plan. What do I do?",
-        answer:
-        "You can renew/upgrade your plan at any time. All remaining deliverable offers will be carried over to the new plan."
+      question:
+      "12. My plan hasn’t expired yet but I would like to renew/upgrade to a new plan. What do I do?",
+      answer:
+      "You can renew/upgrade your plan at any time. All remaining deliverable offers will be carried over to the new plan."
     },
     {
-        question: "13. What is your refund policy?",
-        answer:
-        "We offer a no-questions-asked 100% refund guarantee.\n\n                                                    To ensure that you do not have to pay for something you may not want, we allow you to cancel your subscription plan anytime and you will be refunded 100% of your hard-earned money for the remainder period of the plan.\n\n                                                    eg: You have paid Rs. 23,988/- + GST for a 12-month plan and decide to cancel after 45 days. You will be charged only for the 45 days that you have used the service and will be refunded Rs. 20,989.50 for the balance period of 10 months and 15 days. In case there are outstanding payments against Overage Charges, the Overage Charges will be deducted and the balance amount refunded.\n\n                                                    The 100% Refund Guarantee period shall begin after the 14-Day Free Trial period."
+      question: "13. What is your refund policy?",
+      answer:
+      "We offer a no-questions-asked 100% refund guarantee.\n\n                                                    To ensure that you do not have to pay for something you may not want, we allow you to cancel your subscription plan anytime and you will be refunded 100% of your hard-earned money for the remainder period of the plan.\n\n                                                    eg: You have paid Rs. 23,988/- + GST for a 12-month plan and decide to cancel after 45 days. You will be charged only for the 45 days that you have used the service and will be refunded Rs. 20,989.50 for the balance period of 10 months and 15 days. In case there are outstanding payments against Overage Charges, the Overage Charges will be deducted and the balance amount refunded.\n\n                                                    The 100% Refund Guarantee period shall begin after the 14-Day Free Trial period."
     },
     {
-        question: "14. Is support included in the price or is it chargeable?",
-        answer:
-        "Full email support is included in all our plans and email + phone support is included in our Grow and Pro plans for no additional charge."
+      question: "14. Is support included in the price or is it chargeable?",
+      answer:
+      "Full email support is included in all our plans and email + phone support is included in our Grow and Pro plans for no additional charge."
     },
     {
-        question: "15. Are there any additional charges after I buy a plan?",
-        answer:
-        "Once your campaign reaches the limit on the number of offers distributable under the plan, an overage charge per customer reached is charged as specified in that particular plan."
+      question: "15. Are there any additional charges after I buy a plan?",
+      answer:
+      "Once your campaign reaches the limit on the number of offers distributable under the plan, an overage charge per customer reached is charged as specified in that particular plan."
     },
     {
-        question: "16. How will overage be billed?",
-        answer:
-        "Overage charges are billed on a monthly basis only when offer distribution has gone beyond the plan limit usage. In case of overage, the invoice will be emailed to you at the end of every month and can also be accessed from your merchant dashboard on XIRCLS. Payment can be made via secure payment options available on your dashboard."
+      question: "16. How will overage be billed?",
+      answer:
+      "Overage charges are billed on a monthly basis only when offer distribution has gone beyond the plan limit usage. In case of overage, the invoice will be emailed to you at the end of every month and can also be accessed from your merchant dashboard on XIRCLS. Payment can be made via secure payment options available on your dashboard."
     },
     {
-        question: "17. What happens on non-payment of overage?",
-        answer:
-        "On non-payment of overage charges over 30 days, your campaign will be stopped i.e. distribution of Loyalty Offers and partner offers to your customers will be stopped."
+      question: "17. What happens on non-payment of overage?",
+      answer:
+      "On non-payment of overage charges over 30 days, your campaign will be stopped i.e. distribution of Loyalty Offers and partner offers to your customers will be stopped."
     },
     {
-        question: "18. What happens on non-payment of overage?",
-        answer:
-        "We accept payments via Visa, MasterCard, Paypal. We also accept payments via bank transfer or cheque. For more details, please contact support@xircls.com"
+      question: "18. What happens on non-payment of overage?",
+      answer:
+      "We accept payments via Visa, MasterCard, Paypal. We also accept payments via bank transfer or cheque. For more details, please contact support@xircls.com"
     },
     {
-        question: "19. Which currencies do you bill in?",
-        answer: "Currently, we’re billing only in INR."
+      question: "19. Which currencies do you bill in?",
+      answer: "Currently, we’re billing only in INR."
     },
     {
-        question: "20. I have more questions. What do I do?",
-        answer:
-        "Get in touch with us on support@xircls.com and we’ll be happy to answer any other questions you may have."
+      question: "20. I have more questions. What do I do?",
+      answer:
+      "Get in touch with us on support@xircls.com and we’ll be happy to answer any other questions you may have."
     }
-    ]
+  ]
 }
 
 
 export const phone_list = [
-    { name: "Afghanistan", flag: "🇦🇫", code: "AF", dial_code: "+93" },
-    { name: "Åland Islands", flag: "🇦🇽", code: "AX", dial_code: "+358" },
-    { name: "Albania", flag: "🇦🇱", code: "AL", dial_code: "+355" },
-    { name: "Algeria", flag: "🇩🇿", code: "DZ", dial_code: "+213" },
-    {
-    name: "American Samoa",
-    flag: "🇦🇸",
-    code: "AS",
-    dial_code: "+1684"
-    },
-    { name: "Andorra", flag: "🇦🇩", code: "AD", dial_code: "+376" },
-    { name: "Angola", flag: "🇦🇴", code: "AO", dial_code: "+244" },
-    { name: "Anguilla", flag: "🇦🇮", code: "AI", dial_code: "+1264" },
-    { name: "Antarctica", flag: "🇦🇶", code: "AQ", dial_code: "+672" },
-    {
-    name: "Antigua and Barbuda",
-    flag: "🇦🇬",
-    code: "AG",
-    dial_code: "+1268"
-    },
-    { name: "Argentina", flag: "🇦🇷", code: "AR", dial_code: "+54" },
-    { name: "Armenia", flag: "🇦🇲", code: "AM", dial_code: "+374" },
-    { name: "Aruba", flag: "🇦🇼", code: "AW", dial_code: "+297" },
-    { name: "Australia", flag: "🇦🇺", code: "AU", dial_code: "+61" },
-    { name: "Austria", flag: "🇦🇹", code: "AT", dial_code: "+43" },
-    { name: "Azerbaijan", flag: "🇦🇿", code: "AZ", dial_code: "+994" },
-    { name: "Bahamas", flag: "🇧🇸", code: "BS", dial_code: "+1242" },
-    { name: "Bahrain", flag: "🇧🇭", code: "BH", dial_code: "+973" },
-    { name: "Bangladesh", flag: "🇧🇩", code: "BD", dial_code: "+880" },
-    { name: "Barbados", flag: "🇧🇧", code: "BB", dial_code: "+1246" },
-    { name: "Belarus", flag: "🇧🇾", code: "BY", dial_code: "+375" },
-    { name: "Belgium", flag: "🇧🇪", code: "BE", dial_code: "+32" },
-    { name: "Belize", flag: "🇧🇿", code: "BZ", dial_code: "+501" },
-    { name: "Benin", flag: "🇧🇯", code: "BJ", dial_code: "+229" },
-    { name: "Bermuda", flag: "🇧🇲", code: "BM", dial_code: "+1441" },
-    { name: "Bhutan", flag: "🇧🇹", code: "BT", dial_code: "+975" },
-    {
-    name: "Bolivia, Plurinational State of bolivia",
-    flag: "🇧🇴",
-    code: "BO",
-    dial_code: "+591"
-    },
-    {
-    name: "Bosnia and Herzegovina",
-    flag: "🇧🇦",
-    code: "BA",
-    dial_code: "+387"
-    },
-    { name: "Botswana", flag: "🇧🇼", code: "BW", dial_code: "+267" },
-    { name: "Bouvet Island", flag: "🇧🇻", code: "BV", dial_code: "+47" },
-    { name: "Brazil", flag: "🇧🇷", code: "BR", dial_code: "+55" },
-    {
-    name: "British Indian Ocean Territory",
-    flag: "🇮🇴",
-    code: "IO",
-    dial_code: "+246"
-    },
-    {
-    name: "Brunei Darussalam",
-    flag: "🇧🇳",
-    code: "BN",
-    dial_code: "+673"
-    },
-    { name: "Bulgaria", flag: "🇧🇬", code: "BG", dial_code: "+359" },
-    { name: "Burkina Faso", flag: "🇧🇫", code: "BF", dial_code: "+226" },
-    { name: "Burundi", flag: "🇧🇮", code: "BI", dial_code: "+257" },
-    { name: "Cambodia", flag: "🇰🇭", code: "KH", dial_code: "+855" },
-    { name: "Cameroon", flag: "🇨🇲", code: "CM", dial_code: "+237" },
-    { name: "Canada", flag: "🇨🇦", code: "CA", dial_code: "+1" },
-    { name: "Cape Verde", flag: "🇨🇻", code: "CV", dial_code: "+238" },
-    { name: "Cayman Islands", flag: "🇰🇾", code: "KY", dial_code: "+345" },
-    {
-    name: "Central African Republic",
-    flag: "🇨🇫",
-    code: "CF",
-    dial_code: "+236"
-    },
-    { name: "Chad", flag: "🇹🇩", code: "TD", dial_code: "+235" },
-    { name: "Chile", flag: "🇨🇱", code: "CL", dial_code: "+56" },
-    { name: "China", flag: "🇨🇳", code: "CN", dial_code: "+86" },
-    {
-    name: "Christmas Island",
-    flag: "🇨🇽",
-    code: "CX",
-    dial_code: "+61"
-    },
-    {
-    name: "Cocos (Keeling) Islands",
-    flag: "🇨🇨",
-    code: "CC",
-    dial_code: "+61"
-    },
-    { name: "Colombia", flag: "🇨🇴", code: "CO", dial_code: "+57" },
-    { name: "Comoros", flag: "🇰🇲", code: "KM", dial_code: "+269" },
-    { name: "Congo", flag: "🇨🇬", code: "CG", dial_code: "+242" },
-    {
-    name: "Congo, The Democratic Republic of the Congo",
-    flag: "🇨🇩",
-    code: "CD",
-    dial_code: "+243"
-    },
-    { name: "Cook Islands", flag: "🇨🇰", code: "CK", dial_code: "+682" },
-    { name: "Costa Rica", flag: "🇨🇷", code: "CR", dial_code: "+506" },
-    { name: "Cote d'Ivoire", flag: "🇨🇮", code: "CI", dial_code: "+225" },
-    { name: "Croatia", flag: "🇭🇷", code: "HR", dial_code: "+385" },
-    { name: "Cuba", flag: "🇨🇺", code: "CU", dial_code: "+53" },
-    { name: "Cyprus", flag: "🇨🇾", code: "CY", dial_code: "+357" },
-    { name: "Czech Republic", flag: "🇨🇿", code: "CZ", dial_code: "+420" },
-    { name: "Denmark", flag: "🇩🇰", code: "DK", dial_code: "+45" },
-    { name: "Djibouti", flag: "🇩🇯", code: "DJ", dial_code: "+253" },
-    { name: "Dominica", flag: "🇩🇲", code: "DM", dial_code: "+1767" },
-    {
-    name: "Dominican Republic",
-    flag: "🇩🇴",
-    code: "DO",
-    dial_code: "+1849"
-    },
-    { name: "Ecuador", flag: "🇪🇨", code: "EC", dial_code: "+593" },
-    { name: "Egypt", flag: "🇪🇬", code: "EG", dial_code: "+20" },
-    { name: "El Salvador", flag: "🇸🇻", code: "SV", dial_code: "+503" },
-    {
-    name: "Equatorial Guinea",
-    flag: "🇬🇶",
-    code: "GQ",
-    dial_code: "+240"
-    },
-    { name: "Eritrea", flag: "🇪🇷", code: "ER", dial_code: "+291" },
-    { name: "Estonia", flag: "🇪🇪", code: "EE", dial_code: "+372" },
-    { name: "Ethiopia", flag: "🇪🇹", code: "ET", dial_code: "+251" },
-    {
-    name: "Falkland Islands (Malvinas)",
-    flag: "🇫🇰",
-    code: "FK",
-    dial_code: "+500"
-    },
-    { name: "Faroe Islands", flag: "🇫🇴", code: "FO", dial_code: "+298" },
-    { name: "Fiji", flag: "🇫🇯", code: "FJ", dial_code: "+679" },
-    { name: "Finland", flag: "🇫🇮", code: "FI", dial_code: "+358" },
-    { name: "France", flag: "🇫🇷", code: "FR", dial_code: "+33" },
-    { name: "French Guiana", flag: "🇬🇫", code: "GF", dial_code: "+594" },
-    {
-    name: "French Polynesia",
-    flag: "🇵🇫",
-    code: "PF",
-    dial_code: "+689"
-    },
-    {
-    name: "French Southern Territories",
-    flag: "🇹🇫",
-    code: "TF",
-    dial_code: "+262"
-    },
-    { name: "Gabon", flag: "🇬🇦", code: "GA", dial_code: "+241" },
-    { name: "Gambia", flag: "🇬🇲", code: "GM", dial_code: "+220" },
-    { name: "Georgia", flag: "🇬🇪", code: "GE", dial_code: "+995" },
-    { name: "Germany", flag: "🇩🇪", code: "DE", dial_code: "+49" },
-    { name: "Ghana", flag: "🇬🇭", code: "GH", dial_code: "+233" },
-    { name: "Gibraltar", flag: "🇬🇮", code: "GI", dial_code: "+350" },
-    { name: "Greece", flag: "🇬🇷", code: "GR", dial_code: "+30" },
-    { name: "Greenland", flag: "🇬🇱", code: "GL", dial_code: "+299" },
-    { name: "Grenada", flag: "🇬🇩", code: "GD", dial_code: "+1473" },
-    { name: "Guadeloupe", flag: "🇬🇵", code: "GP", dial_code: "+590" },
-    { name: "Guam", flag: "🇬🇺", code: "GU", dial_code: "+1671" },
-    { name: "Guatemala", flag: "🇬🇹", code: "GT", dial_code: "+502" },
-    { name: "Guernsey", flag: "🇬🇬", code: "GG", dial_code: "+44" },
-    { name: "Guinea", flag: "🇬🇳", code: "GN", dial_code: "+224" },
-    { name: "Guinea-Bissau", flag: "🇬🇼", code: "GW", dial_code: "+245" },
-    { name: "Guyana", flag: "🇬🇾", code: "GY", dial_code: "+592" },
-    { name: "Haiti", flag: "🇭🇹", code: "HT", dial_code: "+509" },
-    {
-    name: "Heard Island and Mcdonald Islands",
-    flag: "🇭🇲",
-    code: "HM",
-    dial_code: "+672"
-    },
-    {
-    name: "Holy See (Vatican City State)",
-    flag: "🇻🇦",
-    code: "VA",
-    dial_code: "+379"
-    },
-    { name: "Honduras", flag: "🇭🇳", code: "HN", dial_code: "+504" },
-    { name: "Hong Kong", flag: "🇭🇰", code: "HK", dial_code: "+852" },
-    { name: "Hungary", flag: "🇭🇺", code: "HU", dial_code: "+36" },
-    { name: "Iceland", flag: "🇮🇸", code: "IS", dial_code: "+354" },
-    { name: "India", flag: "🇮🇳", code: "IN", dial_code: "+91" },
-    { name: "Indonesia", flag: "🇮🇩", code: "ID", dial_code: "+62" },
-    {
-    name: "Iran, Islamic Republic of Persian Gulf",
-    flag: "🇮🇷",
-    code: "IR",
-    dial_code: "+98"
-    },
-    { name: "Iraq", flag: "🇮🇶", code: "IQ", dial_code: "+964" },
-    { name: "Ireland", flag: "🇮🇪", code: "IE", dial_code: "+353" },
-    { name: "Isle of Man", flag: "🇮🇲", code: "IM", dial_code: "+44" },
-    { name: "Israel", flag: "🇮🇱", code: "IL", dial_code: "+972" },
-    { name: "Italy", flag: "🇮🇹", code: "IT", dial_code: "+39" },
-    { name: "Jamaica", flag: "🇯🇲", code: "JM", dial_code: "+1876" },
-    { name: "Japan", flag: "🇯🇵", code: "JP", dial_code: "+81" },
-    { name: "Jersey", flag: "🇯🇪", code: "JE", dial_code: "+44" },
-    { name: "Jordan", flag: "🇯🇴", code: "JO", dial_code: "+962" },
-    { name: "Kazakhstan", flag: "🇰🇿", code: "KZ", dial_code: "+7" },
-    { name: "Kenya", flag: "🇰🇪", code: "KE", dial_code: "+254" },
-    { name: "Kiribati", flag: "🇰🇮", code: "KI", dial_code: "+686" },
-    {
-    name: "Korea, Democratic People's Republic of Korea",
-    flag: "🇰🇵",
-    code: "KP",
-    dial_code: "+850"
-    },
-    {
-    name: "Korea, Republic of South Korea",
-    flag: "🇰🇷",
-    code: "KR",
-    dial_code: "+82"
-    },
-    { name: "Kosovo", flag: "🇽🇰", code: "XK", dial_code: "+383" },
-    { name: "Kuwait", flag: "🇰🇼", code: "KW", dial_code: "+965" },
-    { name: "Kyrgyzstan", flag: "🇰🇬", code: "KG", dial_code: "+996" },
-    { name: "Laos", flag: "🇱🇦", code: "LA", dial_code: "+856" },
-    { name: "Latvia", flag: "🇱🇻", code: "LV", dial_code: "+371" },
-    { name: "Lebanon", flag: "🇱🇧", code: "LB", dial_code: "+961" },
-    { name: "Lesotho", flag: "🇱🇸", code: "LS", dial_code: "+266" },
-    { name: "Liberia", flag: "🇱🇷", code: "LR", dial_code: "+231" },
-    {
-    name: "Libyan Arab Jamahiriya",
-    flag: "🇱🇾",
-    code: "LY",
-    dial_code: "+218"
-    },
-    { name: "Liechtenstein", flag: "🇱🇮", code: "LI", dial_code: "+423" },
-    { name: "Lithuania", flag: "🇱🇹", code: "LT", dial_code: "+370" },
-    { name: "Luxembourg", flag: "🇱🇺", code: "LU", dial_code: "+352" },
-    { name: "Macao", flag: "🇲🇴", code: "MO", dial_code: "+853" },
-    { name: "Macedonia", flag: "🇲🇰", code: "MK", dial_code: "+389" },
-    { name: "Madagascar", flag: "🇲🇬", code: "MG", dial_code: "+261" },
-    { name: "Malawi", flag: "🇲🇼", code: "MW", dial_code: "+265" },
-    { name: "Malaysia", flag: "🇲🇾", code: "MY", dial_code: "+60" },
-    { name: "Maldives", flag: "🇲🇻", code: "MV", dial_code: "+960" },
-    { name: "Mali", flag: "🇲🇱", code: "ML", dial_code: "+223" },
-    { name: "Malta", flag: "🇲🇹", code: "MT", dial_code: "+356" },
-    {
-    name: "Marshall Islands",
-    flag: "🇲🇭",
-    code: "MH",
-    dial_code: "+692"
-    },
-    { name: "Martinique", flag: "🇲🇶", code: "MQ", dial_code: "+596" },
-    { name: "Mauritania", flag: "🇲🇷", code: "MR", dial_code: "+222" },
-    { name: "Mauritius", flag: "🇲🇺", code: "MU", dial_code: "+230" },
-    { name: "Mayotte", flag: "🇾🇹", code: "YT", dial_code: "+262" },
-    { name: "Mexico", flag: "🇲🇽", code: "MX", dial_code: "+52" },
-    {
-    name: "Micronesia, Federated States of Micronesia",
-    flag: "🇫🇲",
-    code: "FM",
-    dial_code: "+691"
-    },
-    { name: "Moldova", flag: "🇲🇩", code: "MD", dial_code: "+373" },
-    { name: "Monaco", flag: "🇲🇨", code: "MC", dial_code: "+377" },
-    { name: "Mongolia", flag: "🇲🇳", code: "MN", dial_code: "+976" },
-    { name: "Montenegro", flag: "🇲🇪", code: "ME", dial_code: "+382" },
-    { name: "Montserrat", flag: "🇲🇸", code: "MS", dial_code: "+1664" },
-    { name: "Morocco", flag: "🇲🇦", code: "MA", dial_code: "+212" },
-    { name: "Mozambique", flag: "🇲🇿", code: "MZ", dial_code: "+258" },
-    { name: "Myanmar", flag: "🇲🇲", code: "MM", dial_code: "+95" },
-    { name: "Namibia", flag: "🇳🇦", code: "NA", dial_code: "+264" },
-    { name: "Nauru", flag: "🇳🇷", code: "NR", dial_code: "+674" },
-    { name: "Nepal", flag: "🇳🇵", code: "NP", dial_code: "+977" },
-    { name: "Netherlands", flag: "🇳🇱", code: "NL", dial_code: "+31" },
-    {
-    name: "Netherlands Antilles",
-    flag: "",
-    code: "AN",
-    dial_code: "+599"
-    },
-    { name: "New Caledonia", flag: "🇳🇨", code: "NC", dial_code: "+687" },
-    { name: "New Zealand", flag: "🇳🇿", code: "NZ", dial_code: "+64" },
-    { name: "Nicaragua", flag: "🇳🇮", code: "NI", dial_code: "+505" },
-    { name: "Niger", flag: "🇳🇪", code: "NE", dial_code: "+227" },
-    { name: "Nigeria", flag: "🇳🇬", code: "NG", dial_code: "+234" },
-    { name: "Niue", flag: "🇳🇺", code: "NU", dial_code: "+683" },
-    { name: "Norfolk Island", flag: "🇳🇫", code: "NF", dial_code: "+672" },
-    {
-    name: "Northern Mariana Islands",
-    flag: "🇲🇵",
-    code: "MP",
-    dial_code: "+1670"
-    },
-    { name: "Norway", flag: "🇳🇴", code: "NO", dial_code: "+47" },
-    { name: "Oman", flag: "🇴🇲", code: "OM", dial_code: "+968" },
-    { name: "Pakistan", flag: "🇵🇰", code: "PK", dial_code: "+92" },
-    { name: "Palau", flag: "🇵🇼", code: "PW", dial_code: "+680" },
-    {
-    name: "Palestinian Territory, Occupied",
-    flag: "🇵🇸",
-    code: "PS",
-    dial_code: "+970"
-    },
-    { name: "Panama", flag: "🇵🇦", code: "PA", dial_code: "+507" },
-    {
-    name: "Papua New Guinea",
-    flag: "🇵🇬",
-    code: "PG",
-    dial_code: "+675"
-    },
-    { name: "Paraguay", flag: "🇵🇾", code: "PY", dial_code: "+595" },
-    { name: "Peru", flag: "🇵🇪", code: "PE", dial_code: "+51" },
-    { name: "Philippines", flag: "🇵🇭", code: "PH", dial_code: "+63" },
-    { name: "Pitcairn", flag: "🇵🇳", code: "PN", dial_code: "+64" },
-    { name: "Poland", flag: "🇵🇱", code: "PL", dial_code: "+48" },
-    { name: "Portugal", flag: "🇵🇹", code: "PT", dial_code: "+351" },
-    { name: "Puerto Rico", flag: "🇵🇷", code: "PR", dial_code: "+1939" },
-    { name: "Qatar", flag: "🇶🇦", code: "QA", dial_code: "+974" },
-    { name: "Romania", flag: "🇷🇴", code: "RO", dial_code: "+40" },
-    { name: "Russia", flag: "🇷🇺", code: "RU", dial_code: "+7" },
-    { name: "Rwanda", flag: "🇷🇼", code: "RW", dial_code: "+250" },
-    { name: "Reunion", flag: "🇷🇪", code: "RE", dial_code: "+262" },
-    {
-    name: "Saint Barthelemy",
-    flag: "🇧🇱",
-    code: "BL",
-    dial_code: "+590"
-    },
-    {
-    name: "Saint Helena, Ascension and Tristan Da Cunha",
-    flag: "🇸🇭",
-    code: "SH",
-    dial_code: "+290"
-    },
-    {
-    name: "Saint Kitts and Nevis",
-    flag: "🇰🇳",
-    code: "KN",
-    dial_code: "+1869"
-    },
-    { name: "Saint Lucia", flag: "🇱🇨", code: "LC", dial_code: "+1758" },
-    { name: "Saint Martin", flag: "🇲🇫", code: "MF", dial_code: "+590" },
-    {
-    name: "Saint Pierre and Miquelon",
-    flag: "🇵🇲",
-    code: "PM",
-    dial_code: "+508"
-    },
-    {
-    name: "Saint Vincent and the Grenadines",
-    flag: "🇻🇨",
-    code: "VC",
-    dial_code: "+1784"
-    },
-    { name: "Samoa", flag: "🇼🇸", code: "WS", dial_code: "+685" },
-    { name: "San Marino", flag: "🇸🇲", code: "SM", dial_code: "+378" },
-    {
-    name: "Sao Tome and Principe",
-    flag: "🇸🇹",
-    code: "ST",
-    dial_code: "+239"
-    },
-    { name: "Saudi Arabia", flag: "🇸🇦", code: "SA", dial_code: "+966" },
-    { name: "Senegal", flag: "🇸🇳", code: "SN", dial_code: "+221" },
-    { name: "Serbia", flag: "🇷🇸", code: "RS", dial_code: "+381" },
-    { name: "Seychelles", flag: "🇸🇨", code: "SC", dial_code: "+248" },
-    { name: "Sierra Leone", flag: "🇸🇱", code: "SL", dial_code: "+232" },
-    { name: "Singapore", flag: "🇸🇬", code: "SG", dial_code: "+65" },
-    { name: "Slovakia", flag: "🇸🇰", code: "SK", dial_code: "+421" },
-    { name: "Slovenia", flag: "🇸🇮", code: "SI", dial_code: "+386" },
-    {
-    name: "Solomon Islands",
-    flag: "🇸🇧",
-    code: "SB",
-    dial_code: "+677"
-    },
-    { name: "Somalia", flag: "🇸🇴", code: "SO", dial_code: "+252" },
-    { name: "South Africa", flag: "🇿🇦", code: "ZA", dial_code: "+27" },
-    { name: "South Sudan", flag: "🇸🇸", code: "SS", dial_code: "+211" },
-    {
-    name: "South Georgia and the South Sandwich Islands",
-    flag: "🇬🇸",
-    code: "GS",
-    dial_code: "+500"
-    },
-    { name: "Spain", flag: "🇪🇸", code: "ES", dial_code: "+34" },
-    { name: "Sri Lanka", flag: "🇱🇰", code: "LK", dial_code: "+94" },
-    { name: "Sudan", flag: "🇸🇩", code: "SD", dial_code: "+249" },
-    { name: "Suriname", flag: "🇸🇷", code: "SR", dial_code: "+597" },
-    {
-    name: "Svalbard and Jan Mayen",
-    flag: "🇸🇯",
-    code: "SJ",
-    dial_code: "+47"
-    },
-    { name: "Eswatini", flag: "🇸🇿", code: "SZ", dial_code: "+268" },
-    { name: "Sweden", flag: "🇸🇪", code: "SE", dial_code: "+46" },
-    { name: "Switzerland", flag: "🇨🇭", code: "CH", dial_code: "+41" },
-    {
-    name: "Syrian Arab Republic",
-    flag: "🇸🇾",
-    code: "SY",
-    dial_code: "+963"
-    },
-    { name: "Taiwan", flag: "🇹🇼", code: "TW", dial_code: "+886" },
-    { name: "Tajikistan", flag: "🇹🇯", code: "TJ", dial_code: "+992" },
-    {
-    name: "Tanzania, United Republic of Tanzania",
-    flag: "🇹🇿",
-    code: "TZ",
-    dial_code: "+255"
-    },
-    { name: "Thailand", flag: "🇹🇭", code: "TH", dial_code: "+66" },
-    { name: "Timor-Leste", flag: "🇹🇱", code: "TL", dial_code: "+670" },
-    { name: "Togo", flag: "🇹🇬", code: "TG", dial_code: "+228" },
-    { name: "Tokelau", flag: "🇹🇰", code: "TK", dial_code: "+690" },
-    { name: "Tonga", flag: "🇹🇴", code: "TO", dial_code: "+676" },
-    {
-    name: "Trinidad and Tobago",
-    flag: "🇹🇹",
-    code: "TT",
-    dial_code: "+1868"
-    },
-    { name: "Tunisia", flag: "🇹🇳", code: "TN", dial_code: "+216" },
-    { name: "Turkey", flag: "🇹🇷", code: "TR", dial_code: "+90" },
-    { name: "Turkmenistan", flag: "🇹🇲", code: "TM", dial_code: "+993" },
-    {
-    name: "Turks and Caicos Islands",
-    flag: "🇹🇨",
-    code: "TC",
-    dial_code: "+1649"
-    },
-    { name: "Tuvalu", flag: "🇹🇻", code: "TV", dial_code: "+688" },
-    { name: "Uganda", flag: "🇺🇬", code: "UG", dial_code: "+256" },
-    { name: "Ukraine", flag: "🇺🇦", code: "UA", dial_code: "+380" },
-    {
-    name: "United Arab Emirates",
-    flag: "🇦🇪",
-    code: "AE",
-    dial_code: "+971"
-    },
-    { name: "United Kingdom", flag: "🇬🇧", code: "GB", dial_code: "+44" },
-    { name: "United States", flag: "🇺🇸", code: "US", dial_code: "+1" },
-    { name: "Uruguay", flag: "🇺🇾", code: "UY", dial_code: "+598" },
-    { name: "Uzbekistan", flag: "🇺🇿", code: "UZ", dial_code: "+998" },
-    { name: "Vanuatu", flag: "🇻🇺", code: "VU", dial_code: "+678" },
-    {
-    name: "Venezuela, Bolivarian Republic of Venezuela",
-    flag: "🇻🇪",
-    code: "VE",
-    dial_code: "+58"
-    },
-    { name: "Vietnam", flag: "🇻🇳", code: "VN", dial_code: "+84" },
-    {
-    name: "Virgin Islands, British",
-    flag: "🇻🇬",
-    code: "VG",
-    dial_code: "+1284"
-    },
-    {
-    name: "Virgin Islands, U.S.",
-    flag: "🇻🇮",
-    code: "VI",
-    dial_code: "+1340"
-    },
-    {
-    name: "Wallis and Futuna",
-    flag: "🇼🇫",
-    code: "WF",
-    dial_code: "+681"
-    },
-    { name: "Yemen", flag: "🇾🇪", code: "YE", dial_code: "+967" },
-    { name: "Zambia", flag: "🇿🇲", code: "ZM", dial_code: "+260" },
-    { name: "Zimbabwe", flag: "🇿🇼", code: "ZW", dial_code: "+263" }
+  { name: "Afghanistan", flag: "🇦🇫", code: "AF", dial_code: "+93" },
+  { name: "Åland Islands", flag: "🇦🇽", code: "AX", dial_code: "+358" },
+  { name: "Albania", flag: "🇦🇱", code: "AL", dial_code: "+355" },
+  { name: "Algeria", flag: "🇩🇿", code: "DZ", dial_code: "+213" },
+  {
+  name: "American Samoa",
+  flag: "🇦🇸",
+  code: "AS",
+  dial_code: "+1684"
+  },
+  { name: "Andorra", flag: "🇦🇩", code: "AD", dial_code: "+376" },
+  { name: "Angola", flag: "🇦🇴", code: "AO", dial_code: "+244" },
+  { name: "Anguilla", flag: "🇦🇮", code: "AI", dial_code: "+1264" },
+  { name: "Antarctica", flag: "🇦🇶", code: "AQ", dial_code: "+672" },
+  {
+  name: "Antigua and Barbuda",
+  flag: "🇦🇬",
+  code: "AG",
+  dial_code: "+1268"
+  },
+  { name: "Argentina", flag: "🇦🇷", code: "AR", dial_code: "+54" },
+  { name: "Armenia", flag: "🇦🇲", code: "AM", dial_code: "+374" },
+  { name: "Aruba", flag: "🇦🇼", code: "AW", dial_code: "+297" },
+  { name: "Australia", flag: "🇦🇺", code: "AU", dial_code: "+61" },
+  { name: "Austria", flag: "🇦🇹", code: "AT", dial_code: "+43" },
+  { name: "Azerbaijan", flag: "🇦🇿", code: "AZ", dial_code: "+994" },
+  { name: "Bahamas", flag: "🇧🇸", code: "BS", dial_code: "+1242" },
+  { name: "Bahrain", flag: "🇧🇭", code: "BH", dial_code: "+973" },
+  { name: "Bangladesh", flag: "🇧🇩", code: "BD", dial_code: "+880" },
+  { name: "Barbados", flag: "🇧🇧", code: "BB", dial_code: "+1246" },
+  { name: "Belarus", flag: "🇧🇾", code: "BY", dial_code: "+375" },
+  { name: "Belgium", flag: "🇧🇪", code: "BE", dial_code: "+32" },
+  { name: "Belize", flag: "🇧🇿", code: "BZ", dial_code: "+501" },
+  { name: "Benin", flag: "🇧🇯", code: "BJ", dial_code: "+229" },
+  { name: "Bermuda", flag: "🇧🇲", code: "BM", dial_code: "+1441" },
+  { name: "Bhutan", flag: "🇧🇹", code: "BT", dial_code: "+975" },
+  {
+  name: "Bolivia, Plurinational State of bolivia",
+  flag: "🇧🇴",
+  code: "BO",
+  dial_code: "+591"
+  },
+  {
+  name: "Bosnia and Herzegovina",
+  flag: "🇧🇦",
+  code: "BA",
+  dial_code: "+387"
+  },
+  { name: "Botswana", flag: "🇧🇼", code: "BW", dial_code: "+267" },
+  { name: "Bouvet Island", flag: "🇧🇻", code: "BV", dial_code: "+47" },
+  { name: "Brazil", flag: "🇧🇷", code: "BR", dial_code: "+55" },
+  {
+  name: "British Indian Ocean Territory",
+  flag: "🇮🇴",
+  code: "IO",
+  dial_code: "+246"
+  },
+  {
+  name: "Brunei Darussalam",
+  flag: "🇧🇳",
+  code: "BN",
+  dial_code: "+673"
+  },
+  { name: "Bulgaria", flag: "🇧🇬", code: "BG", dial_code: "+359" },
+  { name: "Burkina Faso", flag: "🇧🇫", code: "BF", dial_code: "+226" },
+  { name: "Burundi", flag: "🇧🇮", code: "BI", dial_code: "+257" },
+  { name: "Cambodia", flag: "🇰🇭", code: "KH", dial_code: "+855" },
+  { name: "Cameroon", flag: "🇨🇲", code: "CM", dial_code: "+237" },
+  { name: "Canada", flag: "🇨🇦", code: "CA", dial_code: "+1" },
+  { name: "Cape Verde", flag: "🇨🇻", code: "CV", dial_code: "+238" },
+  { name: "Cayman Islands", flag: "🇰🇾", code: "KY", dial_code: "+345" },
+  {
+  name: "Central African Republic",
+  flag: "🇨🇫",
+  code: "CF",
+  dial_code: "+236"
+  },
+  { name: "Chad", flag: "🇹🇩", code: "TD", dial_code: "+235" },
+  { name: "Chile", flag: "🇨🇱", code: "CL", dial_code: "+56" },
+  { name: "China", flag: "🇨🇳", code: "CN", dial_code: "+86" },
+  {
+  name: "Christmas Island",
+  flag: "🇨🇽",
+  code: "CX",
+  dial_code: "+61"
+  },
+  {
+  name: "Cocos (Keeling) Islands",
+  flag: "🇨🇨",
+  code: "CC",
+  dial_code: "+61"
+  },
+  { name: "Colombia", flag: "🇨🇴", code: "CO", dial_code: "+57" },
+  { name: "Comoros", flag: "🇰🇲", code: "KM", dial_code: "+269" },
+  { name: "Congo", flag: "🇨🇬", code: "CG", dial_code: "+242" },
+  {
+  name: "Congo, The Democratic Republic of the Congo",
+  flag: "🇨🇩",
+  code: "CD",
+  dial_code: "+243"
+  },
+  { name: "Cook Islands", flag: "🇨🇰", code: "CK", dial_code: "+682" },
+  { name: "Costa Rica", flag: "🇨🇷", code: "CR", dial_code: "+506" },
+  { name: "Cote d'Ivoire", flag: "🇨🇮", code: "CI", dial_code: "+225" },
+  { name: "Croatia", flag: "🇭🇷", code: "HR", dial_code: "+385" },
+  { name: "Cuba", flag: "🇨🇺", code: "CU", dial_code: "+53" },
+  { name: "Cyprus", flag: "🇨🇾", code: "CY", dial_code: "+357" },
+  { name: "Czech Republic", flag: "🇨🇿", code: "CZ", dial_code: "+420" },
+  { name: "Denmark", flag: "🇩🇰", code: "DK", dial_code: "+45" },
+  { name: "Djibouti", flag: "🇩🇯", code: "DJ", dial_code: "+253" },
+  { name: "Dominica", flag: "🇩🇲", code: "DM", dial_code: "+1767" },
+  {
+  name: "Dominican Republic",
+  flag: "🇩🇴",
+  code: "DO",
+  dial_code: "+1849"
+  },
+  { name: "Ecuador", flag: "🇪🇨", code: "EC", dial_code: "+593" },
+  { name: "Egypt", flag: "🇪🇬", code: "EG", dial_code: "+20" },
+  { name: "El Salvador", flag: "🇸🇻", code: "SV", dial_code: "+503" },
+  {
+  name: "Equatorial Guinea",
+  flag: "🇬🇶",
+  code: "GQ",
+  dial_code: "+240"
+  },
+  { name: "Eritrea", flag: "🇪🇷", code: "ER", dial_code: "+291" },
+  { name: "Estonia", flag: "🇪🇪", code: "EE", dial_code: "+372" },
+  { name: "Ethiopia", flag: "🇪🇹", code: "ET", dial_code: "+251" },
+  {
+  name: "Falkland Islands (Malvinas)",
+  flag: "🇫🇰",
+  code: "FK",
+  dial_code: "+500"
+  },
+  { name: "Faroe Islands", flag: "🇫🇴", code: "FO", dial_code: "+298" },
+  { name: "Fiji", flag: "🇫🇯", code: "FJ", dial_code: "+679" },
+  { name: "Finland", flag: "🇫🇮", code: "FI", dial_code: "+358" },
+  { name: "France", flag: "🇫🇷", code: "FR", dial_code: "+33" },
+  { name: "French Guiana", flag: "🇬🇫", code: "GF", dial_code: "+594" },
+  {
+  name: "French Polynesia",
+  flag: "🇵🇫",
+  code: "PF",
+  dial_code: "+689"
+  },
+  {
+  name: "French Southern Territories",
+  flag: "🇹🇫",
+  code: "TF",
+  dial_code: "+262"
+  },
+  { name: "Gabon", flag: "🇬🇦", code: "GA", dial_code: "+241" },
+  { name: "Gambia", flag: "🇬🇲", code: "GM", dial_code: "+220" },
+  { name: "Georgia", flag: "🇬🇪", code: "GE", dial_code: "+995" },
+  { name: "Germany", flag: "🇩🇪", code: "DE", dial_code: "+49" },
+  { name: "Ghana", flag: "🇬🇭", code: "GH", dial_code: "+233" },
+  { name: "Gibraltar", flag: "🇬🇮", code: "GI", dial_code: "+350" },
+  { name: "Greece", flag: "🇬🇷", code: "GR", dial_code: "+30" },
+  { name: "Greenland", flag: "🇬🇱", code: "GL", dial_code: "+299" },
+  { name: "Grenada", flag: "🇬🇩", code: "GD", dial_code: "+1473" },
+  { name: "Guadeloupe", flag: "🇬🇵", code: "GP", dial_code: "+590" },
+  { name: "Guam", flag: "🇬🇺", code: "GU", dial_code: "+1671" },
+  { name: "Guatemala", flag: "🇬🇹", code: "GT", dial_code: "+502" },
+  { name: "Guernsey", flag: "🇬🇬", code: "GG", dial_code: "+44" },
+  { name: "Guinea", flag: "🇬🇳", code: "GN", dial_code: "+224" },
+  { name: "Guinea-Bissau", flag: "🇬🇼", code: "GW", dial_code: "+245" },
+  { name: "Guyana", flag: "🇬🇾", code: "GY", dial_code: "+592" },
+  { name: "Haiti", flag: "🇭🇹", code: "HT", dial_code: "+509" },
+  {
+  name: "Heard Island and Mcdonald Islands",
+  flag: "🇭🇲",
+  code: "HM",
+  dial_code: "+672"
+  },
+  {
+  name: "Holy See (Vatican City State)",
+  flag: "🇻🇦",
+  code: "VA",
+  dial_code: "+379"
+  },
+  { name: "Honduras", flag: "🇭🇳", code: "HN", dial_code: "+504" },
+  { name: "Hong Kong", flag: "🇭🇰", code: "HK", dial_code: "+852" },
+  { name: "Hungary", flag: "🇭🇺", code: "HU", dial_code: "+36" },
+  { name: "Iceland", flag: "🇮🇸", code: "IS", dial_code: "+354" },
+  { name: "India", flag: "🇮🇳", code: "IN", dial_code: "+91" },
+  { name: "Indonesia", flag: "🇮🇩", code: "ID", dial_code: "+62" },
+  {
+  name: "Iran, Islamic Republic of Persian Gulf",
+  flag: "🇮🇷",
+  code: "IR",
+  dial_code: "+98"
+  },
+  { name: "Iraq", flag: "🇮🇶", code: "IQ", dial_code: "+964" },
+  { name: "Ireland", flag: "🇮🇪", code: "IE", dial_code: "+353" },
+  { name: "Isle of Man", flag: "🇮🇲", code: "IM", dial_code: "+44" },
+  { name: "Israel", flag: "🇮🇱", code: "IL", dial_code: "+972" },
+  { name: "Italy", flag: "🇮🇹", code: "IT", dial_code: "+39" },
+  { name: "Jamaica", flag: "🇯🇲", code: "JM", dial_code: "+1876" },
+  { name: "Japan", flag: "🇯🇵", code: "JP", dial_code: "+81" },
+  { name: "Jersey", flag: "🇯🇪", code: "JE", dial_code: "+44" },
+  { name: "Jordan", flag: "🇯🇴", code: "JO", dial_code: "+962" },
+  { name: "Kazakhstan", flag: "🇰🇿", code: "KZ", dial_code: "+7" },
+  { name: "Kenya", flag: "🇰🇪", code: "KE", dial_code: "+254" },
+  { name: "Kiribati", flag: "🇰🇮", code: "KI", dial_code: "+686" },
+  {
+  name: "Korea, Democratic People's Republic of Korea",
+  flag: "🇰🇵",
+  code: "KP",
+  dial_code: "+850"
+  },
+  {
+  name: "Korea, Republic of South Korea",
+  flag: "🇰🇷",
+  code: "KR",
+  dial_code: "+82"
+  },
+  { name: "Kosovo", flag: "🇽🇰", code: "XK", dial_code: "+383" },
+  { name: "Kuwait", flag: "🇰🇼", code: "KW", dial_code: "+965" },
+  { name: "Kyrgyzstan", flag: "🇰🇬", code: "KG", dial_code: "+996" },
+  { name: "Laos", flag: "🇱🇦", code: "LA", dial_code: "+856" },
+  { name: "Latvia", flag: "🇱🇻", code: "LV", dial_code: "+371" },
+  { name: "Lebanon", flag: "🇱🇧", code: "LB", dial_code: "+961" },
+  { name: "Lesotho", flag: "🇱🇸", code: "LS", dial_code: "+266" },
+  { name: "Liberia", flag: "🇱🇷", code: "LR", dial_code: "+231" },
+  {
+  name: "Libyan Arab Jamahiriya",
+  flag: "🇱🇾",
+  code: "LY",
+  dial_code: "+218"
+  },
+  { name: "Liechtenstein", flag: "🇱🇮", code: "LI", dial_code: "+423" },
+  { name: "Lithuania", flag: "🇱🇹", code: "LT", dial_code: "+370" },
+  { name: "Luxembourg", flag: "🇱🇺", code: "LU", dial_code: "+352" },
+  { name: "Macao", flag: "🇲🇴", code: "MO", dial_code: "+853" },
+  { name: "Macedonia", flag: "🇲🇰", code: "MK", dial_code: "+389" },
+  { name: "Madagascar", flag: "🇲🇬", code: "MG", dial_code: "+261" },
+  { name: "Malawi", flag: "🇲🇼", code: "MW", dial_code: "+265" },
+  { name: "Malaysia", flag: "🇲🇾", code: "MY", dial_code: "+60" },
+  { name: "Maldives", flag: "🇲🇻", code: "MV", dial_code: "+960" },
+  { name: "Mali", flag: "🇲🇱", code: "ML", dial_code: "+223" },
+  { name: "Malta", flag: "🇲🇹", code: "MT", dial_code: "+356" },
+  {
+  name: "Marshall Islands",
+  flag: "🇲🇭",
+  code: "MH",
+  dial_code: "+692"
+  },
+  { name: "Martinique", flag: "🇲🇶", code: "MQ", dial_code: "+596" },
+  { name: "Mauritania", flag: "🇲🇷", code: "MR", dial_code: "+222" },
+  { name: "Mauritius", flag: "🇲🇺", code: "MU", dial_code: "+230" },
+  { name: "Mayotte", flag: "🇾🇹", code: "YT", dial_code: "+262" },
+  { name: "Mexico", flag: "🇲🇽", code: "MX", dial_code: "+52" },
+  {
+  name: "Micronesia, Federated States of Micronesia",
+  flag: "🇫🇲",
+  code: "FM",
+  dial_code: "+691"
+  },
+  { name: "Moldova", flag: "🇲🇩", code: "MD", dial_code: "+373" },
+  { name: "Monaco", flag: "🇲🇨", code: "MC", dial_code: "+377" },
+  { name: "Mongolia", flag: "🇲🇳", code: "MN", dial_code: "+976" },
+  { name: "Montenegro", flag: "🇲🇪", code: "ME", dial_code: "+382" },
+  { name: "Montserrat", flag: "🇲🇸", code: "MS", dial_code: "+1664" },
+  { name: "Morocco", flag: "🇲🇦", code: "MA", dial_code: "+212" },
+  { name: "Mozambique", flag: "🇲🇿", code: "MZ", dial_code: "+258" },
+  { name: "Myanmar", flag: "🇲🇲", code: "MM", dial_code: "+95" },
+  { name: "Namibia", flag: "🇳🇦", code: "NA", dial_code: "+264" },
+  { name: "Nauru", flag: "🇳🇷", code: "NR", dial_code: "+674" },
+  { name: "Nepal", flag: "🇳🇵", code: "NP", dial_code: "+977" },
+  { name: "Netherlands", flag: "🇳🇱", code: "NL", dial_code: "+31" },
+  {
+  name: "Netherlands Antilles",
+  flag: "",
+  code: "AN",
+  dial_code: "+599"
+  },
+  { name: "New Caledonia", flag: "🇳🇨", code: "NC", dial_code: "+687" },
+  { name: "New Zealand", flag: "🇳🇿", code: "NZ", dial_code: "+64" },
+  { name: "Nicaragua", flag: "🇳🇮", code: "NI", dial_code: "+505" },
+  { name: "Niger", flag: "🇳🇪", code: "NE", dial_code: "+227" },
+  { name: "Nigeria", flag: "🇳🇬", code: "NG", dial_code: "+234" },
+  { name: "Niue", flag: "🇳🇺", code: "NU", dial_code: "+683" },
+  { name: "Norfolk Island", flag: "🇳🇫", code: "NF", dial_code: "+672" },
+  {
+  name: "Northern Mariana Islands",
+  flag: "🇲🇵",
+  code: "MP",
+  dial_code: "+1670"
+  },
+  { name: "Norway", flag: "🇳🇴", code: "NO", dial_code: "+47" },
+  { name: "Oman", flag: "🇴🇲", code: "OM", dial_code: "+968" },
+  { name: "Pakistan", flag: "🇵🇰", code: "PK", dial_code: "+92" },
+  { name: "Palau", flag: "🇵🇼", code: "PW", dial_code: "+680" },
+  {
+  name: "Palestinian Territory, Occupied",
+  flag: "🇵🇸",
+  code: "PS",
+  dial_code: "+970"
+  },
+  { name: "Panama", flag: "🇵🇦", code: "PA", dial_code: "+507" },
+  {
+  name: "Papua New Guinea",
+  flag: "🇵🇬",
+  code: "PG",
+  dial_code: "+675"
+  },
+  { name: "Paraguay", flag: "🇵🇾", code: "PY", dial_code: "+595" },
+  { name: "Peru", flag: "🇵🇪", code: "PE", dial_code: "+51" },
+  { name: "Philippines", flag: "🇵🇭", code: "PH", dial_code: "+63" },
+  { name: "Pitcairn", flag: "🇵🇳", code: "PN", dial_code: "+64" },
+  { name: "Poland", flag: "🇵🇱", code: "PL", dial_code: "+48" },
+  { name: "Portugal", flag: "🇵🇹", code: "PT", dial_code: "+351" },
+  { name: "Puerto Rico", flag: "🇵🇷", code: "PR", dial_code: "+1939" },
+  { name: "Qatar", flag: "🇶🇦", code: "QA", dial_code: "+974" },
+  { name: "Romania", flag: "🇷🇴", code: "RO", dial_code: "+40" },
+  { name: "Russia", flag: "🇷🇺", code: "RU", dial_code: "+7" },
+  { name: "Rwanda", flag: "🇷🇼", code: "RW", dial_code: "+250" },
+  { name: "Reunion", flag: "🇷🇪", code: "RE", dial_code: "+262" },
+  {
+  name: "Saint Barthelemy",
+  flag: "🇧🇱",
+  code: "BL",
+  dial_code: "+590"
+  },
+  {
+  name: "Saint Helena, Ascension and Tristan Da Cunha",
+  flag: "🇸🇭",
+  code: "SH",
+  dial_code: "+290"
+  },
+  {
+  name: "Saint Kitts and Nevis",
+  flag: "🇰🇳",
+  code: "KN",
+  dial_code: "+1869"
+  },
+  { name: "Saint Lucia", flag: "🇱🇨", code: "LC", dial_code: "+1758" },
+  { name: "Saint Martin", flag: "🇲🇫", code: "MF", dial_code: "+590" },
+  {
+  name: "Saint Pierre and Miquelon",
+  flag: "🇵🇲",
+  code: "PM",
+  dial_code: "+508"
+  },
+  {
+  name: "Saint Vincent and the Grenadines",
+  flag: "🇻🇨",
+  code: "VC",
+  dial_code: "+1784"
+  },
+  { name: "Samoa", flag: "🇼🇸", code: "WS", dial_code: "+685" },
+  { name: "San Marino", flag: "🇸🇲", code: "SM", dial_code: "+378" },
+  {
+  name: "Sao Tome and Principe",
+  flag: "🇸🇹",
+  code: "ST",
+  dial_code: "+239"
+  },
+  { name: "Saudi Arabia", flag: "🇸🇦", code: "SA", dial_code: "+966" },
+  { name: "Senegal", flag: "🇸🇳", code: "SN", dial_code: "+221" },
+  { name: "Serbia", flag: "🇷🇸", code: "RS", dial_code: "+381" },
+  { name: "Seychelles", flag: "🇸🇨", code: "SC", dial_code: "+248" },
+  { name: "Sierra Leone", flag: "🇸🇱", code: "SL", dial_code: "+232" },
+  { name: "Singapore", flag: "🇸🇬", code: "SG", dial_code: "+65" },
+  { name: "Slovakia", flag: "🇸🇰", code: "SK", dial_code: "+421" },
+  { name: "Slovenia", flag: "🇸🇮", code: "SI", dial_code: "+386" },
+  {
+  name: "Solomon Islands",
+  flag: "🇸🇧",
+  code: "SB",
+  dial_code: "+677"
+  },
+  { name: "Somalia", flag: "🇸🇴", code: "SO", dial_code: "+252" },
+  { name: "South Africa", flag: "🇿🇦", code: "ZA", dial_code: "+27" },
+  { name: "South Sudan", flag: "🇸🇸", code: "SS", dial_code: "+211" },
+  {
+  name: "South Georgia and the South Sandwich Islands",
+  flag: "🇬🇸",
+  code: "GS",
+  dial_code: "+500"
+  },
+  { name: "Spain", flag: "🇪🇸", code: "ES", dial_code: "+34" },
+  { name: "Sri Lanka", flag: "🇱🇰", code: "LK", dial_code: "+94" },
+  { name: "Sudan", flag: "🇸🇩", code: "SD", dial_code: "+249" },
+  { name: "Suriname", flag: "🇸🇷", code: "SR", dial_code: "+597" },
+  {
+  name: "Svalbard and Jan Mayen",
+  flag: "🇸🇯",
+  code: "SJ",
+  dial_code: "+47"
+  },
+  { name: "Eswatini", flag: "🇸🇿", code: "SZ", dial_code: "+268" },
+  { name: "Sweden", flag: "🇸🇪", code: "SE", dial_code: "+46" },
+  { name: "Switzerland", flag: "🇨🇭", code: "CH", dial_code: "+41" },
+  {
+  name: "Syrian Arab Republic",
+  flag: "🇸🇾",
+  code: "SY",
+  dial_code: "+963"
+  },
+  { name: "Taiwan", flag: "🇹🇼", code: "TW", dial_code: "+886" },
+  { name: "Tajikistan", flag: "🇹🇯", code: "TJ", dial_code: "+992" },
+  {
+  name: "Tanzania, United Republic of Tanzania",
+  flag: "🇹🇿",
+  code: "TZ",
+  dial_code: "+255"
+  },
+  { name: "Thailand", flag: "🇹🇭", code: "TH", dial_code: "+66" },
+  { name: "Timor-Leste", flag: "🇹🇱", code: "TL", dial_code: "+670" },
+  { name: "Togo", flag: "🇹🇬", code: "TG", dial_code: "+228" },
+  { name: "Tokelau", flag: "🇹🇰", code: "TK", dial_code: "+690" },
+  { name: "Tonga", flag: "🇹🇴", code: "TO", dial_code: "+676" },
+  {
+  name: "Trinidad and Tobago",
+  flag: "🇹🇹",
+  code: "TT",
+  dial_code: "+1868"
+  },
+  { name: "Tunisia", flag: "🇹🇳", code: "TN", dial_code: "+216" },
+  { name: "Turkey", flag: "🇹🇷", code: "TR", dial_code: "+90" },
+  { name: "Turkmenistan", flag: "🇹🇲", code: "TM", dial_code: "+993" },
+  {
+  name: "Turks and Caicos Islands",
+  flag: "🇹🇨",
+  code: "TC",
+  dial_code: "+1649"
+  },
+  { name: "Tuvalu", flag: "🇹🇻", code: "TV", dial_code: "+688" },
+  { name: "Uganda", flag: "🇺🇬", code: "UG", dial_code: "+256" },
+  { name: "Ukraine", flag: "🇺🇦", code: "UA", dial_code: "+380" },
+  {
+  name: "United Arab Emirates",
+  flag: "🇦🇪",
+  code: "AE",
+  dial_code: "+971"
+  },
+  { name: "United Kingdom", flag: "🇬🇧", code: "GB", dial_code: "+44" },
+  { name: "United States", flag: "🇺🇸", code: "US", dial_code: "+1" },
+  { name: "Uruguay", flag: "🇺🇾", code: "UY", dial_code: "+598" },
+  { name: "Uzbekistan", flag: "🇺🇿", code: "UZ", dial_code: "+998" },
+  { name: "Vanuatu", flag: "🇻🇺", code: "VU", dial_code: "+678" },
+  {
+  name: "Venezuela, Bolivarian Republic of Venezuela",
+  flag: "🇻🇪",
+  code: "VE",
+  dial_code: "+58"
+  },
+  { name: "Vietnam", flag: "🇻🇳", code: "VN", dial_code: "+84" },
+  {
+  name: "Virgin Islands, British",
+  flag: "🇻🇬",
+  code: "VG",
+  dial_code: "+1284"
+  },
+  {
+  name: "Virgin Islands, U.S.",
+  flag: "🇻🇮",
+  code: "VI",
+  dial_code: "+1340"
+  },
+  {
+  name: "Wallis and Futuna",
+  flag: "🇼🇫",
+  code: "WF",
+  dial_code: "+681"
+  },
+  { name: "Yemen", flag: "🇾🇪", code: "YE", dial_code: "+967" },
+  { name: "Zambia", flag: "🇿🇲", code: "ZM", dial_code: "+260" },
+  { name: "Zimbabwe", flag: "🇿🇼", code: "ZW", dial_code: "+263" }
 ]
 
 export const blogs = [
-    {
-        component: 'conflict',
-        heading: 'Conflict: Torture or Tool?',
-        date: '06th January 2023',
-        link: '/blog/Conflict-Torture-or-Tool/',
-        author: 'Darina Litvina',
-        authorLink: '/blog/author/Darina_Litvina/',
-        authorImage: `${ownUrl}/images/website-slide/blog/a9.jpeg`,
-        authorRole: 'Content Writer at XIRCLS',
-        blogImage: `${ownUrl}/images/website-slide/blog/b11_img_1.jpg`,
-        description: <>Most people would say they don’t like conflict. It doesn’t feel good— it’s disruptive, tense, uncomfortable, perhaps even torturous. It is often perceived as an enemy that needs to be defeated in order for us to restore happiness. One thing worth exploring, however, is instead reconceptualising conflict as our greatest tool; one that builds what everyone is ultimately seeking in life: connection.</>
-    },
-    {
-        component: 'party',
-        heading: 'Collaborative Marketing and the Future of Zero-Party Data',
-        date: '13th December 2022',
-        link: '/blog/Collaborative-Marketing-and-the-Future-of-Zero-Party-Data/',
-        author: 'Ian White',
-        authorLink: '/blog/author/Ian_White/',
-        authorImage: `${ownUrl}/images/website-slide/blog/a8.jpg`,
-        authorRole: 'Content Writer at XIRCLS',
-        blogImage: `${ownUrl}/images/website-slide/blog/blog-10-main.jpeg`,
-        description: <>How Third-Party Data Deprecation will Affect Marketing in 2023</>
-    },
-    {
-        component: 'inclusion',
-        heading: 'Why Companies Need to Move From Diversity to Inclusion',
-        date: '1st August 2022',
-        link: '/blog/Why-Companies-Need-to-Move-From-Diversity-to-Inclusion/',
-        author: 'Shakercha Bradshaw',
-        authorLink: '/blog/author/Shakercha_Bradshaw/',
-        authorImage: `${ownUrl}/images/website-slide/blog/a7.jpeg`,
-        authorRole: 'Content Writer at XIRCLS.',
-        blogImage: `${ownUrl}/images/website-slide/blog/b9.jpg`,
-        description: <>Whether you’re a newly graduated college student looking for a job on LinkedIn, or a seasoned employee working in corporate America, one thing is for sure – you will always see the equal opportunity employee clause in your contract or receive diversity training in the workplace.</>
-    },
-    {
-        component: 'war',
-        heading: 'Target Audience: Are Companies at War with Their Customers?',
-        date: '19th July 2022',
-        link: '/blog/Target-Audience-Are-Companies-at-War-with-Their-Customers/',
-        author: 'Adriana Marcela Torrenegra',
-        authorShort: 'Adriana Torrenegra',
-        authorLink: '/blog/author/Adriana_Marcela_Torrenegra/',
-        authorImage: `${ownUrl}/images/website-slide/blog/a6.jpg`,
-        authorRole: 'Copywriter & Content Writer at XIRCLS',
-        blogImage: `${ownUrl}/images/website-slide/blog/b8.jpg`,
-        description: <>Whenever you buy or intend to buy a service or product from a company, you inadvertently become their target audience. You are now a subject of their intense scrutiny, as they attempt to study your behaviour, your interests, and gather more information on you, ranging from your demographic to psychographic information. Much like a stalker, if you think about it.</>
-    },
-    {
-        component: 'marketing',
-        heading: 'Current Online Marketing Practices Are Making You Pay More!',
-        date: '04th July 2022',
-        link: '/blog/Current-Online-Marketing-Practices-Are-Making-You-Pay-More/',
-        author: 'Lauren Deah',
-        authorLink: '/blog/author/Lauren_Deah/',
-        authorImage: `${ownUrl}/images/website-slide/blog/a2.jpeg`,
-        authorRole: 'Copywriter, Content writer and Blogger, XIRCLS',
-        blogImage: `${ownUrl}/images/website-slide/blog/b7.jpg`,
-        description: <>Have you noticed your paycheck doesn’t go as far as it once did?</>
-    },
-    {
-        component: 'hunters',
-        heading: 'Are Bargain Hunters Killing Your Business?',
-        date: '08th June 2022',
-        link: '/blog/Are-Bargain-Hunters-Killing-Your-Business/',
-        author: 'Kwanele Ngobese',
-        authorLink: '/blog/author/Kwanele_Ngobese/',
-        authorImage: `${ownUrl}/images/website-slide/blog/a5.jpeg`,
-        authorRole: 'Marketing & Branding Intern at XIRCLS',
-        blogImage: `${ownUrl}/images/website-slide/blog/b6.jpg`,
-        description: <>Whether you’re a small business owner just starting out or in the marketing department of a large corporation, one thing’s for sure - bargain hunters aren’t the kind of customers you should be hoping for.</>
-    },
-    {
-        component: 'mind',
-        heading: 'Mind Games: Why We Buy What We Buy',
-        date: '23rd May 2022',
-        link: '/blog/Mind-Games-Why-We-Buy-What-We-Buy/',
-        author: 'Allie Hinds',
-        authorLink: '/blog/author/Allie_Hinds/',
-        authorImage: `${ownUrl}/images/website-slide/blog/a1.jpg`,
-        authorRole: 'Head of Content, XIRCLS',
-        blogImage: `${ownUrl}/images/website-slide/blog/b5.jpg`,
-        description: <>Everyone loves a deal. From cash cows and billionaire tycoons to the middle-class and even those barely scraping by - we all want the same thing. We want to get the most for our money.</>
-    },
-    {
-        component: 'influencer',
-        heading: 'Are Influencers Worth The Price Tag?',
-        date: '06th May 2022',
-        link: '/blog/Are-Influencers-Worth-The-Price-Tag/',
-        author: 'Peyton Sweeney',
-        authorLink: '/blog/author/Peyton-Sweeney/',
-        authorImage: `${ownUrl}/images/website-slide/blog/a4.jpg`,
-        authorRole: '',
-        blogImage: `${ownUrl}/images/website-slide/blog/b4.jpg`,
-        description: <>Every day, billions of people visit various social media platforms such as Instagram, TikTok, Twitter, YouTube and Facebook. According to a survey conducted in February of 2021, 46% of survey participants spent an average of five to six hours on their phones daily, with an additional 22% spending an average of three to four hours on their phones every day.</>
-    },
-    {
-        component: 'loyalty',
-        heading: 'The Harsh Truth About Customer Loyalty Programs!',
-        date: '28th April 2022',
-        link: '/blog/The-Harsh-Truth-About-Customer-Loyalty-Programs/',
-        author: 'Dineo Magakwa',
-        authorLink: '/blog/author/Dineo-Magakwa/',
-        authorImage: `${ownUrl}/images/website-slide/blog/a3_new.jpg`,
-        authorRole: 'Content Writer, XIRCLS',
-        blogImage: `${ownUrl}/images/website-slide/blog/b3.jpg`,
-        description: <>According to recent data, in just the United States, there are over 4 billion loyalty program memberships, and growing! Moreover, a whopping 86 percent of American consumers are members of at least one loyalty program.</>
-    },
-    {
-        component: 'monopolies',
-        heading: 'Playing With Power: The Danger of Monopolies',
-        date: '07th April 2022',
-        link: '/blog/Playing-With-Power-The-Danger-of-Monopolies/',
-        author: 'Lauren Deah',
-        authorLink: '/blog/author/Lauren_Deah/',
-        authorImage: `${ownUrl}/images/website-slide/blog/a2.jpeg`,
-        authorRole: 'Copywriter, Content writer and Blogger, XIRCLS',
-        blogImage: `${ownUrl}/images/website-slide/blog/b21.jpg`,
-        description: <>Ever notice how any main street, in any town, is lined with the same restaurants, the same clothing stores, the same bookstores…<br />
-            It’s like anywhere you go, you’re always in the same place.<br />
-            It wasn’t always that way. If I think back on my childhood vacations, I remember each place I traveled to was a new adventure. Every town had its different stores and local restaurants that drew you in with their own unique charm.</>
-    },
-    {
-        component: 'currency',
-        heading: 'The Devil’s Currency: Our Lives for Auction',
-        date: '04th April 2022',
-        link: '/blog/The-Devils-Currency-Our-Lives-for-Auction/',
-        author: 'Allie Hinds',
-        authorLink: '/blog/author/Allie_Hinds/',
-        authorImage: `${ownUrl}/images/website-slide/blog/a1.jpg`,
-        authorRole: 'Head of Content, XIRCLS',
-        blogImage: `${ownUrl}/images/website-slide/blog/b11.jpg`,
-        description: <>Data tracking has become so deeply integrated into our personal lives that society has forgotten the value of true privacy. Under the guise of social connection, creativity and networking, the very platforms we use daily have distracted us from their ultimate motive: to profit from the most intimate details of our lives. The general public has willingly bartered their private moments, locations, pictures and personal interests to the highest bidders in exchange for a few “likes” and targeted ads. </>
-    }
+  {
+    component: 'conflict',
+    heading: 'Conflict: Torture or Tool?',
+    date: '06th January 2023',
+    link: '/blog/Conflict-Torture-or-Tool/',
+    author: 'Darina Litvina',
+    authorLink: '/blog/author/Darina_Litvina/',
+    authorImage: `${ownUrl}/images/website-slide/blog/a9.jpeg`,
+    authorRole: 'Content Writer at XIRCLS',
+    blogImage: `${ownUrl}/images/website-slide/blog/b11_img_1.jpg`,
+    description: <>Most people would say they don’t like conflict. It doesn’t feel good— it’s disruptive, tense, uncomfortable, perhaps even torturous. It is often perceived as an enemy that needs to be defeated in order for us to restore happiness. One thing worth exploring, however, is instead reconceptualising conflict as our greatest tool; one that builds what everyone is ultimately seeking in life: connection.</>
+  },
+  {
+    component: 'party',
+    heading: 'Collaborative Marketing and the Future of Zero-Party Data',
+    date: '13th December 2022',
+    link: '/blog/Collaborative-Marketing-and-the-Future-of-Zero-Party-Data/',
+    author: 'Ian White',
+    authorLink: '/blog/author/Ian_White/',
+    authorImage: `${ownUrl}/images/website-slide/blog/a8.jpg`,
+    authorRole: 'Content Writer at XIRCLS',
+    blogImage: `${ownUrl}/images/website-slide/blog/blog-10-main.jpeg`,
+    description: <>How Third-Party Data Deprecation will Affect Marketing in 2023</>
+  },
+  {
+    component: 'inclusion',
+    heading: 'Why Companies Need to Move From Diversity to Inclusion',
+    date: '1st August 2022',
+    link: '/blog/Why-Companies-Need-to-Move-From-Diversity-to-Inclusion/',
+    author: 'Shakercha Bradshaw',
+    authorLink: '/blog/author/Shakercha_Bradshaw/',
+    authorImage: `${ownUrl}/images/website-slide/blog/a7.jpeg`,
+    authorRole: 'Content Writer at XIRCLS.',
+    blogImage: `${ownUrl}/images/website-slide/blog/b9.jpg`,
+    description: <>Whether you’re a newly graduated college student looking for a job on LinkedIn, or a seasoned employee working in corporate America, one thing is for sure – you will always see the equal opportunity employee clause in your contract or receive diversity training in the workplace.</>
+  },
+  {
+    component: 'war',
+    heading: 'Target Audience: Are Companies at War with Their Customers?',
+    date: '19th July 2022',
+    link: '/blog/Target-Audience-Are-Companies-at-War-with-Their-Customers/',
+    author: 'Adriana Marcela Torrenegra',
+    authorShort: 'Adriana Torrenegra',
+    authorLink: '/blog/author/Adriana_Marcela_Torrenegra/',
+    authorImage: `${ownUrl}/images/website-slide/blog/a6.jpg`,
+    authorRole: 'Copywriter & Content Writer at XIRCLS',
+    blogImage: `${ownUrl}/images/website-slide/blog/b8.jpg`,
+    description: <>Whenever you buy or intend to buy a service or product from a company, you inadvertently become their target audience. You are now a subject of their intense scrutiny, as they attempt to study your behaviour, your interests, and gather more information on you, ranging from your demographic to psychographic information. Much like a stalker, if you think about it.</>
+  },
+  {
+    component: 'marketing',
+    heading: 'Current Online Marketing Practices Are Making You Pay More!',
+    date: '04th July 2022',
+    link: '/blog/Current-Online-Marketing-Practices-Are-Making-You-Pay-More/',
+    author: 'Lauren Deah',
+    authorLink: '/blog/author/Lauren_Deah/',
+    authorImage: `${ownUrl}/images/website-slide/blog/a2.jpeg`,
+    authorRole: 'Copywriter, Content writer and Blogger, XIRCLS',
+    blogImage: `${ownUrl}/images/website-slide/blog/b7.jpg`,
+    description: <>Have you noticed your paycheck doesn’t go as far as it once did?</>
+  },
+  {
+    component: 'hunters',
+    heading: 'Are Bargain Hunters Killing Your Business?',
+    date: '08th June 2022',
+    link: '/blog/Are-Bargain-Hunters-Killing-Your-Business/',
+    author: 'Kwanele Ngobese',
+    authorLink: '/blog/author/Kwanele_Ngobese/',
+    authorImage: `${ownUrl}/images/website-slide/blog/a5.jpeg`,
+    authorRole: 'Marketing & Branding Intern at XIRCLS',
+    blogImage: `${ownUrl}/images/website-slide/blog/b6.jpg`,
+    description: <>Whether you’re a small business owner just starting out or in the marketing department of a large corporation, one thing’s for sure - bargain hunters aren’t the kind of customers you should be hoping for.</>
+  },
+  {
+    component: 'mind',
+    heading: 'Mind Games: Why We Buy What We Buy',
+    date: '23rd May 2022',
+    link: '/blog/Mind-Games-Why-We-Buy-What-We-Buy/',
+    author: 'Allie Hinds',
+    authorLink: '/blog/author/Allie_Hinds/',
+    authorImage: `${ownUrl}/images/website-slide/blog/a1.jpg`,
+    authorRole: 'Head of Content, XIRCLS',
+    blogImage: `${ownUrl}/images/website-slide/blog/b5.jpg`,
+    description: <>Everyone loves a deal. From cash cows and billionaire tycoons to the middle-class and even those barely scraping by - we all want the same thing. We want to get the most for our money.</>
+  },
+  {
+    component: 'influencer',
+    heading: 'Are Influencers Worth The Price Tag?',
+    date: '06th May 2022',
+    link: '/blog/Are-Influencers-Worth-The-Price-Tag/',
+    author: 'Peyton Sweeney',
+    authorLink: '/blog/author/Peyton-Sweeney/',
+    authorImage: `${ownUrl}/images/website-slide/blog/a4.jpg`,
+    authorRole: '',
+    blogImage: `${ownUrl}/images/website-slide/blog/b4.jpg`,
+    description: <>Every day, billions of people visit various social media platforms such as Instagram, TikTok, Twitter, YouTube and Facebook. According to a survey conducted in February of 2021, 46% of survey participants spent an average of five to six hours on their phones daily, with an additional 22% spending an average of three to four hours on their phones every day.</>
+  },
+  {
+    component: 'loyalty',
+    heading: 'The Harsh Truth About Customer Loyalty Programs!',
+    date: '28th April 2022',
+    link: '/blog/The-Harsh-Truth-About-Customer-Loyalty-Programs/',
+    author: 'Dineo Magakwa',
+    authorLink: '/blog/author/Dineo-Magakwa/',
+    authorImage: `${ownUrl}/images/website-slide/blog/a3_new.jpg`,
+    authorRole: 'Content Writer, XIRCLS',
+    blogImage: `${ownUrl}/images/website-slide/blog/b3.jpg`,
+    description: <>According to recent data, in just the United States, there are over 4 billion loyalty program memberships, and growing! Moreover, a whopping 86 percent of American consumers are members of at least one loyalty program.</>
+  },
+  {
+    component: 'monopolies',
+    heading: 'Playing With Power: The Danger of Monopolies',
+    date: '07th April 2022',
+    link: '/blog/Playing-With-Power-The-Danger-of-Monopolies/',
+    author: 'Lauren Deah',
+    authorLink: '/blog/author/Lauren_Deah/',
+    authorImage: `${ownUrl}/images/website-slide/blog/a2.jpeg`,
+    authorRole: 'Copywriter, Content writer and Blogger, XIRCLS',
+    blogImage: `${ownUrl}/images/website-slide/blog/b21.jpg`,
+    description: <>Ever notice how any main street, in any town, is lined with the same restaurants, the same clothing stores, the same bookstores…<br />
+        It’s like anywhere you go, you’re always in the same place.<br />
+        It wasn’t always that way. If I think back on my childhood vacations, I remember each place I traveled to was a new adventure. Every town had its different stores and local restaurants that drew you in with their own unique charm.</>
+  },
+  {
+    component: 'currency',
+    heading: 'The Devil’s Currency: Our Lives for Auction',
+    date: '04th April 2022',
+    link: '/blog/The-Devils-Currency-Our-Lives-for-Auction/',
+    author: 'Allie Hinds',
+    authorLink: '/blog/author/Allie_Hinds/',
+    authorImage: `${ownUrl}/images/website-slide/blog/a1.jpg`,
+    authorRole: 'Head of Content, XIRCLS',
+    blogImage: `${ownUrl}/images/website-slide/blog/b11.jpg`,
+    description: <>Data tracking has become so deeply integrated into our personal lives that society has forgotten the value of true privacy. Under the guise of social connection, creativity and networking, the very platforms we use daily have distracted us from their ultimate motive: to profit from the most intimate details of our lives. The general public has willingly bartered their private moments, locations, pictures and personal interests to the highest bidders in exchange for a few “likes” and targeted ads. </>
+  }
 ]
 
 export const selectPhoneList = [

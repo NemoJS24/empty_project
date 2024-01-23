@@ -12,14 +12,14 @@ export default function Superleadz_Pricing() {
       value: "0",
       subValue: "$00.00/year",
       button: "Get Started",
-      items: ["Upto 1,000 pop-up views"]
+      items: ["Upto 15,000 visits"]
     },
     {
       head: "Lite",
-      value: "14.99",
+      value: "29.99",
       subValue: "$80.99/year (save 10%)",
       button: "Buy Now",
-      items: ["Upto 20,000 pop-up views"]
+      items: ["Upto 35,000 visits", "2 Domains"]
     },
     {
       head: "Grow",
@@ -28,9 +28,9 @@ export default function Superleadz_Pricing() {
       button: "Buy Now",
       high: "Recommended",
       items: [
-        "250,000 pop-up views",
+        "125,000 visits",
         "No XIRCLS branding",
-        "2 Domains"
+        "5 Domains"
 
 
       ]
@@ -41,9 +41,9 @@ export default function Superleadz_Pricing() {
       subValue: "$419.99/year (save 30%)",
       button: "Buy Now",
       items: [
-        "750,000 pop-up views",
+        "375,000 visits",
         "No XIRCLS branding",
-        "5 Domains"
+        "10 Domains"
 
 
       ]

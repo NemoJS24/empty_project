@@ -6,23 +6,23 @@ import { stringSplit } from './Blog'
 import { BiRightArrowAlt } from 'react-icons/bi'
 import Navbar from '@src/views/main/utilities/navbar/Navbar'
 import Footer from '../../utilities/footer/Footer'
-function replaceUnderscoreWithSpaces(inputString) {
-  // Using the replace method with a hyphen to replace with white space
-  return inputString.replace(/_/g, ' ')
-}
+// function replaceUnderscoreWithSpaces(inputString) {
+//   // Using the replace method with a hyphen to replace with white space
+//   return inputString.replace(/_/g, ' ')
+// }
 const Blogger = () => {
 
   const { blogger } = useParams()
   // console.log('blogger: ' + blogger)
-  const newBlogger = replaceUnderscoreWithSpaces(blogger)
-  const bloggerName = blogsData.find((item) => item.author === (newBlogger))
+  // const newBlogger = replaceUnderscoreWithSpaces(blogger)
+  const bloggerName = blogsData.find((item) => item.auth_slug.toLowerCase() === blogger.toLowerCase())
   document.title = `Author: ${bloggerName.author}`
 
   console.log(bloggerName.author)
 
-  const authorsBlog = blogsData.filter((blogs) => blogs.author === (newBlogger))
+  const authorsBlog = blogsData.filter((blogs) => blogs.auth_slug.toLowerCase() === blogger.toLowerCase())
 
-  const authorsData = bloggersData.find((item) => item.author === (newBlogger))
+  const authorsData = bloggersData.find((item) => item.auth_slug.toLowerCase() === blogger.toLowerCase())
   // console.log('Bloggers name found on bloggersData' + authorsData)
   // console.log(authorsData)
 

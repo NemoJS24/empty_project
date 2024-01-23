@@ -665,7 +665,7 @@ function SuperLeadzDashboard() {
                 </Col>
 
                 <div className='col-md-6 cursor-default'>
-                    <CardCom icon={<Check width={'27px'}/>} title={<>Remaining <br /> Pop-up views</>} data={!chargesLoader ? Number(billing?.usage_charge) - Number(billing?.usage_count)  : <Spinner size={'25px'} />} info={`Total number of pop-ups (according to the plan) - number of pop-ups loaded on the website`} />
+                    <CardCom icon={<Check width={'27px'}/>} title={<>Remaining <br /> Visits</>} data={!chargesLoader ? Number(billing?.usage_charge) - Number(billing?.usage_count)  : <Spinner size={'25px'} />} info={`Total number of pop-ups (according to the plan) - number of pop-ups loaded on the website`} />
                 </div>
                 
                 <div className='col-md-6 cursor-default'>

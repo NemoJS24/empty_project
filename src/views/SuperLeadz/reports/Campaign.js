@@ -225,7 +225,7 @@ const Campaign = () => {
         <Row className='match-height'>
 
             <div className='col-md-6'>
-                <CardCom icon={<Check width={'20px'}/>} title={<>Remaining <br /> Pop-up views</>} data={!chargesLoader ? Number(billing?.usage_charge) - Number(billing?.usage_count)  : <Spinner size={'25px'} />} info={`Total number of pop-ups (according to the plan) - number of pop-ups loaded on the website`} />
+                <CardCom icon={<Check width={'20px'}/>} title={<>Remaining <br /> Visits</>} data={!chargesLoader ? Number(billing?.usage_charge) - Number(billing?.usage_count)  : <Spinner size={'25px'} />} info={`Total number of pop-ups (according to the plan) - number of pop-ups loaded on the website`} />
             </div>
 
             <Col className='col-md-6'>
