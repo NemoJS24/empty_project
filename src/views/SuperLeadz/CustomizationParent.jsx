@@ -4254,7 +4254,7 @@ const CustomizationParent = () => {
                                                                         value={parseFloat(currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]["width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"])}
                                                                         className='w-100' onChange={e => {
                                                                             currPage === "button" ? updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}button`]: { ...finalObj?.backgroundStyles[`${mobileCondition}button`], [e.target.name]: `${e.target.value}${isMobile ? "%" : "px"}` } } }) : updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: { ...finalObj?.backgroundStyles[`${mobileCondition}main`], [e.target.name]: `${e.target.value}${isMobile ? "%" : "px"}` } } })
-                                                                        }} name={currPage === "button" ? "width" : isMobile ? "maxWidth" : "width"} min="25" max={isMobile ? "100" : "800"} />
+                                                                        }} name={currPage === "button" ? "width" : isMobile ? "maxWidth" : "width"} min="0" max={isMobile ? "100" : "800"} />
                                                                 </div>
                                                             </div>
                                                             <div className=''>
@@ -4262,7 +4262,7 @@ const CustomizationParent = () => {
                                                                 <div className="d-flex p-0 justify-content-between align-items-center gap-2">
                                                                     <input type='range' value={parseFloat(currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]?.minHeight : finalObj?.backgroundStyles[`${mobileCondition}main`]?.minHeight)} onChange={e => {
                                                                         currPage === "button" ? updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}button`]: { ...finalObj?.backgroundStyles[`${mobileCondition}button`], minHeight: `${e.target.value}px` } } }) : updatePresent({ ...finalObj, backgroundStyles: { ...finalObj.backgroundStyles, [`${mobileCondition}main`]: { ...finalObj?.backgroundStyles[`${mobileCondition}main`], minHeight: `${e.target.value}px` } } })
-                                                                    }} className='w-100' name="height" min="50" max="800" />
+                                                                    }} className='w-100' name="height" min="0" max="800" />
                                                                 </div>
                                                             </div>
                                                         </div>
