@@ -96,7 +96,7 @@ const CustomizationParent = () => {
     // const dateFormat = "%Y-%m-%d %H:%M:%S"
 
     // status variable shows whether the user has monile view or desktop view selected while visiting the page
-    const status = (defaultIsMobile.get('isMobile') !== "false" && defaultIsMobile.get('isMobile') !== undefined && defaultIsMobile.get('isMobile') !== null && defaultIsMobile.get('isMobile') !== false)
+    // const status = (defaultIsMobile.get('isMobile') !== "false" && defaultIsMobile.get('isMobile') !== undefined && defaultIsMobile.get('isMobile') !== null && defaultIsMobile.get('isMobile') !== false)
 
     const [isMobile, setIsMobile] = useState(defaultIsMobile.get('isMobile') !== "false" && defaultIsMobile.get('isMobile') !== undefined && defaultIsMobile.get('isMobile') !== null && defaultIsMobile.get('isMobile') !== false)
 
@@ -3784,7 +3784,7 @@ const CustomizationParent = () => {
         addEvents()
         getData()
         const colWise = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
-        const onLoadMobile = status ? "mobile_" : ""
+        // const onLoadMobile = status ? "mobile_" : ""
         getOffers()
         refreshOfferDraggable()
         getPlan()
@@ -3805,22 +3805,22 @@ const CustomizationParent = () => {
         //     // setCrossStyle({ ...finalObj?.crossButtons?.[`${onLoadMobile}main`] })
         // }
 
-        setBrandStyles({ ...finalObj?.[`${onLoadMobile}brandStyles`] })
+        setBrandStyles({ ...finalObj?.[`${mobileCondition}brandStyles`] })
 
         const positionIndex = colWise[indexes.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
         if (indexes.subElem === "grandparent") {
-            setValues(currPage === "button" ? { ...finalObj?.[`${onLoadMobile}button`][indexes.cur]?.style } : { ...finalObj?.[`${onLoadMobile}pages`][finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.style })
+            setValues(currPage === "button" ? { ...finalObj?.[`${mobileCondition}button`][indexes.cur]?.style } : { ...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.style })
         } else if (indexes.subElem === "parent") {
-            setValues(currPage === "button" ? { ...finalObj?.[`${onLoadMobile}button`][indexes.cur]?.elements[positionIndex]?.style } : { ...finalObj?.[`${onLoadMobile}pages`][finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.style })
+            setValues(currPage === "button" ? { ...finalObj?.[`${mobileCondition}button`][indexes.cur]?.elements[positionIndex]?.style } : { ...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.style })
         } else {
-            setValues(currPage === "button" ? { ...finalObj?.[`${onLoadMobile}button`][indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style } : { ...finalObj?.[`${onLoadMobile}pages`][finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style })
+            setValues(currPage === "button" ? { ...finalObj?.[`${mobileCondition}button`][indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style } : { ...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style })
         }
 
-        if (status) {
-            document.getElementById("phone").click()
-        } else if (defaultIsMobile.get('isMobile') === 'false') {
-            document.getElementById("desktop").click()
-        }
+        // if (status) {
+        //     document.getElementById("phone").click()
+        // } else if (defaultIsMobile.get('isMobile') === 'false') {
+        //     document.getElementById("desktop").click()
+        // }
         return () => {
             localStorage.removeItem("draftId")
             localStorage.removeItem("defaultThemeId")
