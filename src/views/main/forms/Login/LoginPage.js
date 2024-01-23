@@ -1,7 +1,5 @@
-// /* eslint-disable no-unused-vars */
-// /* eslint-disable prefer-const */
-import React, { useContext, useState } from 'react'
-// import Navbar from '@src/views/main/utilities/navbar/Navbar'
+/* eslint-disable no-unused-vars */
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import Footer from '@src/views/main/utilities/footer/Footer'
 import toast from 'react-hot-toast'
@@ -10,11 +8,9 @@ import { setToken } from '../../../../assets/auth/auth'
 import { postReq } from '../../../../assets/auth/jwtService'
 import countries from '../../../NewFrontBase/Country'
 import { PermissionProvider } from '../../../../Helper/Context'
-// import $ from "jquery"
 import FrontBaseLoader from '../../../Components/Loader/Loader'
 
 export default function LoginPage() {
-    // const { pathname } = useLocation()
     const navigate = useNavigate()
     const { setUserPermission, userPermission } = useContext(PermissionProvider)
     const [apiLoader, setApiLoader] = useState(false)
@@ -22,7 +18,9 @@ export default function LoginPage() {
         email: '',
         password: ''
     })
-    console.log("getUserPermission", userPermission)
+    const emailRef = useRef()
+    const passwordRef = useRef()
+    // console.log("getUserPermission", userPermission)
     //   erors
     const [formErrors, setFormErrors] = useState({
         email: '',
@@ -41,11 +39,11 @@ export default function LoginPage() {
 
     //   form validation
     const validateForm = () => {
-        if (!formData.email) {
+        if (!emailRef.current.value) {
             setFormErrors({ email: "Please enter your email ID" })
             return false
         }
-        if (!formData.password) {
+        if (!passwordRef.current.value) {
             setFormErrors({ password: "Please enter your password" })
             return false
         }
@@ -53,11 +51,15 @@ export default function LoginPage() {
         return true
     }
 
-    // make a toast
-
     //   from sub,mit
     const handleSubmit = (e) => {
         e.preventDefault()
+        const formData = {
+            email: emailRef.current.value,
+            password: passwordRef.current.value
+        }
+       
+        // console.log("from data", emailRef.current.value)
         if (validateForm()) {
             // toast.success('form is valid')
             setApiLoader(true)
@@ -81,11 +83,7 @@ export default function LoginPage() {
                             apiKey: res?.data?.outlet_list ? res?.data?.outlet_list[0].api_key : "",
                             installedApps: res?.data?.installed_apps,
                             campagin: res?.data?.status,
-                            currencySymbol: merchantCurrency[0]?.currency?.symbol ? merchantCurrency[0]?.currency?.symbol : '₹',
-                            permissionList: res?.data?.permission_list,
-                            super_user: res?.data?.super_user,
-                            is_super_user: res?.data?.is_super_user,
-                            multi_user_key: res?.data?.multi_user_key
+                            currencySymbol: merchantCurrency[0]?.currency?.symbol ? merchantCurrency[0]?.currency?.symbol : '₹'
                         }
                         setUserPermission((curData) => ({
                             ...curData,
@@ -112,13 +110,26 @@ export default function LoginPage() {
     }
 
 
+    useEffect(() => {
+        const listener = event => {
+            if (event.code === "Enter" || event.code === "NumpadEnter") {
+                // callMyFunction();
+                handleSubmit(event)
+            }
+        }
+        document.addEventListener("keydown", listener)
+        return () => {
+            document.removeEventListener("keydown", listener)
+        }
+    }, [])
+
     return (
         <div className='login_cont' style={{ background: "#fff" }}>
             {
                 apiLoader ? <FrontBaseLoader /> : ''
             }
             {/* <Navbar /> */}
-            <Container fluid="sm" className=' login_cont+ ' >
+            <div className=' login_cont ' >
                 <Row className=' justify-content-center mt-lg-1 pt-lg-5 '>
                     <Col md="10" xl="8">
                         <form className='mt-2  rounded-2  p-3 ' >
@@ -131,14 +142,14 @@ export default function LoginPage() {
 
                                 <Col xs="12" className='mt-2'>
                                     <label className="fs-4 main-heading">Email Address  </label>
-                                    <input type="text" className={`form-control form-control  fs-5 text-dark rounded-1  `} onChange={handleInputChange} placeholder="Email" name="email" style={{ marginTop: "4px" }} />
+                                    <input type="text" autoFocus ref={emailRef} className={`form-control form-control  fs-5 text-dark rounded-1  `} onChange={handleInputChange} placeholder="Email" name="email" style={{ marginTop: "4px" }} />
                                     <span className="error text-danger ">{formErrors.email}</span>
 
                                 </Col>
 
                                 <Col xs="12" className='mt-2'>
                                     <label className="fs-4 main-heading">Password  </label>
-                                    <input type="password" className={`form-control form-control  fs-5 text-dark rounded-1  `} onChange={handleInputChange} placeholder="Password" name="password" style={{ marginTop: "4px" }} />
+                                    <input ref={passwordRef} type="password" className={`form-control form-control  fs-5 text-dark rounded-1  `} onChange={handleInputChange} placeholder="Password" name="password" style={{ marginTop: "4px" }} />
                                     <span className="error text-danger ">{formErrors.password}</span>
                                 </Col>
                                 <div className='mt-1'>
@@ -156,7 +167,7 @@ export default function LoginPage() {
                     </Col>
 
                 </Row>
-            </Container>
+            </div>
             <hr className='mt-5' />
             <Footer />
 

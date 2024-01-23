@@ -121,9 +121,9 @@ export default function Infiniti() {
         </h1>
 
         <Row className='mt160 justify-content-center '>
-          <Col xs="11" md="10" lg="11" xl="10"  >
+          <Col xs="11"  lg="11" xl="10"  >
             <Row className=' justify-content- '>
-              <Col lg="6" className='text-end pe-2'>
+              <Col md="6" className='text-end pe-2'>
                 <img src="https://www.xircls.com/static/media/acquisitionimg.489b16be.jpg" alt="" width={80} style={{ filter: "grayscale(100%)" }} />
                 <div className=' '>
                   <h1 className='display-4 main-heading fw-bolder '>Customer Acquisition</h1>
@@ -133,7 +133,7 @@ export default function Infiniti() {
                 </div>
               </Col>
 
-              <Col lg="6" className='text-start ps-2'>
+              <Col md="6" className='text-start ps-2'>
                 <img src="https://www.xircls.com/static/media/retentionimg.87bcf3f8.jpg" alt="" width={80} style={{ filter: "grayscale(100%)" }} />
                 <div className=' '>
                   <h1 className='display-4 main-heading fw-bolder '>Customer Retention</h1>
@@ -143,7 +143,7 @@ export default function Infiniti() {
                 </div>
               </Col>
               <div className='text-center'>
-              <Link to='/merchant/signup' className=' btn  main-btn-blue fs-3 mt-3'>Start a Infiniti Campaign</Link>
+              <Link to='/merchant/signup' className=' btn  main-btn-blue fs-3 mt-3 fw-lig'>Start a Infiniti Campaign</Link>
               </div>
 
             </Row>
@@ -151,9 +151,9 @@ export default function Infiniti() {
         </Row>
 
 
-        <Container fluid='sm'>
+        <div>
           <Row className='section8 justify-content-center mt180 '>
-            <Col xs="10" lg="12" xl="10"  >
+            <Col xs="11" lg="12" xl="10"  >
               <h1 className=' text-center display-2 fw-bolder main-heading  ' >Why Infiniti is Marketing 2.0</h1>
               <Row className='  m-auto justify-content-between  mt-2 '>
                 {
@@ -168,45 +168,45 @@ export default function Infiniti() {
               </Row>
             </Col>
           </Row>
-        </Container>
+        </div>
 
         <div className=' p-5  mt180' style={{ background: "#e5e7eb" }}>
-          <Container fluid='sm'>
+          <div>
 
-            <Row className='justify-content-center  text-center '>
-              <Col lg="3" className='text-center'>
+            <Row className='justify-content-center  text-center gy-1 '>
+              <Col md="3" className='text-center'>
                 <h1 className='main-heading fw-bolder '>140000+</h1>
                 <h3 className='fs-3 text-black'> Real-Time Marketing <br/>Collaborations Enabled.</h3>
               </Col>
-              <Col lg="3" className='text-center'>
+              <Col md="3" className='text-center'>
                 <h1 className='main-heading fw-bolder '>97000+</h1>
                 <h3 className='fs-3 text-black'>Transactions rewarded.</h3>
               </Col>
-              <Col lg="3" className='text-center'>
+              <Col md="3" className='text-center'>
                 <h1 className='main-heading fw-bolder '>1250000+</h1>
                 <h3 className='fs-3 text-black'>Value of offers rewarded by partners.</h3>
               </Col>
 
-              <Col lg="3" className='text-center'>
+              <Col md="3" className='text-center'>
                 <h1 className='main-heading fw-bolder '>800+</h1>
                 <h3 className='fs-3 text-black'>Customers successfully retained.</h3>
               </Col>
             </Row>
-          </Container>
+          </div>
 
         </div>
 
 
-        <Container fluid='sm'>
+        <div>
 
           <Row className='section8 justify-content-center mt180 '>
-            <Col xs="10" xl="10"  >
+            <Col xs="11" xl="10"  >
               <h1 className=' text-center display-2 fw-bolder main-heading  ' >Your Affinity Partners Are Waiting!</h1>
               <h1 className='text-center text-black'>Join the XIRCLS network and instantly partner with companies in these categories.</h1>
               <Row className='   justify-content-between  mt-1 '>
                 {
                   PartnersData.map((data, index) => (
-                    <Col lg="4" md="4" className='text-center mt-3' key={index}>
+                    <Col  md="4" xs="6" className='text-center mt-3' key={index}>
                       <img className='mb-2' src={data.img} alt="" width={50} />
                       {/* <h3 className='fs-1 text-black'>{data.icon}</h3> */}
                       <h1 className='main-heading fw-bolder '>{data.title}</h1>
@@ -224,11 +224,11 @@ export default function Infiniti() {
               <h1 className=' text-center display-2 fw-bolder main-heading ' >Decentralized Marketing</h1>
               <h1 className='text-center text-black'>Revolutionary technology makes XIRCLS a truly democratic & decentralised marketing network run by businesses for businesses.</h1>
 
-              <Row className='  m-auto justify-content-between  mt-2 '>
+              <Row className='  justify-content-center  mt-2 px-3 px-md-1  '>
                 {
                   marketingData.map((data, index) => {
                     return (
-                      <Col lg="4" md="6" className='' key={index}>
+                      <Col lg="4" md="5" className='' key={index}>
                         <CardLeft icon={data.icon} title={data.title} desc={data.desc} key={index} />
                       </Col>
                     )
@@ -237,13 +237,13 @@ export default function Infiniti() {
               </Row>
             </Col>
           </Row>
-        </Container>
+        </div>
 
 
         <div className='section8Test d-flex flex-column justify-content-center align-items-center mt190 p-0 p-sm-5' style={{ background: "#000" }}>
-          <Container fluid='sm'>
+          <div>
             <Row className='justify-content-center '>
-              <Col xs="10" md="12" xl="11">
+              <Col xs="11" md="12" xl="11">
                 <Row className='match-height mt-2 '>
                   <Col lg="6" md="6" className=''>
                     <h1 className='display-1 fw-bolder  text-white text-start lh-sm ' >XIRCLS Campaigns Are:</h1>
@@ -265,7 +265,7 @@ export default function Infiniti() {
                 </Row>
               </Col>
             </Row>
-          </Container>
+          </div>
         </div>
         <Footer />
 

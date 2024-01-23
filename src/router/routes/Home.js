@@ -1,8 +1,8 @@
 import { lazy } from 'react'
 
 const ContactUs = lazy(() => import('@src/views/main/forms/contactUs/ContactUs'))
-const Pricing = lazy(() => import('@src/views/main/products/superLeadz/SuperLeadz/components/PricingPage'))
-const SuperLeadzFaq = lazy(() => import('@src/views/main/products/superLeadz/SuperLeadz/components/SuperLeadzFaq'))
+const Superleadz_Pricing = lazy(() => import('@src/views/main/products/superLeadz/SuperLeadz/Superleadz_Pricing'))
+const SuperLeadzFaq = lazy(() => import('@src/views/main/products/superLeadz/SuperLeadz/SuperLeadzFaq'))
 const Sniper = lazy(() => import('@src/views/main/products/sniper/Sniper'))
 const FaqPartner = lazy(() => import('@src/views/main/partner/FaqPartner'))
 const Infiniti = lazy(() => import('@src/views/main/products/infiniti/Infiniti'))
@@ -41,6 +41,10 @@ const FlowLogin = lazy(() => import("../../views/Flow/Login"))
 const FlowSignUp = lazy(() => import("../../views/Flow/SignUp"))
 import VerfiyYourEmail from '../../views/XirclsFrontend/VerfiyYourAccount'
 import InstallFailed from '../../views/XirclsFrontend/InstallFailed'
+
+import FlashAccount from '../../views/main/products/flash/FlashAccount'
+import FaqFlash from '../../views/main/products/flash/FaqFlash'
+import Flash_Pricing from '../../views/main/products/flash/Flash_Pricing'
 
 const Homes_Routes = [
 
@@ -93,7 +97,7 @@ const Homes_Routes = [
   },
   {
     path: '/products/superleadz/lead-generation-nurturing-and-conversion/pricing',
-    element: <Pricing />,
+    element: <Superleadz_Pricing />,
     meta: {
       layout: "homeLayout",
       publicRoute: true
@@ -131,6 +135,33 @@ const Homes_Routes = [
   {
     path: '/products/semperfi/customer-loyalty/',
     element: <Semper />,
+    meta: {
+      layout: "homeLayout",
+      publicRoute: true
+    },
+    title: "Semper Fi: Customer loyalty"
+  },
+  {
+    path: '/products/flash-accounts/',
+    element: <FlashAccount />,
+    meta: {
+      layout: "homeLayout",
+      publicRoute: true
+    },
+    title: "Semper Fi: Customer loyalty"
+  },
+  {
+    path: '/products/flash-accounts/faq',
+    element: <FaqFlash />,
+    meta: {
+      layout: "homeLayout",
+      publicRoute: true
+    },
+    title: "Semper Fi: Customer loyalty"
+  },
+  {
+    path: '/products/flash-accounts/pricing',
+    element: <Flash_Pricing />,
     meta: {
       layout: "homeLayout",
       publicRoute: true

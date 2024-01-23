@@ -78,14 +78,14 @@ export default function WhyXircls() {
           </Col>
         </Row >
 
-        <Container fluid='sm'>
+        <div>
 
           <Row className='section8 justify-content-center mt180 '>
-            <Col xs="10" lg="12" xl="10"   >
-
               <h1 className=' text-center display-2 fw-bolder main-heading  ' >Connect with Humans, <br />Not Data Points.</h1>
               <h1 className='text-center fs-1  text-black mb-3'>Our Approach to Human-Centric Marketing.</h1>
-              <Row className='   justify-content-between  mt-3'>
+            <Col xs="10" lg="12" xl="10"   >
+
+              <Row className='   justify-content-between  mt-md-3 '>
                 {
                   techSellsData.map((data, index) => {
                     return (
@@ -98,30 +98,17 @@ export default function WhyXircls() {
               </Row>
             </Col>
           </Row>
-        </Container>
+        </div>
 
-        {/* <Row className=' mt170 justify-content-center  '>
-          <Col xs="10" xl="10" className='  px-0 rounded-2'>
-            <Row className='justify-content-center mt-5 match-height flex-row-reverse'>
-              <Col lg="5" className=' p-0  rounded-2 '>
-                <img className='w-100 rounded-3' src="https://www.xircls.com/static/media/xircls_why-xircls_02.9021e3ee.jpg" alt="" />
-              </Col>
-              <Col lg="7" className='d-flex flex-column justify-content-end  mb-2   ps-2 text-end'>
-                <div>
-                  <h1 className='fs-1 main-heading fw-lig mt-5 pt-5'>With over two decades of experience navigating businesses through a manufactured ad environment, XIRCLS is the culmination of our founding team's 20+ years in advertising, communications, and marketing technology.</h1>
-                </div>
-              </Col>
-            </Row>
-          </Col>
-        </Row> */}
-        <div className=' p-5  mt180 text-center d-flex justify-content-center  align-items-center ' style={{ background: "#e5e7eb", minHeight: "250px" }}>
-          <Container fluid='sm'>
+
+        <div className='py-2 px-1 p-md-5  mt180 text-center d-flex justify-content-center  align-items-center ' style={{ background: "#e5e7eb", minHeight: "250px" }}>
+          <div>
             <h1 className='display-6 main-heading fw-lig '>With over two decades of experience navigating businesses through a manufactured ad environment, XIRCLS is the culmination of our founding team's 20+ years in advertising, communications, and marketing technology.</h1>
-          </Container>
+          </div>
         </div>
         <Row className=" justify-content-center mt180 ">
           <Col lg="10" xs="10">
-            <Container fluid='sm'>
+            <div>
 
               <h1 className='display-2 fw-bolder text-center  main-heading'>Our Focus Areas</h1>
               <Row className='  justify-content-center '>
@@ -135,7 +122,7 @@ export default function WhyXircls() {
                 }
 
               </Row>
-            </Container>
+            </div>
 
           </Col>
         </Row>
