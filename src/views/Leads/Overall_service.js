@@ -65,7 +65,7 @@ const Customers = () => {
       name: "Brand",
       minWidth: "150px",
       selector: (row) => row?.servicing_brand ? row.servicing_brand : "-",
-      type: 'number',
+      type: 'text',
       isEnable: true
     },
     {

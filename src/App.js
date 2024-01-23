@@ -16,7 +16,7 @@ import { SuperLeadzLinkValidation, ActiveAppsProvider } from './Helper/Context'
 const App = () => {
   const [allRoutes, setAllRoutes] = useState([])
   const [validateLink, setValidateLink] = useState({ audience: false, templates: false, editTheme: false })
-  const [activeApps, setActiveApps] = useState()
+  const [activeApps, setActiveApps] = useState([])
   const [visitorSettings, setVisitorSettings] = useState("ALL_VISITORS")
 
   // ** Hooks

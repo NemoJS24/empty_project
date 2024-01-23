@@ -63,7 +63,7 @@ const Customers = () => {
       name: "Brand",
       minWidth: "150px",
       selector: (row) => row?.insurance_brand ? row.insurance_brand : "-",
-      type: 'number',
+      type: 'text',
       isEnable: true
     },
     {
