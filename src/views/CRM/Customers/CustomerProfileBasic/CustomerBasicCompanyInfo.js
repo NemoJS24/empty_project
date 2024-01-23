@@ -1006,6 +1006,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
             <Col md={12} className="mt-2">
               <label htmlFor="basicDetails-last-name">
                 Company PAN
+                Company PAN
               </label>
               <input
                 required

@@ -57,7 +57,7 @@ const ModificationSection = ({ styles, general, spacing, currPosition, setCurrPo
                         }
                     })}
                 </div>
-                <div className="flex-grow-1" style={{ overflow: "auto", overflowX: 'hidden' }}>
+                <div className="flex-grow-1 hideScroll" style={{ overflow: "auto", overflowX: 'hidden' }}>
                     {activeMenu === "general" && (
                         <>{general}</>
                     )}

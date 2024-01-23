@@ -10,38 +10,36 @@ import { Link, useLocation } from 'react-router-dom'
 import "../../mainCustome.scss"
 import logo from "../logo.png"
 import "./navbar.scss"
+import SuperLeadzLogo from "@src/assets/images/website-slide/FrontBase/user.png"
+import infiniti from "@src/assets/images/website-slide/FrontBase/infinity.png"
+import gift from "@src/assets/images/website-slide/FrontBase/gift.png"
+import workgroup from "@src/assets/images/website-slide/FrontBase/workgroup.png"
 
 
 export const productList = [
   {
     title: "SuperLeadz",
     desc: "Lead Generation  ",
-    logo: <BsCodeSquare size={20} color='' className='text-dark' />,
-    link: "/products/superleadz/lead-generation-nurturing-and-conversion"
+    logo: <img src={SuperLeadzLogo} alt='SuperLeadz_logo' />,
+    link: "/products/superleadz/"
   },
   {
     title: "Infiniti",
     desc: "Customer Acquisition & Loyalty",
-    logo: <PiCodeBlockLight size={23} color='' className='text-dark' />,
-    link: "/products/infiniti/customer-acquisition-and-loyalty/"
+    logo: <img src={infiniti} alt='infiniti_logo' />,
+    link: "/products/infiniti/"
   },
   {
     title: "Semper fi",
     desc: "Customer Loyalty",
-    logo: <TiFlashOutline size={23} color='' className='text-dark' />,
-    link: "/products/semperfi/customer-loyalty/"
+    logo: <img src={gift} alt='gift_logo' />,
+    link: "/products/semperfi/"
   },
   {
     title: "Sniper",
     desc: "Customer Acquisition",
     logo: <TfiTarget size={20} color='' className='text-dark' />,
-    link: "/products/sniper/customer-acquisition/"
-  },
-  {
-    title: "Flash Accounts",
-    desc: "dummy content",
-    logo: <TfiTarget size={20} color='' className='text-dark' />,
-    link: "/products/flash-accounts/"
+    link: "/products/sniper/"
   }
 
 ]
@@ -56,7 +54,7 @@ export const aboutList = [
   {
     title: "Why Collaborative Marketing?",
     desc: "Because Life is Collaboration, Not Competition.",
-    logo: <PiCodeBlockLight size={23} color='' className='text-dark' />,
+    logo: <img src={workgroup} alt='why_collaborative_marketing_logo' />,
     link: "/about-us/why-collaborative-marketing/"
 
   },
@@ -210,9 +208,9 @@ const Navbar = ({ position }) => {
 
             </ul>
             <div className='navBtn gap-1'>
-              <Link  to='/merchant/signup' className=' btn  btn-lg main-btn-blue-gra  fs-3 fw-lig'>Signup for Free</Link>
+              <Link  to='/merchant/signup' className=' btn  btn-lg main-btn-blue-gra  fs-3 fw-lig cust-font'>Signup Free</Link>
 
-              <Link to='/merchant/login' className=' btn btn-lg main-btn-dark fs-3 fw-lig' >Login</Link>
+              <Link to='/merchant/login' className=' btn btn-lg main-btn-dark fs-3 fw-lig cust-font' >Login</Link>
             </div>
           </div>
           <div className='menuBtn' onClick={() => { setToggleMenu(!toggleMenu); setShowProducts(false); setShowCompany(false) }}>

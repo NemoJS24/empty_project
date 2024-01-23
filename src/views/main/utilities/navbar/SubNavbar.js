@@ -10,13 +10,13 @@ export default function SubNavbar({ navTitle }) {
     let AllLinks = []
     switch (navTitle) {
       case 'superleadz':
-        AllLinks = [{ title: 'Overview', link: '/products/superleadz/lead-generation-nurturing-and-conversion' }, { title: 'Features', link: '/products/superleadz/lead-generation-nurturing-and-conversion/features' }, { title: 'Pricing', link: '/products/superleadz/lead-generation-nurturing-and-conversion/pricing' }, { title: 'FAQ', link: '/products/superleadz/lead-generation-nurturing-and-conversion/faqs' }]
+        AllLinks = [{ title: 'Overview', link: '/products/superleadz/' }, { title: 'Features', link: '/products/superleadz/features/' }, { title: 'Pricing', link: '/products/superleadz/pricing' }, { title: 'FAQ', link: '/products/superleadz/faq' }]
         break
       case 'partners':
-        AllLinks = [{ title: 'Overview', link: '/partners' }, { title: 'FAQ', link: '/partners/faqs' }]
+        AllLinks = [{ title: 'Overview', link: '/partners' }, { title: 'FAQ', link: '/partners/faq' }]
         break
       case 'flash-accounts':
-        AllLinks = [{ title: 'Overview', link: '/products/flash-accounts/' }, { title: 'Features', link: '/products/superleadz/lead-generation-nurturing-and-conversion/features' }, { title: 'Pricing', link: '/products/flash-accounts/pricing' }, { title: 'FAQ', link: '/products/flash-accounts/faq' }]
+        AllLinks = [{ title: 'Overview', link: '/products/flash-accounts/' }, { title: 'Features', link: '/products/superleadz/features/' }, { title: 'Pricing', link: '/products/flash-accounts/pricing' }, { title: 'FAQ', link: '/products/flash-accounts/faq' }]
         break
       default:
         AllLinks = [{ title: 'Overview', link: '/' }]

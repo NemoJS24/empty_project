@@ -178,7 +178,7 @@ const Customers = () => {
     {
       name: "Total Loan Amount",
       data: tableData.total_loan_amount ?? "0",
-      type: "number",
+      type: "money",
       icon: <LiaUserSlashSolid size={30} className="text-dark" />,
       iconStyle: ""
     },

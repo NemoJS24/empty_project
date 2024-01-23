@@ -113,7 +113,7 @@ const CustomizationParent = () => {
 
     const navigate = useNavigate()
     const [mousePos, setMousePos] = useState({})
-    const [finalObj, setFinalObj] = useState(themeLoc?.state?.custom_theme ? JSON.parse(themeLoc?.state?.custom_theme) : selectedThemeId !== "" ? { ...allPreviews[allPreviews?.findIndex($ => $?.theme_id === selectedThemeId)]?.object, campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") } : defaultObj)
+    const [finalObj, setFinalObj] = useState(themeLoc?.state?.custom_theme ? JSON.parse(themeLoc?.state?.custom_theme) : localStorage.getItem("defaultThemeId") !== "" ? { ...allPreviews[allPreviews?.findIndex($ => $?.theme_id === Number(localStorage.getItem("defaultThemeId")))]?.object, campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") } : selectedThemeId !== "" ? { ...allPreviews[allPreviews?.findIndex($ => $?.theme_id === selectedThemeId)]?.object, campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") } : defaultObj)
     const [past, setPast] = useState([])
     const [future, setFuture] = useState([])
     const [themeName, setThemeName] = useState(themeLoc?.state?.custom_theme ? finalObj.theme_name : `Campaign-${generateRandomString()}`)
@@ -239,6 +239,9 @@ const CustomizationParent = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [disableIpDrag, setDisableIpDrag] = useState([])
     const [imageTab, setImageTab] = useState("default")
+    const [dropImage, setDropImage] = useState(false)
+
+    console.log({ dropImage, imageType })
     // const [textValue, setTextValue] = useState("")
     // const [senderName, setSenderName] = useState("")
     // const [apiLoader, setApiLoader] = useState(false)
@@ -805,6 +808,8 @@ const CustomizationParent = () => {
                     updatedColWise[dragStartIndex.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)].element?.splice(dragStartIndex?.subElem, 1)
                     mobile_updatedColWise[dragStartIndex.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)].element?.splice(dragStartIndex?.subElem, 1)
                 }
+            } else if (dataTransfered?.includes("image")) {
+                setDropImage(true)
             }
             setcolWise(isMobile ? mobile_updatedColWise : updatedColWise)
 
@@ -3165,6 +3170,9 @@ const CustomizationParent = () => {
                 setIndexes({ cur, curElem, subElem })
             }
 
+            if (transferedData?.includes("image")) {
+                setDropImage(true)
+            }
 
             setValues({ ...elementStyles[transferedData] })
             setcolWise(isMobile ? [...mobile_dupArray] : [...dupArray])
@@ -3648,54 +3656,6 @@ const CustomizationParent = () => {
             })
     }
 
-    useEffect(() => {
-        getEmailSettings()
-        addEvents()
-        getData()
-        const colWise = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
-        const onLoadMobile = status ? "mobile_" : ""
-        getOffers()
-        refreshOfferDraggable()
-        getPlan()
-        // generateSuggestion()
-        const campaignStartDate = finalObj?.campaignStartDate === "" ? moment(new Date()).format("YYYY-MM-DD HH:mm:ss") : Array.isArray(finalObj?.campaignStartDate) ? moment(finalObj?.campaignStartDate[0]).format("YYYY-MM-DD HH:mm:ss") : finalObj?.campaignStartDate
-        const campaignEndDate = !finalObj?.campaignHasEndDate ? "" : finalObj?.campaignEndDate === "" ? moment(new Date()).format("YYYY-MM-DD HH:mm:ss") : Array.isArray(finalObj?.campaignEndDate) ? moment(finalObj?.campaignEndDate[0]).format("YYYY-MM-DD HH:mm:ss") : finalObj?.campaignEndDate
-
-        updatePresent({ ...finalObj, campaignStartDate, campaignEndDate })
-        if (themeLoc?.pathname?.includes("/merchant/SuperLeadz/new_customization/")) {
-            saveDraft()
-        }
-        if (currPage === "button") {
-            setcolWise(finalObj?.[`${onLoadMobile}button`])
-            // setBtnStyles({ ...finalObj?.backgroundStyles?.[`${onLoadMobile}button`] })
-        } else {
-            const pageIndex = finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)
-            setcolWise(finalObj?.[`${onLoadMobile}pages`][pageIndex]?.values)
-            // setCrossStyle({ ...finalObj?.crossButtons?.[`${onLoadMobile}main`] })
-        }
-
-        setBrandStyles({ ...finalObj?.[`${onLoadMobile}brandStyles`] })
-
-        const positionIndex = colWise[indexes.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
-        if (indexes.subElem === "grandparent") {
-            setValues(currPage === "button" ? { ...finalObj?.[`${onLoadMobile}button`][indexes.cur]?.style } : { ...finalObj?.[`${onLoadMobile}pages`][finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.style })
-        } else if (indexes.subElem === "parent") {
-            setValues(currPage === "button" ? { ...finalObj?.[`${onLoadMobile}button`][indexes.cur]?.elements[positionIndex]?.style } : { ...finalObj?.[`${onLoadMobile}pages`][finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.style })
-        } else {
-            setValues(currPage === "button" ? { ...finalObj?.[`${onLoadMobile}button`][indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style } : { ...finalObj?.[`${onLoadMobile}pages`][finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style })
-        }
-
-        if (status) {
-            document.getElementById("phone").click()
-        } else if (defaultIsMobile.get('isMobile') === 'false') {
-            document.getElementById("desktop").click()
-        }
-        return () => {
-            localStorage.removeItem("draftId")
-        }
-
-    }, [])
-
     const columns = [
         {
             name: 'Sr No.',
@@ -3870,6 +3830,10 @@ const CustomizationParent = () => {
         }
     }, [sideNav])
 
+    // useEffect(() => {
+    //     setSelectedOffer({})
+    // }, [currPosition, indexes])
+
     const currPageIndex = finalObj?.pages?.findIndex($ => $?.id === currPage)
 
     const returnRender = (props) => {
@@ -3879,6 +3843,55 @@ const CustomizationParent = () => {
             return <RenderPreviewCopy {...props} />
         }
     }
+
+    useEffect(() => {
+        getEmailSettings()
+        addEvents()
+        getData()
+        const colWise = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
+        const onLoadMobile = status ? "mobile_" : ""
+        getOffers()
+        refreshOfferDraggable()
+        getPlan()
+        // generateSuggestion()
+        const campaignStartDate = finalObj?.campaignStartDate === "" ? moment(new Date()).format("YYYY-MM-DD HH:mm:ss") : Array.isArray(finalObj?.campaignStartDate) ? moment(finalObj?.campaignStartDate[0]).format("YYYY-MM-DD HH:mm:ss") : finalObj?.campaignStartDate
+        const campaignEndDate = !finalObj?.campaignHasEndDate ? "" : finalObj?.campaignEndDate === "" ? moment(new Date()).format("YYYY-MM-DD HH:mm:ss") : Array.isArray(finalObj?.campaignEndDate) ? moment(finalObj?.campaignEndDate[0]).format("YYYY-MM-DD HH:mm:ss") : finalObj?.campaignEndDate
+
+        updatePresent({ ...finalObj, campaignStartDate, campaignEndDate })
+        if (themeLoc?.pathname?.includes("/merchant/SuperLeadz/new_customization/")) {
+            saveDraft()
+        }
+        if (currPage === "button") {
+            setcolWise(finalObj?.[`${onLoadMobile}button`])
+            // setBtnStyles({ ...finalObj?.backgroundStyles?.[`${onLoadMobile}button`] })
+        } else {
+            const pageIndex = finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)
+            setcolWise(finalObj?.[`${onLoadMobile}pages`][pageIndex]?.values)
+            // setCrossStyle({ ...finalObj?.crossButtons?.[`${onLoadMobile}main`] })
+        }
+
+        setBrandStyles({ ...finalObj?.[`${onLoadMobile}brandStyles`] })
+
+        const positionIndex = colWise[indexes.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
+        if (indexes.subElem === "grandparent") {
+            setValues(currPage === "button" ? { ...finalObj?.[`${onLoadMobile}button`][indexes.cur]?.style } : { ...finalObj?.[`${onLoadMobile}pages`][finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.style })
+        } else if (indexes.subElem === "parent") {
+            setValues(currPage === "button" ? { ...finalObj?.[`${onLoadMobile}button`][indexes.cur]?.elements[positionIndex]?.style } : { ...finalObj?.[`${onLoadMobile}pages`][finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.style })
+        } else {
+            setValues(currPage === "button" ? { ...finalObj?.[`${onLoadMobile}button`][indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style } : { ...finalObj?.[`${onLoadMobile}pages`][finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style })
+        }
+
+        if (status) {
+            document.getElementById("phone").click()
+        } else if (defaultIsMobile.get('isMobile') === 'false') {
+            document.getElementById("desktop").click()
+        }
+        return () => {
+            localStorage.removeItem("draftId")
+            localStorage.removeItem("defaultThemeId")
+        }
+
+    }, [])
 
     return (
         <Suspense fallback={null}>
@@ -5170,8 +5183,11 @@ const CustomizationParent = () => {
                                                                 <span className="position-relative" style={{ cursor: "pointer", outline: `2px solid ${finalObj?.selectedOffers?.some($ => $?.Code === ele.Code) ? "#FF671C" : "rgba(0,0,0,0)"}` }} onClick={() => {
                                                                     if (finalObj?.selectedOffers?.some($ => $?.Code === ele.Code)) {
                                                                         const newArr = [...finalObj.selectedOffers]
-                                                                        updatePresent({ ...finalObj, selectedOffers: [...newArr?.filter(item => item.Code !== ele.Code)] })
+                                                                        const filteredArr = [...newArr?.filter(item => item.Code !== ele.Code)]
+                                                                        // setSelectedOffer(filteredArr[filteredArr.length - 1])
+                                                                        updatePresent({ ...finalObj, selectedOffers: filteredArr })
                                                                     } else {
+                                                                        // setSelectedOffer(ele)
                                                                         updatePresent({ ...finalObj, selectedOffers: [...finalObj?.selectedOffers, ele] })
                                                                     }
                                                                 }}>
@@ -5430,22 +5446,37 @@ const CustomizationParent = () => {
                                                     <div className="p-1 bg-white text-black rounded-3 w-100">{ele?.image?.split("/")?.at("-1")}</div>
                                                     <button className="btn btn-dark w-100" onClick={() => {
                                                         if (imageType === "SINGLE") {
-                                                            const colWise = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
-                                                            const arr = [...colWise]
-                                                            if (arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type) {
-                                                                arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type = "image"
-                                                            }
-                                                            if (arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src) {
-                                                                arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src = ele.image
-                                                            }
-                                                            if (arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].isBrandLogo) {
-                                                                arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].isBrandLogo = false
-                                                            }
+                                                            // const colWise = 
                                                             const newFinalObj = finalObj
+                                                            const arr = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
+                                                            const arrRev = currPage === "button" ? [...finalObj?.[`${mobileConditionRev}button`]] : [...finalObj?.[`${mobileConditionRev}pages`][finalObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $.id === currPage)].values]
+                                                            if (arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type) {
+                                                                arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type = "image"
+                                                            }
+                                                            if (arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src) {
+                                                                arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src = ele.image
+                                                            }
+                                                            if (arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].isBrandLogo) {
+                                                                arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].isBrandLogo = false
+                                                            }
                                                             currPage === "button" ? newFinalObj[`${mobileCondition}button`] = arr : newFinalObj[`${mobileCondition}pages`][finalObj[`${mobileCondition}pages`].findIndex($ => $?.id === currPage)].values = arr
+
+                                                            if (dropImage) {
+                                                                // if (arrRev[indexes.cur].elements[arrRev[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type) {
+                                                                arrRev[indexes.cur].elements[arrRev[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type = "image"
+                                                                // }
+                                                                // if (arrRev[indexes.cur].elements[arrRev[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src) {
+                                                                arrRev[indexes.cur].elements[arrRev[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src = ele.image
+                                                                // }
+                                                                // if (arrRev[indexes.cur].elements[arrRev[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].isBrandLogo) {
+                                                                arrRev[indexes.cur].elements[arrRev[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].isBrandLogo = false
+                                                                // }
+                                                                currPage === "button" ? newFinalObj[`${mobileConditionRev}button`] = arrRev : newFinalObj[`${mobileConditionRev}pages`][finalObj[`${mobileConditionRev}pages`].findIndex($ => $?.id === currPage)].values = arrRev
+                                                            }
                                                             updatePresent(newFinalObj)
-                                                            setcolWise(currPage === "button" ? newFinalObj?.[`${mobileCondition}button`] : newFinalObj?.[`${mobileCondition}pages`]?.[finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values)
+                                                            // setcolWise(currPage === "button" ? newFinalObj?.[`${mobileCondition}button`] : newFinalObj?.[`${mobileCondition}pages`]?.[finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values)
                                                             setImgModal(!imgModal)
+                                                            setDropImage(false)
 
                                                         } else {
                                                             const finalData = finalObj
@@ -5489,22 +5520,37 @@ const CustomizationParent = () => {
                                                     <div className="p-1 bg-white text-black rounded-3 w-100">{ele?.image?.split("/")?.at("-1")}</div>
                                                     <button className="btn btn-dark w-100" onClick={() => {
                                                         if (imageType === "SINGLE") {
-                                                            const colWise = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
-                                                            const arr = [...colWise]
-                                                            if (arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type) {
-                                                                arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type = "image"
-                                                            }
-                                                            if (arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src) {
-                                                                arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src = ele.image
-                                                            }
-                                                            if (arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].isBrandLogo) {
-                                                                arr[indexes.cur].elements[colWise[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].isBrandLogo = false
-                                                            }
+                                                            // const colWise = 
                                                             const newFinalObj = finalObj
+                                                            const arr = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
+                                                            const arrRev = currPage === "button" ? [...finalObj?.[`${mobileConditionRev}button`]] : [...finalObj?.[`${mobileConditionRev}pages`][finalObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $.id === currPage)].values]
+                                                            if (arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type) {
+                                                                arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type = "image"
+                                                            }
+                                                            if (arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src) {
+                                                                arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src = ele.image
+                                                            }
+                                                            if (arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].isBrandLogo) {
+                                                                arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].isBrandLogo = false
+                                                            }
                                                             currPage === "button" ? newFinalObj[`${mobileCondition}button`] = arr : newFinalObj[`${mobileCondition}pages`][finalObj[`${mobileCondition}pages`].findIndex($ => $?.id === currPage)].values = arr
+
+                                                            if (dropImage) {
+                                                                // if (arrRev[indexes.cur].elements[arrRev[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type) {
+                                                                arrRev[indexes.cur].elements[arrRev[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type = "image"
+                                                                // }
+                                                                // if (arrRev[indexes.cur].elements[arrRev[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src) {
+                                                                arrRev[indexes.cur].elements[arrRev[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src = ele.image
+                                                                // }
+                                                                // if (arrRev[indexes.cur].elements[arrRev[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].isBrandLogo) {
+                                                                arrRev[indexes.cur].elements[arrRev[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].isBrandLogo = false
+                                                                // }
+                                                                currPage === "button" ? newFinalObj[`${mobileConditionRev}button`] = arrRev : newFinalObj[`${mobileConditionRev}pages`][finalObj[`${mobileConditionRev}pages`].findIndex($ => $?.id === currPage)].values = arrRev
+                                                            }
                                                             updatePresent(newFinalObj)
-                                                            setcolWise(currPage === "button" ? newFinalObj?.[`${mobileCondition}button`] : newFinalObj?.[`${mobileCondition}pages`]?.[finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values)
+                                                            // setcolWise(currPage === "button" ? newFinalObj?.[`${mobileCondition}button`] : newFinalObj?.[`${mobileCondition}pages`]?.[finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values)
                                                             setImgModal(!imgModal)
+                                                            setDropImage(false)
 
                                                         } else {
                                                             const finalData = finalObj

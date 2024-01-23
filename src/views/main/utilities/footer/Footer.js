@@ -68,14 +68,17 @@ const Footer = () => {
                             </ul>
                         </div>
                         <div className="p-0 mt-3 mt-lg-0" >
-                            <h5 className='text-black fw-bolder mb-' style={{fontSize:"17px"}}><Link to='/partners' >Partners </Link></h5>
-                            <ul className=' list-unstyled'>
-                            <li className=' ' style={{ marginTop: "7px" }} ><Link to="/affiliate/login" >  Login </Link></li>
-                            <li className=' ' style={{ marginTop: "7px" }} ><Link to="/affiliate/signup" >  Signup </Link></li>
-                            </ul>
+                            <div className="d-none">
+                                <h5 className='text-black fw-bolder mb-' style={{fontSize:"17px"}}><Link to='/partners' >Partners </Link></h5>
+                                <ul className=' list-unstyled'>
+                                    <li className=' ' style={{ marginTop: "7px" }} ><Link to="/affiliate/login" >  Login </Link></li>
+                                    <li className=' ' style={{ marginTop: "7px" }} ><Link to="/affiliate/signup" >  Signup </Link></li>
+                                </ul>
+
+                            </div>
 
                             <h5 className='text-black fw-bolder mb-1' style={{fontSize:"17px"}}><Link to='/blog' >Blog </Link></h5>
-                            <h5 className='text-black fw-bolder mb-1' style={{fontSize:"17px"}}><a  href='https://hr.xircls.com/careers/' >Careers </a></h5>
+                            <h5 className='text-black fw-bolder mb-1' style={{fontSize:"17px"}}><a target="_blank" href='https://hr.xircls.com/careers/' >Careers </a></h5>
                         </div>
                         <div className="p-0 mt-3 mt-lg-0" >
                             <h5 className='text-black fw-bolder mb-'style={{fontSize:"17px"}} >Contact Us</h5>

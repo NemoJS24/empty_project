@@ -26,7 +26,7 @@ export default function Price_Card({ data, isFeature }) {
                     <h5 className='ms-1 mt-2 text-black'>{data.listHead}</h5>
                     <div className='ms-1 d-flex flex-column mt-1 gap-1'>
                         {
-                            isFeature && <Link to='/products/superleadz/lead-generation-nurturing-and-conversion/features' className='d-flex align-items-center text-success' style={{ gap: "5px" }}><GoDotFill color="#afafaf" /> <h3 className='m-0 fs-4 text-'>All Features</h3><FiArrowUpRight color="#afafaf" size={17} style={{ marginLeft: "-3px" }} /></Link>
+                            isFeature && <a target='_blank' href='/products/superleadz/features/' className='d-flex align-items-center text-success' style={{ gap: "5px" }}><GoDotFill color="#afafaf" /> <h3 className='m-0 fs-4 text-'>All Features</h3><FiArrowUpRight color="#afafaf" size={17} style={{ marginLeft: "-3px" }} /></a>
                         }
 
                         {

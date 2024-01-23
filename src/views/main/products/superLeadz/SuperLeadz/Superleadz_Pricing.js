@@ -28,7 +28,7 @@ export default function Superleadz_Pricing() {
       button: "Buy Now",
       high: "Recommended",
       items: [
-        "150,000 pop-up views",
+        "250,000 pop-up views",
         "No XIRCLS branding",
         "2 Domains"
 
@@ -41,7 +41,7 @@ export default function Superleadz_Pricing() {
       subValue: "$419.99/year (save 30%)",
       button: "Buy Now",
       items: [
-        "500,000 pop-up views",
+        "750,000 pop-up views",
         "No XIRCLS branding",
         "5 Domains"
 

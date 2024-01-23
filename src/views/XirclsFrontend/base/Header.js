@@ -202,21 +202,21 @@ export default function Header() {
                       <Row>
                         <Col sm={4} className='d-flex flex-column justify-content-start py-2 border-end align-items-center'>
                           <img className="mb-2" width={64} height={64} src={logo5} />
-                          <Link style={{fontSize: '18px'}} to='/products/infiniti/customer-acquisition-and-loyalty/' className="text-uppercase font-18px-st text-blue hover-black">Infiniti</Link>
+                          <Link style={{fontSize: '18px'}} to='/products/infiniti/' className="text-uppercase font-18px-st text-blue hover-black">Infiniti</Link>
                           <p className="text font-15px-st text-center text-dark mb-2">Customer Acquisition and Loyalty</p>
-                          <Link to='/products/infiniti/customer-acquisition-and-loyalty/' className="text-blue hover-blue">Learn More <IoIosArrowForward /></Link>
+                          <Link to='/products/infiniti/' className="text-blue hover-blue">Learn More <IoIosArrowForward /></Link>
                         </Col>
                         <Col sm={4} className='d-flex flex-column justify-content-start py-2 border-end align-items-center'>
                           <img className="mb-2" width={64} height={64} src={logo6} />
-                          <Link style={{fontSize: '18px'}} to='/products/semperfi/customer-loyalty/' className="text-uppercase font-18px-st text-blue hover-black">Semper Fi</Link>
+                          <Link style={{fontSize: '18px'}} to='/products/semperfi/' className="text-uppercase font-18px-st text-blue hover-black">Semper Fi</Link>
                           <p className="text font-15px-st text-center text-dark mb-2">Customer Loyalty</p>
-                          <Link to='/products/semperfi/customer-loyalty/' className="text-blue hover-blue">Learn More <IoIosArrowForward /></Link>
+                          <Link to='/products/semperfi/' className="text-blue hover-blue">Learn More <IoIosArrowForward /></Link>
                         </Col>
                         <Col sm={4} className='d-flex flex-column justify-content-start py-2 align-items-center'>
                           <img className="mb-2" width={64} height={64} src={logo3} />
-                          <Link style={{fontSize: '18px'}} to='/products/sniper/customer-acquisition/' className="text-uppercase font-18px-st text-blue hover-black">Sniper</Link>
+                          <Link style={{fontSize: '18px'}} to='/products/sniper/' className="text-uppercase font-18px-st text-blue hover-black">Sniper</Link>
                           <p className="text font-15px-st text-center text-dark mb-2">Customer Acquisition</p>
-                          <Link to='/products/sniper/customer-acquisition/' className="text-blue hover-blue">Learn More <IoIosArrowForward /></Link>
+                          <Link to='/products/sniper/' className="text-blue hover-blue">Learn More <IoIosArrowForward /></Link>
                         </Col>
                       </Row>
                     </Container>
@@ -319,18 +319,18 @@ export default function Header() {
                                   <Row>
                                     <Col sm={12} className='d-flex flex-column justify-content-start py-1 bordert-top align-items-center'>
                                       <img className="mb-2" width={64} height={64} src={logo2} />
-                                      <Link to='/products/infiniti/customer-acquisition-and-loyalty/' className="text-uppercase font-22px-res text-center text-blue hover-black">INFINITI</Link>
-                                      <Link to='/products/infiniti/customer-acquisition-and-loyalty/' className="text-blue hover-blue">Learn More <IoIosArrowForward /></Link>
+                                      <Link to='/products/infiniti/' className="text-uppercase font-22px-res text-center text-blue hover-black">INFINITI</Link>
+                                      <Link to='/products/infiniti/' className="text-blue hover-blue">Learn More <IoIosArrowForward /></Link>
                                     </Col>
                                     <Col sm={12} className='d-flex flex-column justify-content-start py-1 bordert-top align-items-center'>
                                       <img className="mb-2" width={64} height={64} src={`${xircls_url}images/website-slide/why-collaborative-marketing/why_collaborative_marketing_logo.png`} />
-                                      <Link to='/products/semperfi/customer-loyalty/' className="text-uppercase font-22px-res text-center text-blue hover-black">SEMPER FI</Link>
-                                      <Link to='/products/semperfi/customer-loyalty/' className="text-blue hover-blue">Learn More <IoIosArrowForward /></Link>
+                                      <Link to='/products/semperfi/' className="text-uppercase font-22px-res text-center text-blue hover-black">SEMPER FI</Link>
+                                      <Link to='/products/semperfi/' className="text-blue hover-blue">Learn More <IoIosArrowForward /></Link>
                                     </Col>
                                     <Col sm={12} className='d-flex flex-column justify-content-start py-1 bordert-top align-items-center'>
                                       <img className="mb-2" width={64} height={64} src={logo4} />
-                                      <Link to='/products/sniper/customer-acquisition/' className="text-uppercase font-22px-res text-center text-blue hover-black">SNIPER</Link>
-                                      <Link to='/products/sniper/customer-acquisition/' className="text-blue hover-blue">Learn More <IoIosArrowForward /></Link>
+                                      <Link to='/products/sniper/' className="text-uppercase font-22px-res text-center text-blue hover-black">SNIPER</Link>
+                                      <Link to='/products/sniper/' className="text-blue hover-blue">Learn More <IoIosArrowForward /></Link>
                                     </Col>
                                   </Row>
                                 </Container>

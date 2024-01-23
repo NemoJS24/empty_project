@@ -24,7 +24,7 @@ import { AiOutlineLink, AiOutlineAppstoreAdd } from 'react-icons/ai'
 const techSellsData = [
   {
     title: "Intuition",
-    desc: "Data-driven & user-friendly interfaces that know what your shoppers want.",
+    desc: "User-friendly interfaces that predict customer needs and deliver seamless experiences.",
     icon: <BsBullseye />
   },
   {
@@ -34,12 +34,12 @@ const techSellsData = [
   },
   {
     title: "Personalization",
-    desc: "Built to serve every kind of shopper. ",
+    desc: "Tailored to individual preferences and fully customizable.",
     icon: <AiOutlineLink />
   },
   {
     title: "Value Addition",
-    desc: "Advanced offer creation & collaborative distribution tools to add value to your customers’ daily lives.",
+    desc: "Advanced offer creation & collaborative distribution tools that add value.",
     icon: <AiOutlineAppstoreAdd />
   },
   {
@@ -49,7 +49,7 @@ const techSellsData = [
   },
   {
     title: "Goodwill",
-    desc: "Turn customers into brand ambassadors and incentivize them to spread the love.",
+    desc: "Customers become brand ambassadors and are incentivized to spread the love.",
     icon: <TbMoneybag />
   }
 ]
@@ -60,7 +60,7 @@ const data = [
       {
         title: "Zero-Party Data Collection",
         subTitle: "Democrazy",
-        desc: "Customer demographic data collection for curated buying experiences."
+        desc: "Customer demographic data collection to curate personalized buying experiences."
       }
     ]
   },
@@ -69,8 +69,8 @@ const data = [
     list: [
       {
       title: "Visitor Authentication",
-      subTitle: (<> <Link to="/superLeadz">SuperLeadz <FiArrowUpRight size={17} style={{ marginTop: "-5px" }} /></Link></>),
-      desc: "Ground zero tools that detect & verify high-intent shoppers within the first few seconds of arrival."
+      subTitle: (<> <a target='_blank' href="/products/superleadz/">SuperLeadz <FiArrowUpRight size={17} style={{ marginTop: "-5px" }} /></a></>),
+      desc: "Make this clickable and open SuperLeadz overview page in a new tab"
     }
   ]
   },
@@ -85,7 +85,7 @@ const data = [
       {
         title: "Rewards & Incentives",
         subTitle: "Infiniti, Semper Fi",
-        desc: "Timely offers, delivered discreetly, to delight shoppers into purchase."
+        desc: "Timely offers, delivered discreetly, to delight shoppers and convert them into customers guaranteed to return."
       }
     ]
   },
@@ -105,7 +105,7 @@ const data = [
       {
         title: "Revenue Recovery",
         subTitle: "Revive",
-        desc: "Smart tools that predict, protect or recover lost or at-risk revenue across the buying cycle."
+        desc: "Smart tools that predict, protect and recover lost or at-risk revenue across the buying cycle."
       },
       {
         title: "Communication",
@@ -115,7 +115,7 @@ const data = [
       {
         title: "Omnichannel Automation",
         subTitle: "QR Forms, CRM",
-        desc: "Online and offline lead generation & conversion at offline locations with centralized customer database management."
+        desc: "Unified online/offline lead generation & conversion with a centralized customer database for streamlined operations."
       }
     ]
   },
@@ -134,7 +134,7 @@ const data = [
     list: [
       {
         title: "Loyalty Management",
-        subTitle: "Semper Fi, TruCash, Gift Cards",
+        subTitle: "Semper Fi, TrueCash, Gift Cards",
         desc: "Loyalty solutions built to deliver meaningful interactions that add true value to your customers’ lives."
       },
       {
@@ -145,7 +145,7 @@ const data = [
       {
         title: "Goodwill & Partnerships",
         subTitle: "Referrals, Customer Affiliates",
-        desc: "Referral management tools to track, reward, and leverage the influence of satisfied customers and strategic partners."
+        desc: "Referral management tools to track, reward and leverage the influence of satisfied customers and strategic partners."
       }
     ]
   }
@@ -165,7 +165,7 @@ const Home = () => {
           <h1 className='display-1 text-center main-heading fw-bolder lh-83 ' >
             From First Visit <br /> To Forever Loyal.
           </h1>
-          <h1 className=' text-center text-black  mt-1 px-3' >An end-to-end martech stack for every step of the buyer journey.</h1>
+          <h1 className=' text-center text-black  mt-1 px-3' >An end-to-end martech stack to optimize every step of the buyer journey.</h1>
 
         </div>
 
@@ -175,7 +175,7 @@ const Home = () => {
         <Row className=' mt170 justify-content-center '>
           <Col xs="10" xl="10" className='  px-0 rounded-2 text-center '>
             <h1 className='display-2 main-heading fw-bolder  '>Trust is Everything.</h1>
-            <h3 className='fs-1  text-black '>We prioritize digital interactions built on trust, transparency, and 100% consent of your valued customers..</h3>
+            <h3 className='fs-1  text-black '>We prioritize digital interactions built on trust, transparency, and 100% consent of your valued customers.</h3>
           </Col>
         </Row>
 
@@ -282,7 +282,7 @@ const Home = () => {
                   </h1>
                   <br />
 
-                  <Link to='/products/superleadz/lead-generation-nurturing-and-conversion' className='btn  btn-lg  fs-3 main-btn-dark px-3 py-1'>Learn more about SuperLeadz <FiArrowUpRight className='fs-4' style={{ marginLeft: "3px", marginBottom: "2px" }} /></Link>
+                  <Link to='/products/superleadz/' className='btn  btn-lg  fs-3 main-btn-dark px-3 py-1'>Learn more about SuperLeadz <FiArrowUpRight className='fs-4' style={{ marginLeft: "3px", marginBottom: "2px" }} /></Link>
                 </div>
               </Card>
             </Col>

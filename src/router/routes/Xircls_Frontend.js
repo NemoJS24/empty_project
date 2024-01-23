@@ -143,7 +143,7 @@ const Xircls_Frontend_Routes = [
     }
   },
   {
-    path: '/products/semperfi/customer-loyalty/',
+    path: '/products/semperfi/',
     app: appName,
     element: <SemperFi />,
     meta: {
@@ -161,7 +161,7 @@ const Xircls_Frontend_Routes = [
     }
   },
   {
-    path: '/products/infiniti/customer-acquisition-and-loyalty/',
+    path: '/products/infiniti/',
     app: appName,
     element: <Infiniti />,
     meta: {
@@ -170,7 +170,7 @@ const Xircls_Frontend_Routes = [
     }
   },
   {
-    path: '/products/sniper/customer-acquisition/',
+    path: '/products/sniper/',
     app: appName,
     element: <Sniper />,
     meta: {
