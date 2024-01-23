@@ -166,61 +166,6 @@ const AddInsurance = () => {
         // }
     ]
 
-    // const handleInputChange = (e, type) => {
-    //     console.log(e)
-    //     if (type === undefined) {
-    //         const { name, value } = e.target
-    //         if (name.includes('.')) {
-    //             const [parent, child] = name.split('.')
-    //             if (parent === 'customer') {
-    //                 setCustomerFormData(prevData => ({
-    //                     ...prevData,
-    //                     [child]: value
-    //                 }))
-    //             } else if (parent === 'product') {
-    //                 setProductFormData(prevData => ({
-    //                     ...prevData,
-    //                     [child]: value
-    //                 }))
-    //             }
-    //         } else {
-    //             setFormData(prevData => ({
-    //                 ...prevData,
-    //                 [name]: value
-    //             }))
-    //         }
-    //     } else if (type === "tel") {
-    //         let { value } = e.target
-    //         const { name } = e.target
-    //         value = value.replace(/[^0-9]/g, "")
-    //         setFormData(prevFormData => ({
-    //             ...prevFormData,
-    //             [name]: value
-    //         }))
-    //     } else if (type) {
-    //         console.log(e)
-    //         if (type.includes('.')) {
-    //             const [parent, child] = type.split('.')
-    //             if (parent === 'customer') {
-    //                 setCustomerFormData(prevData => ({
-    //                     ...prevData,
-    //                     [child]: e.value
-    //                 }))
-    //             } else if (parent === 'product') {
-    //                 setProductFormData(prevData => ({
-    //                     ...prevData,
-    //                     [child]: e.value
-    //                 }))
-    //             }
-    //         } else {
-    //             setFormData(prevFormData => ({
-    //                 ...prevFormData,
-    //                 [type]: e.value
-    //             }))
-    //         }
-    //     }
-    // }
-
     const handleInputChange = (e, type = "formData") => {
         if (type === "formData") {
             setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -402,7 +347,7 @@ const AddInsurance = () => {
 
         setUsedProductOptions(data.car_variant.map(item => {
             const value = item[0]
-            const label = <div style={{textTransform: "capitalize"}}>{item[4]}</div>
+            const label = <div style={{ textTransform: "capitalize" }}>{item[4]}</div>
             return {
                 value,
                 label
@@ -752,7 +697,13 @@ const AddInsurance = () => {
                     <input placeholder="Mobile Number" type='tel' maxLength={10} id='basicDetails-mobile' name='phone_no' className="form-control"
                         value={customerFormData?.phone_no}
                         // onChange={handleInputChangeCustomerFrom}
-                        onChange={(e) => handleInputChange(e, "customerData")}
+                        // onChange={(e) => handleInputChange(e, "customerData")}
+                        onChange={(e) => {
+                            if (!isNaN(e.target.value)) {
+                                handleInputChange(e, "customerData")
+                                console.log("this is a number")
+                            }
+                        }}
                         isDisabled={id}
                     />
                     <p id="phone_no_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -805,7 +756,13 @@ const AddInsurance = () => {
                         className="form-control"
                         value={customerFormData.pincode}
                         // onChange={handleInputChangeCustomerFrom}
-                        onChange={(e) => handleInputChange(e, "customerData")}
+                        // onChange={(e) => handleInputChange(e, "customerData")}
+                        onChange={(e) => {
+                            if (!isNaN(e.target.value)) {
+                                handleInputChange(e, "customerData")
+                              console.log("this is a number")
+                            }
+                          }}
                     />
                 </Col>
 
@@ -1221,7 +1178,13 @@ const AddInsurance = () => {
                                         </label>
                                         <input placeholder="Amount" type='tel' id='amount-r' name='amount' className="form-control"
                                             value={formData?.amount}
-                                            onChange={e => handleInputChange(e)}
+                                            // onChange={e => handleInputChange(e)}
+                                            onChange={(e) => {
+                                                if (!isNaN(e.target.value)) {
+                                                    handleInputChange(e)
+                                                  console.log("this is a number")
+                                                }
+                                              }}
                                         />
                                     </Col>
                                     {(formData?.insurance_type === 'Motor' || formData?.insurance_type === 'Lease Car') && <>

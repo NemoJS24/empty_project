@@ -141,9 +141,15 @@ const CoApplicantForm = ({ allData }) => {
                         </label>
                         <input required placeholder="10-digit Mobile Number" type='tel' pattern="[789][0-9]{9}" maxLength={10} id='basicDetails-mobile' name='phone_no' className="form-control"
                             value={formData?.phone_no}
+                            // onChange={(e) => {
+                            //     handleInputChange(e)
+                            // }}
                             onChange={(e) => {
-                                handleInputChange(e)
-                            }}
+                                if (!isNaN(e.target.value)) {
+                                  handleInputChange(e)
+                                  console.log("this is a number")
+                                }
+                              }}
                         />
                         <p id="phone_no_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
@@ -175,7 +181,13 @@ const CoApplicantForm = ({ allData }) => {
                         </label>
                         <input required placeholder="Alternate Mobile Number" type='tel' pattern="[789][0-9]{9}" maxLength={10} id='basicDetails-alt-landline' name='phone_no2' className="form-control"
                             value={formData?.phone_no2}
-                            onChange={e => (handleInputChange(e))}
+                            // onChange={e => (handleInputChange(e))}
+                            onChange={(e) => {
+                                if (!isNaN(e.target.value)) {
+                                  handleInputChange(e)
+                                  console.log("this is a number")
+                                }
+                              }}
                         />
                     </Col>
 
@@ -269,7 +281,13 @@ const CoApplicantForm = ({ allData }) => {
                             name="pincode"
                             className="form-control"
                             value={formData.pincode}
-                            onChange={e => (handleInputChange(e))}
+                            // onChange={e => (handleInputChange(e))}
+                            onChange={(e) => {
+                                if (!isNaN(e.target.value)) {
+                                  handleInputChange(e)
+                                  console.log("this is a number")
+                                }
+                              }}
                         />
                     </Col>
                     <Col md={6} className="mt-2">
@@ -313,7 +331,13 @@ const CoApplicantForm = ({ allData }) => {
                         </label>
                         <input required placeholder="10-digit Aadhar Card Number" type='tel' pattern="[0-9]{12}" maxLength={10} id='basicDetails-aadhar' name='Adharcard' className="form-control"
                             value={formData?.Adharcard}
-                            onChange={e => (handleInputChange(e))}
+                            // onChange={e => (handleInputChange(e))}
+                            onChange={(e) => {
+                                if (!isNaN(e.target.value)) {
+                                  handleInputChange(e)
+                                  console.log("this is a number")
+                                }
+                              }}
                         />
                     </Col>
                     <Col md={6} className="mt-2">
@@ -368,7 +392,13 @@ const CoApplicantForm = ({ allData }) => {
                                 className="form-control"
                                 min="0"
                                 value={formData?.NO_Of_Children ?? ''}
-                                onChange={handleInputChange}
+                                // onChange={handleInputChange}
+                                onChange={(e) => {
+                                    if (!isNaN(e.target.value)) {
+                                      handleInputChange(e)
+                                      console.log("this is a number")
+                                    }
+                                  }}
                             />
                         </Col>
                     )}

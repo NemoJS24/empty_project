@@ -34,9 +34,15 @@ const EMIForm = ({ allData }) => {
                         <input required placeholder="EMI Amount" type='tel' pattern="[0-9]" maxLength={10} id='basicDetails-emi' name='Emi_Amount' className="form-control"
                             value={formData?.Emi_Amount}
                             // onChange={e => (handleInputChange(e))}
+                            // onChange={(e) => {
+                            //     handleInputChange(e)
+                            // }}
                             onChange={(e) => {
-                                handleInputChange(e)
-                            }}
+                                if (!isNaN(e.target.value)) {
+                                  handleInputChange(e)
+                                  console.log("this is a number")
+                                }
+                              }}
                         />
                         <p id="Emi_Amount_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
@@ -88,7 +94,13 @@ const EMIForm = ({ allData }) => {
                         </label>
                         <input required placeholder="Ex-Showroom Amount" type='tel' pattern="[0-9]" maxLength={10} id='basicDetails-showroom-amount' name='Ex_Showroom_Amount' className="form-control"
                             value={formData?.Ex_Showroom_Amount}
-                            onChange={handleInputChange}
+                            // onChange={handleInputChange}
+                            onChange={(e) => {
+                                if (!isNaN(e.target.value)) {
+                                  handleInputChange(e)
+                                  console.log("this is a number")
+                                }
+                              }}
                         />
                     </Col>
                     <Col md={6} className="mt-2">

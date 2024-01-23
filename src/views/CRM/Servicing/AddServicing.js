@@ -299,45 +299,6 @@ const AddServicing = () => {
             })
     }
 
-    // useEffect(() => {
-    //     getCustomer()
-    // }, [])
-
-    // const fetchCustomerData = async (page, inputValue, callback) => {
-    //     // console.log(callback, 'callback2')
-    //     try {
-    //         const response = await getReq("get_customer_details", `/?page=${page}`)
-    //         // const response = await axios.get(
-    //         //     `https://api.demo.xircls.in/customers/merchant/get_customer_details/?page=${page}`
-    //         // )
-    //         const successData = response.data.success
-    //         // console.log(successData)
-    //         console.log("successData", successData)
-    //         if (successData && Array.isArray(successData)) {
-    //             const customerOptions = successData
-    //                 .filter((item) => item.customer_name !== "")
-    //                 .map((customer) => ({
-    //                     value: customer.id,
-    //                     label: customer.customer_name
-    //                 }))
-    //             const option = [...allOptions, ...customerOptions]
-    //             console.log(option, "option")
-    //             setAllOptions(option)
-    //             callback(option)
-    //             // setCurrentPage((prevPage) => prevPage + 1)
-    //             setCurrentPage((prevPage) => {
-    //                 const nextPage = Math.min(prevPage + 1, (response.data.total_count / 100))
-    //                 return nextPage
-    //             })
-    //         } else {
-    //             console.error("Invalid or missing data in the API response")
-    //             callback([])
-    //         }
-    //     } catch (error) {
-    //         console.error("Error fetching data:", error.message)
-    //     }
-    // }
-
     const getCountries = () => {
         getReq("countries")
             .then((resp) => {
@@ -430,7 +391,7 @@ const AddServicing = () => {
     }
 
     useEffect(() => {
-        
+
         // fetchCustomerData(currentPage, null, () => { })
         getCustomer()
         getCountries()
@@ -650,9 +611,15 @@ const AddServicing = () => {
                     </label>
                     <input placeholder="Mobile Number" type='tel' maxLength={10} id='basicDetails-mobile' name='phone_no' className="form-control"
                         value={formData.addForm?.phone_no}
+                        // onChange={(e) => {
+                        //     handleInputChange(e, "addForm")
+                        //     // addInputChangeHandler(e)
+                        // }}
                         onChange={(e) => {
-                            handleInputChange(e, "addForm")
-                            // addInputChangeHandler(e)
+                            if (!isNaN(e.target.value)) {
+                                handleInputChange(e, "addForm")
+                                console.log("this is a number")
+                            }
                         }}
                     />
                     <p id="phone_no_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -719,8 +686,14 @@ const AddServicing = () => {
                         name="pincode"
                         className="form-control"
                         value={formData.addForm.pincode}
+                        // onChange={(e) => {
+                        //     handleInputChange(e, "addForm")
+                        // }}
                         onChange={(e) => {
-                            handleInputChange(e, "addForm")
+                            if (!isNaN(e.target.value)) {
+                                handleInputChange(e, "addForm")
+                                console.log("this is a number")
+                            }
                         }}
                     />
                     <p id="pincode_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -914,8 +887,14 @@ const AddServicing = () => {
                             name="service_invoice_amount"
                             className="form-control"
                             value={formData.mainForm.service_invoice_amount ?? ""}
+                            // onChange={(e) => {
+                            //     handleInputChange(e, "mainForm")
+                            // }}
                             onChange={(e) => {
-                                handleInputChange(e, "mainForm")
+                                if (!isNaN(e.target.value)) {
+                                    handleInputChange(e, "mainForm")
+                                    console.log("this is a number")
+                                }
                             }}
                         />
                         <p id="service_invoice_amount_val" className="text-danger m-0 p-0 vaildMessage"></p>
