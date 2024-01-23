@@ -116,6 +116,13 @@ const Customers = () => {
       isEnable: true
     },
     {
+      name: "Created at",
+      minWidth: "200px",
+      selector: (row) => row?.insurance_created_at ? moment(row.insurance_created_at).format("YYYY-MM-DD") : "-",
+      type: 'date',
+      isEnable: true
+    },
+    {
       name: "Action",
       width: "130px",
       selector: (row) => (
