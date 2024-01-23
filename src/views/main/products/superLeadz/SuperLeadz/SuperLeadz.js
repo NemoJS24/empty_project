@@ -20,53 +20,248 @@ import CardLeft from '../../../components/CardLeft'
 // import gif1 from './images/Horizontal.gif'
 import arrow from './images/arrow.png'
 import giff1 from './images/gif1.gif'
+import { X } from 'react-feather'
 
 // faq data
 export const superFaqData = [
     {
         q: "What is SuperLeadz?",
-        a: "Put in your phone no. and email address not available on our website You will always receive personalized, exclusive discounts when you log in, not available anywhere else on your website. Turn your store into a super-charged lead generation machine while encouraging them to spend more. You can generate zero-party, genuine and verified leads by incentivizing visitors to willingly give their data to you.!"
+        a: " SuperLeadz is a lead generation tool to generate 100% self-verified leads, engage them with on-site incentives tailored by visit frequency and engagement, and facilitate one-click offer redemptions for a frictionless purchase journey."
     },
     {
-        q: "How can you guarantee genuine and verified leads?",
-        a: "Visitors must enter the one-time password received in their inbox to verify themselves as genuine potential customers. Although, this feature can be turned off and the leads will no longer be genuine and verified.."
+        q: "How is SuperLeadz different from other lead generation & conversion tools?",
+        a: (
+            <div>
+                <p>SuperLeadz is markedly different from other lead generation tools, mainly in these aspects:</p>
+                <p>
+
+                    i. Lead Verification: SuperLeadz employs a Dual Verification Process, validating
+                    both the authenticity and purchase intent of website visitors through OTP
+                    verification. This guarantees the generation of 100% self-verified leads, who
+                    can then be incentivized with offers personalized by visit frequency &
+                    engagement.</p>
+                <p>
+                    ii.  Diverse Offer Creation: Merchants can create different types of offers, from
+                    flat discount on order value to Buy & Get Free offers.</p>
+                <p>
+                    iii.Multiple Offer Display: Visitors can choose from multiple offers in a single
+                    pop-up interaction, increasing the likelihood of conversions.</p>
+                <p>
+                    iv.One-Click Offer Redemptions: Leads can click the "Redeem" button adjacent
+                    to their selected offer in the pop-up and continue shopping. The chosen offer
+                    is automatically applied during the checkout process (even if the shopper
+                    forgets!)</p>
+            </div >
+        )
     },
     {
-        q: "Why would the user go through an extra step of entering the one-time password?",
-        a: "The Lead Hotspot (widget) will appear on your website. When clicked, the pop-up will incentivize visitors to check in with their email/mobile number. Visitors will instantly see the offer which they can redeem with one click and auto applied on checkout. Without OTP, bots will start making your website heavy. You will be spending resources to manage and remarket to unverified users, mostly bots."
+        q: "How does SuperLeadz personalize and incentivize based on visitor history?",
+        a: "  SuperLeadz empowers you to design personalized pop-ups catering to first-time shoppers, returning visitors, and existing customers. It dynamically showcases specific offers tailored to each of these distinct visitor segments. Offers can also be personalized based on engagement e.g. time spent on page, scroll percentage and more."
     },
     {
-        q: "What makes SuperLeadz more effective than other kinds of lead generation tools?",
-        a: "SuperLeadz is a simple tool to reduce drop-offs at the very top of your sales funnel. A simple button invites visitors to ‘check in’ and grab their own exclusive offer, which is auto-applied, after verifying their identity. It’s a subtle psychological strategy that runs counter to traditional lead magnets like newsletters, contests, spin the wheel and other gamification tools that goad visitors into signing up or completing an action to get a reward. And worse, makes your website look just like your competition’s! Additionally, all the communication will be sent by you and not us or any third party application."
+        q: "How does Super Leadz help me authenticate lead data?",
+        a: " Leads self-verify their contact details through One-Time Password (OTP) verification of their email address and/or mobile number. This guarantees 100% authentic lead data for future marketing campaigns."
     },
     {
-        q: "How do I know if this is right for me?",
-        a: "To determine if SuperLeadz is the right tool for you, you should consider your business goals, target audience, and existing lead generation strategies. If your primary goal is to reduce drop-offs at the top of your sales funnel and you want a simple, non-intrusive way to offer exclusive deals to your website visitors, then SuperLeadz could be a good fit for you. However, if you have a different objective or already have effective lead generation strategies in place, you may not need SuperLeadz. Consider your target audience as well. If your audience is likely to be receptive to exclusive offers and appreciates a simple and straightforward approach, SuperLeadz may be a good fit. However, if your audience prefers more interactive or engaging lead generation methods, SuperLeadz may not be the best option. Ultimately, the decision of whether SuperLeadz is right for you depends on your specific business needs and objectives. Additionally, you can try out a free trial or request a demo to see if SuperLeadz is a good fit for your business."
+        q: "How do I know whether Super Leadz is the right tool for me?",
+        a: (
+            <div>
+                <p> Super Leadz is the right tool for you if you want to:</p>
+                <p>
+                    i.  Reduce website drop-offs and increase average visit time</p>
+                <p>ii.  Convert more anonymous visitors into self-qualified leads</p>
+                <p>iii. Personalize your communication & incentives for first-time visitors, returning shoppers and registered users</p>
+                <p>iv. Display multiple offers within a single pop-up interaction for a lead to choose
+                    from</p>
+                <p> v. Hyper-customize your pop-ups (multiple offer display, multiple page redirects,
+                    placeholder text customization etc.)</p>
+                <p>  vi. Give your customers one-click offer redemption for a seamless purchase
+                    experience</p>
+
+            </div>
+        )
     },
     {
-        q: " How does the pricing work?",
-        a: "SuperLeadz pricing is based on the total number of visitors in your store. You can check the details here <Pricing Page Link>."
+        q: "What is a Lead?",
+        a: "Lead is a store visitor who has signaled interest in making a purchase via a SuperLeadz pop-up i.e. they’ve submitted their contact information to receive a special offer."
     },
     {
-        q: "What if I exceed the maximum in my plan?",
-        a: "When your customers are increased outside the range, your plan will automatically upgrade to the next pricing plan."
+        q: "What is a SuperLead?",
+        a: "SuperLead is a Lead who has self-verified their contact information through One Time Password (OTP) authentication. Besides authenticity, a SuperLead implies interest as well, since the lead has taken the effort to complete the verification process in order to receive an offer. In essence, a SuperLead represents a high-quality, ready-to-convert lead."
     },
     {
-        q: "How do I pay?",
-        a: "All charges are submitted through Shopify, will appear on your normal Shopify bill, and will be paid through Shopify. There are no extra contracts, vendors, or payment schedules to worry about."
+        q: "What is a Sales Qualified Lead (SQL)?",
+        a: "Lead who has self-verified their contact information through One Time Password (OTP) authentication, specifically with the intention of receiving an offer, qualifies as a Sales Qualified Lead."
+    },
+    {
+        q: "What is a Marketing Qualified Lead (MQL)?",
+        a: "Lead who has opted in to receive a newsletter or any other marketing communication in the future is further identified as a Marketing Qualified Lead."
+    },
+    {
+        q: "What is a Visitor Type?",
+        a: " Visitor Type identifies a store visitor as a first-time shopper, a returning visitor, or a registered user."
+    },
+    {
+        q: "Who is a First-Time Shopper?",
+        a: "First-Time Shopper is a prospective customer who has not previously visited your store. They are identified as such based on their IP address."
+    },
+    {
+        q: "Who is a Returning Visitor?",
+        a: "Returning Visitor is a prospective customer who has previously visited your store. They are identified as such based on their IP address."
+    },
+    {
+        q: "Who is a Registered User?",
+        a: "Registered User is a prospective or existing customer who has an account with your store."
+    },
+    {
+        q: "What is Lead Rating?",
+        a: " Lead Rating categorizes a lead as Cold, Warm, or Hot based on their position in the offer redemption and purchase journey."
+    },
+    {
+        q: "What is a Cold Lead?",
+        a: "Cold Lead is a lead who has shared their contact information via a SuperLeadz pop-up and requested a One-Time Password (OTP) but not entered it."
+    },
+    {
+        q: "What is a Warm Lead?",
+        a: "Warm Lead is a lead who verifies their contact information by submitting their One-Time Password (OTP) in a SuperLeadz pop-up, receives one or more offers but opts not to redeem them."
+    },
+    {
+        q: "What is a Hot Lead?",
+        a: "Hot Lead is a lead who clicks on the Redeem button of a SuperLeadz pop-up with the intent to redeem an offer but ultimately abandons the purchase."
+    },
+
+    {
+        q: "What kind of offers can I create?",
+        a: "Lead/Live Activity is a section on your SuperLeadz dashboard that displays real-time information about visitors currently active on your website, including the pages they are currently viewing or have recently navigated to."
+    },
+
+    {
+        q: "What types of offers can I create?",
+        a: (
+            <div>
+                <p>
+                     Types of offers can I create?</p>
+                     <p>  There are 3 types of offers you can create on SuperLeadz:</p>
+                     <p>a. Discount on Total Order Value: A discount applied to the total purchase.</p>
+                     <p>b. Discount on Select Products: A discount applied to specific items or categories
+                    within a product catalog. Instead of offering a discount across the entire range of
+                    products, this type of promotion targets particular items, groups of items, or
+                    product categories.</p>
+                    <p> c. Buy X, Get Y: Customers receive a discount on the second or subsequent
+                    products when they purchase the first product in a specified quantity or reach a
+                    certain total purchase amount.</p>
+                
+            </div>
+        )
+    },
+    {
+        q: "What kinds of discount values can I create?",
+        a: (
+            <div>
+                <p>
+                    You can create two types of discount values:</p>
+                    <p> a. Percentage Off - A percentage amount deducted from the original price of a
+                    product or the total purchase amount.</p>
+                    <p> b. Flat Amount off - A specific monetary value deducted from the original price of a
+                    product or the total purchase amount.</p>
+                
+            </div>
+        )
+    },
+    {
+        q: " What type of cart conditions can I apply to an offer?",
+        a: (
+            <div>
+                <p>
+                    Cart conditions are criteria or requirements that must be met in a shopping cart for an
+                    offer to be applied. The types of cart conditions you can apply to an offer on SuperLeadz
+                    are:</p>
+                    <p> a. Minimum Purchase Amount: Requires that customers spend a certain minimum amount
+                    to be eligible for the offer</p>
+                    <p> b. Cart Quantity: Set conditions based on the number of items or quantity of products in the
+                    shopping cart.</p>
+                
+            </div>
+        )
+    },
+    {
+        q: "What does Maximum Use Count mean?",
+        a: (
+            <div>
+                <p>
+                    In offer creation, "Maximum Use Count" refers to the maximum number of times a
+                    particular discount code or offer can be used. This feature helps businesses control the
+                    distribution and utilization of discounts based on a predetermined usage limit.
+                </p>
+                <p>
+                    In SuperLeadz, discount use can be limited to one time per customer or a limit can be
+                    set on the total usage of the discount, restricting the number of times customers can
+                    apply the discount code to their purchases. Once the maximum use count is reached,
+                    the discount code becomes invalid or inactive.
+                </p>
+            </div>
+        )
+    },
+    {
+        q: "How do I change the Offer Design?",
+        a:
+            (
+                <div>
+                    <p>
+                        The offer design can be modified after adding that particular offer to a Campaign</p>
+                        <p>Thereafter, you can customize the design in the Offer section of the Campaign Settings.
+                    </p>
+                </div>
+            )
+    },
+    {
+        q: "What is a SuperLeadz campaign?",
+        a: "A SuperLeadz campaign involves directing a pop-up template toward specific visitor segments such as first-time shoppers, returning visitors, and registered users. The objective is to incentivize purchases through enticing offers in exchange for their contact information, whether verified or not. The pop-up templates are customizable by design, visitor type and behaviour."
+    },
+    {
+        q: "What is a Quick Setup?",
+        a: " Quick Setup in the Theme section enables quick customization of the main elements of the pop-up to save time. Alternately, you can use the Brand Theme Preset option to apply your company’s branding to every pop-up campaign you create."
+    },
+    {
+        q: "What is a Brand Theme Preset?",
+        a: "A Brand Theme preset refers to a predefined set of design elements, including colors, fonts, logo, and other visual components, that collectively represent the distinctive and consistent visual identity of your brand. With a Brand Theme preset, you can give all your campaigns a unified look with a single click."
+    },
+    {
+        q: "How do I see a live preview of the pop-up template?",
+        a: " To preview how the pop-up will appear on your website, click the Preview button located at the top right of the Create/Edit Campaign page"
+    },
+
+    {
+        q: "Can I try out SuperLeadz for free?",
+        a: " Yes, you can try out all features of SuperLeadz at no cost, for up to 1,000 pop-up views per month."
+    },
+    {
+        q: "How does the pricing work?",
+        a: " You can try out SuperLeadz for free, with a limit of up to 1,000 pop-up views per month. Once you surpass this limit, choose a plan based on the monthly average of pop-up views you anticipate on your website."
+    },
+    {
+        q: "What happens if I surpass the allocated number of pop-up views in my current plan?",
+        a: " If you exceed the allocated number of pop-up views within your current plan, your SuperLeadz campaign will temporarily stop and resume in the next billing cycle. To resume the campaign immediately, upgrade to a higher plan."
     },
     {
         q: "What is the billing date?",
-        a: "-You will be billed on the date of your first purchase every month"
-    },
-    {
-        q: "Is there a free plan?",
-        a: "We do not have a free plan but you can have a free trial of 14 days to incentivize visitors to willingly give their data to you and generate zero-party, genuine and verified leads. All features are available during this trial period."
+        a: " Billing will occur monthly, and the billing date will be the same as the date of your first purchase."
     },
     {
         q: "Can I cancel at any time?",
-        a: "Of course! You can cancel your active charge at any time through your SuperLeadz Settings in the billing section or by simply uninstalling the app. Once uninstalled, no further charges will be submitted but your next Shopify bill may still have one remaining charge to be paid based on any partial billing cycle.",
-        learn: "Learn More from shopify"
+        a: (
+            <div>
+                <p>
+                    We prioritize your satisfaction above all else. Should you encounter any challenges or
+                    have concerns, please reach out to <Link to="#" className='text-primary'>support@xircls.com</Link>  or call/WhatsApp +91 9969 333
+                    666. We will do our best to assist you.
+                </p>
+                <p>To cancel your plan subscription, navigate to the Billing section of your SuperLeadz
+                    dashboard.</p>
+                <p>Please note: After you cancel your subscription, your account will automatically revert to the
+                    free plan, which has no expiry date, allowing you to use it indefinitely.</p>
+            </div>
+        )
     }
 ]
 export default function SuperLeadz() {
@@ -197,7 +392,8 @@ export default function SuperLeadz() {
                                 <p className='fs-1 fw-lig'>No self-verification</p>
                                 <p className='fs-1 fw-lig'>=</p>
                                 <div className='d-flex  justify-content-center align-items-center '>
-                                    <img src={arrow} alt="" style={{ transform: "rotate(90deg)", height: "50px" }} />
+                                    {/* <img src={arrow} alt="" style={{ transform: "rotate(90deg)", height: "50px" }} /> */}
+                                    <X size={'50px'} />
                                     <p className='display-1 '>100 %</p>
                                 </div>
 

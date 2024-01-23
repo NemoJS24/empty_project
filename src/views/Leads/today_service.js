@@ -128,36 +128,29 @@ const Customers = () => {
 
   const customerStatisticsData = [
     {
-      name: "All Loan",
-      data: tableData.total_loan_amount ?? "0",
+      name: "All Servicing",
+      data: tableData.total_servicing ?? "0",
       type: "number",
       icon: <LuTrendingUp size={30} className="text-dark" />,
       iconStyle: ""
     },
     {
-      name: "Today's Loan",
-      data: tableData.today_loan ?? "0",
+      name: "Today's Servicing",
+      data: tableData.todays_servicing ?? "0",
       type: "number",
       icon: <LiaUserSolid size={30} className="text-dark" />,
       iconStyle: ""
     },
     {
-      name: "Total Loan Amount",
-      data: tableData.total_loan_amount ?? "0",
+      name: "Total Customers Served",
+      data: tableData.total_customers ?? "0",
       type: "number",
       icon: <LiaUserSlashSolid size={30} className="text-dark" />,
       iconStyle: ""
     },
     {
-      name: "Total EMI Amount Paid",
-      data: tableData.total_loan_amount_remain ?? "0",
-      type: "money",
-      icon: <PiMoneyThin size={30} className="text-dark" />,
-      iconStyle: ""
-    },
-    {
-      name: "Total EMI Amount Due",
-      data: tableData.total_loan_amount_remain ?? "0",
+      name: "Total Amount",
+      data: tableData.total_amount ?? "0",
       type: "money",
       icon: <PiMoneyThin size={30} className="text-dark" />,
       iconStyle: ""
