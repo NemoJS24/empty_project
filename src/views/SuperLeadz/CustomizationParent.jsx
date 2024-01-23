@@ -111,12 +111,14 @@ const CustomizationParent = () => {
 
     const allPreviews = [...allThemes]
 
+    console.log("finalObj: ", localStorage.getItem("defaultThemeId"))
+
     const navigate = useNavigate()
     const [mousePos, setMousePos] = useState({})
-    const [finalObj, setFinalObj] = useState(themeLoc?.state?.custom_theme ? JSON.parse(themeLoc?.state?.custom_theme) : localStorage.getItem("defaultThemeId") !== "" ? { ...allPreviews[allPreviews?.findIndex($ => $?.theme_id === Number(localStorage.getItem("defaultThemeId")))]?.object, campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") } : selectedThemeId !== "" ? { ...allPreviews[allPreviews?.findIndex($ => $?.theme_id === selectedThemeId)]?.object, campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") } : defaultObj)
+    const [finalObj, setFinalObj] = useState(themeLoc?.state?.custom_theme ? JSON.parse(themeLoc?.state?.custom_theme) : Boolean(localStorage.getItem("defaultTheme")) ? JSON.parse(localStorage.getItem("defaultTheme")) : Boolean(localStorage.getItem("defaultThemeId")) ? allPreviews[allPreviews.findIndex($ => $?.theme_id === parseFloat(localStorage.getItem("defaultThemeId")))]?.object : selectedThemeId !== "" ? { ...allPreviews[allPreviews?.findIndex($ => $?.theme_id === selectedThemeId)]?.object, campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") } : defaultObj)
     const [past, setPast] = useState([])
     const [future, setFuture] = useState([])
-    const [themeName, setThemeName] = useState(themeLoc?.state?.custom_theme ? finalObj.theme_name : `Campaign-${generateRandomString()}`)
+    const [themeName, setThemeName] = useState(themeLoc?.state?.custom_theme ? finalObj?.theme_name : `Campaign-${generateRandomString()}`)
     const [defColors, setDefColors] = useState(finalObj.defaultThemeColors || {})
     const [textValue, setTextValue] = useState("")
     const [senderName, setSenderName] = useState("")
@@ -241,7 +243,7 @@ const CustomizationParent = () => {
     const [imageTab, setImageTab] = useState("default")
     const [dropImage, setDropImage] = useState(false)
 
-    console.log({ dropImage, imageType })
+    console.log({ dropImage, imageType, finalObj })
     // const [textValue, setTextValue] = useState("")
     // const [senderName, setSenderName] = useState("")
     // const [apiLoader, setApiLoader] = useState(false)
@@ -3806,6 +3808,7 @@ const CustomizationParent = () => {
         })
 
         setDisableIpDrag([...draggedTypes])
+        localStorage.setItem("defaultTheme", JSON.stringify(finalObj))
         const draftIntervalTimer = 30000
         const draftInterval = setInterval(() => {
             if (themeLoc?.pathname?.includes("/merchant/SuperLeadz/new_customization/")) {
@@ -3889,6 +3892,7 @@ const CustomizationParent = () => {
         return () => {
             localStorage.removeItem("draftId")
             localStorage.removeItem("defaultThemeId")
+            localStorage.removeItem("defaultTheme")
         }
 
     }, [])
