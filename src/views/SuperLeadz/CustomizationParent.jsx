@@ -98,7 +98,7 @@ const CustomizationParent = () => {
     // status variable shows whether the user has monile view or desktop view selected while visiting the page
     const status = (defaultIsMobile.get('isMobile') !== "false" && defaultIsMobile.get('isMobile') !== undefined && defaultIsMobile.get('isMobile') !== null && defaultIsMobile.get('isMobile') !== false)
 
-    const [isMobile, setIsMobile] = useState(false)
+    const [isMobile, setIsMobile] = useState(defaultIsMobile.get('isMobile') !== "false" && defaultIsMobile.get('isMobile') !== undefined && defaultIsMobile.get('isMobile') !== null && defaultIsMobile.get('isMobile') !== false)
 
     // const [isDragging, setIsDragging] = useState(false)
 
@@ -300,74 +300,6 @@ const CustomizationParent = () => {
     const updatePresent = (newState) => {
         const data = JSON.stringify(finalObj)
         const newObj = { ...newState }
-        // if (Array.isArray(newState?.responsive)) {
-        //     newState?.responsive?.forEach((responsive) => {
-        //         if (Array.isArray(responsive?.position)) {
-        //             responsive?.position?.forEach((position) => {
-        //                 if (Array.isArray(position?.style)) {
-        //                     position?.style?.forEach((style) => {
-        //                         if (style?.isSame) {
-        //                             if (responsive?.pageName === "close") {
-        //                                 const closeArr1 = newObj?.crossButtons[`${mobileConditionRev}main`]
-        //                                 const closeArr2 = newObj?.crossButtons[`${mobileCondition}main`]
-
-        //                                 if (closeArr1.length > 0 && closeArr2.length > 0) {
-        //                                     closeArr1.style[style?.styleName] = closeArr2?.style[style?.styleName]
-        //                                 }
-
-        //                                 newObj.crossButtons[`${mobileConditionRev}main`] = closeArr1
-        //                                 newObj.crossButtons[`${mobileConditionRev}main`] = closeArr2
-
-        //                             } else {
-        //                                 const arr1 = currPage === "button" ? newObj[`${mobileConditionRev}button`] : newObj[`${mobileConditionRev}pages`][newObj[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)]?.values || []
-        //                                 const arr2 = currPage === "button" ? newObj[`${mobileCondition}button`] : newObj[`${mobileCondition}pages`][newObj[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values || []
-        //                                 if (arr1.length > 0 && arr2.length > 0) {
-        //                                     const positionIndex = arr1[position?.id?.cur]?.elements?.findIndex($ => $?.positionType === position?.id?.curElem)
-        //                                     const updateCustom = (list, obj1, obj2) => {
-        //                                         list.forEach(listName => {
-        //                                             obj1[listName] = obj2[listName]
-        //                                         })
-        //                                     }
-        //                                     if (position?.id?.subElem === "grandparent") {
-        //                                         arr1[position?.id?.cur].style[style?.styleName] = arr2[position?.id?.cur].style[style?.styleName]
-        //                                         if (style?.styleName === "bgType") {
-        //                                             updateCustom(["backgroundColor", "backgroundImage"], arr1[position?.id?.cur]?.style, arr2[position?.id?.cur]?.style)
-        //                                         }
-        //                                     } else if (position?.id?.subElem === "parent" && positionIndex !== -1) {
-        //                                         arr1[position?.id?.cur].elements[positionIndex].style[style?.styleName] = arr2[position?.id?.cur].elements[positionIndex]?.style[style?.styleName]
-        //                                         if (style?.styleName === "bgType") {
-        //                                             updateCustom(["backgroundColor", "backgroundImage"], arr1[position?.id?.cur].elements[positionIndex]?.style, arr2[position?.id?.cur].elements[positionIndex]?.style)
-        //                                         }
-        //                                     } else {
-        //                                         if (positionIndex !== -1) {
-        //                                             arr1[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem].style[style?.styleName] = arr2[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem]?.style[style?.styleName]
-        //                                             if (style?.styleName === "bgType") {
-        //                                                 updateCustom(["backgroundColor", "backgroundImage"], arr1[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem]?.style, arr2[position?.id?.cur].elements[positionIndex].element[position?.id?.subElem]?.style)
-        //                                             }
-
-        //                                         }
-        //                                     }
-
-        //                                     if (currPage === "button") {
-        //                                         newObj[`${mobileConditionRev}button`] = arr1
-        //                                         newObj[`${mobileCondition}button`] = arr2
-        //                                     } else {
-        //                                         const pageIndex = newObj[`${mobileConditionRev}pages`]?.findIndex($ => $.id === currPage)
-        //                                         newObj[`${mobileConditionRev}pages`][pageIndex].values = arr1
-        //                                         newObj[`${mobileCondition}pages`][pageIndex].values = arr2
-        //                                     }
-
-        //                                 }
-        //                             }
-
-
-        //                         }
-        //                     })
-        //                 }
-        //             })
-        //         }
-        //     })
-        // }
         const clonedFinalObj = JSON.parse(data)
         setFinalObj({ ...newObj })
         const delay = 200
@@ -3864,14 +3796,14 @@ const CustomizationParent = () => {
         if (themeLoc?.pathname?.includes("/merchant/SuperLeadz/new_customization/")) {
             saveDraft()
         }
-        if (currPage === "button") {
-            setcolWise(finalObj?.[`${onLoadMobile}button`])
-            // setBtnStyles({ ...finalObj?.backgroundStyles?.[`${onLoadMobile}button`] })
-        } else {
-            const pageIndex = finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)
-            setcolWise(finalObj?.[`${onLoadMobile}pages`][pageIndex]?.values)
-            // setCrossStyle({ ...finalObj?.crossButtons?.[`${onLoadMobile}main`] })
-        }
+        // if (currPage === "button") {
+        //     setcolWise(finalObj?.[`${onLoadMobile}button`])
+        //     // setBtnStyles({ ...finalObj?.backgroundStyles?.[`${onLoadMobile}button`] })
+        // } else {
+        //     const pageIndex = finalObj?.[`${onLoadMobile}pages`]?.findIndex($ => $?.id === currPage)
+        //     setcolWise(finalObj?.[`${onLoadMobile}pages`][pageIndex]?.values)
+        //     // setCrossStyle({ ...finalObj?.crossButtons?.[`${onLoadMobile}main`] })
+        // }
 
         setBrandStyles({ ...finalObj?.[`${onLoadMobile}brandStyles`] })
 
