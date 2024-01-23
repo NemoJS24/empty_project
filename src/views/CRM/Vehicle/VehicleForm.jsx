@@ -14,7 +14,7 @@ import Flatpickr from 'react-flatpickr'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 
-const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
+const VehicleForm = ({ isView, apiCall, defaultData, setData, isCustomer }) => {
     // const { id } = useParams()
     const [brand, setBrand] = useState([])
     const navigate = useNavigate()
@@ -222,8 +222,8 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData }) => {
                             options={customerList}
                             closeMenuOnSelect={true}
                             // isDisabled={isView}
-                            // isDisabled={true}
-                            value={customerList?.filter((curElem) => defaultData?.xircls_customer_id === curElem?.value)}
+                            isDisabled={isCustomer}
+                            value={customerList?.filter((curElem) => Number(defaultData?.xircls_customer_id) === Number(curElem?.value))}
                             onChange={selectedOption => {
                                 handleInputChange({
                                     target: { name: 'xircls_customer_id', value: selectedOption.value }

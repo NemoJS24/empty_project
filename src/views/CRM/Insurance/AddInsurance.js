@@ -101,7 +101,7 @@ const AddInsurance = () => {
         {
             name: 'policy_number',
             message: 'Please enter your Policy Number',
-            type: 'number',
+            type: 'string',
             id: 'policy_number'
         },
         {

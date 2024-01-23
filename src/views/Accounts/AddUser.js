@@ -7,18 +7,19 @@ import toast from 'react-hot-toast'
 
 const AddUser = () => {
 
-    const [data, setData] = useState({
+    const defaultData = {
         first_name: "",
         last_name: "",
         email_id: "",
         password: "",
         confirm_password: "",
         assign_department: "",
-        // selectedModuleList: [],
         commision: "",
         assign_role: "",
         selectedData: ""
-    })
+    }
+
+    const [data, setData] = useState(defaultData)
     const [departmentList, setDepartmentList] = useState([])
     const [permisionList, setPermissionList] = useState([])
 
@@ -121,6 +122,8 @@ const AddUser = () => {
         .then((resp) => {
             console.log(resp)
             toast.success("User saved successfully")
+            setData(defaultData)
+            setPermissionList([])
         })
         .catch((error) => {
             console.log(error)
@@ -205,7 +208,7 @@ const AddUser = () => {
                                 </div>
                             </div>
 
-                            <div className="col-md-4 mb-1">
+                            <div className="col-md-4 mb-1 d-none">
                                 <div className="form-group">
                                     <label htmlFor="confirm_password">Commission</label>
                                     <Select
@@ -238,7 +241,7 @@ const AddUser = () => {
                                 </div>
                             </div>
 
-                            <div className="col-md-4 mb-1">
+                            <div className="col-md-4 mb-1 d-none">
                                 <div className="form-group">
                                     <label htmlFor="confirm_password">Start Date</label>
                                     <Flatpickr options={{ // Sets the minimum date as 14 days ago

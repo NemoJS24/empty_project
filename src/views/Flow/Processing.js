@@ -39,7 +39,10 @@ const Processing = () => {
           installedApps: res.data.installed_apps,
           campagin: res?.data?.status,
           currencySymbol: merchantCurrency[0]?.currency?.symbol ? merchantCurrency[0]?.currency?.symbol : '₹',
-          permissionList: res?.data?.permission_list
+          permissionList: res?.data?.permission_list,
+          super_user: res?.data?.super_user,
+          is_super_user: res?.data?.is_super_user,
+          multi_user_key: res?.data?.multi_user_key
         }
 
         console.log(updatedPermission)

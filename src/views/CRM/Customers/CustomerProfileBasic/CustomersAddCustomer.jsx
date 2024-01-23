@@ -131,7 +131,15 @@ const CustomersAddCustomer = ({ allData }) => {
                   <label htmlFor="basicDetails-mobile">
                      Mobile Number
                   </label>
-                  <input placeholder="Mobile Number" type='tel' maxLength={10} id='basicDetails-mobile' name='phone_no' className="form-control" value={formData?.phone_no ?? ''} onChange={handleInputChange} disabled={id} />
+                  <input placeholder="Mobile Number" type='tel' maxLength={10} id='basicDetails-mobile' name='phone_no' className="form-control" value={formData?.phone_no ?? ''}
+                     // onChange={handleInputChange}
+                     onChange={(e) => {
+                        if (!isNaN(e.target.value)) {
+                           handleInputChange(e)
+                        }
+                     }}
+                     disabled={id}
+                  />
                   <p id="phone_no_val" className="text-danger m-0 p-0 vaildMessage"></p>
                </Col>
                <Col md={6} lg={4} className="mt-1">
@@ -139,7 +147,14 @@ const CustomersAddCustomer = ({ allData }) => {
                      Alternate Mobile Number
                   </label>
                   <div>
-                     <input placeholder="Alternate Mobile Number" type='tel' maxLength={10} id='basicDetails-alt-mobile' name='phone_no2' className="form-control" value={formData?.phone_no2 ?? ''} onChange={handleInputChange} />
+                     <input placeholder="Alternate Mobile Number" type='tel' maxLength={10} id='basicDetails-alt-mobile' name='phone_no2' className="form-control" value={formData?.phone_no2 ?? ''}
+                        // onChange={handleInputChange} 
+                        onChange={(e) => {
+                           if (!isNaN(e.target.value)) {
+                              handleInputChange(e)
+                           }
+                        }}
+                     />
                      <p className={`text-danger text-left m-0 font-small-1 ${errors.phone_no2 ? '' : 'd-none'}`}>
                         {errors.phone_no2}
                      </p>
@@ -150,7 +165,14 @@ const CustomersAddCustomer = ({ allData }) => {
                      Landline Number
                   </label>
                   <div>
-                     <input placeholder="Landline Number" type='tel' maxLength={10} id='basicDetails-landline' name='landline1' className="form-control" value={formData?.landline1 ?? ''} onChange={handleInputChange} />
+                     <input placeholder="Landline Number" type='tel' maxLength={10} id='basicDetails-landline' name='landline1' className="form-control" value={formData?.landline1 ?? ''}
+                        // onChange={handleInputChange} 
+                        onChange={(e) => {
+                           if (!isNaN(e.target.value)) {
+                              handleInputChange(e)
+                           }
+                        }}
+                     />
                      <p className={`text-danger text-left m-0 font-small-1 ${errors.landline1 ? '' : 'd-none'}`}>
                         {errors.landline1}
                      </p>
@@ -161,7 +183,14 @@ const CustomersAddCustomer = ({ allData }) => {
                      Alternate Landline Number
                   </label>
                   <div>
-                     <input placeholder="Alternate Landline Number" type='tel' maxLength={10} pattern="[789][0-9]{9}" id='basicDetails-alt-landline' name='landline2' className="form-control" value={formData?.landline2 ?? ''} onChange={handleInputChange} />
+                     <input placeholder="Alternate Landline Number" type='tel' maxLength={10} pattern="[789][0-9]{9}" id='basicDetails-alt-landline' name='landline2' className="form-control" value={formData?.landline2 ?? ''}
+                        // onChange={handleInputChange}
+                        onChange={(e) => {
+                           if (!isNaN(e.target.value)) {
+                              handleInputChange(e)
+                           }
+                        }}
+                     />
                      <p className={`text-danger text-left m-0 font-small-1 ${errors.landline2 ? '' : 'd-none'}`}>
                         {errors.landline2}
                      </p>

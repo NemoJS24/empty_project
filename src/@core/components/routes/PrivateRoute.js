@@ -10,7 +10,7 @@ import { PermissionProvider } from '../../../Helper/Context'
 const PrivateRoute = ({ children, route }) => {
 
   const navigate = useNavigate()
-  const {setUserPermission, userPermission} = useContext(PermissionProvider)
+  const { setUserPermission, userPermission } = useContext(PermissionProvider)
   const location = useLocation()
 
   const checkUserToken = async () => {
@@ -32,28 +32,33 @@ const PrivateRoute = ({ children, route }) => {
         if (userPermission?.installedApps?.includes(route?.app)) {
           // console.log("INSTALLED", "Route Permission")
           if (route?.app !== userPermission?.appName) {
-            setUserPermission({...userPermission, appName: route?.app})
+            setUserPermission({ ...userPermission, appName: route?.app })
           }
-  
+
         } else {
           // console.log("NOT INSTALLED", "Route Permission")
           toast.error("You don't have access of that App")
           navigate("/merchant/apps/")
         }
-  
+
       }
-  
-      if (route?.permission) {
-        const permissionList = userPermission?.permissionList.filter((curElem) => curElem.permission__apps === route?.app && curElem.permission__slug === route?.permission.route_type)
-        if (permissionList.length > 0) {
-          const isAccess = permissionList[0][route?.permission?.action]
-          // console.log(permissionList[0][currentRoute[0]?.permission?.action], "isPermission")
-          if (!isAccess) {
+      
+      if (!userPermission?.is_super_user && route?.permission) {
+        // if (route?.permission) {
+          const permissionList = userPermission?.permissionList?.filter((curElem) => curElem.permission__apps === route?.app && curElem.permission__slug === route?.permission.route_type)
+          if (permissionList?.length > 0) {
+            const isAccess = permissionList[0][route?.permission?.action]
+            // console.log(permissionList[0][currentRoute[0]?.permission?.action], "isPermission")
+            if (!isAccess) {
+              navigate("/merchant/apps/")
+              toast.error("Permission denied")
+            }
+    
+          } else {
             navigate("/merchant/apps/")
             toast.error("Permission denied")
           }
-  
-        }
+        //}
       }
 
     }

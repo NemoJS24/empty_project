@@ -15,10 +15,11 @@ import Flatpickr from 'react-flatpickr'
 import { PermissionProvider } from '../../../Helper/Context'
 import AdvanceOptions from '../../../Helper/AdvanceOptions'
 import { Link } from 'react-router-dom'
+import { SuperLeadzBaseURL } from '../../../assets/auth/jwtService'
 // import { Link } from 'react-router-dom'
 // import { pageNo } from '../../Validator'
 
-const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpand, ExpandableTable, custom, isStyling, selectableRows = false, selectedRows, setSelectedRows, getData, exportUrl, viewAll, isExport, selectedContent, advanceFilter, viewType = "table", setViewType, viewContent, deleteContent, create, createLink, createText }) => {
+const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpand, ExpandableTable, custom, isStyling, selectableRows = false, selectedRows, setSelectedRows, getData, exportUrl, viewAll, isExport, selectedContent, advanceFilter, viewType = "table", setViewType, viewContent, deleteContent, create, createLink, createText, DownloadBtn }) => {
   // ** State
   const [currentPage, setCurrentPage] = useState(0)
   const [currentEntry, setCurrentEntry] = useState(custom ? 5 : 10)
@@ -35,8 +36,8 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
   const [advanceSearchValue, setAdvanceSearchValue] = useState({})
   // const [advanceValue, setAdvanceValue] = useState({})
   const [isDownLoad, setIsDownLoad] = useState(false)
-  const [pageNumber, setPageNumber] = useState(currentPage + 1)
-  // const [displayedPageNumber, setDisplayedPageNumber] = useState(pageNumber)
+  const [pageNumber, setPageNumber] = useState(0)
+  const [displayedPageNumber, setDisplayedPageNumber] = useState(pageNumber)
 
   const fileOptions = [
     {
@@ -57,15 +58,34 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
 
   // ** Function to handle pagination
   const handlePagination = page => {
+    // setPageNumber(page.selected)
     setCurrentPage(page.selected)
   }
 
+  const PageSearch = () => {
+    return (
+      <Input
+        className='dataTable-filter form-control'
+        style={{ width: `180px`, height: `2.714rem` }}
+        type='text'
+        bsSize='sm'
+        id='search-input-1'
+        placeholder='Search...'
+        value={searchValue}
+        onChange={(e) => setSearchValue(e)}
+      />
+    )
+  }
+
+
   // ** Pagination Previous Component
   const Previous = () => {
-    return (
+    return (<>
       <Fragment>
         <span className='align-middle d-none d-md-inline-block'>{t('Prev')}</span>
       </Fragment>
+    </>
+
     )
   }
 
@@ -78,24 +98,24 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
     )
   }
 
-  useEffect(() => {
-    if (searchValue) {
-      const delay = 1000
-      const request = setTimeout(() => {
-        getData(currentPage, currentEntry, searchValue, advanceSearchValue)
-      }, delay)
+  // useEffect(() => {
+  //   // if (searchValue) {
+  //   const delay = 1000
+  //   const request = setTimeout(() => {
+  //     getData({ currentPage, currentEntry, advanceSearchValue, searchValue })
+  //   }, delay)
 
-      return () => {
-        clearTimeout(request)
-      }
-    }
-  }, [searchValue])
+  //   return () => {
+  //     clearTimeout(request)
+  //   }
+  //   // }
+  // }, [currentPage, currentEntry, advanceSearchValue, searchValue])
 
 
   //------------------------
   useEffect(() => {
     getData(currentPage, currentEntry, searchValue, advanceSearchValue)
-  }, [currentPage, currentEntry])
+  }, [currentPage, currentEntry, searchValue])
 
   // useEffect(() => {
   //   getData({currentPage, currentEntry, advanceSearchValue, searchValue})
@@ -138,66 +158,47 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
         setApiLoader(false)
       })
 
+
   }
 
   // ** Custom Pagination Component
-  const CustomPagination = () => {
-    console.log("ppp")
-    return (
-      <div className="d-flex w-100 align-items-center justify-content-between">
+  const CustomPagination = () => (
+    <div className="d-flex w-100 align-items-center justify-content-between">
         <span>Showing {currentPage + 1} to {currentEntry} of {count} entries</span>
-        <div className="d-none gap-1 align-items-center">
-            <input type="number" className='form-control' value={pageNumber}
-              onChange={(e) => {
-                setPageNumber(e.target.value)
-                // setDisplayedPageNumber(inputValue)
-              }}
-            />
-            <Button className='btn' onClick={() => setCurrentPage(pageNumber + 1)}>Go</Button>
-            <ReactPaginate
-              previousLabel={<Previous size={15} />}
-              nextLabel={<Next size={15} />}
-              forcePage={currentPage}
-              onPageChange={page => handlePagination(page)}
-              pageCount={Math.ceil(count / currentEntry) || 1}
-              breakLabel={'...'}
-              pageRangeDisplayed={2}
-              marginPagesDisplayed={2}
-              activeClassName={'active'}
-              pageClassName={'page-item'}
-              nextLinkClassName={'page-link'}
-              nextClassName={'page-item next'}
-              previousClassName={'page-item prev'}
-              previousLinkClassName={'page-link'}
-              pageLinkClassName={'page-link'}
-              breakClassName='page-item'
-              breakLinkClassName='page-link'
-              containerClassName={'pagination react-paginate pagination-sm justify-content-end pe-1 mt-1'}
-            />
+        <div className="d-flex gap-1 align-items-center">
+          <Input
+            type="number"
+            value={displayedPageNumber}
+            onChange={(e) => {
+              const inputValue = parseInt(e.target.value)
+              setDisplayedPageNumber(inputValue)
+              setPageNumber(inputValue - 1)
+            }}
+          />
+          <Button className='btn' onClick={() => setCurrentPage(pageNumber)}>Go</Button>
+          <ReactPaginate
+            previousLabel={<Previous size={15} />}
+            nextLabel={<Next size={15} />}
+            forcePage={currentPage}
+            onPageChange={page => handlePagination(page)}
+            pageCount={Math.ceil(count / currentEntry) || 1}
+            breakLabel={'...'}
+            pageRangeDisplayed={2}
+            marginPagesDisplayed={2}
+            activeClassName={'active'}
+            pageClassName={'page-item'}
+            nextLinkClassName={'page-link'}
+            nextClassName={'page-item next'}
+            previousClassName={'page-item prev'}
+            previousLinkClassName={'page-link'}
+            pageLinkClassName={'page-link'}
+            breakClassName='page-item'
+            breakLinkClassName='page-link'
+            containerClassName={'pagination react-paginate pagination-sm justify-content-end pe-1 mt-1'}
+          />
         </div>
-        <ReactPaginate
-          previousLabel={<Previous size={15} />}
-          nextLabel={<Next size={15} />}
-          forcePage={currentPage}
-          onPageChange={page => handlePagination(page)}
-          pageCount={Math.ceil(count / currentEntry) || 1}
-          breakLabel={'...'}
-          pageRangeDisplayed={2}
-          marginPagesDisplayed={2}
-          activeClassName={'active'}
-          pageClassName={'page-item'}
-          nextLinkClassName={'page-link'}
-          nextClassName={'page-item next'}
-          previousClassName={'page-item prev'}
-          previousLinkClassName={'page-link'}
-          pageLinkClassName={'page-link'}
-          breakClassName='page-item'
-          breakLinkClassName='page-link'
-          containerClassName={'pagination react-paginate pagination-sm justify-content-end pe-1 mt-1'}
-        />
-      </div>
-    )
-  }
+    </div>
+  )
 
   const customStyles = {
     headCells: {
@@ -230,6 +231,20 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
 
     // console.log("ff", advanceSearchValue)
   }
+
+//   const getData = () => {
+//     console.log("Fetching")
+//     fetch(`${SuperLeadzBaseURL}/get-apps/`)
+//     .then((resp) => resp.json())
+//     .then((data) => {
+//         console.log(data)
+//     })
+//     .catch((error) => {
+//         console.log(error)
+//     })
+//   }
+
+//   console.log()
 
   // console.log(advanceSearchValue, "advanceSearchValue")
   return (
@@ -269,13 +284,13 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
           {
             viewContent ? <>
               <div className="d-flex justify-content-end">
-                <div className="d-flex align-items-center" style={{border: '1px solid #ccc'}}>
-                    <div className={`datatableView ${viewType === "table" ? "active" : ""}`} onClick={() => setViewType("table")}>
-                        <Table size={22} />
-                    </div>
-                    <div className={`datatableView ${viewType === "grid" ? "active" : ""}`} onClick={() => setViewType("grid")}>
-                        <Grid size={22} />
-                    </div>
+                <div className="d-flex align-items-center" style={{ border: '1px solid #ccc' }}>
+                  <div className={`datatableView ${viewType === "table" ? "active" : ""}`} onClick={() => setViewType("table")}>
+                    <Table size={22} />
+                  </div>
+                  <div className={`datatableView ${viewType === "grid" ? "active" : ""}`} onClick={() => setViewType("grid")}>
+                    <Grid size={22} />
+                  </div>
 
                 </div>
               </div>
@@ -283,8 +298,14 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
           }
           {
             deleteContent && selectedRows.length > 0 ? <>
-                {deleteContent}
+              {deleteContent}
             </> : ''
+          }
+          {
+            DownloadBtn && data?.length > 0 &&
+            <a onClick={() => setIsDownLoad(true)}>
+              {DownloadBtn}
+            </a>
           }
           {
             isExport && data?.length > 0 ? (
@@ -309,7 +330,7 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
         <Col className='d-flex align-items-center justify-content-center' md='4' sm='12'>
           <h4 className='m-0'>{tableName}</h4>
         </Col>
-        <Col className='d-flex align-items-center justify-content-end' style={{gap: '15px'}} md='4' sm='12'>
+        <Col className='d-flex align-items-center justify-content-end' style={{ gap: '15px' }} md='4' sm='12'>
           {
             create ? <>
               <Link className='btn btn-primary-main' to={createLink}>{createText}</Link>

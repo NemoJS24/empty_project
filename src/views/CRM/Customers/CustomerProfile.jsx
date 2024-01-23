@@ -224,7 +224,7 @@ export default function CustomerProfile() {
     {
       name: 'phone_no',
       message: 'Please enter your phone number',
-      type: 'string',
+      type: 'number',
       id: 'phone_no'
     },
     {

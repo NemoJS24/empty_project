@@ -122,7 +122,19 @@ export function validForm(validator, value) {
                 break
             } else {
                 $(`#${currentObject.id}_val`).html('')
-                // console.log('Some fields are empty')
+
+                if (currentObject.type === "email") {
+                    if (validateEmail(fieldValue)) {
+                        console.log("validateEmail is true")
+                    } else {
+                        console.log("validateEmail is false")
+
+                        $(`#${currentObject.id}_val`).html("Enter Valid Email id")
+                        $(`input[name="${currentObject.id}"]`).focus()
+                        isValid = false
+                        break
+                    }
+                }
             }
         } else {
 
@@ -130,9 +142,34 @@ export function validForm(validator, value) {
                 $(`#${currentObject.id}_val`).html(currentObject.message)
                 $(`input[name="${currentObject.id}"]`).focus()
                 isValid = false
+                // if (currentObject.type === "email") {
+                //     if (validateEmail(fieldValue)) {
+                //         console.log("validateEmail is true")
+                //     } else {
+                //         console.log("validateEmail is false")
+
+                //         $(`#${currentObject.id}_val`).html(currentObject.message)
+                //         $(`input[name="${currentObject.id}"]`).focus()
+                //     }
+                // }
                 break
             } else {
                 $(`#${currentObject.id}_val`).html('')
+                console.log(currentObject.type, "typeof Object")
+
+                if (currentObject.type === "email") {
+                    if (validateEmail(fieldValue)) {
+                        console.log("validateEmail is true")
+                    } else {
+                        console.log("validateEmail is false")
+
+                        $(`#${currentObject.id}_val`).html("Please enter valid email ID")
+                        $(`input[name="${currentObject.id}"]`).focus()
+                        isValid = false
+                        break
+                    }
+                }
+
                 // console.log('Some fields are empty')
             }
         }
@@ -183,60 +220,60 @@ export function generateRandomString() {
 }
 
 export const purpose = [
-    {label: 'Increase brand recall', value: 'Increase brand recall', id: "1"},
-    {label: 'Increase sales', value: 'Increase sales', id: "2"},
-    {label: 'Increase registered users', value: 'Increase registered users', id: "3"},
-    {label: 'Build high-quality email lists', value: 'Build high-quality email lists', id: "4"}
+    { label: 'Increase brand recall', value: 'Increase brand recall', id: "1" },
+    { label: 'Increase sales', value: 'Increase sales', id: "2" },
+    { label: 'Increase registered users', value: 'Increase registered users', id: "3" },
+    { label: 'Build high-quality email lists', value: 'Build high-quality email lists', id: "4" }
 ]
 
 export const strategy = [
-    {label: 'Newsletter Subscription', value: 'Newsletter Subscription', purpose_id: ["1", "3"], id: "1"},
-    {label: 'Birthday Incentives', value: 'Birthday Incentives', purpose_id: ["1", "2", "3", "4"], id: "2"},
-    {label: 'Sign-up Only', value: 'Sign-up Only', purpose_id: ["3"], id: "3"},
-    {label: 'Membership', value: 'Membership', purpose_id: ["3"], id: "4"},
-    {label: 'Gender Classification', value: 'Gender Classification', purpose_id: ["3", "4"], id: "5"}
+    { label: 'Newsletter Subscription', value: 'Newsletter Subscription', purpose_id: ["1", "3"], id: "1" },
+    { label: 'Birthday Incentives', value: 'Birthday Incentives', purpose_id: ["1", "2", "3", "4"], id: "2" },
+    { label: 'Sign-up Only', value: 'Sign-up Only', purpose_id: ["3"], id: "3" },
+    { label: 'Membership', value: 'Membership', purpose_id: ["3"], id: "4" },
+    { label: 'Gender Classification', value: 'Gender Classification', purpose_id: ["3", "4"], id: "5" }
 ]
 
 export const Tone = [
-    {label: 'Direct', value: 'Direct', strategy_id: ["3", "5"], id: "1"},
-    {label: 'Casual/Chatty', value: 'Casual/Chatty', strategy_id: ["3", "5"], id: "2"},
-    {label: 'Sophisticated', value: 'Sophisticated', strategy_id: ["3", "1"], id: "3"},
-    {label: 'Urgent', value: 'Urgent', strategy_id: ["3", "4", "1"], id: "4"},
-    {label: 'Incentivizing', value: 'Incentivizing', strategy_id:["4"], id: "5"},
-    {label: 'Enticing', value: 'Enticing', strategy_id: ["4", "5", "1"], id: "6"},
-    {label: 'Enthusiastic', value: 'Enthusiastic', strategy_id: ["4", "2", "5", "1"], id: "7"},
-    {label: 'Mysterious', value: 'Mysterious', strategy_id: ["4", "2"], id: "8"},
-    {label: 'Warm', value: 'Warm', strategy_id: ["2", "1"], id: "9"},
-    {label: 'Complimentary', value: 'Complimentary', strategy_id: ["2"], id: "10"},
-    {label: 'Astrological', value: 'Astrological', strategy_id: ["2"], id: "11"},
-    {label: 'Privacy-Focused', value: 'Privacy-Focused', strategy_id: ["5"], id: "12"}
+    { label: 'Direct', value: 'Direct', strategy_id: ["3", "5"], id: "1" },
+    { label: 'Casual/Chatty', value: 'Casual/Chatty', strategy_id: ["3", "5"], id: "2" },
+    { label: 'Sophisticated', value: 'Sophisticated', strategy_id: ["3", "1"], id: "3" },
+    { label: 'Urgent', value: 'Urgent', strategy_id: ["3", "4", "1"], id: "4" },
+    { label: 'Incentivizing', value: 'Incentivizing', strategy_id: ["4"], id: "5" },
+    { label: 'Enticing', value: 'Enticing', strategy_id: ["4", "5", "1"], id: "6" },
+    { label: 'Enthusiastic', value: 'Enthusiastic', strategy_id: ["4", "2", "5", "1"], id: "7" },
+    { label: 'Mysterious', value: 'Mysterious', strategy_id: ["4", "2"], id: "8" },
+    { label: 'Warm', value: 'Warm', strategy_id: ["2", "1"], id: "9" },
+    { label: 'Complimentary', value: 'Complimentary', strategy_id: ["2"], id: "10" },
+    { label: 'Astrological', value: 'Astrological', strategy_id: ["2"], id: "11" },
+    { label: 'Privacy-Focused', value: 'Privacy-Focused', strategy_id: ["5"], id: "12" }
 ]
 
 export const affiliateTracking = (aft_no) => {
 
     fetch(`${SuperLeadzBaseURL}/protein`)
-    .then((data) => data.json())
-    .then((resp) => {
-        console.log(resp)
-        const form_data = new FormData()
-        form_data.append("aft_no", aft_no)
-        form_data.append("ip_address", resp?.ip_address)
-        form_data.append("link", location.pathname)
+        .then((data) => data.json())
+        .then((resp) => {
+            console.log(resp)
+            const form_data = new FormData()
+            form_data.append("aft_no", aft_no)
+            form_data.append("ip_address", resp?.ip_address)
+            form_data.append("link", location.pathname)
 
-        fetch(`${baseURL}/affiliate/create_affiliate_click/`, {
-            method: "POST",
-            body: form_data
-        })
-        .then((result) => {
-            console.log(result)
+            fetch(`${baseURL}/affiliate/create_affiliate_click/`, {
+                method: "POST",
+                body: form_data
+            })
+                .then((result) => {
+                    console.log(result)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+
         })
         .catch((error) => {
             console.log(error)
         })
 
-    })
-    .catch((error) => {
-        console.log(error)
-    })
-    
 }

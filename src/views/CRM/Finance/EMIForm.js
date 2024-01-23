@@ -9,57 +9,6 @@ const EMIForm = ({ allData }) => {
 
     const { formData, handleNext, handleBack, handleInputChange } = allData
 
-    // const EMIFormvalueToCheck = [
-    //     {
-    //         name: 'Emi_Amount',
-    //         message: 'Enter EMI Amount',
-    //         type: 'string',
-    //         id: 'Emi_Amount'
-    //     },
-    //     {
-    //         name: 'no_of_tenure',
-    //         message: 'Enter Number of Tenure',
-    //         type: 'string',
-    //         id: 'no_of_tenure'
-    //     },
-    //     {
-    //         name: 'no_of_installment',
-    //         message: 'Enter Number of Installment',
-    //         type: 'string',
-    //         id: 'no_of_installment'
-    //     }
-    // ]
-
-    // const [check, setCheck] = useState({
-    //     mainForm: {
-    //         Emi_Amount: "",
-    //         no_of_tenure: '',
-    //         no_of_installment: ""
-    //     }
-    // })
-
-    // const handleAddInputChange = (e, keyType) => {
-    //     console.log(e)
-    //     setCheck(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
-    // }
-
-    // const handleSubmitSection = (e, action) => {
-    //     e.preventDefault()
-
-    //     const checkForm = validForm(mainFormvalueToCheck, check.mainForm)  // Use mainFormvalueToCheck for validation
-    //     console.log(checkForm)
-
-    //     if (checkForm.isValid) {
-    //         console.log('Form is valid')
-    //         handleNext()
-    //         if (action === 'SAVE') {
-    //             // Save
-    //         } else if (action === 'SAVE & CLOSE') {
-    //             // Save and close
-    //         }
-    //     }
-    // }
-
     const accountType = [
         { value: 'Saving', label: 'Saving' },
         { value: 'Current', label: 'Current' }

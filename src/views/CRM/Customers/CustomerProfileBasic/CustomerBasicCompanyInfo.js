@@ -106,7 +106,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
       .then((resp) => {
         console.log({ resp })
         fetchCompanyData()
-        
+
         const addForm = { ...newCompany }
         Object.keys(newCompany).forEach((key) => {
           addForm[key] = ""
@@ -145,7 +145,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
     {
       name: 'company_email',
       message: 'Please enter your Company Email',
-      type: 'string',
+      type: 'email',
       id: 'basicDetails-email'
     }
   ]
@@ -269,7 +269,7 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
           onClick={handleShow}
           className="link-success link-underline-opacity-0 "
         >
-          Add new company
+          Add Company
         </a>
       </p>
       {children}
@@ -378,7 +378,13 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 name="company_phone"
                 className="form-control"
                 value={form.company_phone ?? ""}
-                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                onChange={(e) => {
+                  if (!isNaN(e.target.value)) {
+                    handleInputChange2(e, form.id ?? form.formId)
+                    console.log("this is a number")
+                  }
+                }}
                 disabled
               />
             </Col>
@@ -409,9 +415,9 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
               />
             </Col>
             <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="company-pancard">Company Pan Card Number</label>
+              <label htmlFor="company-pancard">Company PAN</label>
               <input
-                placeholder="Company Pan Card Number"
+                placeholder="Company PAN"
                 type="text"
                 id="company-pancard"
                 name="company_panCard"
@@ -561,7 +567,13 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 name="pincode"
                 className="form-control"
                 value={form.pincode ?? ""}
-                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                onChange={(e) => {
+                  if (!isNaN(e.target.value)) {
+                    handleInputChange2(e, form.id ?? form.formId)
+                    console.log("this is a number")
+                  }
+                }}
                 disabled
               />
             </Col>
@@ -707,11 +719,11 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
             </Col>
             <Col md={12} className="mt-2">
               <label htmlFor="basicDetails-last-name">
-                PAN
+                Company PAN
               </label>
               <input
                 required
-                placeholder="PAN"
+                placeholder="Company PAN"
                 type="text"
                 id="basicDetails-panNumber"
                 name="company_pancard"
@@ -732,7 +744,13 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 name="company_phone"
                 className="form-control"
                 value={newCompany.company_phone ?? ''}
-                onChange={(e) => handleInputChange2(e, "new-company")}
+                // onChange={(e) => handleInputChange2(e, "new-company")}
+                onChange={(e) => {
+                  if (!isNaN(e.target.value)) {
+                    handleInputChange2(e, "new-company")
+                    console.log("this is a number")
+                  }
+                }}
               />
               <p id="basicDetails-phone_val" className="text-danger m-0 p-0 vaildMessage"></p>
             </Col>
@@ -871,7 +889,13 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 name="pincode"
                 className="form-control"
                 value={newCompany.pincode ?? ""}
-                onChange={(e) => handleInputChange2(e, "new-company")}
+                // onChange={(e) => handleInputChange2(e, "new-company")}
+                onChange={(e) => {
+                  if (!isNaN(e.target.value)) {
+                    handleInputChange2(e, "new-company")
+                    console.log("this is a number")
+                  }
+                }}
               />
             </Col>
             <Col md={12} className="mt-2">
@@ -982,10 +1006,11 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
             <Col md={12} className="mt-2">
               <label htmlFor="basicDetails-last-name">
                 Company PAN
+                Company PAN
               </label>
               <input
                 required
-                placeholder="PAN"
+                placeholder="Company PAN"
                 type="text"
                 id="basicDetails-panNumber"
                 name="par_company_pancard"
@@ -1006,7 +1031,13 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 name="par_company_phone"
                 className="form-control"
                 value={newCompany.par_company_phone ?? ''}
-                onChange={(e) => handleInputChange2(e, "new-company")}
+                // onChange={(e) => handleInputChange2(e, "new-company")}
+                onChange={(e) => {
+                  if (!isNaN(e.target.value)) {
+                    handleInputChange2(e, "new-company")
+                    console.log("this is a number")
+                  }
+                }}
               />
               <p id="basicDetails-phone_val" className="text-danger m-0 p-0 vaildMessage"></p>
             </Col>
@@ -1148,7 +1179,13 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
                 name="par_pincode"
                 className="form-control"
                 value={newCompany.par_pincode ?? ""}
-                onChange={(e) => handleInputChange2(e, "new-company")}
+                // onChange={(e) => handleInputChange2(e, "new-company")}
+                onChange={(e) => {
+                  if (!isNaN(e.target.value)) {
+                    handleInputChange2(e, "new-company")
+                    console.log("this is a number")
+                  }
+                }}
               />
             </Col>
             <Col md={12} className="mt-2">

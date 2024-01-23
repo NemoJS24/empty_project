@@ -73,9 +73,9 @@ const Customers = () => {
       isEnable: true
     },
     {
-      name: "Vehical Number",
+      name: "Registration Number",
       minWidth: "200px",
-      selector: (row) => row?.finance_vehicle_number ? row.finance_vehicle_number : "-",
+      selector: (row) => row?.finance_registration_number ? row.finance_registration_number : "-",
       type: 'text',
       isEnable: true
     },
@@ -96,7 +96,7 @@ const Customers = () => {
     {
       name: "Disburse Date",
       minWidth: "200px",
-      selector: (row) => row?.finance_loan_disbursement_date ? moment(row.finance_loan_disbursement_date).format("YYYY-MM-DD") : "-",
+      selector: (row) => row?.finance_loan_disbursement_date ? row?.finance_loan_disbursement_date : "-",
       type: 'date',
       isEnable: true
     },
@@ -140,7 +140,7 @@ const Customers = () => {
       width: "130px",
       selector: (row) => (
         <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
-          <Link to={`/merchant/customers/view_customer/${row?.xircls_customer_id}`}><Eye size={15} /></Link>
+          {/* <Link to={`/merchant/customers/view_customer/${row?.xircls_customer_id}`}><Eye size={15} /></Link> */}
           <Link to={`/merchant/customers/edit_finance/${row?.finance_id}?type=edit`}> <Edit3 size={15} /></Link>
         </div>
       )

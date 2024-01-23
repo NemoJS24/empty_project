@@ -146,7 +146,7 @@ const Call = ({ userData }) => {
         setIsLoading(true)
         const form_data = new FormData()
         // const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
-        form_data.append("customer_id", id)
+        form_data.append("xircls_customer_id", id)
         form_data.append("tab_type", "add_call")
         postReq('get_view_customer', form_data)
         .then((res) => {

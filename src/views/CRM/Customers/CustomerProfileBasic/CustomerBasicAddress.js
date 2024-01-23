@@ -126,7 +126,13 @@ const CustomerBasicAddress = ({ allData }) => {
               name="pincode"
               className="form-control"
               value={formData?.pincode ?? ''}
-              onChange={handleInputChange}
+              // onChange={handleInputChange}
+              onChange={(e) => {
+                if (!isNaN(e.target.value)) {
+                  handleInputChange(e)
+                  console.log("this is a number")
+                }
+              }}
             />
           </Col>
           {/* <Col md={6} lg={4} className="mt-2">
@@ -176,98 +182,104 @@ const CustomerBasicAddress = ({ allData }) => {
             </span>
           </Col>
           {/* {!formData.billingShippingAddressSame && ( */}
-            <>
-              <Col md={6} lg={4} className="mt-2">
-                <label htmlFor="address-2-house-details">
-                  Flat and / or Building / House Details
-                </label>
-                <input
-                  placeholder="Flat and / or Building / House Details"
-                  type="text"
-                  id="address-2-house-details"
-                  name="shipping_address1"
-                  className="form-control"
-                  value={formData?.shipping_address1 ?? ''}
-                  onChange={handleInputChange}
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-2">
-                <label htmlFor="address-2-lane">Street Lane or Road</label>
-                <input
-                  placeholder="Street Lane or Road"
-                  type="text"
-                  id="address-2-lane"
-                  name="shipping_address2"
-                  className="form-control"
-                  value={formData?.shipping_address2 ?? ''}
-                  onChange={handleInputChange}
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-2">
-                <label htmlFor="address-2-locality">
-                  Enter Area, Locality or Suburb e.g. Bandra
-                </label>
-                <input
-                  placeholder="Enter Area, Locality or Suburb e.g. Bandra"
-                  type="text"
-                  id="address-2-locality"
-                  name="shipping_area_building"
-                  className="form-control"
-                  value={formData?.shipping_area_building ?? ''}
-                  onChange={handleInputChange}
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-2">
-                <label htmlFor="address-2-landmark">Landmark</label>
-                <input
-                  placeholder="Landmark"
-                  type="text"
-                  id="address-2-landmark"
-                  name="shipping_landmark"
-                  className="form-control"
-                  value={formData?.shipping_landmark ?? ''}
-                  onChange={handleInputChange}
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-2">
-                <label htmlFor="address-2-city">City</label>
-                <input
-                  placeholder="City"
-                  type="text"
-                  id="address-2-city"
-                  name="shipping_city"
-                  className="form-control"
-                  value={formData?.shipping_city ?? ''}
-                  onChange={handleInputChange}
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-2">
-                <label htmlFor="address-2-state">State</label>
-                <input
-                  placeholder="State"
-                  type="text"
-                  id="address-2-state"
-                  name="shipping_state"
-                  className="form-control"
-                  value={formData?.shipping_state ?? ''}
-                  onChange={handleInputChange}
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-2">
-                <label htmlFor="address-2-pincode">Pincode</label>
-                <input
-                  placeholder="Pincode"
-                  type="text"
-                  id="address-2-pincode"
-                  name="shipping_pincode"
-                  className="form-control"
-                  value={formData?.shipping_pincode ?? ''}
-                  onChange={handleInputChange}
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-2">
-                <label htmlFor="address-2-country">Country</label>
-                {/* <select
+          <>
+            <Col md={6} lg={4} className="mt-2">
+              <label htmlFor="address-2-house-details">
+                Flat and / or Building / House Details
+              </label>
+              <input
+                placeholder="Flat and / or Building / House Details"
+                type="text"
+                id="address-2-house-details"
+                name="shipping_address1"
+                className="form-control"
+                value={formData?.shipping_address1 ?? ''}
+                onChange={handleInputChange}
+              />
+            </Col>
+            <Col md={6} lg={4} className="mt-2">
+              <label htmlFor="address-2-lane">Street Lane or Road</label>
+              <input
+                placeholder="Street Lane or Road"
+                type="text"
+                id="address-2-lane"
+                name="shipping_address2"
+                className="form-control"
+                value={formData?.shipping_address2 ?? ''}
+                onChange={handleInputChange}
+              />
+            </Col>
+            <Col md={6} lg={4} className="mt-2">
+              <label htmlFor="address-2-locality">
+                Enter Area, Locality or Suburb e.g. Bandra
+              </label>
+              <input
+                placeholder="Enter Area, Locality or Suburb e.g. Bandra"
+                type="text"
+                id="address-2-locality"
+                name="shipping_area_building"
+                className="form-control"
+                value={formData?.shipping_area_building ?? ''}
+                onChange={handleInputChange}
+              />
+            </Col>
+            <Col md={6} lg={4} className="mt-2">
+              <label htmlFor="address-2-landmark">Landmark</label>
+              <input
+                placeholder="Landmark"
+                type="text"
+                id="address-2-landmark"
+                name="shipping_landmark"
+                className="form-control"
+                value={formData?.shipping_landmark ?? ''}
+                onChange={handleInputChange}
+              />
+            </Col>
+            <Col md={6} lg={4} className="mt-2">
+              <label htmlFor="address-2-city">City</label>
+              <input
+                placeholder="City"
+                type="text"
+                id="address-2-city"
+                name="shipping_city"
+                className="form-control"
+                value={formData?.shipping_city ?? ''}
+                onChange={handleInputChange}
+              />
+            </Col>
+            <Col md={6} lg={4} className="mt-2">
+              <label htmlFor="address-2-state">State</label>
+              <input
+                placeholder="State"
+                type="text"
+                id="address-2-state"
+                name="shipping_state"
+                className="form-control"
+                value={formData?.shipping_state ?? ''}
+                onChange={handleInputChange}
+              />
+            </Col>
+            <Col md={6} lg={4} className="mt-2">
+              <label htmlFor="address-2-pincode">Pincode</label>
+              <input
+                placeholder="Pincode"
+                type="text"
+                id="address-2-pincode"
+                name="shipping_pincode"
+                className="form-control"
+                value={formData?.shipping_pincode ?? ''}
+                // onChange={handleInputChange}
+                onChange={(e) => {
+                  if (!isNaN(e.target.value)) {
+                    handleInputChange(e)
+                    console.log("this is a number")
+                  }
+                }}
+              />
+            </Col>
+            <Col md={6} lg={4} className="mt-2">
+              <label htmlFor="address-2-country">Country</label>
+              {/* <select
                   placeholder="Country"
                   type="select"
                   id="address-2-country"
@@ -280,17 +292,17 @@ const CustomerBasicAddress = ({ allData }) => {
                     India
                   </option>
                 </select> */}
-                <Select
-                  placeholder="Country"
-                  id="address-2-country"
-                  options={country}
-                  closeMenuOnSelect={true}
-                  value={country.find(option => option.value === formData?.shipping_country) ?? ''}
-                  defaultValue={country.find(option => option.value === 'india')}
-                  onChange={(e) => handleInputChange(e, 'shipping_country')}
-                />
-              </Col>
-            </>
+              <Select
+                placeholder="Country"
+                id="address-2-country"
+                options={country}
+                closeMenuOnSelect={true}
+                value={country.find(option => option.value === formData?.shipping_country) ?? ''}
+                defaultValue={country.find(option => option.value === 'india')}
+                onChange={(e) => handleInputChange(e, 'shipping_country')}
+              />
+            </Col>
+          </>
           {/* )} */}
           {/* <div className="d-flex justify-content-between mt-2">
             <div>

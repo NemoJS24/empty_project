@@ -91,7 +91,7 @@ const AddVehicle = () => {
 
                if (urlParams.get("type") === "customer") {
                   updatedData = {
-                     customer_id: id,
+                     xircls_customer_id: id,
                   }
                }
 
@@ -152,7 +152,7 @@ const AddVehicle = () => {
          </Container>
 
          <form id='formId'>
-            <VehicleForm isView={false} defaultData={editData} setData={setEditData} apiCall={apiCall} formId={"formId"} />
+            <VehicleForm isView={false} isCustomer={urlParams.get("type") === "customer"} defaultData={editData} setData={setEditData} apiCall={apiCall} formId={"formId"} />
          </form>
       </>
    )

@@ -22,24 +22,23 @@ const CrossLeads = () => {
         form_data.append("size", currentEntry)
         form_data.append("searchValue", searchValue)
 
-        // postReq('cross_leads', form_data, crmURL)
-        fetch(`${crmURL}/customers/cross_leads/`, {
-            method: 'POST',
-            body: form_data,
-            headers: {
-                "outlet": "879",
-            }
+        // fetch(`${crmURL}/customers/cross_leads/`, {
+        //     method: 'POST',
+        //     body: form_data,
+        //     headers: {
+        //         "outlet": "879",
+        //     }
+        // })
+        postReq('cross_leads', form_data, crmURL)
+        .then((resp) => {
+            console.log("hh", resp)
+            setIsLoading(false)
+            setTableData(resp?.data)
         })
-            .then((data) => data.json())
-            .then((resp) => {
-                console.log("hh", resp)
-                setIsLoading(false)
-                setTableData(resp)
-            })
-            .catch((error) => {
-                console.log(error)
-                setIsLoading(false)
-            })
+        .catch((error) => {
+            console.log(error)
+            setIsLoading(false)
+        })
     }
 
     const columns = [
@@ -47,7 +46,7 @@ const CrossLeads = () => {
             name: "Customer Name",
             minWidth: "180px",
             selector: (row) => (
-                <Link to={`/merchant/customers/view_customer/${row?.id}`}>{row?.customer_name}</Link>
+                <Link to={`/merchant/customers/view_customer/${row?.xircls_customer_id}`}>{row?.customer_name}</Link>
             ),
             type: 'text',
             isEnable: false
@@ -90,6 +89,7 @@ const CrossLeads = () => {
             ),
             type: 'select',
             options: [
+                { label: "No Filter", value: '' },
                 { label: "True", value: 'true' },
                 { label: "False", value: 'false' }
             ],
@@ -105,6 +105,7 @@ const CrossLeads = () => {
             ),
             type: 'select',
             options: [
+                { label: "No Filter", value: '' },
                 { label: "True", value: 'true' },
                 { label: "False", value: 'false' }
             ],
@@ -120,6 +121,7 @@ const CrossLeads = () => {
             ),
             type: 'select',
             options: [
+                { label: "No Filter", value: '' },
                 { label: "True", value: 'true' },
                 { label: "False", value: 'false' }
             ],
@@ -130,7 +132,7 @@ const CrossLeads = () => {
             maxWidth: "150px",
             selector: (row) => (
                 <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
-                    <Link to={`view_customer/${row?.id}`}><Eye size={15} /></Link>
+                    <Link to={`/merchant/customers/view_customer/${row?.xircls_customer_id}`}><Eye size={15} /></Link>
                     <Link to={`/merchant/customers/edit_customer/${row?.id}?type=edit`}> <Edit3 size={15} /></Link>
                 </div>
             )
