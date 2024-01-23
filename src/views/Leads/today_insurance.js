@@ -12,7 +12,7 @@ import moment from "moment"
 /* eslint-disable */
 const Customers = () => {
   const [tableData, setTableData] = useState([])
-  const [custData, setCustData] = useState({})
+  // const [custData, setCustData] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [selected, setSelected] = useState([])
 
@@ -33,7 +33,7 @@ const Customers = () => {
     // })
     postReq("insurance_dashboard", form_data, crmURL)
       .then((resp) => {
-        setCustData(resp)
+        // setCustData(resp)
         console.log("today_insurance", resp.data)
         setTableData(resp?.data)
         setIsLoading(false)
@@ -63,7 +63,7 @@ const Customers = () => {
       name: "Brand",
       minWidth: "150px",
       selector: (row) => row?.insurance_brand ? row.insurance_brand : "-",
-      type: 'number',
+      type: 'text',
       isEnable: true
     },
     {
@@ -116,6 +116,13 @@ const Customers = () => {
       isEnable: true
     },
     {
+      name: "Created at",
+      minWidth: "200px",
+      selector: (row) => row?.insurance_created_at ? moment(row.insurance_created_at).format("YYYY-MM-DD") : "-",
+      type: 'date',
+      isEnable: true
+    },
+    {
       name: "Action",
       width: "130px",
       selector: (row) => (
@@ -130,28 +137,28 @@ const Customers = () => {
   const customerStatisticsData = [
     {
       name: "All Insurance",
-      data: custData.recordsTotal ?? "0",
+      data: tableData.recordsTotal ?? "0",
       type: "number",
       icon: <LuTrendingUp size={30} className="text-dark" />,
       iconStyle: ""
     },
     {
       name: "Today's Insurance",
-      data: custData.recordsFiltered ?? "0",
+      data: tableData.today_insurance ?? "0",
       type: "number",
       icon: <LiaUserSolid size={30} className="text-dark" />,
       iconStyle: ""
     },
     {
       name: "Total Customers Insured",
-      data: custData.total_customers ?? "0",
+      data: tableData.total_customers ?? "0",
       type: "number",
       icon: <LiaUserSlashSolid size={30} className="text-dark" />,
       iconStyle: ""
     },
     {
       name: "Total Amount",
-      data: custData.total_amount ?? "0",
+      data: tableData.total_amount ?? "0",
       type: "money",
       icon: <PiMoneyThin size={30} className="text-dark" />,
       iconStyle: ""

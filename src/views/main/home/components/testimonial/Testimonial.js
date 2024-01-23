@@ -10,7 +10,7 @@ const Testimonial = () => {
             name: "BADMAASH",
             personName: "Nikhil Jain",
             role: "Co-founder & CEO",
-            desc: "A very good app in terms of collaborative marketing. Something new and unique and helps us spend lesser money than we are used to. The team is very good support wise and follow up wise. Harshitha from the team is in touch with us, and she's like fire, always behind us to plan something or the other. Overall a great platform! Cheers to this great work guys",
+            desc: "A very good app in terms of collaborative marketing. Something new and unique and helps us reduce spend. The team is very good in terms of support and follow-up. Harshitha from the team is like fire - always in touch and encouraging us to implement some marketing strategy or the other. Overall a great platform. Cheers to this great work guys!",
             logo: "https://www.badmaash.com/cdn/shop/files/Badmaash_Logo_Details-1_1_1_1_d41e0537-7483-47a5-bd4b-0ef75dba30af_1024x.png?v=1670569637"
 
         },

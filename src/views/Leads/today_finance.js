@@ -141,6 +141,13 @@ const Customers = () => {
       isEnable: true
     },
     {
+      name: "Created at",
+      minWidth: "200px",
+      selector: (row) => row?.finance_created_at ? moment(row.finance_created_at).format("YYYY-MM-DD") : "-",
+      type: 'date',
+      isEnable: true
+    },
+    {
       name: "Action",
       width: "130px",
       selector: (row) => (
@@ -171,7 +178,7 @@ const Customers = () => {
     {
       name: "Total Loan Amount",
       data: tableData.total_loan_amount ?? "0",
-      type: "number",
+      type: "money",
       icon: <LiaUserSlashSolid size={30} className="text-dark" />,
       iconStyle: ""
     },

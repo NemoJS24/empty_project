@@ -1,5 +1,5 @@
 // ** React Imports
-import { Fragment, useContext, useEffect, useState } from 'react'
+import { Fragment, useContext, useState } from 'react'
 
 // ** Custom Components
 import NavbarUser from './NavbarUser'
@@ -10,16 +10,17 @@ import { Sun, Moon, Menu } from 'react-feather'
 // ** Reactstrap Imports
 import { DropdownItem, DropdownMenu, DropdownToggle, NavItem, NavLink, UncontrolledDropdown } from 'reactstrap'
 import { FaLayerGroup } from 'react-icons/fa'
-import { getReq } from '../../../../assets/auth/jwtService'
+// import { getReq } from '../../../../assets/auth/jwtService'
 import { useNavigate } from 'react-router-dom'
 import { dashboardURL } from '../../../../views/Validator'
-import { PermissionProvider } from '../../../../Helper/Context'
+import { PermissionProvider, ActiveAppsProvider } from '../../../../Helper/Context'
 
 const ThemeNavbar = props => {
   // ** Props
   const [userApps, setUserApps] = useState([])
   const { skin, setSkin, setMenuVisibility } = props
   const { setUserPermission, userPermission } = useContext(PermissionProvider)
+  const { setActiveApps, activeApps } = useContext(ActiveAppsProvider)
   // ** Function to toggle Theme (Light/Dark)
   const ThemeToggler = () => {
     if (skin === 'semi-dark') {
@@ -28,37 +29,39 @@ const ThemeNavbar = props => {
       return <div title='Semi-dark mode'><Moon className='ficon' onClick={() => setSkin('semi-dark')} /></div>
     }
   }
-  const getData = () => {
-    getReq('getAllApps')
-    .then((res) => {
-      console.log(res)
-      setUserApps(res?.data)
-      // const updatedData = {
-      //   isLoading: false
-      // }
-      // setData((preData) => ({
-      //   ...preData,
-      //   ...updatedData
-      // }))
-    })
-    .catch((error) => {
-      console.log(error)
-      // const updatedData = {
-      //   isLoading: false
-      // }
-      // setData((preData) => ({
-      //   ...preData,
-      //   ...updatedData
-      // }))
-    })
+  // const getData = () => {
+  //   getReq('getAllApps')
+  //     .then((res) => {
+  //       console.log(res)
+  //       setUserApps(res?.data)
+  //       // const updatedData = {
+  //       //   isLoading: false
+  //       // }
+  //       // setData((preData) => ({
+  //       //   ...preData,
+  //       //   ...updatedData
+  //       // }))
+  //     })
+  //     .catch((error) => {
+  //       console.log(error)
+  //       // const updatedData = {
+  //       //   isLoading: false
+  //       // }
+  //       // setData((preData) => ({
+  //       //   ...preData,
+  //       //   ...updatedData
+  //       // }))
+  //     })
 
-  }
+  // }
 
   const navigate = useNavigate()
 
-  useEffect(() => {
-    getData()
-  }, [])
+  // useEffect(() => {
+  //   getData()
+  // }, [])
+
+  console.log(userApps, setActiveApps, setUserApps)
 
 
   return (
@@ -92,15 +95,15 @@ const ThemeNavbar = props => {
       {/* <a className='cursor-pointer'>
         
       </a> */}
-      <UncontrolledDropdown  tag='li' className='dropdown-notification nav-item me-25' style={{listStyle: 'none'}}>
+      <UncontrolledDropdown tag='li' className='dropdown-notification nav-item me-25' style={{ listStyle: 'none' }}>
         <DropdownToggle tag='a' className='nav-link' href='/' onClick={e => e.preventDefault()}>
           <div className='d-flex justify-content-end align-items-center gap-1'>
             <FaLayerGroup size={'20px'} />
 
           </div>
         </DropdownToggle>
-        <DropdownMenu end tag='ul' className='dropdown-menu-media mt-0 apps_dropdown' style={{width: '450px', zIndex: '1000'}}>
-          <li className='dropdown-menu-header' style={{listStyle: 'none'}}>
+        <DropdownMenu end tag='ul' className='dropdown-menu-media mt-0 apps_dropdown' style={{ width: '450px', zIndex: '1000' }}>
+          <li className='dropdown-menu-header' style={{ listStyle: 'none' }}>
             <DropdownItem className='d-flex' tag='div' header>
               <h4 className='notification-title mb-0 me-auto'>Shortcuts</h4>
             </DropdownItem>
@@ -108,49 +111,34 @@ const ThemeNavbar = props => {
           {
             <>
               <div className='px-1'>
-                  <div className="row">
-                    {
-                      userApps?.map((curElem) => {
-                        return (curElem.name.toLowerCase() === "infiniti" && userPermission.installedApps.includes(curElem.name.toLowerCase())) ? (
-                          <div className="col-md-6 app_cards">
-                            <DropdownItem tag={'div'} className='text-center py-2' onClick={() => {
-                              setUserPermission({...userPermission, appName: curElem.name.toLowerCase()})
-                              navigate(dashboardURL[curElem.name.toLowerCase()])
-                            }}>
-                              <h5>
-                                <a onClick={() => {
-                                  setUserPermission({...userPermission, appName: curElem.name.toLowerCase()})
-                                  navigate(dashboardURL[curElem.name.toLowerCase()])
-                                }}>
+                <div className="row">
+                  {
+                    activeApps?.filter((curElem) => curElem.is_active).map((curElem) => {
+                      return (userPermission.installedApps.includes(curElem.name.toLowerCase())) ? (
+                        <div className="col-md-6 app_cards">
+                          <DropdownItem tag={'div'} className='text-center py-2' onClick={() => {
+                            setUserPermission({ ...userPermission, appName: curElem.name.toLowerCase() })
+                            navigate(dashboardURL[curElem.name.toLowerCase()])
+                          }}>
+                            <h5>
+                              <a onClick={() => {
+                                setUserPermission({ ...userPermission, appName: curElem.name.toLowerCase() })
+                                navigate(dashboardURL[curElem.name.toLowerCase()])
+                              }}>
                                 {curElem.name}
-                                </a>
-                              </h5>
-                            </DropdownItem>
-                          </div>
-                        ) : (curElem.name.toLowerCase() === "superleadz" && userPermission.installedApps.includes(curElem.name.toLowerCase())) ? (
-                          <div className="col-md-6 app_cards">
-                            <DropdownItem tag={'div'} className='text-center py-2' onClick={() => {
-                              setUserPermission({...userPermission, appName: curElem.name.toLowerCase()})
-                              navigate(dashboardURL[curElem.name.toLowerCase()])
-                            }}>
-                              <h5>
-                                <a>
-                                  {curElem.name}
-                                  
-                                </a>
-                              </h5>
-                            </DropdownItem>
-                          
-                          </div>
-                        ) : ''
-                      })
-                    }
-                   
-                  </div>
+                              </a>
+                            </h5>
+                          </DropdownItem>
+                        </div>
+                      ) : ''
+                    })
+                  }
+
+                </div>
               </div>
             </>
           }
-          
+
         </DropdownMenu>
       </UncontrolledDropdown>
       <NavbarUser skin={skin} setSkin={setSkin} />

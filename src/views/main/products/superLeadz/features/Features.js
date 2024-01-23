@@ -43,10 +43,10 @@ const dragData = [
   {
     title: "Build like a developer.",
     desc: [
-      "Create pop-ups from scratch with layout container elements.",
-      "Build mobile-responsive pop-ups.",
-      "Create full-screen overlays.",
-      "Embed into your website effortlessly."
+      "Create pop-ups from scratch with layout container elements",
+      "Build mobile-responsive pop-ups",
+      "Create full-screen overlays",
+      "Embed into your website effortlessly"
     ],
     img: dev
   },
@@ -54,16 +54,16 @@ const dragData = [
     title: "Create like a designer.",
     desc: [
       "Customize colour, background, font, spacing, borders & more!",
-      "See a live preview of pop-ups on your website."
+      "See a live preview of pop-ups on your website"
     ],
     img: design
   },
   {
     title: "Sell like a marketer.",
     desc: [
-      "Choose from conversion-optimized pop-up templates.",
-      "Segment pop-ups for different lead types, visit frequency etc.",
-      "Reward them for shopping with a digital loyalty program."
+      "Choose from conversion-optimized pop-up templates",
+      "Segment pop-ups for different lead types, visit frequency etc",
+      "Add multiple incentives within a single pop-up"
     ],
     img: market
   }
@@ -81,7 +81,7 @@ const nextgenData = [
     title: "Engagement Tracking",
     desc: "Map every lead’s journey through your store - in real time. Study multiple session journeys to gauge intent and interest.",
     listTitle: "Tracking metrics include:",
-    list: ["Pop-up view", "OTP verification opt-in", "Redeem button engagement", "Purchase status", "Session-wise mapping"],
+    list: ["Pop-up views", "OTP verification opt-in", "Redeem button engagement", "Purchase status", "Session-wise mapping"],
     img: engagament
   },
   {
@@ -302,7 +302,7 @@ export default function Features() {
             <Col md="6" className='d-flex flex-column  gap-3 ps-2  '>
               <div>
                 <h1 className='display-6 main-heading fw-bolder'>No more wastage.</h1>
-                <h3 className='fs-3 fw-bold text-black '>Your marketing budget is reserved for <span className='fw-bolder'>SuperLeadz</span>most likely to convert. Not anonymous visitors with unverifiable intent.</h3>
+                <h3 className='fs-3 fw-bold text-black '>Your marketing budget is reserved for <span className='fw-bolder'>SuperLeadz</span> most likely to convert. Not anonymous visitors with unverifiable intent.</h3>
 
               </div>
 

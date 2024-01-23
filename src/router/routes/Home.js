@@ -64,7 +64,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Partners: Grow your business"
+    title: "Partners - Grow your business"
   },
   {
     path: '/partners/faq',
@@ -83,7 +83,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "SuperLeadz: Lead generation, nurturing and conversion"
+    title: "SuperLeadz - Lead generation, nurturing and conversion"
   },
 
   {
@@ -94,7 +94,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Features: Lead generation, nurturing and conversion"
+    title: "Features - Lead generation, nurturing and conversion"
   },
   {
     // path: '/products/superleadz/lead-generation-nurturing-and-conversion/pricing',
@@ -104,7 +104,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Pricing: Lead generation, nurturing and conversion"
+    title: "Pricing - Lead generation, nurturing and conversion"
   },
   {
     // path: '/products/superleadz/lead-generation-nurturing-and-conversion/faqs',
@@ -114,7 +114,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "FAQ: Lead generation, nurturing and conversion"
+    title: "FAQ - Lead generation, nurturing and conversion"
   },
   {
     // path: '/products/sniper/',
@@ -124,7 +124,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: " Sniper: Customer acquisition"
+    title: " Sniper - Customer acquisition"
   },
   {
     path: '/products/infiniti/',
@@ -134,7 +134,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Infiniti: Customer acquisition and loyalty"
+    title: "Infiniti - Customer acquisition and loyalty"
 
   },
   {
@@ -145,7 +145,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Semper Fi: Customer loyalty"
+    title: "Semper Fi - Customer loyalty"
   },
   {
     path: '/products/flash-accounts/',
@@ -154,7 +154,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Semper Fi: Customer loyalty"
+    title: "Semper Fi - Customer loyalty"
   },
   {
     path: '/products/flash-accounts/faq',
@@ -163,7 +163,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Semper Fi: Customer loyalty"
+    title: "Semper Fi - Customer loyalty"
   },
   {
     path: '/products/flash-accounts/pricing',
@@ -172,7 +172,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Semper Fi: Customer loyalty"
+    title: "Semper Fi - Customer loyalty"
   },
   {
     path: '/contact-us/:type',
@@ -198,7 +198,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Why XIRCLS : Democratizing Martech for Sustainable Growth."
+    title: "Why XIRCLS - Democratizing Martech for Sustainable Growth."
   },
   {
     path: '/about-us/why-collaborative-marketing/',
@@ -207,7 +207,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Why Collaborative Marketing : Because Life is Collaboration, Not Competition."
+    title: "Why Collaborative Marketing - Because Life is Collaboration, Not Competition."
   },
   {
     path: '/about-us/vision-&-mission-statement/',
@@ -216,7 +216,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Vision & Mission : To Empower Businesses, Globally"
+    title: "Vision & Mission - To Empower Businesses, Globally"
   },
 
   // {

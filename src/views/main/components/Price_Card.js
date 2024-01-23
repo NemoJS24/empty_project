@@ -26,7 +26,7 @@ export default function Price_Card({ data, isFeature }) {
                     <h5 className='ms-1 mt-2 text-black'>{data.listHead}</h5>
                     <div className='ms-1 d-flex flex-column mt-1 gap-1'>
                         {
-                            isFeature && <Link to='/products/superleadz/features/' className='d-flex align-items-center text-success' style={{ gap: "5px" }}><GoDotFill color="#afafaf" /> <h3 className='m-0 fs-4 text-'>All Features</h3><FiArrowUpRight color="#afafaf" size={17} style={{ marginLeft: "-3px" }} /></Link>
+                            isFeature && <a target='_blank' href='/products/superleadz/features/' className='d-flex align-items-center text-success' style={{ gap: "5px" }}><GoDotFill color="#afafaf" /> <h3 className='m-0 fs-4 text-'>All Features</h3><FiArrowUpRight color="#afafaf" size={17} style={{ marginLeft: "-3px" }} /></a>
                         }
 
                         {
@@ -37,7 +37,7 @@ export default function Price_Card({ data, isFeature }) {
                     </div>
                 </div>
 
-                <button className='mt-3 w-100  btn border-black fs-3  main-btn-dark fw-lig ' style={{ padding: "6px" }}>{data.button}</button>
+                <a className='mt-3 w-100  btn border-black fs-3  main-btn-dark fw-lig ' style={{ padding: "6px" }} target='_blank' href='https://apps.shopify.com/superleadz-by-xircls'>{data.button}</a>
             </CardBody>
         </Card>
     )

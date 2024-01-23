@@ -12,7 +12,7 @@ import moment from "moment"
 
 const Vehicle = () => {
     const [tableData, setTableData] = useState([])
-    const [custData, setCustData] = useState({})
+    // const [custData, setCustData] = useState({})
     const [isLoading, setIsLoading] = useState(true)
     const [selected, setSelected] = useState([])
 
@@ -101,21 +101,21 @@ const Vehicle = () => {
     const customerStatisticsData = [
         {
             name: "All Vehicles",
-            data: custData?.customer_detailsrecordsTotal ?? '0',
+            data: tableData?.all_vehicle_count ?? '0',
             type: "number",
             icon: <LuTrendingUp size={30} className="text-dark" />,
             iconStyle: ""
         },
         {
             name: "Today's Vehicle",
-            data: custData?.customer_detailsrecordsFiltered ?? '0',
+            data: tableData?.today_vehicle ?? '0',
             type: "number",
             icon: <LiaUserSolid size={30} className="text-dark" />,
             iconStyle: ""
         },
         {
             name: "Delivery To Be Made Today",
-            data: custData?.total_loan_amount ?? '0',
+            data: tableData?.delivery_to_be_made_today ?? '0',
             type: "number",
             icon: <LuBox Solid size={30} className="text-dark" />,
             iconStyle: ""

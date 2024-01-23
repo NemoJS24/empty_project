@@ -69,7 +69,7 @@ const data = [
     list: [
       {
       title: "Visitor Authentication",
-      subTitle: (<> <Link to="/superLeadz">SuperLeadz <FiArrowUpRight size={17} style={{ marginTop: "-5px" }} /></Link></>),
+      subTitle: (<> <a target='_blank' href="/products/superleadz/">SuperLeadz <FiArrowUpRight size={17} style={{ marginTop: "-5px" }} /></a></>),
       desc: "Make this clickable and open SuperLeadz overview page in a new tab"
     }
   ]

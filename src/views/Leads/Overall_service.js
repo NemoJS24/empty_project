@@ -65,7 +65,7 @@ const Customers = () => {
       name: "Brand",
       minWidth: "150px",
       selector: (row) => row?.servicing_brand ? row.servicing_brand : "-",
-      type: 'number',
+      type: 'text',
       isEnable: true
     },
     {
@@ -115,6 +115,13 @@ const Customers = () => {
       minWidth: "200px",
       selector: (row) => row?.servicing_service_invoice_amount ? row.servicing_service_invoice_amount : "-",
       type: 'text',
+      isEnable: true
+    },
+    {
+      name: "Created at",
+      minWidth: "200px",
+      selector: (row) => row?.servicing_created_at ? moment(row.servicing_created_at).format("YYYY-MM-DD") : "-",
+      type: 'date',
       isEnable: true
     },
     {
