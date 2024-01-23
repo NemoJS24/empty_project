@@ -138,208 +138,68 @@ export default function Semper() {
   return (
     <div style={{ background: "#fff" }} >
 
-        {/* <Navbar /> */}
+      {/* <Navbar /> */}
 
-        {/* section 1 */}
+      {/* section 1 */}
 
-        <Row className=' text-center  justify-content-center mt240'>
-          <Col xs="11" lg="8" xl="8"  >
-            <h1 className='display-1 text-center main-heading fw-bolder   lh-83 '>
-              Retain Customers with<br /> Rewards You Don’t Pay For.
-            </h1>
-            <h1 className='text-black'>Semper-Fi is the only customer loyalty program in the world where other businesses pay to help YOU retain YOUR customers!</h1>
-            <p className='fw-lig'>*Semper Fi comes from Semper Fidelis - a Latin phrase that means 'Always Loyal’.</p>
-            <Link to="/merchant/signup" className='btn  btn-lg main-btn-blue-gra  fs-3 mt-2 ' style={{ fontWeight: "900" }}>Start A Semper-fi Campaign</Link>
-          </Col>
-        </Row >
-
-
-        <Row className=' justify-content-center mt100 '>
-          <Col lg="12" xl="10"  >
-            <Container fluid='sm'>
-
-              <Row className='  m-auto justify-content-between  '>
-                {
-                  simperData.map((data, index) => {
-                    return (
-                      <Col lg="4" md="6" className='' key={index}>
-                        <CardLeft icon={data.icon} title={data.title} desc={data.desc} key={index} />
-                      </Col>
-                    )
-                  })
-                }
-              </Row>
-              <h1 className='mt180 text-center display-2 fw-bolder main-heading  ' >How Semper-Fi is Different</h1>
-              <Row className=' justify-content-around   mt-1 '>
-
-                <Col lg="5" className='text-start mt-3 ' >
-
-                  <h1 className='fs-1 main-heading fw-bolder'>Typical Loyalty Programs</h1>
-                  <div className='d-flex flex-column  gap-1 mt-2'>
-                    {
-                      diffData.wrong.map((data) => (
-                        <div className='d-flex  align-items-start '>
-                          <h3 className=' fs-6 text-secondary ' style={{ minWidth: "20px", marginTop: "4px" }}><RxCross2 /></h3>
-                          <h3 className=' fs-3 text-black '>{data}</h3>
-                        </div>
-                      ))
-                    }
-                  </div>
-                </Col>
-
-                <Col lg="5" className='text-start mt-3' >
-                  <h1 className='fs-1 main-heading fw-bolder'>Semper Fi</h1>
-                  <div className='d-flex flex-column  gap-1 mt-2'>
-                    {
-                      diffData.right.map((data) => (
-                        <div className='d-flex  align-items-start '>
-                          <h3 className=' fs-6 text-secondary ' style={{ minWidth: "20px", marginTop: "4px" }}><MdDone /></h3>
-                          <h3 className=' fs-3 text-black '>{data}</h3>
-                        </div>
-
-                      ))
-                    }
-                  </div>
-                </Col>
-
-              </Row>
-            </Container>
-          </Col>
-        </Row>
+      <Row className=' text-center  justify-content-center mt240'>
+        <Col xs="11" lg="8" xl="8"  >
+          <h1 className='display-1 text-center main-heading fw-bolder   lh-83 '>
+            Retain Customers with<br /> Rewards You Don’t Pay For.
+          </h1>
+          <h1 className='text-black'>Semper-Fi is the only customer loyalty program in the world where other businesses pay to help YOU retain YOUR customers!</h1>
+          <p className='fw-lig'>*Semper Fi comes from Semper Fidelis - a Latin phrase that means 'Always Loyal’.</p>
+          <Link to="/merchant/signup" className='btn  btn-lg main-btn-blue-gra  fs-3 mt-2 ' style={{ fontWeight: "900" }}>Start A Semper-fi Campaign</Link>
+        </Col>
+      </Row >
 
 
-        {/* --------------------------------------------- */}
+      <Row className=' justify-content-center mt100 '>
+        <Col lg="12" xl="10"  >
+          <Container fluid='sm'>
 
-        <Row className='mt180 justify-content-center '>
-          <Col xs="10" md="10" xl="10"  >
-            <h1 className='display-2  main-heading fw-bolder text-center'>Create a virtuous cycle of goodwill.</h1>
-            <h3 className='  text-center text-black   '>Equate your brand with unlimited value in the minds of your customers.<br />
-              Make their purchases with you a source of perpetual delight!</h3>
-            <div className=' mt100 px-0  d-flex flex-column  gap-5 '>
+            <Row className='  m-auto justify-content-between px-2  '>
               {
-                virtuousData.map((data, index) => {
-                  if (index % 2 === 0) {
-                    return (
-                      <Row className='justify-content-start my-3 '>
-                        <Col md="2" className=' text-end'>
-                          <img src={data.img} alt="" width={100} style={{ minWidth: '100px' }} />
-                        </Col>
-                        <Col md="10" className=''>
-                          <h1 className='main-heading fw-bolder  mb-0 display-6 '>{data.title}</h1>
-                          <h3 className='text-black lh-32 mt-1 ms-1'>{data.desc}</h3>
-                        </Col>
-                      </Row>
-                    )
-                  } else {
-                    return (
-                      <Row className='justify-content-start my-3 flex-row-reverse'>
-                        <Col md="2" className=' text-start'>
-                          <img src={data.img} alt="" width={100} style={{ minWidth: '100px' }} />
-                        </Col>
-                        <Col md="10" className='text-end'>
-                          <h1 className='main-heading fw-bolder  mb-0 display-6 '>{data.title}</h1>
-                          <h3 className='text-black lh-32 mt-1 ms-1'>{data.desc}</h3>
-                        </Col>
-                      </Row>
-                    )
-                  }
+                simperData.map((data, index) => {
+                  return (
+                    <Col lg="4" md="6" className='' key={index}>
+                      <CardLeft icon={data.icon} title={data.title} desc={data.desc} key={index} />
+                    </Col>
+                  )
                 })
               }
-
-            </div>
-          </Col>
-        </Row>
-
-        <div className=' p-5  mt100 text-center' style={{ background: "#e5e7eb" }}>
-          <Container fluid='sm'>
-            <h1 className='display-3  main-heading fw-bolder '>
-              Instant Gratification Never Felt So Good.
-            </h1>
-            <h3 className='text-black m-0 fs-3 '>Generously reward your customers on every single purchase without feeling the pinch.<br />
-              Reserve your marketing budget for other activities  <br />
-              while actively cultivating loyalty for your brand every single day.</h3>
-
-          </Container>
-        </div>
-
-        <Row className=" justify-content-center mt180 ">
-          <Col lg="10" xs="10">
-            <Container fluid='sm'>
-
-              <h1 className='display-2 fw-bolder text-center  main-heading'>Why Customer Retention Makes Sense.</h1>
-              <Row className='  justify-content-center '>
-                {
-                  retentionData.map((data, index) => (
-                    <Col md="5" >
-                      <CardLeft icon={data.icon} title={data.title} desc={data.desc} key={index} />
-
-                    </Col>
-                  ))
-                }
-
-              </Row>
-            </Container>
-
-          </Col>
-        </Row>
-
-        <Row className=" justify-content-center text-center mt180 py-5" style={{ background: "#e5e7eb" }}>
-          <Col lg="10" xs="10">
-
-            <Container fluid='sm'>
-              <h1 className='display-3  main-heading fw-bolder '>
-                Give Value To Become Truly Invaluable.
-              </h1>
-              <h3 className=' m-0 fs-2 mt-1 text-black'> <span className=' text-black '> ‘You must give to receive.’</span> We help you put this principle to practice.</h3>
-              <h3 className=' m-0 fs-2 mt-1 text-black'>Instead of leaving it to your customers to reap the benefits of their loyalty to you,<br /> we ask you to take the first step and reward them from their very first purchase – and forever after that.</h3>
-              <h3 className=' m-0 fs-2 mt-1 text-black'>Consistently give them value.</h3>
-            </Container>
-          </Col>
-        </Row>
-
-
-        <div className=' p-5  mt180 ' style={{ background: "#000" }}>
-          <Container fluid='sm'>
-
-            <Row className=" justify-content-center " >
-              <Col lg="6">
-                <h1 className='display-3  text-white fw-bolder '>
-                  Launch a Perpetual Rewards Loop
-                </h1>
-                <h3 className='text-white  fs-2 '>Gift your customers with partner offers every single time they buy from you to keep them coming back for more.</h3>
-             
-                <Link to='/merchant/signup' className=' btn btn-lg  main-btn-blue2 fw-lig fs-3 mt-2'>Get started for free</Link>
-              </Col>
-              <Col lg="6">
-                {/* <MediaEmbed
-                  thumbnailUrl="https://api.xircls.com/static/images/website-slide/videoback.jpg"
-                  mediaUrl="https://api.xircls.com/static/images/website-slide/videos/XIRCLS%20E-Commerce%20Demo.mp4"
-                /> */}
-        <video className='w-100' controls src="https://api.xircls.com/static/images/website-slide/videos/XIRCLS%20E-Commerce%20Demo.mp4" width="400" height="300"  autoPlay muted loop/>
-
-              </Col>
-
             </Row>
-          </Container>
-        </div>
+            <h1 className='mt180 text-center display-2 fw-bolder main-heading  ' >How Semper-Fi is Different</h1>
+            <Row className=' justify-content-around   mt-1 '>
 
+              <Col lg="5" className='text-start mt-3 ' >
 
-        {/* <Row className=" justify-content-center mt180 py-5" style={{ background: "#e5e7eb" }}>
-        <Col lg="10" xs="10">
-          <Container fluid='sm'>
-
-            <Row className=" justify-content-center " >
-              <Col lg="6">
-                <h1 className='display-4  main-heading fw-bolder '>
-                Launch a Perpetual Rewards Loop
-                </h1>
-                <h3 className='text-black m-0 fs-2 '>Gift your customers with partner offers every single time they buy from you to keep them coming back for more.</h3>
+                <h1 className='fs-1 main-heading fw-bolder'>Typical Loyalty Programs</h1>
+                <div className='d-flex flex-column  gap-1 mt-2'>
+                  {
+                    diffData.wrong.map((data) => (
+                      <div className='d-flex  align-items-start '>
+                        <h3 className=' fs-6 text-secondary ' style={{ minWidth: "20px", marginTop: "4px" }}><RxCross2 /></h3>
+                        <h3 className=' fs-3 text-black '>{data}</h3>
+                      </div>
+                    ))
+                  }
+                </div>
               </Col>
-              <Col lg="6">
-              <MediaEmbed
-              thumbnailUrl="https://api.xircls.com/static/images/website-slide/videoback.jpg"
-                  mediaUrl="https://api.xircls.com/static/images/website-slide/videos/XIRCLS%20E-Commerce%20Demo.mp4"
-                />
+
+              <Col lg="5" className='text-start mt-3' >
+                <h1 className='fs-1 main-heading fw-bolder'>Semper Fi</h1>
+                <div className='d-flex flex-column  gap-1 mt-2'>
+                  {
+                    diffData.right.map((data) => (
+                      <div className='d-flex  align-items-start '>
+                        <h3 className=' fs-6 text-secondary ' style={{ minWidth: "20px", marginTop: "4px" }}><MdDone /></h3>
+                        <h3 className=' fs-3 text-black '>{data}</h3>
+                      </div>
+
+                    ))
+                  }
+                </div>
               </Col>
 
             </Row>
@@ -348,17 +208,119 @@ export default function Semper() {
       </Row>
 
 
-      <div className=' p-5  mt100 text-center' style={{ background: "#000" }}>
+      {/* --------------------------------------------- */}
+
+      <Row className='mt180 justify-content-center '>
+        <Col xs="11" md="10" xl="10"  >
+          <h1 className='display-2  main-heading fw-bolder text-center'>Create a virtuous cycle of goodwill.</h1>
+          <h3 className='  text-center text-black   '>Equate your brand with unlimited value in the minds of your customers.<br />
+            Make their purchases with you a source of perpetual delight!</h3>
+          <div className=' mt100 px-0  d-flex flex-column  gap-5 '>
+            {
+              virtuousData.map((data, index) => {
+                if (index % 2 === 0) {
+                  return (
+                    <Row className='justify-content-start my-1 my-md-3 '>
+                      <Col md="2" className=' text-start text-md-end'>
+                        <img src={data.img} alt="" width={100} />
+                      </Col>
+                      <Col md="10" className=''>
+                        <h1 className='main-heading fw-bolder  mb-0 display-6 '>{data.title}</h1>
+                        <h3 className='text-black lh-32 mt-1 ms-1'>{data.desc}</h3>
+                      </Col>
+                    </Row>
+                  )
+                } else {
+                  return (
+                    <Row className='justify-content-start my-1 my-md-3  flex-row-reverse'>
+                      <Col md="2" className=' text-end text-md-start'>
+                        <img src={data.img} alt="" width={100} />
+                      </Col>
+                      <Col md="10" className='text-end'>
+                        <h1 className='main-heading fw-bolder  mb-0 display-6 '>{data.title}</h1>
+                        <h3 className='text-black lh-32 mt-1 ms-1'>{data.desc}</h3>
+                      </Col>
+                    </Row>
+                  )
+                }
+              })
+            }
+
+          </div>
+        </Col>
+      </Row>
+
+      <div className=' p-1 py-3 p-md-5  mt100 text-center' style={{ background: "#e5e7eb" }}>
         <Container fluid='sm'>
-          <h1 className='display-3  text-white fw-bolder '>
-          Give Value To Become Truly Invaluable.
+          <h1 className='display-3  main-heading fw-bolder '>
+            Instant Gratification Never Felt So Good.
           </h1>
-          <h3 className='text-secondary m-0 fs-3 mt-1 text-white'> <span className=' text-white '> ‘You must give to receive.’</span> We help you put this principle to practice.</h3>
-          <h3 className='text-secondary m-0 fs-3 mt-1 text-white'>Instead of leaving it to your customers to reap the benefits of their loyalty to you,<br/> we ask you to take the first step and reward them from their very first purchase – and forever after that.</h3>
-          <h3 className='text-secondary m-0 fs-3 mt-1 text-white'>Consistently give them value.</h3>
+          <h3 className='text-black m-0 fs-3 '>Generously reward your customers on every single purchase without feeling the pinch.<br />
+            Reserve your marketing budget for other activities  <br />
+            while actively cultivating loyalty for your brand every single day.</h3>
+
         </Container>
-      </div> */}
-        <Footer />
+      </div>
+
+      <Row className=" justify-content-center mt180 ">
+        <Col lg="10" xs="10">
+          <Container fluid='sm'>
+
+            <h1 className='display-2 fw-bolder text-center  main-heading'>Why Customer Retention Makes Sense.</h1>
+            <Row className='  justify-content-center '>
+              {
+                retentionData.map((data, index) => (
+                  <Col lg="5" md="6" >
+                    <CardLeft icon={data.icon} title={data.title} desc={data.desc} key={index} />
+
+                  </Col>
+                ))
+              }
+
+            </Row>
+          </Container>
+
+        </Col>
+      </Row>
+
+      <Row className=" justify-content-center text-center mt180 py-5" style={{ background: "#e5e7eb" }}>
+        <Col lg="10" xs="12">
+
+          <Container fluid='sm'>
+            <h1 className='display-3  main-heading fw-bolder '>
+              Give Value To Become Truly Invaluable.
+            </h1>
+            <h3 className=' m-0 fs-2 mt-1 text-black'> <span className=' text-black '> ‘You must give to receive.’</span> We help you put this principle to practice.</h3>
+            <h3 className=' m-0 fs-2 mt-1 text-black'>Instead of leaving it to your customers to reap the benefits of their loyalty to you,<br /> we ask you to take the first step and reward them from their very first purchase – and forever after that.</h3>
+            <h3 className=' m-0 fs-2 mt-1 text-black'>Consistently give them value.</h3>
+          </Container>
+        </Col>
+      </Row>
+
+
+      <div className=' p-1 py-3 p-md-5 mt180 ' style={{ background: "#000" }}>
+        <Container fluid='sm'>
+
+          <Row className=" justify-content-center d-flex flex-column-reverse flex-lg-row " >
+            <Col lg="6">
+              <h1 className='display-3  text-white fw-bolder '>
+                Launch a Perpetual Rewards Loop
+              </h1>
+              <h3 className='text-white  fs-2 '>Gift your customers with partner offers every single time they buy from you to keep them coming back for more.</h3>
+
+              <Link to='/merchant/signup' className=' btn btn-lg  main-btn-blue2 fw-lig fs-3 mt-2'>Get started for free</Link>
+            </Col>
+            <Col lg="6">
+             
+              <video className='w-100' controls src="https://api.xircls.com/static/images/website-slide/videos/XIRCLS%20E-Commerce%20Demo.mp4" width="400" height="300" autoPlay muted loop />
+
+            </Col>
+
+          </Row>
+        </Container>
+      </div>
+
+      <Footer />
 
 
     </div>

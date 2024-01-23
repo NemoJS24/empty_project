@@ -39,9 +39,9 @@ export default function PolicyPage() {
         {/* <Navbar /> */}
 
         {/* section 1 */}
-        <Row className=' text-center  justify-content-center mt200'>
+        <Row className=' text-center  justify-content-center mt240'>
           <Col xs="11" lg="10" xl="10"  >
-            <h1 className='display-1 text-center main-heading fw-bolder  pt-3  lh-83 '>
+            <h1 className='display-1 text-center main-heading fw-bolder   lh-83 '>
               Privacy Policy
             </h1>
             <h1 className='text-black mt-2'>XIRCLS is committed to protecting the privacy of visitors to this site. While it is necessary for us to collect certain personal information, we respect and protect your right to privacy as set forth in this Privacy Policy. This Privacy Policy applies to the Site. This Privacy Policy does not apply to other websites to which we link. You agree that your use of the Site signifies your assent to this Privacy Policy.

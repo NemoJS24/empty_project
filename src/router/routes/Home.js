@@ -1,8 +1,8 @@
 import { lazy } from 'react'
 
 const ContactUs = lazy(() => import('@src/views/main/forms/contactUs/ContactUs'))
-const Pricing = lazy(() => import('@src/views/main/products/superLeadz/SuperLeadz/components/PricingPage'))
-const SuperLeadzFaq = lazy(() => import('@src/views/main/products/superLeadz/SuperLeadz/components/SuperLeadzFaq'))
+const Superleadz_Pricing = lazy(() => import('@src/views/main/products/superLeadz/SuperLeadz/Superleadz_Pricing'))
+const SuperLeadzFaq = lazy(() => import('@src/views/main/products/superLeadz/SuperLeadz/SuperLeadzFaq'))
 const Sniper = lazy(() => import('@src/views/main/products/sniper/Sniper'))
 const FaqPartner = lazy(() => import('@src/views/main/partner/FaqPartner'))
 const Infiniti = lazy(() => import('@src/views/main/products/infiniti/Infiniti'))
@@ -41,6 +41,10 @@ const FlowLogin = lazy(() => import("../../views/Flow/Login"))
 const FlowSignUp = lazy(() => import("../../views/Flow/SignUp"))
 import VerfiyYourEmail from '../../views/XirclsFrontend/VerfiyYourAccount'
 import InstallFailed from '../../views/XirclsFrontend/InstallFailed'
+import Skin_type_form from '../../views/XirclsFrontend/test/Skin_type_form'
+import FlashAccount from '../../views/main/products/flash/FlashAccount'
+import FaqFlash from '../../views/main/products/flash/FaqFlash'
+import Flash_Pricing from '../../views/main/products/flash/Flash_Pricing'
 
 const Homes_Routes = [
 
@@ -63,7 +67,7 @@ const Homes_Routes = [
     title: "Partners: Grow your business"
   },
   {
-    path: '/partners/faqs',
+    path: '/partners/faq',
     element: <FaqPartner />,
     meta: {
       layout: "homeLayout",
@@ -73,7 +77,7 @@ const Homes_Routes = [
   },
 
   {
-    path: '/products/superleadz/lead-generation-nurturing-and-conversion',
+    path: '/products/superleadz/',
     element: <SuperLeadz />,
     meta: {
       layout: "homeLayout",
@@ -83,7 +87,8 @@ const Homes_Routes = [
   },
 
   {
-    path: '/products/superleadz/lead-generation-nurturing-and-conversion/features',
+    // path: '/products/superleadz/lead-generation-nurturing-and-conversion/features',
+    path: '/products/superleadz/features/',
     element: <Features />,
     meta: {
       layout: "homeLayout",
@@ -92,8 +97,9 @@ const Homes_Routes = [
     title: "Features: Lead generation, nurturing and conversion"
   },
   {
-    path: '/products/superleadz/lead-generation-nurturing-and-conversion/pricing',
-    element: <Pricing />,
+    // path: '/products/superleadz/lead-generation-nurturing-and-conversion/pricing',
+    path: '/products/superleadz/pricing/',
+    element: <Superleadz_Pricing />,
     meta: {
       layout: "homeLayout",
       publicRoute: true
@@ -101,7 +107,8 @@ const Homes_Routes = [
     title: "Pricing: Lead generation, nurturing and conversion"
   },
   {
-    path: '/products/superleadz/lead-generation-nurturing-and-conversion/faqs',
+    // path: '/products/superleadz/lead-generation-nurturing-and-conversion/faqs',
+    path: '/products/superleadz/faq',
     element: <SuperLeadzFaq />,
     meta: {
       layout: "homeLayout",
@@ -110,7 +117,8 @@ const Homes_Routes = [
     title: "FAQ: Lead generation, nurturing and conversion"
   },
   {
-    path: '/products/sniper/customer-acquisition/',
+    // path: '/products/sniper/',
+    path: '/products/sniper/',
     element: <Sniper />,
     meta: {
       layout: "homeLayout",
@@ -119,7 +127,8 @@ const Homes_Routes = [
     title: " Sniper: Customer acquisition"
   },
   {
-    path: '/products/infiniti/customer-acquisition-and-loyalty/',
+    path: '/products/infiniti/',
+    // path: '/products/infiniti/',
     element: <Infiniti />,
     meta: {
       layout: "homeLayout",
@@ -129,8 +138,36 @@ const Homes_Routes = [
 
   },
   {
-    path: '/products/semperfi/customer-loyalty/',
+    // path: '/products/semperfi/',
+    path: '/products/semperfi/',
     element: <Semper />,
+    meta: {
+      layout: "homeLayout",
+      publicRoute: true
+    },
+    title: "Semper Fi: Customer loyalty"
+  },
+  {
+    path: '/products/flash-accounts/',
+    element: <FlashAccount />,
+    meta: {
+      layout: "homeLayout",
+      publicRoute: true
+    },
+    title: "Semper Fi: Customer loyalty"
+  },
+  {
+    path: '/products/flash-accounts/faq',
+    element: <FaqFlash />,
+    meta: {
+      layout: "homeLayout",
+      publicRoute: true
+    },
+    title: "Semper Fi: Customer loyalty"
+  },
+  {
+    path: '/products/flash-accounts/pricing',
+    element: <Flash_Pricing />,
     meta: {
       layout: "homeLayout",
       publicRoute: true
@@ -341,6 +378,14 @@ const Homes_Routes = [
     element: <InstallFailed />,
     meta: {
       layout: 'custom',
+      publicRoute: true
+    }
+  },
+  {
+    path: '/codeskin/skin-type-test',
+    element: <Skin_type_form />,
+    meta: {
+      layout: "NewBlank",
       publicRoute: true
     }
   }

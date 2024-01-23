@@ -48,11 +48,11 @@ const Testimonial = () => {
 
                                 </Col>
 
-                                <Col md="7" className=' py-3 px-1 d-flex flex-column justify-content-center  align-items-start ' >
-                                    <h1 className='fs-1 fw-bold mb-2 main-heading testimonialDesc lh-32' >
+                                <Col md="5" sm=""  className=' py-3 px-1 d-flex flex-column justify-content-center  align-items-start ' >
+                                    <h1 className='fs-1 fw-bold mb-2 px-2 main-heading testimonialDesc lh-32' >
                                         {ele.desc}
                                     </h1>
-                                    <p className='text-black fs-2 mt-2'><span className="fw-bolder">{ele.personName},</span> {ele.role}</p>
+                                    <p className='text-black fs-2 mt-2 px-1'><span className="fw-bolder">{ele.personName},</span> {ele.role}</p>
                                 </Col>
 
                             </Row>

@@ -121,7 +121,7 @@ const FinanceDetails = () => {
             name: <>DISBURSE <br /> DATE</>,
             minWidth: "150px",
             selector: (row) => (
-                row?.Loan_Disbursement_Date ? moment(row.Loan_Disbursement_Date).format("YYYY-MM-DD") : ''
+                row?.Loan_Disbursement_Date ? row.Loan_Disbursement_Date : ''
             ),
             type: 'date'
         },

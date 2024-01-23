@@ -128,6 +128,7 @@ export const configUrl = {
     get_view_customer: "/customers/merchant/get_view_customer/",
     get_company_details: "/customers/merchant/get_company_details/",
     all_cust_dashboard: "/customers/merchant/all_cust_dashboard/",
+    crm_all_cust_dashboard: "/customers/cust_all_dashboard/",
     add_company_details: "/customers/merchant/add_company_details/",
     get_customer_vehicle: '/vehicle/get_customer_vehicle/', //crm
     get_customer_insurance: '/insurance/get_customer_insurance/', //crm

@@ -1,6 +1,6 @@
 import FaqComponent from '@src/views/main/components/Faq/FaqComponent'
 import React from 'react'
-import { superFaqData } from '../SuperLeadz'
+import { superFaqData } from './SuperLeadz'
 export default function SuperLeadzFaq() {
     // faq data
     const faqData = superFaqData

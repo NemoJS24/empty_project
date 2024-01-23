@@ -121,7 +121,7 @@ const Collab = () => {
                             </h1>
                         </div>
 
-                        <div className='px-5'>
+                        <div className=' px-lg-5'>
                             {
                                 data.map((data, index) => (
                                     <div className='mt180' key={index}>
@@ -146,10 +146,10 @@ const Collab = () => {
                 <Container fluid='sm'>
 
                     <Row className='section8 justify-content-center mt180 '>
-                        <Col xs="10" lg="12" xl="10"   >
-
                             <h1 className=' text-center display-2 fw-bolder main-heading  ' >Benefits of Collaborative Marketing:</h1>
-                            <Row className='   justify-content-between  mt-2'>
+                        <Col xs="11" lg="12" xl="10"   >
+
+                            <Row className='   justify-content-between  mt-2 '>
                                 {
                                     MarketingData.map((data, index) => {
                                         return (

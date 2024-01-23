@@ -6,7 +6,7 @@ import { LuTrendingUp } from "react-icons/lu"
 import { LiaUserSlashSolid, LiaUserSolid } from "react-icons/lia"
 import { PiMoneyThin } from "react-icons/pi"
 import { Link } from "react-router-dom"
-import { baseURL, postReq } from "../../assets/auth/jwtService"
+import { baseURL, crmURL, postReq } from "../../assets/auth/jwtService"
 
 /* eslint-disable */
 const Customers = () => {
@@ -36,9 +36,9 @@ const Customers = () => {
     //   body: form_data
     // })
       // .then((data) => data.json())
-      postReq("all_cust_dashboard", form_data)
+      postReq("crm_all_cust_dashboard", form_data, crmURL)
       .then((resp) => {
-        console.log(resp, "all_cust_dashboard")
+        console.log(resp, "crm_all_cust_dashboard")
         setCustData(resp?.data?.success)
         console.log("hh", resp?.data?.success)
         setTableData(resp?.data?.success)

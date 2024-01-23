@@ -1,7 +1,6 @@
 import React from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import Footer from '@src/views/main/utilities/footer/Footer'
-import Navbar from '@src/views/main/utilities/navbar/Navbar'
 
 export default function TermsPage() {
 
@@ -321,7 +320,7 @@ export default function TermsPage() {
       desc: (
         <>
           You acknowledge and undertake that you are accessing the services on the XIRCLS website and transacting at your own risk, using your best and prudent judgment before entering into any transactions through the website. We shall neither be liable nor responsible for any actions or inactions of sellers nor any breach of conditions, representations, or warranties by businesses/merchants and hereby expressly disclaim any and all responsibility and liability in that regard. We shall not mediate or resolve any dispute or disagreement between you and other businesses/merchants.
-          <br/><br/>
+          <br /><br />
           We further expressly disclaim any warranties or representations (express or implied) in respect of quality, suitability, accuracy, reliability, completeness, timeliness, performance, safety, merchantability, fitness for a particular purpose, or legality of the products listed or displayed or transacted or the content (including product or pricing information and/or specifications) on the XIRCLS website. While we have taken precautions to avoid inaccuracies in content, this website, all content, information (including the price of products), software, products, services, and related graphics are provided as is, without warranty of any kind. We do not implicitly or explicitly support or endorse the sale or purchase of any products or product information on the website by other businesses/merchants. At no time shall any right, title, or interest in the communication or products sold through or displayed through XIRCLS vest with XIRCLS, nor shall XIRCLS have any obligations or liabilities in respect of any transactions on the websites of businesses/merchants listed on XIRCLS.
         </>
       )
@@ -344,36 +343,34 @@ export default function TermsPage() {
 
   return (
     <div style={{ background: "#fff" }} >
-        {/* <Navbar /> */}
+      {/* <Navbar /> */}
 
-        {/* section 1 */}
-        <Row className=' text-center  justify-content-center mt200'>
-          <Col xs="11" lg="10" xl="10"  >
-            <h1 className='display-1 text-center main-heading fw-bolder  pt-3  lh-83 '>
-              Terms Of Use</h1>
-          </Col>
-        </Row >
+      {/* section 1 */}
+      <div className=' text-center  justify-content-center mt240'>
+        <h1 className='display-1 text-center main-heading fw-bolder  '>
+          Terms Of Use</h1>
+      </div >
 
-        <Row className='mt100 justify-content-center '>
-          <Col xs="10" md="10" xl="10"  >
-            <div className='  px-0  d-flex flex-column  gap-5 '>
-              {
-                policyData.map((data, index) => (
-                  <div className='justify-content-start mt-4   ' key={index}>
-                    <div className=''>
-                      <h1 className='main-heading display-6 fw-bolder  mb-0'>{data.title}</h1>
-                      <h2 className='text-black lh-32 mt-1'>{data.desc}</h2>
-                    </div>
+      <Row className='mt100 justify-content-center '>
+        <Col xs="10" md="10" xl="10"  >
+          <div className='  px-0  d-flex flex-column  gap-5 '>
+            {
+              policyData.map((data, index) => (
+                <div className='justify-content-start  ' key={index}>
+                  <div className=''>
+                    <h1 className='main-heading display-6 fw-bolder  mb-0'>{data.title}</h1>
+                    <h2 className='text-black lh-32 mt-1'>{data.desc}</h2>
                   </div>
-                ))}
-            </div>
-          </Col >
-        </Row >
-        
-        <hr className='mt180' />
+                </div>
+              ))}
+          </div>
+        </Col >
+      </Row >
 
-        {/* footer */}
-        < Footer />
+      <hr className='mt180' />
+
+      {/* footer */}
+      < Footer />
     </div >
   )
 }

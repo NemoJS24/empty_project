@@ -28,14 +28,15 @@ const HomeLayout = () => {
   // console.log(pathname)
 
   const NavbarFun = () => {
-    const list = ['/partners', '/partners/faqs', '/products/superleadz/lead-generation-nurturing-and-conversion', '/products/superleadz/lead-generation-nurturing-and-conversion/features', '/products/superleadz/lead-generation-nurturing-and-conversion/pricing', '/products/superleadz/lead-generation-nurturing-and-conversion/faqs']
+    const list = ['/partners', '/partners/faq', '/products/superleadz/', '/products/superleadz/features/', '/products/superleadz/pricing', '/products/superleadz/faq', '/products/flash-accounts/', '/products/flash-accounts/faq', '/products/flash-accounts/pricing']
     if (list.includes(pathname)) {
       setisDifferent(true)
-      // console.log(true)
       if (pathname.includes("partners")) {
         setSecondNavbar("partners")
       } else if (pathname.includes("superleadz")) {
         setSecondNavbar("superleadz")
+      } else if (pathname.includes("flash-accounts")) {
+        setSecondNavbar("flash-accounts")
       } else {
         setSecondNavbar(false)
       }
@@ -104,7 +105,7 @@ const HomeLayout = () => {
           {/* xircls_frontend */}
           {
             <div className='content-body customeHomeDiv'>
-              <Container fluid="sm" className='border p-0 overflow-hidden'>
+              <Container fluid="lg" className='border p-0 overflow-hidden'>
                 {
                   isDifferent ? <Navbar position={'notFixed'} /> : <Navbar />
                 }
@@ -112,7 +113,7 @@ const HomeLayout = () => {
                   isDifferent && SecondNavbar && <SubNavbar navTitle={SecondNavbar} />
                 }
 
-                <Outlet />
+                  <Outlet />
 
                 {/* <Footer /> */}
               </Container>

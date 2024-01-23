@@ -696,9 +696,15 @@ const ApplicantForm = ({ allData }) => {
                     <input placeholder="Mobile Number" type='tel' maxLength={10} id='basicDetails-mobile' name='phone_no' className="form-control"
                         // value={formData?.basicDetail?.phone_no}
                         //  onChange={handleInputChange} 
+                        // onChange={(e) => {
+                        //     handleAddInputChange(e, "addForm")
+                        //     // addInputChangeHandler(e)
+                        // }}
                         onChange={(e) => {
-                            handleAddInputChange(e, "addForm")
-                            // addInputChangeHandler(e)
+                            if (!isNaN(e.target.value)) {
+                                handleAddInputChange(e, "addForm")
+                                console.log("this is a number")
+                            }
                         }}
                     />
                     <p id="phone_no_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -757,9 +763,15 @@ const ApplicantForm = ({ allData }) => {
                         id="address-1-pincode"
                         name="billingAddress.pincode"
                         className="form-control"
+                        // onChange={(e) => {
+                        //     handleAddInputChange(e, "addForm")
+                        //     // addInputChangeHandler(e)
+                        // }}
                         onChange={(e) => {
-                            handleAddInputChange(e, "addForm")
-                            // addInputChangeHandler(e)
+                            if (!isNaN(e.target.value)) {
+                                handleAddInputChange(e, "addForm")
+                                console.log("this is a number")
+                            }
                         }}
                     // value={formData.billingAddress.pincode}
                     // onChange={handleInputChange}
@@ -1340,7 +1352,13 @@ const ApplicantForm = ({ allData }) => {
                         </label>
                         <input placeholder="Loan Amount" type='tel' maxLength={10} id='basicDetails-loan-amount' name='Loan_amount' className="form-control"
                             value={formData?.Loan_amount}
-                            onChange={e => (handleInputChange(e, 'tel'))}
+                            // onChange={e => (handleInputChange(e, 'tel'))}
+                            onChange={(e) => {
+                                if (!isNaN(e.target.value)) {
+                                    (handleInputChange(e, 'tel'))
+                                    console.log("this is a number")
+                                }
+                            }}
                         />
                     </Col>
                     <Col md={6} className="mt-2">

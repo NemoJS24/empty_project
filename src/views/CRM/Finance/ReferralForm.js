@@ -69,8 +69,14 @@ const ReferralForm = ({ allData }) => {
                         <input required placeholder="10-digit Mobile Number" type='tel' pattern="[789][0-9]{9}" maxLength={10} id='basicDetails-mobile' name='Ref_phone_no' className="form-control"
                             value={formData?.Ref_phone_no}
                             // onChange={e => (handleInputChange(e))}
+                            // onChange={(e) => {
+                            //     handleInputChange(e)
+                            // }}
                             onChange={(e) => {
-                                handleInputChange(e)
+                                if (!isNaN(e.target.value)) {
+                                    handleInputChange(e)
+                                    console.log("this is a number")
+                                }
                             }}
                         />
                         <p id="Ref_phone_no_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -160,7 +166,13 @@ const ReferralForm = ({ allData }) => {
                             name="Ref_pincode"
                             className="form-control"
                             value={formData.Ref_pincode}
-                            onChange={e => (handleInputChange(e))}
+                            // onChange={e => (handleInputChange(e))}
+                            onChange={(e) => {
+                                if (!isNaN(e.target.value)) {
+                                    handleInputChange(e)
+                                    console.log("this is a number")
+                                }
+                            }}
                         />
                     </Col>
                     <Col md={6} className="mt-2">

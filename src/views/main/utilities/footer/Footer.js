@@ -18,10 +18,10 @@ const Footer = () => {
         navigator.clipboard.writeText(demo)
         toast.success(() => <h4 className="fw-bolder m-0 ">Copied !</h4>, {
             position: "top-center"
-          })
+        })
     }
     return (
-        <Container fluid="sm">
+        <div className="px-2">
             <Row className='justify-content-center py-5 homeFooter mt-2 '>
                 <Col md="10" xs="10" lg="11" xl="11">
                     <div className=' d-flex flex-wrap justify-content-between'  >
@@ -82,6 +82,7 @@ const Footer = () => {
                             <ul className=' list-unstyled'>
                                 <li className='mb-1 '><Link to='/contact-us' > Leave us a message <GoLinkExternal style={{ marginLeft: "5px" }} /> </Link></li>
                                 <li className='mb-1 cursor-pointer user-select-none' onClick={() => copyText("num1")} ><img className='me-1' src={india} alt="" width={20} /> <span id="num1"> +91 9969 333 666 </span></li>
+                                 {/* <a href="https://wa.me/message/LGXSSWWGV7UGP1" >contact to sahil</a> */}
                                 <li className='mb-1 cursor-pointer user-select-none' onClick={() => copyText("num2")}> <img className='me-1' src={usa} alt="" width={20} /> <span id="num2">+1 (936) 333 6363 </span></li>
                                 <li className='mb-1'><img className='me-1' src={mail} alt="" width={20} />
                                     <a href="mailto:info@xircls.com?subject = Feedback&body = Message">info@xircls.com</a></li>
@@ -102,7 +103,7 @@ const Footer = () => {
 
 
             </Row>
-        </Container>
+        </div>
     )
 }
 
