@@ -164,7 +164,7 @@ export default function SuperLeadz() {
                                         </div>
                                     </div>
                                 </Col>
-                                <Col md="5" className='d-flex  align-items-center justify-content-center mt-1 mt-md-0 ' >
+                                <Col md="5" className='d-none  align-items-center justify-content-center mt-1 mt-md-0 ' >
                                     <img src={giff1} alt='...' style={{ width: '100%' }} />
                                 </Col>
                             </Row>
@@ -493,7 +493,7 @@ export default function SuperLeadz() {
                             </div>
                             <h3 className='h3 justify-content-start text-black px-2 pt-0 pb-2' >Includes all features, upto 125,000 pop-up views.</h3>
                             <div>
-                                <Link to='/products/superleadz/lead-generation-nurturing-and-conversion/pricing' className=" btn  main-btn-blue2 fs-4 fw-lig mt-3 mb-1 text-center ms-2" type="button" style={{ minWidth: "130px" }}>Explore</Link>
+                                <Link to='/products/superleadz/pricing' className=" btn  main-btn-blue2 fs-4 fw-lig mt-3 mb-1 text-center ms-2" type="button" style={{ minWidth: "130px" }}>Explore</Link>
                             </div>
                         </Col>
                     </Row>
@@ -517,7 +517,7 @@ export default function SuperLeadz() {
 
                                         <br />
 
-                                        <Link to='/products/superleadz/lead-generation-nurturing-and-conversion/features' className='btn  btn-lg  fs-4 fw-lig main-btn-dark px-3  py-md-1'>Learn More <FiArrowUpRight className='fs-4' style={{ marginLeft: "3px", marginBottom: "2px" }} /></Link>
+                                        <Link to='/products/superleadz/features/' className='btn  btn-lg  fs-4 fw-lig main-btn-dark px-3  py-md-1'>Learn More <FiArrowUpRight className='fs-4' style={{ marginLeft: "3px", marginBottom: "2px" }} /></Link>
                                     </Col>
 
                                 </Row>

@@ -36,6 +36,16 @@ $breakpoints: (
         // margin-bottom: 130px;
     }
 
+    .cust-font {
+        font-size: 17px !important;
+        padding: 11px 20px !important;
+    }
+
+    .form-control {
+        font-size: 17px !important;
+        padding: 0.4rem 1rem !important;
+    }
+
     .nav_logo_img {
         width: 180px;
         @include media-query(md)
