@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import Footer from './base/Footer'
 import { BiMap } from 'react-icons/bi'
@@ -6,6 +6,23 @@ import { Link } from 'react-router-dom'
 import { validForm } from '../Validator'
 
 const ScheduleDemo = () => {
+
+    const valueToCheck = [
+        {
+            name: 'email',
+            message: 'Enter your email address',
+            type: 'string',
+            id: 'email'
+        },
+        {
+            name: 'password',
+            message: 'Enter your password',
+            type: 'string',
+            id: 'password'
+        }
+    ]
+    
+    const [data, setData] = useState({})
 
 //     class Contact_us(models.Model):
 //     name = models.CharField(max_length=255)
@@ -35,6 +52,8 @@ const ScheduleDemo = () => {
 
 //     class Meta:
 //         db_table = "xl925_Contact_us_merchant"
+
+
     const sendMessage = () => {
         // valueToCheck = []
         const check = validForm()
@@ -58,7 +77,7 @@ const ScheduleDemo = () => {
                                 <h3 className='third_h3 mb-1'>Please leave your details for us to reach out!</h3>
                                 <Col md={6}>
                                     <label className='label'>Name *</label>
-                                    <input className='third-form-control' type="text" placeholder='Name' />
+                                    <input className='third-form-control' type="text" placeholder='Name' onChange={(e) => updateData(e)} />
 
                                 </Col>
                                 <Col md={6}>
@@ -70,7 +89,7 @@ const ScheduleDemo = () => {
                                             </select>
                                         </Col>
                                         <Col md={9}>
-                                            <input className='third-form-control' type="text" placeholder='Phone' />
+                                            <input className='third-form-control' type="text" placeholder='Phone' onChange={(e) => updateData(e)} />
                                         </Col>
                                     </Row>
                                 </Col>
@@ -78,15 +97,15 @@ const ScheduleDemo = () => {
                             <Row className='breaker'>
                                 <Col md={12} className="breaker">
                                     <label className='label'>Email *</label>
-                                    <input className='third-form-control' type="text" placeholder='Email' />
+                                    <input className='third-form-control' type="text" placeholder='Email' onChange={(e) => updateData(e)} />
                                 </Col>
                                 <Col md={12} className="breaker">
                                     <label className='label'>Subject *</label>
-                                    <input className='third-form-control' type="text" placeholder='Subject' />
+                                    <input className='third-form-control' type="text" placeholder='Subject' onChange={(e) => updateData(e)} />
                                 </Col>
                                 <Col md={12} className="breaker">
                                     <label className='label'>Message *</label>
-                                    <textarea rows="6" cols="30" className='third-form-control' placeholder='Message'>
+                                    <textarea rows="6" cols="30" className='third-form-control' placeholder='Message' onChange={(e) => updateData(e)}>
 
                                     </textarea>
                                 </Col>

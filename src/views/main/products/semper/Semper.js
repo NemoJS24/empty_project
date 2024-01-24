@@ -149,7 +149,7 @@ export default function Semper() {
           </h1>
           <h1 className='text-black'>Semper-Fi is the only customer loyalty program in the world where other businesses pay to help YOU retain YOUR customers!</h1>
           <p className='fw-lig'>*Semper Fi comes from Semper Fidelis - a Latin phrase that means 'Always Loyal’.</p>
-          <Link to="/merchant/signup" className='btn  btn-lg main-btn-blue-gra  fs-3 mt-2 ' style={{ fontWeight: "900" }}>Start A Semper-fi Campaign</Link>
+          <a target='_blank' href='https://apps.shopify.com/xircls?guided_search_enabled=false&st_source=autocomplete' className='btn  btn-lg main-btn-blue-gra  fs-3 mt-2 ' style={{ fontWeight: "900" }}>Start A Semper-fi Campaign</a>
         </Col>
       </Row >
 

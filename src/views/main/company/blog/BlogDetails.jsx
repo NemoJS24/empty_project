@@ -45,9 +45,9 @@ const BlogList = ({ ele }) => (
 const BlogDetails = ({  }) => {
 
   const { blogTitle } = useParams()
-  // console.log('BlogTitle: ' + blogTitle)
+  console.log('BlogTitle: ', blogTitle)
 
-  const blog = blogsData.find((item) => removeSpecialChars(item.title) === (blogTitle))
+  const blog = blogsData.find((item) => item.slug.toLowerCase() === blogTitle?.toLowerCase())
   if (!blog) {
     return <div>Blog not found</div>
   }
@@ -130,7 +130,7 @@ const BlogDetails = ({  }) => {
                     <img src={(bloggersDetails.authorImg) ? bloggersDetails.authorImg : defaultProfileImg} className="img-thumbnail rounded-circle object-fit-cover mt-4 mt-lg-3" alt={bloggersDetails.author }
                       style={{ width: '130px', height: '130px' }} />
                     <div className='d-inline-block justify-content-center text-center align-items-center'>
-                      <Link to={`/blog/author/${replaceSpacesWithUnderscore(blog.author)}`} className='text-decoration-none   link-dark ms-4'>
+                      <Link to={`/blog/author/${replaceSpacesWithUnderscore(blog.author)}`} className='text-decoration-none link-dark ms-4'>
                         <h5 className='fs-3 m-0'>{blog.author}</h5>
                       </Link>
                       <h6 className='fs-5 m-0'>{bloggersDetails.authorPosition}, at XIRCLS</h6>

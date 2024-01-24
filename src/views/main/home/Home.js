@@ -332,7 +332,7 @@ const Home = () => {
             <h1 className=' display- text-center mt-0 text-white ' >Reach out for customized solutions.</h1>
 
             <div className=' d-flex justify-content-center align-items-center gap-1 mt-4'>
-              <Link to='/contact-us/demo' className=' btn btn-lg  main-btn-blue fw-lig'>Request Demo</Link>
+              {/* <Link to='/contact-us/demo' className=' btn btn-lg  main-btn-blue fw-lig'>Request Demo</Link> */}
               <Link to='/contact-us' className=' btn btn-lg main-btn-light fw-lig'>Contact Us</Link>
             </div>
           </Col>

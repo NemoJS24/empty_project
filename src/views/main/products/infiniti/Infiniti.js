@@ -143,7 +143,7 @@ export default function Infiniti() {
                 </div>
               </Col>
               <div className='text-center'>
-              <Link to='/merchant/signup' className=' btn  main-btn-blue fs-3 mt-3 fw-lig'>Start a Infiniti Campaign</Link>
+              <a target='_blank' href='https://apps.shopify.com/xircls?guided_search_enabled=false&st_source=autocomplete' className=' btn  main-btn-blue fs-3 mt-3 fw-lig'>Start a Infiniti Campaign</a>
               </div>
 
             </Row>

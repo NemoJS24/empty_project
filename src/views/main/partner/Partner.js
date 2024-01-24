@@ -323,7 +323,7 @@ export default function Partner() {
                                     Start Earning <br /> Today
                                 </h1>
                                 <h1 className='text-black mt-2 fs-1'>
-                                    Earn upto <span className='text-warning fw-bolder'>30% commission</span> <br /> for every XIRCLS product purchase.
+                                    Earn upto <span className='text-warning fw-bolder'>20% commission</span> <br /> for every XIRCLS product purchase.
                                 </h1>
                                 <br />
                                 <Row className=''>
@@ -333,7 +333,7 @@ export default function Partner() {
                                             <Link to='/contact-us' className='btn main-btn-dark btn-lg  fs-3 px-3 py-1' >Speak with our team</Link>
                                         </div>
                                     </Col>
-                                    <Col xs="12" md="4  " xl="6" className='text-end'>
+                                    <Col xs="12" md="4  " xl="6" className='text-end d-none'>
                                         <Link to='/contact-us' className=' text-black fw-bold fs-3' style={{ boxShadow: 'none' }}>Sign up as a XIRCLS Partner<BiRightArrowAlt /></Link>
                                         
                                     </Col>

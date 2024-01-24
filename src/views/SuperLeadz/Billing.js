@@ -239,7 +239,7 @@ const SuperLeadzBilling = () => {
                             </div>
                             <div className="d-flex justify-content-between align-items-baseline">
                                 <p className="mb-0 h5 card-text position-relative cursor-default p-0">
-                                    Pop-ups
+                                    Visits
                                 </p>
                                 <h3 className='m-0'>
                                     {billing?.usage_count}/{billing?.usage_charge}

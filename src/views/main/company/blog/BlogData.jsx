@@ -14,7 +14,8 @@ const bloggersData = [
       twitter: 'https://www.xircls.com/',
       facebook: 'https://www.xircls.com/',
       linkedIn: 'https://www.xircls.com/'
-    }
+    },
+    auth_slug: "Darina_Litvina"
   },
   {
     id: 2,
@@ -31,7 +32,8 @@ const bloggersData = [
       twitter: 'https://www.xircls.com/',
       facebook: 'https://www.xircls.com/',
       linkedIn: 'https://www.xircls.com/'
-    }
+    },
+    auth_slug: "Ian_White"
   },
   {
     id: 3,
@@ -47,7 +49,8 @@ const bloggersData = [
       twitter: 'https://www.xircls.com/',
       facebook: 'https://www.xircls.com/',
       linkedIn: 'https://www.xircls.com/'
-    }
+    },
+    auth_slug: "Shakercha_Bradshaw"
   },
   {
     id: 4,
@@ -65,7 +68,8 @@ const bloggersData = [
       twitter: 'https://www.xircls.com/',
       facebook: 'https://www.xircls.com/',
       linkedIn: 'https://www.xircls.com/'
-    }
+    },
+    auth_slug: "Adriana_Marcela_Torrenegra"
   },
   {
     id: 5,
@@ -83,7 +87,8 @@ const bloggersData = [
       twitter: 'https://www.xircls.com/',
       facebook: 'https://www.xircls.com/',
       linkedIn: 'https://www.xircls.com/'
-    }
+    },
+    auth_slug: "Lauren_Deah"
   },
   {
     id: 6,
@@ -99,7 +104,8 @@ const bloggersData = [
       twitter: 'https://www.xircls.com/',
       facebook: 'https://www.xircls.com/',
       linkedIn: 'https://www.xircls.com/'
-    }
+    },
+    auth_slug: "Kwanele_Ngobese"
   },
   {
     id: 7,
@@ -118,7 +124,8 @@ const bloggersData = [
       twitter: 'https://www.xircls.com/',
       facebook: 'https://www.xircls.com/',
       linkedIn: 'https://www.xircls.com/'
-    }
+    },
+    auth_slug: "Allie_Hinds"
   },
   {
     id: 8,
@@ -135,7 +142,8 @@ const bloggersData = [
       twitter: 'https://www.xircls.com/',
       facebook: 'https://www.xircls.com/',
       linkedIn: 'https://www.xircls.com/'
-    }
+    },
+    auth_slug: "Peyton-Sweeney"
   },
   {
     id: 9,
@@ -151,7 +159,8 @@ const bloggersData = [
       twitter: 'https://www.xircls.com/',
       facebook: 'https://www.xircls.com/',
       linkedIn: 'https://www.xircls.com/'
-    }
+    },
+    auth_slug: "Dineo-Magakwa"
   },
   {
     id: 10,
@@ -177,7 +186,9 @@ const blogsData = [
     author: "Darina Litvina",
     title: "Conflict: Torture or Tool?",
     subTitle: [],
-    preview: "Most people would say they don’t like conflict. It doesn’t feel good— it’s disruptive, tense, uncomfortable, perhaps even torturous. It is often perceived as an enemy that needs to be defeated in order for us to restore happiness. One thing worth exploring, however, is instead reconceptualising..."
+    preview: "Most people would say they don’t like conflict. It doesn’t feel good— it’s disruptive, tense, uncomfortable, perhaps even torturous. It is often perceived as an enemy that needs to be defeated in order for us to restore happiness. One thing worth exploring, however, is instead reconceptualising...",
+    slug: "Conflict-Torture-or-Tool",
+    auth_slug: "Darina_Litvina"
   },
   {
     id: 2,
@@ -186,7 +197,9 @@ const blogsData = [
     author: "Ian White",
     date: "13th December 2022",
     title: "Collaborative Marketing and the Future of Zero-Party Data",
-    preview: 'How Third-Party Data Deprecation will Affect Marketing in 2023'
+    preview: 'How Third-Party Data Deprecation will Affect Marketing in 2023',
+    slug: "Collaborative-Marketing-and-the-Future-of-ZeroParty-Data",
+    auth_slug: "Ian_White"
   },
   {
     id: 3,
@@ -195,7 +208,9 @@ const blogsData = [
     title: "Why Companies Need to Move From Diversity To Inclusion",
     preview: "Whether you’re a newly graduated college student looking for a job on LinkedIn, or a seasoned employee working in corporate America, one thing is for sure – you will always see the equal opportunity...",
     author: "Shakercha Bradshaw",
-    date: "1st August 2022"
+    date: "1st August 2022",
+    slug: "Why-Companies-Need-to-Move-From-Diversity-To-Inclusion",
+    auth_slug: "Shakercha_Bradshaw"
   },
   {
     id: 4,
@@ -204,7 +219,9 @@ const blogsData = [
     title: "Target Audience: Are Companies At War With Their Customers?",
     preview: "Whenever you buy or intend to buy a service or product from a company, you inadvertently become their target audience.",
     author: "Adriana Marcela Torrenegra",
-    date: "19th July 2022"
+    date: "19th July 2022",
+    slug: "Target-Audience-Are-Companies-At-War-With-Their-Customers",
+    auth_slug: "Adriana_Marcela_Torrenegra"
   },
   {
     id: 5,
@@ -213,7 +230,9 @@ const blogsData = [
     title: "Current Online Marketing Practices Are Making You Pay More!",
     preview: "Have you noticed your paycheck doesn’t go as far as it once did?",
     author: "Lauren Deah",
-    date: "04th July 2022"
+    date: "04th July 2022",
+    slug: "Current-Online-Marketing-Practices-Are-Making-You-Pay-More",
+    auth_slug: "Lauren_Deah"
   },
   {
     id: 6,
@@ -222,7 +241,9 @@ const blogsData = [
     title: "Are Bargain Hunters Killing Your Business?",
     preview: "Whether you’re a small business owner just starting out or in the marketing department of a large corporation, one thing’s for sure - bargain hunters aren’t the kind of customers you should be hoping for.",
     author: "Kwanele Ngobese",
-    date: "08th June 2022"
+    date: "08th June 2022",
+    slug: "Are-Bargain-Hunters-Killing-Your-Business",
+    auth_slug: "Kwanele_Ngobese"
   },
   {
     id: 7,
@@ -231,7 +252,9 @@ const blogsData = [
     imgSrc: 'https://api.xircls.com/static/images/website-slide/blog/b5.jpg',
     preview: "Everyone loves a deal. From cash cows and billionaire tycoons to the middle-class and even those barely scraping by - we all want the same thing. We want to get the most for our money.",
     author: "Allie Hinds",
-    date: "23rd May 2022"
+    date: "23rd May 2022",
+    slug: "Mind-Games-Why-We-Buy-What-We-Buy",
+    auth_slug: "Allie_Hinds"
   },
   {
     id: 8,
@@ -240,7 +263,9 @@ const blogsData = [
     imgSrc: 'https://api.xircls.com/static/images/website-slide/blog/b4.jpg',
     preview: "Every day, billions of people visit various social media platforms such as Instagram, TikTok, Twitter, YouTube and Facebook. According to a survey conducted in February of 2021, 46% of survey participants spent...",
     author: "Peyton Sweeney",
-    date: "06th May 2022"
+    date: "06th May 2022",
+    slug: "Are-Influencers-Worth-The-Price-Tag",
+    auth_slug: "Peyton-Sweeney"
   },
   {
     id: 9,
@@ -249,7 +274,9 @@ const blogsData = [
     imgSrc: 'https://api.xircls.com/static/images/website-slide/blog/b3.jpg',
     preview: "According to recent data, in just the United States, there are over 4 billion loyalty program memberships, and growing!",
     author: "Dineo Magakwa",
-    date: "28th April 2022"
+    date: "28th April 2022",
+    slug: "The-Harsh-Truth-About-Customer-Loyalty-Programs",
+    auth_slug: "Dineo-Magakwa"
   },
   {
     id: 10,
@@ -258,7 +285,9 @@ const blogsData = [
     imgSrc: 'https://api.xircls.com/static/images/website-slide/blog/b21.jpg',
     preview: "Ever notice how any main street, in any town, is lined with the same restaurants, the same clothing stores, the same bookstores…  It’s like anywhere you go, you’re always in the same place.",
     author: "Lauren Deah",
-    date: "07th April 2022"
+    date: "07th April 2022",
+    slug: "Playing-With-Power-The-Danger-Of-Monopolies",
+    auth_slug: "Lauren_Deah"
   },
   {
     id: 11,
@@ -267,7 +296,9 @@ const blogsData = [
     imgSrc: 'https://api.xircls.com/static/images/website-slide/blog/b11.jpg',
     preview: "Data tracking has become so deeply integrated into our personal lives that society has forgotten the value of true privacy. Under the guise of social connection, creativity and networking, the very platforms...",
     author: "Allie Hinds",
-    date: "04th April 2022"
+    date: "04th April 2022",
+    slug: "The-Devils-Currency-Our-Lives-For-Auction",
+    auth_slug: "Allie_Hinds"
   }
 ]
 

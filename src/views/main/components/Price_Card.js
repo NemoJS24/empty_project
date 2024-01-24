@@ -20,7 +20,7 @@ export default function Price_Card({ data, isFeature }) {
                         </div>
                         <h1 className=' mt-1 fs-3 main-heading' style={{ marginLeft: "3px" }}>/month</h1>
                     </div>
-                    <h5 className='ms-2 text-black mb-2'>{data.subValue}</h5>
+                    <h5 className='ms-2 text-black mb-2 d-none'>{data.subValue}</h5>
 
                     <hr />
                     <h5 className='ms-1 mt-2 text-black'>{data.listHead}</h5>
