@@ -17,7 +17,7 @@ import toast from 'react-hot-toast'
 import BasicEditor from '../Components/Editor/BaseEditor'
 
 const RenderPreview = (props) => {
-    const { outletData, slPrevBg, bgsettings, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition, bgStyles, crossStyle, values, setValues, showBrand, handleColDrop, handleDragOver, handleElementDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise, setcolWise, setDragStartIndex, setDragOverIndex, isMobile, finalObj, setFinalObj, mobileCondition, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles, offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes } = props
+    const { outletData, slPrevBg, bgsettings, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition, bgStyles, crossStyle, values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise, setcolWise, setDragStartIndex, setDragOverIndex, isMobile, finalObj, setFinalObj, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles, offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes } = props
     const [editorBar, setEditorBar] = useState(true)
     const { userPermission } = useContext(PermissionProvider)
     const setDragEnter = ({ position, id }) => {
@@ -382,73 +382,73 @@ const RenderPreview = (props) => {
                                             }} className="text-decoration-underline">XIRCLS</span></span></div>}
                                             {/* render layout Here */}
                                             {colWise.length > 0 ? colWise?.map((cur, key) => {
-                                                    return <div style={{ ...cur?.style, display: "flex", justifyContent: "center", alignItems: "center", position: "relative", zIndex: cur === indexes.cur ? "2" : "0" }} key={key}
-                                                        onClick={(e) => {
-                                                            e.stopPropagation()
-                                                            makActive(e, cur, "parent", "parent", key, "parent", "parent")
-                                                            setCurrPosition({ ...currPosition, selectedType: "block" })
-                                                            setIndexes({ cur: key, curElem: "parent", subElem: "grandparent" })
-                                                            setValues(cur?.style)
-                                                            // setShowActive(!isEqual({ ...indexes }, { cur: key, curElem: "parent", subElem: "grandparent" }))
-                                                        }}
+                                                return <div style={{ ...cur?.style, display: "flex", justifyContent: "center", alignItems: "center", position: "relative", zIndex: cur === indexes.cur ? "2" : "0" }} key={key}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        makActive(e, cur, "parent", "parent", key, "parent", "parent")
+                                                        setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                        setIndexes({ cur: key, curElem: "parent", subElem: "grandparent" })
+                                                        setValues(cur?.style)
+                                                        // setShowActive(!isEqual({ ...indexes }, { cur: key, curElem: "parent", subElem: "grandparent" }))
+                                                    }}
+                                                    onMouseOver={(e) => {
+                                                        e.stopPropagation()
+                                                        setMouseEnterIndex({ cur: key, curElem: "parent", subElem: "grandparent" })
+                                                    }}
+                                                    onDragEnter={e => {
+                                                        e.preventDefault()
+                                                        e.stopPropagation()
+                                                        setDragEnter({ type: "block", position: { cur: key, curElem: "parent", subElem: "grandparent" }, id: `${currPage}-${key}-parent-grandparent` })
+                                                    }}
+                                                    onDragExit={e => {
+                                                        e.preventDefault()
+                                                        e.stopPropagation()
+                                                        setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.stopPropagation()
+                                                        setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
+                                                    }}
+                                                    id={`${currPage}-${key}-parent-grandparent`}
+                                                    className={`${isEqual({ cur: key, curElem: "parent", subElem: "grandparent" }, { ...indexes }) ? "active-elem" : ""}`}
+                                                >
+                                                    {isEqual({ cur: key, curElem: "parent", subElem: "grandparent" }, { ...gotDragOver }) && (
+                                                        <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
+                                                    )}
+                                                    {isEqual({ cur: key, curElem: "parent", subElem: "grandparent" }, { ...mouseEnterIndex }) && <span
                                                         onMouseOver={(e) => {
                                                             e.stopPropagation()
-                                                            setMouseEnterIndex({ cur: key, curElem: "parent", subElem: "grandparent" })
-                                                        }}
-                                                        onDragEnter={e => {
-                                                            e.preventDefault()
-                                                            e.stopPropagation()
-                                                            setDragEnter({ type: "block", position: { cur: key, curElem: "parent", subElem: "grandparent" }, id: `${currPage}-${key}-parent-grandparent` })
-                                                        }}
-                                                        onDragExit={e => {
-                                                            e.preventDefault()
-                                                            e.stopPropagation()
-                                                            setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                            setMouseEnterIndex({ ...mouseEnterIndex })
                                                         }}
                                                         onMouseLeave={(e) => {
                                                             e.stopPropagation()
                                                             setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                        }}
-                                                        id={`${currPage}-${key}-parent-grandparent`}
-                                                        className={`${isEqual({ cur: key, curElem: "parent", subElem: "grandparent" }, { ...indexes }) ? "active-elem" : ""}`}
-                                                    >
-                                                        {isEqual({ cur: key, curElem: "parent", subElem: "grandparent" }, { ...gotDragOver }) && (
-                                                            <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
-                                                        )}
-                                                        {isEqual({ cur: key, curElem: "parent", subElem: "grandparent" }, { ...mouseEnterIndex }) && <span
-                                                            onMouseOver={(e) => {
-                                                                e.stopPropagation()
-                                                                setMouseEnterIndex({ ...mouseEnterIndex })
-                                                            }}
-                                                            onMouseLeave={(e) => {
-                                                                e.stopPropagation()
-                                                                setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                            }} className="d-flex w-100" style={{ backgroundColor: "#727272", position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
-                                                            <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }} onClick={(e) => {
-                                                                e.stopPropagation()
-                                                                if (colWise.length <= 1) {
-                                                                    setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
-                                                                } else {
-                                                                    setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
-                                                                }
-                                                                const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
-                                                                const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
-                                                                arr.splice(key, 1)
-                                                                // setcolWise([...arr])
-                                                                const newObj = { ...finalObj }
-                                                                if (currPage === "button") {
-                                                                    newObj.button = arr
-                                                                    newObj.mobile_button = arrRev
-                                                                } else {
-                                                                    const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
-                                                                    const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $?.id === currPage)
-                                                                    newObj.pages[pageIndex].values = arr
-                                                                    newObj.mobile_pages[mobile_pageIndex].values = arrRev
-                                                                }
-                                                                updatePresent({ ...newObj })
-                                                                setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                            }} />
-                                                            {/* <Copy color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }} onClick={(e) => {
+                                                        }} className="d-flex w-100" style={{ backgroundColor: "#727272", position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
+                                                        <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }} onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            if (colWise.length <= 1) {
+                                                                setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                            } else {
+                                                                setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
+                                                            }
+                                                            const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
+                                                            const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
+                                                            arr.splice(key, 1)
+                                                            // setcolWise([...arr])
+                                                            const newObj = { ...finalObj }
+                                                            if (currPage === "button") {
+                                                                newObj.button = arr
+                                                                newObj.mobile_button = arrRev
+                                                            } else {
+                                                                const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
+                                                                const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $?.id === currPage)
+                                                                newObj.pages[pageIndex].values = arr
+                                                                newObj.mobile_pages[mobile_pageIndex].values = arrRev
+                                                            }
+                                                            updatePresent({ ...newObj })
+                                                            setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
+                                                        }} />
+                                                        {/* <Copy color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }} onClick={(e) => {
                                                                                         e.stopPropagation()
                                                                                         setCurrPosition({ ...currPosition, selectedType: "block" })
                                                                                         setIndexes({ cur: key, curElem: curElem.positionType, subElem: j + 1 })
@@ -458,635 +458,228 @@ const RenderPreview = (props) => {
                                                                                         setcolWise([...arr])
                                                                                         setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
                                                                                     }} /> */}
-                                                        </span>}
-                                                        {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: "parent", subElem: "grandparent" }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
-                                                        <div style={{ display: "flex", flexDirection: currPage === "button" ? "row" : isMobile ? "column" : "row", justifyContent: "center", alignItems: "stretch", position: "relative", width: "100%" }}
-                                                        >
-                                                            {
-                                                                cur?.elements?.map((curElem, i) => {
-                                                                    return (
-                                                                        <div style={{ ...curElem?.style, position: "relative", width: currPage === "button" ? curElem?.style?.width : isMobile ? "100%" : curElem?.style?.width, zIndex: (cur === indexes.cur) && (curElem.positionType === indexes.curElem) ? "2" : "0" }} onClick={(e) => {
+                                                    </span>}
+                                                    {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: "parent", subElem: "grandparent" }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
+                                                    <div style={{ display: "flex", flexDirection: currPage === "button" ? "row" : isMobile ? "column" : "row", justifyContent: "center", alignItems: "stretch", position: "relative", width: "100%" }}
+                                                    >
+                                                        {
+                                                            cur?.elements?.map((curElem, i) => {
+                                                                return (
+                                                                    <div style={{ ...curElem?.style, position: "relative", width: currPage === "button" ? curElem?.style?.width : isMobile ? "100%" : curElem?.style?.width, zIndex: (cur === indexes.cur) && (curElem.positionType === indexes.curElem) ? "2" : "0" }} onClick={(e) => {
+                                                                        e.stopPropagation()
+                                                                        // setActiveRow("none")
+                                                                        makActive(e, cur, curElem, curElem?.positionType, key, i, "parent")
+                                                                        setCurrPosition({ ...currPosition, selectedType: "column" })
+                                                                        setIndexes({ cur: key, curElem: curElem?.positionType, subElem: "parent" })
+                                                                        setValues(curElem?.style)
+                                                                    }}
+                                                                        onMouseOver={(e) => {
                                                                             e.stopPropagation()
-                                                                            // setActiveRow("none")
-                                                                            makActive(e, cur, curElem, curElem?.positionType, key, i, "parent")
-                                                                            setCurrPosition({ ...currPosition, selectedType: "column" })
-                                                                            setIndexes({ cur: key, curElem: curElem?.positionType, subElem: "parent" })
-                                                                            setValues(curElem?.style)
+                                                                            setMouseEnterIndex({ cur: key, curElem: curElem?.positionType, subElem: "parent" })
                                                                         }}
-                                                                            onMouseOver={(e) => {
-                                                                                e.stopPropagation()
-                                                                                setMouseEnterIndex({ cur: key, curElem: curElem?.positionType, subElem: "parent" })
-                                                                            }}
-                                                                            onMouseLeave={(e) => {
-                                                                                e.stopPropagation()
-                                                                                setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                                            }}
-                                                                            onDragEnter={e => {
-                                                                                e.preventDefault()
-                                                                                e.stopPropagation()
-                                                                                setDragEnter({ type: "col", position: { cur: key, curElem: curElem.positionType, subElem: "parent" }, id: `${currPage}-${key}-${curElem?.positionType}-parent` })
-                                                                            }}
-                                                                            onDragExit={e => {
-                                                                                e.preventDefault()
-                                                                                e.stopPropagation()
-                                                                                setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                                            }}
-                                                                            onDrop={e => {
-                                                                                e.stopPropagation()
-                                                                                setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                                                handleColDrop(e, key, curElem?.positionType, curElem?.element?.length, i)
-                                                                                const transferType = e.dataTransfer.getData("type")
-                                                                                setCurrPosition({ ...currPosition, j: curElem?.element?.length, selectedType: transferType })
-                                                                            }}
-                                                                            id={`${currPage}-${key}-${curElem.positionType}-parent`}
-                                                                            className={`${isEqual({ cur: key, curElem: curElem.positionType, subElem: "parent" }, { ...indexes }) ? "active-elem" : ""}`}>
+                                                                        onMouseLeave={(e) => {
+                                                                            e.stopPropagation()
+                                                                            setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
+                                                                        }}
+                                                                        onDragEnter={e => {
+                                                                            e.preventDefault()
+                                                                            e.stopPropagation()
+                                                                            setDragEnter({ type: "col", position: { cur: key, curElem: curElem.positionType, subElem: "parent" }, id: `${currPage}-${key}-${curElem?.positionType}-parent` })
+                                                                        }}
+                                                                        onDragExit={e => {
+                                                                            e.preventDefault()
+                                                                            e.stopPropagation()
+                                                                            setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                                        }}
+                                                                        onDrop={e => {
+                                                                            e.stopPropagation()
+                                                                            setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                                            handleColDrop(e, key, curElem?.positionType, curElem?.element?.length, i)
+                                                                            const transferType = e.dataTransfer.getData("type")
+                                                                            setCurrPosition({ ...currPosition, j: curElem?.element?.length, selectedType: transferType })
+                                                                        }}
+                                                                        id={`${currPage}-${key}-${curElem.positionType}-parent`}
+                                                                        className={`${isEqual({ cur: key, curElem: curElem.positionType, subElem: "parent" }, { ...indexes }) ? "active-elem" : ""}`}>
 
-                                                                            {/* {isEqual({ cur: key, curElem: curElem.positionType, subElem: "parent" }, { ...gotDragOver }) && (
+                                                                        {/* {isEqual({ cur: key, curElem: curElem.positionType, subElem: "parent" }, { ...gotDragOver }) && (
                                                                                 <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
                                                                             )} */}
-                                                                            {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: "parent" }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
-                                                                            {curElem?.element?.map((subElem, j) => {
-                                                                                switch (subElem?.type) {
-                                                                                    case 'text':
-                                                                                        // return <span contentEditable="true" className="text-secondary p-1 rounded-2 " style={{ fontSize: '14.4px', border: '1px solid black' }} onClick={(e) => makActive(e, cur)} >Text Element</span>
-                                                                                        return (
-                                                                                            <div id={`${currPage}-${key}-${curElem?.positionType}-${j}`} draggable={!isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes })} style={{ zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1", position: "relative" }} onDragStart={(e) => {
+                                                                        {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: "parent" }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
+                                                                        {curElem?.element?.map((subElem, j) => {
+                                                                            switch (subElem?.type) {
+                                                                                case 'text':
+                                                                                    // return <span contentEditable="true" className="text-secondary p-1 rounded-2 " style={{ fontSize: '14.4px', border: '1px solid black' }} onClick={(e) => makActive(e, cur)} >Text Element</span>
+                                                                                    return (
+                                                                                        <div id={`${currPage}-${key}-${curElem?.positionType}-${j}`} draggable={!isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes })} style={{ zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1", position: "relative" }} onDragStart={(e) => {
+                                                                                            e.stopPropagation()
+                                                                                            e.dataTransfer.setData("type", "rearrange_text")
+                                                                                            setTransfered("rearrange_text")
+                                                                                            setIndexes({ cur: key, curElem: curElem.positionType, subElem: j })
+                                                                                            setDragStartIndex({ cur: key, curElem: curElem.positionType, subElem: j })
+                                                                                        }}
+                                                                                            onDragEnter={e => {
+                                                                                                e.preventDefault()
                                                                                                 e.stopPropagation()
-                                                                                                e.dataTransfer.setData("type", "rearrange_text")
-                                                                                                setTransfered("rearrange_text")
-                                                                                                setIndexes({ cur: key, curElem: curElem.positionType, subElem: j })
-                                                                                                setDragStartIndex({ cur: key, curElem: curElem.positionType, subElem: j })
+                                                                                                setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
                                                                                             }}
-                                                                                                onDragEnter={e => {
-                                                                                                    e.preventDefault()
-                                                                                                    e.stopPropagation()
-                                                                                                    setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
-                                                                                                }}
-                                                                                                onDragExit={e => {
-                                                                                                    e.preventDefault()
-                                                                                                    e.stopPropagation()
-                                                                                                    setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                                                                }}
-                                                                                                onClick={e => {
-                                                                                                    e.stopPropagation()
-                                                                                                    makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                    setCurrPosition({ ...currPosition, selectedType: "text" })
-                                                                                                    setIndexes({ cur: key, curElem: curElem.positionType, subElem: j })
-                                                                                                    setValues(subElem?.style)
-                                                                                                    setSelectedOffer({})
-                                                                                                }}
-                                                                                                onDrop={e => {
-                                                                                                    e.stopPropagation()
-                                                                                                    setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                                                                    const transferType = e.dataTransfer.getData("type")
-                                                                                                    if (!transferType.includes("rearrange")) {
-                                                                                                        handleColDrop(e, key, curElem.positionType, j + 1, i)
-                                                                                                        setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
-                                                                                                    } else {
-                                                                                                        handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                    }
-                                                                                                }}
+                                                                                            onDragExit={e => {
+                                                                                                e.preventDefault()
+                                                                                                e.stopPropagation()
+                                                                                                setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                                                            }}
+                                                                                            onClick={e => {
+                                                                                                e.stopPropagation()
+                                                                                                makActive(e, cur, curElem, curElem?.positionType, key, i, j)
+                                                                                                setCurrPosition({ ...currPosition, selectedType: "text" })
+                                                                                                setIndexes({ cur: key, curElem: curElem.positionType, subElem: j })
+                                                                                                setValues(subElem?.style)
+                                                                                                setSelectedOffer({})
+                                                                                            }}
+                                                                                            onDrop={e => {
+                                                                                                e.stopPropagation()
+                                                                                                setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                                                                const transferType = e.dataTransfer.getData("type")
+                                                                                                if (!transferType.includes("rearrange")) {
+                                                                                                    handleElementDrop(e, key, curElem.positionType, j + 1, i)
+                                                                                                    setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
+                                                                                                } else {
+                                                                                                    handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                }
+                                                                                            }}
+                                                                                            onMouseOver={(e) => {
+                                                                                                e.stopPropagation()
+                                                                                                setMouseEnterIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                            }}
+                                                                                            onMouseLeave={(e) => {
+                                                                                                e.stopPropagation()
+                                                                                                setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
+                                                                                            }}
+                                                                                            onDragOver={e => {
+                                                                                                e.preventDefault()
+                                                                                                e.stopPropagation()
+                                                                                                setDragOverIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                setMousePos({ ...mousePos, y: e.clientY, x: e.clientX })
+                                                                                            }}
+                                                                                            className={`${isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
+
+                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
+                                                                                                <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
+                                                                                            )}
+
+                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
                                                                                                 onMouseOver={(e) => {
                                                                                                     e.stopPropagation()
-                                                                                                    setMouseEnterIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                    setMouseEnterIndex({ ...mouseEnterIndex })
                                                                                                 }}
                                                                                                 onMouseLeave={(e) => {
                                                                                                     e.stopPropagation()
                                                                                                     setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                                                                }}
-                                                                                                onDragOver={e => {
-                                                                                                    e.preventDefault()
+                                                                                                }} className="d-flex w-100" style={{ position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
+                                                                                                <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
                                                                                                     e.stopPropagation()
-                                                                                                    setDragOverIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                    setMousePos({ ...mousePos, y: e.clientY, x: e.clientX })
-                                                                                                }}
-                                                                                                className={`${isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
-
-                                                                                                {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
-                                                                                                    <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
-                                                                                                )}
-
-                                                                                                {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
-                                                                                                    onMouseOver={(e) => {
-                                                                                                        e.stopPropagation()
-                                                                                                        setMouseEnterIndex({ ...mouseEnterIndex })
-                                                                                                    }}
-                                                                                                    onMouseLeave={(e) => {
-                                                                                                        e.stopPropagation()
-                                                                                                        setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                                                                    }} className="d-flex w-100" style={{ position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
-                                                                                                    <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
-                                                                                                        e.stopPropagation()
-                                                                                                        if (colWise.length <= 1) {
-                                                                                                            setCurrPosition({ ...currPosition, selectedType: "main" })
-                                                                                                            setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
-                                                                                                        } else {
-                                                                                                            setCurrPosition({ ...currPosition, selectedType: "block" })
-                                                                                                            setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
-                                                                                                        }
-                                                                                                        const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
-                                                                                                        const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
-                                                                                                        if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
-                                                                                                            arr.splice(key, 1)
-                                                                                                            arrRev.splice(key, 1)
-                                                                                                        } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
-                                                                                                            arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
-                                                                                                            arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
-                                                                                                        } else {
-                                                                                                            arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
-                                                                                                            arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
-                                                                                                        }
-                                                                                                        const newObj = { ...finalObj }
-                                                                                                        if (currPage === "button") {
-                                                                                                            newObj.button = arr
-                                                                                                            newObj.mobile_button = arrRev
-                                                                                                        } else {
-                                                                                                            const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
-                                                                                                            const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $?.id === currPage)
-                                                                                                            newObj.pages[pageIndex].values = arr
-                                                                                                            newObj.mobile_pages[mobile_pageIndex].values = arrRev
-                                                                                                        }
-                                                                                                        updatePresent({ ...newObj })
-                                                                                                        // setcolWise([...arr])
-                                                                                                    }} />
-                                                                                                    <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />
-                                                                                                </span>}
-                                                                                                {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute resizeDiv" style={{ inset: "0px", outline: "2px solid #727272", zIndex: "2", backgroundColor: "rgb(114, 114, 114, 0.3)", resize: "vertical", overflow: "auto" }}></div>}
-                                                                                                <div style={{ width: "100%", resize: isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) ? "vertical" : "none" }} id={`textField-${key}-${curElem?.positionType}-${j}`} className="text-field" >
-                                                                                                    <Editor
-                                                                                                        customElemnt={(
-                                                                                                            <UncontrolledButtonDropdown>
-                                                                                                                <DropdownToggle color='dark' style={{ padding: "0.5rem" }}
-                                                                                                                    className='hide-after-dropdown rounded'>
-                                                                                                                    {(subElem.isSameText || !isMobile) && <Monitor size={subElem.isSameText ? "12px" : "15px"} />}{(subElem.isSameText || isMobile) && <Smartphone size={subElem.isSameText ? "12px" : "15px"} />}
-                                                                                                                </DropdownToggle>
-                                                                                                                <DropdownMenu end>
-                                                                                                                    <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: false, key, i, j })} className={`w-100 ${!subElem?.isSameText && !isMobile ? "activeDrop" : ""}`}>
-                                                                                                                        Desktop View Only
-                                                                                                                    </DropdownItem>
-                                                                                                                    <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: true, key, i, j })} className={`w-100 ${!subElem?.isSameText && isMobile ? "activeDrop" : ""}`}>
-                                                                                                                        Mobile View Only
-                                                                                                                    </DropdownItem>
-                                                                                                                    <DropdownItem onClick={e => updateTextRes({ e, arrCondition: true, mobCondition: isMobile, key, i, j })} className={`w-100 ${subElem?.isSameText ? "activeDrop" : ""}`}>
-                                                                                                                        Desktop and Mobile View
-                                                                                                                    </DropdownItem>
-                                                                                                                </DropdownMenu>
-                                                                                                            </UncontrolledButtonDropdown>
-                                                                                                        )}
-                                                                                                        fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""}
-                                                                                                        fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""}
-                                                                                                        elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
-                                                                                                        key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${subElem?.textValue}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`}
-                                                                                                        style={{ ...subElem?.style, width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, color: subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : "" }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
-                                                                                                        onChange={(content, editorState) => {
-                                                                                                            if (!isEqual(content, subElem?.editorState)) {
-                                                                                                                const newObj = { ...finalObj }
-                                                                                                                if (currPage === "button") {
-                                                                                                                    const positionIndex = newObj?.button[key]?.elements?.findIndex($ => $?.positionType === curElem.positionType)
-                                                                                                                    if (newObj?.button[key]?.elements[positionIndex]?.element[j] && (!isMobile || subElem?.isSameText)) {
-                                                                                                                        newObj.button[key].elements[positionIndex].element[j].textValue = content
-                                                                                                                        newObj.button[key].elements[positionIndex].element[j].editorState = editorState
-                                                                                                                    }
-                                                                                                                    if (newObj?.mobile_button[key]?.elements[positionIndex]?.element[j] && (isMobile || subElem?.isSameText)) {
-                                                                                                                        newObj.mobile_button[key].elements[positionIndex].element[j].textValue = content
-                                                                                                                        newObj.mobile_button[key].elements[positionIndex].element[j].editorState = editorState
-                                                                                                                    }
-                                                                                                                } else {
-                                                                                                                    const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
-                                                                                                                    const positionIndex = newObj?.pages[pageIndex]?.values[key]?.elements?.findIndex($ => $?.positionType === curElem.positionType)
-                                                                                                                    if (newObj?.pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j] && (!isMobile || subElem?.isSameText)) {
-                                                                                                                        newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
-                                                                                                                        newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
-                                                                                                                    }
-                                                                                                                    if (newObj?.mobile_pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j] && (isMobile || subElem?.isSameText)) {
-                                                                                                                        newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
-                                                                                                                        newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
-                                                                                                                    }
-                                                                                                                }
-                                                                                                                updatePresent(newObj)
-                                                                                                            }
-                                                                                                        }}
-                                                                                                        // htmlContent={subElem?.textValue}
-                                                                                                        editorState={subElem?.editorState ? subElem?.editorState : `{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"font-family: Montserrat;font-weight: 100;font-size: 12px;","text":"Enter text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`}
-                                                                                                    />
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        )
-                                                                                    case 'image':
-                                                                                        if (subElem.src !== "") {
-                                                                                            return (
-                                                                                                <div id={`${currPage}-${key}-${curElem?.positionType}-${j}`} draggable style={{ ...subElem?.style, width: subElem?.isBrandWidth ? finalObj?.defaultThemeColors?.brandWidth : subElem?.style?.width, height: subElem?.isBrandHeight ? finalObj?.defaultThemeColors?.brandHeight : subElem?.style?.height, margin: subElem?.isBrandAlignment ? finalObj?.defaultThemeColors?.brandAlignment : subElem?.style?.margin, position: "relative", display: "flex", justifyContent: "center", alignItems: "center", zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
-                                                                                                    onDragStart={e => {
-                                                                                                        e.stopPropagation()
-                                                                                                        e.dataTransfer.setData("type", "rearrange_image")
-                                                                                                        setTransfered("rearrange_image")
-                                                                                                        setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                        setDragStartIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                    }}
-                                                                                                    onMouseOver={(e) => {
-                                                                                                        e.stopPropagation()
-                                                                                                        setMouseEnterIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                    }}
-                                                                                                    onMouseLeave={(e) => {
-                                                                                                        e.stopPropagation()
-                                                                                                        setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                                                                    }}
-                                                                                                    onDragEnter={e => {
-                                                                                                        e.preventDefault()
-                                                                                                        e.stopPropagation()
-                                                                                                        setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
-                                                                                                    }}
-                                                                                                    onDragExit={e => {
-                                                                                                        e.preventDefault()
-                                                                                                        e.stopPropagation()
-                                                                                                        setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                                                                    }}
-                                                                                                    onClick={e => {
-                                                                                                        e.stopPropagation()
-                                                                                                        makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                        setCurrPosition({ ...currPosition, selectedType: "image" })
-                                                                                                        setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                        setValues(subElem?.style)
-                                                                                                        setSelectedOffer({})
-                                                                                                    }}
-                                                                                                    onDrop={e => {
-                                                                                                        e.stopPropagation()
-                                                                                                        setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                                                                        setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                                                                        const transferType = e.dataTransfer.getData("type")
-                                                                                                        if (!transferType.includes("rearrange")) {
-                                                                                                            handleColDrop(e, key, curElem?.positionType, j + 1, i)
-                                                                                                            setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
-                                                                                                        } else {
-                                                                                                            handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                        }
-                                                                                                    }}
-                                                                                                    onDragOver={e => {
-                                                                                                        e.preventDefault()
-                                                                                                        e.stopPropagation()
-                                                                                                        setDragOverIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                        setMousePos({ ...mousePos, y: e.clientY })
-                                                                                                    }}
-                                                                                                    className={`${isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
-                                                                                                    {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
-                                                                                                        <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
+                                                                                                    if (colWise.length <= 1) {
+                                                                                                        setCurrPosition({ ...currPosition, selectedType: "main" })
+                                                                                                        setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                                                                    } else {
+                                                                                                        setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                        setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
+                                                                                                    }
+                                                                                                    const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                    const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                    if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                        arr.splice(key, 1)
+                                                                                                        arrRev.splice(key, 1)
+                                                                                                    } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                    } else {
+                                                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                    }
+                                                                                                    const newObj = { ...finalObj }
+                                                                                                    if (currPage === "button") {
+                                                                                                        newObj[`${mobileCondition}button`] = arr
+                                                                                                        newObj[`${mobileConditionRev}button`] = arrRev
+                                                                                                    } else {
+                                                                                                        const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                        const mobile_pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                        newObj[`${mobileCondition}pages`][pageIndex].values = arr
+                                                                                                        newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = arrRev
+                                                                                                    }
+                                                                                                    updatePresent({ ...newObj })
+                                                                                                    // setcolWise([...arr])
+                                                                                                }} />
+                                                                                                <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />
+                                                                                            </span>}
+                                                                                            {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute resizeDiv" style={{ inset: "0px", outline: "2px solid #727272", zIndex: "2", backgroundColor: "rgb(114, 114, 114, 0.3)", resize: "vertical", overflow: "auto" }}></div>}
+                                                                                            <div style={{ width: "100%", resize: isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) ? "vertical" : "none" }} id={`textField-${key}-${curElem?.positionType}-${j}`} className="text-field" >
+                                                                                                <Editor
+                                                                                                    customElemnt={(
+                                                                                                        <UncontrolledButtonDropdown>
+                                                                                                            <DropdownToggle color='dark' style={{ padding: "0.5rem" }}
+                                                                                                                className='hide-after-dropdown rounded'>
+                                                                                                                {(subElem.isSameText || !isMobile) && <Monitor size={subElem.isSameText ? "12px" : "15px"} />}{(subElem.isSameText || isMobile) && <Smartphone size={subElem.isSameText ? "12px" : "15px"} />}
+                                                                                                            </DropdownToggle>
+                                                                                                            <DropdownMenu end>
+                                                                                                                <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: false, key, i, j })} className={`w-100 ${!subElem?.isSameText && !isMobile ? "activeDrop" : ""}`}>
+                                                                                                                    Desktop View Only
+                                                                                                                </DropdownItem>
+                                                                                                                <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: true, key, i, j })} className={`w-100 ${!subElem?.isSameText && isMobile ? "activeDrop" : ""}`}>
+                                                                                                                    Mobile View Only
+                                                                                                                </DropdownItem>
+                                                                                                                <DropdownItem onClick={e => updateTextRes({ e, arrCondition: true, mobCondition: isMobile, key, i, j })} className={`w-100 ${subElem?.isSameText ? "activeDrop" : ""}`}>
+                                                                                                                    Desktop and Mobile View
+                                                                                                                </DropdownItem>
+                                                                                                            </DropdownMenu>
+                                                                                                        </UncontrolledButtonDropdown>
                                                                                                     )}
-                                                                                                    {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span className="d-flex"
-                                                                                                        onMouseOver={(e) => {
-                                                                                                            e.stopPropagation()
-                                                                                                            setMouseEnterIndex({ ...mouseEnterIndex })
-                                                                                                        }}
-                                                                                                        onMouseLeave={(e) => {
-                                                                                                            e.stopPropagation()
-                                                                                                            setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                                                                        }} style={{ backgroundColor: "#727272", position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
-                                                                                                        <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }} onClick={(e) => {
-                                                                                                            e.stopPropagation()
-                                                                                                            if (colWise.length <= 1) {
-                                                                                                                setCurrPosition({ ...currPosition, selectedType: "main" })
-                                                                                                                setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
-                                                                                                            } else {
-                                                                                                                setCurrPosition({ ...currPosition, selectedType: "block" })
-                                                                                                                setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
-                                                                                                            }
-                                                                                                            const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
-                                                                                                            const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
-                                                                                                            if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
-                                                                                                                arr.splice(key, 1)
-                                                                                                                arrRev.splice(key, 1)
-                                                                                                            } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
-                                                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
-                                                                                                                arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
-                                                                                                            } else {
-                                                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
-                                                                                                                arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
-                                                                                                            }
+                                                                                                    fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""}
+                                                                                                    fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""}
+                                                                                                    elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
+                                                                                                    key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${subElem?.textValue}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`}
+                                                                                                    style={{ ...subElem?.style, width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, color: subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : "" }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
+                                                                                                    onChange={(content, editorState) => {
+                                                                                                        if (!isEqual(content, subElem?.editorState)) {
                                                                                                             const newObj = { ...finalObj }
                                                                                                             if (currPage === "button") {
-                                                                                                                newObj.button = arr
-                                                                                                                newObj.mobile_button = arrRev
+                                                                                                                const positionIndex = newObj?.button[key]?.elements?.findIndex($ => $?.positionType === curElem.positionType)
+                                                                                                                if (newObj?.button[key]?.elements[positionIndex]?.element[j] && (!isMobile || subElem?.isSameText)) {
+                                                                                                                    newObj.button[key].elements[positionIndex].element[j].textValue = content
+                                                                                                                    newObj.button[key].elements[positionIndex].element[j].editorState = editorState
+                                                                                                                }
+                                                                                                                if (newObj?.mobile_button[key]?.elements[positionIndex]?.element[j] && (isMobile || subElem?.isSameText)) {
+                                                                                                                    newObj.mobile_button[key].elements[positionIndex].element[j].textValue = content
+                                                                                                                    newObj.mobile_button[key].elements[positionIndex].element[j].editorState = editorState
+                                                                                                                }
                                                                                                             } else {
                                                                                                                 const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
-                                                                                                                const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $?.id === currPage)
-                                                                                                                newObj.pages[pageIndex].values = arr
-                                                                                                                newObj.mobile_pages[mobile_pageIndex].values = arrRev
-                                                                                                            }
-                                                                                                            updatePresent({ ...newObj })
-                                                                                                            // setcolWise([...arr])
-                                                                                                        }} />
-                                                                                                        {/* <Copy color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }}
-                                                                                                                                    onClick={(e) => {
-                                                                                                                                        e.stopPropagation()
-                                                                                                                                        setCurrPosition({ ...currPosition, selectedType: "block" })
-                                                                                                                                        setIndexes({ cur: key, curElem: curElem.positionType, subElem: j + 1 })
-                                                                                                                                        const arr = [...colWise]
-                                                                                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 0, subElem)
-                                                                                                                                        setValues(subElem?.style)
-                                                                                                                                        setcolWise([...arr])
-                                                                                                                                    }} /> */}
-                                                                                                    </span>}
-                                                                                                    {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
-                                                                                                    <img
-                                                                                                        className="img-fluid"
-                                                                                                        src={currPage === "button" ? subElem.src : subElem?.isBrandLogo ? finalObj?.defaultThemeColors?.brandLogo : subElem.src}
-                                                                                                        alt={``}
-                                                                                                        style={{ width: "100%", height: "100%" }}
-                                                                                                    />
-                                                                                                </div>
-                                                                                            )
-                                                                                        } else {
-                                                                                            setCurrPosition({ ...currPosition, j })
-                                                                                            // imageSelector.click()
-                                                                                            triggerImage()
-                                                                                            const dupArray = [...colWise]
-                                                                                            dupArray[key].elements[i].element[j].src = "http://www.palmares.lemondeduchiffre.fr/images/joomlart/demo/default.jpg"
-                                                                                            setcolWise([...dupArray])
-                                                                                        }
-                                                                                    case 'button':
-                                                                                        return (
-                                                                                            <div id={`${currPage}-${key}-${curElem?.positionType}-${j}`} draggable={!isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes })} style={{ width: "100%", display: "flex", justifyContent: subElem?.style?.alignType, position: "relative", display: "flex", alignItems: "center", zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
-                                                                                                onDragStart={e => {
-                                                                                                    e.stopPropagation()
-                                                                                                    e.dataTransfer.setData("type", "rearrange_button")
-                                                                                                    setTransfered("rearrange_button")
-                                                                                                    setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                    setDragStartIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                }}
-                                                                                                onDragEnter={e => {
-                                                                                                    e.preventDefault()
-                                                                                                    e.stopPropagation()
-                                                                                                    setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
-                                                                                                }}
-                                                                                                onDragExit={e => {
-                                                                                                    e.preventDefault()
-                                                                                                    e.stopPropagation()
-                                                                                                    setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                                                                }}
-                                                                                                onClick={e => {
-                                                                                                    e.stopPropagation()
-                                                                                                    makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                    setCurrPosition({ ...currPosition, selectedType: "button" })
-                                                                                                    setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                    setValues(subElem?.style)
-                                                                                                    setSelectedOffer({})
-                                                                                                }}
-                                                                                                onDrop={e => {
-                                                                                                    e.stopPropagation()
-                                                                                                    setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                                                                    const transferType = e.dataTransfer.getData("type")
-                                                                                                    if (!transferType.includes("rearrange")) {
-                                                                                                        handleColDrop(e, key, curElem?.positionType, j + 1, i)
-                                                                                                        setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
-                                                                                                    } else {
-                                                                                                        handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                    }
-                                                                                                }}
-                                                                                                onMouseOver={(e) => {
-                                                                                                    e.stopPropagation()
-                                                                                                    setMouseEnterIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                }}
-                                                                                                onMouseLeave={(e) => {
-                                                                                                    e.stopPropagation()
-                                                                                                    setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                                                                }}
-                                                                                                onDragOver={e => {
-                                                                                                    e.preventDefault()
-                                                                                                    e.stopPropagation()
-                                                                                                    setDragOverIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                    setMousePos({ ...mousePos, y: e.clientY })
-                                                                                                }}
-                                                                                                className={`${isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
-                                                                                                {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
-                                                                                                    <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
-                                                                                                )}
-                                                                                                {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
-                                                                                                    onMouseOver={(e) => {
-                                                                                                        e.stopPropagation()
-                                                                                                        setMouseEnterIndex({ ...mouseEnterIndex })
-                                                                                                    }}
-                                                                                                    onMouseLeave={(e) => {
-                                                                                                        e.stopPropagation()
-                                                                                                        setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                                                                    }} className="d-flex w-100" style={{ position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
-                                                                                                    <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
-                                                                                                        e.stopPropagation()
-                                                                                                        if (colWise.length <= 1) {
-                                                                                                            setCurrPosition({ ...currPosition, selectedType: "main" })
-                                                                                                            setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
-                                                                                                        } else {
-                                                                                                            setCurrPosition({ ...currPosition, selectedType: "block" })
-                                                                                                            setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
-                                                                                                        }
-                                                                                                        const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
-                                                                                                        const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
-                                                                                                        if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
-                                                                                                            arr.splice(key, 1)
-                                                                                                            arrRev.splice(key, 1)
-                                                                                                        } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
-                                                                                                            arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
-                                                                                                            arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
-                                                                                                        } else {
-                                                                                                            arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
-                                                                                                            arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
-                                                                                                        }
-                                                                                                        const newObj = { ...finalObj }
-                                                                                                        if (currPage === "button") {
-                                                                                                            newObj.button = arr
-                                                                                                            newObj.mobile_button = arrRev
-                                                                                                        } else {
-                                                                                                            const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
-                                                                                                            const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $?.id === currPage)
-                                                                                                            newObj.pages[pageIndex].values = arr
-                                                                                                            newObj.mobile_pages[mobile_pageIndex].values = arrRev
-                                                                                                        }
-                                                                                                        updatePresent({ ...newObj })
-                                                                                                        // setcolWise([...arr])
-                                                                                                    }} />
-                                                                                                    <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />
-                                                                                                    {/* <Copy color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }}
-                                                                                                        onClick={(e) => {
-                                                                                                            e.stopPropagation()
-                                                                                                            setCurrPosition({ ...currPosition, selectedType: "block" })
-                                                                                                            setIndexes({ cur: key, curElem: curElem.positionType, subElem: j + 1 })
-                                                                                                            const arr = [...colWise]
-                                                                                                            arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 0, subElem)
-                                                                                                            setValues(subElem?.style)
-                                                                                                            setcolWise([...arr])
-                                                                                                        }} /> */}
-                                                                                                </span>}
-                                                                                                {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
-                                                                                                <div style={{ ...subElem?.style, display: "inline-flex", justifyContent: "center", alignItems: "center", fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} >
-                                                                                                    <span onDragStart={e => e.stopPropagation()} id={`textField-${key}-${curElem?.positionType}-${j}`} style={{ display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems }}>
-                                                                                                        <Editor fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
-                                                                                                            key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${subElem?.textValue}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
-                                                                                                            onChange={(content, editorState) => {
-                                                                                                                if (!isEqual(content, subElem?.editorState)) {
-                                                                                                                    const newObj = { ...finalObj }
-                                                                                                                    const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
-                                                                                                                    const positionIndex = newObj?.pages[pageIndex]?.values[key]?.elements?.findIndex($ => $?.positionType === curElem.positionType)
-                                                                                                                    if (newObj?.pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
-                                                                                                                        newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
-                                                                                                                        newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
-                                                                                                                    }
-                                                                                                                    if (newObj?.mobile_pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
-                                                                                                                        newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
-                                                                                                                        newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
-                                                                                                                    }
-                                                                                                                    updatePresent(newObj)
-                                                                                                                }
-                                                                                                            }}
-                                                                                                            // htmlContent={subElem?.textValue}
-                                                                                                            editorState={subElem?.editorState ? subElem?.editorState : `{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"font-family: Montserrat;font-weight: 100;font-size: 12px;","text":"Enter text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`}
-                                                                                                        />
-                                                                                                    </span>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        )
-                                                                                    case 'input':
-                                                                                        return (
-                                                                                            <div id={`${currPage}-${key}-${curElem?.positionType}-${j}`} draggable style={{ width: "100%", display: "flex", justifyContent: subElem?.style?.alignType, position: "relative", alignItems: "center", zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
-                                                                                                onDragStart={e => {
-                                                                                                    e.stopPropagation()
-                                                                                                    e.dataTransfer.setData("type", "rearrange_input")
-                                                                                                    setTransfered("rearrange_input")
-                                                                                                    setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                    setDragStartIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                }}
-                                                                                                onDragEnter={e => {
-                                                                                                    e.preventDefault()
-                                                                                                    e.stopPropagation()
-                                                                                                    setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
-                                                                                                }}
-                                                                                                onDragExit={e => {
-                                                                                                    e.preventDefault()
-                                                                                                    e.stopPropagation()
-                                                                                                    setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                                                                }}
-                                                                                                onClick={e => {
-                                                                                                    e.stopPropagation()
-                                                                                                    makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                    setCurrPosition({ ...currPosition, selectedType: "input" })
-                                                                                                    setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                    setValues(subElem.style)
-                                                                                                    setSelectedOffer({})
-                                                                                                }}
-                                                                                                onDrop={e => {
-                                                                                                    e.stopPropagation()
-                                                                                                    setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                                                                    const transferType = e.dataTransfer.getData("type")
-                                                                                                    if (!transferType.includes("rearrange")) {
-                                                                                                        handleColDrop(e, key, curElem?.positionType, j + 1, i)
-                                                                                                        setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
-                                                                                                    } else {
-                                                                                                        handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                    }
-                                                                                                }}
-                                                                                                onMouseOver={(e) => {
-                                                                                                    e.stopPropagation()
-                                                                                                    setMouseEnterIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                }}
-                                                                                                onMouseLeave={(e) => {
-                                                                                                    e.stopPropagation()
-                                                                                                    setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                                                                }}
-                                                                                                onDragOver={e => {
-                                                                                                    e.preventDefault()
-                                                                                                    e.stopPropagation()
-                                                                                                    setDragOverIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                    setMousePos({ ...mousePos, y: e.clientY })
-                                                                                                }}
-                                                                                                className={`${isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
-                                                                                                {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
-                                                                                                    <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
-                                                                                                )}
-                                                                                                {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
-                                                                                                    onMouseOver={(e) => {
-                                                                                                        e.stopPropagation()
-                                                                                                        setMouseEnterIndex({ ...mouseEnterIndex })
-                                                                                                    }}
-                                                                                                    onMouseLeave={(e) => {
-                                                                                                        e.stopPropagation()
-                                                                                                        setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                                                                    }} className="d-flex w-100" style={{ backgroundColor: "#727272", position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
-                                                                                                    <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
-                                                                                                        e.stopPropagation()
-                                                                                                        if (colWise.length <= 1) {
-                                                                                                            setCurrPosition({ ...currPosition, selectedType: "main" })
-                                                                                                            setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
-                                                                                                        } else {
-                                                                                                            setCurrPosition({ ...currPosition, selectedType: "block" })
-                                                                                                            setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
-                                                                                                        }
-                                                                                                        const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
-                                                                                                        const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
-                                                                                                        if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
-                                                                                                            arr.splice(key, 1)
-                                                                                                            arrRev.splice(key, 1)
-                                                                                                        } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
-                                                                                                            arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
-                                                                                                            arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
-                                                                                                        } else {
-                                                                                                            arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
-                                                                                                            arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
-                                                                                                        }
-                                                                                                        const newObj = { ...finalObj }
-                                                                                                        if (currPage === "button") {
-                                                                                                            newObj.button = arr
-                                                                                                            newObj.mobile_button = arrRev
-                                                                                                        } else {
-                                                                                                            const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
-                                                                                                            const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $?.id === currPage)
-                                                                                                            newObj.pages[pageIndex].values = arr
-                                                                                                            newObj.mobile_pages[mobile_pageIndex].values = arrRev
-                                                                                                        }
-                                                                                                        updatePresent({ ...newObj })
-                                                                                                        // setcolWise([...arr])
-                                                                                                    }} />
-                                                                                                    {subElem?.hasLabel && <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />}
-                                                                                                    {/* <Copy color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }}
-                                                                                                                                onClick={(e) => {
-                                                                                                                                    e.stopPropagation()
-                                                                                                                                    setCurrPosition({ ...currPosition, selectedType: "block" })
-                                                                                                                                    setIndexes({ cur: key, curElem: curElem.positionType, subElem: j + 1 })
-                                                                                                                                    const arr = [...colWise]
-                                                                                                                                    arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 0, subElem)
-                                                                                                                                    setValues(subElem?.style)
-                                                                                                                                    setcolWise([...arr])
-                                                                                                                                }} /> */}
-                                                                                                </span>}
-                                                                                                {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
-                                                                                                <div style={{ width: subElem?.style?.width, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, display: "flex", flexDirection: "column", gap: subElem?.style?.elemGap ? subElem?.style?.elemGap : "0px" }}>
-                                                                                                    {subElem?.hasLabel && (<Editor fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`} key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} style={{ width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
-                                                                                                        onChange={(content, editorState) => {
-                                                                                                            if (!isEqual(content, subElem?.editorState)) {
-                                                                                                                const newObj = { ...finalObj }
-                                                                                                                const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
                                                                                                                 const positionIndex = newObj?.pages[pageIndex]?.values[key]?.elements?.findIndex($ => $?.positionType === curElem.positionType)
-                                                                                                                if (newObj?.pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
+                                                                                                                if (newObj?.pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j] && (!isMobile || subElem?.isSameText)) {
                                                                                                                     newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
                                                                                                                     newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
                                                                                                                 }
-                                                                                                                if (newObj?.mobile_pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
+                                                                                                                if (newObj?.mobile_pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j] && (isMobile || subElem?.isSameText)) {
                                                                                                                     newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
                                                                                                                     newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
                                                                                                                 }
-                                                                                                                updatePresent(newObj)
                                                                                                             }
-                                                                                                        }}
-                                                                                                        // htmlContent={subElem?.textValue}
-                                                                                                        editorState={subElem?.editorState ? subElem?.editorState : `{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"font-family: Montserrat;font-weight: 100;font-size: 12px;","text":"Enter text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`}
-                                                                                                    />)}
-                                                                                                    <input placeholder={subElem?.placeholder} type="text" style={{ ...subElem?.style, width: "100%", fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} readOnly />
-                                                                                                </div>
+                                                                                                            updatePresent(newObj)
+                                                                                                        }
+                                                                                                    }}
+                                                                                                    // htmlContent={subElem?.textValue}
+                                                                                                    editorState={subElem?.editorState ? subElem?.editorState : `{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"font-family: Montserrat;font-weight: 100;font-size: 12px;","text":"Enter text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`}
+                                                                                                />
                                                                                             </div>
-                                                                                        )
-                                                                                    case 'offer':
+                                                                                        </div>
+                                                                                    )
+                                                                                case 'image':
+                                                                                    if (subElem.src !== "") {
                                                                                         return (
-                                                                                            <div
+                                                                                            <div id={`${currPage}-${key}-${curElem?.positionType}-${j}`} draggable style={{ ...subElem?.style, width: subElem?.isBrandWidth ? finalObj?.defaultThemeColors?.brandWidth : subElem?.style?.width, height: subElem?.isBrandHeight ? finalObj?.defaultThemeColors?.brandHeight : subElem?.style?.height, margin: subElem?.isBrandAlignment ? finalObj?.defaultThemeColors?.brandAlignment : subElem?.style?.margin, position: "relative", display: "flex", justifyContent: "center", alignItems: "center", zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
                                                                                                 onDragStart={e => {
                                                                                                     e.stopPropagation()
-                                                                                                    e.dataTransfer.setData("type", "rearrange_offer")
-                                                                                                    setTransfered("rearrange_offer")
+                                                                                                    e.dataTransfer.setData("type", "rearrange_image")
+                                                                                                    setTransfered("rearrange_image")
                                                                                                     setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                     setDragStartIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                 }}
@@ -1111,21 +704,18 @@ const RenderPreview = (props) => {
                                                                                                 onClick={e => {
                                                                                                     e.stopPropagation()
                                                                                                     makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                    setCurrPosition({ ...currPosition, selectedType: "offer" })
+                                                                                                    setCurrPosition({ ...currPosition, selectedType: "image" })
                                                                                                     setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                     setValues(subElem?.style)
-                                                                                                    if (!isEqual(indexes, { cur: key, curElem: curElem?.positionType, subElem: j })) {
-                                                                                                        setSelectedOffer({})
-                                                                                                    } else if (finalObj?.selectedOffers.length > 0) {
-                                                                                                        setSelectedOffer(finalObj?.selectedOffers[0])
-                                                                                                    }
+                                                                                                    setSelectedOffer({})
                                                                                                 }}
                                                                                                 onDrop={e => {
                                                                                                     e.stopPropagation()
                                                                                                     setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                                                                    setGotDragOver({ cur: false, curElem: false, subElem: false })
                                                                                                     const transferType = e.dataTransfer.getData("type")
                                                                                                     if (!transferType.includes("rearrange")) {
-                                                                                                        handleColDrop(e, key, curElem?.positionType, j + 1, i)
+                                                                                                        handleElementDrop(e, key, curElem?.positionType, j + 1, i)
                                                                                                         setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
                                                                                                     } else {
                                                                                                         handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
@@ -1136,13 +726,12 @@ const RenderPreview = (props) => {
                                                                                                     e.stopPropagation()
                                                                                                     setDragOverIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                     setMousePos({ ...mousePos, y: e.clientY })
-                                                                                                }} style={{ ...subElem?.style, position: "relative", fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
-                                                                                                id={`${currPage}-${key}-${curElem.positionType}-${j}`}
-                                                                                                className={`${isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
+                                                                                                }}
+                                                                                                className={`${isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
                                                                                                 {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
                                                                                                     <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
                                                                                                 )}
-                                                                                                {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
+                                                                                                {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span className="d-flex"
                                                                                                     onMouseOver={(e) => {
                                                                                                         e.stopPropagation()
                                                                                                         setMouseEnterIndex({ ...mouseEnterIndex })
@@ -1150,7 +739,7 @@ const RenderPreview = (props) => {
                                                                                                     onMouseLeave={(e) => {
                                                                                                         e.stopPropagation()
                                                                                                         setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                                                                    }} className="d-flex w-100" style={{ backgroundColor: "#727272", position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
+                                                                                                    }} style={{ backgroundColor: "#727272", position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
                                                                                                     <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }} onClick={(e) => {
                                                                                                         e.stopPropagation()
                                                                                                         if (colWise.length <= 1) {
@@ -1174,18 +763,429 @@ const RenderPreview = (props) => {
                                                                                                         }
                                                                                                         const newObj = { ...finalObj }
                                                                                                         if (currPage === "button") {
-                                                                                                            newObj.button = arr
-                                                                                                            newObj.mobile_button = arrRev
+                                                                                                            newObj[`${mobileCondition}button`] = arr
+                                                                                                            newObj[`${mobileConditionRev}button`] = arrRev
                                                                                                         } else {
-                                                                                                            const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
-                                                                                                            const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $?.id === currPage)
-                                                                                                            newObj.pages[pageIndex].values = arr
-                                                                                                            newObj.mobile_pages[mobile_pageIndex].values = arrRev
+                                                                                                            const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                            const mobile_pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                            newObj[`${mobileCondition}pages`][pageIndex].values = arr
+                                                                                                            newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = arrRev
                                                                                                         }
                                                                                                         updatePresent({ ...newObj })
                                                                                                         // setcolWise([...arr])
                                                                                                     }} />
                                                                                                     {/* <Copy color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }}
+                                                                                                                                    onClick={(e) => {
+                                                                                                                                        e.stopPropagation()
+                                                                                                                                        setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                                                        setIndexes({ cur: key, curElem: curElem.positionType, subElem: j + 1 })
+                                                                                                                                        const arr = [...colWise]
+                                                                                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 0, subElem)
+                                                                                                                                        setValues(subElem?.style)
+                                                                                                                                        setcolWise([...arr])
+                                                                                                                                    }} /> */}
+                                                                                                </span>}
+                                                                                                {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
+                                                                                                <img
+                                                                                                    className="img-fluid"
+                                                                                                    src={currPage === "button" ? subElem.src : subElem?.isBrandLogo ? finalObj?.defaultThemeColors?.brandLogo : subElem.src}
+                                                                                                    alt={``}
+                                                                                                    style={{ width: "100%", height: "100%" }}
+                                                                                                />
+                                                                                            </div>
+                                                                                        )
+                                                                                    } else {
+                                                                                        setCurrPosition({ ...currPosition, j })
+                                                                                        // imageSelector.click()
+                                                                                        triggerImage()
+                                                                                        const dupArray = [...colWise]
+                                                                                        dupArray[key].elements[i].element[j].src = "http://www.palmares.lemondeduchiffre.fr/images/joomlart/demo/default.jpg"
+                                                                                        setcolWise([...dupArray])
+                                                                                    }
+                                                                                case 'button':
+                                                                                    return (
+                                                                                        <div id={`${currPage}-${key}-${curElem?.positionType}-${j}`} draggable={!isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes })} style={{ width: "100%", display: "flex", justifyContent: subElem?.style?.alignType, position: "relative", display: "flex", alignItems: "center", zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
+                                                                                            onDragStart={e => {
+                                                                                                e.stopPropagation()
+                                                                                                e.dataTransfer.setData("type", "rearrange_button")
+                                                                                                setTransfered("rearrange_button")
+                                                                                                setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                setDragStartIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                            }}
+                                                                                            onDragEnter={e => {
+                                                                                                e.preventDefault()
+                                                                                                e.stopPropagation()
+                                                                                                setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
+                                                                                            }}
+                                                                                            onDragExit={e => {
+                                                                                                e.preventDefault()
+                                                                                                e.stopPropagation()
+                                                                                                setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                                                            }}
+                                                                                            onClick={e => {
+                                                                                                e.stopPropagation()
+                                                                                                makActive(e, cur, curElem, curElem?.positionType, key, i, j)
+                                                                                                setCurrPosition({ ...currPosition, selectedType: "button" })
+                                                                                                setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                setValues(subElem?.style)
+                                                                                                setSelectedOffer({})
+                                                                                            }}
+                                                                                            onDrop={e => {
+                                                                                                e.stopPropagation()
+                                                                                                setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                                                                const transferType = e.dataTransfer.getData("type")
+                                                                                                if (!transferType.includes("rearrange")) {
+                                                                                                    handleElementDrop(e, key, curElem?.positionType, j + 1, i)
+                                                                                                    setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
+                                                                                                } else {
+                                                                                                    handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                }
+                                                                                            }}
+                                                                                            onMouseOver={(e) => {
+                                                                                                e.stopPropagation()
+                                                                                                setMouseEnterIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                            }}
+                                                                                            onMouseLeave={(e) => {
+                                                                                                e.stopPropagation()
+                                                                                                setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
+                                                                                            }}
+                                                                                            onDragOver={e => {
+                                                                                                e.preventDefault()
+                                                                                                e.stopPropagation()
+                                                                                                setDragOverIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                setMousePos({ ...mousePos, y: e.clientY })
+                                                                                            }}
+                                                                                            className={`${isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
+                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
+                                                                                                <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
+                                                                                            )}
+                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
+                                                                                                onMouseOver={(e) => {
+                                                                                                    e.stopPropagation()
+                                                                                                    setMouseEnterIndex({ ...mouseEnterIndex })
+                                                                                                }}
+                                                                                                onMouseLeave={(e) => {
+                                                                                                    e.stopPropagation()
+                                                                                                    setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
+                                                                                                }} className="d-flex w-100" style={{ position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
+                                                                                                <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
+                                                                                                    e.stopPropagation()
+                                                                                                    if (colWise.length <= 1) {
+                                                                                                        setCurrPosition({ ...currPosition, selectedType: "main" })
+                                                                                                        setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                                                                    } else {
+                                                                                                        setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                        setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
+                                                                                                    }
+                                                                                                    const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                    const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                    if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                        arr.splice(key, 1)
+                                                                                                        arrRev.splice(key, 1)
+                                                                                                    } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                    } else {
+                                                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                    }
+                                                                                                    const newObj = { ...finalObj }
+                                                                                                    if (currPage === "button") {
+                                                                                                        newObj[`${mobileCondition}button`] = arr
+                                                                                                        newObj[`${mobileConditionRev}button`] = arrRev
+                                                                                                    } else {
+                                                                                                        const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                        const mobile_pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                        newObj[`${mobileCondition}pages`][pageIndex].values = arr
+                                                                                                        newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = arrRev
+                                                                                                    }
+                                                                                                    updatePresent({ ...newObj })
+                                                                                                    // setcolWise([...arr])
+                                                                                                }} />
+                                                                                                <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />
+                                                                                                {/* <Copy color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }}
+                                                                                                        onClick={(e) => {
+                                                                                                            e.stopPropagation()
+                                                                                                            setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                            setIndexes({ cur: key, curElem: curElem.positionType, subElem: j + 1 })
+                                                                                                            const arr = [...colWise]
+                                                                                                            arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 0, subElem)
+                                                                                                            setValues(subElem?.style)
+                                                                                                            setcolWise([...arr])
+                                                                                                        }} /> */}
+                                                                                            </span>}
+                                                                                            {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
+                                                                                            <div style={{ ...subElem?.style, display: "inline-flex", justifyContent: "center", alignItems: "center", fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} >
+                                                                                                <span onDragStart={e => e.stopPropagation()} id={`textField-${key}-${curElem?.positionType}-${j}`} style={{ display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems }}>
+                                                                                                    <Editor fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
+                                                                                                        key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${subElem?.textValue}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
+                                                                                                        onChange={(content, editorState) => {
+                                                                                                            if (!isEqual(content, subElem?.editorState)) {
+                                                                                                                const newObj = { ...finalObj }
+                                                                                                                const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
+                                                                                                                const positionIndex = newObj?.pages[pageIndex]?.values[key]?.elements?.findIndex($ => $?.positionType === curElem.positionType)
+                                                                                                                if (newObj?.pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
+                                                                                                                    newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
+                                                                                                                    newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
+                                                                                                                }
+                                                                                                                if (newObj?.mobile_pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
+                                                                                                                    newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
+                                                                                                                    newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
+                                                                                                                }
+                                                                                                                updatePresent(newObj)
+                                                                                                            }
+                                                                                                        }}
+                                                                                                        // htmlContent={subElem?.textValue}
+                                                                                                        editorState={subElem?.editorState ? subElem?.editorState : `{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"font-family: Montserrat;font-weight: 100;font-size: 12px;","text":"Enter text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`}
+                                                                                                    />
+                                                                                                </span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    )
+                                                                                case 'input':
+                                                                                    return (
+                                                                                        <div id={`${currPage}-${key}-${curElem?.positionType}-${j}`} draggable style={{ width: "100%", display: "flex", justifyContent: subElem?.style?.alignType, position: "relative", alignItems: "center", zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
+                                                                                            onDragStart={e => {
+                                                                                                e.stopPropagation()
+                                                                                                e.dataTransfer.setData("type", "rearrange_input")
+                                                                                                setTransfered("rearrange_input")
+                                                                                                setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                setDragStartIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                            }}
+                                                                                            onDragEnter={e => {
+                                                                                                e.preventDefault()
+                                                                                                e.stopPropagation()
+                                                                                                setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
+                                                                                            }}
+                                                                                            onDragExit={e => {
+                                                                                                e.preventDefault()
+                                                                                                e.stopPropagation()
+                                                                                                setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                                                            }}
+                                                                                            onClick={e => {
+                                                                                                e.stopPropagation()
+                                                                                                makActive(e, cur, curElem, curElem?.positionType, key, i, j)
+                                                                                                setCurrPosition({ ...currPosition, selectedType: "input" })
+                                                                                                setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                setValues(subElem.style)
+                                                                                                setSelectedOffer({})
+                                                                                            }}
+                                                                                            onDrop={e => {
+                                                                                                e.stopPropagation()
+                                                                                                setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                                                                const transferType = e.dataTransfer.getData("type")
+                                                                                                if (!transferType.includes("rearrange")) {
+                                                                                                    handleElementDrop(e, key, curElem?.positionType, j + 1, i)
+                                                                                                    setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
+                                                                                                } else {
+                                                                                                    handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                }
+                                                                                            }}
+                                                                                            onMouseOver={(e) => {
+                                                                                                e.stopPropagation()
+                                                                                                setMouseEnterIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                            }}
+                                                                                            onMouseLeave={(e) => {
+                                                                                                e.stopPropagation()
+                                                                                                setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
+                                                                                            }}
+                                                                                            onDragOver={e => {
+                                                                                                e.preventDefault()
+                                                                                                e.stopPropagation()
+                                                                                                setDragOverIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                setMousePos({ ...mousePos, y: e.clientY })
+                                                                                            }}
+                                                                                            className={`${isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
+                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
+                                                                                                <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
+                                                                                            )}
+                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
+                                                                                                onMouseOver={(e) => {
+                                                                                                    e.stopPropagation()
+                                                                                                    setMouseEnterIndex({ ...mouseEnterIndex })
+                                                                                                }}
+                                                                                                onMouseLeave={(e) => {
+                                                                                                    e.stopPropagation()
+                                                                                                    setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
+                                                                                                }} className="d-flex w-100" style={{ backgroundColor: "#727272", position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
+                                                                                                <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
+                                                                                                    e.stopPropagation()
+                                                                                                    if (colWise.length <= 1) {
+                                                                                                        setCurrPosition({ ...currPosition, selectedType: "main" })
+                                                                                                        setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                                                                    } else {
+                                                                                                        setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                        setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
+                                                                                                    }
+                                                                                                    const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                    const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                    if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                        arr.splice(key, 1)
+                                                                                                        arrRev.splice(key, 1)
+                                                                                                    } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                    } else {
+                                                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                    }
+                                                                                                    const newObj = { ...finalObj }
+                                                                                                    if (currPage === "button") {
+                                                                                                        newObj[`${mobileCondition}button`] = arr
+                                                                                                        newObj[`${mobileConditionRev}button`] = arrRev
+                                                                                                    } else {
+                                                                                                        const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                        const mobile_pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                        newObj[`${mobileCondition}pages`][pageIndex].values = arr
+                                                                                                        newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = arrRev
+                                                                                                    }
+                                                                                                    updatePresent({ ...newObj })
+                                                                                                    // setcolWise([...arr])
+                                                                                                }} />
+                                                                                                {subElem?.hasLabel && <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />}
+                                                                                                {/* <Copy color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }}
+                                                                                                                                onClick={(e) => {
+                                                                                                                                    e.stopPropagation()
+                                                                                                                                    setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                                                    setIndexes({ cur: key, curElem: curElem.positionType, subElem: j + 1 })
+                                                                                                                                    const arr = [...colWise]
+                                                                                                                                    arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 0, subElem)
+                                                                                                                                    setValues(subElem?.style)
+                                                                                                                                    setcolWise([...arr])
+                                                                                                                                }} /> */}
+                                                                                            </span>}
+                                                                                            {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
+                                                                                            <div style={{ width: subElem?.style?.width, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, display: "flex", flexDirection: "column", gap: subElem?.style?.elemGap ? subElem?.style?.elemGap : "0px" }}>
+                                                                                                {subElem?.hasLabel && (<Editor fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`} key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} style={{ width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
+                                                                                                    onChange={(content, editorState) => {
+                                                                                                        if (!isEqual(content, subElem?.editorState)) {
+                                                                                                            const newObj = { ...finalObj }
+                                                                                                            const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
+                                                                                                            const positionIndex = newObj?.pages[pageIndex]?.values[key]?.elements?.findIndex($ => $?.positionType === curElem.positionType)
+                                                                                                            if (newObj?.pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
+                                                                                                                newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
+                                                                                                                newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
+                                                                                                            }
+                                                                                                            if (newObj?.mobile_pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
+                                                                                                                newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
+                                                                                                                newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
+                                                                                                            }
+                                                                                                            updatePresent(newObj)
+                                                                                                        }
+                                                                                                    }}
+                                                                                                    // htmlContent={subElem?.textValue}
+                                                                                                    editorState={subElem?.editorState ? subElem?.editorState : `{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"font-family: Montserrat;font-weight: 100;font-size: 12px;","text":"Enter text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`}
+                                                                                                />)}
+                                                                                                <input placeholder={subElem?.placeholder} type="text" style={{ ...subElem?.style, width: "100%", fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} readOnly />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    )
+                                                                                case 'offer':
+                                                                                    return (
+                                                                                        <div
+                                                                                            onDragStart={e => {
+                                                                                                e.stopPropagation()
+                                                                                                e.dataTransfer.setData("type", "rearrange_offer")
+                                                                                                setTransfered("rearrange_offer")
+                                                                                                setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                setDragStartIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                            }}
+                                                                                            onMouseOver={(e) => {
+                                                                                                e.stopPropagation()
+                                                                                                setMouseEnterIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                            }}
+                                                                                            onMouseLeave={(e) => {
+                                                                                                e.stopPropagation()
+                                                                                                setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
+                                                                                            }}
+                                                                                            onDragEnter={e => {
+                                                                                                e.preventDefault()
+                                                                                                e.stopPropagation()
+                                                                                                setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
+                                                                                            }}
+                                                                                            onDragExit={e => {
+                                                                                                e.preventDefault()
+                                                                                                e.stopPropagation()
+                                                                                                setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                                                            }}
+                                                                                            onClick={e => {
+                                                                                                e.stopPropagation()
+                                                                                                makActive(e, cur, curElem, curElem?.positionType, key, i, j)
+                                                                                                setCurrPosition({ ...currPosition, selectedType: "offer" })
+                                                                                                setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                setValues(subElem?.style)
+                                                                                                if (!isEqual(indexes, { cur: key, curElem: curElem?.positionType, subElem: j })) {
+                                                                                                    setSelectedOffer({})
+                                                                                                } else if (finalObj?.selectedOffers.length > 0) {
+                                                                                                    setSelectedOffer(finalObj?.selectedOffers[0])
+                                                                                                }
+                                                                                            }}
+                                                                                            onDrop={e => {
+                                                                                                e.stopPropagation()
+                                                                                                setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                                                                const transferType = e.dataTransfer.getData("type")
+                                                                                                if (!transferType.includes("rearrange")) {
+                                                                                                    handleElementDrop(e, key, curElem?.positionType, j + 1, i)
+                                                                                                    setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
+                                                                                                } else {
+                                                                                                    handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                }
+                                                                                            }}
+                                                                                            onDragOver={e => {
+                                                                                                e.preventDefault()
+                                                                                                e.stopPropagation()
+                                                                                                setDragOverIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                setMousePos({ ...mousePos, y: e.clientY })
+                                                                                            }} style={{ ...subElem?.style, position: "relative", fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
+                                                                                            id={`${currPage}-${key}-${curElem.positionType}-${j}`}
+                                                                                            className={`${isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
+                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
+                                                                                                <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
+                                                                                            )}
+                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
+                                                                                                onMouseOver={(e) => {
+                                                                                                    e.stopPropagation()
+                                                                                                    setMouseEnterIndex({ ...mouseEnterIndex })
+                                                                                                }}
+                                                                                                onMouseLeave={(e) => {
+                                                                                                    e.stopPropagation()
+                                                                                                    setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
+                                                                                                }} className="d-flex w-100" style={{ backgroundColor: "#727272", position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
+                                                                                                <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }} onClick={(e) => {
+                                                                                                    e.stopPropagation()
+                                                                                                    if (colWise.length <= 1) {
+                                                                                                        setCurrPosition({ ...currPosition, selectedType: "main" })
+                                                                                                        setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                                                                    } else {
+                                                                                                        setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                        setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
+                                                                                                    }
+                                                                                                    const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                    const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                    if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                        arr.splice(key, 1)
+                                                                                                        arrRev.splice(key, 1)
+                                                                                                    } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                    } else {
+                                                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                    }
+                                                                                                    const newObj = { ...finalObj }
+                                                                                                    if (currPage === "button") {
+                                                                                                        newObj[`${mobileCondition}button`] = arr
+                                                                                                        newObj[`${mobileConditionRev}button`] = arrRev
+                                                                                                    } else {
+                                                                                                        const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                        const mobile_pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                        newObj[`${mobileCondition}pages`][pageIndex].values = arr
+                                                                                                        newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = arrRev
+                                                                                                    }
+                                                                                                    updatePresent({ ...newObj })
+                                                                                                    // setcolWise([...arr])
+                                                                                                }} />
+                                                                                                {/* <Copy color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }}
                                                                                                         onClick={(e) => {
                                                                                                             e.stopPropagation()
                                                                                                             setCurrPosition({ ...currPosition, selectedType: "block" })
@@ -1195,11 +1195,11 @@ const RenderPreview = (props) => {
                                                                                                             setValues(subElem?.style)
                                                                                                             setcolWise([...arr])
                                                                                                     }} /> */}
-                                                                                                </span>}
-                                                                                                {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
-                                                                                                {gotOffers ? finalObj?.selectedOffers?.map((ele, key) => {
-                                                                                                    return (
-                                                                                                        <div title="Click on offer to edit more settings" style={{ position: "relative" }} 
+                                                                                            </span>}
+                                                                                            {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
+                                                                                            {gotOffers ? finalObj?.selectedOffers?.map((ele, key) => {
+                                                                                                return (
+                                                                                                    <div title="Click on offer to edit more settings" style={{ position: "relative" }}
                                                                                                         // onClick={(e) => {
                                                                                                         //     e.stopPropagation()
                                                                                                         //     setSelectedOffer(ele)
@@ -1212,197 +1212,197 @@ const RenderPreview = (props) => {
                                                                                                             setValues(subElem?.style)
                                                                                                             setSelectedOffer(ele)
                                                                                                         }}>
-                                                                                                            {isEqual(ele, selectedOffer) && (
-                                                                                                                <div className='position-absolute w-100 h-100 bg-black opacity-25 top-0 start-0 z-1'></div>
-                                                                                                            )}
-                                                                                                            <ReturnOfferHtml details={ele} key={key} theme={offerTheme} offerProperties={finalObj?.offerProperties} />
-                                                                                                        </div>
-                                                                                                    )
-                                                                                                }) : (
-                                                                                                    <div className="d-flex justify-content-center align-items-center" style={{ inset: "0px", backgroundColor: "rgba(255,255,255,0.5)" }}>
-                                                                                                        <Spinner />
+                                                                                                        {isEqual(ele, selectedOffer) && (
+                                                                                                            <div className='position-absolute w-100 h-100 bg-black opacity-25 top-0 start-0 z-1'></div>
+                                                                                                        )}
+                                                                                                        <ReturnOfferHtml details={ele} key={key} theme={offerTheme} offerProperties={finalObj?.offerProperties} />
                                                                                                     </div>
-                                                                                                )}
-                                                                                            </div>
-                                                                                        )
-                                                                                    case 'icon':
-                                                                                        return (
-                                                                                            <div>icon</div>
-                                                                                        )
-                                                                                    case 'tnc':
-                                                                                        return (
-                                                                                            <div
-                                                                                                onDragEnter={e => {
-                                                                                                    e.preventDefault()
-                                                                                                    e.stopPropagation()
-                                                                                                    setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
-                                                                                                }}
-                                                                                                onDragExit={e => {
-                                                                                                    e.preventDefault()
-                                                                                                    e.stopPropagation()
-                                                                                                    setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                                                                }}
-                                                                                                onDragStart={e => {
-                                                                                                    e.stopPropagation()
-                                                                                                    e.dataTransfer.setData("type", "rearrange_tnc")
-                                                                                                    setTransfered("rearrange_tnc")
-                                                                                                    setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                    setDragStartIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                }}
+                                                                                                )
+                                                                                            }) : (
+                                                                                                <div className="d-flex justify-content-center align-items-center" style={{ inset: "0px", backgroundColor: "rgba(255,255,255,0.5)" }}>
+                                                                                                    <Spinner />
+                                                                                                </div>
+                                                                                            )}
+                                                                                        </div>
+                                                                                    )
+                                                                                case 'icon':
+                                                                                    return (
+                                                                                        <div>icon</div>
+                                                                                    )
+                                                                                case 'tnc':
+                                                                                    return (
+                                                                                        <div
+                                                                                            onDragEnter={e => {
+                                                                                                e.preventDefault()
+                                                                                                e.stopPropagation()
+                                                                                                setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
+                                                                                            }}
+                                                                                            onDragExit={e => {
+                                                                                                e.preventDefault()
+                                                                                                e.stopPropagation()
+                                                                                                setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                                                            }}
+                                                                                            onDragStart={e => {
+                                                                                                e.stopPropagation()
+                                                                                                e.dataTransfer.setData("type", "rearrange_tnc")
+                                                                                                setTransfered("rearrange_tnc")
+                                                                                                setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                setDragStartIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                            }}
+                                                                                            onMouseOver={(e) => {
+                                                                                                e.stopPropagation()
+                                                                                                setMouseEnterIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                            }}
+                                                                                            onMouseLeave={(e) => {
+                                                                                                e.stopPropagation()
+                                                                                                setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
+                                                                                            }}
+                                                                                            onClick={e => {
+                                                                                                e.stopPropagation()
+                                                                                                makActive(e, cur, curElem, curElem?.positionType, key, i, j)
+                                                                                                setCurrPosition({ ...currPosition, selectedType: "tnc" })
+                                                                                                setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                setValues(subElem?.style)
+                                                                                                setSelectedOffer({})
+                                                                                            }}
+                                                                                            onDrop={e => {
+                                                                                                e.stopPropagation()
+                                                                                                setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                                                                const transferType = e.dataTransfer.getData("type")
+                                                                                                if (!transferType.includes("rearrange")) {
+                                                                                                    handleElementDrop(e, key, curElem?.positionType, j + 1, i)
+                                                                                                    setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
+                                                                                                } else {
+                                                                                                    handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                }
+                                                                                            }}
+                                                                                            onDragOver={e => {
+                                                                                                e.preventDefault()
+                                                                                                e.stopPropagation()
+                                                                                                setDragOverIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                setMousePos({ ...mousePos, y: e.clientY })
+                                                                                            }} style={{ ...subElem?.style, position: "relative", fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
+                                                                                            id={`${currPage}-${key}-${curElem.positionType}-${j}`}
+                                                                                            className={`${isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
+                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
+                                                                                                <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
+                                                                                            )}
+                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
                                                                                                 onMouseOver={(e) => {
                                                                                                     e.stopPropagation()
-                                                                                                    setMouseEnterIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                    setMouseEnterIndex({ ...mouseEnterIndex })
                                                                                                 }}
                                                                                                 onMouseLeave={(e) => {
                                                                                                     e.stopPropagation()
                                                                                                     setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                                                                }}
-                                                                                                onClick={e => {
+                                                                                                }} className="d-flex w-100" style={{ position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
+                                                                                                <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
                                                                                                     e.stopPropagation()
-                                                                                                    makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                    setCurrPosition({ ...currPosition, selectedType: "tnc" })
-                                                                                                    setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                    setValues(subElem?.style)
-                                                                                                    setSelectedOffer({})
-                                                                                                }}
-                                                                                                onDrop={e => {
-                                                                                                    e.stopPropagation()
-                                                                                                    setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                                                                    const transferType = e.dataTransfer.getData("type")
-                                                                                                    if (!transferType.includes("rearrange")) {
-                                                                                                        handleColDrop(e, key, curElem?.positionType, j + 1, i)
-                                                                                                        setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
+                                                                                                    if (colWise.length <= 1) {
+                                                                                                        setCurrPosition({ ...currPosition, selectedType: "main" })
+                                                                                                        setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
                                                                                                     } else {
-                                                                                                        handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                        setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                        setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
                                                                                                     }
-                                                                                                }}
-                                                                                                onDragOver={e => {
-                                                                                                    e.preventDefault()
-                                                                                                    e.stopPropagation()
-                                                                                                    setDragOverIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                    setMousePos({ ...mousePos, y: e.clientY })
-                                                                                                }} style={{ ...subElem?.style, position: "relative", fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
-                                                                                                id={`${currPage}-${key}-${curElem.positionType}-${j}`}
-                                                                                                className={`${isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
-                                                                                                {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
-                                                                                                    <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
-                                                                                                )}
-                                                                                                {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
-                                                                                                    onMouseOver={(e) => {
-                                                                                                        e.stopPropagation()
-                                                                                                        setMouseEnterIndex({ ...mouseEnterIndex })
-                                                                                                    }}
-                                                                                                    onMouseLeave={(e) => {
-                                                                                                        e.stopPropagation()
-                                                                                                        setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                                                                    }} className="d-flex w-100" style={{ position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
-                                                                                                    <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
-                                                                                                        e.stopPropagation()
-                                                                                                        if (colWise.length <= 1) {
-                                                                                                            setCurrPosition({ ...currPosition, selectedType: "main" })
-                                                                                                            setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
-                                                                                                        } else {
-                                                                                                            setCurrPosition({ ...currPosition, selectedType: "block" })
-                                                                                                            setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
-                                                                                                        }
-                                                                                                        const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
-                                                                                                        const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
-                                                                                                        if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
-                                                                                                            arr.splice(key, 1)
-                                                                                                            arrRev.splice(key, 1)
-                                                                                                        } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
-                                                                                                            arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
-                                                                                                            arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
-                                                                                                        } else {
-                                                                                                            arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
-                                                                                                            arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
-                                                                                                        }
-                                                                                                        const newObj = { ...finalObj }
-                                                                                                        if (currPage === "button") {
-                                                                                                            newObj.button = arr
-                                                                                                            newObj.mobile_button = arrRev
-                                                                                                        } else {
-                                                                                                            const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
-                                                                                                            const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $?.id === currPage)
-                                                                                                            newObj.pages[pageIndex].values = arr
-                                                                                                            newObj.mobile_pages[mobile_pageIndex].values = arrRev
-                                                                                                        }
-                                                                                                        updatePresent({ ...newObj })
-                                                                                                        // setcolWise([...arr])
-                                                                                                    }} />
-                                                                                                    <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />
-                                                                                                </span>}
-                                                                                                {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
-                                                                                                <input type="checkbox" id={`tnc-${currPage}-${key}-${curElem.positionType}-${j}`} />
-                                                                                                <Editor fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`} key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} style={{ width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })} onChange={(content, editorState) => {
-                                                                                                    if (!isEqual(content, subElem?.editorState)) {
-                                                                                                        const newObj = { ...finalObj }
-                                                                                                        const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
-                                                                                                        const positionIndex = newObj?.pages[pageIndex]?.values[key]?.elements?.findIndex($ => $?.positionType === curElem.positionType)
-                                                                                                        if (newObj?.pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
-                                                                                                            newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
-                                                                                                            newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
-                                                                                                        }
-                                                                                                        if (newObj?.mobile_pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
-                                                                                                            newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
-                                                                                                            newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
-                                                                                                        }
-                                                                                                        updatePresent(newObj)
+                                                                                                    const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                    const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                    if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                        arr.splice(key, 1)
+                                                                                                        arrRev.splice(key, 1)
+                                                                                                    } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                    } else {
+                                                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
                                                                                                     }
-                                                                                                }}
-                                                                                                    // htmlContent={subElem?.textValue}
-                                                                                                    editorState={subElem?.editorState ? subElem?.editorState : `{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"font-family: Montserrat;font-weight: 100;font-size: 12px;","text":"Enter text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`}
-                                                                                                />
-                                                                                            </div>
-                                                                                        )
-                                                                                    default:
-                                                                                        return <div key={i} className='' style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}
-                                                                                            // onClick={(e) => makActive(e, cur)}
-                                                                                            onDragOver={(e) => {
-                                                                                                e.preventDefault()
-                                                                                                e.stopPropagation()
-                                                                                                makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                handleDragOver(e)
-                                                                                                setDragOverIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
-                                                                                                setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                    const newObj = { ...finalObj }
+                                                                                                    if (currPage === "button") {
+                                                                                                        newObj[`${mobileCondition}button`] = arr
+                                                                                                        newObj[`${mobileConditionRev}button`] = arrRev
+                                                                                                    } else {
+                                                                                                        const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                        const mobile_pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                        newObj[`${mobileCondition}pages`][pageIndex].values = arr
+                                                                                                        newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = arrRev
+                                                                                                    }
+                                                                                                    updatePresent({ ...newObj })
+                                                                                                    // setcolWise([...arr])
+                                                                                                }} />
+                                                                                                <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />
+                                                                                            </span>}
+                                                                                            {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
+                                                                                            <input type="checkbox" id={`tnc-${currPage}-${key}-${curElem.positionType}-${j}`} />
+                                                                                            <Editor fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`} key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} style={{ width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })} onChange={(content, editorState) => {
+                                                                                                if (!isEqual(content, subElem?.editorState)) {
+                                                                                                    const newObj = { ...finalObj }
+                                                                                                    const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
+                                                                                                    const positionIndex = newObj?.pages[pageIndex]?.values[key]?.elements?.findIndex($ => $?.positionType === curElem.positionType)
+                                                                                                    if (newObj?.pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
+                                                                                                        newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
+                                                                                                        newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
+                                                                                                    }
+                                                                                                    if (newObj?.mobile_pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
+                                                                                                        newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
+                                                                                                        newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
+                                                                                                    }
+                                                                                                    updatePresent(newObj)
+                                                                                                }
                                                                                             }}
-                                                                                            onClick={(e) => {
-                                                                                                makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                            }}
-                                                                                            onDrop={(e) => {
-                                                                                                e.stopPropagation()
-                                                                                                setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                                                                makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                handleElementDrop(e, curElem?.positionType, key, i, curElem, j)
-                                                                                            }}>
-                                                                                            <Download size={10} style={{ color: 'grey' }} />
-                                                                                            {/* <p style={{ margin: '0px', fontSize: '10px', color: 'grey' }}>Drop an element here</p> */}
+                                                                                                // htmlContent={subElem?.textValue}
+                                                                                                editorState={subElem?.editorState ? subElem?.editorState : `{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"font-family: Montserrat;font-weight: 100;font-size: 12px;","text":"Enter text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`}
+                                                                                            />
                                                                                         </div>
-                                                                                }
-                                                                            })}
-                                                                        </div>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </div>
+                                                                                    )
+                                                                                default:
+                                                                                    return <div key={i} className='' style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}
+                                                                                        // onClick={(e) => makActive(e, cur)}
+                                                                                        onDragOver={(e) => {
+                                                                                            e.preventDefault()
+                                                                                            e.stopPropagation()
+                                                                                            makActive(e, cur, curElem, curElem?.positionType, key, i, j)
+                                                                                            handleDragOver(e)
+                                                                                            setDragOverIndex({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                            setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                        }}
+                                                                                        onClick={(e) => {
+                                                                                            makActive(e, cur, curElem, curElem?.positionType, key, i, j)
+                                                                                        }}
+                                                                                        onDrop={(e) => {
+                                                                                            e.stopPropagation()
+                                                                                            setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                                                            makActive(e, cur, curElem, curElem?.positionType, key, i, j)
+                                                                                            handleNewDrop(e, curElem?.positionType, key, i, curElem, j)
+                                                                                        }}>
+                                                                                        <Download size={10} style={{ color: 'grey' }} />
+                                                                                        {/* <p style={{ margin: '0px', fontSize: '10px', color: 'grey' }}>Drop an element here</p> */}
+                                                                                    </div>
+                                                                            }
+                                                                        })}
+                                                                    </div>
+                                                                )
+                                                            })
+                                                        }
                                                     </div>
-                                                }) : (
-                                                    <div onDragOver={(e) => {
-                                                        handleDragOver(e)
-                                                    }}
-                                                        onDrop={(e) => {
-                                                            e.stopPropagation()
-                                                            const transferType = e.dataTransfer.getData("type")
-                                                            setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                            if (transferType !== "") {
-                                                                handleLayoutDrop(e)
-                                                                setIndexes(transferType.includes("col") ? { cur: colWise.length, curElem: "parent", subElem: "grandparent" } : { cur: colWise.length, curElem: "left", subElem: 0 })
-                                                                setCurrPosition({ ...currPosition, id: colWise.length, selectedType: transferType.includes("col") ? "block" : transferType })
-                                                                setValues(elementStyles[transferType.includes("col") ? "block" : transferType])
-                                                            }
-                                                        }} className='' style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}
-                                                    // onClick={(e) => makActive(e, cur)}
-                                                    >
+                                                </div>
+                                            }) : (
+                                                <div onDragOver={(e) => {
+                                                    handleDragOver(e)
+                                                }}
+                                                    onDrop={(e) => {
+                                                        e.stopPropagation()
+                                                        const transferType = e.dataTransfer.getData("type")
+                                                        setGotDragOver({ cur: false, curElem: false, subElem: false })
+                                                        if (transferType !== "") {
+                                                            handleLayoutDrop(e)
+                                                            setIndexes(transferType.includes("col") ? { cur: colWise.length, curElem: "parent", subElem: "grandparent" } : { cur: colWise.length, curElem: "left", subElem: 0 })
+                                                            setCurrPosition({ ...currPosition, id: colWise.length, selectedType: transferType.includes("col") ? "block" : transferType })
+                                                            setValues(elementStyles[transferType.includes("col") ? "block" : transferType])
+                                                        }
+                                                    }} className='' style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}
+                                                // onClick={(e) => makActive(e, cur)}
+                                                >
                                                     <Download size={10} style={{ color: 'grey' }} />
                                                     {/* <p style={{ margin: '0px', fontSize: '10px', color: 'grey' }}>Drop an element here</p> */}
                                                 </div>

@@ -639,7 +639,7 @@ const CustomizationParent = () => {
         setcolWise(isMobile ? mobile_updatedColWise : updatedColWise)
     }
 
-    const handleElementDrop = (e, position, id, index, curData, j) => {
+    const handleNewDrop = (e, position, id, index, curData, j) => {
         setGotDragOver({ cur: false, curElem: false, subElem: false })
         const colWise = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
         const dataTransfered = e.dataTransfer.getData("type")
@@ -2993,13 +2993,14 @@ const CustomizationParent = () => {
                                                         setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
                                                     }}
                                                 >
+                                                    {(!subElem?.type || subElem?.type === "") && <span>No element</span>}
                                                     {subElem?.type === 'text' && <Type size={16} color='#727272' />}
                                                     {subElem?.type === 'button' && <Disc size={16} color='#727272' />}
                                                     {subElem?.type === 'input' && <img style={{ filter: "grayscale(100%)" }} src='https://cdn-app.optimonk.com/img/StructureInput.61ed2888.svg' alt='' />}
                                                     {subElem?.type === 'image' && (subElem.src === "" ? <Image width={16} color='#727272' /> : <div style={{ width: 16, aspectRatio: "1", backgroundImage: `url(${subElem.src})`, backgroundSize: "contain", backgroundPosition: "center center", backgroundRepeat: "no-repeat" }} />)}
                                                     {<span className={`${subElem.type !== "text" ? "text-capitalize" : ""}`} style={{ fontSize: "0.75rem" }}>{getSideText(subElem)}</span>}
                                                 </div>
-                                                {subElem?.type !== "" && <UncontrolledDropdown onClick={e => e.stopPropagation()} className='more-options-dropdown'>
+                                                {subElem?.type && subElem?.type !== "" && <UncontrolledDropdown onClick={e => e.stopPropagation()} className='more-options-dropdown'>
                                                     <DropdownToggle className='btn-icon cursor-pointer' color='transparent' size='sm'>
                                                         <span className={`${isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...indexes }) ? "text-black" : ""}`}>
                                                             <MoreVertical size='18' />
@@ -3030,13 +3031,13 @@ const CustomizationParent = () => {
                                                                 }
                                                                 const newObj = { ...finalObj }
                                                                 if (currPage === "button") {
-                                                                    newObj.button = arr
-                                                                    newObj.mobile_button = arrRev
+                                                                    newObj[`${mobileCondition}button`] = arr
+                                                                    newObj[`${mobileConditionRev}button`] = arrRev
                                                                 } else {
-                                                                    const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
-                                                                    const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $?.id === currPage)
-                                                                    newObj.pages[pageIndex].values = arr
-                                                                    newObj.mobile_pages[mobile_pageIndex].values = arrRev
+                                                                    const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                    const mobile_pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+                                                                    newObj[`${mobileCondition}pages`][pageIndex].values = arr
+                                                                    newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = arrRev
                                                                 }
                                                                 updatePresent({ ...newObj })
                                                                 // setcolWise([...arr])
@@ -3074,8 +3075,51 @@ const CustomizationParent = () => {
         return <ModificationSection key={`${currPage}-${currPosition.selectedType}-${indexes.cur}-${indexes.curElem}-${indexes.subElem}`} currPosition={currPosition} setCurrPosition={setCurrPosition} styles={styles} general={general} spacing={spacing} />
     }
 
+    const handleColDrop = (e, cur, curElem) => {
+        e.stopPropagation()
+        const transferedData = e.dataTransfer.getData("type")
+        const dupArray = currPage === "button" ? finalObj.button : finalObj?.pages[finalObj?.pages?.findIndex($ => $?.id === currPage)]?.values
+        const mobile_dupArray = currPage === "button" ? finalObj?.mobile_button : finalObj?.mobile_pages[finalObj?.pages?.findIndex($ => $?.id === currPage)]?.values
+        const inputTypeCondition = draggedInputType === "none" ? commonObj?.inputType : draggedInputType
+        const dragOverData = document.getElementById(`${currPage}-${cur}-${curElem}-parent`)?.getBoundingClientRect()
+        const y = dragOverData?.y
+        const height = dragOverData?.height
+        if ((transferedData !== "" && !transferedData.includes("col"))) {
+            const arrCheck = dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element
+            if (arrCheck.length <= 1 && (!arrCheck[0]?.type || arrCheck[0]?.type === "")) {
+                console.log({arrCheck: "1"})
+                dupArray[cur].elements[dupArray[cur].elements.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }]
+                mobile_dupArray[cur].elements[mobile_dupArray[cur].elements.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }]
+            } else if ((mousePos.y - (y + (height / 2)) > 0)) {
+                console.log({arrCheck: "2"})
+                dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element?.push({ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
+                mobile_dupArray[cur]?.elements[mobile_dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element?.push({ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
+            } else {
+                console.log({arrCheck: "3"})
+                dupArray[cur].elements[dupArray[cur].elements?.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }, ...dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element]
+                mobile_dupArray[cur].elements[mobile_dupArray[cur].elements?.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }, ...dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element]
+            }
+            setIndexes({ cur, curElem, subElem: dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element?.length - 1 })
 
-    const handleColDrop = (e, cur, curElem, subElem) => {
+            if (transferedData?.includes("image")) {
+                setDropImage(true)
+            }
+
+            const newObj = { ...finalObj }
+            if (currPage === "button") {
+                newObj.button = dupArray
+                newObj.mobile_button = mobile_dupArray
+            } else {
+                newObj.pages[newObj.pages.findIndex($ => $?.id === currPage)].values = dupArray
+                newObj.mobile_pages[newObj.mobile_pages.findIndex($ => $?.id === currPage)].values = mobile_dupArray
+            }
+            updatePresent({ ...newObj })
+        }
+
+        console.log({ cur, curElem, dupArray, mobile_dupArray, inputTypeCondition, y, height })
+    }
+
+    const handleElementDrop = (e, cur, curElem, subElem) => {
         e.stopPropagation()
         setGotDragOver({ cur: false, curElem: false, subElem: false })
         const transferedData = e.dataTransfer.getData("type")
@@ -3084,7 +3128,8 @@ const CustomizationParent = () => {
         const y = dragOverData?.y
         const height = dragOverData?.height
         if ((transferedData !== "" && !transferedData.includes("col"))) {
-            let dupArray, mobile_dupArray
+            let dupArray
+            let mobile_dupArray
 
             if (currPage === "button") {
                 dupArray = finalObj.button
@@ -3096,10 +3141,12 @@ const CustomizationParent = () => {
 
             if (mousePos.y - (y + (height / 2)) < 0) {
                 dupArray[dragOverIndex?.cur]?.elements[dupArray[dragOverIndex.cur]?.elements?.findIndex($ => $?.positionType === dragOverIndex?.curElem)]?.element?.splice(dragOverIndex?.subElem, 0, { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
+
                 mobile_dupArray[dragOverIndex?.cur]?.elements[mobile_dupArray[dragOverIndex.cur]?.elements?.findIndex($ => $?.positionType === dragOverIndex?.curElem)]?.element?.splice(dragOverIndex?.subElem, 0, { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
                 setIndexes({ ...dragOverIndex })
             } else {
                 dupArray[dragOverIndex.cur]?.elements[dupArray[dragOverIndex.cur]?.elements?.findIndex($ => $?.positionType === dragOverIndex?.curElem)]?.element?.splice(dragOverIndex?.subElem + 1, 0, { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
+
                 mobile_dupArray[dragOverIndex.cur]?.elements[mobile_dupArray[dragOverIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragOverIndex?.curElem)]?.element?.splice(dragOverIndex?.subElem + 1, 0, { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
                 setIndexes({ cur, curElem, subElem })
             }
@@ -3109,7 +3156,7 @@ const CustomizationParent = () => {
             }
 
             setValues({ ...elementStyles[transferedData] })
-            setcolWise(isMobile ? [...mobile_dupArray] : [...dupArray])
+            // setcolWise(isMobile ? [...mobile_dupArray] : [...dupArray])
             const newObj = { ...finalObj }
 
             if (currPage === "button") {
@@ -5296,7 +5343,7 @@ const CustomizationParent = () => {
                         {/* Section Drawer */}
                         {/* Theme Preview */}
                         <div className="d-flex flex-column align-items-center bg-light-secondary" style={{ width: `calc(100vw - ${sideNav !== "" ? sectionWidths.editSection : "0"}px - ${sectionWidths.drawerWidth}px - ${sectionWidths.sidebar}px)`, transition: "0.3s ease-in-out" }}>
-                            {returnRender({ outletData, slPrevBg, bgsettings: finalObj?.overlayStyles, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition: finalObj?.positions?.[`${mobileCondition}${pageCondition}`], bgStyles: finalObj?.backgroundStyles?.[`${mobileCondition}main`], crossStyle: finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], values, setValues, showBrand, handleColDrop, handleDragOver, handleElementDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise: currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values], setcolWise, setDragStartIndex, dragOverIndex, setDragOverIndex, isMobile, setIsMobile, finalObj, setFinalObj: updatePresent, mobileCondition, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles: finalObj?.backgroundStyles[`${mobileCondition}button`], offerTheme: finalObj?.offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes })}
+                            {returnRender({ outletData, slPrevBg, bgsettings: finalObj?.overlayStyles, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition: finalObj?.positions?.[`${mobileCondition}${pageCondition}`], bgStyles: finalObj?.backgroundStyles?.[`${mobileCondition}main`], crossStyle: finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise: currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values], setcolWise, setDragStartIndex, dragOverIndex, setDragOverIndex, isMobile, setIsMobile, finalObj, setFinalObj: updatePresent, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles: finalObj?.backgroundStyles[`${mobileCondition}button`], offerTheme: finalObj?.offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes })}
                         </div>
                         {/* Theme Preview */}
                         {/* Edit Section */}
