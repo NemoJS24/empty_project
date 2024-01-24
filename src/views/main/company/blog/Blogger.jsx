@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { bloggersData, blogsData } from './BlogData'
 import { Col, Container, Row } from 'reactstrap'
 import { stringSplit } from './Blog'
@@ -10,9 +10,9 @@ import Footer from '../../utilities/footer/Footer'
 //   // Using the replace method with a hyphen to replace with white space
 //   return inputString.replace(/_/g, ' ')
 // }
-const Blogger = () => {
+const Blogger = ({blogger}) => {
 
-  const { blogger } = useParams()
+  // const { blogger } = useParams()
   // console.log('blogger: ' + blogger)
   // const newBlogger = replaceUnderscoreWithSpaces(blogger)
   const bloggerName = blogsData.find((item) => item.auth_slug.toLowerCase() === blogger.toLowerCase())
@@ -114,7 +114,7 @@ const Blogger = () => {
                             <div className="d-flex flex-column  justify-content-between align-items-start text-start h-100">
                               <h4 className="p-2 m-0 ">{stringSplit(item.title, 6)}</h4>
                               <h5 className="fs-5 p-2 m-0 text-secondary">{stringSplit(item.preview, 20)}</h5>
-                              <Link to={`/blog/${item.title}`} className='text-decoration-none text-black' >
+                              <Link to={`/blog/${item.slug}`} className='text-decoration-none text-black' >
                                 <h6 className="p-2 m-0 mb-2">Read More
                                   <BiRightArrowAlt className='ms-1 position-relative' style={{ top: '-1px' }} />
                                 </h6>
