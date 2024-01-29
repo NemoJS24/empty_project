@@ -24,7 +24,7 @@ const JsonToJsx = ({ renderObj, isMobile, scale, index = 0 }) => {
                 <X size={renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.width} height={renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.height} color={renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.color} style={{ position: "absolute", inset: "0px 0px auto auto", zIndex: "350", backgroundColor: renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.backgroundColor, borderRadius: renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.borderRadius, padding: `3px`, marginBottom: renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.marginBottom, transform: `translateX(${renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.translateX}) translateY(${renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.translateY})` }} onClick={(e) => {
                     e.stopPropagation()
                 }} />
-                <div id="dropZoneParent" className="pop-up" style={{ position: 'relative', zIndex: '300', overflow: "visible", ...renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`], backgroundColor: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`]?.backgroundColor, backgroundImage: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`]?.backgroundImage, width: "100%", maxWidth: "100%", marginTop: "0px", marginRight: "0px", marginBottom: "0px", marginLeft: "0px" }}>
+                <div id="dropZoneParent" className="pop-up" style={{ position: 'relative', zIndex: '300', overflow: "visible", ...renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`], backgroundColor: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`]?.backgroundColor, backgroundImage: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`]?.backgroundImage, width: "100%", maxWidth: isMobile ? "100%" : renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`]?.width, marginTop: "0px", marginRight: "0px", marginBottom: "0px", marginLeft: "0px" }}>
                     {findObj && findObj[index]?.values?.map((cur, key) => {
                         return <div style={{ ...cur?.style, display: "flex", justifyContent: "center", alignItems: "center", position: "relative" }} key={key}
                             id={`${"main"}-${key}-parent-grandparent`}
@@ -102,13 +102,13 @@ const JsonToJsx = ({ renderObj, isMobile, scale, index = 0 }) => {
                                                                         />
                                                                     </div>
                                                                 )
-                                                            } else {
-                                                                setCurrPosition({ ...currPosition, j })
-                                                                // imageSelector.click()
-                                                                triggerImage()
-                                                                const dupArray = [...colWise]
-                                                                dupArray[key].elements[i].element[j].src = "http://www.palmares.lemondeduchiffre.fr/images/joomlart/demo/default.jpg"
-                                                                setcolWise([...dupArray])
+                                                            // } else {
+                                                            //     setCurrPosition({ ...currPosition, j })
+                                                            //     // imageSelector.click()
+                                                            //     triggerImage()
+                                                            //     const dupArray = [...colWise]
+                                                            //     dupArray[key].elements[i].element[j].src = "http://www.palmares.lemondeduchiffre.fr/images/joomlart/demo/default.jpg"
+                                                            //     setcolWise([...dupArray])
                                                             }
                                                         case 'button':
                                                             return (

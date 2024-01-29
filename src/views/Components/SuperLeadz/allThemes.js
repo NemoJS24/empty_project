@@ -9620,36 +9620,7 @@ export const allThemes = [
                 spent_on_website_value_converted: "1",
                 not_active_page_value_converted: "1"
             },
-            selectedOffers: [
-                {
-                    id: "gid://shopify/PriceRule/1443109142811",
-                    Summary: "10% off entire order",
-                    Status: "ACTIVE",
-                    Code: "ULQLEAB9TZA",
-                    Value: "10.0",
-                    Type: "PERCENTAGE",
-                    created_at: "2024-01-16T13:46:32Z",
-                    ValidityPeriod: {
-                        end: null,
-                        start: "2024-01-16T07:46:31Z"
-                    },
-                    app_title: "SuperLeadz by XIRCLS"
-                },
-                {
-                    id: "gid://shopify/PriceRule/1443953115419",
-                    Summary: "25% off entire order",
-                    Status: "ACTIVE",
-                    Code: "PKAH6L3VID",
-                    Value: "25.0",
-                    Type: "PERCENTAGE",
-                    created_at: "2024-01-23T15:30:38Z",
-                    ValidityPeriod: {
-                        end: null,
-                        start: "2024-01-23T09:30:38Z"
-                    },
-                    app_title: "SuperLeadz by XIRCLS"
-                }
-            ],
+            selectedOffers: [],
             offerProperties: {
                 showSections: [
                     "validity",

@@ -50,6 +50,24 @@ const Themes = () => {
             // toast.error("Data could not be loaded")
             // setIsLoading(false)
         })
+
+        // const innerCard = document.getElementById("inner_card_container")
+
+        // const container = await document.querySelector(".innerRect")
+
+        // console.log(innerCard, Boolean(innerCard), "innerCard")
+        // if (Boolean(innerCard)) {
+        //     console.log(container)
+        //     const resizeObserver = new ResizeObserver(entries => {
+        //         console.log(entries)
+        //         for (const entry of entries) {
+        //             console.log('Div size changed:', entry.contentRect.width, 'x', entry.contentRect.height)
+        //         }
+        //     })
+        //     resizeObserver.observe(innerCard)
+
+        //     return () => resizeObserver.unobserve(innerCard)
+        // }
     }, [])
 
     return (
@@ -62,8 +80,8 @@ const Themes = () => {
                                 <Card>
                                     <CardBody>
                                         <div style={{ aspectRatio: "16/9" }}>
-                                            <div className="d-flex justify-content-center align-items-center rounded position-relative m-auto" style={{ aspectRatio: phoneView[key] ? '9/16' : '16/9', height: '100%', backgroundSize: "100%", backgroundImage: `url(${skeletonBg})`, backgroundColor: "rgba(0,0,0,0.25)", backgroundBlendMode: "soft-light" }}>
-                                                <div style={{ position: "absolute", scale: phoneView[key] ? "0.625" : "0.75", width: phoneView[key] ? "300px" : "100%" }}>
+                                            <div className="d-flex justify-content-center align-items-center rounded position-relative m-auto innerRect" style={{ aspectRatio: phoneView[key] ? '9/16' : '16/9', height: '100%', backgroundSize: "100%", backgroundImage: `url(${skeletonBg})`, backgroundColor: "rgba(0,0,0,0.25)", backgroundBlendMode: "soft-light" }}>
+                                                <div style={{ scale: "0.75" }}>
                                                     <JsonToJsx key={key} isMobile={phoneView[key]} renderObj={theme.object} />
                                                 </div>
                                             </div>
