@@ -58,6 +58,19 @@ export const fontStyles = [
     { label: "Ubuntu", value: `Ubuntu` }
 ]
 
+const sourceList = [
+    { label: "Facebook", value: `facebook` },
+    { label: "Instagram", value: `instagram.com` },
+    { label: "Twitter", value: `twitter` },
+    { label: "LinkedIn", value: `linkedIn` },
+    { label: "Google", value: `google` },
+    { label: "Linktree", value: `linktree` },
+    { label: "Pinterest", value: `pinterest` },
+    { label: "Bing", value: `bing` },
+    { label: "MailChimp", value: `mailChimp` },
+    { label: "Yelp", value: `yelp` }
+]
+
 const inputTypeList = [
     { value: 'email', label: 'Email' },
     { value: 'number', label: 'Phone Number' },
@@ -142,7 +155,8 @@ const CustomizationParent = () => {
         { value: 'product_page', label: 'Product Page' },
         { value: 'product_list_page', label: 'Product List Page' },
         { value: 'cart_page', label: 'Cart Page' },
-        { value: 'custom_page', label: 'Custom Pages' }
+        { value: 'custom_page', label: 'Custom Pages' },
+        { value: 'custom_source', label: 'Source' }
     ]
 
     const alignOptions = [
@@ -2653,10 +2667,10 @@ const CustomizationParent = () => {
                         <input checked={finalObj?.rules?.display_when === "all_condition_met"} onChange={updateRules} type="radio" name='display_when' id='all_condition_met' value={"all_condition_met"} className="form-check-input cursor-pointer" /><label htmlFor="all_condition_met" className="cursor-pointer" style={{ fontSize: "13px" }}>When All Conditions are met</label>
                     </div>
                     <div className="form-check mb-2">
-                        <input checked={finalObj?.rules?.display_when === "any_condition_met"} onChange={updateRules} type="radio" name='display_when' id='any_condition_met' value={"any_condition_met"} className="form-check-input cursor-pointer" /><label htmlFor="any_condition_met" className="cursor-pointer" style={{ fontSize: "13px" }}>When any Condition is met</label>
+                        <input checked={finalObj?.rules?.display_when === "button_click"} onChange={updateRules} type="radio" name='display_when' id='button_click' value={"button_click"} className="form-check-input cursor-pointer" /><label htmlFor="button_click" className="cursor-pointer" style={{ fontSize: "13px" }}>On Button Click</label>
                     </div>
                     <div className="form-check mb-2">
-                        <input checked={finalObj?.rules?.display_when === "button_click"} onChange={updateRules} type="radio" name='display_when' id='button_click' value={"button_click"} className="form-check-input cursor-pointer" /><label htmlFor="button_click" className="cursor-pointer" style={{ fontSize: "13px" }}>On Button Click</label>
+                        <input checked={finalObj?.rules?.display_when === "any_condition_met"} onChange={updateRules} type="radio" name='display_when' id='any_condition_met' value={"any_condition_met"} className="form-check-input cursor-pointer" /><label htmlFor="any_condition_met" className="cursor-pointer" style={{ fontSize: "13px" }}>When any Condition is met</label>
                     </div>
 
                     {
@@ -2789,7 +2803,7 @@ const CustomizationParent = () => {
                     <div className="row">
                         {pagesSelection?.map((ele, key) => {
                             return (
-                                <div key={key} className="col-md-6 d-flex gap-2 align-items-start">
+                                <div key={key} className="col-md-4 d-flex gap-2 align-items-start">
                                     <input
                                         checked={finalObj?.behaviour?.PAGES?.includes(ele?.value)}
                                         className="d-none" value={ele?.value} onChange={addPage} type='checkbox' id={`page-${key}`} />
@@ -2797,7 +2811,7 @@ const CustomizationParent = () => {
                                         <div className="position-relative w-50 d-flex justify-content-center align-items-center">
                                             <div className="position-absolute w-100" style={{ inset: "0px", outline: finalObj?.behaviour?.PAGES?.includes(ele.value) ? `1.5px solid rgba(0,0,0,1)` : `0px solid rgba(0,0,0,0)`, aspectRatio: "1", scale: finalObj?.behaviour?.PAGES?.includes(ele.value) ? "1.15" : "1.25", zIndex: "99999999", backgroundColor: `rgba(255,255,255,${finalObj?.behaviour?.PAGES?.includes(ele.value) ? "0" : "0.5"})`, transition: "0.3s ease-in-out" }}></div>
                                             <img width="100%" style={{ transition: '0.25s ease' }}
-                                                className={`mb-2`} src={`${xircls_url}/plugin_other_images/icons/${ele.value === "custom_page" ? "all_pages" : ele.value}.png`}
+                                                className={`mb-2`} src={`${xircls_url}/plugin_other_images/icons/${ele.value === "custom_page" || ele.value === "custom_source" ? "all_pages" : ele.value}.png`}
                                                 alt='no img' />
                                         </div>
                                         <span className={`${finalObj?.behaviour?.PAGES?.includes(ele.value) ? "text-black" : ""} fw-bolder`} style={{ fontSize: '75%', textAlign: "center" }}>{ele?.label}</span>
@@ -2834,6 +2848,32 @@ const CustomizationParent = () => {
                             }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
                         </div>}
                     </div>}
+
+                    {finalObj?.behaviour?.PAGES?.includes("custom_source") && (
+                        <div className="row mt-2">
+                            <label htmlFor="" className='mb-1' style={{ fontSize: "12px" }}>Source:</label>
+                            <Select
+                                isMulti={true}
+                                options={sourceList}
+                                inputId="aria-example-input"
+                                closeMenuOnSelect={true}
+                                name="source"
+                                placeholder="Add Source"
+                                value={sourceList?.filter(option => finalObj?.behaviour?.SOURCE_PAGE_LINK?.includes(option.value))}
+                                onChange={(options) => {
+                                    const option_list = options.map((cur) => {
+                                        return cur.value
+                                    })
+                                    updatePresent({ ...finalObj, behaviour: {...finalObj?.behaviour, SOURCE_PAGE_LINK: option_list}})
+
+                                    // const newObj = { ...finalObj }
+                                    // newObj.behaviour.SOURCE_PAGE_LINK = [...finalObj.behaviour.CUSTOM_PAGE_LINK, ""]
+                                    // updatePresent(newObj)
+                                }}
+                            />
+                        </div>
+                    )
+                    }
                 </div>
             )
         } else {
@@ -3293,6 +3333,8 @@ const CustomizationParent = () => {
             form_data.append("end_date", finalObj.campaignEndDate)
             form_data.append("default_id", selectedThemeId)
             form_data.append("is_edit", themeId === 0 ? 0 : 1)
+            // form_data.append("source", )
+            finalObj?.behaviour?.SOURCE_PAGE_LINK?.map((curElem) => form_data.append("source", `${curElem}_page`))
 
             form_data.append("theme_id", themeId)
             form_data.append("is_draft", 0)
@@ -3348,7 +3390,7 @@ const CustomizationParent = () => {
         form_data.append("end_date", finalObj.campaignEndDate)
         form_data.append("default_id", selectedThemeId)
         form_data.append("is_draft", 1)
-
+        finalObj?.behaviour?.SOURCE_PAGE_LINK?.map((curElem) => form_data.append("source", `${curElem}_page`))
         form_data.append("theme_id", theme_id_get)
         axios({
             method: "POST", url: `${SuperLeadzBaseURL}/api/v1/form_builder_template/`, data: form_data
@@ -5347,7 +5389,7 @@ const CustomizationParent = () => {
                         </div>
                         {/* Theme Preview */}
                         {/* Edit Section */}
-                        <div className="edit-section h-100" style={{ width: currPosition?.selectedType !== "" ? `${sectionWidths.editSection}px` : "0px", overflow: "auto", transition: "0.3s ease-in-out" }}>
+                        <div className="edit-section h-100" style={{ width: currPosition?.selectedType !== "" ? `${currPosition?.selectedType === "on_pages" ? "" : `${sectionWidths.editSection}px`}` : "0px", overflow: "auto", transition: "0.3s ease-in-out" }}>
                             {currPosition?.selectedType !== "" && renderElems()}
                         </div>
                         {/* Edit Section */}

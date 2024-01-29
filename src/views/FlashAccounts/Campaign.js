@@ -155,7 +155,7 @@ const Campaign = () => {
         },
         {
             name: 'Start Date',
-            selector: row => <span className='cursor-pointer'>{moment(row.theme_name.start_date).format("DD-MM-YYYY")}</span>,
+            selector: row => <span className='cursor-pointer'>{row.theme_name.start_date ? moment(row.theme_name.start_date).format("DD-MM-YYYY") : ''}</span>,
             dataType: 'offer_code',
             type: 'date',
             isEnable: true

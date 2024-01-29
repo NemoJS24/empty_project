@@ -175,7 +175,6 @@ export default function Editor({ fontFamilies = "Montserrat", fontColor = "#444"
             contentEditable={<ContentEditable className="editor-input" />}
             placeholder={<Placeholder />}
             ErrorBoundary={LexicalErrorBoundary}
-
           />
           <HistoryPlugin />
           <HtmlPlugin

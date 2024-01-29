@@ -157,6 +157,10 @@ const RenderPreview = (props) => {
                 </style>
                 <div className="flex-grow-1 w-100 preview-section border-end d-flex justify-content-center align-items-stretch p-1 bg-white position-relative overflow-auto overflow-x-hidden" style={{ flexDirection: 'column' }}>
                     <div className="row w-100">
+                        <div className="text-center mb-2">
+                            <h4>POP-UP BEHAVIOUR</h4>
+                            <p>Set specific rules for this campaign</p>
+                        </div>
                         <div className="col-md-10 offset-md-1">
                             <Card className={`${currPosition?.selectedType === "display_frequency" ? "card_active" : ""}`} style={{ boxShadow: `rgba(100, 100, 111, 0.2) 0px 7px 29px 0px`, cursor: 'pointer' }}
                                 onClick={() => setCurrPosition({ ...currPosition, selectedType: "display_frequency" })}
@@ -606,12 +610,12 @@ const RenderPreview = (props) => {
                                                                                                         newObj[`${mobileCondition}pages`][pageIndex].values = arr
                                                                                                         newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = arrRev
                                                                                                     }
+
                                                                                                     updatePresent({ ...newObj })
-                                                                                                    // setcolWise([...arr])
                                                                                                 }} />
                                                                                                 <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />
                                                                                             </span>}
-                                                                                            {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute resizeDiv" style={{ inset: "0px", outline: "2px solid #727272", zIndex: "2", backgroundColor: "rgb(114, 114, 114, 0.3)", resize: "vertical", overflow: "auto" }}></div>}
+                                                                                            {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute resizeDiv" style={{ inset: "0px", outline: "2px solid #727272", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)", resize: "vertical", overflow: "auto" }}></div>}
                                                                                             <div style={{ width: "100%", resize: isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) ? "vertical" : "none" }} id={`textField-${key}-${curElem?.positionType}-${j}`} className="text-field" >
                                                                                                 <Editor
                                                                                                     customElemnt={(
@@ -636,7 +640,9 @@ const RenderPreview = (props) => {
                                                                                                     fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""}
                                                                                                     fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""}
                                                                                                     elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
-                                                                                                    key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${subElem?.textValue}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`}
+                                                                                                    // key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${subElem?.textValue}`} 
+                                                                                                    key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}`}
+                                                                                                    id={`${currPage}-${key}-${curElem?.positionType}-${j}`}
                                                                                                     style={{ ...subElem?.style, width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, color: subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : "" }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
                                                                                                     onChange={(content, editorState) => {
                                                                                                         if (!isEqual(content, subElem?.editorState)) {
