@@ -148,10 +148,10 @@ export default function Editor({ fontFamilies = "Montserrat", fontColor = "#444"
     if (elementId) {
       const elementDetails = document.getElementById(elementId)?.getBoundingClientRect()
       if (position === "top") {
-        return (`${elementDetails.y}px`)
+        return (`${elementDetails?.y}px`)
       } else if (position === "left") {
-        const width = elementDetails.width / 2
-        return (`${elementDetails.x + width}px`)
+        const width = elementDetails?.width / 2
+        return (`${elementDetails?.x + width}px`)
       }
     }
   }

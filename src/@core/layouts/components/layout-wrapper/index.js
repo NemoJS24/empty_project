@@ -69,7 +69,7 @@ const LayoutWrapper = props => {
     >
       <div className='content-overlay'></div>
       <div className='header-navbar-shadow' />
-      <div
+      <div id='inner_card_container'
         className={classnames({
           'content-wrapper': routeMeta && !routeMeta.appLayout,
           'content-area-wrapper': routeMeta && routeMeta.appLayout,
