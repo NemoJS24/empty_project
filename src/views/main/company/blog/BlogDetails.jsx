@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { blogsData, bloggersData, blogPostData } from './BlogData'
 import { Row, Col, Container } from 'reactstrap'
 import { AiOutlineCalendar, AiOutlineMail, AiFillFacebook } from 'react-icons/ai'
@@ -42,9 +42,9 @@ const BlogList = ({ ele }) => (
   </Col>
 )
 
-const BlogDetails = ({  }) => {
+const BlogDetails = ({ blogTitle }) => {
 
-  const { blogTitle } = useParams()
+  // const { blogTitle } = useParams()
   console.log('BlogTitle: ', blogTitle)
 
   const blog = blogsData.find((item) => item.slug.toLowerCase() === blogTitle?.toLowerCase())
