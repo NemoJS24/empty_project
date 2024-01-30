@@ -4,6 +4,7 @@ import Select from 'react-select'
 import Flatpickr from 'react-flatpickr'
 import { getReq, postReq } from '../../assets/auth/jwtService'
 import toast from 'react-hot-toast'
+import { useParams } from 'react-router-dom'
 
 const AddUser = () => {
 
@@ -18,6 +19,8 @@ const AddUser = () => {
         assign_role: "",
         selectedData: ""
     }
+
+    const { id } = useParams()
 
     const [data, setData] = useState(defaultData)
     const [departmentList, setDepartmentList] = useState([])
@@ -46,7 +49,7 @@ const AddUser = () => {
         { value: "Manager", label: "Manager" },
         { value: "Executive", label: "Executive" }
     ]
-      
+
 
     const handleChange = (options, actionMeta, check) => {
         if (check) {
@@ -93,17 +96,6 @@ const AddUser = () => {
         getReq("checkDeptName", `?id=${value}`)
         .then((resp) => {
             console.log(resp, "checkDeptName")
-            // const permission_list = resp?.data?.map((curElem) => {
-            //     return {
-            //         permission: curElem?.id,
-            //         create: false,
-            //         update: false,
-            //         delete: false,
-            //         read: false
-            //     }
-            // })
-
-            // setData({...data, selectedModuleList: permission_list})
 
             setPermissionList(resp?.data)
         })
@@ -131,8 +123,22 @@ const AddUser = () => {
         })
     }
 
+    const getData = () => {
+        getReq("memebersDetails", `?id=${id}`)
+        .then((res) => {
+            console.log(res?.data?.MemberProfile, "kk")
+            // setTableData(res?.data?.MemberProfile)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
+
     useEffect(() => {
         getDepartmentList()
+        if (id) {
+            getData()
+        }
     }, [])
 
     useEffect(() => {

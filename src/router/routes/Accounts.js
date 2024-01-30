@@ -16,6 +16,10 @@ const Accounts_Routes = [
   {
     path: '/merchant/customers/add-user/',
     element: <AddUser />
+  },
+  {
+    path: "/merchant/customers/edit-user/:id",
+    element: <AddUser />
   }
 ]
 

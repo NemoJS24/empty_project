@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { Card, CardBody, Col, Input, Row } from 'reactstrap'
 import ComTable from '../Components/DataTable/ComTable'
 import { Edit, Eye } from 'react-feather'
+import { getReq } from '../../assets/auth/jwtService'
+import moment from 'moment'
 
 const User = () => {
 
@@ -10,30 +12,30 @@ const User = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [filteredData, setFilteredData] = useState([])
     const [searchValue, setSearchValue] = useState('')
-    console.log(setTableData, setIsLoading)
+    // console.log(setTableData, setIsLoading)
 
     const getData = () => {
-        // setIsLoading(true)
+        setIsLoading(true)
         // const form_data = new FormData()
-        // // const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
+        // const url = new URL(`${crmURL}/customers/merchant/get_view_customer/`)
         // form_data.append("customer_id", id)
         // form_data.append("tab_type", "servicing")
         
-        // // fetch(url, {
-        // //     method: "POST",
-        // //     body: form_data
-        // // })
-        // postReq("get_customer_servicing", form_data, crmURL)
-        // .then((res) => {
-        //     console.log(res.success, "kk")
-        //     setTableData(res.success)
-
-        //     setIsLoading(false)
+        // fetch(url, {
+        //     method: "POST",
+        //     body: form_data
         // })
-        // .catch((error) => {
-        //     console.log(error)
-        //     setIsLoading(false)
-        // })
+        getReq("memebersDetails")
+        .then((res) => {
+            console.log(res, "kk")
+            setTableData(res?.data?.MemberProfile)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+        .finally(() => {
+            setIsLoading(false)
+        })
     }
 
     const handleFilter = e => {
@@ -42,12 +44,18 @@ const User = () => {
         setSearchValue(value)
 
         if (value.length) {
-            updatedData = data.filter(item => {
+            updatedData = tableData.filter(row => {
                 const startsWith =
-                    item.registration_number.toLowerCase().startsWith(value.toLowerCase())
+                    row?.user?.first_name.toLowerCase().startsWith(value.toLowerCase()) ||
+                    row?.department[0]?.department.toLowerCase().startsWith(value.toLowerCase()) ||
+                    row?.user_position.toLowerCase().startsWith(value.toLowerCase()) ||
+                    row?.user?.username.toLowerCase().startsWith(value.toLowerCase())
 
                 const includes =
-                    item.registration_number.toLowerCase().includes(value.toLowerCase())
+                    row?.user?.first_name.toLowerCase().includes(value.toLowerCase()) ||
+                    row?.department[0]?.department.toLowerCase().includes(value.toLowerCase()) ||
+                    row?.user_position.toLowerCase().includes(value.toLowerCase()) ||
+                    row?.user?.username.toLowerCase().includes(value.toLowerCase())
 
                 if (startsWith) {
                     return startsWith
@@ -84,42 +92,41 @@ const User = () => {
 
     const columns = [
         {
-            name: "Date Created",
+            name: "Created at",
             minWidth: "240px",
-            selector: (row) => (
-                row?.customer_name
-            ),
+            selector: (row) => moment(row?.created_at).format("YYYY-MM-DD, h:mm:ss"),
             type: 'text'
         },
         {
             name: "Name",
             minWidth: "100px",
-            selector: (row) => (
-                row?.brand
-            ),
+            selector: (row) => `${row?.user?.first_name} ${row?.user?.last_name}`,
             type: 'text'
         },
         {
             name: "Email",
             minWidth: "100px",
-            selector: (row) => (
-                row?.model
-            ),
+            selector: (row) => row?.user?.username,
             type: 'text'
         },
         {
             name: "Status",
             minWidth: "100px",
-            selector: (row) => (
-                row?.variant
-            ),
-            type: 'text'
+            cell: (row) => {
+                return (
+                    <>
+                        {
+                            row?.is_active ? <div className="badge badge-light-success">Active</div> : <div className="badge badge-light-warning">Deactive</div>
+                        }
+                    </>
+                )
+            }
         },
         {
             name: "Department",
             minWidth: "100px",
             selector: (row) => (
-                row?.service_location
+                row?.department[0]?.department
             ),
             type: 'text'
         },
@@ -127,7 +134,7 @@ const User = () => {
             name: "Role",
             minWidth: "120px",
             selector: (row) => (
-                row?.job_card_date
+                row?.user_position
             ),
             type: 'text'
         },
@@ -137,8 +144,8 @@ const User = () => {
             selector: (row) => (
                 <>
                     <div className='d-flex justify-content-center align-items-center gap-2'>
-                        <Eye size='17px' style={{ cursor: "pointer" }} />
-                        <Link to={`${row?.id}`}>
+                        {/* <Eye size='17px' style={{ cursor: "pointer" }} /> */}
+                        <Link to={`/merchant/customers/edit-user/${row?.id}`}>
                             <Edit size='17px' style={{ cursor: "pointer" }} />
 
                         </Link>
@@ -166,12 +173,10 @@ const User = () => {
                 <Card>
                     <CardBody>
                         <ComTable
-                            // tableName="Verified Email"
                             content={defferContent}
                             tableCol={columns}
                             data={tableData}
                             searchValue={searchValue}
-                            // handleFilter={handleFilter}
                             filteredData={filteredData}
                             isLoading={isLoading}
                         />
