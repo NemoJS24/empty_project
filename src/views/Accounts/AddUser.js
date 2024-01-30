@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Card, CardBody, Input, Row } from 'reactstrap'
+import Spinner from '../Components/DataTable/Spinner'
 import Select from 'react-select'
 import Flatpickr from 'react-flatpickr'
 import { getReq, postReq } from '../../assets/auth/jwtService'
 import toast from 'react-hot-toast'
+import { validForm } from '../Validator'
 
 const AddUser = () => {
 
@@ -19,12 +21,58 @@ const AddUser = () => {
         selectedData: ""
     }
 
+    const userDataCheck = [
+        {
+            name: 'first_name',
+            message: 'Please Enter First Name',
+            type: 'string',
+            id: 'first_name'
+        },
+        {
+            name: 'last_name',
+            message: 'Please Enter Last Name',
+            type: 'string',
+            id: 'last_name'
+        },
+        {
+            name: 'email_id',
+            message: 'Please Enter Email ID',
+            type: 'email',
+            id: 'email_id'
+        },
+        {
+            name: 'password',
+            message: 'Please Enter Password',
+            type: 'string',
+            id: 'password'
+        },
+        {
+            name: 'confirm_password',
+            message: 'Please Enter Confirm Password',
+            type: 'string',
+            id: 'confirm_password'
+        },
+        {
+            name: 'assign_department',
+            message: 'Please Select Assign Department',
+            type: 'string',
+            id: 'assign_department'
+        },
+        {
+            name: 'assign_role',
+            message: 'Please Select Assign Role',
+            type: 'string',
+            id: 'assign_role'
+        }
+    ]
+
     const [data, setData] = useState(defaultData)
     const [departmentList, setDepartmentList] = useState([])
     const [permisionList, setPermissionList] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
     const updateData = (e) => {
-        setData({...data, [e.target.name]: e.target.value})
+        setData({ ...data, [e.target.name]: e.target.value })
     }
 
     const commissionOptions = [
@@ -46,7 +94,7 @@ const AddUser = () => {
         { value: "Manager", label: "Manager" },
         { value: "Executive", label: "Executive" }
     ]
-      
+
 
     const handleChange = (options, actionMeta, check) => {
         if (check) {
@@ -76,59 +124,76 @@ const AddUser = () => {
 
     const getDepartmentList = () => {
         getReq("addDepartment")
-        .then((resp) => {
-            console.log(resp)
-            const dept_list = resp?.data?.map((curElem) => {
-                return {label: curElem?.department, value: curElem?.id}
-            })
+            .then((resp) => {
+                console.log(resp)
+                const dept_list = resp?.data?.map((curElem) => {
+                    return { label: curElem?.department, value: curElem?.id }
+                })
 
-            setDepartmentList(dept_list)
-        })          
-        .catch((error) => {
-            console.log(error)
-        })
+                setDepartmentList(dept_list)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     const getPermissionList = (value) => {
+        setIsLoading(true)
         getReq("checkDeptName", `?id=${value}`)
-        .then((resp) => {
-            console.log(resp, "checkDeptName")
-            // const permission_list = resp?.data?.map((curElem) => {
-            //     return {
-            //         permission: curElem?.id,
-            //         create: false,
-            //         update: false,
-            //         delete: false,
-            //         read: false
-            //     }
-            // })
+            .then((resp) => {
+                console.log(resp, "checkDeptName")
+                // const permission_list = resp?.data?.map((curElem) => {
+                //     return {
+                //         permission: curElem?.id,
+                //         create: false,
+                //         update: false,
+                //         delete: false,
+                //         read: false
+                //     }
+                // })
 
-            // setData({...data, selectedModuleList: permission_list})
+                // setData({...data, selectedModuleList: permission_list})
 
-            setPermissionList(resp?.data)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+                setPermissionList(resp?.data)
+                setIsLoading(false)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     const saveData = () => {
-        const form_data = new FormData()
-        Object.entries(data).map(([key, value]) => form_data.append(key, value))
+        console.log("api hit")
+        const passCheck = data.password === data.confirm_password
 
-        permisionList?.map((curElem) => form_data.append("permission_list", JSON.stringify(curElem)))
+        console.log(passCheck, "passCheck")
 
-        postReq("saveUser", form_data)
-        .then((resp) => {
-            console.log(resp)
-            toast.success("User saved successfully")
-            setData(defaultData)
-            setPermissionList([])
-        })
-        .catch((error) => {
-            console.log(error)
-            toast.error("Something went wrong")
-        })
+        if (passCheck) {
+            const checkForm = validForm(userDataCheck, data)
+            if (checkForm) {
+                console.log("form is valid")
+                const form_data = new FormData()
+                Object.entries(data).map(([key, value]) => form_data.append(key, value))
+
+                permisionList?.map((curElem) => form_data.append("permission_list", JSON.stringify(curElem)))
+
+                postReq("saveUser", form_data)
+                    .then((resp) => {
+                        console.log(resp)
+                        toast.success("User saved successfully")
+                        setData(defaultData)
+                        setPermissionList([])
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        toast.error("Something went wrong")
+                    })
+            }
+        } else {
+            toast.error('Password does not match')
+        }
+
+        // return
     }
 
     useEffect(() => {
@@ -163,18 +228,21 @@ const AddUser = () => {
                                 <div className="form-group">
                                     <label htmlFor="first_name">First Name</label>
                                     <input className='form-control' type="text" name="first_name" placeholder='First Name' value={data?.first_name} onChange={(e) => updateData(e)} />
+                                    <p id="first_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                 </div>
                             </div>
                             <div className="col-md-4 mb-1">
                                 <div className="form-group">
                                     <label htmlFor="last_name">Last Name</label>
                                     <input className='form-control' type="text" name="last_name" placeholder='Last Name' value={data?.last_name} onChange={(e) => updateData(e)} />
+                                    <p id="last_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                 </div>
                             </div>
                             <div className="col-md-4 mb-1">
                                 <div className="form-group">
                                     <label htmlFor="email_id">Email ID</label>
                                     <input className='form-control' type="text" name="email_id" placeholder='Email ID' value={data?.email_id} onChange={(e) => updateData(e)} />
+                                    <p id="email_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                 </div>
                             </div>
 
@@ -182,6 +250,7 @@ const AddUser = () => {
                                 <div className="form-group">
                                     <label htmlFor="password">Password</label>
                                     <input className='form-control' type="text" name="password" placeholder='Password' value={data?.password} onChange={(e) => updateData(e)} />
+                                    <p id="password_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                 </div>
                             </div>
 
@@ -189,6 +258,7 @@ const AddUser = () => {
                                 <div className="form-group">
                                     <label htmlFor="confirm_password">Confirm Password</label>
                                     <input className='form-control' type="text" name="confirm_password" placeholder='Confirm Password' value={data?.confirm_password} onChange={(e) => updateData(e)} />
+                                    <p id="confirm_password_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                 </div>
                             </div>
 
@@ -196,15 +266,16 @@ const AddUser = () => {
                                 <div className="form-group">
                                     <label htmlFor="confirm_password">Assign Department</label>
                                     <Select
-                                        isMulti = {false}
+                                        isMulti={false}
                                         options={departmentList}
                                         inputId="aria-example-input"
                                         closeMenuOnSelect={true}
                                         name="assign_department"
                                         placeholder="Assign Department"
-                                        value={departmentList?.filter(option => data?.assign_department  === option.value)}
+                                        value={departmentList?.filter(option => data?.assign_department === option.value)}
                                         onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                     />
+                                    <p id="assign_department_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                 </div>
                             </div>
 
@@ -212,13 +283,13 @@ const AddUser = () => {
                                 <div className="form-group">
                                     <label htmlFor="confirm_password">Commission</label>
                                     <Select
-                                        isMulti = {false}
+                                        isMulti={false}
                                         options={commissionOptions}
                                         inputId="aria-example-input"
                                         closeMenuOnSelect={true}
                                         name="commision"
                                         placeholder="Commission"
-                                        value={commissionOptions?.filter(option => data?.commision  === option.value)}
+                                        value={commissionOptions?.filter(option => data?.commision === option.value)}
                                         onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                     />
                                 </div>
@@ -228,16 +299,17 @@ const AddUser = () => {
                                 <div className="form-group">
                                     <label htmlFor="confirm_password">Assign Role</label>
                                     <Select
-                                        isMulti = {false}
+                                        isMulti={false}
                                         options={rolesOptions}
                                         defaultInputValue=''
                                         inputId="aria-example-input"
                                         closeMenuOnSelect={true}
                                         name="assign_role"
                                         placeholder="Assign Role"
-                                        value={rolesOptions?.filter(option => data?.assign_role  === option.value)}
+                                        value={rolesOptions?.filter(option => data?.assign_role === option.value)}
                                         onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                     />
+                                    <p id="assign_role_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                 </div>
                             </div>
 
@@ -266,33 +338,42 @@ const AddUser = () => {
                                             <th scope="col">Delete</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        {permisionList?.map((cur, key) => (
-                                            <tr key={key}>
-                                                <td>{cur?.permission}</td>
-                                                <td>
-                                                    <div className='form-check form-check-primary'>
-                                                        <Input type='checkbox' value={cur?.id} name="create" onChange={(e) => changeCheck(e, cur?.id)} />
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div className='form-check form-check-primary'>
-                                                        <Input type='checkbox' value={cur?.id} name="update" onChange={(e) => changeCheck(e, cur?.id)} />
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div className='form-check form-check-primary'>
-                                                        <Input type='checkbox' value={cur?.id} name="read" onChange={(e) => changeCheck(e, cur?.id)} />
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div className='form-check form-check-primary'>
-                                                        <Input type='checkbox' value={cur?.id} name="delete" onChange={(e) => changeCheck(e, cur?.id)} />
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
+
+                                    {isLoading ? (
+                                        <div className='w-100 d-flex justify-content-center align-items-center' style={{ marginRight: "90vw" }}><Spinner size={'35px'} /></div>
+                                    ) : (
+                                        <tbody>
+                                            {
+                                                permisionList?.map((cur, key) => (
+                                                    <tr key={key}>
+                                                        <td>{cur?.permission}</td>
+                                                        <td>
+                                                            <div className='form-check form-check-primary'>
+                                                                <Input type='checkbox' value={cur?.id} name="create" onChange={(e) => changeCheck(e, cur?.id)} />
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div className='form-check form-check-primary'>
+                                                                <Input type='checkbox' value={cur?.id} name="update" onChange={(e) => changeCheck(e, cur?.id)} />
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div className='form-check form-check-primary'>
+                                                                <Input type='checkbox' value={cur?.id} name="read" onChange={(e) => changeCheck(e, cur?.id)} />
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div className='form-check form-check-primary'>
+                                                                <Input type='checkbox' value={cur?.id} name="delete" onChange={(e) => changeCheck(e, cur?.id)} />
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            }
+                                        </tbody>
+                                    )
+                                    }
+
                                 </table>
                             </div>
                         </div>
