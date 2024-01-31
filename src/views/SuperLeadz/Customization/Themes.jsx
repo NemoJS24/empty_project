@@ -16,6 +16,7 @@ const Themes = () => {
     const outletData = getCurrentOutlet()
     const [themeLength, setThemeLength] = useState(0)
     const allPreviews = [...allThemes]
+    const [contWidth, setContWidth] = useState(600)
     const [phoneView, setPhoneView] = useState(allPreviews.map(() => {
         return false
     }))
@@ -51,23 +52,21 @@ const Themes = () => {
             // setIsLoading(false)
         })
 
-        // const innerCard = document.getElementById("inner_card_container")
+        const innerCard = document.getElementById("themeContainer-0")
 
-        // const container = await document.querySelector(".innerRect")
+        if (Boolean(innerCard)) {
+            const resizeObserver = new ResizeObserver(entries => {
+                let contentWidth
+                for (const entry of entries) {
+                    console.log('Div size changed:', entry.contentRect.width, 'x', entry.contentRect.height)
+                    contentWidth = entry.contentRect.width
+                }
+                setContWidth(contentWidth)
+            })
+            resizeObserver.observe(innerCard)
 
-        // console.log(innerCard, Boolean(innerCard), "innerCard")
-        // if (Boolean(innerCard)) {
-        //     console.log(container)
-        //     const resizeObserver = new ResizeObserver(entries => {
-        //         console.log(entries)
-        //         for (const entry of entries) {
-        //             console.log('Div size changed:', entry.contentRect.width, 'x', entry.contentRect.height)
-        //         }
-        //     })
-        //     resizeObserver.observe(innerCard)
-
-        //     return () => resizeObserver.unobserve(innerCard)
-        // }
+            return () => resizeObserver.unobserve(innerCard)
+        }
     }, [])
 
     return (
@@ -79,9 +78,9 @@ const Themes = () => {
                             <Col className='d-flex flex-column align-items-stretch' md={6} key={key}>
                                 <Card>
                                     <CardBody>
-                                        <div style={{ aspectRatio: "16/9" }}>
+                                        <div id={`themeContainer-${key}`} style={{ aspectRatio: "16/9" }}>
                                             <div className="d-flex justify-content-center align-items-center rounded position-relative m-auto innerRect" style={{ aspectRatio: phoneView[key] ? '9/16' : '16/9', height: '100%', backgroundSize: "100%", backgroundImage: `url(${skeletonBg})`, backgroundColor: "rgba(0,0,0,0.25)", backgroundBlendMode: "soft-light" }}>
-                                                <div style={{ scale: "0.75" }}>
+                                                <div className='position-absolute' style={{ scale: `${(((contWidth - 200) * 100) / contWidth) / 100}` }}>
                                                     <JsonToJsx key={key} isMobile={phoneView[key]} renderObj={theme.object} />
                                                 </div>
                                             </div>

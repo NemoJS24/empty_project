@@ -74,46 +74,25 @@ const FONT_FAMILY_OPTIONS = [
   { label: "Ubuntu", value: `Ubuntu` }
 ]
 
-const FONT_SIZE_OPTIONS = [
-  { label: '10px', value: '10px' },
-  { label: '11px', value: '11px' },
-  { label: '12px', value: '12px' },
-  { label: '13px', value: '13px' },
-  { label: '14px', value: '14px' },
-  { label: '15px', value: '15px' },
-  { label: '16px', value: '16px' },
-  { label: '17px', value: '17px' },
-  { label: '18px', value: '18px' },
-  { label: '19px', value: '19px' },
-  { label: '20px', value: '20px' },
-  { label: '21px', value: '21px' },
-  { label: '22px', value: '22px' },
-  { label: '23px', value: '23px' },
-  { label: '24px', value: '24px' },
-  { label: '25px', value: '25px' },
-  { label: '26px', value: '26px' },
-  { label: '27px', value: '27px' },
-  { label: '28px', value: '28px' },
-  { label: '29px', value: '29px' },
-  { label: '30px', value: '30px' },
-  { label: '31px', value: '31px' },
-  { label: '32px', value: '32px' },
-  { label: '33px', value: '33px' },
-  { label: '34px', value: '34px' },
-  { label: '35px', value: '35px' },
-  { label: '36px', value: '36px' },
-  { label: '37px', value: '37px' },
-  { label: '38px', value: '38px' },
-  { label: '39px', value: '39px' },
-  { label: '40px', value: '40px' }
-]
+const FONT_SIZE_OPTIONS = []
+
+for (let index = 0; index < 200; index++) {
+  FONT_SIZE_OPTIONS.push({value: `${index + 1}px`, label: `${index + 1}px`})
+  
+}
 
 const LINE_HEIGHT_OPTIONS = [
+  { label: '0.25', value: '0.25' },
   { label: '0.5', value: '0.5' },
+  { label: '0.75', value: '0.75' },
   { label: '1', value: '1' },
+  { label: '1.25', value: '1.25' },
   { label: '1.5', value: '1.5' },
+  { label: '17.5', value: '1.75' },
   { label: '2', value: '2' },
-  { label: '2.5', value: '2.5' }
+  { label: '2.25', value: '2.25' },
+  { label: '2.5', value: '2.5' },
+  { label: '27.5', value: '2.75' }
 ]
 
 const FONT_WEIGHT_OPTIONS = [

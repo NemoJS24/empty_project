@@ -243,7 +243,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
             name: 'Campaign',
             selector: row => {
                 return (
-                    <div className='d-flex justify-content-start align-items-center gap-1 py-1'>
+                    <div title={row.theme_name.campaign_name} className='d-flex justify-content-start align-items-center gap-1 py-1'>
                         <div style={{ backgroundImage: `url("https://miro.medium.com/v2/resize:fit:678/1*ZPvzUShTe448VPDukHiskw.png")`, backgroundSize: "100%" }}>
                             <div onClick={() => {
                                 // setSelectedThemeNo(row.default_id)
@@ -260,7 +260,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                             // setSelectedThemeNo(row.theme_name.default_id)
                             // setEditTheme(row)
                             // navigate(`/merchant/SuperLeadz/overview/${row.theme_name.id}/`)
-                        }} className='fw-bolder text-primary cursor-pointer'>{row.theme_name.campaign_name}</div>
+                        }} className='fw-bolder text-primary cursor-pointer' style={{width: 'calc(100% - 135px)', overflow: 'hidden', textOverflow: 'ellipsis'}}>{row.theme_name.campaign_name}</div>
                     </div>
                 )
             },

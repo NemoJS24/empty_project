@@ -35,6 +35,7 @@ import RenderPreviewCopy from './RenderPreview copy'
 import VerifyYourEmailQuick from '../Outlet/VerifyYourEmailQuick'
 import VerifyYourEmail from '../Outlet/VerifyYourEmail'
 import ComTable from '../Components/DataTable/ComTable'
+import { TbReplace } from "react-icons/tb"
 
 
 export const fontStyles = [
@@ -256,7 +257,8 @@ const CustomizationParent = () => {
     const [disableIpDrag, setDisableIpDrag] = useState([])
     const [imageTab, setImageTab] = useState("default")
     const [dropImage, setDropImage] = useState(false)
-    const [rearrCount, setRearrCount] = useState(0)
+    const [rearr, setRearr] = useState(0)
+    const [isColDragging, setIsColDragging] = useState(false)
 
     console.log({ dropImage, imageType, finalObj })
     // const [textValue, setTextValue] = useState("")
@@ -472,6 +474,7 @@ const CustomizationParent = () => {
 
     const handleDragStart = (e, dataType, inputType) => {
         e.dataTransfer.setData("type", dataType)
+        setIsColDragging(dataType.includes("col1"))
         setDraggedInputType(inputType ? inputType : "none")
     }
 
@@ -482,8 +485,9 @@ const CustomizationParent = () => {
         setDragOverIndex(transferType?.includes("col") ? { cur: colWise?.length, curElem: "parent", subElem: "grandparent" } : { cur: colWise?.length, curElem: "left", subElem: 0 })
     }
 
-    const handleLayoutDrop = (e) => {
+    const handleLayoutDrop = (e, cur) => {
         // setSideNav('add-elements')
+        setIsColDragging(false)
         setGotDragOver({ cur: false, curElem: false, subElem: false })
         const dataTransfered = e.dataTransfer.getData("type")
         const transferedData = dataTransfered?.includes("rearrange") ? dataTransfered?.split("rearrange_") : dataTransfered
@@ -495,97 +499,14 @@ const CustomizationParent = () => {
         // const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $.id === currPage)
 
         if (transferedData && transferedData !== "row") {
-            if (transferedData === "col3") {
-                updatedColWise = [
-                    ...updatedColWise, {
-                        id: updatedColWise?.length + 1,
-                        col: 3,
-                        style: elementStyles?.block,
-                        elements: [
-                            {
-                                positionType: 'left',
-                                style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
-                            },
-                            {
-                                positionType: 'center',
-                                style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
-                            },
-                            {
-                                positionType: 'right',
-                                style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
-                            }
-                        ]
-                    }
-                ]
-                mobile_updatedColWise = [
-                    ...mobile_updatedColWise, {
-                        id: mobile_updatedColWise?.length + 1,
-                        col: 3,
-                        style: elementStyles?.block,
-                        elements: [
-                            {
-                                positionType: 'left',
-                                style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
-                            },
-                            {
-                                positionType: 'center',
-                                style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
-                            },
-                            {
-                                positionType: 'right',
-                                style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
-                            }
-                        ]
-                    }
-                ]
-            } else if (transferedData === "col2") {
-                updatedColWise = [
-                    ...updatedColWise, {
-                        id: updatedColWise?.length + 1,
-                        col: 2,
-                        style: elementStyles?.block,
-                        elements: [
-                            {
-                                positionType: 'left',
-                                style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
-                            },
-                            {
-                                positionType: 'right',
-                                style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
-                            }
-                        ]
-                    }
-                ]
-                mobile_updatedColWise = [
-                    ...mobile_updatedColWise, {
-                        id: mobile_updatedColWise?.length + 1,
-                        col: 2,
-                        style: elementStyles?.block,
-                        elements: [
-                            {
-                                positionType: 'left',
-                                style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
-                            },
-                            {
-                                positionType: 'right',
-                                style: elementStyles?.col,
-                                element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
-                            }
-                        ]
-                    }
-                ]
-            } else if (transferedData === "col1") {
-                updatedColWise = [
-                    ...updatedColWise, {
+            if (transferedData === "col1") {
+                const getId = `${currPage}-${gotDragOver?.cur}-parent-grandparent`
+                setMousePos({ ...mousePos, y: e.clientY, x: e.clientX })
+                const elem = document.getElementById(getId)
+                const { y, height } = elem?.getBoundingClientRect()
+
+                if (mousePos.y - (y + (height / 2)) < 0) {
+                    updatedColWise.splice(gotDragOver?.cur, 0, {
                         id: updatedColWise?.length + 1,
                         col: 1,
                         style: elementStyles?.block,
@@ -596,10 +517,9 @@ const CustomizationParent = () => {
                                 element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
                             }
                         ]
-                    }
-                ]
-                mobile_updatedColWise = [
-                    ...mobile_updatedColWise, {
+                    })
+
+                    mobile_updatedColWise.splice(gotDragOver?.cur, 0, {
                         id: mobile_updatedColWise?.length + 1,
                         col: 1,
                         style: elementStyles?.block,
@@ -610,8 +530,36 @@ const CustomizationParent = () => {
                                 element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
                             }
                         ]
-                    }
-                ]
+                    })
+                    setIndexes({ ...gotDragOver, curElem: "parent", subElem: "grandparent" })
+                } else {
+                    updatedColWise?.splice(gotDragOver?.cur + 1, 0, {
+                        id: updatedColWise?.length + 1,
+                        col: 1,
+                        style: elementStyles?.block,
+                        elements: [
+                            {
+                                positionType: 'left',
+                                style: elementStyles?.col,
+                                element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
+                            }
+                        ]
+                    })
+
+                    mobile_updatedColWise?.splice(gotDragOver?.subElem + 1, 0, {
+                        id: mobile_updatedColWise?.length + 1,
+                        col: 1,
+                        style: elementStyles?.block,
+                        elements: [
+                            {
+                                positionType: 'left',
+                                style: elementStyles?.col,
+                                element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
+                            }
+                        ]
+                    })
+                    setIndexes({ cur, curElem: "parent", subElem: "grandparent" })
+                }
             } else if (transferedData !== "" && !transferedData?.includes("col")) {
                 const inputTypeCondition = draggedInputType === "none" ? commonObj?.inputType : draggedInputType
                 updatedColWise = [
@@ -651,10 +599,18 @@ const CustomizationParent = () => {
             mobile_updatedColWise[dragStartIndex.cur]?.elements[mobile_updatedColWise[dragStartIndex.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex.curElem)]?.element?.splice(dragStartIndex?.subElem, 1, { ...commonObj })
         }
 
-        setcolWise(isMobile ? mobile_updatedColWise : updatedColWise)
+        // setcolWise(isMobile ? mobile_updatedColWise : updatedColWise)
+        if (currPage === "button") {
+            updatePresent({ ...finalObj, button: updatedColWise, mobile_button: mobile_updatedColWise })
+        } else {
+            newObj.pages[newObj?.pages?.findIndex($ => $.id === currPage)].values = updatedColWise
+            newObj.mobile_pages[newObj?.mobile_pages?.findIndex($ => $.id === currPage)].values = mobile_updatedColWise
+            updatePresent({ ...newObj })
+        }
     }
 
     const handleNewDrop = (e, position, id, index, curData, j) => {
+        setIsColDragging(false)
         setGotDragOver({ cur: false, curElem: false, subElem: false })
         const colWise = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
         const dataTransfered = e.dataTransfer.getData("type")
@@ -835,7 +791,7 @@ const CustomizationParent = () => {
                     element: dupArray[indexes.cur]?.elements?.length === 3 ? [...dupArray[indexes.cur]?.elements[2]?.element] : [{ ...commonObj, type: "", id: dupArray?.length }]
                 }
             ]
-            elements = [
+            mobile_elements = [
                 {
                     positionType: 'left',
                     style: { ...mobile_dupArray[indexes.cur]?.elements[0]?.style, width: `${width?.left}` },
@@ -1027,6 +983,45 @@ const CustomizationParent = () => {
         setImgModal(!imgModal)
         triggerImage()
         setImageType("SINGLE")
+    }
+
+    const replaceColumns = (e, { cur, mainCol, repCol }) => {
+        e.stopPropagation()
+        console.log({cur, mainCol, repCol})
+        const newObj = { ...finalObj }
+        const dupArray = currPage === "button" ? newObj?.button : newObj?.pages[newObj?.pages?.findIndex($ => $?.id === currPage)].values
+        const mobile_dupArray = currPage === "button" ? newObj?.mobile_button : newObj?.mobile_pages[newObj?.mobile_pages?.findIndex($ => $?.id === currPage)].values
+        const mainIndex = dupArray[cur]?.elements?.findIndex($ => $?.positionType === mainCol)
+        const repIndex = dupArray[cur]?.elements?.findIndex($ => $?.positionType === repCol)
+        const mobile_mainIndex = mobile_dupArray[cur]?.elements?.findIndex($ => $?.positionType === mainCol)
+        const mobile_repIndex = mobile_dupArray[cur]?.elements?.findIndex($ => $?.positionType === repCol)
+        let mainObj, repObj, mobile_mainObj, mobile_repObj
+        if (currPage === "button") {
+            mainObj = { ...finalObj.button[cur].elements[mainIndex], positionType: repCol }
+            repObj = { ...finalObj.button[cur].elements[repIndex], positionType: mainCol }
+            mobile_mainObj = { ...finalObj.mobile_button[cur].elements[mobile_mainIndex], positionType: repCol }
+            mobile_repObj = { ...finalObj.mobile_button[cur].elements[mobile_repIndex], positionType: mainCol }
+            dupArray[cur].elements[mainIndex] = repObj
+            dupArray[cur].elements[repIndex] = mainObj
+            mobile_dupArray[cur].elements[mobile_mainIndex] = mobile_repObj
+            mobile_dupArray[cur].elements[mobile_repIndex] = mobile_mainObj
+            newObj.button = dupArray
+            newObj.mobile_button = mobile_dupArray
+        } else {
+            const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
+            const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $?.id === currPage)
+            mainObj = { ...finalObj.pages[pageIndex].values[cur].elements[mainIndex], positionType: repCol }
+            repObj = { ...finalObj.pages[pageIndex].values[cur].elements[repIndex], positionType: mainCol }
+            mobile_mainObj = { ...finalObj.mobile_pages[mobile_pageIndex].values[cur].elements[mobile_mainIndex], positionType: repCol }
+            mobile_repObj = { ...finalObj.mobile_pages[mobile_pageIndex].values[cur].elements[mobile_repIndex], positionType: mainCol }
+            dupArray[cur].elements[mainIndex] = repObj
+            dupArray[cur].elements[repIndex] = mainObj
+            mobile_dupArray[cur].elements[mobile_mainIndex] = mobile_repObj
+            mobile_dupArray[cur].elements[mobile_repIndex] = mobile_mainObj
+            newObj.pages[pageIndex].values = dupArray
+            newObj.mobile_pages[mobile_pageIndex].values = mobile_dupArray
+        }
+        updatePresent({...newObj})
     }
 
     const renderElems = () => {
@@ -2453,7 +2448,7 @@ const CustomizationParent = () => {
                                     </div>
                                     <div className='mb-2'>
                                         {getMDToggle({ label: `Max Height: ${values?.maxHeight}`, value: `maxHeight` })}
-                                        <p className='fw-bolder text-black mb-1' style={{ fontSize: "0.75rem" }}>Max Height: {values?.maxHeight}</p>
+                                        {/* <p className='fw-bolder text-black mb-1' style={{ fontSize: "0.75rem" }}>Max Height: {values?.maxHeight}</p> */}
                                         <div className="d-flex p-0 justify-content-between align-items-center gap-2">
                                             <input value={parseFloat(values?.maxHeight)} type='range' className='w-100' onChange={e => {
                                                 setValues({ ...values, maxHeight: `${e.target.value}px` })
@@ -2865,7 +2860,7 @@ const CustomizationParent = () => {
                                     const option_list = options.map((cur) => {
                                         return cur.value
                                     })
-                                    updatePresent({ ...finalObj, behaviour: {...finalObj?.behaviour, SOURCE_PAGE_LINK: option_list}})
+                                    updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, SOURCE_PAGE_LINK: option_list } })
 
                                     // const newObj = { ...finalObj }
                                     // newObj.behaviour.SOURCE_PAGE_LINK = [...finalObj.behaviour.CUSTOM_PAGE_LINK, ""]
@@ -2950,6 +2945,7 @@ const CustomizationParent = () => {
                                                 const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
                                                 const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
                                                 arr.splice(key, 1)
+                                                arrRev.splice(key, 1)
                                                 // setcolWise([...arr])
                                                 const newObj = { ...finalObj }
                                                 if (currPage === "button") {
@@ -2985,30 +2981,60 @@ const CustomizationParent = () => {
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
                             </div>
-                            {cur?.elements?.map((curElem, i) => (
-                                <div onClick={(e) => {
-                                    e.stopPropagation()
-                                    // setActiveRow("none")
-                                    makActive(e, cur, curElem, curElem.positionType, key, i, "parent")
-                                    setCurrPosition({ ...currPosition, selectedType: "column" })
-                                    setIndexes({ cur: key, curElem: curElem.positionType, subElem: "parent" })
-                                    setValues(curElem.style)
-                                    setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                }}
-                                    onMouseOver={(e) => {
-                                        e.stopPropagation()
-                                        setMouseEnterIndex({ cur: key, curElem: curElem.positionType, subElem: "parent" })
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.stopPropagation()
-                                        setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                    }} key={i}
+                            {cur?.elements?.map((curElem, i, curElemArr) => (
+                                <div key={i}
                                     className='h-100 ms-2 position-relative tree-border'>
-                                    <div className={`fw-bolder text-black ms-1 cursor-pointer d-flex align-items-center rounded ${isEqual({ cur: key, curElem: curElem.positionType, subElem: "parent" }, { ...indexes }) ? "bg-light-secondary" : ""}`} style={{ padding: "0.5rem", gap: "0.5rem" }}>
-                                        <Columns color="#727272" size={15} />
-                                        <p className='m-0 fw-bold text-capitalize w-100 text-black' style={{ fontSize: "0.85rem" }}>
-                                            {`${cur?.elements?.length > 1 ? `${curElem?.positionType} ` : ""}`}column
-                                        </p>
+                                    <div className="d-flex align-items-center pe-1">
+                                        <div
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                // setActiveRow("none")
+                                                makActive(e, cur, curElem, curElem.positionType, key, i, "parent")
+                                                setCurrPosition({ ...currPosition, selectedType: "column" })
+                                                setIndexes({ cur: key, curElem: curElem.positionType, subElem: "parent" })
+                                                setValues(curElem.style)
+                                                setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
+                                            }}
+                                            onMouseOver={(e) => {
+                                                e.stopPropagation()
+                                                setMouseEnterIndex({ cur: key, curElem: curElem.positionType, subElem: "parent" })
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.stopPropagation()
+                                                setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
+                                            }} className={`flex-grow-1 fw-bolder text-black ms-1 cursor-pointer d-flex align-items-center rounded ${isEqual({ cur: key, curElem: curElem.positionType, subElem: "parent" }, { ...indexes }) ? "bg-light-secondary" : ""}`} style={{ padding: "0.5rem", gap: "0.5rem" }}>
+                                            <Columns color="#727272" size={15} />
+                                            <p className='m-0 fw-bold text-capitalize w-100 text-black' style={{ fontSize: "0.85rem" }}>
+                                                {`${cur?.elements?.length > 1 ? `${curElem?.positionType} ` : ""}`}column
+                                            </p>
+                                        </div>
+                                        {curElemArr.length > 1 && <div>
+                                            <UncontrolledDropdown className='more-options-dropdown'>
+                                                <DropdownToggle className={`btn-icon cursor-pointer`} color='transparent' size='md'>
+                                                    <span className={`${isEqual({ cur: key, curElem: curElem?.positionType, subElem: "grandparent" }, { ...indexes }) ? "text-black" : ""}`}>
+                                                        <MoreVertical size='18' />
+                                                    </span>
+                                                </DropdownToggle>
+                                                <DropdownMenu end>
+                                                    {curElemArr.map(($, curElemIndex) => {
+                                                        if (curElem?.positionType !== $?.positionType) {
+                                                            return (
+                                                                <DropdownItem onClick={e => replaceColumns(e, { mainCol: curElem?.positionType, repCol: $?.positionType, cur: key })} key={curElemIndex} className='w-100'>
+                                                                    <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                                                        <TbReplace size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black text-capitalize' style={{ fontSize: "0.75rem" }}>Replace with {$?.positionType} column</span>
+                                                                    </div>
+                                                                </DropdownItem>
+                                                            )
+                                                        }
+                                                    })}
+                                                    {/* <DropdownItem className='w-100'>
+                                                        <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                                            <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black text-capitalize' style={{ fontSize: "0.75rem" }}>Delete</span>
+                                                        </div>
+                                                    </DropdownItem> */}
+                                                </DropdownMenu>
+                                            </UncontrolledDropdown>
+                                        </div>}
                                     </div>
                                     {curElem.element.every($ => $?.type !== "") && <ul className='ms-2 mb-0 p-0' style={{ listStyle: 'none' }}>
                                         {curElem.element.map((subElem, j) => (
@@ -3125,18 +3151,20 @@ const CustomizationParent = () => {
         const dragOverData = document.getElementById(`${currPage}-${cur}-${curElem}-parent`)?.getBoundingClientRect()
         const y = dragOverData?.y
         const height = dragOverData?.height
+
+        console.log("newObj ColDrop", transferedData)
         if ((transferedData !== "" && !transferedData.includes("col"))) {
             const arrCheck = dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element
             if (arrCheck.length <= 1 && (!arrCheck[0]?.type || arrCheck[0]?.type === "")) {
-                console.log({arrCheck: "1"})
+                console.log({ arrCheck: "1" })
                 dupArray[cur].elements[dupArray[cur].elements.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }]
                 mobile_dupArray[cur].elements[mobile_dupArray[cur].elements.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }]
             } else if ((mousePos.y - (y + (height / 2)) > 0)) {
-                console.log({arrCheck: "2"})
+                console.log({ arrCheck: "2" })
                 dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element?.push({ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
                 mobile_dupArray[cur]?.elements[mobile_dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element?.push({ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
             } else {
-                console.log({arrCheck: "3"})
+                console.log({ arrCheck: "3" })
                 dupArray[cur].elements[dupArray[cur].elements?.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }, ...dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element]
                 mobile_dupArray[cur].elements[mobile_dupArray[cur].elements?.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }, ...dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element]
             }
@@ -3156,18 +3184,23 @@ const CustomizationParent = () => {
             }
             updatePresent({ ...newObj })
         }
+        if (transferedData.includes("col")) {
+            handleLayoutDrop(e, cur)
+        }
 
         console.log({ cur, curElem, dupArray, mobile_dupArray, inputTypeCondition, y, height })
     }
 
     const handleElementDrop = (e, cur, curElem, subElem) => {
         e.stopPropagation()
+        setIsColDragging(false)
         setGotDragOver({ cur: false, curElem: false, subElem: false })
         const transferedData = e.dataTransfer.getData("type")
         const inputTypeCondition = draggedInputType === "none" ? commonObj?.inputType : draggedInputType
         const dragOverData = document.getElementById(`${currPage}-${dragOverIndex.cur}-${dragOverIndex.curElem}-${dragOverIndex.subElem}`)?.getBoundingClientRect()
         const y = dragOverData?.y
         const height = dragOverData?.height
+        console.log("newObj ElementDrop", { transferedData })
         if ((transferedData !== "" && !transferedData.includes("col"))) {
             let dupArray
             let mobile_dupArray
@@ -3209,6 +3242,9 @@ const CustomizationParent = () => {
             }
 
             updatePresent({ ...newObj })
+        }
+        if (transferedData.includes("col")) {
+            handleLayoutDrop(e, cur)
         }
     }
 
@@ -3268,7 +3304,7 @@ const CustomizationParent = () => {
         setValues({ ...dupArray[dragOverIndex.cur].elements[dupArray[dragOverIndex.cur].elements.findIndex($ => $?.positionType === dragOverIndex.curElem)].element[dragOverIndex.subElem].style })
         setIndexes({ ...dragOverIndex })
         updatePresent({ ...newObj })
-        setRearrCount(rearrCount + 1)
+        setRearr(rearr + 1)
         // }
     }
 
@@ -5119,10 +5155,12 @@ const CustomizationParent = () => {
                                         </div>}
                                         {/* Elements section */}
                                         {/* Button Section */}
-                                        {sideNav === "button" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%" }}>
-                                            <div style={{ flexWrap: "wrap" }} className="toggleSection border-end d-flex align-items-stretch justify-content-start mb-1">
+                                        {sideNav === "button" && <div className={`px-1`} style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%" }}>
+                                            <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0.5rem 0px", fontSize: "0.75rem" }}>Basic Elements</p>
+                                            <div className="toggleSection d-flex align-items-stretch justify-content-start mb-1" style={{ flexWrap: "wrap" }}>
+                                                {/* {getElementJsx({ draggable: true, dragStartFunc: (e) => handleDragStart(e, "text", "type"), icon: <Type size={17.5} />, label: "Text" })} */}
                                                 <div style={{ width: `33.3333%`, padding: "0.35rem", height: "100%" }}>
-                                                    <div title='Drag to add to your pop-up' draggable onDragStart={(e) => handleDragStart(e, "text", "type")} className="border rounded w-100 d-flex flex-column justify-content-between align-items-center p-1 h-100" style={{ aspectRatio: "1", cursor: "grab", gap: "0.25rem" }}>
+                                                    <div title='Drag to add to your pop-up' draggable onDragStart={(e) => handleDragStart(e, "text", "type")} className="border rounded w-100 d-flex flex-column justify-content-between align-items-center p-1 h-100" style={{ aspectRatio: "1", cursor: "grab", gap: "1rem" }}>
                                                         <span className="bg-light-secondary d-flex justify-content-center align-items-center rounded" style={{ padding: "0.75rem", aspectRatio: "1" }}>
                                                             <Type color="#727272" size={12.5} />
                                                         </span>
@@ -5145,11 +5183,37 @@ const CustomizationParent = () => {
                                                     </div>
                                                 </div>
                                                 <div style={{ width: `33.3333%`, padding: "0.35rem", height: "100%" }}>
-                                                    <div title='Drag to add to your pop-up' draggable onDragStart={(e) => handleDragStart(e, "image")} className="border rounded w-100 d-flex flex-column justify-content-between align-items-center p-1 h-100" style={{ aspectRatio: "1", cursor: "grab", gap: "0.25rem" }}>
+                                                    <div title='Drag to add to your pop-up' draggable onDragStart={(e) => handleDragStart(e, "image")} className="border rounded w-100 d-flex flex-column justify-content-between align-items-center p-1 h-100" style={{ aspectRatio: "1", cursor: "grab", gap: "1rem" }}>
                                                         <span className="bg-light-secondary d-flex justify-content-center align-items-center rounded" style={{ padding: "0.75rem", aspectRatio: "1" }}>
                                                             <Image color="#727272" size={12.5} />
                                                         </span>
                                                         <span className='text-black text-center' style={{ fontSize: "11px" }}>Image</span>
+                                                        {/* <svg
+                                                            width={"35%"}
+                                                            viewBox="0 0 67 28"
+                                                            fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                        >
+                                                            <circle cx={5} cy={5} r={3.5} stroke="#727272" strokeWidth={3} />
+                                                            <circle cx={24} cy={5} r={3.5} stroke="#727272" strokeWidth={3} />
+                                                            <circle cx={43} cy={5} r={3.5} stroke="#727272" strokeWidth={3} />
+                                                            <circle cx={62} cy={5} r={3.5} stroke="#727272" strokeWidth={3} />
+                                                            <circle cx={5} cy={23} r={3.5} stroke="#727272" strokeWidth={3} />
+                                                            <circle cx={24} cy={23} r={3.5} stroke="#727272" strokeWidth={3} />
+                                                            <circle cx={43} cy={23} r={3.5} stroke="#727272" strokeWidth={3} />
+                                                            <circle cx={62} cy={23} r={3.5} stroke="#727272" strokeWidth={3} />
+                                                        </svg> */}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0.5rem 0px", fontSize: "0.75rem" }}>Layout Elements</p>
+                                            <div className="toggleSection d-flex align-items-stretch justify-content-start mb-1">
+                                                <div style={{ width: `33.3333%`, padding: "0.35rem", height: "100%" }}>
+                                                    <div title='Drag to add to your pop-up' draggable onDragStart={(e) => handleDragStart(e, "col1")} className="border rounded text-dark w-100 d-flex flex-column justify-content-between align-items-center p-1" style={{ aspectRatio: "1", cursor: "grab", gap: "0.25rem" }}>
+                                                        <span className="bg-light-secondary d-flex justify-content-center align-items-center rounded" style={{ padding: "0.75rem", aspectRatio: "1" }}>
+                                                            <Square color="#727272" size={12.5} />
+                                                        </span>
+                                                        <span className='text-black text-center' style={{ fontSize: "11px" }}>Block</span>
                                                         {/* <svg
                                                             width={"35%"}
                                                             viewBox="0 0 67 28"
@@ -5382,12 +5446,11 @@ const CustomizationParent = () => {
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         {/* Section Drawer */}
                         {/* Theme Preview */}
                         <div className="d-flex flex-column align-items-center bg-light-secondary" style={{ width: `calc(100vw - ${sideNav !== "" ? sectionWidths.editSection : "0"}px - ${sectionWidths.drawerWidth}px - ${sectionWidths.sidebar}px)`, transition: "0.3s ease-in-out" }}>
-                            {returnRender({ outletData, slPrevBg, bgsettings: finalObj?.overlayStyles, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition: finalObj?.positions?.[`${mobileCondition}${pageCondition}`], bgStyles: finalObj?.backgroundStyles?.[`${mobileCondition}main`], crossStyle: finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise: currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values], setcolWise, setDragStartIndex, dragOverIndex, setDragOverIndex, isMobile, setIsMobile, finalObj, setFinalObj: updatePresent, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles: finalObj?.backgroundStyles[`${mobileCondition}button`], offerTheme: finalObj?.offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearrCount, setRearrCount })}
+                            {returnRender({ outletData, slPrevBg, bgsettings: finalObj?.overlayStyles, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition: finalObj?.positions?.[`${mobileCondition}${pageCondition}`], bgStyles: finalObj?.backgroundStyles?.[`${mobileCondition}main`], crossStyle: finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise: currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values], setcolWise, dragStartIndex, setDragStartIndex, dragOverIndex, setDragOverIndex, isMobile, setIsMobile, finalObj, setFinalObj: updatePresent, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles: finalObj?.backgroundStyles[`${mobileCondition}button`], offerTheme: finalObj?.offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, setRearr, isColDragging, setIsColDragging })}
                         </div>
                         {/* Theme Preview */}
                         {/* Edit Section */}

@@ -21,7 +21,8 @@ export const commonObj = {
     placeholder: "Email",
     labelText: "Email",
     redirectType: "nextPage",
-    redirectTo: ""
+    redirectTo: "",
+    style: {}
 }
 
 export const elementStyles = {

@@ -17,12 +17,14 @@ import toast from 'react-hot-toast'
 import BasicEditor from '../Components/Editor/BaseEditor'
 
 const RenderPreview = (props) => {
-    const { outletData, slPrevBg, bgsettings, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition, bgStyles, crossStyle, values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise, setcolWise, setDragStartIndex, setDragOverIndex, isMobile, finalObj, setFinalObj, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles, offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearrCount } = props
+    const { outletData, slPrevBg, bgsettings, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition, bgStyles, crossStyle, values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise, setcolWise, setDragStartIndex, setDragOverIndex, isMobile, finalObj, setFinalObj, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles, offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, isColDragging } = props
     const [editorBar, setEditorBar] = useState(true)
     const { userPermission } = useContext(PermissionProvider)
-    const setDragEnter = ({ position, id }) => {
-        setGotDragOver({ ...position })
-        const elem = document.getElementById(id)
+    const setDragEnter = (e, { position, id }) => {
+        setGotDragOver({ ...position, curElem: isColDragging ? "parent" : position?.curElem, subElem: isColDragging ? "grandparent" : position?.subElem })
+        const getId = isColDragging ? `${currPage}-${position.cur}-parent-grandparent` : id
+        setMousePos({ ...mousePos, y: e.clientY, x: e.clientX })
+        const elem = document.getElementById(getId)
         const { y, height } = elem?.getBoundingClientRect()
 
         if (mousePos.y - (y + (height / 2)) < 0) {
@@ -346,7 +348,6 @@ const RenderPreview = (props) => {
                                     <div style={currPage === "button" ? { position: "relative", width: btnStyles?.width, maxWidth: btnStyles?.maxWidth, maxHeight: "100%", minHeight: btnStyles?.minHeight, marginTop: btnStyles?.marginTop, marginRight: btnStyles?.marginRight, marginBottom: btnStyles?.marginBottom, marginLeft: btnStyles?.marginLeft, borderRadius: btnStyles?.borderRadius } : { position: "relative", width: bgStyles?.width, maxWidth: bgStyles?.maxWidth, maxHeight: "100%", minHeight: bgStyles?.minHeight, marginTop: bgStyles?.marginTop, marginRight: bgStyles?.marginRight, marginBottom: bgStyles?.marginBottom, marginLeft: bgStyles?.marginLeft, borderRadius: bgStyles?.borderRadius }}>
                                         {currPage !== "button" &&
                                             <div id="cross_btn_cont" tabindex="0" style={{ position: "absolute", inset: "0px 0px auto auto", zIndex: "2", backgroundColor: crossStyle?.backgroundColor, borderRadius: crossStyle?.borderRadius, padding: `3px`, marginBottom: crossStyle?.marginBottom, transform: `translate(${crossStyle?.translateX}, ${crossStyle?.translateY})` }}>
-
                                                 <div id="cross_btn_box" className={`${currPosition?.selectedType === "close" ? "cross_btn_box_border" : ""}`}>
                                                     <X size={crossStyle?.width} height={crossStyle?.height} color={crossStyle?.color}
                                                         onClick={(e) => {
@@ -355,8 +356,6 @@ const RenderPreview = (props) => {
                                                         }}
                                                     />
                                                 </div>
-
-
                                             </div>
                                         }
                                         <div id="dropZoneParent" onClick={(e) => {
@@ -370,7 +369,7 @@ const RenderPreview = (props) => {
                                                 const transferType = e.dataTransfer.getData("type")
                                                 setGotDragOver({ cur: false, curElem: false, subElem: false })
                                                 if (transferType !== "") {
-                                                    handleLayoutDrop(e)
+                                                    handleLayoutDrop(e, colWise.length)
                                                     setIndexes(transferType.includes("col") ? { cur: colWise.length, curElem: "parent", subElem: "grandparent" } : { cur: colWise.length, curElem: "left", subElem: 0 })
                                                     setCurrPosition({ ...currPosition, id: colWise.length, selectedType: transferType.includes("col") ? "block" : transferType })
                                                     setValues(elementStyles[transferType.includes("col") ? "block" : transferType])
@@ -402,7 +401,7 @@ const RenderPreview = (props) => {
                                                     onDragEnter={e => {
                                                         e.preventDefault()
                                                         e.stopPropagation()
-                                                        setDragEnter({ type: "block", position: { cur: key, curElem: "parent", subElem: "grandparent" }, id: `${currPage}-${key}-parent-grandparent` })
+                                                        setDragEnter(e, { type: "block", position: { cur: key, curElem: "parent", subElem: "grandparent" }, id: `${currPage}-${key}-parent-grandparent` })
                                                     }}
                                                     onDragExit={e => {
                                                         e.preventDefault()
@@ -438,6 +437,7 @@ const RenderPreview = (props) => {
                                                             const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
                                                             const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
                                                             arr.splice(key, 1)
+                                                            arrRev.splice(key, 1)
                                                             // setcolWise([...arr])
                                                             const newObj = { ...finalObj }
                                                             if (currPage === "button") {
@@ -488,7 +488,7 @@ const RenderPreview = (props) => {
                                                                         onDragEnter={e => {
                                                                             e.preventDefault()
                                                                             e.stopPropagation()
-                                                                            setDragEnter({ type: "col", position: { cur: key, curElem: curElem.positionType, subElem: "parent" }, id: `${currPage}-${key}-${curElem?.positionType}-parent` })
+                                                                            setDragEnter(e, { type: "col", position: { cur: key, curElem: curElem.positionType, subElem: "parent" }, id: `${currPage}-${key}-${curElem?.positionType}-parent` })
                                                                         }}
                                                                         onDragExit={e => {
                                                                             e.preventDefault()
@@ -516,6 +516,7 @@ const RenderPreview = (props) => {
                                                                                     return (
                                                                                         <div id={`${currPage}-${key}-${curElem?.positionType}-${j}`} draggable={!isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes })} style={{ zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1", position: "relative" }} onDragStart={(e) => {
                                                                                             e.stopPropagation()
+                                                                                            // setRearr({cur: key, curElem: curElem?.positionType, subElem: j})
                                                                                             e.dataTransfer.setData("type", "rearrange_text")
                                                                                             setTransfered("rearrange_text")
                                                                                             setIndexes({ cur: key, curElem: curElem.positionType, subElem: j })
@@ -524,7 +525,7 @@ const RenderPreview = (props) => {
                                                                                             onDragEnter={e => {
                                                                                                 e.preventDefault()
                                                                                                 e.stopPropagation()
-                                                                                                setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
+                                                                                                setDragEnter(e, { type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
                                                                                             }}
                                                                                             onDragExit={e => {
                                                                                                 e.preventDefault()
@@ -566,7 +567,7 @@ const RenderPreview = (props) => {
                                                                                             }}
                                                                                             className={`${isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
 
-                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
+                                                                                            {!isColDragging && isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
                                                                                                 <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
                                                                                             )}
 
@@ -615,7 +616,7 @@ const RenderPreview = (props) => {
                                                                                                 }} />
                                                                                                 <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />
                                                                                             </span>}
-                                                                                            {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute resizeDiv" style={{ inset: "0px", outline: "2px solid #727272", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)", resize: "vertical", overflow: "auto" }}></div>}
+                                                                                            {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute resizeDiv" style={{ inset: "0px", outline: "2px solid #727272", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
                                                                                             <div style={{ width: "100%", resize: isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) ? "vertical" : "none" }} id={`textField-${key}-${curElem?.positionType}-${j}`} className="text-field" >
                                                                                                 <Editor
                                                                                                     customElemnt={(
@@ -640,7 +641,7 @@ const RenderPreview = (props) => {
                                                                                                     fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""}
                                                                                                     fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""}
                                                                                                     elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
-                                                                                                    key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${rearrCount}`} 
+                                                                                                    key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${rearr}`}
                                                                                                     id={`${currPage}-${key}-${curElem?.positionType}-${j}`}
                                                                                                     style={{ ...subElem?.style, width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, color: subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : "" }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
                                                                                                     onChange={(content, editorState) => {
@@ -689,6 +690,7 @@ const RenderPreview = (props) => {
                                                                                             <div id={`${currPage}-${key}-${curElem?.positionType}-${j}`} draggable style={{ ...subElem?.style, width: subElem?.isBrandWidth ? finalObj?.defaultThemeColors?.brandWidth : subElem?.style?.width, height: subElem?.isBrandHeight ? finalObj?.defaultThemeColors?.brandHeight : subElem?.style?.height, margin: subElem?.isBrandAlignment ? finalObj?.defaultThemeColors?.brandAlignment : subElem?.style?.margin, position: "relative", display: "flex", justifyContent: "center", alignItems: "center", zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
                                                                                                 onDragStart={e => {
                                                                                                     e.stopPropagation()
+                                                                                                    // setRearr({cur: key, curElem: curElem?.positionType, subElem: j})
                                                                                                     e.dataTransfer.setData("type", "rearrange_image")
                                                                                                     setTransfered("rearrange_image")
                                                                                                     setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
@@ -705,7 +707,7 @@ const RenderPreview = (props) => {
                                                                                                 onDragEnter={e => {
                                                                                                     e.preventDefault()
                                                                                                     e.stopPropagation()
-                                                                                                    setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
+                                                                                                    setDragEnter(e, { type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
                                                                                                 }}
                                                                                                 onDragExit={e => {
                                                                                                     e.preventDefault()
@@ -723,10 +725,9 @@ const RenderPreview = (props) => {
                                                                                                 onDrop={e => {
                                                                                                     e.stopPropagation()
                                                                                                     setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                                                                    setGotDragOver({ cur: false, curElem: false, subElem: false })
                                                                                                     const transferType = e.dataTransfer.getData("type")
                                                                                                     if (!transferType.includes("rearrange")) {
-                                                                                                        handleElementDrop(e, key, curElem?.positionType, j + 1, i)
+                                                                                                        handleElementDrop(e, key, curElem.positionType, j + 1, i)
                                                                                                         setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
                                                                                                     } else {
                                                                                                         handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
@@ -739,7 +740,7 @@ const RenderPreview = (props) => {
                                                                                                     setMousePos({ ...mousePos, y: e.clientY })
                                                                                                 }}
                                                                                                 className={`${isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
-                                                                                                {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
+                                                                                                {!isColDragging && isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
                                                                                                     <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
                                                                                                 )}
                                                                                                 {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span className="d-flex"
@@ -797,12 +798,14 @@ const RenderPreview = (props) => {
                                                                                                                                     }} /> */}
                                                                                                 </span>}
                                                                                                 {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
-                                                                                                <img
-                                                                                                    className="img-fluid"
-                                                                                                    src={currPage === "button" ? subElem.src : subElem?.isBrandLogo ? finalObj?.defaultThemeColors?.brandLogo : subElem.src}
-                                                                                                    alt={``}
-                                                                                                    style={{ width: "100%", height: "100%" }}
-                                                                                                />
+                                                                                                <span style={{ width: "100%", height: "100%", overflow: "hidden", borderTopLeftRadius: subElem?.style?.borderTopLeftRadius, borderTopRightRadius: subElem?.style?.borderTopRightRadius, borderBottomRightRadius: subElem?.style?.borderBottomRightRadius, borderBottomLeftRadius: subElem?.style?.borderBottomLeftRadius }}>
+                                                                                                    <img
+                                                                                                        className="img-fluid"
+                                                                                                        src={currPage === "button" ? subElem.src : subElem?.isBrandLogo ? finalObj?.defaultThemeColors?.brandLogo : subElem.src}
+                                                                                                        alt={``}
+                                                                                                        style={{ width: "100%", height: "100%" }}
+                                                                                                    />
+                                                                                                </span>
                                                                                             </div>
                                                                                         )
                                                                                     } else {
@@ -818,6 +821,7 @@ const RenderPreview = (props) => {
                                                                                         <div id={`${currPage}-${key}-${curElem?.positionType}-${j}`} draggable={!isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes })} style={{ width: "100%", display: "flex", justifyContent: subElem?.style?.alignType, position: "relative", display: "flex", alignItems: "center", zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
                                                                                             onDragStart={e => {
                                                                                                 e.stopPropagation()
+                                                                                                // setRearr({cur: key, curElem: curElem?.positionType, subElem: j})
                                                                                                 e.dataTransfer.setData("type", "rearrange_button")
                                                                                                 setTransfered("rearrange_button")
                                                                                                 setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
@@ -826,7 +830,7 @@ const RenderPreview = (props) => {
                                                                                             onDragEnter={e => {
                                                                                                 e.preventDefault()
                                                                                                 e.stopPropagation()
-                                                                                                setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
+                                                                                                setDragEnter(e, { type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
                                                                                             }}
                                                                                             onDragExit={e => {
                                                                                                 e.preventDefault()
@@ -846,7 +850,7 @@ const RenderPreview = (props) => {
                                                                                                 setGotDragOver({ cur: false, curElem: false, subElem: false })
                                                                                                 const transferType = e.dataTransfer.getData("type")
                                                                                                 if (!transferType.includes("rearrange")) {
-                                                                                                    handleElementDrop(e, key, curElem?.positionType, j + 1, i)
+                                                                                                    handleElementDrop(e, key, curElem.positionType, j + 1, i)
                                                                                                     setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
                                                                                                 } else {
                                                                                                     handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
@@ -867,7 +871,7 @@ const RenderPreview = (props) => {
                                                                                                 setMousePos({ ...mousePos, y: e.clientY })
                                                                                             }}
                                                                                             className={`${isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
-                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
+                                                                                            {!isColDragging && isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
                                                                                                 <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
                                                                                             )}
                                                                                             {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
@@ -929,7 +933,7 @@ const RenderPreview = (props) => {
                                                                                             <div style={{ ...subElem?.style, display: "inline-flex", justifyContent: "center", alignItems: "center", fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} >
                                                                                                 <span onDragStart={e => e.stopPropagation()} id={`textField-${key}-${curElem?.positionType}-${j}`} style={{ display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems }}>
                                                                                                     <Editor fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
-                                                                                                        key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${rearrCount}`}  id={`${currPage}-${key}-${curElem?.positionType}-${j}`} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
+                                                                                                        key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${rearr}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
                                                                                                         onChange={(content, editorState) => {
                                                                                                             if (!isEqual(content, subElem?.editorState)) {
                                                                                                                 const newObj = { ...finalObj }
@@ -958,6 +962,7 @@ const RenderPreview = (props) => {
                                                                                         <div id={`${currPage}-${key}-${curElem?.positionType}-${j}`} draggable style={{ width: "100%", display: "flex", justifyContent: subElem?.style?.alignType, position: "relative", alignItems: "center", zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
                                                                                             onDragStart={e => {
                                                                                                 e.stopPropagation()
+                                                                                                // setRearr({cur: key, curElem: curElem?.positionType, subElem: j})
                                                                                                 e.dataTransfer.setData("type", "rearrange_input")
                                                                                                 setTransfered("rearrange_input")
                                                                                                 setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
@@ -966,7 +971,7 @@ const RenderPreview = (props) => {
                                                                                             onDragEnter={e => {
                                                                                                 e.preventDefault()
                                                                                                 e.stopPropagation()
-                                                                                                setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
+                                                                                                setDragEnter(e, { type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
                                                                                             }}
                                                                                             onDragExit={e => {
                                                                                                 e.preventDefault()
@@ -986,7 +991,7 @@ const RenderPreview = (props) => {
                                                                                                 setGotDragOver({ cur: false, curElem: false, subElem: false })
                                                                                                 const transferType = e.dataTransfer.getData("type")
                                                                                                 if (!transferType.includes("rearrange")) {
-                                                                                                    handleElementDrop(e, key, curElem?.positionType, j + 1, i)
+                                                                                                    handleElementDrop(e, key, curElem.positionType, j + 1, i)
                                                                                                     setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
                                                                                                 } else {
                                                                                                     handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
@@ -1007,7 +1012,7 @@ const RenderPreview = (props) => {
                                                                                                 setMousePos({ ...mousePos, y: e.clientY })
                                                                                             }}
                                                                                             className={`${isEqual({ cur: key, curElem: curElem?.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
-                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
+                                                                                            {!isColDragging && isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
                                                                                                 <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
                                                                                             )}
                                                                                             {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
@@ -1068,7 +1073,7 @@ const RenderPreview = (props) => {
                                                                                             {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
                                                                                             <div style={{ width: subElem?.style?.width, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, display: "flex", flexDirection: "column", gap: subElem?.style?.elemGap ? subElem?.style?.elemGap : "0px" }}>
                                                                                                 {subElem?.hasLabel && (<Editor fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
-                                                                                                    key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${rearrCount}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} style={{ width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
+                                                                                                    key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${rearr}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} style={{ width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
                                                                                                     onChange={(content, editorState) => {
                                                                                                         if (!isEqual(content, subElem?.editorState)) {
                                                                                                             const newObj = { ...finalObj }
@@ -1097,6 +1102,7 @@ const RenderPreview = (props) => {
                                                                                         <div
                                                                                             onDragStart={e => {
                                                                                                 e.stopPropagation()
+                                                                                                // setRearr({cur: key, curElem: curElem?.positionType, subElem: j})
                                                                                                 e.dataTransfer.setData("type", "rearrange_offer")
                                                                                                 setTransfered("rearrange_offer")
                                                                                                 setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
@@ -1113,7 +1119,7 @@ const RenderPreview = (props) => {
                                                                                             onDragEnter={e => {
                                                                                                 e.preventDefault()
                                                                                                 e.stopPropagation()
-                                                                                                setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
+                                                                                                setDragEnter(e, { type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
                                                                                             }}
                                                                                             onDragExit={e => {
                                                                                                 e.preventDefault()
@@ -1137,7 +1143,7 @@ const RenderPreview = (props) => {
                                                                                                 setGotDragOver({ cur: false, curElem: false, subElem: false })
                                                                                                 const transferType = e.dataTransfer.getData("type")
                                                                                                 if (!transferType.includes("rearrange")) {
-                                                                                                    handleElementDrop(e, key, curElem?.positionType, j + 1, i)
+                                                                                                    handleElementDrop(e, key, curElem.positionType, j + 1, i)
                                                                                                     setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
                                                                                                 } else {
                                                                                                     handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
@@ -1151,7 +1157,7 @@ const RenderPreview = (props) => {
                                                                                             }} style={{ ...subElem?.style, position: "relative", fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
                                                                                             id={`${currPage}-${key}-${curElem.positionType}-${j}`}
                                                                                             className={`${isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
-                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
+                                                                                            {!isColDragging && isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
                                                                                                 <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
                                                                                             )}
                                                                                             {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
@@ -1247,7 +1253,7 @@ const RenderPreview = (props) => {
                                                                                             onDragEnter={e => {
                                                                                                 e.preventDefault()
                                                                                                 e.stopPropagation()
-                                                                                                setDragEnter({ type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
+                                                                                                setDragEnter(e, { type: subElem?.type, position: { cur: key, curElem: curElem.positionType, subElem: j }, id: `${currPage}-${key}-${curElem?.positionType}-${j}` })
                                                                                             }}
                                                                                             onDragExit={e => {
                                                                                                 e.preventDefault()
@@ -1256,6 +1262,7 @@ const RenderPreview = (props) => {
                                                                                             }}
                                                                                             onDragStart={e => {
                                                                                                 e.stopPropagation()
+                                                                                                // setRearr({cur: key, curElem: curElem?.positionType, subElem: j})
                                                                                                 e.dataTransfer.setData("type", "rearrange_tnc")
                                                                                                 setTransfered("rearrange_tnc")
                                                                                                 setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
@@ -1282,7 +1289,7 @@ const RenderPreview = (props) => {
                                                                                                 setGotDragOver({ cur: false, curElem: false, subElem: false })
                                                                                                 const transferType = e.dataTransfer.getData("type")
                                                                                                 if (!transferType.includes("rearrange")) {
-                                                                                                    handleElementDrop(e, key, curElem?.positionType, j + 1, i)
+                                                                                                    handleElementDrop(e, key, curElem.positionType, j + 1, i)
                                                                                                     setCurrPosition({ ...currPosition, j: j + 1, selectedType: transferType })
                                                                                                 } else {
                                                                                                     handleRearrangeElement(e, { cur: key, curElem: curElem?.positionType, subElem: j })
@@ -1296,7 +1303,7 @@ const RenderPreview = (props) => {
                                                                                             }} style={{ ...subElem?.style, position: "relative", fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
                                                                                             id={`${currPage}-${key}-${curElem.positionType}-${j}`}
                                                                                             className={`${isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...indexes }) ? "active-elem" : ""}`}>
-                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
+                                                                                            {!isColDragging && isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
                                                                                                 <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
                                                                                             )}
                                                                                             {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
@@ -1347,22 +1354,22 @@ const RenderPreview = (props) => {
                                                                                             {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
                                                                                             <input type="checkbox" id={`tnc-${currPage}-${key}-${curElem.positionType}-${j}`} />
                                                                                             <Editor fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
-                                                                                                    key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${rearrCount}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} style={{ width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })} onChange={(content, editorState) => {
-                                                                                                if (!isEqual(content, subElem?.editorState)) {
-                                                                                                    const newObj = { ...finalObj }
-                                                                                                    const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
-                                                                                                    const positionIndex = newObj?.pages[pageIndex]?.values[key]?.elements?.findIndex($ => $?.positionType === curElem.positionType)
-                                                                                                    if (newObj?.pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
-                                                                                                        newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
-                                                                                                        newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
+                                                                                                key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${rearr}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} style={{ width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })} onChange={(content, editorState) => {
+                                                                                                    if (!isEqual(content, subElem?.editorState)) {
+                                                                                                        const newObj = { ...finalObj }
+                                                                                                        const pageIndex = newObj?.pages?.findIndex($ => $?.id === currPage)
+                                                                                                        const positionIndex = newObj?.pages[pageIndex]?.values[key]?.elements?.findIndex($ => $?.positionType === curElem.positionType)
+                                                                                                        if (newObj?.pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
+                                                                                                            newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
+                                                                                                            newObj.pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
+                                                                                                        }
+                                                                                                        if (newObj?.mobile_pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
+                                                                                                            newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
+                                                                                                            newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
+                                                                                                        }
+                                                                                                        updatePresent(newObj)
                                                                                                     }
-                                                                                                    if (newObj?.mobile_pages[pageIndex]?.values[key]?.elements[positionIndex]?.element[j]) {
-                                                                                                        newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].textValue = content
-                                                                                                        newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
-                                                                                                    }
-                                                                                                    updatePresent(newObj)
-                                                                                                }
-                                                                                            }}
+                                                                                                }}
                                                                                                 // htmlContent={subElem?.textValue}
                                                                                                 editorState={subElem?.editorState ? subElem?.editorState : `{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"font-family: Montserrat;font-weight: 100;font-size: 12px;","text":"Enter text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`}
                                                                                             />
@@ -1408,7 +1415,7 @@ const RenderPreview = (props) => {
                                                         const transferType = e.dataTransfer.getData("type")
                                                         setGotDragOver({ cur: false, curElem: false, subElem: false })
                                                         if (transferType !== "") {
-                                                            handleLayoutDrop(e)
+                                                            handleLayoutDrop(e, cur)
                                                             setIndexes(transferType.includes("col") ? { cur: colWise.length, curElem: "parent", subElem: "grandparent" } : { cur: colWise.length, curElem: "left", subElem: 0 })
                                                             setCurrPosition({ ...currPosition, id: colWise.length, selectedType: transferType.includes("col") ? "block" : transferType })
                                                             setValues(elementStyles[transferType.includes("col") ? "block" : transferType])
@@ -1503,12 +1510,14 @@ const RenderPreview = (props) => {
                                                                                                                         if (subElem.src !== "") {
                                                                                                                             return (
                                                                                                                                 <div id={`${currPage}-${key}-${curElem?.positionType}-${j}`} style={{ width: "100%", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1", ...subElem?.style, width: subElem?.isBrandWidth ? finalObj?.defaultThemeColors?.brandWidth : subElem?.style?.width, height: subElem?.isBrandHeight ? finalObj?.defaultThemeColors?.brandHeight : subElem?.style?.height, margin: subElem?.isBrandAlignment ? finalObj?.defaultThemeColors?.brandAlignment : subElem?.style?.margin }}>
-                                                                                                                                    <img
-                                                                                                                                        className="img-fluid"
-                                                                                                                                        src={subElem?.isBrandLogo ? finalObj?.defaultThemeColors?.brandLogo : subElem.src}
-                                                                                                                                        alt={``}
-                                                                                                                                        style={{ width: "100%", height: "100%" }}
-                                                                                                                                    />
+                                                                                                                                    <span style={{ width: "100%", height: "100%", overflow: "hidden", borderTopLeftRadius: subElem?.style?.borderTopLeftRadius, borderTopRightRadius: subElem?.style?.borderTopRightRadius, borderBottomRightRadius: subElem?.style?.borderBottomRightRadius, borderBottomLeftRadius: subElem?.style?.borderBottomLeftRadius }}>
+                                                                                                                                        <img
+                                                                                                                                            className="img-fluid"
+                                                                                                                                            src={currPage === "button" ? subElem.src : subElem?.isBrandLogo ? finalObj?.defaultThemeColors?.brandLogo : subElem.src}
+                                                                                                                                            alt={``}
+                                                                                                                                            style={{ width: "100%", height: "100%" }}
+                                                                                                                                        />
+                                                                                                                                    </span>
                                                                                                                                 </div>
                                                                                                                             )
                                                                                                                         }
@@ -1730,12 +1739,14 @@ const RenderPreview = (props) => {
                                                                                                                     if (subElem.src !== "") {
                                                                                                                         return (
                                                                                                                             <div id={`button-${key}-${curElem?.positionType}-${j}`} draggable style={{ width: "100%", ...subElem?.style, backgroundImage: subElem?.style?.backgroundImage, overflow: "hidden", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", width: subElem?.isBrandWidth ? finalObj?.defaultThemeColors?.brandWidth : subElem?.style?.width, height: subElem?.isBrandHeight ? finalObj?.defaultThemeColors?.brandHeight : subElem?.style?.height, margin: subElem?.isBrandAlignment ? finalObj?.defaultThemeColors?.brandAlignment : subElem?.style?.margin }}>
-                                                                                                                                <img
-                                                                                                                                    className="img-fluid"
-                                                                                                                                    src={subElem.src}
-                                                                                                                                    alt={``}
-                                                                                                                                    style={{ width: "100%", height: "100%" }}
-                                                                                                                                />
+                                                                                                                                <span style={{ width: "100%", height: "100%", overflow: "hidden", borderTopLeftRadius: subElem?.style?.borderTopLeftRadius, borderTopRightRadius: subElem?.style?.borderTopRightRadius, borderBottomRightRadius: subElem?.style?.borderBottomRightRadius, borderBottomLeftRadius: subElem?.style?.borderBottomLeftRadius }}>
+                                                                                                                                    <img
+                                                                                                                                        className="img-fluid"
+                                                                                                                                        src={currPage === "button" ? subElem.src : subElem?.isBrandLogo ? finalObj?.defaultThemeColors?.brandLogo : subElem.src}
+                                                                                                                                        alt={``}
+                                                                                                                                        style={{ width: "100%", height: "100%" }}
+                                                                                                                                    />
+                                                                                                                                </span>
                                                                                                                             </div>
                                                                                                                         )
                                                                                                                     } else {
