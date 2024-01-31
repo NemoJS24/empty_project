@@ -145,7 +145,7 @@ const User = () => {
                 <>
                     <div className='d-flex justify-content-center align-items-center gap-2'>
                         {/* <Eye size='17px' style={{ cursor: "pointer" }} /> */}
-                        <Link to={`/merchant/customers/edit-user/${row?.id}`}>
+                        <Link to={`/merchant/customers/edit-user/${row?.unique_id}`}>
                             <Edit size='17px' style={{ cursor: "pointer" }} />
 
                         </Link>

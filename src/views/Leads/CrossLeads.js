@@ -8,11 +8,12 @@ import { LiaUserSlashSolid, LiaUserSolid } from "react-icons/lia"
 import { LuBox } from "react-icons/lu";
 import { Link } from "react-router-dom"
 import { baseURL, crmURL, getReq, postReq, putReq } from "../../assets/auth/jwtService"
+import moment from "moment"
 
 const CrossLeads = () => {
     const [tableData, setTableData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    const [selected, setSelected] = useState([])
+    // const [selected, setSelected] = useState([])
 
     const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
         setIsLoading(true)
@@ -42,6 +43,13 @@ const CrossLeads = () => {
     }
 
     const columns = [
+        {
+            name: "Created At",
+            minWidth: "200px",
+            selector: (row) => row?.created_at ? moment(row.created_at).format("YYYY-MM-DD") : "-",
+            type: 'date',
+            isEnable: true
+        },
         {
             name: "Customer Name",
             minWidth: "180px",
@@ -128,6 +136,15 @@ const CrossLeads = () => {
             isEnable: true
         },
         {
+            name: "Created By",
+            minWidth: "250px",
+            selector: (row) => <div className="py-1">
+              <h6>{row?.member__member_name ? row?.member__member_name : row?.super_user_name}</h6>
+              <p className="m-0">{row?.member__email ? row?.member__email : row?.super_user_email}</p>
+            </div>,
+            type: 'text'
+        },
+        {
             name: "Action",
             maxWidth: "150px",
             selector: (row) => (
@@ -159,9 +176,9 @@ const CrossLeads = () => {
                                 isLoading={isLoading}
                                 getData={getData}
                                 count={tableData?.recordsTotal}
-                                selectableRows={true}
-                                setSelectedRows={setSelected}
-                                selectedRows={selected}
+                                // selectableRows={true}
+                                // setSelectedRows={setSelected}
+                                // selectedRows={selected}
                                 advanceFilter={true}
                             />
                         </CardBody>

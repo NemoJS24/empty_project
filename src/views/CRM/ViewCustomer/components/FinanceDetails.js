@@ -86,6 +86,14 @@ const FinanceDetails = () => {
 
     const columns = [
         {
+            name: "Created At",
+            minWidth: "240px",
+            selector: (row) => (
+                row?.created_at ? moment(row?.created_at).format("YYYY-MM-DD") : ''
+            ),
+            type: 'date'
+        },
+        {
             name: <>VEHICLE <br /> NUMBER</>,
             minWidth: "110px",
             selector: (row) => (
@@ -164,6 +172,15 @@ const FinanceDetails = () => {
                 row?.Emi_End_Date ? moment(row.Emi_End_Date).format("YYYY-MM-DD") : ''
             ),
             type: 'date'
+        },
+        {
+            name: "Created By",
+            minWidth: "250px",
+            selector: (row) => <div className="py-1">
+              <h6>{row?.member?.member_name ? row?.member?.member_name : row?.super_user_name}</h6>
+              <p className="m-0">{row?.member?.email ? row?.member?.email : row?.super_user_email}</p>
+            </div>,
+            type: 'text'
         },
         {
             name: "Action",

@@ -14,7 +14,7 @@ import moment from "moment"
 const Customers = () => {
   const [tableData, setTableData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [selected, setSelected] = useState([])
+  // const [selected, setSelected] = useState([])
 
   const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
     setIsLoading(true)
@@ -53,6 +53,12 @@ const Customers = () => {
   // }, [])
 
   const columns = [
+    {
+      name: "Created At",
+      minWidth: "240px",
+      selector: (row) => row?.finance_created_at ? moment(row?.finance_created_at).format("YYYY-MM-DD") : '',
+      type: 'date'
+    },
     {
       name: "Customer Name",
       minWidth: "200px",
@@ -141,11 +147,13 @@ const Customers = () => {
       isEnable: true
     },
     {
-      name: "Created at",
-      minWidth: "200px",
-      selector: (row) => row?.finance_created_at ? moment(row.finance_created_at).format("YYYY-MM-DD") : "-",
-      type: 'date',
-      isEnable: true
+      name: "Created By",
+      minWidth: "250px",
+      selector: (row) => <div className="py-1">
+        <h6>{row?.finance_created_by ? row?.finance_created_by : row?.super_user_name}</h6>
+        <p className="m-0">{row?.finance_created_by_email ? row?.finance_created_by_email : row?.super_user_email}</p>
+      </div>,
+      type: 'text'
     },
     {
       name: "Action",
@@ -245,9 +253,9 @@ const Customers = () => {
                 isLoading={isLoading}
                 getData={getData}
                 count={tableData?.recordsTotal}
-                selectableRows={true}
-                setSelectedRows={setSelected}
-                selectedRows={selected}
+                // selectableRows={true}
+                // setSelectedRows={setSelected}
+                // selectedRows={selected}
                 advanceFilter={true}
               />
             </CardBody>

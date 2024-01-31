@@ -60,8 +60,16 @@ const Call = ({ userData }) => {
 
     const columns = [
         {
+            name: "Created At",
+            minWidth: "120px",
+            selector: (row) => (
+                row?.created_at ? moment(row?.created_at).format("YYYY-MM-DD") : ''
+            ),
+            type: 'date'
+        },
+        {
             name: "Call Purpose",
-            minWidth: "320px",
+            minWidth: "200px",
             selector: (row) => (
                 callPurposeOptions[row?.Call_Purpose]
             ),
@@ -69,7 +77,7 @@ const Call = ({ userData }) => {
         },
         {
             name: "Call Status",
-            minWidth: "320px",
+            minWidth: "200px",
             selector: (row) => (
                 row?.Call_Status
             ),
@@ -77,7 +85,7 @@ const Call = ({ userData }) => {
         },
         {
             name: "Intrested",
-            minWidth: "320px",
+            minWidth: "200px",
             selector: (row) => (
                 row?.Interested
             ),
@@ -85,7 +93,7 @@ const Call = ({ userData }) => {
         },
         {
             name: "Product",
-            minWidth: "320px",
+            minWidth: "200px",
             selector: (row) => (
                 row?.Products ? row?.Products : '--'
             ),
@@ -93,21 +101,30 @@ const Call = ({ userData }) => {
         },
         {
             name: "Lead Status",
-            minWidth: "50px",
+            minWidth: "200px",
             selector: (row) => row?.Lead_Status,
             type: 'date'
         },
         {
             name: "Follow Up Date",
-            minWidth: "50px",
+            minWidth: "200px",
             selector: (row) => (
                 row.schedule_Next_Call_date ? moment(row.schedule_Next_Call_date).format("YYYY-MM-DD") : "--"
             ),
             type: 'date'
         },
         {
+            name: "Created By",
+            minWidth: "250px",
+            selector: (row) => <div className="py-1">
+              <h6>{row?.member?.member_name ? row?.member?.member_name : row?.super_user_name}</h6>
+              <p className="m-0">{row?.member?.email ? row?.member?.email : row?.super_user_email}</p>
+            </div>,
+            type: 'text'
+        },
+        {
             name: "Action",
-            minWidth: "50px",
+            minWidth: "100px",
             selector: (row) => (
                 <>
                     <div className='d-flex justify-content-center align-items-center gap-2'>

@@ -286,7 +286,12 @@ const AddServicing = () => {
             .then((resp) => {
                 console.log("Response:", resp)
                 toast.success('Customer Service saved successfully')
-                resp.data.is_edit_url ? navigate(`/merchant/customers/edit_service/${resp.data.servicing_code}?type=edit`) : navigate(`/merchant/customer/all_cust_dashboard/add_servicing/`)
+                if (btn === "SAVE&CLOSE") {
+                    navigate(-1)
+                } else {
+                    resp.data.is_edit_url ? navigate(`/merchant/customers/edit_service/${resp.data.servicing_code}?type=edit`) : navigate(`/merchant/customer/all_cust_dashboard/add_servicing/`)
+
+                }
                 fetchServiceData(resp.servicing_code)
             })
             .catch((error) => {
@@ -910,7 +915,7 @@ const AddServicing = () => {
                             </div>
                             <div>
                                 <button className="btn btn-primary" type="button" onClick={(e) => handleSubmitSection(e, 'SAVE')} >Save</button>
-                                <button className="btn btn-primary ms-2" type="button" onClick={(e) => handleSubmitSection(e)}>Save & Close</button>
+                                <button className="btn btn-primary ms-2" type="button" onClick={(e) => handleSubmitSection(e, 'SAVE&CLOSE')}>Save & Close</button>
                             </div>
                         </div>
                     </Col>

@@ -14,7 +14,7 @@ const Vehicle = () => {
     const [tableData, setTableData] = useState([])
     // const [custData, setCustData] = useState({})
     const [isLoading, setIsLoading] = useState(true)
-    const [selected, setSelected] = useState([])
+    // const [selected, setSelected] = useState([])
 
     const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
         setIsLoading(true)
@@ -42,6 +42,12 @@ const Vehicle = () => {
     }
 
     const columns = [
+        {
+            name: "Created At",
+            minWidth: "240px",
+            selector: (row) => row?.vehicle_created_at ? moment(row?.vehicle_created_at).format("YYYY-MM-DD") : '',
+            type: 'date'
+        },
         {
             name: "Customer Name",
             minWidth: "200px",
@@ -85,6 +91,15 @@ const Vehicle = () => {
             selector: (row) => row?.vehicle_registeration_date ? moment(row?.vehicle_registeration_date).format('YYYY-MM-DD') : "-",
             type: 'date',
             isEnable: true
+        },
+        {
+            name: "Created By",
+            minWidth: "250px",
+            selector: (row) => <div className="py-1">
+              <h6>{row?.vehicle_created_by ? row?.vehicle_created_by : row?.super_user_name}</h6>
+              <p className="m-0">{row?.vehicle_created_by_email ? row?.vehicle_created_by_email : row?.super_user_email}</p>
+            </div>,
+            type: 'text'
         },
         {
             name: "Action",
@@ -180,9 +195,9 @@ const Vehicle = () => {
                                 isLoading={isLoading}
                                 getData={getData}
                                 count={tableData?.recordsTotal}
-                                selectableRows={true}
-                                setSelectedRows={setSelected}
-                                selectedRows={selected}
+                                // selectableRows={true}
+                                // setSelectedRows={setSelected}
+                                // selectedRows={selected}
                                 advanceFilter={true}
                             />
                         </CardBody>

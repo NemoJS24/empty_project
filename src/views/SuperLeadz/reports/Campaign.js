@@ -229,7 +229,7 @@ const Campaign = () => {
             </div>
 
             <Col className='col-md-6'>
-                <CardCom icon={<img src='https://cdn-icons-png.flaticon.com/512/1773/1773345.png' width='25px' />} title="Campaign Revenue" info={'Sum Total Revenue through SuperLeadz Campaign'} data={!isLoading ? `${userPermission?.currencySymbol}${performanceData.campaign_revenue}` : <Spinner size={'25px'} />} />
+                <CardCom icon={<img src='https://cdn-icons-png.flaticon.com/512/1773/1773345.png' width='25px' />} title="Campaign Revenue" info={'Sum Total Revenue through SuperLeadz Campaign'} data={!isLoading ? `${userPermission?.currencySymbol}${Number(performanceData?.campaign_revenue).toFixed(2)}` : <Spinner size={'25px'} />} />
             </Col>
             
             <div className='col-md-6'>

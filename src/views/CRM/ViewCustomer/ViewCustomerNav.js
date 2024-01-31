@@ -9,7 +9,7 @@ const ViewCustomerNav = ({ NavCurrentStep, currentStep }) => {
         <>
             <style>
                 {`
-                .active {
+                .active-unique {
                     border-bottom: 2px solid blue;
                     border-radius: 0px !important;
                     border-image: linear-gradient(to right, #464646, #464646);
@@ -28,7 +28,7 @@ const ViewCustomerNav = ({ NavCurrentStep, currentStep }) => {
                             <div className='d-flex justify-content-between'>
                                 <div
                                     key={index}
-                                    className={`cursor-pointer d-flex justify-content-center align-items-center p-custom ${currentStep === index + 1 ? 'active' : 'rounded-2 text-secondary'}`}
+                                    className={`cursor-pointer d-flex justify-content-center align-items-center p-custom ${currentStep === index + 1 ? 'active-unique' : 'rounded-2 text-secondary'}`}
                                     onClick={() => NavCurrentStep(index + 1)}
                                     style={{ width: "fit-content" }}
                                 >

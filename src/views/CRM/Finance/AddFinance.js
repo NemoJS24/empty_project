@@ -73,32 +73,32 @@ const AddFinance = () => {
     }
   ]
 
-  const refferalFormvalueToCheck = [
-    {
-      name: 'Ref_title',
-      message: 'Select Title',
-      type: 'string',
-      id: 'Ref_title'
-    },
-    {
-      name: 'Ref_first_name',
-      message: 'Enter First Name',
-      type: 'string',
-      id: 'Ref_first_name'
-    },
-    {
-      name: 'Ref_last_name',
-      message: 'Enter Last Name',
-      type: 'string',
-      id: 'Ref_last_name'
-    },
-    {
-      name: 'Ref_phone_no',
-      message: 'Enter Mobile Number',
-      type: 'number',
-      id: 'Ref_phone_no'
-    }
-  ]
+  // const refferalFormvalueToCheck = [
+  //   {
+  //     name: 'Ref_title',
+  //     message: 'Select Title',
+  //     type: 'string',
+  //     id: 'Ref_title'
+  //   },
+  //   {
+  //     name: 'Ref_first_name',
+  //     message: 'Enter First Name',
+  //     type: 'string',
+  //     id: 'Ref_first_name'
+  //   },
+  //   {
+  //     name: 'Ref_last_name',
+  //     message: 'Enter Last Name',
+  //     type: 'string',
+  //     id: 'Ref_last_name'
+  //   },
+  //   {
+  //     name: 'Ref_phone_no',
+  //     message: 'Enter Mobile Number',
+  //     type: 'number',
+  //     id: 'Ref_phone_no'
+  //   }
+  // ]
 
 
   const [currentStep, setCurrentStep] = useState(1)
@@ -257,9 +257,9 @@ const AddFinance = () => {
       checkForm = validForm(EMIFormvalueToCheck, formData)
     }
 
-    if (currentStep === 4) {
-      checkForm = validForm(refferalFormvalueToCheck, formData)
-    }
+    // if (currentStep === 4) {
+    //   checkForm = validForm(refferalFormvalueToCheck, formData)
+    // }
 
     return checkForm
   }
