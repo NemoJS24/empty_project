@@ -12,11 +12,15 @@ import { baseURL, getReq, postReq } from '../../../assets/auth/jwtService'
 import { validForm } from '../../Validator'
 import Flatpickr from 'react-flatpickr'
 import moment from 'moment'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 // import toast from "react-hot-toast"
 
 const ApplicantForm = ({ allData }) => {
     // const { id } = useParams()
+    // const parmas = new URLSearchParams(location.search)
+    const { id } = useParams()
+    // const isEdit = parmas.get("type") === "edit"
+    // const isCustomer = parmas.get("type") === "customer"
 
     const navigate = useNavigate()
     const { formData, handleNext, handleInputChange, setFormData, handleChange, country, isCustomer } = allData
@@ -99,6 +103,12 @@ const ApplicantForm = ({ allData }) => {
             message: 'Please select a Model',
             type: 'string',
             id: 'car_model'
+        },
+        {
+            name: "variant",
+            message: 'Please select a variant',
+            type: 'string',
+            id: 'variant'
         }
     ]
 
@@ -111,7 +121,7 @@ const ApplicantForm = ({ allData }) => {
             phone_no: ""
         },
         productForm: {
-            xircls_customer_id: '',
+            xircls_customer_id: isCustomer ? id : '',
             engine_number: '',
             // brand: '',
             model: ''
@@ -285,7 +295,7 @@ const ApplicantForm = ({ allData }) => {
             })
             .catch((error) => {
                 console.error("Error:", error)
-                toast.error('Failed to save Vehicle')
+                toast.error('Something went wrong')
             })
     }
 
@@ -794,187 +804,6 @@ const ApplicantForm = ({ allData }) => {
             </Row>
         </form>
     )
-
-    // const AddNewProductSideForm = (
-    //     <form>
-    //         <Row>
-    //             <Col md={12} className="mt-2">
-    //                 <h4 className="mb-0">Add Product</h4>
-    //             </Col>
-    //             <Col md={12} className="mt-2">
-    //                 <label htmlFor="customer-name">
-    //                     Customer Name
-    //                 </label>
-    //                 <input type='text' id='customer-name' name='cust_first_name' className="form-control"
-    //                     value={check?.productForm?.cust_first_name} 
-    //                     // onChange={handleInputChange} 
-    //                     disabled
-    //                     onChange={(event) => {
-    //                         const e = { target: { name: "cust_first_name", value: event.value } };
-    //                         handleAddInputChange(e, "productForm")
-    //                     }}
-    //                 />
-    //                 <p id="cust_first_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
-    //             </Col>
-    //             <Col md={12} className="mt-2">
-    //                 <label htmlFor="registration-name">
-    //                     Registration Number
-    //                 </label>
-    //                 <input
-    //                     placeholder='Registration Number'
-    //                     type='text' id='registration-name' name='registration_number' className="form-control"
-    //                 // value={formData?.basicDetail?.cust_first_name} 
-    //                 onChange={(e) => {
-    //                     handleAddInputChange(e, "productForm")
-    //                 }} 
-    //                 />
-    //             </Col>
-    //             <Col md={12} className="mt-2">
-    //                 <label htmlFor="sales-person">
-    //                     Sales Person
-    //                 </label>
-    //                 <input
-    //                     placeholder='Sales Person'
-    //                     type='text' id='sales-person' name='sales_person' className="form-control"
-    //                 // value={formData?.basicDetail?.cust_first_name} 
-    //                     onChange={(e) => {
-    //                         handleInputChange(e, "productForm")
-    //                     }} 
-    //                 />
-    //             </Col>
-    //             <Col md={12} className="mt-2">
-    //                 <label htmlFor="vehicle-identification">
-    //                     Vehicle Identification Number (VIN) or Chassis Number
-    //                 </label>
-    //                 <input
-    //                     placeholder='Vehicle Identification Number'
-    //                     type='text' id='vehicle-identification'
-    //                     name='vehicle_number'
-    //                     className="form-control"
-    //                     onChange={(e) => {
-    //                         handleInputChange(e, "productForm")
-    //                     }} 
-    //                 // value={formData?.basicDetail?.cust_first_name} 
-    //                 // onChange={handleInputChange} 
-    //                 />
-    //             </Col>
-    //             <Col md={12} className="mt-2">
-    //                 <label htmlFor="engine-number">
-    //                     Engine Number
-    //                 </label>
-    //                 <input
-    //                     placeholder='Engine Number'
-    //                     type='text' id='engine-number' name='engine_number' className="form-control"
-    //                     // value={formData?.basicDetail?.cust_first_name} 
-    //                     // onChange={handleInputChange}
-    //                     onChange={(e) => {
-    //                         // const e = { target: { name: "engine_number", value: event.target.value } };
-    //                         handleAddInputChange(e, "productForm")
-    //                     }}
-    //                 />
-    //                 <p id="engine_number_val" className="text-danger m-0 p-0 vaildMessage"></p>
-    //             </Col>
-
-    //             <Col md={12} className="mt-2">
-    //                 <label htmlFor="vehicle-type" className="form-label" style={{ margin: '0px' }}>
-    //                     Vehicle Type
-    //                 </label>
-    //                 <Select
-    //                     placeholder='Vehicle Type'
-    //                     id="vehicle-type"
-    //                     options={[
-    //                         { value: 'newCar', label: 'New Car' },
-    //                         { value: 'used', label: 'Used' },
-    //                     ]}
-    //                     closeMenuOnSelect={true}
-    //                     onChange={(event) => {
-    //                         const e = { target: { name: "vehicle_type", value: event.value } };
-    //                         handleInputChange(e, "productForm")
-    //                     }} 
-    //                 />
-    //             </Col>
-    //             <Col md={12} className="mt-2">
-    //                 <label htmlFor="brand-select" className="form-label" style={{ margin: '0px' }}>
-    //                     Select Brand
-    //                 </label>
-    //                 <Select
-    //                     placeholder='Select Brand'
-    //                     id="brand-select"
-    //                     options={loadBrandOptions}
-    //                     onChange={(event) => {
-    //                         const e = { target: { name: "brand", value: event.value } };
-    //                         handleAddInputChange(e, "productForm")
-    //                     }}
-    //                     closeMenuOnSelect={true}
-    //                 />
-    //                 <p id="brand_val" className="text-danger m-0 p-0 vaildMessage"></p>
-    //             </Col>
-
-    //             <Col md={12} className="mt-2">
-    //                 <label htmlFor="model-select" className="form-label" style={{ margin: '0px' }}>
-    //                     Select Model
-    //                 </label>
-    //                 <Select
-    //                     placeholder='Select Model'
-    //                     id="model-select"
-    //                     options={[
-    //                         { value: 'newCar', label: 'New Car' },
-    //                         { value: 'used', label: 'Used' },
-    //                     ]}
-    //                     onChange={(event) => {
-    //                         const e = { target: { name: "model", value: event.value } };
-    //                         handleAddInputChange(e, "productForm")
-    //                     }}
-    //                     closeMenuOnSelect={true}
-    //                 />
-    //                 <p id="model_val" className="text-danger m-0 p-0 vaildMessage"></p>
-
-    //             </Col>
-    //             <Col md={12} className="mt-2">
-    //                 <label htmlFor="variant-select" className="form-label" style={{ margin: '0px' }}>
-    //                     Select Variant
-    //                 </label>
-    //                 <Select
-    //                     placeholder='Select Variant'
-    //                     id="variant-select"
-    //                     options={[
-    //                         { value: 'newCar', label: 'New Car' },
-    //                         { value: 'used', label: 'Used' },
-    //                     ]}
-    //                     closeMenuOnSelect={true}
-    //                     onChange={(event) => {
-    //                         const e = { target: { name: "variant", value: event.value } };
-    //                         handleInputChange(e, "productForm")
-    //                     }} 
-    //                 />
-    //             </Col>
-    //             <Col md={12} className="mt-2">
-    //                 <label htmlFor="vehicle-delivery-date">
-    //                     Vehicle Delivery Date
-    //                 </label>
-    //                 <input placeholder="Vehicle Delivery Date" type='text' id='vehicle-delivery-date' name='basicDetail.cust_last_name' className="form-control"
-    //                 // value={formData?.basicDetail?.cust_last_name} 
-    //                 // onChange={handleInputChange} 
-    //                 />
-    //             </Col>
-    //             <Col md={12} className="mt-2">
-    //                 <label htmlFor="vehicle-registration-date">
-    //                     Vehicle Registration Date
-    //                 </label>
-    //                 <input placeholder="Vehicle Registration Date" type='text' id='vehicle-registration-date' name='basicDetail.cust_last_name' className="form-control"
-    //                 // value={formData?.basicDetail?.cust_last_name} 
-    //                 // onChange={handleInputChange} 
-    //                 />
-    //             </Col>
-    //             <div className='d-flex justify-content-end mt-2'>
-    //                 <div>
-    //                     <button className="btn btn-primary ms-2" type="button" onClick={(e) => handleProductSubmitSection(e)}>Add Product</button>
-    //                 </div>
-    //             </div>
-    //         </Row>
-    //     </form>
-    // )
-
     const AddNewProductSideForm = (
         <form>
             <Row>
@@ -985,10 +814,20 @@ const ApplicantForm = ({ allData }) => {
                     <label htmlFor="customer-name">
                         Customer Name
                     </label>
-                    <input type='text' id='customer-name' name='customer_name' className="form-control"
+                    {/* <input type='text' id='customer-name' name='customer_name' className="form-control"
                         value={formData?.customer_name}
                         // onChange={handleInputChange} 
                         disabled
+                    /> */}
+                    <Select
+                        placeholder='Customer Name'
+                        id="insurance-type"
+                        options={customerList}
+                        closeMenuOnSelect={true}
+                        name='customer_name'
+                        // onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
+                        value={customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.xircls_customer_id))}
+                        isDisabled={true}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -1074,7 +913,7 @@ const ApplicantForm = ({ allData }) => {
                     // onChange={(e) => selectChange(e, 'brand')}
                     //   value={selectedOption}
                     />
-                    {/* <p id="brand_val" className="text-danger m-0 p-0 vaildMessage"></p> */}
+                    <p id="brand_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
 
                 <Col md={12} className="mt-2">
@@ -1090,7 +929,7 @@ const ApplicantForm = ({ allData }) => {
                         onChange={(value, actionMeta) => selectChange(value, actionMeta)}
                     // isLoading={loading}
                     />
-                    <p id="carmodel_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                    <p id="car_model_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="variant-select" className="" style={{ margin: '0px' }}>
@@ -1108,6 +947,7 @@ const ApplicantForm = ({ allData }) => {
                         }}
 
                     />
+                    <p id="variant_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="vehicle-delivery-date">
@@ -1191,47 +1031,9 @@ const ApplicantForm = ({ allData }) => {
                                 }))
 
                                 handleAddInputChange({ target: { value: e.value, name: "xircls_customer_id" } }, 'productForm')
-
-                                // setCheck((preData) => ({
-                                //     ...preData,
-                                //     productForm: {...preData.productForm, ...updatedData}
-                                // }))
                             }}
                             value={customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.xircls_customer_id))}
-                        // onChange={(value, actionMeta) => selectCustomer(value, actionMeta, false)}
-                        // onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                         />
-                        {/* <AsyncSelect
-                            placeholder='Select Customer Name'
-                            defaultOptions
-                            cacheOptions
-                            id="customer-name"
-                            loadOptions={loadOptions}
-                            onChange={(e) => {
-                                console.log(e)
-                                selectCustomer(e);
-                                handleInputChange(e, 'customer_name')
-                                const updatedData = {
-                                    cust_first_name: e.label,
-                                    xircls_customer_id: e.value
-                                }
-
-                                setCheck((preData) => ({
-                                    ...preData,
-                                    productForm: {...preData.productForm, ...updatedData}
-                                }))
-                                // handleAddInputChange({target: {value: e.label, name: "cust_first_name"}}, "productForm")
-
-                                // setFormData((preData) => ({
-                                //     ...preData,
-                                //     ...updatedData
-                                // }))
-                                // console.log(updatedData, "updatedData")
-                            }}
-                            components={{ Menu: CustomSelectComponent }}
-                          //value={selectedOption}
-                        // name='customer_name'
-                        /> */}
                         <p id="xircls_customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
                     </Col>
                     <Col md={6} className="mt-2">
@@ -1323,7 +1125,7 @@ const ApplicantForm = ({ allData }) => {
                         <label htmlFor="basicDetails-rot">
                             Rate of Interest - %
                         </label>
-                        <input placeholder="Rate of Interest" type='tel' maxLength={10} id='basicDetails-rot' name='Rate_of_Interest' className="form-control"
+                        <input placeholder="Rate of Interest" type='tel' id='basicDetails-rot' name='Rate_of_Interest' className="form-control"
                             value={formData?.Rate_of_Interest}
                             onChange={e => handleInputChange(e, 'tel')}
                         />
@@ -1332,7 +1134,7 @@ const ApplicantForm = ({ allData }) => {
                         <label htmlFor="basicDetails-loan-acc-number">
                             Loan Account Number
                         </label>
-                        <input placeholder="Loan Account Number" type='tel' maxLength={10} id='basicDetails-loan-acc-number' name='Loan_Number' className="form-control"
+                        <input placeholder="Loan Account Number" type='tel' id='basicDetails-loan-acc-number' name='Loan_Number' className="form-control"
                             value={formData?.Loan_Number}
                             onChange={e => handleInputChange(e)}
                         />
@@ -1341,7 +1143,7 @@ const ApplicantForm = ({ allData }) => {
                         <label htmlFor="basicDetails-bank-acc-number">
                             Bank Account Number
                         </label>
-                        <input placeholder="Bank Account Number" type='tel' maxLength={10} id='basicDetails-bank-acc-number' name='Bank_Number' className="form-control"
+                        <input placeholder="Bank Account Number" type='tel' id='basicDetails-bank-acc-number' name='Bank_Number' className="form-control"
                             value={formData?.Bank_Number}
                             onChange={handleInputChange}
                         />
@@ -1350,7 +1152,7 @@ const ApplicantForm = ({ allData }) => {
                         <label htmlFor="basicDetails-loan-amount">
                             Loan Amount - ₹
                         </label>
-                        <input placeholder="Loan Amount" type='tel' maxLength={10} id='basicDetails-loan-amount' name='Loan_amount' className="form-control"
+                        <input placeholder="Loan Amount" type='tel' id='basicDetails-loan-amount' name='Loan_amount' className="form-control"
                             value={formData?.Loan_amount}
                             // onChange={e => (handleInputChange(e, 'tel'))}
                             onChange={(e) => {

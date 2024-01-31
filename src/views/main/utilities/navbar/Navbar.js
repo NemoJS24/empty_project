@@ -6,7 +6,7 @@ import { PiCodeBlockLight } from "react-icons/pi"
 import { TfiTarget } from "react-icons/tfi"
 import { TiFlashOutline } from "react-icons/ti"
 import { VscTarget } from "react-icons/vsc"
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import "../../mainCustome.scss"
 import logo from "../logo.png"
 import "./navbar.scss"
@@ -14,6 +14,7 @@ import SuperLeadzLogo from "@src/assets/images/website-slide/FrontBase/user.png"
 import infiniti from "@src/assets/images/website-slide/FrontBase/infinity.png"
 import gift from "@src/assets/images/website-slide/FrontBase/gift.png"
 import workgroup from "@src/assets/images/website-slide/FrontBase/workgroup.png"
+import { getToken } from '../../../../assets/auth/auth'
 
 
 export const productList = [
@@ -142,6 +143,17 @@ const Navbar = ({ position }) => {
     }
   }
 
+  const navigate = useNavigate()
+
+  const checkLogin = async () => {
+    const token = await getToken() ? JSON.parse(getToken()) : null
+    if (token) {
+      navigate("/merchant/apps/")
+    } else {
+      navigate("/merchant/login/")
+    }
+  }
+
   return (
     <div className={`Container-subNav border-bottom py-1 py-md-0 bg-white  position-${isFixed === "notFixed" ? "relative" : "fixed"}  `} id="first_navbar" style={{ zIndex: "999", marginTop: '-5px', paddingBottom: "11px" }}>
       <div className=' justify-content-center bg-white m-0 p-0'>
@@ -210,7 +222,7 @@ const Navbar = ({ position }) => {
             <div className='navBtn gap-1'>
               <Link  to='/merchant/signup' className=' btn  btn-lg main-btn-blue-gra  fs-3 fw-lig cust-font'>Signup Free</Link>
 
-              <Link to='/merchant/login' className=' btn btn-lg main-btn-dark fs-3 fw-lig cust-font' >Login</Link>
+              <a onClick={() => checkLogin()} className=' btn btn-lg main-btn-dark fs-3 fw-lig cust-font'>Login</a>
             </div>
           </div>
           <div className='menuBtn' onClick={() => { setToggleMenu(!toggleMenu); setShowProducts(false); setShowCompany(false) }}>

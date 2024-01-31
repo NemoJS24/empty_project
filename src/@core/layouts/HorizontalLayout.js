@@ -130,7 +130,7 @@ const HorizontalLayout = props => {
           <div className='navbar-header d-xl-block d-none'>
             <ul className='nav navbar-nav'>
               <NavItem>
-                <Link to='/merchant/dashboard/' className='navbar-brand'>
+                <Link to='/merchant/home/' className='navbar-brand'>
                   <span className='brand-logo'>
                     <img src={themeConfig.app.appLogoImage} alt='logo' />
                   </span>

@@ -159,6 +159,7 @@ export const configUrl = {
     getPermissionList: "/member/apps_permission/",
     addDepartment: "/member/department_details/",
     saveUser: "/member/member_permission/",
+    memebersDetails: "/member/members_details/",
     getAllCustomer: "/customers/get_customers/",
     cross_leads: "/customers/cross_leads/"
 }

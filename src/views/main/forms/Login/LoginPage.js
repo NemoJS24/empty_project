@@ -83,7 +83,11 @@ export default function LoginPage() {
                             apiKey: res?.data?.outlet_list ? res?.data?.outlet_list[0].api_key : "",
                             installedApps: res?.data?.installed_apps,
                             campagin: res?.data?.status,
-                            currencySymbol: merchantCurrency[0]?.currency?.symbol ? merchantCurrency[0]?.currency?.symbol : '₹'
+                            currencySymbol: merchantCurrency[0]?.currency?.symbol ? merchantCurrency[0]?.currency?.symbol : '₹',
+                            permissionList: res?.data?.permission_list,
+                            super_user: res?.data?.super_user,
+                            is_super_user: res?.data?.is_super_user,
+                            multi_user_key: res?.data?.multi_user_key
                         }
                         setUserPermission((curData) => ({
                             ...curData,

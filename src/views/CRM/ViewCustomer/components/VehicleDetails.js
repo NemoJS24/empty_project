@@ -6,6 +6,7 @@ import { postReq, crmURL } from '../../../../assets/auth/jwtService'
 import { Link, useParams } from 'react-router-dom'
 import { Edit, Eye } from 'react-feather'
 import ComTable from '../../../Components/DataTable/ComTable'
+import moment from 'moment'
 
 const VehicleDetails = () => {
 
@@ -67,10 +68,18 @@ const VehicleDetails = () => {
 
     const columns = [
         {
+            name: "Created At",
+            minWidth: "240px",
+            selector: (row) => (
+                row?.created_at ? moment(row?.created_at).format("YYYY-MM-DD") : ''
+            ),
+            type: 'date'
+        },
+        {
             name: "REGISTRATION NUMBER",
             minWidth: "320px",
             selector: (row) => (
-                row?.registration_number !== undefined && row?.registration_number !== null ? row.registration_number : "None"
+                row?.registration_number !== undefined && row?.registration_number !== null ? row.registration_number : ""
             ),
             type: 'text'
         },
@@ -78,7 +87,7 @@ const VehicleDetails = () => {
             name: "BRAND",
             minWidth: "320px",
             selector: (row) => (
-                row?.brand !== undefined && row?.brand !== null ? row.brand : "None"
+                row?.brand !== undefined && row?.brand !== null ? row.brand : ""
             ),
             type: 'text'
         },
@@ -86,7 +95,7 @@ const VehicleDetails = () => {
             name: "ENGINE NO",
             minWidth: "320px",
             selector: (row) => (
-                row?.engine_no !== undefined && row?.engine_no !== null ? row.engine_no : "None"
+                row?.engine_no !== undefined && row?.engine_no !== null ? row.engine_no : ""
             ),
             type: 'text'
         },
@@ -94,11 +103,19 @@ const VehicleDetails = () => {
             name: "VARIANT",
             minWidth: "320px",
             selector: (row) => (
-                row?.variant !== undefined && row?.variant !== null ? row.variant : "None"
+                row?.variant !== undefined && row?.variant !== null ? row.variant : ""
             ),
             type: 'text'
         },
-
+        {
+            name: "Created By",
+            minWidth: "250px",
+            selector: (row) => <div className="py-1">
+              <h6>{row?.member?.member_name ? row?.member?.member_name : row?.super_user_name}</h6>
+              <p className="m-0">{row?.member?.email ? row?.member?.email : row?.super_user_email}</p>
+            </div>,
+            type: 'text'
+        },
         {
             name: "ACTION",
             minWidth: "50px",

@@ -13,7 +13,7 @@ import { crmURL, postReq } from "../../assets/auth/jwtService"
 const Customers = () => {
   const [tableData, setTableData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [selected, setSelected] = useState([])
+  // const [selected, setSelected] = useState([])
 
   const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
     setIsLoading(true)
@@ -51,6 +51,13 @@ const Customers = () => {
 
 
   const columns = [
+    {
+      name: "Created At",
+      minWidth: "200px",
+      selector: (row) => row?.insurance_created_at ? moment(row.insurance_created_at).format("YYYY-MM-DD") : "-",
+      type: 'date',
+      isEnable: true
+    },
     {
       name: "Customer Name",
       minWidth: "150px",
@@ -117,11 +124,13 @@ const Customers = () => {
       isEnable: true
     },
     {
-      name: "Created at",
-      minWidth: "200px",
-      selector: (row) => row?.insurance_created_at ? moment(row.insurance_created_at).format("YYYY-MM-DD") : "-",
-      type: 'date',
-      isEnable: true
+      name: "Created By",
+      minWidth: "250px",
+      selector: (row) => <div className="py-1">
+        <h6>{row?.insurance_created_by ? row?.insurance_created_by : row?.super_user_name}</h6>
+        <p className="m-0">{row?.insurance_created_by_email ? row?.insurance_created_by_email : row?.super_user_email}</p>
+      </div>,
+      type: 'text'
     },
     {
       name: "Action",
@@ -151,9 +160,9 @@ const Customers = () => {
                 isLoading={isLoading}
                 getData={getData}
                 count={tableData?.recordsTotal}
-                selectableRows={true}
-                setSelectedRows={setSelected}
-                selectedRows={selected}
+                // selectableRows={true}
+                // setSelectedRows={setSelected}
+                // selectedRows={selected}
                 advanceFilter={true}
               />
             </CardBody>

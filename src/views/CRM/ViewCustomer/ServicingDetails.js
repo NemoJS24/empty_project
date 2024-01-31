@@ -6,6 +6,7 @@ import { Link, useParams } from 'react-router-dom'
 import { crmURL, postReq } from '../../../assets/auth/jwtService'
 import moment from 'moment'
 import ComTable from '../../Components/DataTable/ComTable'
+import { Edit3 } from 'react-feather'
 
 const ServicingDetails = () => {
 
@@ -32,8 +33,8 @@ const ServicingDetails = () => {
         // })
         postReq("get_customer_servicing", form_data, crmURL)
         .then((res) => {
-            console.log(res.success, "kk")
-            setTableData(res.success)
+            console.log(res, "kk")
+            setTableData(res?.data?.data)
 
             setIsLoading(false)
         })
@@ -93,18 +94,18 @@ const ServicingDetails = () => {
 
     const columns = [
         {
-            name: <>CUSTOMER <br /> NAME</>,
+            name: "Created At",
             minWidth: "240px",
             selector: (row) => (
-                row?.customer_name !== undefined && row?.customer_name !== null ? row.customer_name : "None"
+                row?.created_at ? moment(row?.created_at).format("YYYY-MM-DD") : ''
             ),
-            type: 'text'
+            type: 'date'
         },
         {
             name: <>BRAND</>,
             minWidth: "100px",
             selector: (row) => (
-                row?.brand !== undefined && row?.brand !== null ? row.brand : "None"
+                row?.vehicle?.brand
             ),
             type: 'text'
         },
@@ -112,7 +113,7 @@ const ServicingDetails = () => {
             name: "MODEL",
             minWidth: "100px",
             selector: (row) => (
-                row?.model !== undefined && row?.model !== null ? row.model : "None"
+                row?.vehicle?.car_model
             ),
             type: 'text'
         },
@@ -120,7 +121,7 @@ const ServicingDetails = () => {
             name: <>VARIANT</>,
             minWidth: "100px",
             selector: (row) => (
-                row?.variant !== undefined && row?.variant !== null ? row.variant : "None"
+                row?.vehicle?.variant
             ),
             type: 'text'
         },
@@ -128,42 +129,61 @@ const ServicingDetails = () => {
             name: <>SERVICE<br />LOCATION</>,
             minWidth: "100px",
             selector: (row) => (
-                row?.service_location !== undefined && row?.service_location !== null ? row.service_location : "None"
+                row?.service_location
             ),
             type: 'text'
         },
         {
             name: <>JOB CARD <br /> DATE</>,
-            minWidth: "120px",
+            minWidth: "200px",
             selector: (row) => (
-                row?.job_card_date !== undefined && row?.job_card_date !== null ? moment(row.job_card_date).format("YYYY-MM-DD") : 'None'
+                row?.job_card_date ? moment(row.job_card_date).format("YYYY-MM-DD") : ''
             ),
             type: 'text'
         },
         {
             name: <>SERVICE INVOICE<br /> DATE</>,
-            minWidth: "150px",
+            minWidth: "200px",
             selector: (row) => (
-                row?.service_invoice_date !== undefined && row?.service_invoice_date !== null ? moment(row.service_invoice_date).format("YYYY-MM-DD") : 'None'
+                row?.service_invoice_date ? moment(row.service_invoice_date).format("YYYY-MM-DD") : ''
             ),
             type: 'text'
         },
         {
             name: <>SERVICE EXPIRY<br />DATE </>,
-            minWidth: "150px",
+            minWidth: "200px",
             selector: (row) => (
-                row?.service_expiry_date !== undefined && row?.service_expiry_date !== null ? moment(row.service_expiry_date).format("YYYY-MM-DD") : 'None'
+                row?.service_expiry_date ? moment(row.service_expiry_date).format("YYYY-MM-DD") : ''
             ),
             type: 'text'
         },
         {
             name: <>SERVICE INVOICE <br /> AMOUNT</>,
-            minWidth: "100px",
+            minWidth: "200px",
             selector: (row) => (
-                row?.service_invoice_amount !== undefined && row?.service_invoice_amount !== null ? row.service_invoice_amount : "None"
+                row?.service_invoice_amount
             ),
 
             type: 'text'
+        },
+        {
+            name: "Created By",
+            minWidth: "250px",
+            selector: (row) => <div className="py-1">
+              <h6>{row?.member?.member_name ? row?.member?.member_name : row?.super_user_name}</h6>
+              <p className="m-0">{row?.member?.email ? row?.member?.email : row?.super_user_email}</p>
+            </div>,
+            type: 'text'
+        },
+        {
+            name: "Action",
+            width: "130px",
+            selector: (row) => (
+              <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
+                {/* <Link to={`/merchant/customers/view_customer/${row?.xircls_customer_id}`}><Eye size={15} /></Link> */}
+                <Link to={`/merchant/customers/edit_service/${row?.servicing_customer_id}`}> <Edit3 size={15} /></Link>
+              </div>
+            )
         }
 
     ]

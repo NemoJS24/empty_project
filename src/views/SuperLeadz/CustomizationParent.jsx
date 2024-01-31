@@ -5353,7 +5353,7 @@ const CustomizationParent = () => {
                                                         <div className="py-1">
                                                             <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Email From</label>
                                                             <div className="d-flex justify-content-center align-items-center" style={{ border: '1px solid #d8d6de', borderRadius: '0.357rem', gap: '5px' }}>
-                                                                <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Email Template</label>
+                                                                {/* <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Email Template</label> */}
                                                                 <input type="text" value={outletSenderId ? outletSenderId : "no_reply@xircls.com"} className="form-control" style={{ width: '250px', border: 'none' }} disabled />
                                                                 <a style={{ marginRight: '5px' }} onClick={() => setChangeSenderEmail(!changeSenderEmail)}>
                                                                     <Edit size={'18px'} />
@@ -5372,16 +5372,16 @@ const CustomizationParent = () => {
                                                                     method: "POST",
                                                                     body: form_data
                                                                 })
-                                                                    .then((data) => data.json())
-                                                                    .then((resp) => {
-                                                                        if (resp.data) {
-                                                                            setFinalObj({ ...finalObj, email_settings: { ...resp.data } })
+                                                                .then((data) => data.json())
+                                                                .then((resp) => {
+                                                                    if (resp.data) {
+                                                                        setFinalObj({ ...finalObj, email_settings: { ...resp.data } })
 
-                                                                        }
-                                                                    })
-                                                                    .catch((error) => {
-                                                                        console.log(error)
-                                                                    })
+                                                                    }
+                                                                })
+                                                                .catch((error) => {
+                                                                    console.log(error)
+                                                                })
                                                             }} options={emailTemplate} />
                                                         </div>
 

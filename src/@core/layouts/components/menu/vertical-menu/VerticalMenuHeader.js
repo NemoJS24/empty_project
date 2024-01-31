@@ -52,7 +52,7 @@ const VerticalMenuHeader = props => {
     <div className='navbar-header'>
       <ul className='nav navbar-nav flex-row'>
         <li className='nav-item me-auto'>
-          <NavLink to={'/merchant/dashboard/'} className='navbar-brand'>
+          <NavLink to={'/merchant/home/'} className='navbar-brand'>
             <span className='brand-logo'>
               <img src={themeConfig.app.appLogoImage} alt='logo' />
             </span>

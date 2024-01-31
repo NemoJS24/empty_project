@@ -7,6 +7,7 @@ import { LiaUserSlashSolid, LiaUserSolid } from "react-icons/lia"
 import { PiMoneyThin } from "react-icons/pi"
 import { Link } from "react-router-dom"
 import { baseURL, crmURL, postReq } from "../../assets/auth/jwtService"
+import moment from "moment"
 
 /* eslint-disable */
 const Customers = () => {
@@ -58,6 +59,12 @@ const Customers = () => {
 
   const columns = [
     {
+      name: "Created At",
+      minWidth: "240px",
+      selector: (row) => row?.customer_details_created_at ? moment(row?.customer_details_created_at).format("YYYY-MM-DD") : '',
+      type: 'date'
+    },
+    {
       name: "Customer Name",
       minWidth: "200px",
       selector: (row) => (
@@ -89,11 +96,13 @@ const Customers = () => {
       isEnable: true
     },
     {
-      name: "Location",
-      minWidth: "200px",
-      selector: (row) => row?.customer_details_location,
-      type: 'text',
-      isEnable: true
+      name: "Created By",
+      minWidth: "250px",
+      selector: (row) => <div className="py-1">
+        <h6>{row?.customer_details_created_by ? row?.customer_details_created_by : row?.super_user_name}</h6>
+        <p className="m-0">{row?.customer_details_created_by_email ? row?.customer_details_created_by_email : row?.super_user_email}</p>
+      </div>,
+      type: 'text'
     },
     {
       name: "Action",
@@ -199,9 +208,9 @@ const Customers = () => {
                 isLoading={isLoading}
                 getData={getData}
                 count={tableData?.customer_detailsrecordsTotal}
-                selectableRows={true}
-                setSelectedRows={setSelected}
-                selectedRows={selected}
+                // selectableRows={true}
+                // setSelectedRows={setSelected}
+                // selectedRows={selected}
                 advanceFilter={true}
               />
             </CardBody>
