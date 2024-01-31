@@ -319,6 +319,7 @@ const AddInsurance = () => {
             .then((resp) => {
                 console.log("Response:", resp)
                 toast.success('Customer saved successfully')
+                handleClose("customer")
                 getCustomer()
             })
             .catch((error) => {

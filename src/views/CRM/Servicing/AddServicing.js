@@ -491,6 +491,16 @@ const AddServicing = () => {
             .then((resp) => {
                 console.log("Response:", resp)
                 toast.success('Customer saved successfully')
+                const addForm = { ...formData.addForm }
+                Object.keys(formData.addForm).forEach((key) => {
+                    addForm[key] = ""
+                })
+                setFormData(prev => {
+                    return { ...prev, addForm }
+                })
+                handleClose("customer")
+                getCustomer()
+                
             })
             .catch((error) => {
                 console.error("Error:", error)
@@ -708,7 +718,7 @@ const AddServicing = () => {
                 <div className='d-flex justify-content-between mt-2'>
                     <div>
                         <button className="btn btn-primary" type="submit" onClick={(e) => handleAddSubmitSection(e)}>Add</button>
-                        <button className="btn btn-primary ms-2" type="button" onClick={(e) => handleAddSubmitSection(e)}>Cancel</button>
+                        <button className="btn btn-primary ms-2" type="button">Cancel</button>
                     </div>
                     <div>
                         {/* <button className="btn btn-primary" type="submit" onClick={handleSubmitSection1}>Save</button>

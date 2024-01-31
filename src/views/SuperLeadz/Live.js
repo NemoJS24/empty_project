@@ -9,10 +9,13 @@ import axios from 'axios'
 import { getCurrentOutlet } from '../Validator'
 import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
 import { MdOutlineRefresh } from "react-icons/md"
+import worker from './app.worker'
+import WebWorker from './WebWorker'
+
 // import moment from 'moment/moment'
 
 const LiveUpdates = () => {
-
+    const webWorker = new WebWorker(worker)
     const [showData, setShowData] = useState([])
 
     const [sideBarData, setSideBarData] = useState([])
@@ -100,25 +103,34 @@ const LiveUpdates = () => {
                 setTotal(data?.total_leads)
                 setVerified(data?.verified_leads)
                 setIsLoading(false)
-                const subArray = new Array()
-                const refArray = new Array()
-                data?.status?.map((ele) => {
-                    try {
-                        if (!refArray.includes(ele.ip_address)) {
-                            subArray.push({ ip_address: ele.ip_address, visitor_type: ele.visitor_type, browser_details: JSON.parse(JSON.stringify(ele.browser_details)), activities: [{ created_at: ele.created_at, current_page: ele.current_page }], source: ele?.source })
-                            refArray.push(ele.ip_address)
-                            // refArray.push(ele.visitor_type)
-                        } else {
-                            subArray[refArray.indexOf(ele.ip_address)].activities.push({ created_at: ele.created_at, current_page: ele.current_page })
-                        }
-                        setSideBarData([...subArray[0]?.activities])
+                // const subArray = new Array()
+                // const refArray = new Array()
+                // data?.status?.map((ele) => {
+                //     try {
+                //         if (!refArray.includes(ele.ip_address)) {
+                //             subArray.push({ ip_address: ele.ip_address, visitor_type: ele.visitor_type, browser_details: JSON.parse(JSON.stringify(ele.browser_details)), activities: [{ created_at: ele.created_at, current_page: ele.current_page }], source: ele?.source })
+                //             refArray.push(ele.ip_address)
+                //             // refArray.push(ele.visitor_type)
+                //         } else {
+                //             subArray[refArray.indexOf(ele.ip_address)].activities.push({ created_at: ele.created_at, current_page: ele.current_page })
+                //         }
+                //         setSideBarData([...subArray[0]?.activities])
 
-                    } catch (error) {
-                        console.log(error, "Error in browser Details", ele?.id)
-                    }
+                //     } catch (error) {
+                //         console.log(error, "Error in browser Details", ele?.id)
+                //     }
+                // })
+                // console.log(subArray, "asd")
+                // setShowData(subArray)
+                webWorker.postMessage({ data })
+                webWorker.addEventListener('message', (event) => {
+                    const subArray = event.data?.subArray
+                    const activity = event.data?.activity
+                    // const dataByDate = event.data?.dataByDate
+                    setShowData(subArray)
+                    setSideBarData([...activity])
+                    // setDataByDate(dataByDate)
                 })
-                console.log(subArray, "asd")
-                setShowData(subArray)
             })
             .catch((error) => {
                 console.log(error)

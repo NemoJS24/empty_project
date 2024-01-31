@@ -150,6 +150,7 @@ const ApplicantForm = ({ allData }) => {
                     return { ...prev, addForm }
                 })
                 handleClose("customer")
+                getCustomer()
             })
             .catch((error) => {
                 console.error("Error:", error)

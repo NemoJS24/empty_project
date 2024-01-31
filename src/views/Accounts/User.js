@@ -100,7 +100,7 @@ const User = () => {
         {
             name: "Name",
             minWidth: "100px",
-            selector: (row) => `${row?.user?.first_name} ${row?.user?.last_name}`,
+            selector: (row) => `${row?.first_name} ${row?.last_name}`,
             type: 'text'
         },
         {

@@ -176,7 +176,7 @@ const Customers_Routes = [
     app: appName,
     permission: {
       route_type: "insurance",
-      action: "view"
+      action: "read"
     }
   },
   {
@@ -270,7 +270,7 @@ const Customers_Routes = [
     app: appName,
     permission: {
       route_type: "insurance",
-      action: "view"
+      action: "read"
     }
   },
   // --------------------------------

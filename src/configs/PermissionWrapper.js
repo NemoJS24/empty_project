@@ -19,7 +19,8 @@ const PermissionWrapper = ({children}) => {
         multi_user_key: "",
         permissionList: [],
         super_user: "",
-        is_super_user: true
+        is_super_user: true,
+        logged_in_user: {}
     }
     const [userPermission, setUserPermission] = useState(localStorage.getItem('userPermission') ? JSON.parse(localStorage.getItem('userPermission')) : defaultData)
     const location = useLocation()

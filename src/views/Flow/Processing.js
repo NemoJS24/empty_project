@@ -42,7 +42,8 @@ const Processing = () => {
           permissionList: res?.data?.permission_list,
           super_user: res?.data?.super_user,
           is_super_user: res?.data?.is_super_user,
-          multi_user_key: res?.data?.multi_user_key
+          multi_user_key: res?.data?.multi_user_key,
+          logged_in_user: res?.data?.logged_in_user
         }
 
         console.log(updatedPermission)

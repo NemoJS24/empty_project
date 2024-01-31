@@ -70,7 +70,7 @@ const NavbarUser = ({disableName}) => {
       }
 
       {
-        userPermission?.multipleDomain.length > 1 ? <select className='form-control' style={{appearance: 'auto'}} onChange={(e) => {
+        <select className='form-control' style={{appearance: 'auto'}} onChange={(e) => {
           // window.location.reload(false)
           setUserPermission({...userPermission, apiKey : e.target.value})
           navigate('/merchant/apps/')
@@ -80,7 +80,7 @@ const NavbarUser = ({disableName}) => {
               return <option key={i} value={cur.api_key} selected={userPermission?.apiKey === cur.api_key}>{cur.outlet_name}</option>
             })
           }
-        </select> : ''
+        </select>
       }
       
       

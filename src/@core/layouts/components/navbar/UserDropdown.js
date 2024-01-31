@@ -19,7 +19,7 @@ import { PermissionProvider } from '../../../../Helper/Context'
 import Cookies from 'js-cookie'
 import { getReq } from '../../../../assets/auth/jwtService'
 
-const UserDropdown = ({disableName}) => {
+const UserDropdown = () => {
   const navigate = useNavigate()
   // const [outletData, setOutletData] = useState([])
   const { userPermission } = useContext(PermissionProvider)
@@ -73,11 +73,10 @@ const UserDropdown = ({disableName}) => {
     <UncontrolledDropdown tag='li' className='dropdown-user nav-item'>
       <DropdownToggle href='/' tag='a' className='nav-link dropdown-user-link' onClick={e => e.preventDefault()}>
         <div className='user-nav d-sm-flex d-none'>
-          <span className='user-name fw-bold text-capitalize' style={{whiteSpace: 'nowrap'}}>{userPermission?.multipleDomain?.map((curElem) => {
-            // console.log(curElem.api_key === userPermission?.apiKey, "ppp")
-            return curElem.api_key === userPermission?.apiKey ? curElem.outlet_name : '' 
-          })}</span>
-          {!disableName && <span className='user-status'>Admin</span>}
+          <span className='user-name fw-bold text-capitalize' style={{whiteSpace: 'nowrap'}}>
+            {userPermission?.logged_in_user?.user_first_name}
+          </span>
+          {<span className='user-status' style={{whiteSpace: 'nowrap'}}>{userPermission?.logged_in_user?.user_role}</span>}
         </div>
         <Avatar img={defaultAvatar} imgHeight='40' imgWidth='40' status='online' />
       </DropdownToggle>

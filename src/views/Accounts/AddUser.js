@@ -7,9 +7,10 @@ import { getReq, postReq } from '../../assets/auth/jwtService'
 import toast from 'react-hot-toast'
 import { validForm } from '../Validator'
 import { useNavigate, useParams } from 'react-router-dom'
+import FrontBaseLoader from '../Components/Loader/Loader'
 
 const AddUser = () => {
-
+    const [apiLoader, setApiLoader] = useState(false)
     const defaultData = {
         first_name: "",
         last_name: "",
@@ -52,6 +53,39 @@ const AddUser = () => {
             message: 'Please Enter Confirm Password',
             type: 'string',
             id: 'confirm_password'
+        },
+        {
+            name: 'assign_department',
+            message: 'Please Select Assign Department',
+            type: 'string',
+            id: 'assign_department'
+        },
+        {
+            name: 'assign_role',
+            message: 'Please Select Assign Role',
+            type: 'string',
+            id: 'assign_role'
+        }
+    ]
+
+    const editUserDataCheck = [
+        {
+            name: 'first_name',
+            message: 'Please Enter First Name',
+            type: 'string',
+            id: 'first_name'
+        },
+        {
+            name: 'last_name',
+            message: 'Please Enter Last Name',
+            type: 'string',
+            id: 'last_name'
+        },
+        {
+            name: 'email_id',
+            message: 'Please Enter Email ID',
+            type: 'email',
+            id: 'email_id'
         },
         {
             name: 'assign_department',
@@ -168,17 +202,25 @@ const AddUser = () => {
     }
 
     const saveData = (type) => {
+        setApiLoader(true)
         console.log("api hit")
-        const passCheck = data.password === data.confirm_password
+        let passCheck = true
+        if (!id) {
+            passCheck = data.password === data.confirm_password
+        }
 
         console.log(passCheck, "passCheck")
 
         if (passCheck) {
-            const checkForm = validForm(userDataCheck, data)
+            const checkForm = validForm(id ? editUserDataCheck : userDataCheck, data)
             if (checkForm) {
                 console.log("form is valid")
                 const form_data = new FormData()
                 Object.entries(data).map(([key, value]) => form_data.append(key, value))
+
+                if (id) {
+                    form_data.append('unique_id', id)
+                }
 
                 permisionList?.map((curElem) => form_data.append("permission_list", JSON.stringify(curElem)))
 
@@ -196,9 +238,15 @@ const AddUser = () => {
                     console.log(error)
                     toast.error("Something went wrong")
                 })
+                .finally(() => {
+                    setApiLoader(false)
+                })
+            } else {
+                setApiLoader(false)
             }
         } else {
             toast.error('Password does not match')
+            setApiLoader(false)
         }
 
         // return
@@ -211,8 +259,8 @@ const AddUser = () => {
             const data = res?.data?.MemberProfile
             console.log(data)
             const updatedData = {
-                first_name: data[0]?.member?.user?.first_name,
-                last_name: data[0]?.member?.user?.last_name,
+                first_name: data[0]?.member?.first_name,
+                last_name: data[0]?.member?.last_name,
                 email_id: data[0]?.member?.user?.email,
                 password: "",
                 confirm_password: "",
@@ -225,7 +273,20 @@ const AddUser = () => {
                 ...preData,
                 ...updatedData
             }))
-            setPermissionList([])
+            setPermissionList(data?.map((curElem) => {
+                return {
+                    id: curElem?.permission?.id,
+                    apps: curElem?.permission?.apps,
+                    permission: curElem?.permission?.permission,
+                    slug: curElem?.permission?.slug,
+                    permission_description: curElem?.permission?.permission_description,
+                    create: curElem?.create,
+                    update: curElem?.update,
+                    read: curElem?.read,
+                    delete: curElem?.delete,
+                    is_active: curElem?.permission?.is_active
+                }
+            }))
         })
         .catch((error) => {
             console.log(error)
@@ -249,11 +310,14 @@ const AddUser = () => {
 
     return (
         <>
+            {
+                apiLoader ? <FrontBaseLoader /> : ''
+            }
             <Row>
                 <Card>
                     <CardBody>
                         <div className="d-flex justify-content-between align-items-center">
-                            <h4 className='m-0'>Add User</h4>
+                            <h4 className='m-0'>{id ? "Edit" : "Add"} User</h4>
                         </div>
                     </CardBody>
                 </Card>
@@ -280,7 +344,7 @@ const AddUser = () => {
                             <div className="col-md-4 mb-1">
                                 <div className="form-group">
                                     <label htmlFor="email_id">Email ID</label>
-                                    <input className='form-control' type="text" name="email_id" placeholder='Email ID' value={data?.email_id} onChange={(e) => updateData(e)} />
+                                    <input disabled={id} className='form-control' type="text" name="email_id" placeholder='Email ID' value={data?.email_id} onChange={(e) => updateData(e)} />
                                     <p id="email_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
                                 </div>
                             </div>
