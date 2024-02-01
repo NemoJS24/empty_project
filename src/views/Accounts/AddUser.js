@@ -486,8 +486,8 @@ const AddUser = () => {
 
                         <div className="row">
                             <div className="action-btn mt-2 d-flex justify-content-end align-items-center gap-2">
-                                <a className='btn btn-primary-main' onClick={() => saveData('save')}>Save</a>
-                                <a className='btn btn-primary-main' onClick={() => saveData('save&close')}>Save & Close</a>
+                                {/* <a className='btn btn-primary-main' onClick={() => saveData('save')}>Save</a> */}
+                                <a className='btn btn-primary-main' onClick={() => saveData('save&close')}>Save</a>
                             </div>
                         </div>
                     </CardBody>
