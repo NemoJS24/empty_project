@@ -13,6 +13,7 @@ import { postReq } from '../../../assets/auth/jwtService'
 import { main } from '@popperjs/core'
 import Flatpickr from 'react-flatpickr'
 import moment from 'moment'
+import Spinner from '../../Components/DataTable/Spinner'
 
 const AddServicing = () => {
 
@@ -22,6 +23,7 @@ const AddServicing = () => {
     const isEdit = urlParams.get("type") === "edit"
     const isCustomer = urlParams.get("type") === "customer"
     const [customerList, setCustomerList] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
 
     // if (isEdit) {
     //     id = getid.split("-")[0]
@@ -37,6 +39,7 @@ const AddServicing = () => {
                 setCustomerList(resp?.data?.success?.map((curElem) => {
                     return { label: curElem?.customer_name ? curElem?.customer_name : '-', value: curElem?.xircls_customer_id }
                 }))
+                setIsLoading(false)
             })
             .catch((error) => {
                 console.log(error)
@@ -191,18 +194,19 @@ const AddServicing = () => {
                     // const newArr = resp?.data?.success?.map(ele => {
                     //     return { value: ele.id, label: ele.customer_name }
                     // })
-                    console.log("ResponseId:", resp.data.success[0])
+                    console.log(resp?.data, "resp")
+                    console.log("ResponseId:", resp?.data?.data[0])
                     setFormData((prev) => {
                         return {
                             ...prev, mainForm: {
                                 ...prev.mainForm,
-                                xircls_customer_id: resp?.data?.success[0]?.xircls_customer,
-                                vehicle: resp?.data?.success[0]?.vehicle?.registration_number,
-                                service_advisor: resp?.data?.success[0]?.service_advisor,
-                                job_card_date: resp?.data?.success[0]?.job_card_date,
-                                service_invoice_date: resp?.data?.success[0]?.service_invoice_date,
-                                next_service_date: resp?.data?.success[0]?.service_expiry_date,
-                                service_invoice_amount: resp?.data?.success[0]?.service_invoice_amount
+                                xircls_customer_id: resp?.data?.data[0]?.xircls_customer,
+                                vehicle: resp?.data?.data[0]?.vehicle?.id,
+                                service_advisor: resp?.data?.data[0]?.service_advisor,
+                                job_card_date: resp?.data?.data[0]?.job_card_date,
+                                service_invoice_date: resp?.data?.data[0]?.service_invoice_date,
+                                next_service_date: resp?.data?.data[0]?.service_expiry_date,
+                                service_invoice_amount: resp?.data?.data[0]?.service_invoice_amount
 
                             }
                         }
@@ -500,7 +504,7 @@ const AddServicing = () => {
                 })
                 handleClose("customer")
                 getCustomer()
-                
+
             })
             .catch((error) => {
                 console.error("Error:", error)
@@ -749,78 +753,80 @@ const AddServicing = () => {
                     {AddCustomerForm}
                 </Offcanvas.Body>
             </Offcanvas>
-            <form>
-                <Row>
-                    <Col md={12} className="mt-2">
-                        <h4 className="mb-0">{(id && isEdit) ? 'Edit Servicing' : 'Add Servicing'}</h4>
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label
-                            htmlFor="company-name"
-                            className="form-label"
-                            style={{ margin: "0px" }}
-                        >
-                            Customer Name
-                        </label>
-                        <Select
-                            placeholder='Select Customer'
-                            id='company-name'
-                            options={customerList}
-                            closeMenuOnSelect={true}
-                            // onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
-                            components={{ Menu: CustomSelectComponent }}
-                            onChange={(event) => {
-                                // selectCustomer()
-                                const e = { target: { name: 'xircls_customer_id', value: event?.value } }
-                                handleInputChange(e, "mainForm")
-                            }}
-                            value={customerList?.filter($ => Number($.value) === Number(formData?.mainForm?.xircls_customer_id))}
-                            isDisabled={isCustomer}
-                        />
-                        <p id="xircls_customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label
-                            htmlFor="vehicle-name"
-                            className="form-label"
-                            style={{ margin: "0px" }}
-                        >
-                            Vehicle Number
-                        </label>
-                        <Select
-                            placeholder='Vehicle Number'
-                            id="vehicle-name"
-                            options={vehicleOptions}
-                            // defaultValue={vehicleOptions[0]}
-                            value={id && { value: formData.mainForm?.vehicle, label: formData.mainForm?.vehicle }}
-                            // isDisabled={formData.mainForm?.vehicle}
-                            closeMenuOnSelect={true}
-                            // onChange={e => setFormData(prev => ({ ...prev, vehicle: e.value }))}
-                            onChange={(event) => {
-                                const e = { target: { name: "vehicle", value: event.value } }
-                                handleInputChange(e, "mainForm")
-                            }}
-                        />
-                        <p id="vehicle_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="advisor-name">Service Advisor</label>
-                        <input
-                            placeholder="Service Advisor"
-                            type="text"
-                            id="advisor-name"
-                            name="service_advisor"
-                            className="form-control"
-                            value={formData.mainForm.service_advisor ?? ""}
-                            onChange={(e) => {
-                                handleInputChange(e, "mainForm")
-                            }}
-                        />
-                        <p id="service_advisor_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="job-card-date">Job Card Date</label>
-                        {/* <input
+            {
+                !isLoading ? (
+                    <form>
+                        <Row>
+                            <Col md={12} className="mt-2">
+                                <h4 className="mb-0">{(id && isEdit) ? 'Edit Servicing' : 'Add Servicing'}</h4>
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label
+                                    htmlFor="company-name"
+                                    className="form-label"
+                                    style={{ margin: "0px" }}
+                                >
+                                    Customer Name
+                                </label>
+                                <Select
+                                    placeholder='Select Customer'
+                                    id='company-name'
+                                    options={customerList}
+                                    closeMenuOnSelect={true}
+                                    // onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
+                                    components={{ Menu: CustomSelectComponent }}
+                                    onChange={(event) => {
+                                        // selectCustomer()
+                                        const e = { target: { name: 'xircls_customer_id', value: event?.value } }
+                                        handleInputChange(e, "mainForm")
+                                    }}
+                                    value={customerList?.filter($ => Number($.value) === Number(formData?.mainForm?.xircls_customer_id))}
+                                    isDisabled={isCustomer}
+                                />
+                                <p id="xircls_customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label
+                                    htmlFor="vehicle-name"
+                                    className="form-label"
+                                    style={{ margin: "0px" }}
+                                >
+                                    Vehicle Number
+                                </label>
+                                <Select
+                                    placeholder='Vehicle Number'
+                                    id="vehicle-name"
+                                    options={vehicleOptions}
+                                    // defaultValue={vehicleOptions[0]}
+                                    value={vehicleOptions.filter((option) => String(option.value) === String(formData.mainForm?.vehicle))}
+                                    // isDisabled={formData.mainForm?.vehicle}
+                                    closeMenuOnSelect={true}
+                                    // onChange={e => setFormData(prev => ({ ...prev, vehicle: e.value }))}
+                                    onChange={(event) => {
+                                        const e = { target: { name: "vehicle", value: event.value } }
+                                        handleInputChange(e, "mainForm")
+                                    }}
+                                />
+                                <p id="vehicle_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label htmlFor="advisor-name">Service Advisor</label>
+                                <input
+                                    placeholder="Service Advisor"
+                                    type="text"
+                                    id="advisor-name"
+                                    name="service_advisor"
+                                    className="form-control"
+                                    value={formData.mainForm.service_advisor ?? ""}
+                                    onChange={(e) => {
+                                        handleInputChange(e, "mainForm")
+                                    }}
+                                />
+                                <p id="service_advisor_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label htmlFor="job-card-date">Job Card Date</label>
+                                {/* <input
                             placeholder="Job Card Date"
                             type="date"
                             id="job-card-date"
@@ -832,20 +838,20 @@ const AddServicing = () => {
                             }}
                         /> */}
 
-                        <Flatpickr
-                            name="job_card_date"
-                            className='form-control'
-                            value={formData.mainForm.job_card_date ?? ""}
-                            onChange={(date) => {
-                                setFormData({ ...formData, mainForm: { ...formData.mainForm, job_card_date: moment(date[0]).format("YYYY-MM-DD") } })
-                            }}
-                        />
-                        <p id="job_card_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                                <Flatpickr
+                                    name="job_card_date"
+                                    className='form-control'
+                                    value={formData.mainForm.job_card_date ?? ""}
+                                    onChange={(date) => {
+                                        setFormData({ ...formData, mainForm: { ...formData.mainForm, job_card_date: moment(date[0]).format("YYYY-MM-DD") } })
+                                    }}
+                                />
+                                <p id="job_card_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
 
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="service-invoice-date">Service Invoice Date</label>
-                        {/* <input
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label htmlFor="service-invoice-date">Service Invoice Date</label>
+                                {/* <input
                             placeholder="Service Invoice Date"
                             type="date"
                             id="service-invoice-date"
@@ -857,20 +863,20 @@ const AddServicing = () => {
                             }}
                         /> */}
 
-                        <Flatpickr
-                            name="job_card_date"
-                            className='form-control'
-                            value={formData.mainForm.service_invoice_date}
-                            onChange={(date) => {
-                                setFormData({ ...formData, mainForm: { ...formData.mainForm, service_invoice_date: moment(date[0]).format("YYYY-MM-DD") } })
-                            }}
-                        />
-                        <p id="service_invoice_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                                <Flatpickr
+                                    name="job_card_date"
+                                    className='form-control'
+                                    value={formData.mainForm.service_invoice_date}
+                                    onChange={(date) => {
+                                        setFormData({ ...formData, mainForm: { ...formData.mainForm, service_invoice_date: moment(date[0]).format("YYYY-MM-DD") } })
+                                    }}
+                                />
+                                <p id="service_invoice_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
 
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="next-service-date">Next Service Date</label>
-                        {/* <input
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label htmlFor="next-service-date">Next Service Date</label>
+                                {/* <input
                             placeholder="Next Service Date"
                             type="date"
                             id="next-service-date"
@@ -882,55 +888,65 @@ const AddServicing = () => {
                             }}
                         /> */}
 
-                        <Flatpickr
-                            name="job_card_date"
-                            className='form-control'
-                            value={formData.mainForm.next_service_date ?? ""}
-                            onChange={(date) => {
-                                setFormData({ ...formData, mainForm: { ...formData.mainForm, service_expiry_date: moment(date[0]).format("YYYY-MM-DD") } })
-                            }}
-                        />
-                        <p id="service_expiry_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                                <Flatpickr
+                                    name="job_card_date"
+                                    className='form-control'
+                                    value={formData.mainForm.next_service_date ?? ""}
+                                    onChange={(date) => {
+                                        setFormData({ ...formData, mainForm: { ...formData.mainForm, service_expiry_date: moment(date[0]).format("YYYY-MM-DD") } })
+                                    }}
+                                />
+                                <p id="service_expiry_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
 
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="service-invoice-amount">Service Invoice Amount - ₹</label>
-                        <input
-                            placeholder="Service Invoice Amount"
-                            type="tel"
-                            id="service-invoice-amount"
-                            name="service_invoice_amount"
-                            className="form-control"
-                            value={formData.mainForm.service_invoice_amount ?? ""}
-                            // onChange={(e) => {
-                            //     handleInputChange(e, "mainForm")
-                            // }}
-                            onChange={(e) => {
-                                if (!isNaN(e.target.value)) {
-                                    handleInputChange(e, "mainForm")
-                                    console.log("this is a number")
-                                }
-                            }}
-                        />
-                        <p id="service_invoice_amount_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label htmlFor="service-invoice-amount">Service Invoice Amount - ₹</label>
+                                <input
+                                    placeholder="Service Invoice Amount"
+                                    type="text"
+                                    id="service-invoice-amount"
+                                    name="service_invoice_amount"
+                                    className="form-control"
+                                    value={formData.mainForm.service_invoice_amount ?? ""}
+                                    // onChange={(e) => {
+                                    //     handleInputChange(e, "mainForm")
+                                    // }}
+                                    onChange={(e) => {
+                                        if (!isNaN(e.target.value)) {
+                                            handleInputChange(e, "mainForm")
+                                            console.log("this is a number")
+                                        }
+                                    }}
+                                />
+                                <p id="service_invoice_amount_val" className="text-danger m-0 p-0 vaildMessage"></p>
 
-                    </Col>
-                    <Col xs='12'>
-                        <div className='d-flex justify-content-between mt-2'>
-                            <div>
-                                <button className="btn btn-primary" type="button" onClick={() => history.back()}>
-                                    Back
-                                </button>
-                                {/* <button className="btn btn-primary ms-2" type="button">Cancel</button> */}
-                            </div>
-                            <div>
-                                <button className="btn btn-primary" type="button" onClick={(e) => handleSubmitSection(e, 'SAVE')} >Save</button>
-                                <button className="btn btn-primary ms-2" type="button" onClick={(e) => handleSubmitSection(e, 'SAVE&CLOSE')}>Save & Close</button>
-                            </div>
+                            </Col>
+                            <Col xs='12'>
+                                <div className='d-flex justify-content-between mt-2'>
+                                    <div>
+                                        <button className="btn btn-primary" type="button" onClick={() => history.back()}>
+                                            Back
+                                        </button>
+                                        {/* <button className="btn btn-primary ms-2" type="button">Cancel</button> */}
+                                    </div>
+                                    <div>
+                                        <button className="btn btn-primary" type="button" onClick={(e) => handleSubmitSection(e, 'SAVE')} >Save</button>
+                                        <button className="btn btn-primary ms-2" type="button" onClick={(e) => handleSubmitSection(e, 'SAVE&CLOSE')}>Save & Close</button>
+                                    </div>
+                                </div>
+                            </Col>
+                        </Row>
+                    </form>
+                ) : (
+                    <Container>
+                        <div className='d-flex justify-content-center align-items-center w-100'>
+                            <Spinner size={'40px'} />
                         </div>
-                    </Col>
-                </Row>
-            </form>
+                    </Container>
+
+                )
+            }
+
         </div>
     )
 }

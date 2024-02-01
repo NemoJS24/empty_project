@@ -70,7 +70,7 @@ const CustomerDetails = ({ userData }) => {
                                         <div className='d-flex flex-column justify-content-center'>
                                             <h4><span style={{textTransform: "capitalize"}}>{userData?.title}</span> {userData?.customer_name}</h4>
                                             <div><span className='font-small-4'>{userData?.email}</span></div>
-                                            <button type="button" className="btn btn-primary mt-1" style={{ width: "fit-content" }} onClick={() => navigate(`/merchant/customers/edit_customer/${userData.id}`)}>Edit</button>
+                                            <button type="button" className="btn btn-primary mt-1" style={{ width: "fit-content" }} onClick={() => navigate(`/merchant/customers/edit_customer/${userData.id}?type=edit`)}>Edit</button>
                                         </div>
                                     </Col>
                                     <Col md='8' className='d-flex justify-content-end gap-5'>
@@ -280,7 +280,7 @@ const CustomerDetails = ({ userData }) => {
                         </Col>
 
                         <Col md='4'>
-                            <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/add-vehicle/${id}`)}>
+                            <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/add-vehicle/${id}?type=customer`)}>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
                                         <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px" }}>
@@ -295,7 +295,7 @@ const CustomerDetails = ({ userData }) => {
                         </Col>
 
                         <Col md='4'>
-                            <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/add-insurance/${id}`)}>
+                            <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/add-insurance/${id}?type=customer`)}>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
                                         <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px" }}>
@@ -311,7 +311,7 @@ const CustomerDetails = ({ userData }) => {
                     </Row>
                     <Row>
                         <Col md='4'>
-                            <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/add-servicing/${id}`)}>
+                            <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/add-servicing/${id}?type=customer`)}>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
                                         <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px" }}>
@@ -326,7 +326,7 @@ const CustomerDetails = ({ userData }) => {
                         </Col>
 
                         <Col md='4'>
-                            <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/jmd-finance-customers/${id}`)}>
+                            <Card className=' cursor-pointer' onClick={() => navigate(`/merchant/customers/jmd-finance-customers/${id}?type=customer`)}>
                                 <CardBody>
                                     <div className='d-flex justify-content-center align-items-center flex-column'>
                                         <div className='d-flex justify-content-center align-items-center' style={{ height: "45px", width: "45px", borderRadius: "30px" }}>

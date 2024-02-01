@@ -117,7 +117,7 @@ const Call = ({ userData }) => {
             name: "Created By",
             minWidth: "250px",
             selector: (row) => <div className="py-1">
-              <h6>{row?.member?.member_name ? row?.member?.member_name : row?.super_user_name}</h6>
+              <h6>{row?.member?.first_name ? `${row?.member?.first_name} ${row?.member.last_name}` : row?.super_user_name}</h6>
               <p className="m-0">{row?.member?.email ? row?.member?.email : row?.super_user_email}</p>
             </div>,
             type: 'text'

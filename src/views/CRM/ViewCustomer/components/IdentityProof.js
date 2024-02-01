@@ -3,10 +3,11 @@ import { Card, CardBody, Col, FormGroup, Input, InputGroup, InputGroupText, Labe
 import { Edit } from 'react-feather'
 import toast from 'react-hot-toast'
 import { ownUrl } from '../../../Validator'
+import { Link } from 'react-router-dom'
 
 const IdentityProof = ({ AllFormData }) => {
   const { handleInputChange, userData, postData } = AllFormData
-  const [editMode, setEditMode] = useState(false)
+  // const [editMode, setEditMode] = useState(false)
 
   const adharImageUrlFromAPI = userData?.aadhar_pdf_file ? `${ownUrl}${userData.aadhar_pdf_file}` : null
 
@@ -14,13 +15,13 @@ const IdentityProof = ({ AllFormData }) => {
 
   const [adharImageUrl, setAdharImageUrl] = useState(adharImageUrlFromAPI)
   const [panImageUrl, setPanImageUrl] = useState(panImageUrlFromAPI)
+  const editMode = false
+  // const handleEditClick = () => {
+  //   // setEditMode(!editMode)
 
-  const handleEditClick = () => {
-    setEditMode(!editMode)
-
-    setAdharImageUrl(adharImageUrlFromAPI)
-    setPanImageUrl(panImageUrlFromAPI)
-  }
+  //   // setAdharImageUrl(adharImageUrlFromAPI)
+  //   // setPanImageUrl(panImageUrlFromAPI)
+  // }
   return (
     <>
       <style>
@@ -46,7 +47,9 @@ const IdentityProof = ({ AllFormData }) => {
               <Row>
                 <Col md='12 d-flex justify-content-between align-items-center'>
                   <h4>Identity proofs</h4>
-                  <Edit size='15px' cursor='pointer' onClick={handleEditClick} />
+                  <Link to={`/merchant/customers/edit_customer/${userData?.id}?type=edit`}>
+                    <Edit size='15px' cursor='pointer' />
+                  </Link>
                 </Col>
               </Row>
 

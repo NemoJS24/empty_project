@@ -31,7 +31,7 @@ const EMIForm = ({ allData }) => {
                         <label htmlFor="basicDetails-emi">
                             EMI Amount - ₹
                         </label>
-                        <input required placeholder="EMI Amount" type='tel' pattern="[0-9]" maxLength={10} id='basicDetails-emi' name='Emi_Amount' className="form-control"
+                        <input required placeholder="EMI Amount" type='tel' pattern="[0-9]" id='basicDetails-emi' name='Emi_Amount' className="form-control"
                             value={formData?.Emi_Amount}
                             // onChange={e => (handleInputChange(e))}
                             // onChange={(e) => {
@@ -50,7 +50,7 @@ const EMIForm = ({ allData }) => {
                         <label htmlFor="basicDetails-tenure">
                             Number of Tenure
                         </label>
-                        <input required placeholder="Number of Tenure" type='tel' pattern="[0-9]" maxLength={10} id='basicDetails-tenure' name='no_of_tenure' className="form-control"
+                        <input required placeholder="Number of Tenure" type='tel' pattern="[0-9]" id='basicDetails-tenure' name='no_of_tenure' className="form-control"
                             value={formData?.no_of_tenure}
                             // onChange={handleInputChange}
                             onChange={(e) => {
@@ -79,7 +79,7 @@ const EMIForm = ({ allData }) => {
                         <label htmlFor="basicDetails-installment">
                             Number of Installment
                         </label>
-                        <input required placeholder="Number of Installment" type='tel' pattern="[0-9]" maxLength={10} id='basicDetails-installment' name='no_of_installment' className="form-control"
+                        <input required placeholder="Number of Installment" type='tel' pattern="[0-9]" id='basicDetails-installment' name='no_of_installment' className="form-control"
                             value={formData?.no_of_installment}
                             // onChange={handleInputChange}
                             onChange={(e) => {
@@ -92,7 +92,7 @@ const EMIForm = ({ allData }) => {
                         <label htmlFor="basicDetails-showroom-amount">
                             Ex-Showroom Amount
                         </label>
-                        <input required placeholder="Ex-Showroom Amount" type='tel' pattern="[0-9]" maxLength={10} id='basicDetails-showroom-amount' name='Ex_Showroom_Amount' className="form-control"
+                        <input required placeholder="Ex-Showroom Amount" type='tel' pattern="[0-9]" id='basicDetails-showroom-amount' name='Ex_Showroom_Amount' className="form-control"
                             value={formData?.Ex_Showroom_Amount}
                             // onChange={handleInputChange}
                             onChange={(e) => {
@@ -107,7 +107,7 @@ const EMIForm = ({ allData }) => {
                         <label htmlFor="basicDetails-emi-number">
                             Advance EMI Number
                         </label>
-                        <input required placeholder="Advance EMI Number" type='tel' pattern="[0-9]" maxLength={10} id='basicDetails-emi-number' name='No_Advance_EMI' className="form-control"
+                        <input required placeholder="Advance EMI Number" type='tel' pattern="[0-9]" id='basicDetails-emi-number' name='No_Advance_EMI' className="form-control"
                             value={formData?.No_Advance_EMI}
                             onChange={handleInputChange}
                         />

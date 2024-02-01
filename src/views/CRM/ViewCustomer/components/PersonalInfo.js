@@ -3,6 +3,7 @@ import { Card, CardBody, Col, FormGroup, Input, InputGroup, InputGroupText, Labe
 import { Twitter, Facebook, Instagram, Edit } from 'react-feather'
 import Select from 'react-select'
 import moment from 'moment'
+import { Link } from 'react-router-dom'
 
 const PersonalInfo = ({ AllFormData }) => {
 
@@ -45,11 +46,11 @@ const PersonalInfo = ({ AllFormData }) => {
     { value: "no", label: "No" }
   ]
 
-  const [editMode, setEditMode] = useState(false)
-
-  const handleEditClick = () => {
-    setEditMode(!editMode)
-  }
+  // const [editMode, setEditMode] = useState(false)
+  const editMode = false
+  // const handleEditClick = () => {
+  //   setEditMode(!editMode)
+  // }
   console.log(setPersonalInfo)
 
   return (
@@ -77,7 +78,9 @@ const PersonalInfo = ({ AllFormData }) => {
               <Row>
                 <Col md='12 d-flex justify-content-between align-items-center'>
                   <h4>Personal Details</h4>
-                  <Edit size='15px' cursor='pointer' onClick={handleEditClick} />
+                  <Link to={`/merchant/customers/edit_customer/${userData?.id}?type=edit`}>
+                    <Edit size='15px' cursor='pointer' />
+                  </Link>
                 </Col>
               </Row>
 

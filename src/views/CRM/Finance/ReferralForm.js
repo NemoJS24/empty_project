@@ -66,7 +66,7 @@ const ReferralForm = ({ allData }) => {
                         <label htmlFor="basicDetails-mobile">
                             Mobile Number
                         </label>
-                        <input required placeholder="10-digit Mobile Number" type='tel' pattern="[789][0-9]{9}" maxLength={10} id='basicDetails-mobile' name='Ref_phone_no' className="form-control"
+                        <input required placeholder="10-digit Mobile Number" type='tel' pattern="[789][0-9]{9}" id='basicDetails-mobile' name='Ref_phone_no' className="form-control"
                             value={formData?.Ref_phone_no}
                             // onChange={e => (handleInputChange(e))}
                             // onChange={(e) => {

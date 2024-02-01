@@ -139,7 +139,7 @@ const CoApplicantForm = ({ allData }) => {
                         <label htmlFor="basicDetails-mobile">
                             Mobile Number
                         </label>
-                        <input required placeholder="10-digit Mobile Number" type='tel' pattern="[789][0-9]{9}" maxLength={10} id='basicDetails-mobile' name='phone_no' className="form-control"
+                        <input required placeholder="10-digit Mobile Number" type='tel' pattern="[789][0-9]{9}" id='basicDetails-mobile' name='phone_no' className="form-control"
                             value={formData?.phone_no}
                             // onChange={(e) => {
                             //     handleInputChange(e)
@@ -179,7 +179,7 @@ const CoApplicantForm = ({ allData }) => {
                         <label htmlFor="basicDetails-alt-landline">
                             Alternate Mobile Number
                         </label>
-                        <input required placeholder="Alternate Mobile Number" type='tel' pattern="[789][0-9]{9}" maxLength={10} id='basicDetails-alt-landline' name='phone_no2' className="form-control"
+                        <input required placeholder="Alternate Mobile Number" type='tel' pattern="[789][0-9]{9}" id='basicDetails-alt-landline' name='phone_no2' className="form-control"
                             value={formData?.phone_no2}
                             // onChange={e => (handleInputChange(e))}
                             onChange={(e) => {
@@ -329,7 +329,7 @@ const CoApplicantForm = ({ allData }) => {
                         <label htmlFor="basicDetails-aadhar">
                             Aadhar Card Number
                         </label>
-                        <input required placeholder="10-digit Aadhar Card Number" type='tel' pattern="[0-9]{12}" maxLength={10} id='basicDetails-aadhar' name='Adharcard' className="form-control"
+                        <input required placeholder="10-digit Aadhar Card Number" type='tel' pattern="[0-9]{12}" id='basicDetails-aadhar' name='Adharcard' className="form-control"
                             value={formData?.Adharcard}
                             // onChange={e => (handleInputChange(e))}
                             onChange={(e) => {

@@ -13,6 +13,7 @@ import { baseURL, postReq } from '../../../assets/auth/jwtService'
 import { validForm } from '../../Validator'
 import Flatpickr from 'react-flatpickr'
 import moment from 'moment'
+import Spinner from '../../Components/DataTable/Spinner'
 
 const AddInsurance = () => {
     const { id } = useParams()
@@ -70,6 +71,7 @@ const AddInsurance = () => {
     const [currentPage, setCurrentPage] = useState(1)
     // const [allOptions, setAllOptions] = useState([])
     const [customerList, setCustomerList] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
 
     const navigate = useNavigate()
 
@@ -272,6 +274,7 @@ const AddInsurance = () => {
                 setCustomerList(resp?.data?.success?.map((curElem) => {
                     return { label: curElem?.customer_name ? curElem?.customer_name : '-', value: curElem?.xircls_customer_id }
                 }))
+                setIsLoading(false)
             })
             .catch((error) => {
                 console.log(error)
@@ -761,9 +764,9 @@ const AddInsurance = () => {
                         onChange={(e) => {
                             if (!isNaN(e.target.value)) {
                                 handleInputChange(e, "customerData")
-                              console.log("this is a number")
+                                console.log("this is a number")
                             }
-                          }}
+                        }}
                     />
                 </Col>
 
@@ -1007,343 +1010,355 @@ const AddInsurance = () => {
                 </Card>
                 <Card>
                     <CardBody>
-                        <form >
-                            <Container fluid className="px-0 pb-1">
-                                <Row>
-                                    <Col md={12} className="">
-                                        <h4 className="mb-0">Applicant Details</h4>
-                                    </Col>
-                                    <Col md={6} className="mt-2" style={{ zIndex: '9' }}>
-                                        <label htmlFor="customer-name" className="" style={{ margin: '0px' }}>
-                                            Customer Name
-                                        </label>
-                                        <Select
-                                            placeholder='Customer Name'
-                                            id="insurance-type"
-                                            options={customerList}
-                                            closeMenuOnSelect={true}
-                                            name='xircls_customer_id'
-                                            value={customerList?.find($ => Number($.value) === Number(formData?.xircls_customer_id))}
-                                            // onMenuScrollToBottom={() => getCustomer(currentPage, null, () => { })}
-                                            components={{ Menu: CustomSelectComponent }}
-                                            onChange={(value, actionMeta) => {
-                                                // selectCustomer(value, actionMeta, false)
-                                                setFormData(prevData => ({ ...prevData, xircls_customer_id: value.value }))
-                                            }}
-                                            isDisabled={isCustomer}
-                                        // onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
-                                        />
-                                        <p id="xircls_customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                                    </Col>
-                                    <Col md={6} className="mt-2 d-none">
-                                        <label htmlFor="insurance-type" className="" style={{ margin: '0px' }}>
-                                            Insurance Type
-                                        </label>
-                                        <Select
-                                            placeholder='Select Insurance'
-                                            id="insurance-type"
-                                            name="insurance_type"
-                                            options={insuranceOptions}
-                                            value={insuranceOptions?.find(option => option.value === formData?.insurance_type)}
-                                            // onChange={e => handleInputChange(e, 'insurance_type')}
-                                            onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
-                                            closeMenuOnSelect={true}
-                                        />
-                                        <p id="insurance_type_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                                    </Col>
-                                    {(formData?.insurance_type === 'Motor' || formData?.insurance_type === 'Lease Car') && <>
-                                        <Col md={6} className="mt-2">
-                                            <label htmlFor="product-name" className="" style={{ margin: '0px' }}>
-                                                Product Name
-                                            </label>
-                                            <Select
-                                                placeholder='Select Product Name'
-                                                id="product-name"
-                                                options={productOptions}
-                                                name="insurance_product_name"
-                                                components={{ Menu: CustomProductSelectComponent }}
-                                                value={productOptions?.filter(option => Number(option.value) === Number(formData?.insurance_product_name))}
-                                                onChange={(value, actionMeta) => {
-                                                    console.log(value, "afaf")
-                                                    handleChange(value, actionMeta, false)
-                                                    console.log(value, "value")
-                                                }}
-                                                // onChange={e => handleInputChange(e, 'insurance_product_name')}
-                                                closeMenuOnSelect={true}
-                                            />
-                                            <p id="insurance_product_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                                        </Col>
-                                        <Col md={6} className="mt-2">
-                                            <label htmlFor="Vehicle-type" className="" style={{ margin: '0px' }}>
-                                                Vehicle Type
-                                            </label>
-                                            <Select
-                                                placeholder='Select Vehicle Type'
-                                                id="product-name"
-                                                options={usedProductOptions?.filter(option => Number(option.value) === Number(formData?.insurance_product_name))}
-                                                name="insurance_product_name"
-                                                value={usedProductOptions?.filter(option => Number(option.value) === Number(formData?.insurance_product_name))}
-                                                isDisabled
-                                                // onChange={e => handleInputChange(e, 'insurance_product_name')}
-                                                closeMenuOnSelect={true}
-                                            />
-                                            {/* <input className='form-control' value={type} id="Vehicle-type" name="vehicle" placeholder='Vehicle Type' /> */}
-                                            <p id="vehicle_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                                        </Col>
-                                    </>}
-                                    <Col md={6} className="mt-2">
-                                        <label htmlFor="policy-number">
-                                            Policy Number
-                                        </label>
-                                        <input placeholder="Policy Number" type='text' id='policy-number' name='policy_number' className="form-control"
-                                            value={formData?.policy_number}
-                                            onChange={handleInputChange}
-                                        />
-                                        <p id="policy_number_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                                    </Col>
-                                    <Col md={6} className="mt-2">
-                                        <label htmlFor="Insurance-company">
-                                            Insurance Company
-                                        </label>
-                                        <input placeholder="Insurance Company" type='text' id='Insurance-company' name='insurance_company' className="form-control"
-                                            value={formData?.insurance_company}
-                                            onChange={handleInputChange}
-                                        />
-                                        <p id="insurance_company_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                                    </Col>
-                                    <Col md={6} className="mt-2">
-                                        <label htmlFor="Policy-purchase-date">
-                                            Policy Purchase Date
-                                        </label>
-                                        {/* <input
-                                            placeholder="Policy Purchase Date"
-                                            type="date"
-                                            id="Policy-purchase-date"
-                                            name="policy_purchase_date"
-                                            className="form-control"
-                                            value={formData?.policy_purchase_date}
-                                            onChange={handleInputChange}
-                                        /> */}
-
-                                        <Flatpickr
-                                            placeholder="Policy Purchase Date"
-                                            id="Policy-purchase-date"
-                                            name="policy_purchase_date"
-                                            className="form-control"
-                                            value={formData?.policy_purchase_date}
-                                            // onChange={(e) => handleInputChange(e)}
-                                            onChange={(date) => {
-                                                setFormData({ ...formData, policy_purchase_date: moment(date[0]).format("YYYY-MM-DD") })
-                                            }}
-                                        />
-                                        <p id="policy_purchase_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                                    </Col>
-                                    <Col md={6} className="mt-2">
-                                        <label htmlFor="Policy-expiry-date">
-                                            Policy Expiry Date
-                                        </label>
-                                        {/* <input
-                                            placeholder="Policy Purchase Date"
-                                            type="date"
-                                            id="Policy-expiry-date"
-                                            name="policy_expiry_date"
-                                            className="form-control"
-                                            value={formData?.policy_expiry_date}
-                                            onChange={handleInputChange}
-                                        /> */}
-
-                                        <Flatpickr
-                                            placeholder="Policy Expiry Date"
-                                            id="Policy-expiry-date"
-                                            name="policy_expiry_date"
-                                            className="form-control"
-                                            value={formData?.policy_expiry_date}
-                                            // onChange={handleInputChange}
-                                            onChange={(date) => {
-                                                setFormData({ ...formData, policy_expiry_date: moment(date[0]).format("YYYY-MM-DD") })
-                                            }}
-                                        />
-                                    </Col>
-                                    <Col md={6} className="mt-2">
-                                        <label htmlFor="Insurance-sales-executive">
-                                            Insurance Sales Executive
-                                        </label>
-                                        <input placeholder="Insurance Sales Executive" type='text' id='Insurance-sales-executive' name='executive_name' className="form-control"
-                                            value={formData?.executive_name}
-                                            onChange={handleInputChange}
-                                        />
-                                    </Col>
-                                    <Col md={6} className="mt-2">
-                                        <label htmlFor="amount-r">
-                                            Amount - ₹
-                                        </label>
-                                        <input placeholder="Amount" type='tel' id='amount-r' name='amount' className="form-control"
-                                            value={formData?.amount}
-                                            // onChange={e => handleInputChange(e)}
-                                            onChange={(e) => {
-                                                if (!isNaN(e.target.value)) {
-                                                    handleInputChange(e)
-                                                  console.log("this is a number")
-                                                }
-                                              }}
-                                        />
-                                    </Col>
-                                    {(formData?.insurance_type === 'Motor' || formData?.insurance_type === 'Lease Car') && <>
-                                        <Col md={6} className="mt-2">
-                                            <label htmlFor="add-on-plan">
-                                                Add on Plan
-                                            </label>
-                                            <input placeholder="Add on Plan" type='text' id='add-on-plan' name='add_on_plan' className="form-control"
-                                                value={formData?.add_on_plan}
-                                                onChange={handleInputChange}
-                                            />
-                                        </Col>
-                                        <Col md={6} className="mt-2">
-                                            <label htmlFor="add-on-plan">
-                                                IDV – Insured Declared Value
-                                            </label>
-                                            <input placeholder="Insured Declared Value" type='tel' maxLength={10} id='add-on-plan' name='insured_declared_value' className="form-control"
-                                                value={formData?.insured_declared_value}
-                                                onChange={e => handleInputChange(e)}
-                                            />
-                                        </Col>
-                                        <Col md={6} className="mt-2">
-                                            <label htmlFor="owndamage">
-                                                OD – Own Damage
-                                            </label>
-                                            <input placeholder="Own Damage" type='tel' maxLength={10} id='owndamage' name='own_damage' className="form-control"
-                                                value={formData?.own_damage}
-                                                onChange={e => handleInputChange(e)}
-                                            />
-                                        </Col>
-                                        <Col md={6} className="mt-2">
-                                            <label htmlFor="NoClaimBonus">
-                                                NCB – No Claim Bonus
-                                            </label>
-                                            <input placeholder="No Claim Bonus" type='tel' maxLength={10} id='NoClaimBonus' name='ncb_no_claim_bonus' className="form-control"
-                                                value={formData?.ncb_no_claim_bonus}
-                                                onChange={e => handleInputChange(e)}
-                                            />
-                                        </Col>
-                                        <Col md={6} className="mt-2">
-                                            <label htmlFor="PaymentMode">
-                                                PM – Payment Mode
-                                            </label>
-                                            <input placeholder="Payment Mode" type='text' id='PaymentMode' name='pm_payment_mode' className="form-control"
-                                                value={formData?.pm_payment_mode}
-                                                onChange={handleInputChange}
-                                            />
-                                        </Col>
-                                        <Col md={6} className="mt-2">
-                                            <label htmlFor="Declaration">
-                                                NCB – Declaration
-                                            </label>
-                                            <input placeholder="Declaration" type='text' id='Declaration' name='ncb_declaration' className="form-control"
-                                                value={formData?.ncb_declaration}
-                                                onChange={handleInputChange}
-                                            />
-                                        </Col>
-                                        <Col md={6} className="mt-2">
-                                            <label htmlFor="ThirdPartyDate">TPD – Third Party Date</label>
-                                            {/* <input
-                                                placeholder="Third Party Date"
+                        {
+                            !isLoading ? (
+                                <form >
+                                    <Container fluid className="px-0 pb-1">
+                                        <Row>
+                                            <Col md={12} className="">
+                                                <h4 className="mb-0">Applicant Details</h4>
+                                            </Col>
+                                            <Col md={6} className="mt-2" style={{ zIndex: '9' }}>
+                                                <label htmlFor="customer-name" className="" style={{ margin: '0px' }}>
+                                                    Customer Name
+                                                </label>
+                                                <Select
+                                                    placeholder='Customer Name'
+                                                    id="insurance-type"
+                                                    options={customerList}
+                                                    closeMenuOnSelect={true}
+                                                    name='xircls_customer_id'
+                                                    value={customerList?.find($ => Number($.value) === Number(formData?.xircls_customer_id))}
+                                                    // onMenuScrollToBottom={() => getCustomer(currentPage, null, () => { })}
+                                                    components={{ Menu: CustomSelectComponent }}
+                                                    onChange={(value, actionMeta) => {
+                                                        // selectCustomer(value, actionMeta, false)
+                                                        setFormData(prevData => ({ ...prevData, xircls_customer_id: value.value }))
+                                                    }}
+                                                    isDisabled={isCustomer}
+                                                // onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
+                                                />
+                                                <p id="xircls_customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                                            </Col>
+                                            <Col md={6} className="mt-2 d-none">
+                                                <label htmlFor="insurance-type" className="" style={{ margin: '0px' }}>
+                                                    Insurance Type
+                                                </label>
+                                                <Select
+                                                    placeholder='Select Insurance'
+                                                    id="insurance-type"
+                                                    name="insurance_type"
+                                                    options={insuranceOptions}
+                                                    value={insuranceOptions?.find(option => option.value === formData?.insurance_type)}
+                                                    // onChange={e => handleInputChange(e, 'insurance_type')}
+                                                    onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
+                                                    closeMenuOnSelect={true}
+                                                />
+                                                <p id="insurance_type_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                                            </Col>
+                                            {(formData?.insurance_type === 'Motor' || formData?.insurance_type === 'Lease Car') && <>
+                                                <Col md={6} className="mt-2">
+                                                    <label htmlFor="product-name" className="" style={{ margin: '0px' }}>
+                                                        Product Name
+                                                    </label>
+                                                    <Select
+                                                        placeholder='Select Product Name'
+                                                        id="product-name"
+                                                        options={productOptions}
+                                                        name="insurance_product_name"
+                                                        components={{ Menu: CustomProductSelectComponent }}
+                                                        value={productOptions?.filter(option => Number(option.value) === Number(formData?.insurance_product_name))}
+                                                        onChange={(value, actionMeta) => {
+                                                            console.log(value, "afaf")
+                                                            handleChange(value, actionMeta, false)
+                                                            console.log(value, "value")
+                                                        }}
+                                                        // onChange={e => handleInputChange(e, 'insurance_product_name')}
+                                                        closeMenuOnSelect={true}
+                                                    />
+                                                    <p id="insurance_product_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                                                </Col>
+                                                <Col md={6} className="mt-2">
+                                                    <label htmlFor="Vehicle-type" className="" style={{ margin: '0px' }}>
+                                                        Vehicle Type
+                                                    </label>
+                                                    <Select
+                                                        placeholder='Select Vehicle Type'
+                                                        id="product-name"
+                                                        options={usedProductOptions?.filter(option => Number(option.value) === Number(formData?.insurance_product_name))}
+                                                        name="insurance_product_name"
+                                                        value={usedProductOptions?.filter(option => Number(option.value) === Number(formData?.insurance_product_name))}
+                                                        isDisabled
+                                                        // onChange={e => handleInputChange(e, 'insurance_product_name')}
+                                                        closeMenuOnSelect={true}
+                                                    />
+                                                    {/* <input className='form-control' value={type} id="Vehicle-type" name="vehicle" placeholder='Vehicle Type' /> */}
+                                                    <p id="vehicle_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                                                </Col>
+                                            </>}
+                                            <Col md={6} className="mt-2">
+                                                <label htmlFor="policy-number">
+                                                    Policy Number
+                                                </label>
+                                                <input placeholder="Policy Number" type='text' id='policy-number' name='policy_number' className="form-control"
+                                                    value={formData?.policy_number}
+                                                    onChange={handleInputChange}
+                                                />
+                                                <p id="policy_number_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                                            </Col>
+                                            <Col md={6} className="mt-2">
+                                                <label htmlFor="Insurance-company">
+                                                    Insurance Company
+                                                </label>
+                                                <input placeholder="Insurance Company" type='text' id='Insurance-company' name='insurance_company' className="form-control"
+                                                    value={formData?.insurance_company}
+                                                    onChange={handleInputChange}
+                                                />
+                                                <p id="insurance_company_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                                            </Col>
+                                            <Col md={6} className="mt-2">
+                                                <label htmlFor="Policy-purchase-date">
+                                                    Policy Purchase Date
+                                                </label>
+                                                {/* <input
+                                                placeholder="Policy Purchase Date"
                                                 type="date"
-                                                id="ThirdPartyDate"
-                                                name="third_party_date"
+                                                id="Policy-purchase-date"
+                                                name="policy_purchase_date"
                                                 className="form-control"
-                                                value={formData?.third_party_date}
+                                                value={formData?.policy_purchase_date}
                                                 onChange={handleInputChange}
                                             /> */}
 
-                                            <Flatpickr
-                                                placeholder="Third Party Date"
-                                                id="ThirdPartyDate"
-                                                name='third_party_date'
+                                                <Flatpickr
+                                                    placeholder="Policy Purchase Date"
+                                                    id="Policy-purchase-date"
+                                                    name="policy_purchase_date"
+                                                    className="form-control"
+                                                    value={formData?.policy_purchase_date}
+                                                    // onChange={(e) => handleInputChange(e)}
+                                                    onChange={(date) => {
+                                                        setFormData({ ...formData, policy_purchase_date: moment(date[0]).format("YYYY-MM-DD") })
+                                                    }}
+                                                />
+                                                <p id="policy_purchase_date_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                                            </Col>
+                                            <Col md={6} className="mt-2">
+                                                <label htmlFor="Policy-expiry-date">
+                                                    Policy Expiry Date
+                                                </label>
+                                                {/* <input
+                                                placeholder="Policy Purchase Date"
+                                                type="date"
+                                                id="Policy-expiry-date"
+                                                name="policy_expiry_date"
                                                 className="form-control"
-                                                value={formData?.third_party_date}
-                                                // onChange={handleInputChange}
-                                                onChange={(date) => {
-                                                    setFormData({ ...formData, third_party_date: moment(date[0]).format("YYYY-MM-DD") })
-                                                }}
-                                            />
-                                        </Col>
-                                        <Col md={6} className="mt-2">
-                                            <label htmlFor="InbuiltDiscount">
-                                                ID – Inbuilt Discount
-                                            </label>
-                                            <input placeholder="Inbuilt Discount" type='tel' maxLength={10} id='InbuiltDiscount' name='inbuilt_discount' className="form-control"
-                                                value={formData?.inbuilt_discount}
-                                                onChange={e => handleInputChange(e)}
-                                            />
-                                        </Col>
-                                        <Col md={6} className="mt-2">
-                                            <label htmlFor="NetPremium">
-                                                NP – Net Premium.
-                                            </label>
-                                            <input placeholder="Net Premium" type='tel' maxLength={10} id='NetPremium' name='net_premimum' className="form-control"
-                                                value={formData?.net_premimum}
-                                                onChange={e => handleInputChange(e)}
-                                            />
-                                        </Col>
-                                    </>}
-                                    <Col md={6} className="mt-2">
-                                        <label htmlFor="health_insurance">Do they have health insurance?</label>
-                                        <div className='d-flex justify-content-between w-50' style={{ padding: '0.571rem 1rem' }}>
-                                            <div className="form-check">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="radio"
-                                                    name="health_insurance"
-                                                    checked={formData.health_insurance === "Data not available"}
-                                                    id="flexRadioDefault1"
-                                                    value="Data not available"
-                                                    onChange={(e) => handleInputChange(e)}
+                                                value={formData?.policy_expiry_date}
+                                                onChange={handleInputChange}
+                                            /> */}
+
+                                                <Flatpickr
+                                                    placeholder="Policy Expiry Date"
+                                                    id="Policy-expiry-date"
+                                                    name="policy_expiry_date"
+                                                    className="form-control"
+                                                    value={formData?.policy_expiry_date}
+                                                    // onChange={handleInputChange}
+                                                    onChange={(date) => {
+                                                        setFormData({ ...formData, policy_expiry_date: moment(date[0]).format("YYYY-MM-DD") })
+                                                    }}
                                                 />
-                                                <label className="form-check-label" htmlFor="flexRadioDefault1">
-                                                    Data not available
+                                            </Col>
+                                            <Col md={6} className="mt-2">
+                                                <label htmlFor="Insurance-sales-executive">
+                                                    Insurance Sales Executive
                                                 </label>
-                                            </div>
-                                            <div className="form-check">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="radio"
-                                                    name="health_insurance"
-                                                    checked={formData.health_insurance === "No"}
-                                                    id="flexRadioDefault2"
-                                                    value="No"
-                                                    onChange={(e) => handleInputChange(e)}
+                                                <input placeholder="Insurance Sales Executive" type='text' id='Insurance-sales-executive' name='executive_name' className="form-control"
+                                                    value={formData?.executive_name}
+                                                    onChange={handleInputChange}
                                                 />
-                                                <label className="form-check-label" htmlFor="flexRadioDefault2">
-                                                    No
+                                            </Col>
+                                            <Col md={6} className="mt-2">
+                                                <label htmlFor="amount-r">
+                                                    Amount - ₹
                                                 </label>
-                                            </div>
-                                            <div className="form-check">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="radio"
-                                                    name="health_insurance"
-                                                    checked={formData.health_insurance === "Yes"}
-                                                    id="flexRadioDefault3"
-                                                    value="Yes"
-                                                    onChange={(e) => handleInputChange(e)}
+                                                <input placeholder="Amount" type='tel' id='amount-r' name='amount' className="form-control"
+                                                    value={formData?.amount}
+                                                    // onChange={e => handleInputChange(e)}
+                                                    onChange={(e) => {
+                                                        if (!isNaN(e.target.value)) {
+                                                            handleInputChange(e)
+                                                            console.log("this is a number")
+                                                        }
+                                                    }}
                                                 />
-                                                <label className="form-check-label" htmlFor="flexRadioDefault3">
-                                                    Yes
-                                                </label>
+                                            </Col>
+                                            {(formData?.insurance_type === 'Motor' || formData?.insurance_type === 'Lease Car') && <>
+                                                <Col md={6} className="mt-2">
+                                                    <label htmlFor="add-on-plan">
+                                                        Add on Plan
+                                                    </label>
+                                                    <input placeholder="Add on Plan" type='text' id='add-on-plan' name='add_on_plan' className="form-control"
+                                                        value={formData?.add_on_plan}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                </Col>
+                                                <Col md={6} className="mt-2">
+                                                    <label htmlFor="add-on-plan">
+                                                        IDV – Insured Declared Value
+                                                    </label>
+                                                    <input placeholder="Insured Declared Value" type='tel' maxLength={10} id='add-on-plan' name='insured_declared_value' className="form-control"
+                                                        value={formData?.insured_declared_value}
+                                                        onChange={e => handleInputChange(e)}
+                                                    />
+                                                </Col>
+                                                <Col md={6} className="mt-2">
+                                                    <label htmlFor="owndamage">
+                                                        OD – Own Damage
+                                                    </label>
+                                                    <input placeholder="Own Damage" type='tel' maxLength={10} id='owndamage' name='own_damage' className="form-control"
+                                                        value={formData?.own_damage}
+                                                        onChange={e => handleInputChange(e)}
+                                                    />
+                                                </Col>
+                                                <Col md={6} className="mt-2">
+                                                    <label htmlFor="NoClaimBonus">
+                                                        NCB – No Claim Bonus
+                                                    </label>
+                                                    <input placeholder="No Claim Bonus" type='tel' maxLength={10} id='NoClaimBonus' name='ncb_no_claim_bonus' className="form-control"
+                                                        value={formData?.ncb_no_claim_bonus}
+                                                        onChange={e => handleInputChange(e)}
+                                                    />
+                                                </Col>
+                                                <Col md={6} className="mt-2">
+                                                    <label htmlFor="PaymentMode">
+                                                        PM – Payment Mode
+                                                    </label>
+                                                    <input placeholder="Payment Mode" type='text' id='PaymentMode' name='pm_payment_mode' className="form-control"
+                                                        value={formData?.pm_payment_mode}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                </Col>
+                                                <Col md={6} className="mt-2">
+                                                    <label htmlFor="Declaration">
+                                                        NCB – Declaration
+                                                    </label>
+                                                    <input placeholder="Declaration" type='text' id='Declaration' name='ncb_declaration' className="form-control"
+                                                        value={formData?.ncb_declaration}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                </Col>
+                                                <Col md={6} className="mt-2">
+                                                    <label htmlFor="ThirdPartyDate">TPD – Third Party Date</label>
+                                                    {/* <input
+                                                    placeholder="Third Party Date"
+                                                    type="date"
+                                                    id="ThirdPartyDate"
+                                                    name="third_party_date"
+                                                    className="form-control"
+                                                    value={formData?.third_party_date}
+                                                    onChange={handleInputChange}
+                                                /> */}
+
+                                                    <Flatpickr
+                                                        placeholder="Third Party Date"
+                                                        id="ThirdPartyDate"
+                                                        name='third_party_date'
+                                                        className="form-control"
+                                                        value={formData?.third_party_date}
+                                                        // onChange={handleInputChange}
+                                                        onChange={(date) => {
+                                                            setFormData({ ...formData, third_party_date: moment(date[0]).format("YYYY-MM-DD") })
+                                                        }}
+                                                    />
+                                                </Col>
+                                                <Col md={6} className="mt-2">
+                                                    <label htmlFor="InbuiltDiscount">
+                                                        ID – Inbuilt Discount
+                                                    </label>
+                                                    <input placeholder="Inbuilt Discount" type='tel' maxLength={10} id='InbuiltDiscount' name='inbuilt_discount' className="form-control"
+                                                        value={formData?.inbuilt_discount}
+                                                        onChange={e => handleInputChange(e)}
+                                                    />
+                                                </Col>
+                                                <Col md={6} className="mt-2">
+                                                    <label htmlFor="NetPremium">
+                                                        NP – Net Premium.
+                                                    </label>
+                                                    <input placeholder="Net Premium" type='tel' maxLength={10} id='NetPremium' name='net_premimum' className="form-control"
+                                                        value={formData?.net_premimum}
+                                                        onChange={e => handleInputChange(e)}
+                                                    />
+                                                </Col>
+                                            </>}
+                                            <Col md={6} className="mt-2">
+                                                <label htmlFor="health_insurance">Do they have health insurance?</label>
+                                                <div className='d-flex justify-content-between w-50' style={{ padding: '0.571rem 1rem' }}>
+                                                    <div className="form-check">
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="radio"
+                                                            name="health_insurance"
+                                                            checked={formData.health_insurance === "Data not available"}
+                                                            id="flexRadioDefault1"
+                                                            value="Data not available"
+                                                            onChange={(e) => handleInputChange(e)}
+                                                        />
+                                                        <label className="form-check-label" htmlFor="flexRadioDefault1">
+                                                            Data not available
+                                                        </label>
+                                                    </div>
+                                                    <div className="form-check">
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="radio"
+                                                            name="health_insurance"
+                                                            checked={formData.health_insurance === "No"}
+                                                            id="flexRadioDefault2"
+                                                            value="No"
+                                                            onChange={(e) => handleInputChange(e)}
+                                                        />
+                                                        <label className="form-check-label" htmlFor="flexRadioDefault2">
+                                                            No
+                                                        </label>
+                                                    </div>
+                                                    <div className="form-check">
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="radio"
+                                                            name="health_insurance"
+                                                            checked={formData.health_insurance === "Yes"}
+                                                            id="flexRadioDefault3"
+                                                            value="Yes"
+                                                            onChange={(e) => handleInputChange(e)}
+                                                        />
+                                                        <label className="form-check-label" htmlFor="flexRadioDefault3">
+                                                            Yes
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        <div className='w-100 d-flex justify-content-between mt-2'>
+                                            <button className="btn btn-primary" type="button" onClick={e => navigate(-1)} >Cancel</button>
+
+                                            <div className='d-flex gap-1'>
+                                                <button className="btn btn-primary" type="button" onClick={e => handleSubmitSection(e, 'SAVE')} >Save</button>
+                                                <button className="btn btn-primary" type="button" onClick={e => handleSubmitSection(e, 'SAVE & CLOSE')} >Save & Close</button>
                                             </div>
                                         </div>
-                                    </Col>
-                                </Row>
-                                <div className='w-100 d-flex justify-content-between mt-2'>
-                                    <button className="btn btn-primary" type="button" onClick={e => navigate(-1)} >Cancel</button>
-
-                                    <div className='d-flex gap-1'>
-                                        <button className="btn btn-primary" type="button" onClick={e => handleSubmitSection(e, 'SAVE')} >Save</button>
-                                        <button className="btn btn-primary" type="button" onClick={e => handleSubmitSection(e, 'SAVE & CLOSE')} >Save & Close</button>
+                                    </Container>
+                                </form>
+                            ) : (
+                                <Container>
+                                    <div className='d-flex justify-content-center align-items-center w-100'>
+                                        <Spinner size={'40px'} />
                                     </div>
-                                </div>
-                            </Container>
-                        </form>
+                                </Container>
+
+                            )
+                        }
+
                     </CardBody>
                 </Card>
             </div>

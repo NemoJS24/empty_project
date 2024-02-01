@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap'
 import { Edit } from 'react-feather'
 import Select from 'react-select'
+import { Link } from 'react-router-dom'
 
 const BasicInfo = ({ AllFormData }) => {
 
@@ -22,11 +23,11 @@ const BasicInfo = ({ AllFormData }) => {
 
     const customerTypeOptions = [{ value: 'customerGroup', label: 'Select Privileged Customer Group' }]
 
-    const [editMode, setEditMode] = useState(false)
-
-    const handleEditClick = () => {
-        setEditMode(!editMode)
-    }
+    // const [editMode, setEditMode] = useState(false)
+    const editMode = false
+    // const handleEditClick = () => {
+        // setEditMode(!editMode)
+    // }
 
     console.log(userData, "kk")
     return (
@@ -54,7 +55,9 @@ const BasicInfo = ({ AllFormData }) => {
                             <Row>
                                 <Col md='12 d-flex justify-content-between align-items-center'>
                                     <h4>Basic Details</h4>
-                                    <Edit size='15px' cursor='pointer' onClick={handleEditClick} />
+                                    <Link to={`/merchant/customers/edit_customer/${userData?.id}?type=edit`}>
+                                        <Edit size='15px' cursor='pointer' />
+                                    </Link>
                                 </Col>
                             </Row>
 

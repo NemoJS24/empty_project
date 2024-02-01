@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Card, CardBody, Container, Row, Col, Input } from "reactstrap"
 import Select from "react-select"
 import { validForm } from '../../Validator'
-import { postReq } from '../../../assets/auth/jwtService'
+import { crmURL, getReq, postReq } from '../../../assets/auth/jwtService'
 import { useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import Flatpickr from 'react-flatpickr'
@@ -13,10 +13,10 @@ const AddCall = () => {
 
    const valueToCheck = [
       {
-         name: 'customer_name',
+         name: 'xircls_customer_id',
          message: 'Enter Customer Name',
          type: 'string',
-         id: 'customer_name'
+         id: 'xircls_customer_id'
       },
       {
          name: 'Call_Status',
@@ -47,7 +47,7 @@ const AddCall = () => {
    const navigate = useNavigate()
 
    const { id } = useParams()
-
+   const [customerList, setCustomerList] = useState([])
    // console.log(useParams(), "params")
    const params = new URLSearchParams(location.search)
 
@@ -144,6 +144,19 @@ const AddCall = () => {
       }
    }
 
+   const getCustomer = () => {
+      getReq("getAllCustomer", "", crmURL)
+      .then((resp) => {
+         console.log(resp)
+         setCustomerList(resp?.data?.success?.map((curElem) => {
+            return { label: curElem?.customer_name ? curElem?.customer_name : '-', value: curElem?.xircls_customer_id }
+         }))
+      })
+      .catch((error) => {
+         console.log(error)
+      })
+  }
+
    const callStatusOptions = [
       { value: 'Not Contacted', label: 'Not Contacted' },
       { value: 'Attempted to Contact', label: 'Attempted to Contact' },
@@ -225,7 +238,10 @@ const AddCall = () => {
    }
 
    useEffect(() => {
-      fetchServiceData()
+      if (id) {
+         fetchServiceData()
+      }
+      getCustomer()
    }, [])
 
    return (
@@ -247,14 +263,27 @@ const AddCall = () => {
                            </Col>
                            <Col md={6} className="mt-2">
                               <label htmlFor="customer-name">Customer Name</label>
-                              <input type='text' id='customer-name' name='customer_name' className="form-control"
+                              {/* <input type='text' id='customer-name' name='customer_name' className="form-control"
                                  value={data?.customer_name}
                                  onChange={(e) => {
                                     inputChangeHandler(e)
                                  }}
                                  disabled
+                              /> */}
+                              <Select
+                                 placeholder='Customer Name'
+                                 id="insurance-type"
+                                 options={customerList}
+                                 closeMenuOnSelect={true}
+                                 name='xircls_customer_id'
+                                 value={customerList?.find($ => Number($.value) === Number(data?.xircls_customer_id))}
+                                 // components={{ Menu: CustomSelectComponent }}
+                                 onChange={(value) => {
+                                    setData(prevData => ({ ...prevData, xircls_customer_id: value.value }))
+                                 }}
+                                 isDisabled={params.get('type') === "customer" || params.get('type') === "edit"}
                               />
-                              <p id="customer_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                              <p id="xircls_customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
                            </Col>
                            <Col md={6} className="mt-2">
                               <label htmlFor="Call_Status">Call Status</label>

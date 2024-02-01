@@ -1,15 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Twitter, Facebook, Instagram, Edit } from 'react-feather'
+import { Link } from 'react-router-dom'
 import { Card, CardBody, Col, FormGroup, Input, InputGroup, InputGroupText, Label, Row } from 'reactstrap'
 
 const CompanyInfo = ({ AllFormData }) => {
 
   const { handleInputChange, userData, postData } = AllFormData
-  const [editMode, setEditMode] = useState(false)
-
-  const handleEditClick = () => {
-    setEditMode(!editMode)
-  }
+  // const [editMode, setEditMode] = useState(false)
+  const editMode = false
+  // const handleEditClick = () => {
+  //   setEditMode(!editMode)
+  // }
   return (
     <>
       <style>
@@ -35,7 +36,9 @@ const CompanyInfo = ({ AllFormData }) => {
               <Row>
                 <Col md='12' className='d-flex justify-content-between align-items-center'>
                   <h4>Company Details</h4>
-                  <Edit size='15px' cursor='pointer' onClick={handleEditClick} />
+                  <Link to={`/merchant/customers/edit_customer/${userData?.id}?type=edit`}>
+                    <Edit size='15px' cursor='pointer' />
+                  </Link>
                 </Col>
               </Row>
               {userData?.associated_accounts.map((company, index) => (

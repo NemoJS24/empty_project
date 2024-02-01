@@ -18,6 +18,7 @@ const AddFinance = () => {
   const { id } = useParams()
   const isEdit = parmas.get("type") === "edit"
   const isCustomer = parmas.get("type") === "customer"
+  // const [isLoading, setIsLoading] = useState(true)
 
   const mainFormvalueToCheck = [
     {
@@ -366,6 +367,7 @@ const AddFinance = () => {
         }
 
         setFormData(updateData)
+        // setIsLoading(false)
       })
       .catch((error) => {
         console.log(error)

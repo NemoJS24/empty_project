@@ -351,6 +351,10 @@ const Customers_Routes = [
     element: <ThankYouPage />
   },
   {
+    path: '/merchant/customers/add_call/',
+    element: <AddCall />
+  },
+  {
     path: '/merchant/customers/add_call/:id',
     element: <AddCall />
   }

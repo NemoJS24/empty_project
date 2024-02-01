@@ -50,12 +50,12 @@ const PrivateRoute = ({ children, route }) => {
             const isAccess = permissionList[0][route?.permission?.action]
             // console.log(permissionList[0][currentRoute[0]?.permission?.action], "isPermission")
             if (!isAccess) {
-              navigate("/merchant/apps/")
+              navigate("/merchant/apps/", { replace: true })
               toast.error("Permission denied")
             }
     
           } else {
-            navigate("/merchant/apps/")
+            navigate("/merchant/apps/", { replace: true })
             toast.error("Permission denied")
           }
         //}

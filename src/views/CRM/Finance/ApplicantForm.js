@@ -13,6 +13,7 @@ import { validForm } from '../../Validator'
 import Flatpickr from 'react-flatpickr'
 import moment from 'moment'
 import { useNavigate, useParams } from 'react-router-dom'
+import Spinner from '../../Components/DataTable/Spinner'
 // import toast from "react-hot-toast"
 
 const ApplicantForm = ({ allData }) => {
@@ -29,6 +30,7 @@ const ApplicantForm = ({ allData }) => {
     // const [allOptions, setAllOptions] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [customerList, setCustomerList] = useState([])
+    // const [isLoading, setIsLoading] = useState(true)
 
 
     // const mainFormvalueToCheck = [
@@ -408,7 +410,6 @@ const ApplicantForm = ({ allData }) => {
     const [customerOptions, setCustomerOptions] = useState([])
     const [productOptions, setProductOptions] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-
     // console.log('customerDetails')
     // console.log(customerDetails)
     // console.log('customerOptions')
@@ -596,6 +597,7 @@ const ApplicantForm = ({ allData }) => {
                 setCustomerList(resp?.data?.success?.map((curElem) => {
                     return { label: curElem?.customer_name ? curElem?.customer_name : '-', value: curElem?.xircls_customer_id }
                 }))
+                setIsLoading(false)
             })
             .catch((error) => {
                 console.log(error)
@@ -704,7 +706,7 @@ const ApplicantForm = ({ allData }) => {
                     <label htmlFor="basicDetails-mobile">
                         Mobile Number
                     </label>
-                    <input placeholder="Mobile Number" type='tel' maxLength={10} id='basicDetails-mobile' name='phone_no' className="form-control"
+                    <input placeholder="Mobile Number" type='tel' id='basicDetails-mobile' name='phone_no' className="form-control"
                         // value={formData?.basicDetail?.phone_no}
                         //  onChange={handleInputChange} 
                         // onChange={(e) => {
@@ -998,184 +1000,186 @@ const ApplicantForm = ({ allData }) => {
                     </Offcanvas.Body>
                 </Offcanvas>
             </>
-            <Container fluid className="px-0 py-1">
-                {/* <form onSubmit={handleSubmit}> */}
-                <Row>
-                    <Col md={12} className="mt-2">
-                        <h4 className="mb-0">Applicant Details</h4>
-                    </Col>
-                    <Col md={6} className="mt-2" style={{ zIndex: '9' }}>
-                        <label htmlFor="customer-name" className="form-label" style={{ margin: '0px' }}>
-                            Customer Name
-                        </label>
-                        <Select
-                            placeholder='Customer Name'
-                            isDisabled={isCustomer}
-                            id="insurance-type"
-                            options={customerList}
-                            closeMenuOnSelect={true}
-                            name='customer_name'
-                            // onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
-                            components={{ Menu: CustomSelectComponent }}
-                            onChange={(e) => {
-                                console.log(e)
-                                // selectCustomer(e);
-                                // handleInputChange(e, 'xircls_customer_id')
-                                const updatedData = {
-                                    customer_name: e.label,
-                                    xircls_customer_id: e.value
-                                }
+            {
+                !isLoading ? (
+                    <Container fluid className="px-0 py-1">
+                        {/* <form onSubmit={handleSubmit}> */}
+                        <Row>
+                            <Col md={12} className="mt-2">
+                                <h4 className="mb-0">Applicant Details</h4>
+                            </Col>
+                            <Col md={6} className="mt-2" style={{ zIndex: '9' }}>
+                                <label htmlFor="customer-name" className="form-label" style={{ margin: '0px' }}>
+                                    Customer Name
+                                </label>
+                                <Select
+                                    placeholder='Customer Name'
+                                    isDisabled={isCustomer}
+                                    id="insurance-type"
+                                    options={customerList}
+                                    closeMenuOnSelect={true}
+                                    name='customer_name'
+                                    // onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
+                                    components={{ Menu: CustomSelectComponent }}
+                                    onChange={(e) => {
+                                        console.log(e)
+                                        // selectCustomer(e);
+                                        // handleInputChange(e, 'xircls_customer_id')
+                                        const updatedData = {
+                                            customer_name: e.label,
+                                            xircls_customer_id: e.value
+                                        }
 
-                                setFormData((preData) => ({
-                                    ...preData,
-                                    ...updatedData
-                                }))
+                                        setFormData((preData) => ({
+                                            ...preData,
+                                            ...updatedData
+                                        }))
 
-                                handleAddInputChange({ target: { value: e.value, name: "xircls_customer_id" } }, 'productForm')
-                            }}
-                            value={customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.xircls_customer_id))}
-                        />
-                        <p id="xircls_customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="basicDetails-client-type" className="form-label" style={{ margin: '0px' }}>
-                            Client
-                        </label>
-                        <Select
-                            placeholder='Client Type'
-                            id="basicDetails-client-type"
-                            name="client"
-                            options={clientTypeOptions}
-                            value={clientTypeOptions?.find(option => option.value === formData?.client)}
-                            onChange={(value, actionMeta) => handleChange(value, actionMeta)}
-                            closeMenuOnSelect={true}
-                        // name='client'
-                        />
-                        <p id="client_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="basicDetails-se_dsa-name">
-                            SE/DSA Name
-                        </label>
-                        <input placeholder="SE/DSA Name" type='text' id='basicDetails-se_dsa-name' name='SE_DSA_Name' className="form-control"
-                            value={formData?.SE_DSA_Name}
-                            onChange={handleInputChange}
-                        />
-                        <p id="SE_DSA_Name_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="basicDetails-Bank-name">
-                            Bank Name
-                        </label>
-                        <input placeholder="Bank Name" type='text' id='basicDetails-Bank-name' name='Bank_Name' className="form-control"
-                            value={formData?.Bank_Name}
-                            onChange={handleInputChange}
-                        />
-                        <p id="Bank_Name_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="product-name" className="form-label" style={{ margin: '0px' }}>
-                            Product Name
-                        </label>
-                        <Select
-                            placeholder='Select Product Name'
-                            id="product-name"
-                            options={productOptions}
-                            name="product_name_id"
-                            components={{ Menu: CustomProductSelectComponent }}
-                            onChange={(value, actionMeta) => handleChange(value, actionMeta)}
-                            value={productOptions?.filter((curElem) => curElem?.value === formData?.product_name_id)}
-                            // onChange={((event) => {
-                            //     selectCustomer(event)
-                            //     const e = { target: { name: 'product_name_id', value: e?.value } }
-                            //     handleAddInputChange(e, "mainForm")
-                            // })}
-                            // onChange={(e) => {
-                            //     selectCustomer(e);
-                            //     handleInputChange(e, 'product_name_id')
-                            // }}
-                            closeMenuOnSelect={true}
-                        />
-                        <p id="product_name_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="basicDetails-loan-type" className="form-label" style={{ margin: '0px' }}>
-                            Loan Type
-                        </label>
-                        <Select
-                            placeholder='Loan Type'
-                            id="basicDetails-loan-type"
-                            options={loanTypeOptions}
-                            name="Loan_Type"
-                            value={loanTypeOptions?.find(option => option.value === formData?.Loan_Type)}
-                            onChange={(value, actionMeta) => handleChange(value, actionMeta)}
-                            // onChange={((event) => {
-                            //     selectCustomer(event)
-                            //     const e = { target: { name: 'Loan_Type', value: e?.value } }
-                            //     handleInputChange(e, "mainForm")
-                            // })}
-                            // onChange={(e) => {
-                            //     // selectCustomer(e);
-                            //     handleInputChange(e, 'Loan_Type')
-                            // }}
-                            closeMenuOnSelect={true}
-                        />
-                        <p id="Loan_Type_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="basicDetails-rot">
-                            Rate of Interest - %
-                        </label>
-                        <input placeholder="Rate of Interest" type='tel' id='basicDetails-rot' name='Rate_of_Interest' className="form-control"
-                            value={formData?.Rate_of_Interest}
-                            onChange={e => handleInputChange(e, 'tel')}
-                        />
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="basicDetails-loan-acc-number">
-                            Loan Account Number
-                        </label>
-                        <input placeholder="Loan Account Number" type='tel' id='basicDetails-loan-acc-number' name='Loan_Number' className="form-control"
-                            value={formData?.Loan_Number}
-                            onChange={e => handleInputChange(e)}
-                        />
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="basicDetails-bank-acc-number">
-                            Bank Account Number
-                        </label>
-                        <input placeholder="Bank Account Number" type='tel' id='basicDetails-bank-acc-number' name='Bank_Number' className="form-control"
-                            value={formData?.Bank_Number}
-                            onChange={handleInputChange}
-                        />
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="basicDetails-loan-amount">
-                            Loan Amount - ₹
-                        </label>
-                        <input placeholder="Loan Amount" type='tel' id='basicDetails-loan-amount' name='Loan_amount' className="form-control"
-                            value={formData?.Loan_amount}
-                            // onChange={e => (handleInputChange(e, 'tel'))}
-                            onChange={(e) => {
-                                if (!isNaN(e.target.value)) {
-                                    (handleInputChange(e, 'tel'))
-                                    console.log("this is a number")
-                                }
-                            }}
-                        />
-                    </Col>
-                    <Col md={6} className="mt-2">
-                        <label htmlFor="loan-disbursement">Loan Disbursement Date</label>
-                        <Flatpickr options={{ // Sets the minimum date as 14 days ago
-                            dateFormat: "Y-m-d"
-                        }}
-                            className='form-control'
-                            value={formData?.Loan_Disbursement_Date} onChange={(date) => {
-                                setFormData({ ...formData, Loan_Disbursement_Date: moment(date[0]).format("YYYY-MM-DD") })
-                            }}
-                            placeholder='Select date'
-                        />
-                        {/* <input
+                                        handleAddInputChange({ target: { value: e.value, name: "xircls_customer_id" } }, 'productForm')
+                                    }}
+                                    value={customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.xircls_customer_id))}
+                                />
+                                <p id="xircls_customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label htmlFor="basicDetails-client-type" className="form-label" style={{ margin: '0px' }}>
+                                    Client
+                                </label>
+                                <Select
+                                    placeholder='Client Type'
+                                    id="basicDetails-client-type"
+                                    name="client"
+                                    options={clientTypeOptions}
+                                    value={clientTypeOptions?.find(option => option.value === formData?.client)}
+                                    onChange={(value, actionMeta) => handleChange(value, actionMeta)}
+                                    closeMenuOnSelect={true}
+                                // name='client'
+                                />
+                                <p id="client_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label htmlFor="basicDetails-se_dsa-name">
+                                    SE/DSA Name
+                                </label>
+                                <input placeholder="SE/DSA Name" type='text' id='basicDetails-se_dsa-name' name='SE_DSA_Name' className="form-control"
+                                    value={formData?.SE_DSA_Name}
+                                    onChange={handleInputChange}
+                                />
+                                <p id="SE_DSA_Name_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label htmlFor="basicDetails-Bank-name">
+                                    Bank Name
+                                </label>
+                                <input placeholder="Bank Name" type='text' id='basicDetails-Bank-name' name='Bank_Name' className="form-control"
+                                    value={formData?.Bank_Name}
+                                    onChange={handleInputChange}
+                                />
+                                <p id="Bank_Name_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label htmlFor="product-name" className="form-label" style={{ margin: '0px' }}>
+                                    Product Name
+                                </label>
+                                <Select
+                                    placeholder='Select Product Name'
+                                    id="product-name"
+                                    options={productOptions}
+                                    name="product_name_id"
+                                    components={{ Menu: CustomProductSelectComponent }}
+                                    onChange={(value, actionMeta) => handleChange(value, actionMeta)}
+                                    value={productOptions?.filter((curElem) => curElem?.value === formData?.product_name_id)}
+                                    // onChange={((event) => {
+                                    //     selectCustomer(event)
+                                    //     const e = { target: { name: 'product_name_id', value: e?.value } }
+                                    //     handleAddInputChange(e, "mainForm")
+                                    // })}
+                                    // onChange={(e) => {
+                                    //     selectCustomer(e);
+                                    //     handleInputChange(e, 'product_name_id')
+                                    // }}
+                                    closeMenuOnSelect={true}
+                                />
+                                <p id="product_name_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label htmlFor="basicDetails-loan-type" className="form-label" style={{ margin: '0px' }}>
+                                    Loan Type
+                                </label>
+                                <Select
+                                    placeholder='Loan Type'
+                                    id="basicDetails-loan-type"
+                                    options={loanTypeOptions}
+                                    name="Loan_Type"
+                                    value={loanTypeOptions?.find(option => option.value === formData?.Loan_Type)}
+                                    onChange={(value, actionMeta) => handleChange(value, actionMeta)}
+                                    // onChange={((event) => {
+                                    //     selectCustomer(event)
+                                    //     const e = { target: { name: 'Loan_Type', value: e?.value } }
+                                    //     handleInputChange(e, "mainForm")
+                                    // })}
+                                    // onChange={(e) => {
+                                    //     // selectCustomer(e);
+                                    //     handleInputChange(e, 'Loan_Type')
+                                    // }}
+                                    closeMenuOnSelect={true}
+                                />
+                                <p id="Loan_Type_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label htmlFor="basicDetails-rot">
+                                    Rate of Interest - %
+                                </label>
+                                <input placeholder="Rate of Interest" type='tel' id='basicDetails-rot' name='Rate_of_Interest' className="form-control"
+                                    value={formData?.Rate_of_Interest}
+                                    onChange={e => handleInputChange(e, 'tel')}
+                                />
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label htmlFor="basicDetails-loan-acc-number">
+                                    Loan Account Number
+                                </label>
+                                <input placeholder="Loan Account Number" type='tel' id='basicDetails-loan-acc-number' name='Loan_Number' className="form-control"
+                                    value={formData?.Loan_Number}
+                                    onChange={e => handleInputChange(e)}
+                                />
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label htmlFor="basicDetails-bank-acc-number">
+                                    Bank Account Number
+                                </label>
+                                <input placeholder="Bank Account Number" type='tel' id='basicDetails-bank-acc-number' name='Bank_Number' className="form-control"
+                                    value={formData?.Bank_Number}
+                                    onChange={handleInputChange}
+                                />
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label htmlFor="basicDetails-loan-amount">
+                                    Loan Amount - ₹
+                                </label>
+                                <input placeholder="Loan Amount" type='tel' id='basicDetails-loan-amount' name='Loan_amount' className="form-control"
+                                    value={formData?.Loan_amount}
+                                    // onChange={e => (handleInputChange(e, 'tel'))}
+                                    onChange={(e) => {
+                                        if (!isNaN(e.target.value)) {
+                                            (handleInputChange(e, 'tel'))
+                                            console.log("this is a number")
+                                        }
+                                    }}
+                                />
+                            </Col>
+                            <Col md={6} className="mt-2">
+                                <label htmlFor="loan-disbursement">Loan Disbursement Date</label>
+                                <Flatpickr options={{ // Sets the minimum date as 14 days ago
+                                    dateFormat: "Y-m-d"
+                                }}
+                                    className='form-control'
+                                    value={formData?.Loan_Disbursement_Date} onChange={(date) => {
+                                        setFormData({ ...formData, Loan_Disbursement_Date: moment(date[0]).format("YYYY-MM-DD") })
+                                    }}
+                                    placeholder='Select date'
+                                />
+                                {/* <input
 
                             placeholder="Loan Disbursement Date"
                             type="date"
@@ -1185,22 +1189,32 @@ const ApplicantForm = ({ allData }) => {
                             value={formData?.Loan_Disbursement_Date}
                             onChange={handleInputChange}
                         /> */}
-                    </Col>
-                    <Col xs={12} className='mt-2'>
-                        <div className='d-flex justify-content-between mt-2'>
-                            <div>
-                                <button className="btn btn-primary" onClick={() => {
-                                    navigate(-1)
-                                }} type="button">Cancel</button>
-                            </div>
-                            <div>
-                                <button className="btn btn-primary ms-2" type="button" onClick={handleNext}>Next</button>
-                            </div>
+                            </Col>
+                            <Col xs={12} className='mt-2'>
+                                <div className='d-flex justify-content-between mt-2'>
+                                    <div>
+                                        <button className="btn btn-primary" onClick={() => {
+                                            navigate(-1)
+                                        }} type="button">Cancel</button>
+                                    </div>
+                                    <div>
+                                        <button className="btn btn-primary ms-2" type="button" onClick={handleNext}>Next</button>
+                                    </div>
+                                </div>
+                            </Col>
+                        </Row>
+                        {/* </form> */}
+                    </Container>
+                ) : (
+                    <Container>
+                        <div className='d-flex justify-content-center align-items-center w-100'>
+                            <Spinner size={'40px'} />
                         </div>
-                    </Col>
-                </Row>
-                {/* </form> */}
-            </Container>
+                    </Container>
+
+                )
+            }
+
         </>
     )
 }

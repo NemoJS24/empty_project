@@ -2,15 +2,16 @@ import React, { useState } from 'react'
 import { Card, CardBody, Col, FormGroup, Input, InputGroup, InputGroupText, Label, Row } from 'reactstrap'
 import { Edit } from 'react-feather'
 import Select from 'react-select'
+import { Link } from 'react-router-dom'
 
 const Address = ({ AllFormData }) => {
   const { handleInputChange, userData, postData } = AllFormData
-  const [editMode, setEditMode] = useState(false)
+  // const [editMode, setEditMode] = useState(false)
   const [sameBillingAddress, setSameBillingAddress] = useState(false)
-
-  const handleEditClick = () => {
-    setEditMode(!editMode)
-  }
+  const editMode = false
+  // const handleEditClick = () => {
+  //   setEditMode(!editMode)
+  // }
 
   const handleSameBillingAddressChange = () => {
     setSameBillingAddress(!sameBillingAddress)
@@ -68,7 +69,9 @@ const Address = ({ AllFormData }) => {
               <Row>
                 <Col md='12' className='d-flex justify-content-between align-items-center'>
                   <h4>Billing Address</h4>
-                  <Edit size='15px' cursor='pointer' onClick={handleEditClick} />
+                  <Link to={`/merchant/customers/edit_customer/${userData?.id}?type=edit`}>
+                    <Edit size='15px' cursor='pointer' />
+                  </Link>
                 </Col>
               </Row>
 
