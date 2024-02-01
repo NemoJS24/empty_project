@@ -259,6 +259,7 @@ const CustomizationParent = () => {
     const [dropImage, setDropImage] = useState(false)
     const [rearr, setRearr] = useState(0)
     const [isColDragging, setIsColDragging] = useState(false)
+    const [deleteCols, setDeleteCols] = useState(["center", "right"])
 
     console.log({ dropImage, imageType, finalObj })
     // const [textValue, setTextValue] = useState("")
@@ -728,51 +729,100 @@ const CustomizationParent = () => {
         setCurrPosition({ ...currPosition, position, id, name: e.target.name, curData, cur, j })
     }
 
-    const changeColumn = (col, width) => {
+    const changeColumn = (col, width, isDelete) => {
         const newObj = { ...finalObj }
         const dupArray = currPage === "button" ? [...newObj?.[`button`]] : [...newObj?.[`pages`][newObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
         const mobile_dupArray = currPage === "button" ? [...newObj?.[`mobile_button`]] : [...newObj?.[`mobile_pages`][newObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
         let elements, mobile_elements
+        // const refer = ["left", "center", "right"]
         if (col === "1") {
-            elements = [
-                {
-                    positionType: 'left',
-                    style: { ...dupArray[indexes.cur]?.elements[0]?.style, width: `${width?.left}` },
-                    element: [...dupArray[indexes.cur]?.elements[0]?.element]
-                }
-            ]
-            mobile_elements = [
-                {
-                    positionType: 'left',
-                    style: { ...mobile_dupArray[indexes.cur]?.elements[0]?.style, width: `${width?.left}` },
-                    element: [...mobile_dupArray[indexes.cur]?.elements[0]?.element]
-                }
-            ]
+            if (isDelete) {
+                const newRow = dupArray[indexes?.cur]?.elements?.filter($ => !deleteCols.includes($.positionType))
+                const mobile_newRow = mobile_dupArray[indexes?.cur]?.elements?.filter($ => !deleteCols.includes($.positionType))
+                elements = [
+                    {
+                        positionType: 'left',
+                        style: { ...newRow[0]?.style, width: `${width?.left}` },
+                        element: [...newRow[0]?.element]
+                    }
+                ]
+                mobile_elements = [
+                    {
+                        positionType: 'left',
+                        style: { ...mobile_newRow[0]?.style, width: `${width?.left}` },
+                        element: [...mobile_newRow[0]?.element]
+                    }
+                ]
+            } else {
+                elements = [
+                    {
+                        positionType: 'left',
+                        style: { ...dupArray[indexes.cur]?.elements[0]?.style, width: `${width?.left}` },
+                        element: [...dupArray[indexes.cur]?.elements[0]?.element]
+                    }
+                ]
+                mobile_elements = [
+                    {
+                        positionType: 'left',
+                        style: { ...mobile_dupArray[indexes.cur]?.elements[0]?.style, width: `${width?.left}` },
+                        element: [...mobile_dupArray[indexes.cur]?.elements[0]?.element]
+                    }
+                ]
+            }
         } else if (col === "2") {
-            elements = [
-                {
-                    positionType: 'left',
-                    style: { ...dupArray[indexes.cur]?.elements[0]?.style, width: `${width?.left}` },
-                    element: [...dupArray[indexes.cur]?.elements[0]?.element]
-                },
-                {
-                    positionType: 'right',
-                    style: dupArray[indexes?.cur].elements?.length !== 1 ? { ...dupArray[indexes?.cur]?.elements[1]?.style, width: `${width?.right}` } : { ...elementStyles?.col, width: `${width?.right}` },
-                    element: dupArray[indexes?.cur]?.elements?.length !== 1 ? [...dupArray[indexes?.cur]?.elements[1]?.element] : [{ ...commonObj, type: "", id: dupArray?.length }]
-                }
-            ]
-            mobile_elements = [
-                {
-                    positionType: 'left',
-                    style: { ...mobile_dupArray[indexes.cur]?.elements[0]?.style, width: `${width?.left}` },
-                    element: [...mobile_dupArray[indexes.cur]?.elements[0]?.element]
-                },
-                {
-                    positionType: 'right',
-                    style: mobile_dupArray[indexes?.cur].elements?.length !== 1 ? { ...mobile_dupArray[indexes?.cur]?.elements[1]?.style, width: `${width?.right}` } : { ...elementStyles?.col, width: `${width?.right}` },
-                    element: mobile_dupArray[indexes?.cur]?.elements?.length !== 1 ? [...mobile_dupArray[indexes?.cur]?.elements[1]?.element] : [{ ...commonObj, type: "", id: dupArray?.length }]
-                }
-            ]
+            if (isDelete) {
+                const newRow = dupArray[indexes?.cur]?.elements?.filter($ => !deleteCols.includes($.positionType))
+                const mobile_newRow = mobile_dupArray[indexes?.cur]?.elements?.filter($ => !deleteCols.includes($.positionType))
+                elements = [
+                    {
+                        positionType: 'left',
+                        style: { ...newRow[0]?.style },
+                        element: [...newRow[0]?.element]
+                    },
+                    {
+                        positionType: 'right',
+                        style: { ...newRow[1]?.style },
+                        element: [...newRow[1]?.element]
+                    }
+                ]
+                mobile_elements = [
+                    {
+                        positionType: 'left',
+                        style: { ...mobile_newRow[0]?.style },
+                        element: [...mobile_newRow[0]?.element]
+                    },
+                    {
+                        positionType: 'right',
+                        style: { ...mobile_newRow[1]?.style },
+                        element: [...mobile_newRow[1]?.element]
+                    }
+                ]
+            } else {
+                elements = [
+                    {
+                        positionType: 'left',
+                        style: { ...dupArray[indexes.cur]?.elements[0]?.style, width: `${width?.left}` },
+                        element: [...dupArray[indexes.cur]?.elements[0]?.element]
+                    },
+                    {
+                        positionType: 'right',
+                        style: dupArray[indexes?.cur].elements?.length !== 1 ? { ...dupArray[indexes?.cur]?.elements[1]?.style, width: `${width?.right}` } : { ...elementStyles?.col, width: `${width?.right}` },
+                        element: dupArray[indexes?.cur]?.elements?.length !== 1 ? [...dupArray[indexes?.cur]?.elements[1]?.element] : [{ ...commonObj, type: "", id: dupArray?.length }]
+                    }
+                ]
+                mobile_elements = [
+                    {
+                        positionType: 'left',
+                        style: { ...mobile_dupArray[indexes.cur]?.elements[0]?.style, width: `${width?.left}` },
+                        element: [...mobile_dupArray[indexes.cur]?.elements[0]?.element]
+                    },
+                    {
+                        positionType: 'right',
+                        style: mobile_dupArray[indexes?.cur].elements?.length !== 1 ? { ...mobile_dupArray[indexes?.cur]?.elements[1]?.style, width: `${width?.right}` } : { ...elementStyles?.col, width: `${width?.right}` },
+                        element: mobile_dupArray[indexes?.cur]?.elements?.length !== 1 ? [...mobile_dupArray[indexes?.cur]?.elements[1]?.element] : [{ ...commonObj, type: "", id: dupArray?.length }]
+                    }
+                ]
+            }
         } else {
             elements = [
                 {
@@ -819,6 +869,7 @@ const CustomizationParent = () => {
             newObj.mobile_pages[newObj?.mobile_pages?.findIndex($ => $?.id === currPage)].values = mobile_dupArray
         }
         updatePresent({ ...newObj })
+        setDeleteCols(["center", "right"])
         // setcolWise([...colWise])
     }
 
@@ -987,7 +1038,7 @@ const CustomizationParent = () => {
 
     const replaceColumns = (e, { cur, mainCol, repCol }) => {
         e.stopPropagation()
-        console.log({cur, mainCol, repCol})
+        console.log({ cur, mainCol, repCol })
         const newObj = { ...finalObj }
         const dupArray = currPage === "button" ? newObj?.button : newObj?.pages[newObj?.pages?.findIndex($ => $?.id === currPage)].values
         const mobile_dupArray = currPage === "button" ? newObj?.mobile_button : newObj?.mobile_pages[newObj?.mobile_pages?.findIndex($ => $?.id === currPage)].values
@@ -1021,7 +1072,7 @@ const CustomizationParent = () => {
             newObj.pages[pageIndex].values = dupArray
             newObj.mobile_pages[mobile_pageIndex].values = mobile_dupArray
         }
-        updatePresent({...newObj})
+        updatePresent({ ...newObj })
     }
 
     const renderElems = () => {
@@ -1532,6 +1583,7 @@ const CustomizationParent = () => {
                 </>
             )
         } else if (selectedType === "block") {
+            const colWise = currPage === "button" ? finalObj?.[`${mobileCondition}button`] : finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values
             styles = (
                 <>
                     <UncontrolledAccordion defaultOpen={['1', '2', '3']} stayOpen>
@@ -1579,7 +1631,7 @@ const CustomizationParent = () => {
                         {/* Column Count Starts */}
                         <h6 style={{ marginLeft: "7px", marginTop: "10px" }}>Column Count</h6>
                         <div className='d-flex justify-content-around align-items-center'>
-                            <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("1", { left: "100%", right: "0%" })} style={{ aspectRatio: "1", width: "50px" }}>
+                            {colWise[indexes?.cur].elements.length === 1 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("1", { left: "100%", right: "0%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <rect
                                         x={2}
@@ -1592,16 +1644,104 @@ const CustomizationParent = () => {
                                         stroke="#727272"
                                     />
                                 </svg>
-                            </button>
-                            <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("2", { left: "100%", right: "100%" })} style={{ aspectRatio: "1", width: "50px" }}>
+                            </button> : (
+                                <UncontrolledDropdown className='more-options-dropdown'>
+                                    <DropdownToggle className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
+                                            <rect
+                                                x={2}
+                                                y={2}
+                                                width={60}
+                                                rx={5}
+                                                height={50}
+                                                fill="transparent"
+                                                strokeWidth={3}
+                                                stroke="#727272"
+                                            />
+                                        </svg>
+                                    </DropdownToggle>
+                                    <DropdownMenu style={{ width: "280px" }} end>
+                                        <div className="p-1 d-flex gap-1">
+                                            {colWise[indexes?.cur].elements.map((element, index) => {
+                                                return (
+                                                    <div key={index} className="form-check m-0 p-0 flex-grow-1 d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                                        <input checked={deleteCols.includes(element.positionType)} name={`deleteCol`} id={`deleteCol-${index}`} type={colWise[indexes?.cur].elements.length === 2 ? "radio" : "checkbox"} onChange={(e) => {
+                                                            if (colWise[indexes?.cur].elements.length === 2) {
+                                                                setDeleteCols([element?.positionType])
+                                                            } else {
+                                                                e.target.checked ? setDeleteCols((deleteCols.length < colWise[indexes?.cur].elements.length - 1) ? [...deleteCols, element?.positionType] : deleteCols) : setDeleteCols(deleteCols.filter($ => $ !== element.positionType))
+                                                            }
+                                                        }} className="form-check-input m-0 p-0" />
+                                                        <label htmlFor={`deleteCol-${index}`} className="form-check-label m-0 p-0 text-capitalize">{element?.positionType}</label>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                        <div className="d-flex align-items-center">
+                                            <DropdownItem onClick={() => {
+                                                if (deleteCols.length < colWise[indexes.cur].elements.length - 1) {
+                                                    toast.error(`Select at least ${colWise[indexes.cur].elements.length - 1} columns`)
+                                                } else {
+                                                    changeColumn("1", { left: "100%" }, true)
+                                                }
+                                            }} className='flex-grow-1 text-center'>
+                                                Remove Columns
+                                            </DropdownItem>
+                                            <DropdownItem className='flex-grow-1 text-center'>
+                                                Cancel
+                                            </DropdownItem>
+                                        </div>
+                                    </DropdownMenu>
+                                </UncontrolledDropdown>
+                            )}
+                            {colWise[indexes?.cur].elements.length <= 2 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("2", { left: "100%", right: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <g strokeWidth={3} stroke="#727272">
                                         <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
                                         <path d="M32 52V2" />
                                     </g>
                                 </svg>
-                            </button>
-                            <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("3", { left: "100%", center: "100%", right: "100%" })} style={{ aspectRatio: "1", width: "50px" }}>
+                            </button> : (
+                                <UncontrolledDropdown className='more-options-dropdown'>
+                                    <DropdownToggle className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
+                                            <g strokeWidth={3} stroke="#727272">
+                                                <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
+                                                <path d="M32 52V2" />
+                                            </g>
+                                        </svg>
+                                    </DropdownToggle>
+                                    <DropdownMenu style={{ width: "280px" }} end>
+                                        <div className="p-1 d-flex gap-1">
+                                            {colWise[indexes?.cur].elements.map((element, index) => {
+                                                return (
+                                                    <div key={index} className="form-check m-0 p-0 flex-grow-1 d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                                        <input checked={deleteCols.includes(element.positionType)} name={`deleteCol`} id={`deleteCol-${index}`} type={"radio"} onChange={() => {
+                                                            setDeleteCols([element?.positionType])
+                                                        }} className="form-check-input m-0 p-0" />
+                                                        <label htmlFor={`deleteCol-${index}`} className="form-check-label m-0 p-0 text-capitalize">{element?.positionType}</label>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                        <div className="d-flex align-items-center">
+                                            <DropdownItem onClick={() => {
+                                                if (deleteCols.length < colWise[indexes.cur].elements.length - 2) {
+                                                    toast.error(`Select at least ${colWise[indexes.cur].elements.length - 2} columns`)
+                                                } else {
+                                                    changeColumn("2", { left: "100%", right: "100%" }, true)
+                                                }
+                                            }} className='flex-grow-1 text-center'>
+                                                Remove Columns
+                                            </DropdownItem>
+                                            <DropdownItem className='flex-grow-1 text-center'>
+                                                Cancel
+                                            </DropdownItem>
+                                        </div>
+                                    </DropdownMenu>
+                                </UncontrolledDropdown>
+                            )}
+                            <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("3", { left: "100%", center: "100%", right: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <g strokeWidth={3} stroke="#727272">
                                         <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1617,7 +1757,7 @@ const CustomizationParent = () => {
                             <div>
                                 <h6 style={{ marginLeft: "7px", marginTop: "20px" }}>Column Split</h6>
                                 <div className='d-flex justify-content-around align-items-center'>
-                                    <button onClick={() => changeColumn("2", { left: "25%", right: "75%" })} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button onClick={() => changeColumn("2", { left: "25%", right: "75%" }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth="3" stroke="#727272">
                                                 <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
@@ -1625,7 +1765,7 @@ const CustomizationParent = () => {
                                             </g>
                                         </svg>
                                     </button>
-                                    <button onClick={() => changeColumn("2", { left: `${100 / 3}%`, right: `${200 / 3}%` })} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button onClick={() => changeColumn("2", { left: `${100 / 3}%`, right: `${200 / 3}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth="3" stroke="#727272">
                                                 <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
@@ -1643,7 +1783,7 @@ const CustomizationParent = () => {
                                     </button>
                                 </div>
                                 <div className='d-flex justify-content-around align-items-center'>
-                                    <button onClick={() => changeColumn("2", { left: "50%", right: "50%" })} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1651,7 +1791,7 @@ const CustomizationParent = () => {
                                             </g>
                                         </svg>
                                     </button>
-                                    <button onClick={() => changeColumn("2", { left: `${(350 * 100) / 600}%`, right: `${(250 * 100) / 600}%` })} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button onClick={() => changeColumn("2", { left: `${(350 * 100) / 600}%`, right: `${(250 * 100) / 600}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth="3" stroke="#727272">
                                                 <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
@@ -1659,7 +1799,7 @@ const CustomizationParent = () => {
                                             </g>
                                         </svg>
                                     </button>
-                                    <button onClick={() => changeColumn("2", { left: `${200 / 3}%`, right: `${100 / 3}%` })} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button onClick={() => changeColumn("2", { left: `${200 / 3}%`, right: `${100 / 3}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth="3" stroke="#727272">
                                                 <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
@@ -1669,7 +1809,7 @@ const CustomizationParent = () => {
                                     </button>
                                 </div>
                                 <div className='d-flex justify-content-start align-items-center' style={{ marginLeft: "14.5px" }}>
-                                    <button onClick={() => changeColumn("2", { left: "75%", right: "25%" })} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button onClick={() => changeColumn("2", { left: "75%", right: "25%" }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth="3" stroke="#727272">
                                                 <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
@@ -1686,7 +1826,7 @@ const CustomizationParent = () => {
                             <div>
                                 <h6 style={{ marginLeft: "7px", marginTop: "20px" }}>Column Split</h6>
                                 <div className='d-flex justify-content-around align-items-center'>
-                                    <button onClick={() => changeColumn("3", { left: `100%`, center: `100%`, right: `100%` })} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button onClick={() => changeColumn("3", { left: `100%`, center: `100%`, right: `100%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1694,7 +1834,7 @@ const CustomizationParent = () => {
                                             </g>
                                         </svg>
                                     </button>
-                                    <button onClick={() => changeColumn("3", { left: `${100 / 2}%`, center: `${100 / 4}%`, right: `${100 / 4}%` })} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button onClick={() => changeColumn("3", { left: `${100 / 2}%`, center: `${100 / 4}%`, right: `${100 / 4}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent"></rect>
@@ -1703,7 +1843,7 @@ const CustomizationParent = () => {
                                             </g>
                                         </svg>
                                     </button>
-                                    <button onClick={() => changeColumn("3", { left: `${100 / 4}%`, center: `${100 / 2}%`, right: `${100 / 4}%` })} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button onClick={() => changeColumn("3", { left: `${100 / 4}%`, center: `${100 / 2}%`, right: `${100 / 4}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
@@ -1714,7 +1854,7 @@ const CustomizationParent = () => {
                                     </button>
                                 </div>
                                 <div className='d-flex justify-content-start align-items-center' style={{ marginLeft: "14.5px" }}>
-                                    <button onClick={() => changeColumn("3", { left: `${100 / 4}%`, center: `${100 / 4}%`, right: `${100 / 2}%` })} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button onClick={() => changeColumn("3", { left: `${100 / 4}%`, center: `${100 / 4}%`, right: `${100 / 2}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
@@ -2852,7 +2992,7 @@ const CustomizationParent = () => {
                                 isMulti={true}
                                 options={sourceList}
                                 inputId="aria-example-input"
-                                closeMenuOnSelect={true}
+                                closeMenuOnSelect={false}
                                 name="source"
                                 placeholder="Add Source"
                                 value={sourceList?.filter(option => finalObj?.behaviour?.SOURCE_PAGE_LINK?.includes(option.value))}
@@ -4088,7 +4228,7 @@ const CustomizationParent = () => {
                             <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Rules</span>
                         </div>
                         <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "email" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => {
-                            setSideNav(sideNav === "email" ? "" : "email")
+                            setSideNav("email")
                         }}>
                             <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
                                 <Mail size={15} />
@@ -4518,7 +4658,7 @@ const CustomizationParent = () => {
                                                                 <svg
                                                                     xmlns="http://www.w3.org/2000/svg"
                                                                     viewBox="0 0 184.45 367.2"
-                                                                    style={{ width: "55px" }}
+                                                                    style={{ width: "75px" }}
                                                                     property="globalStyle.overlay.mobilePosition"
                                                                 >
                                                                     <g id="mobile-position">
@@ -4550,102 +4690,29 @@ const CustomizationParent = () => {
                                                                     <path d="M82.88,13.81h19.94a1.4,1.4,0,0,0,1.54-1.28,1.4,1.4,0,0,0-1.54-1.28H82.88a1.4,1.4,0,0,0-1.54,1.28A1.4,1.4,0,0,0,82.88,13.81Z" />
                                                                 </svg>
                                                             ) : (
-                                                                <svg
-                                                                    width={80}
-                                                                    height={162}
-                                                                    fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <rect x={1.5} y={0.5} width={77} height={161} rx={11.5} fill="#252626" />
-                                                                    <g clipPath="url(#clip0_529_46870)">
-                                                                        <rect x={5} y={4} width={70} height={154} rx={8} fill="#fff" />
-                                                                        <path style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "TC" } })}
-                                                                            fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "TC" ? "#464646" : "#ffffff"}
-                                                                            className="mobile-position-area"
-                                                                            d="M5.125 4.125H76.875V40.875H5.125z"
-                                                                        />
-                                                                        <path style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "TC" } })}
-                                                                            stroke="#313233"
-                                                                            strokeWidth={0.25}
-                                                                            d="M5.125 4.125H76.875V40.875H5.125z"
-                                                                        />
-                                                                        <path style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "ML" } })}
-                                                                            fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "ML" ? "#464646" : "#ffffff"}
-                                                                            className="mobile-position-area"
-                                                                            d="M5.125 41.125H40.875V120.875H5.125z"
-                                                                        />
-                                                                        <path style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "ML" } })}
-                                                                            stroke="#313233"
-                                                                            strokeWidth={0.25}
-                                                                            d="M5.125 41.125H40.875V120.875H5.125z"
-                                                                        />
-                                                                        <path style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "MR" } })}
-                                                                            fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "MR" ? "#464646" : "#ffffff"}
-                                                                            className="mobile-position-area selected"
-                                                                            d="M41.125 41.125H76.875V120.875H41.125z"
-                                                                        />
-                                                                        <path style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "MR" } })}
-                                                                            stroke="#313233"
-                                                                            strokeWidth={0.25}
-                                                                            d="M41.125 41.125H76.875V120.875H41.125z"
-                                                                        />
-                                                                        <path style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "BC" } })}
-                                                                            fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "BC" ? "#464646" : "#ffffff"}
-                                                                            className="mobile-position-area"
-                                                                            d="M5.125 121.125H76.875V157.875H5.125z"
-                                                                        />
-                                                                        <path style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "BC" } })}
-                                                                            stroke="#313233"
-                                                                            strokeWidth={0.25}
-                                                                            d="M5.125 121.125H76.875V157.875H5.125z"
-                                                                        />
+                                                                <svg style={{ width: "75px" }} viewBox="0 0 185 368" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <g clip-path="url(#clip0_0_1)">
+                                                                        <path d="M174 258H120V356H174V258Z" stroke="#231F20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "BR" ? "#464646" : "white"} className='cursor-pointer' onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "BR" } })} />
+                                                                        <path d="M120 258H66V356H120V258Z" stroke="#231F20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "BC" ? "#464646" : "white"} className='cursor-pointer' onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "BC" } })} />
+                                                                        <path d="M66 258H12V356H66V258Z" stroke="#231F20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "BL" ? "#464646" : "white"} className='cursor-pointer' onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "BL" } })} />
+                                                                        <path d="M174 108H120V258H174V108Z" stroke="#231F20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "MR" ? "#464646" : "white"} className='cursor-pointer' onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "MR" } })} />
+                                                                        <path d="M120 108H66V258H120V108Z" stroke="#231F20" fill={"#cccccc"} className='cursor-pointer' />
+                                                                        <path d="M66 108H12V258H66V108Z" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "ML" ? "#464646" : "white"} className='cursor-pointer' stroke="#231F20" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "ML" } })} />
+                                                                        <path d="M174 9H120V108H174V9Z" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "TR" ? "#464646" : "white"} className='cursor-pointer' stroke="#231F20" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "TR" } })} />
+                                                                        <path d="M120 9H66V108H120V9Z" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "TC" ? "#464646" : "white"} className='cursor-pointer' stroke="#231F20" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "TC" } })} />
+                                                                        <path d="M66 9H12V108H66V9Z" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "TL" ? "#464646" : "white"} className='cursor-pointer' stroke="#231F20" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "TL" } })} />
+                                                                        <path fill="#58595B" d="M182.49 26.65C182.49 19.582 179.682 12.8034 174.684 7.8056C169.687 2.80776 162.908 0 155.84 0L28.61 0C21.5489 0.0105983 14.7807 2.82304 9.79146 7.81973C4.80226 12.8164 1.99999 19.5889 2 26.65V340.55C1.99999 347.611 4.80226 354.384 9.79146 359.38C14.7807 364.377 21.5489 367.189 28.61 367.2H155.84C162.908 367.2 169.687 364.392 174.684 359.394C179.682 354.397 182.49 347.618 182.49 340.55V26.65ZM178.4 340.29C178.4 346.342 175.996 352.147 171.716 356.426C167.437 360.706 161.632 363.11 155.58 363.11H28.36C22.3078 363.11 16.5034 360.706 12.2238 356.426C7.94424 352.147 5.54 346.342 5.54 340.29V26.4C5.54 20.3478 7.94424 14.5434 12.2238 10.2638C16.5034 5.98424 22.3078 3.58 28.36 3.58H155.58C161.632 3.58 167.437 5.98424 171.716 10.2638C175.996 14.5434 178.4 20.3478 178.4 26.4V340.29Z" />
+                                                                        <path d="M2 48.47H1.72C1.26383 48.47 0.826339 48.6512 0.503776 48.9737C0.181214 49.2963 2.50017e-10 49.7338 2.50017e-10 50.19L2.50017e-10 60.65C-3.85403e-06 60.8754 0.0445558 61.0986 0.131116 61.3067C0.217676 61.5148 0.344529 61.7038 0.504378 61.8627C0.664227 62.0216 0.853918 62.1473 1.06254 62.2327C1.27116 62.318 1.4946 62.3613 1.72 62.36H2" fill="black" />
+                                                                        <path d="M182.49 126.27C183.02 126.27 183.529 126.059 183.904 125.684C184.279 125.309 184.49 124.8 184.49 124.27V85.48C184.49 84.9495 184.279 84.4408 183.904 84.0658C183.529 83.6907 183.02 83.48 182.49 83.48" fill="black" />
+                                                                        <path d="M2 75.21C1.46957 75.21 0.960859 75.4207 0.585786 75.7958C0.210714 76.1709 0 76.6796 0 77.21L0 99.25C0 99.7805 0.210714 100.289 0.585786 100.664C0.960859 101.039 1.46957 101.25 2 101.25" fill="black" />
+                                                                        <path d="M2 108.58C1.46957 108.58 0.960859 108.791 0.585786 109.166C0.210714 109.541 0 110.05 0 110.58L0 132.66C0 133.19 0.210714 133.699 0.585786 134.074C0.960859 134.449 1.46957 134.66 2 134.66" fill="black" />
+                                                                        <path d="M178.4 26.4C178.4 20.3478 175.996 14.5434 171.716 10.2638C167.437 5.98426 161.632 3.58002 155.58 3.58002H28.36C22.3077 3.58002 16.5034 5.98426 12.2238 10.2638C7.94422 14.5434 5.53998 20.3478 5.53998 26.4V340.29C5.53998 346.342 7.94422 352.147 12.2238 356.426C16.5034 360.706 22.3077 363.11 28.36 363.11H155.58C161.632 363.11 167.437 360.706 171.716 356.426C175.996 352.147 178.4 346.342 178.4 340.29V26.4ZM113.31 12.54C113.312 12.9835 113.182 13.4175 112.937 13.7872C112.692 14.1569 112.343 14.4455 111.934 14.6166C111.525 14.7877 111.074 14.8335 110.639 14.7482C110.204 14.6629 109.804 14.4503 109.49 14.1375C109.175 13.8246 108.961 13.4255 108.874 12.9907C108.787 12.5559 108.83 12.105 109 11.6951C109.169 11.2852 109.456 10.9348 109.824 10.6882C110.193 10.4417 110.627 10.31 111.07 10.31C111.662 10.31 112.231 10.5446 112.65 10.9626C113.07 11.3805 113.307 11.9477 113.31 12.54ZM82.88 11.25H102.82C103.006 11.2308 103.193 11.2488 103.372 11.303C103.55 11.3573 103.716 11.4466 103.859 11.5659C104.003 11.6851 104.121 11.8318 104.207 11.9974C104.293 12.163 104.345 12.3441 104.36 12.53C104.345 12.716 104.293 12.897 104.207 13.0626C104.121 13.2282 104.003 13.3749 103.859 13.4942C103.716 13.6134 103.55 13.7028 103.372 13.757C103.193 13.8113 103.006 13.8293 102.82 13.81H82.88C82.6944 13.8293 82.5069 13.8113 82.3284 13.757C82.1499 13.7028 81.984 13.6134 81.8406 13.4942C81.6971 13.3749 81.5789 13.2282 81.4929 13.0626C81.407 12.897 81.355 12.716 81.34 12.53C81.355 12.3441 81.407 12.163 81.4929 11.9974C81.5789 11.8318 81.6971 11.6851 81.8406 11.5659C81.984 11.4466 82.1499 11.3573 82.3284 11.303C82.5069 11.2488 82.6944 11.2308 82.88 11.25ZM172.77 339.67C172.77 348.6 165.29 355.44 156.36 355.44H29C26.9168 355.478 24.8472 355.096 22.9146 354.317C20.982 353.539 19.2258 352.379 17.7506 350.908C16.2755 349.436 15.1115 347.683 14.328 345.753C13.5444 343.822 13.1574 341.753 13.19 339.67V26C13.1529 23.8913 13.5331 21.7961 14.3087 19.8349C15.0843 17.8736 16.24 16.0851 17.7093 14.5721C19.1786 13.0591 20.9326 11.8516 22.8702 11.0188C24.8079 10.1861 26.8911 9.74474 29 9.72002H43.74C46.85 9.72002 48 9.72002 48.19 13.72C48.39 17.82 51.19 20.05 55.01 21.25C56.3559 21.5412 57.7375 21.6322 59.11 21.52H126.4C127.771 21.665 129.156 21.6077 130.51 21.35C134.32 20.15 137.13 17.72 137.33 13.63C137.53 9.54002 138.66 9.76002 141.78 9.76002H156.36C160.676 9.78302 164.811 11.4961 167.878 14.5319C170.946 17.5678 172.702 21.6847 172.77 26V339.67Z" fill="#231F20" />
+                                                                        <path d="M111.07 14.78C112.307 14.78 113.31 13.7771 113.31 12.54C113.31 11.3029 112.307 10.3 111.07 10.3C109.833 10.3 108.83 11.3029 108.83 12.54C108.83 13.7771 109.833 14.78 111.07 14.78Z" fill="black" />
+                                                                        <path d="M82.88 13.81H102.82C103.006 13.8292 103.193 13.8112 103.372 13.757C103.55 13.7027 103.716 13.6134 103.859 13.4941C104.003 13.3749 104.121 13.2281 104.207 13.0626C104.293 12.897 104.345 12.7159 104.36 12.53C104.345 12.344 104.293 12.1629 104.207 11.9974C104.121 11.8318 104.003 11.6851 103.859 11.5658C103.716 11.4466 103.55 11.3572 103.372 11.303C103.193 11.2487 103.006 11.2307 102.82 11.25H82.88C82.6944 11.2307 82.5069 11.2487 82.3284 11.303C82.1499 11.3572 81.9841 11.4466 81.8406 11.5658C81.6971 11.6851 81.5789 11.8318 81.493 11.9974C81.407 12.1629 81.355 12.344 81.34 12.53C81.355 12.7159 81.407 12.897 81.493 13.0626C81.5789 13.2281 81.6971 13.3749 81.8406 13.4941C81.9841 13.6134 82.1499 13.7027 82.3284 13.757C82.5069 13.8112 82.6944 13.8292 82.88 13.81Z" fill="black" />
                                                                     </g>
-                                                                    <rect
-                                                                        x={5.25}
-                                                                        y={4.25}
-                                                                        width={69.5}
-                                                                        height={153.5}
-                                                                        rx={7.75}
-                                                                        stroke="#313233"
-                                                                        strokeWidth={0.5}
-                                                                    />
-                                                                    <rect
-                                                                        x={1.5}
-                                                                        y={0.5}
-                                                                        width={77}
-                                                                        height={161}
-                                                                        rx={11.5}
-                                                                        stroke="#585A5B"
-                                                                    />
-                                                                    <path fill="#252626" d="M0 21H1V27H0z" />
-                                                                    <path fill="#252626" d="M0 39H1V50H0z" />
-                                                                    <path fill="#252626" d="M79 43H80V61H79z" />
-                                                                    <path
-                                                                        d="M20.753 4.612A3 3 0 0123.689 1h32.622a3 3 0 012.937 3.612l-.417 2A3 3 0 0155.894 9H24.106a3 3 0 01-2.937-2.388l-.416-2z"
-                                                                        fill="#252626"
-                                                                    />
-                                                                    <path fill="#252626" d="M0 52H1V63H0z" />
-                                                                    <rect
-                                                                        x={45}
-                                                                        y={4}
-                                                                        width={1}
-                                                                        height={10}
-                                                                        rx={0.5}
-                                                                        transform="rotate(90 45 4)"
-                                                                        fill="#000"
-                                                                    />
-                                                                    <rect
-                                                                        x={48}
-                                                                        y={4}
-                                                                        width={1}
-                                                                        height={2}
-                                                                        rx={0.5}
-                                                                        transform="rotate(90 48 4)"
-                                                                        fill="#000"
-                                                                    />
                                                                     <defs>
-                                                                        <clipPath id="clip0_529_46870">
-                                                                            <rect x={5} y={4} width={70} height={154} rx={8} fill="#fff" />
+                                                                        <clipPath id="clip0_0_1">
+                                                                            <rect width="184.45" height="367.2" fill="white" />
                                                                         </clipPath>
                                                                     </defs>
                                                                 </svg>
@@ -5372,16 +5439,16 @@ const CustomizationParent = () => {
                                                                     method: "POST",
                                                                     body: form_data
                                                                 })
-                                                                .then((data) => data.json())
-                                                                .then((resp) => {
-                                                                    if (resp.data) {
-                                                                        setFinalObj({ ...finalObj, email_settings: { ...resp.data } })
+                                                                    .then((data) => data.json())
+                                                                    .then((resp) => {
+                                                                        if (resp.data) {
+                                                                            setFinalObj({ ...finalObj, email_settings: { ...resp.data } })
 
-                                                                    }
-                                                                })
-                                                                .catch((error) => {
-                                                                    console.log(error)
-                                                                })
+                                                                        }
+                                                                    })
+                                                                    .catch((error) => {
+                                                                        console.log(error)
+                                                                    })
                                                             }} options={emailTemplate} />
                                                         </div>
 
@@ -5449,12 +5516,12 @@ const CustomizationParent = () => {
                         </div>
                         {/* Section Drawer */}
                         {/* Theme Preview */}
-                        <div className="d-flex flex-column align-items-center bg-light-secondary" style={{ width: `calc(100vw - ${sideNav !== "" ? sectionWidths.editSection : "0"}px - ${sectionWidths.drawerWidth}px - ${sectionWidths.sidebar}px)`, transition: "0.3s ease-in-out" }}>
+                        <div className="d-flex flex-column align-items-center bg-light-secondary flex-grow-1" style={{ width: sideNav === "rules" ? "auto" : `calc(100vw - ${sideNav !== "" ? sectionWidths.editSection : "0"}px - ${sectionWidths.drawerWidth}px - ${sectionWidths.sidebar}px)`, transition: "0.3s ease-in-out" }}>
                             {returnRender({ outletData, slPrevBg, bgsettings: finalObj?.overlayStyles, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition: finalObj?.positions?.[`${mobileCondition}${pageCondition}`], bgStyles: finalObj?.backgroundStyles?.[`${mobileCondition}main`], crossStyle: finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise: currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values], setcolWise, dragStartIndex, setDragStartIndex, dragOverIndex, setDragOverIndex, isMobile, setIsMobile, finalObj, setFinalObj: updatePresent, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles: finalObj?.backgroundStyles[`${mobileCondition}button`], offerTheme: finalObj?.offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, setRearr, isColDragging, setIsColDragging })}
                         </div>
                         {/* Theme Preview */}
                         {/* Edit Section */}
-                        <div className="edit-section h-100" style={{ width: currPosition?.selectedType !== "" ? `${currPosition?.selectedType === "on_pages" ? "" : `${sectionWidths.editSection}px`}` : "0px", overflow: "auto", transition: "0.3s ease-in-out" }}>
+                        <div className="edit-section h-100" style={{ width: currPosition?.selectedType !== "" ? `${sectionWidths.editSection}px` : "0px", overflow: "auto", transition: "0.3s ease-in-out" }}>
                             {currPosition?.selectedType !== "" && renderElems()}
                         </div>
                         {/* Edit Section */}

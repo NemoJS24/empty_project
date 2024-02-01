@@ -58,7 +58,6 @@ const Themes = () => {
             const resizeObserver = new ResizeObserver(entries => {
                 let contentWidth
                 for (const entry of entries) {
-                    console.log('Div size changed:', entry.contentRect.width, 'x', entry.contentRect.height)
                     contentWidth = entry.contentRect.width
                 }
                 setContWidth(contentWidth)
@@ -79,8 +78,8 @@ const Themes = () => {
                                 <Card>
                                     <CardBody>
                                         <div id={`themeContainer-${key}`} style={{ aspectRatio: "16/9" }}>
-                                            <div className="d-flex justify-content-center align-items-center rounded position-relative m-auto innerRect" style={{ aspectRatio: phoneView[key] ? '9/16' : '16/9', height: '100%', backgroundSize: "100%", backgroundImage: `url(${skeletonBg})`, backgroundColor: "rgba(0,0,0,0.25)", backgroundBlendMode: "soft-light" }}>
-                                                <div className='position-absolute' style={{ scale: `${(((contWidth - 200) * 100) / contWidth) / 100}` }}>
+                                            <div className="d-flex justify-content-center align-items-center rounded position-relative m-auto innerRect" style={{ aspectRatio: phoneView[key] ? '3/4' : '16/9', height: '100%', backgroundSize: "100%", backgroundImage: `url(${skeletonBg})`, backgroundColor: "rgba(0,0,0,0.25)", backgroundBlendMode: "soft-light" }}>
+                                                <div className='position-absolute w-100' style={{ scale: `${(((contWidth - 200) * 100) / contWidth) / 100}` }}>
                                                     <JsonToJsx key={key} isMobile={phoneView[key]} renderObj={theme.object} />
                                                 </div>
                                             </div>
