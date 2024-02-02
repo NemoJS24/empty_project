@@ -17,7 +17,7 @@ import toast from 'react-hot-toast'
 import BasicEditor from '../Components/Editor/BaseEditor'
 
 const RenderPreview = (props) => {
-    const { outletData, slPrevBg, bgsettings, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition, bgStyles, crossStyle, values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise, setcolWise, setDragStartIndex, setDragOverIndex, isMobile, finalObj, setFinalObj, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles, offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, isColDragging } = props
+    const { outletData, slPrevBg, bgsettings, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition, bgStyles, crossStyle, values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise, setcolWise, setDragStartIndex, setDragOverIndex, isMobile, finalObj, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles, offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, isColDragging } = props
     const [editorBar, setEditorBar] = useState(true)
     const { userPermission } = useContext(PermissionProvider)
     const setDragEnter = (e, { position, id }) => {
@@ -311,7 +311,7 @@ const RenderPreview = (props) => {
                                                         //     htmlContent: html
                                                         // }
 
-                                                        setFinalObj({ ...finalObj, email_settings: { ...finalObj.email_settings, editorState: ediorState, htmlContent: html } })
+                                                        updatePresent({ ...finalObj, email_settings: { ...finalObj.email_settings, editorState: ediorState, htmlContent: html } })
 
                                                     }}
                                                 />
@@ -384,7 +384,7 @@ const RenderPreview = (props) => {
                                                 navigate("/")
                                             }} className="text-decoration-underline">XIRCLS</span></span></div>}
                                             {/* render layout Here */}
-                                            {colWise.length > 0 ? colWise?.map((cur, key) => {
+                                            {colWise?.map((cur, key) => {
                                                 return <div style={{ ...cur?.style, display: "flex", justifyContent: "center", alignItems: "center", position: "relative", zIndex: cur === indexes.cur ? "2" : "0" }} key={key}
                                                     onClick={(e) => {
                                                         e.stopPropagation()
@@ -1406,27 +1406,7 @@ const RenderPreview = (props) => {
                                                         }
                                                     </div>
                                                 </div>
-                                            }) : (
-                                                <div onDragOver={(e) => {
-                                                    handleDragOver(e)
-                                                }}
-                                                    onDrop={(e) => {
-                                                        e.stopPropagation()
-                                                        const transferType = e.dataTransfer.getData("type")
-                                                        setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                        if (transferType !== "") {
-                                                            handleLayoutDrop(e, cur)
-                                                            setIndexes(transferType.includes("col") ? { cur: colWise.length, curElem: "parent", subElem: "grandparent" } : { cur: colWise.length, curElem: "left", subElem: 0 })
-                                                            setCurrPosition({ ...currPosition, id: colWise.length, selectedType: transferType.includes("col") ? "block" : transferType })
-                                                            setValues(elementStyles[transferType.includes("col") ? "block" : transferType])
-                                                        }
-                                                    }} className='' style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}
-                                                // onClick={(e) => makActive(e, cur)}
-                                                >
-                                                    <Download size={10} style={{ color: 'grey' }} />
-                                                    {/* <p style={{ margin: '0px', fontSize: '10px', color: 'grey' }}>Drop an element here</p> */}
-                                                </div>
-                                            )}
+                                            })}
                                         </div>
                                     </div>
                                 </div>
@@ -1478,7 +1458,7 @@ const RenderPreview = (props) => {
                                                                 }
                                                                 setIndexes(({ cur: 0, curElem: "left", subElem: "grandparent" }))
                                                                 setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
-                                                                setFinalObj({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: bgStyles } })
+                                                                updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: bgStyles } })
                                                             }
                                                         }} className={`overflow-hidden rounded position-relative bg-light-secondary ${currPage === ele.id && openPage ? "border-dark" : ""} ${ele.id === "user_verification" && !finalObj.verificationEnabled ? "opacity-25" : currPage !== ele.id && openPage ? "opacity-50" : ""} m-auto`} style={{ width: '150px', height: openPage ? "84px" : "0px", transition: "0.3s ease-in-out", boxShadow: `0px 0px ${currPage === ele.id && openPage ? "20px" : "0px"} rgba(0,0,0,0.75)` }}>
                                                             <div className={`overflow-hidden d-flex justify-content-center align-items-center w-100 h-100`}>
@@ -1601,7 +1581,7 @@ const RenderPreview = (props) => {
                                                                             setSideNav("add-elements")
                                                                             setIndexes(({ cur: 0, curElem: "left", subElem: "grandparent" }))
                                                                             setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
-                                                                            setFinalObj({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: bgStyles } })
+                                                                            updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: bgStyles } })
                                                                         }
                                                                     }} className={`text-center m-0 fw-bold ${currPage === ele?.id ? "text-white" : "dark"} ${ele?.id === "user_verification" && !finalObj?.verificationEnabled ? "opacity-50" : ""}`} style={{ fontSize: "12px", padding: "0.5rem" }}>{ele?.pageName}</p>
                                                                     {(renamePage === ele?.id) && <div className="position-absolute d-flex align-items-center bg-white rounded renameTab z-1" style={{ padding: "0.25rem", gap: "0.25rem", width: "300px" }}>
@@ -1611,7 +1591,7 @@ const RenderPreview = (props) => {
                                                                             const newObj = { ...finalObj }
                                                                             newObj.pages[pageIndex].pageName = pageName
                                                                             newObj.mobile_pages[pageIndex].pageName = pageName
-                                                                            setFinalObj({ ...newObj })
+                                                                            updatePresent({ ...newObj })
                                                                             setRenamePage("")
                                                                         }} color="#727272" size={"25px"} />
                                                                         <X onClick={() => setRenamePage("")} color="#727272" size={"25px"} />
@@ -1622,7 +1602,7 @@ const RenderPreview = (props) => {
                                                                         setCurrPage(finalObj?.[`${mobileCondition}pages`][0]?.id)
                                                                         setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
                                                                     }
-                                                                    setFinalObj({ ...finalObj, verificationEnabled: e.target.checked })
+                                                                    updatePresent({ ...finalObj, verificationEnabled: e.target.checked })
                                                                 }} style={{ width: "30px", height: "15px" }} type="checkbox" className="form-check-input m-0 cursor-pointer" />}
                                                             </div>
                                                             <UncontrolledButtonDropdown className='more-options-dropdown'>
@@ -1654,7 +1634,7 @@ const RenderPreview = (props) => {
                                                                         const duplicatedMobilePage = { ...mobilePage, id: `Page${newObj?.mobile_pages.length + 1}`, pageName: `Page ${newObj?.mobile_pages.length + 1}` }
                                                                         newObj?.pages?.splice(pageCurrentIndex + 1, 0, duplicatedPage)
                                                                         newObj?.mobile_pages?.splice(mobilePageCurrentIndex + 1, 0, duplicatedMobilePage)
-                                                                        setFinalObj({ ...newObj })
+                                                                        updatePresent({ ...newObj })
                                                                     }}>
                                                                         <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
                                                                             <Copy stroke='green' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Duplicate</span>
@@ -1669,7 +1649,7 @@ const RenderPreview = (props) => {
                                                                             setCurrPage(pageArray[0]?.id)
                                                                         }
                                                                         toast.success(<div className="d-flex gap-1 align-items-center">Page removed! <button onClick={undo} className="btn-primary btn">Undo</button></div>)
-                                                                        setFinalObj({ ...finalObj, pages: pageArray, mobile_pages: mobilePageArray })
+                                                                        updatePresent({ ...finalObj, pages: pageArray, mobile_pages: mobilePageArray })
                                                                     }} className='w-100'>
                                                                         <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
                                                                             <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Delete</span>
@@ -1685,7 +1665,7 @@ const RenderPreview = (props) => {
                                                                             setCurrPage(pageArray[0]?.id)
                                                                         }
                                                                         toast.success(<div className="d-flex gap-1 align-items-center">Page removed! <button onClick={undo} className="btn-primary btn">Undo</button></div>)
-                                                                        setFinalObj({ ...finalObj, pages: pageArray, mobile_pages: mobilePageArray })
+                                                                        updatePresent({ ...finalObj, pages: pageArray, mobile_pages: mobilePageArray })
                                                                     }} className='w-100'>
                                                                         <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
                                                                             <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Delete</span>
@@ -1939,14 +1919,14 @@ const RenderPreview = (props) => {
                                                                     setCurrPage(finalObj?.[`${mobileCondition}pages`][0]?.id)
                                                                     setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
                                                                 }
-                                                                setFinalObj({ ...finalObj, teaserEnabled: e.target.checked })
+                                                                updatePresent({ ...finalObj, teaserEnabled: e.target.checked })
                                                             }} style={{ width: "30px", height: "15px" }} type="checkbox" className="form-check-input m-0 cursor-pointer" />
                                                         </div>
                                                     </div>
                                                 </SwiperSlide>
                                                 <SwiperSlide>
                                                     <div onClick={() => {
-                                                        setFinalObj({ ...finalObj, [`pages`]: [...finalObj?.[`pages`], { pageName: `Page${finalObj[`pages`]?.length + 1}`, id: `Page${finalObj[`pages`]?.length + 1}`, values: [] }], [`mobile_pages`]: [...finalObj?.[`mobile_pages`], { pageName: `Page${finalObj[`mobile_pages`]?.length + 1}`, id: `Page${finalObj[`mobile_pages`]?.length + 1}`, values: [] }] })
+                                                        updatePresent({ ...finalObj, [`pages`]: [...finalObj?.[`pages`], { pageName: `Page${finalObj[`pages`]?.length + 1}`, id: `Page${finalObj[`pages`]?.length + 1}`, values: [] }], [`mobile_pages`]: [...finalObj?.[`mobile_pages`], { pageName: `Page${finalObj[`mobile_pages`]?.length + 1}`, id: `Page${finalObj[`mobile_pages`]?.length + 1}`, values: [] }] })
                                                         setCurrPage(`Page${finalObj[`${mobileCondition}pages`]?.length + 1}`)
                                                         setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
                                                     }} className="cursor-pointer pt-1">

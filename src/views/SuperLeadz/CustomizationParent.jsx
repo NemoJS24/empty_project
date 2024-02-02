@@ -1,6 +1,7 @@
 import React, { Suspense, useContext, useEffect, useState } from 'react'
 import { Crosshair, Edit, Image, Monitor, PlusCircle, Smartphone, Square, Tag, Target, Type, X, Trash2, XCircle, Columns, Disc, Trash, Percent, MoreVertical, ArrowLeft, Home, CheckSquare, Mail, RotateCcw, RotateCw, Check, ChevronRight, Plus } from 'react-feather'
 import { AccordionBody, AccordionHeader, AccordionItem, Card, Container, DropdownItem, DropdownMenu, DropdownToggle, Modal, ModalBody, Row, UncontrolledAccordion, UncontrolledDropdown, Col, ModalHeader, UncontrolledButtonDropdown, CardBody, ModalFooter, Button, Input } from 'reactstrap'
+import { BiSolidOffer } from "react-icons/bi"
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import pixels from "../../assets/images/superLeadz/pixels.png"
 import PickerDefault from '../Components/Date-picker/NormalDatePicker'
@@ -504,9 +505,39 @@ const CustomizationParent = () => {
                 const getId = `${currPage}-${gotDragOver?.cur}-parent-grandparent`
                 setMousePos({ ...mousePos, y: e.clientY, x: e.clientX })
                 const elem = document.getElementById(getId)
-                const { y, height } = elem?.getBoundingClientRect()
+                let y, height
+                if (Boolean(elem?.getBoundingClientRect())) {
+                    y = elem?.getBoundingClientRect().y
+                    height = elem?.getBoundingClientRect().height
+                }
 
-                if (mousePos.y - (y + (height / 2)) < 0) {
+                if (updatedColWise.length === 0) {
+                    updatedColWise[0] = {
+                        id: updatedColWise?.length + 1,
+                        col: 1,
+                        style: elementStyles?.block,
+                        elements: [
+                            {
+                                positionType: 'left',
+                                style: elementStyles?.col,
+                                element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
+                            }
+                        ]
+                    }
+
+                    mobile_updatedColWise[0] = {
+                        id: mobile_updatedColWise?.length + 1,
+                        col: 1,
+                        style: elementStyles?.block,
+                        elements: [
+                            {
+                                positionType: 'left',
+                                style: elementStyles?.col,
+                                element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
+                            }
+                        ]
+                    }
+                } else if (mousePos.y - (y + (height / 2)) < 0) {
                     updatedColWise.splice(gotDragOver?.cur, 0, {
                         id: updatedColWise?.length + 1,
                         col: 1,
@@ -1104,6 +1135,9 @@ const CustomizationParent = () => {
                 { value: 'redirect', label: 'Redirect' },
                 { value: 'call', label: 'Call' },
                 { value: 'close', label: 'Close' },
+                { value: 'save_redirect', label: 'Save & Redirect' },
+                { value: 'save_call', label: 'Save & Call' },
+                { value: 'save_close', label: 'Save & Close' },
                 { value: 'sendOTP', label: 'Send OTP' },
                 { value: 'verify', label: 'Verify OTP' }
             ]
@@ -3203,6 +3237,7 @@ const CustomizationParent = () => {
                                                     {(!subElem?.type || subElem?.type === "") && <span>No element</span>}
                                                     {subElem?.type === 'text' && <Type size={16} color='#727272' />}
                                                     {subElem?.type === 'button' && <Disc size={16} color='#727272' />}
+                                                    {subElem?.type === 'offer' && <BiSolidOffer size={16} color='#727272' />}
                                                     {subElem?.type === 'input' && <img style={{ filter: "grayscale(100%)" }} src='https://cdn-app.optimonk.com/img/StructureInput.61ed2888.svg' alt='' />}
                                                     {subElem?.type === 'image' && (subElem.src === "" ? <Image width={16} color='#727272' /> : <div style={{ width: 16, aspectRatio: "1", backgroundImage: `url(${subElem.src})`, backgroundSize: "contain", backgroundPosition: "center center", backgroundRepeat: "no-repeat" }} />)}
                                                     {<span className={`${subElem.type !== "text" ? "text-capitalize" : ""}`} style={{ fontSize: "0.75rem" }}>{getSideText(subElem)}</span>}
@@ -5442,7 +5477,7 @@ const CustomizationParent = () => {
                                                                     .then((data) => data.json())
                                                                     .then((resp) => {
                                                                         if (resp.data) {
-                                                                            setFinalObj({ ...finalObj, email_settings: { ...resp.data } })
+                                                                            updatePresent({ ...finalObj, email_settings: { ...resp.data } })
 
                                                                         }
                                                                     })
@@ -5454,7 +5489,7 @@ const CustomizationParent = () => {
 
                                                         <div className="py-1">
                                                             <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subject</label>
-                                                            <input value={finalObj?.email_settings?.subject} onChange={(e) => setFinalObj({ ...finalObj, email_settings: { ...finalObj.email_settings, subject: e.target.value } })} name="subject" type="text" className="form-control" id="subject" placeholder="Subject" />
+                                                            <input value={finalObj?.email_settings?.subject} onChange={(e) => updatePresent({ ...finalObj, email_settings: { ...finalObj.email_settings, subject: e.target.value } })} name="subject" type="text" className="form-control" id="subject" placeholder="Subject" />
                                                         </div>
 
                                                         <div className="py-1">
