@@ -297,7 +297,7 @@ const AddBusiness = () => {
             //       return response.json()
             //    })
             .then((resp) => {
-               if (resp.status === 409) {
+               if (resp?.status === 409) {
                   throw new Error('Customer already exists')
                }
                console.log("Response:", resp)

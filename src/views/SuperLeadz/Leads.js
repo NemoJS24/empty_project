@@ -139,19 +139,19 @@ export default function SuperLeadzLeads() {
             <Card>
                 <CardBody>
                     {
-                        data?.data?.first_name ? <h5 className='mb-1'>First Name: {data?.data?.first_name}</h5> : ''
+                        <h5 className='mb-1'>First Name: {data?.data?.first_name ? data?.data?.first_name : '-'}</h5>
                     }
 
                     {
-                        data?.data?.last_name ? <h5 className='mb-1'>Last Name: {data?.data?.last_name}</h5> : ''
+                        <h5 className='mb-1'>Last Name: {data?.data?.last_name ? data?.data?.last_name : '-'}</h5>
                     }
 
                     {
-                        data?.data?.email ? <h5 className='mb-1'>Email: {data?.data?.email}</h5> : ''
+                        <h5 className='mb-1'>Email: {data?.data?.email ? data?.data?.email : '-'}</h5>
                     }
 
                     {
-                        data?.data?.mobile ? <h5 className='mb-1'>Phone Number: {data?.data?.mobile}</h5> : ''
+                        <h5 className='mb-1'>Phone Number: {data?.data?.mobile ? data?.data?.mobile : '-'}</h5>
                     }
 
                 </CardBody>
@@ -168,7 +168,7 @@ export default function SuperLeadzLeads() {
                         <CardCom icon={<User size='25px' />} title="Total Visitors" data={isLoading ? <Spinner size={'25px'} /> : custVisit} />
                     </div>
                     <div className="col-4">
-                        <CardCom icon={<BarChart2 size='25px' />} title="Total Leads" data={isLoading ? <Spinner size={'25px'} /> : tableData?.length} />
+                        <CardCom icon={<BarChart2 size='25px' />} title="Total Leads" data={isLoading ? <Spinner size={'25px'} /> : count} />
                     </div>
                     <div className="col-4">
                         <CardCom icon={<CheckCircle size='25px' />} title="Verified Leads" data={isLoading ? <Spinner size={'25px'} /> : verified} />

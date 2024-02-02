@@ -320,14 +320,15 @@ const AddInsurance = () => {
         form_data.append("press_btn", 'SAVE & CLOSE')
         postReq('add_customer', form_data)
             .then((resp) => {
+                // if (!res.ok) throw new Error(res.status)
                 console.log("Response:", resp)
                 toast.success('Customer saved successfully')
                 handleClose("customer")
                 getCustomer()
             })
             .catch((error) => {
-                console.error("Error:", error)
-                if (error.message === 'Customer already exists') {
+                console.error("Error:", error?.response?.status)
+                if (error?.response?.status === 409) {
                     toast.error('Customer already exists')
                 } else {
                     toast.error('Failed to save customer')

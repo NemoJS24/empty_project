@@ -143,6 +143,9 @@ const ApplicantForm = ({ allData }) => {
         postReq('add_customer', form_data)
             .then((resp) => {
                 console.log("Response:", resp)
+                // if (resp?.status === 409) {
+                //     throw new Error('Customer already exists')
+                // }
                 toast.success('Customer saved successfully')
                 const addForm = { ...check.addForm }
                 Object.keys(check.addForm).forEach((key) => {
@@ -156,7 +159,7 @@ const ApplicantForm = ({ allData }) => {
             })
             .catch((error) => {
                 console.error("Error:", error)
-                if (error.message === 'Customer already exists') {
+                if (error?.response?.status === 409) {
                     toast.error('Customer already exists')
                 } else {
                     toast.error('Failed to save customer')

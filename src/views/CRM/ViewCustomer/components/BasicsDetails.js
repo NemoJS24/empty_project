@@ -89,7 +89,7 @@ const BasicsDetails = () => {
         // })
         postReq("add_customer_individual", form_data)
             .then((resp) => {
-                if (resp.status === 409) {
+                if (resp?.status === 409) {
                     throw new Error('Customer already exists')
                 }
             })

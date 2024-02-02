@@ -179,7 +179,7 @@ export default function CustomerProfile() {
       //   }
       // })
       .then((resp) => {
-        if (resp.status === 409) {
+        if (resp?.status === 409) {
           throw new Error('Customer already exists')
         }
         console.log("Response:", resp)
@@ -192,7 +192,11 @@ export default function CustomerProfile() {
       })
       .catch((error) => {
         console.error("Error:", error)
-        toast.error('Failed to save customer')
+        if (error.message === 'Customer already exists') {
+          toast.error('Customer already exists')
+        } else {
+          toast.error('Failed to save customer')
+        }
       })
   }
 
