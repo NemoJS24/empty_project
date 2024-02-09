@@ -2,9 +2,9 @@ import axios from "axios"
 import { getToken, removeToken, setToken } from "./auth"
 import jwtDecode from "jwt-decode"
 
-// export const baseURL = "https://api.demo.xircls.in"
-// export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
-// export const crmURL = "https://crm.demo.xircls.in"
+export const baseURL = "https://api.demo.xircls.in"
+export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
+export const crmURL = "https://crm.demo.xircls.in"
 
 // const URLs = {
 //     baseURL,
@@ -13,15 +13,22 @@ import jwtDecode from "jwt-decode"
 // }
 
 // Live 
-export const baseURL = "https://api.xircls.com"
-export const SuperLeadzBaseURL = "https://apps.xircls.com"
-export const crmURL = "https://crm.xircls.com"
+// export const baseURL = "https://api.xircls.com"
+// export const SuperLeadzBaseURL = "https://apps.xircls.com"
+// export const crmURL = "https://crm.xircls.com"
 
 export const configUrl = {
 
     login: "/merchant/login/",
     signup: "/merchant/signup/",
     refresh: "/api/token/refresh/",
+    // whatspp
+    createTemplate:"talks/createTemplate/",
+    // affilate
+    signupAffiliate:'/affiliate/affiliate_signup/',
+    loginAffiliate:'/affiliate/affiliate_login/',
+    admin_withdrawn_transactions: "/affiliate/admin_withdrawn_trans",
+    admin_withdrawn_request: "/affiliate/admin_withdrawn_req/",
     //Infiniti
     addPartners: "/merchant/xircls/make-a-xircls/",
     remarketing: "/merchant/campaign_setting/action_email_remarketing/",

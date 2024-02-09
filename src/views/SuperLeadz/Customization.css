@@ -215,6 +215,10 @@ input[type=range] {
     transform: translateX(3px)
 }
 
+.cursor-h-resize {
+    cursor: col-resize !important;
+}
+
 @media only screen and (max-width: 1280px) {
     #page-selector {
         max-width: 340px;
