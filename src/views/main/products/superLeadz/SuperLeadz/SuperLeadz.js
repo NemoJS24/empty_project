@@ -1,6 +1,6 @@
 import FaqComponent from '@src/views/main/components/Faq/FaqComponent'
 import Footer from '@src/views/main/utilities/footer/Footer'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BsArrowRight } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import { Card, Col, Container, Row } from 'reactstrap'
@@ -21,6 +21,7 @@ import CardLeft from '../../../components/CardLeft'
 // import arrow from './images/arrow.png'
 import giff1 from './images/gif1.gif'
 import { Check, X } from 'react-feather'
+import { affiliateTracking } from '../../../../Validator'
 
 // faq data
 export const superFaqData = [
@@ -317,6 +318,14 @@ export default function SuperLeadz() {
             icon: <SiConvertio />
         }
     ]
+
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search)
+        if (params.get('aft_no') || localStorage.getItem('aft_no')) {
+            affiliateTracking(params.get('aft_no') ? params.get('aft_no') : localStorage.getItem('aft_no'))
+        }
+    }, [])
 
 
     return (
