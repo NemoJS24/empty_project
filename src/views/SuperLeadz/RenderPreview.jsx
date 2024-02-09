@@ -15,9 +15,10 @@ import { ImDisplay } from 'react-icons/im'
 import { PermissionProvider } from '../../Helper/Context'
 import toast from 'react-hot-toast'
 import BasicEditor from '../Components/Editor/BaseEditor'
+import { GiHorizontalFlip } from "react-icons/gi"
 
 const RenderPreview = (props) => {
-    const { outletData, slPrevBg, bgsettings, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition, bgStyles, crossStyle, values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise, setcolWise, setDragStartIndex, setDragOverIndex, isMobile, finalObj, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles, offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, isColDragging } = props
+    const { outletData, slPrevBg, bgsettings, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition, bgStyles, crossStyle, values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise, setcolWise, setDragStartIndex, setDragOverIndex, isMobile, finalObj, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles, offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, isColDragging, isColRes, setIsColRes, resizeMouse, setResizeMouse } = props
     const [editorBar, setEditorBar] = useState(true)
     const { userPermission } = useContext(PermissionProvider)
     const setDragEnter = (e, { position, id }) => {
@@ -71,6 +72,12 @@ const RenderPreview = (props) => {
         finalObj.rules.visited,
         finalObj.rules.not_active_page
     ])
+
+    useEffect(() => {
+        const pageContainer = document.getElementById("customization-container")
+        isColRes ? pageContainer.classList.add("cursor-h-resize") : pageContainer.classList.remove("cursor-h-resize")
+    }, [isColRes])
+
     return (
         sideNav === "rules" ? (
             <>
@@ -381,7 +388,7 @@ const RenderPreview = (props) => {
                                                 setCurrPosition({ ...currPosition, selectedType: "brand" })
                                             }}>Powered by <span onClick={e => {
                                                 e.stopPropagation()
-                                                navigate("/")
+                                                navigate("/products/SuperLeadz/")
                                             }} className="text-decoration-underline">XIRCLS</span></span></div>}
                                             {/* render layout Here */}
                                             {colWise?.map((cur, key) => {
@@ -466,10 +473,39 @@ const RenderPreview = (props) => {
                                                     {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: "parent", subElem: "grandparent" }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
                                                     <div style={{ display: "flex", flexDirection: currPage === "button" ? "row" : isMobile ? "column" : "row", justifyContent: "center", alignItems: "stretch", position: "relative", width: "100%" }}
                                                     >
+                                                        <div id={`${currPage}-${key}-sizeable`} className="d-flex w-100 h-100 position-absolute" style={{ pointerEvents: isColRes ? "all" : "none" }}>
+                                                            {!isMobile && cur?.elements?.map((curElem, i, elements) => {
+                                                                if (i < cur?.elements?.length - 1) {
+                                                                    return (
+                                                                        <div key={`${key}-${i}-sizeable`} style={{ width: curElem?.style?.width, height: "100%", zIndex: "2", position: "relative" }}>
+                                                                            <div className="w-100 h-100 position-relative">
+                                                                                <span onMouseDown={e => {
+                                                                                    e.stopPropagation()
+                                                                                    setCurrPosition({...currPosition, selectedType: "block"})
+                                                                                    setIndexes({cur: key, curElem: curElem.positionType, subElem: "parent"})
+                                                                                    setIsColRes(true)
+                                                                                    const colDetails = document.getElementById(`${currPage}-${key}-${curElem?.positionType}-parent`)
+                                                                                    const colWidth = colDetails.getBoundingClientRect().width
+                                                                                    console.log("onMouseDown", curElem?.style)
+
+                                                                                    const ignoreCol =  elements.length < 3 ? "none" : curElem?.positionType === "left" ? "right" : "left"
+
+                                                                                    const ignoreColWidth = ignoreCol === "none" ? 0 : document.getElementById(`${currPage}-${key}-${ignoreCol}-parent`).getBoundingClientRect().width
+
+                                                                                    setResizeMouse({ ...resizeMouse, initial: e.clientX, move: { cur: key, col1: i, col2: i + 1, curElem, colWidth, ignoreCol, ignoreColWidth } })
+                                                                                }} onMouseOver={e => e.stopPropagation()} style={{ position: "absolute", top: "0px", right: "0px", transform: "translate(50%, 0%)", width: "5px", pointerEvents: 'all' }} className="h-100 cursor-h-resize">
+                                                                                    {/* <GiHorizontalFlip size={25} /> */}
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    )
+                                                                }
+                                                            })}
+                                                        </div>
                                                         {
                                                             cur?.elements?.map((curElem, i) => {
                                                                 return (
-                                                                    <div style={{ ...curElem?.style, position: "relative", width: currPage === "button" ? curElem?.style?.width : isMobile ? "100%" : curElem?.style?.width, zIndex: (cur === indexes.cur) && (curElem.positionType === indexes.curElem) ? "2" : "0" }} onClick={(e) => {
+                                                                    <div style={{ ...curElem?.style, position: "relative", width: currPage === "button" ? curElem?.style?.width : isMobile ? "100%" : curElem?.style?.width, zIndex: (cur === indexes.cur) && (curElem.positionType === indexes.curElem) ? "2" : "0", pointerEvents: !isColRes ? "all" : "none" }} onClick={(e) => {
                                                                         e.stopPropagation()
                                                                         // setActiveRow("none")
                                                                         makActive(e, cur, curElem, curElem?.positionType, key, i, "parent")
@@ -504,7 +540,6 @@ const RenderPreview = (props) => {
                                                                         }}
                                                                         id={`${currPage}-${key}-${curElem.positionType}-parent`}
                                                                         className={`${isEqual({ cur: key, curElem: curElem.positionType, subElem: "parent" }, { ...indexes }) ? "active-elem" : ""}`}>
-
                                                                         {/* {isEqual({ cur: key, curElem: curElem.positionType, subElem: "parent" }, { ...gotDragOver }) && (
                                                                                 <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
                                                                             )} */}
@@ -1015,7 +1050,7 @@ const RenderPreview = (props) => {
                                                                                             {!isColDragging && isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
                                                                                                 <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
                                                                                             )}
-                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
+                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span className="d-flex"
                                                                                                 onMouseOver={(e) => {
                                                                                                     e.stopPropagation()
                                                                                                     setMouseEnterIndex({ ...mouseEnterIndex })
@@ -1023,8 +1058,8 @@ const RenderPreview = (props) => {
                                                                                                 onMouseLeave={(e) => {
                                                                                                     e.stopPropagation()
                                                                                                     setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                                                                }} className="d-flex w-100" style={{ backgroundColor: "#727272", position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
-                                                                                                <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
+                                                                                                }} style={{ backgroundColor: "#727272", position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
+                                                                                                <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }} onClick={(e) => {
                                                                                                     e.stopPropagation()
                                                                                                     if (colWise.length <= 1) {
                                                                                                         setCurrPosition({ ...currPosition, selectedType: "main" })
@@ -1060,15 +1095,15 @@ const RenderPreview = (props) => {
                                                                                                 }} />
                                                                                                 {subElem?.hasLabel && <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />}
                                                                                                 {/* <Copy color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }}
-                                                                                                                                onClick={(e) => {
-                                                                                                                                    e.stopPropagation()
-                                                                                                                                    setCurrPosition({ ...currPosition, selectedType: "block" })
-                                                                                                                                    setIndexes({ cur: key, curElem: curElem.positionType, subElem: j + 1 })
-                                                                                                                                    const arr = [...colWise]
-                                                                                                                                    arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 0, subElem)
-                                                                                                                                    setValues(subElem?.style)
-                                                                                                                                    setcolWise([...arr])
-                                                                                                                                }} /> */}
+                                                                                                                                    onClick={(e) => {
+                                                                                                                                        e.stopPropagation()
+                                                                                                                                        setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                                                        setIndexes({ cur: key, curElem: curElem.positionType, subElem: j + 1 })
+                                                                                                                                        const arr = [...colWise]
+                                                                                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 0, subElem)
+                                                                                                                                        setValues(subElem?.style)
+                                                                                                                                        setcolWise([...arr])
+                                                                                                                                    }} /> */}
                                                                                             </span>}
                                                                                             {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
                                                                                             <div style={{ width: subElem?.style?.width, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, display: "flex", flexDirection: "column", gap: subElem?.style?.elemGap ? subElem?.style?.elemGap : "0px" }}>

@@ -1,5 +1,7 @@
 import { lazy } from 'react'
 import Outlet from '../../views/Admin/Outlet'
+import AffiliateTable from '../../views/Admin/AffiliateTable'
+import WithdrawalTransaction from '../../views/Affiliate/WithdrawalTransaction'
 //main login
 const Admin = lazy(() => import('../../views/Admin/Admin'))
 //logins
@@ -67,6 +69,22 @@ const Admin_Routes = [
     meta: {
       layout: 'custom',
       isAdmin: true
+    }
+  },
+  {
+    path: '/admin/affiliate',
+    element: <AffiliateTable />,
+    meta: {
+      layout: 'custom',
+      publicRoute: true
+    }
+  },
+  {
+    path: '/merchant/WithdrawalTransaction/',
+    element: <WithdrawalTransaction />,
+    meta: {
+      layout: 'custom',
+      publicRoute: true
     }
   },
   {

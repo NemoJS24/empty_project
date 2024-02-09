@@ -24,6 +24,13 @@ export const configUrl = {
     login: "/merchant/login/",
     signup: "/merchant/signup/",
     refresh: "/api/token/refresh/",
+    // whatspp
+    createTemplate:"talks/createTemplate/",
+    // affilate
+    signupAffiliate:'/affiliate/affiliate_signup/',
+    loginAffiliate:'/affiliate/affiliate_login/',
+    admin_withdrawn_transactions: "/affiliate/admin_withdrawn_trans",
+    admin_withdrawn_request: "/affiliate/admin_withdrawn_req/",
     //Infiniti
     addPartners: "/merchant/xircls/make-a-xircls/",
     remarketing: "/merchant/campaign_setting/action_email_remarketing/",

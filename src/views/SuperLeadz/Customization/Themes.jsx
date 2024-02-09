@@ -73,7 +73,7 @@ const Themes = () => {
             <Container fluid className='px-0'>
                 <Row className='match-height'>
                     {allPreviews.map((theme, key) => {
-                        if (key <= 2) {
+                        if (key <= 200) {
                             return (
                                 <Col className='d-flex flex-column align-items-stretch' md={6} key={key}>
                                     <Card>
