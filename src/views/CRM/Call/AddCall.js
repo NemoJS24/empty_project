@@ -149,7 +149,10 @@ const AddCall = () => {
       .then((resp) => {
          console.log(resp)
          setCustomerList(resp?.data?.success?.map((curElem) => {
-            return { label: curElem?.customer_name ? curElem?.customer_name : '-', value: curElem?.xircls_customer_id }
+            return { 
+               label: curElem?.customer_name ? curElem?.customer_name : '-', 
+               value: curElem?.xircls_customer_id 
+            }
          }))
       })
       .catch((error) => {

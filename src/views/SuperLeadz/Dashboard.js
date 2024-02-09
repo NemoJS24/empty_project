@@ -20,7 +20,7 @@ import { PermissionProvider } from '../../Helper/Context'
 import Flatpickr from 'react-flatpickr'
 
 function SuperLeadzDashboard() {
-    const { userPermission } = useContext(PermissionProvider)
+    const { userPermission, setUserPermission } = useContext(PermissionProvider)
     const [performanceData, setPerformanceData] = useState({
         active_campaign: "0",
         campaign_revenue: "0",
@@ -247,6 +247,8 @@ function SuperLeadzDashboard() {
                     ...setData
                 }))
 
+                setUserPermission({...userPermission, currentPlan: {...userPermission?.currentPlan, plan: updatedDate[0].plan_id}})
+
                 setChargesLoader(false)
             })
             .catch((error) => {
@@ -282,7 +284,9 @@ function SuperLeadzDashboard() {
             .then((data) => {
                 console.log(data)
                 if (data?.data?.response === "billing created successfully") {
-                    navigate('/merchant/SuperLeadz/')
+                    if (location.pathname === "/merchant/SuperLeadz/" || location.pathname === "/merchant/SuperLeadz") {
+                        navigate('/merchant/SuperLeadz/', {replace: true})
+                    }
                     planData()
                     cancelApi()
 

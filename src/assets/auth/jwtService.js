@@ -1,6 +1,8 @@
 import axios from "axios"
 import { getToken, removeToken, setToken } from "./auth"
 import jwtDecode from "jwt-decode"
+import toast from "react-hot-toast"
+import { Navigate } from "react-router-dom"
 
 // export const baseURL = "https://api.demo.xircls.in"
 // export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
@@ -199,8 +201,10 @@ axiosInstance.interceptors.request.use(
                     //     refresh: refreshToken
                     // })
                     removeToken()
-                    window.alert('session expired')
-                    window.location.replace('/merchant/login/')
+                    // window.alert('session expired')
+                    // window.location.replace('/merchant/login/')
+                    toast.error("Session expired. Please login")
+                    return <Navigate to={'/merchant/login/'} replace={true} />
                 }
                 const newAccessToken = await refreshTokenPromise
                 isRefreshing = false
@@ -217,8 +221,10 @@ axiosInstance.interceptors.request.use(
                 } else {
                     // Refresh token is also expired, remove token and redirect to login page
                     removeToken()
-                    window.alert('session expired')
-                    window.location.replace('/merchant/login/')
+                    // window.alert('session expired')
+                    // window.location.replace('/merchant/login/')
+                    toast.error("Session expired. Please login")
+                    return <Navigate to={'/merchant/login/'} replace={true} />
                 }
             } else {
                 config.headers['Authorization'] = `Bearer ${accessToken}`
@@ -243,9 +249,8 @@ axiosInstance.interceptors.response.use(
     (error) => {
         if (error.response && Number(error.response.status) === 401) {
             removeToken()
-            window.alert('session expired')
-            window.location.replace('/merchant/login/')
-            return error.response
+            toast.error("Session expired. Please login")
+            return <Navigate to={'/merchant/login/'} replace={true} />
         }
         return Promise.reject(error)
     }

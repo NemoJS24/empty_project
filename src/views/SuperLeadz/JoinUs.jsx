@@ -20,7 +20,7 @@ const JoinUs = () => {
     const [isLoading, setIsLoading] = useState(true)
     const location = useLocation()
     const navigate = useNavigate()
-    const { userPermission } = useContext(PermissionProvider)
+    const { userPermission, setUserPermission } = useContext(PermissionProvider)
     const { appName } = useParams()
 
     console.log(appName, "appName")
@@ -30,6 +30,7 @@ const JoinUs = () => {
     const callPlans = (id, data) => {
         // e.preventDefault()
         if (data?.parent_plan_name === "free") {
+            const planName = data?.plan_name
             const url = new URL(`${SuperLeadzBaseURL}/api/v1/free_plan_shopify/`)
             const form = {
                 app: appName?.toLowerCase(),
@@ -57,6 +58,7 @@ const JoinUs = () => {
                 .then((resp) => {
                     console.log(resp)
                     navigate("/merchant/SuperLeadz/billing/")
+                    setUserPermission({...userPermission, currentPlan: {...userPermission?.currentPlan, plan: planName}})
                 })
                 .catch((error) => {
                     console.log(error)
@@ -147,7 +149,7 @@ const JoinUs = () => {
                         <CardBody>
                             <div className="d-flex justify-content-end align-items-center">
                                 <a className="btn btn-outline-primary" onClick={() => {
-                                  navigate(`/merchant/${appName}/joinus/`)
+                                  navigate(`/merchant/${appName}/joinus/`, {replace: true})
                                 }}>Show All Plans</a>
                             </div>
                             <div className="textContent text-center pt-3">

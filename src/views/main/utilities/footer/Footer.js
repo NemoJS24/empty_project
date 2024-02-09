@@ -27,7 +27,7 @@ const Footer = () => {
                     <div className=' d-flex flex-wrap justify-content-between'  >
                         <div  >
                             <img className='mb-1' src={logo} alt="logo" width={200} style={{ marginTop: "-30px" }} />
-                            <h5>The World's First Decentralized Collaborative <br /> Marketing Network.</h5>
+                            <h5>An end-to-end martech stack.</h5>
 
 
                             <div className='d-flex justify-content-start align-items-center mt-2 '>

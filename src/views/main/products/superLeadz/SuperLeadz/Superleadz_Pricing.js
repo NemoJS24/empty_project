@@ -12,14 +12,14 @@ export default function Superleadz_Pricing() {
       value: "0",
       subValue: "$00.00/year",
       button: "Get Started",
-      items: ["Upto 15,000 visits"]
+      items: ["Free - Upto 15,000 visits", "1 campaign", "24/7 email support"]
     },
     {
       head: "Lite",
       value: "29.99",
       subValue: "$80.99/year (save 10%)",
       button: "Buy Now",
-      items: ["Upto 35,000 visits", "2 Domains"]
+      items: ["Upto 35,000 visits", "Visitor segmentation", "Unlimited campaigns", "24/7 email support"]
     },
     {
       head: "Grow",
@@ -28,11 +28,11 @@ export default function Superleadz_Pricing() {
       button: "Buy Now",
       high: "Recommended",
       items: [
-        "125,000 visits",
-        "No XIRCLS branding",
-        "5 Domains"
-
-
+        "Upto 125,000 visits",
+        "Visitor segmentation",
+        "Unlimited campaigns",
+        "24/7 priority email support",
+        "Remove XIRCLS branding"
       ]
     },
     {
@@ -41,11 +41,11 @@ export default function Superleadz_Pricing() {
       subValue: "$419.99/year (save 30%)",
       button: "Buy Now",
       items: [
-        "375,000 visits",
-        "No XIRCLS branding",
-        "10 Domains"
-
-
+        "Upto 375,000 visits",
+        "Visitor segmentation",
+        "Unlimited campaigns",
+        "Dedicated support manager",
+        "Remove XIRCLS branding"
       ]
     }
 

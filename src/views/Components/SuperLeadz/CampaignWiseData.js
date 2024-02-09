@@ -127,7 +127,7 @@ const CampaignWiseData = ({campaignData}) => {
                             <RenderData title="Conversions" data={campaignData?.conversion} info={`Number of redemptions.`} />
                         </Col>
                         <Col md="3">
-                            <RenderData title="Conversion %" data={`${campaignData?.conversion_rate}%`} info={`Number of leads (total) / Number of redemptions`} />
+                            <RenderData title="Conversion %" data={`${Number(campaignData?.conversion_rate).toFixed(2)}%`} info={`Number of leads (total) / Number of redemptions`} />
                         </Col>
                         <Col md="3">
                             <RenderData title="Engaged" data={campaignData[`${condition}clicks`]} info={`Number of clicks in the pop-up`} />

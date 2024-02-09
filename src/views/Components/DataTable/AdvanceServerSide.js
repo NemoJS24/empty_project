@@ -15,6 +15,7 @@ import Flatpickr from 'react-flatpickr'
 import { PermissionProvider } from '../../../Helper/Context'
 import AdvanceOptions from '../../../Helper/AdvanceOptions'
 import { Link } from 'react-router-dom'
+import moment from 'moment'
 // import { Link } from 'react-router-dom'
 // import { pageNo } from '../../Validator'
 
@@ -123,6 +124,7 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
     })
       .then(response => response.blob())
       .then(blob => {
+        console.log({blob})
         const url = window.URL.createObjectURL(new Blob([blob]))
         const a = document.createElement('a')
         a.href = url

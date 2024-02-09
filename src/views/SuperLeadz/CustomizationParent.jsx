@@ -37,6 +37,7 @@ import VerifyYourEmailQuick from '../Outlet/VerifyYourEmailQuick'
 import VerifyYourEmail from '../Outlet/VerifyYourEmail'
 import ComTable from '../Components/DataTable/ComTable'
 import { TbReplace } from "react-icons/tb"
+import { FaCrown } from "react-icons/fa"
 
 
 export const fontStyles = [
@@ -321,7 +322,7 @@ const CustomizationParent = () => {
         const newObj = { ...newState }
         const clonedFinalObj = JSON.parse(data)
         setFinalObj({ ...newObj })
-        const delay = 200
+        const delay = 1000
         const request = setTimeout(() => {
             if (data !== JSON.stringify(newState)) {
                 setPast([...past, { ...clonedFinalObj }])
@@ -335,6 +336,8 @@ const CustomizationParent = () => {
             clearTimeout(request)
         }
     }
+
+    console.log(past, future, "ppppppp")
 
     const undo = () => {
         if (past.length === 0) return
@@ -4535,23 +4538,49 @@ const CustomizationParent = () => {
                                                             <div className="form-check mb-1">
                                                                 <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "ALL_VISITORS"} onChange={e => {
                                                                     updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
-                                                                }} id='all' value={"ALL_VISITORS"} className="form-check-input cursor-pointer" /><label className="cursor-pointer" style={{ fontSize: "13px" }} htmlFor="all">All Visitors</label>
+                                                                }} id='all' value={"ALL_VISITORS"} className="form-check-input cursor-pointer" />
+                                                                <label className="cursor-pointer" style={{ fontSize: "13px" }} htmlFor="all">All Visitors</label>
                                                             </div>
-                                                            <div className="form-check mb-1">
-                                                                <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "FIRST_VISITORS"} onChange={e => {
-                                                                    updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
-                                                                }} id='first' value={"FIRST_VISITORS"} className="form-check-input cursor-pointer" /><label htmlFor="first" className="cursor-pointer" style={{ fontSize: "13px" }}>First-Time Visitors</label>
-                                                            </div>
-                                                            <div className="form-check mb-1">
-                                                                <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "RETURNING_VISITORS"} onChange={e => {
-                                                                    updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
-                                                                }} id='return' value={"RETURNING_VISITORS"} className="form-check-input cursor-pointer" /><label htmlFor="return" className="cursor-pointer" style={{ fontSize: "13px" }}>Returning Shoppers</label>
-                                                            </div>
-                                                            <div className="form-check mb-1">
-                                                                <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "REGISTERED_USERS"} onChange={e => {
-                                                                    updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
-                                                                }} id='registered' value={"REGISTERED_USERS"} className="form-check-input cursor-pointer" /><label htmlFor="registered" className="cursor-pointer" style={{ fontSize: "13px" }}>Registered Users</label>
-                                                            </div>
+
+                                                            {
+                                                                userPermission?.currentPlan?.plan !== "Forever Free" ? <>
+                                                                    <div className="form-check mb-1">
+                                                                        <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "FIRST_VISITORS"} onChange={e => {
+                                                                            updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
+                                                                        }} id='first' value={"FIRST_VISITORS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="first" className="cursor-pointer" style={{ fontSize: "13px" }}>First-Time Visitors</label>
+                                                                    </div>
+                                                                    <div className="form-check mb-1">
+                                                                        <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "RETURNING_VISITORS"} onChange={e => {
+                                                                            updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
+                                                                        }} id='return' value={"RETURNING_VISITORS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="return" className="cursor-pointer" style={{ fontSize: "13px" }}>Returning Shoppers</label>
+                                                                    </div>
+                                                                    <div className="form-check mb-1">
+                                                                        <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "REGISTERED_USERS"} onChange={e => {
+                                                                            updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
+                                                                        }} id='registered' value={"REGISTERED_USERS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="registered" className="cursor-pointer" style={{ fontSize: "13px" }}>Registered Users</label>
+                                                                    </div>
+                                                                </> : <>
+                                                                    <div className="form-check mb-1">
+                                                                        <input disabled type="radio" name='visitor_settings' id='first' value={"FIRST_VISITORS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="first" className="cursor-pointer planCardUpgrade" style={{ fontSize: "13px" }}>First-Time Visitors</label>
+                                                                        <span className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</span>
+                                                                    </div>
+                                                                    <div className="form-check mb-1">
+                                                                        <input disabled type="radio" name='visitor_settings' id='return' value={"RETURNING_VISITORS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="return" className="cursor-pointer planCardUpgrade" style={{ fontSize: "13px" }}>Returning Shoppers</label>
+                                                                        <span className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</span>
+                                                                    </div>
+                                                                    <div className="form-check mb-1">
+                                                                        <input disabled type="radio" name='visitor_settings' id='registered' value={"REGISTERED_USERS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="registered" className="cursor-pointer planCardUpgrade" style={{ fontSize: "13px" }}>Registered Users</label>
+                                                                        <span className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</span>
+                                                                    </div>
+                                                                </>
+                                                            }
+                                                            
                                                         </div>
                                                     </AccordionBody>
                                                 </AccordionItem>

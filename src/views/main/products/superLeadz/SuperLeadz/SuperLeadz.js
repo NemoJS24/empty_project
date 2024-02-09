@@ -398,9 +398,9 @@ export default function SuperLeadz() {
                                 </div>
 
                                 <p className='fs-1  fw-lig'>unverified, no-intent leads</p>
-                                <p className='fs-3 '>80% unverified Intent Emails</p>
-                                <p className='fs-3 '>5% to 15% Incorrect Emails</p>
-                                <p className='fs-3 '>5% Bot Emails</p>
+                                <p className='fs-3 '>80% unverified intent emails</p>
+                                <p className='fs-3 '>5% to 15% incorrect emails</p>
+                                <p className='fs-3 '>5% bot emails</p>
                             </div>
                         </Col>
                         <Col md="2" className='d-flex align-items-center justify-content-center' >

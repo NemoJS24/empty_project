@@ -4,15 +4,15 @@ import { Card, CardBody, Col, Row } from 'reactstrap'
 import { baseURL, getReq, postReq } from '../../assets/auth/jwtService'
 import { PermissionProvider } from '../../Helper/Context'
 import Select from 'react-select'
-import { selectPhoneList } from '../../Helper/data'
+// import { selectPhoneList } from '../../Helper/data'
 import { Paperclip, Trash } from 'react-feather'
 import FrontBaseLoader from '../Components/Loader/Loader'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { FaCrown } from "react-icons/fa"
 
-
-const CreateSupportTicket = () => {
+const CreateSupportTicket = ({ isQuick = false, setBug, data }) => {
     const outletData = getCurrentOutlet()
     const {userPermission} = useContext(PermissionProvider)
     const [apiLoader, setApiLoader] = useState(false)
@@ -25,16 +25,17 @@ const CreateSupportTicket = () => {
         mainreason: '',
         subject: '',
         message: '',
-        priority: '',
+        priority: data?.priority,
         invoicesbooking: '',
         infiniti_extras: '',
         reason: '',
         shopify_url: outletData[0]?.web_url,
         apps: userPermission?.appName,
         product: userPermission?.appName,
-        issue: "",
-        subIssue: "",
-        image: ""
+        issue: data?.issue,
+        subIssue: data?.subIssue,
+        image: [],
+        imageList: []
     }
 
     const valueToCheck = [
@@ -87,23 +88,45 @@ const CreateSupportTicket = () => {
             id: 'message'
         }
     ]
+    // console.log(userPermission?.currentPlan?.plan, userPermission?.currentPlan?.plan === "Forever Free", "lasknsa")
+
+    const priorityJson = [
+        {label: "Low", value: "Low", isDisabled: false},
+        {label: "Medium", value: "Medium", isDisabled: false},
+        {
+            label: userPermission?.currentPlan?.plan === "Forever Free" || userPermission?.currentPlan?.plan === "Lite" ? <>
+                High
+                <span className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</span>
+            </> : "High",
+            value: "High",
+            isDisabled: userPermission?.currentPlan?.plan === "Forever Free" || userPermission?.currentPlan?.plan === "Lite"
+        }
+    ]
 
     const [supportData, setSupportData] = useState(defaultData)
-    const [imageObject, setImageObject] = useState({})
+    // const [imageObject, setImageObject] = useState({})
     const [issuesList, setIssuesList] = useState([])
     const [product, setProduct] = useState([])
     const [subIssues, setSubIssues] = useState([])
 
-    console.log(product, imageObject)
+    console.log(supportData)
     const updateData = (e) => {
         setSupportData({ ...supportData, [e.target.name]: e.target.value })
     }
 
     const imageActions = (e) => {
-        // const checkVaildImage = imageValidation(e)
-        setSupportData({...supportData, image: URL.createObjectURL(e.target.files[0])})
-        // setImageUrl()
-        setImageObject(e.target.files[0])
+        if (e.target.files.length <= 5) {
+            const imageUrls = []
+            for (let i = 0; i < e.target.files.length; i++) {
+                console.log(URL.createObjectURL(e.target.files[i]))
+                imageUrls.push(URL.createObjectURL(e.target.files[i]))
+    
+            }
+            setSupportData({...supportData, imageList:  e.target.files, image: imageUrls})
+
+        } else {
+            toast.error("Select upto 5 images")
+        }
         
     }
 
@@ -224,7 +247,14 @@ const CreateSupportTicket = () => {
             Object.entries(supportData).map(([key, value]) => {
                 form_data.append(key, value)
             })
-            form_data.append('attachment', imageObject)
+
+            for (let i = 0; i < supportData?.imageList.length; i++) {
+                // console.log(URL.createObjectURL(supportData?.imageList[i]))
+                form_data.append('attachment_files', supportData?.imageList[i])
+    
+            }
+            // supportData?.imageList?.map((curElem) => form_data.append('attachment_files', curElem))
+            
             form_data.append("shop", outletData[0]?.web_url)
             form_data.append("app", userPermission?.appName)
             // form_data.append("raised_for_type", "Merchant")
@@ -235,7 +265,11 @@ const CreateSupportTicket = () => {
             .then((resp) => {
                 console.log(resp)
                 toast.success("Support ticket created successfully")
-                navigate("/merchant/support/")
+                if (isQuick) {
+                    setBug(false)
+                } else {
+                    navigate("/merchant/support/")
+                }
                 setApiLoader(false)
             })
             .catch((error) => {
@@ -247,6 +281,16 @@ const CreateSupportTicket = () => {
         }
 
     }
+
+    // const renderImages = () => {
+    //     // for (let i = 0; i < supportData?.imageList.length; i++) {
+    //     //     console.log(supportData?.imageList[i], i)
+    //     //     return <img className='image_viewer' width="200px" height="100px" src={URL.createObjectURL(supportData?.imageList[i])} alt=" " />
+    //     // }
+    //     return supportData?.imageList?.map((curElem) => {
+    //         return <img className='image_viewer' width="200px" height="100px" src={URL.createObjectURL(curElem)} alt=" " />
+    //     })
+    // }
 
     useEffect(() => {
         getData()
@@ -271,131 +315,109 @@ const CreateSupportTicket = () => {
             </Card> */}
 
             <Card>
-                <CardBody>
+                <CardBody className={`${isQuick ? 'p-0' : ''}`}>
                     <Row>
                         {/* <Col md="10" className='offset-md-1'> */}
-                        <Col className='col-md-8 offset-md-2' style={{border: '1px solid #ccc', borderRadius: '8px'}}>
-                            <form action="" className="container" id='support-form' style={{padding: '30px'}}>
+                        <Col className={`${isQuick ? 'col-md-12' : 'col-md-8 offset-md-2'} `} style={{border: '1px solid #ccc', borderRadius: '8px'}}>
+                            <form action="" className="container" id='support-form' style={{padding: '20px'}}>
                                 <div className="row">
-                                    <div className="col-6 mb-2">
-                                        <label htmlFor="first_name">Name</label>
-                                        <input type="text" id='first_name' name='firstname' className='form-control' value={supportData.firstname} onChange={(e) => updateData(e)} 
-                                        placeholder='Enter Your Name'/>
-                                        <p id="firstname_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                                    {
+                                        !isQuick ? <>
+                                            <div className="col-6 mb-2">
+                                                <label htmlFor="first_name">Name</label>
+                                                <input type="text" id='first_name' name='firstname' className='form-control' value={supportData.firstname} onChange={(e) => updateData(e)} 
+                                                placeholder='Enter Your Name'/>
+                                                <p id="firstname_val" className="text-danger m-0 p-0 vaildMessage"></p>
 
-                                    </div>
-                                    <div className="col-6 mb-2">
-                                        <label htmlFor="name">Email</label>
-                                        <input type="email" id='name' name='email' className='form-control' value={supportData.email} onChange={(e) => updateData(e)} readOnly placeholder='Enter Your Email'/>
-                                        <p id="email_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                                    
-                                    </div>
-                                    <div className="col-6 mb-2 d-none">
-                                        <div className="row">
-                                            <label htmlFor="phone">Mobile</label>
-                                            <div className="col-md-3 mb-md-0">
+                                            </div>
+                                            <div className="col-6 mb-2">
+                                                <label htmlFor="name">Email</label>
+                                                <input type="email" id='name' name='email' className='form-control' value={supportData.email} onChange={(e) => updateData(e)} readOnly placeholder='Enter Your Email'/>
+                                                <p id="email_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                                            
+                                            </div>
+
+                                            <Col md="3" className='mb-1'>
+                                                <div className="form-group">
+                                                    <label htmlFor="">Product:</label>
+                                                    <Select
+                                                        isMulti = {false}
+                                                        options={product.filter((curElem) => userPermission?.installedApps.includes(curElem.value))}
+                                                        inputId="aria-example-input"
+                                                        closeMenuOnSelect={true}
+                                                        name="product"
+                                                        noOptionsMessage={() => "Please select a product"}
+                                                        placeholder="Select Product"
+                                                        value={product?.filter(option => supportData.product === option.value)}
+                                                        onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
+                                                    />
+                                                    <p id="product_val" className="text-danger m-0 p-0 vaildMessage"></p>
+                                                </div>
+                                            </Col>
+
+                                            <Col md="3" className='mb-1'>
+                                                <div className="form-group">
+                                                    <label htmlFor="">Issues:</label>
+                                                    <Select
+                                                        isMulti = {false}
+                                                        options={issuesList}
+                                                        inputId="aria-example-input"
+                                                        closeMenuOnSelect={true}
+                                                        name="issue"
+                                                        noOptionsMessage={() => "Issues"}
+                                                        placeholder="Issues"
+                                                        value={issuesList?.filter(option => supportData.issue === option.value)}
+                                                        onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
+                                                    />
+                                                    <p id="issue_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
+                                                </div>
+                                            </Col>
+
+                                            <Col md="3" className='mb-1'>
+                                                <div className="form-group">
+                                                    <label htmlFor="">Sub Issues:</label>
+                                                    <Select
+                                                        isMulti = {false}
+                                                        options={subIssues}
+                                                        inputId="aria-example-input"
+                                                        closeMenuOnSelect={true}
+                                                        name="subIssue"
+                                                        noOptionsMessage={() => "Sub Issues"}
+                                                        placeholder="Sub Issues"
+                                                        value={subIssues?.filter(option => supportData.subIssue === option.value)}
+                                                        onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
+                                                    />
+                                                    <p id="subIssue_val" className="text-danger m-0 p-0 vaildMessage"></p>
+
+                                                </div>
+                                            </Col>
+
+                                            <div className={`col-3 mb-2`}>
+                                                <label htmlFor="priority">Priority</label>
+                                                {/* <select id='priority' name='priority' className='form-control' value={supportData.priority} onChange={(e) => updateData(e)} >
+                                                    <option value="" selected>Priority</option>
+                                                    <option value="Low" selected>Low</option>
+                                                    <option value="Medium">Medium</option>
+                                                    <option value="High">High</option>
+                                                </select> */}
                                                 <Select
                                                     isMulti = {false}
-                                                    options={selectPhoneList}
+                                                    options={priorityJson}
                                                     inputId="aria-example-input"
                                                     closeMenuOnSelect={true}
-                                                    name="phonecode"
+                                                    name="priority"
+                                                    noOptionsMessage={() => "Priority"}
+                                                    placeholder="Priority"
+                                                    value={priorityJson?.filter(option => supportData.priority === option.value)}
                                                     onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
-                                                    value={supportData?.phonecode ? selectPhoneList.filter(option => supportData?.phonecode.includes(option.value)) : ""}
-                                                    styles={{
-                                                        control: (baseStyles) => ({
-                                                            ...baseStyles,
-                                                            fontSize: '12px',
-                                                            margin: 0,
-                                                            height: '100%'
-                                                        })
-                                                    }}
                                                 />
+                                                <p id="priority_val" className="text-danger m-0 p-0 vaildMessage"></p>
 
                                             </div>
-                                            <div className="col-md-9 mb-md-0">
-                                                <div className="w-100">
-                                                    <input
-                                                        type="number"
-                                                        id="phone"
-                                                        name="phone"
-                                                        className="form-control"
-                                                        value={supportData.phone}
-                                                        onChange={updateData}
-                                                        placeholder="Enter Your Phone Number"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <p id="phone_val" className="text-danger m-0 p-0 vaildMessage"></p>
-
-                                        </div>
-                                    </div>
-
-                                    <Col md="3" className='mb-1'>
-                                        <div className="form-group">
-                                            <label htmlFor="">Product:</label>
-                                            <Select
-                                                isMulti = {false}
-                                                options={product.filter((curElem) => userPermission?.installedApps.includes(curElem.value))}
-                                                inputId="aria-example-input"
-                                                closeMenuOnSelect={true}
-                                                name="product"
-                                                noOptionsMessage={() => "Please select a product"}
-                                                placeholder="Select Product"
-                                                value={product?.filter(option => supportData.product === option.value)}
-                                                onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
-                                            />
-                                            <p id="product_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                                        </div>
-                                    </Col>
-                                    <Col md="3" className='mb-1'>
-                                        <div className="form-group">
-                                            <label htmlFor="">Issues:</label>
-                                            <Select
-                                                isMulti = {false}
-                                                options={issuesList}
-                                                inputId="aria-example-input"
-                                                closeMenuOnSelect={true}
-                                                name="issue"
-                                                noOptionsMessage={() => "Issues"}
-                                                placeholder="Issues"
-                                                value={issuesList?.filter(option => supportData.issue === option.value)}
-                                                onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
-                                            />
-                                            <p id="issue_val" className="text-danger m-0 p-0 vaildMessage"></p>
-
-                                        </div>
-                                    </Col>
-
-                                    <Col md="3" className='mb-1'>
-                                        <div className="form-group">
-                                            <label htmlFor="">Sub Issues:</label>
-                                            <Select
-                                                isMulti = {false}
-                                                options={subIssues}
-                                                inputId="aria-example-input"
-                                                closeMenuOnSelect={true}
-                                                name="subIssue"
-                                                noOptionsMessage={() => "Sub Issues"}
-                                                placeholder="Sub Issues"
-                                                value={subIssues?.filter(option => supportData.subIssue === option.value)}
-                                                onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
-                                            />
-                                            <p id="subIssue_val" className="text-danger m-0 p-0 vaildMessage"></p>
-
-                                        </div>
-                                    </Col>
-
-                                    <div className="col-3 mb-2">
-                                        <label htmlFor="priority">Priority</label>
-                                        <select id='priority' name='priority' className='form-control' value={supportData.priority} onChange={(e) => updateData(e)} >
-                                            <option value="Low" selected>Low</option>
-                                            <option value="Medium">Medium</option>
-                                            <option value="High">High</option>
-                                        </select>
-                                        <p id="priority_val" className="text-danger m-0 p-0 vaildMessage"></p>
-
-                                    </div>
+                                        </> : ''
+                                    }
+                                    
                                     
                                     <div className="col-12 mb-2">
                                         <label htmlFor="subject">Subject</label>
@@ -413,8 +435,8 @@ const CreateSupportTicket = () => {
 
                                     </div>
 
-                                    <div className="col-6 mb-2">
-                                        <label htmlFor="attachment">Attachment</label>
+                                    <div className="col-12 mb-2">
+                                        <label htmlFor="attachment" className='mb-2'>Attachment</label>
                                         {/* <div className="d-flex justify-content-start-align-items-center gap-2">
                                             <div className="left" style={{flexGrow: '1'}}>
                                                 <input type="file" id='attachment' name='attachment' className='form-control' onChange={(e) => setImageObject(e.target.files[0])} />
@@ -426,27 +448,32 @@ const CreateSupportTicket = () => {
                                                 
                                             </div>
                                         </div> */}
-                                        <div className="d-flex gap-2 mb-2 align-items-center">
-                                            <div className="w-75">
-                                                <div className="main-wrapper d-flex justify-content-between align-items-center">
-                                                    <div className="image-view">
-                                                        <img className='image_viewer' width="200px" height="100px" src={supportData?.image} alt=" " />
+                                        <div className="d-flex gap-2 align-items-center">
+                                            {/* <div className="w-75"> */}
+                                                <div className="main-wrapper d-flex justify-content-between align-items-start flex-column">
+                                                    <div className="image-view d-flex justify-content-start align-items-center gap-2 mb-2 flex-wrap">
+                                                        {
+                                                            supportData?.image.length > 0 && supportData?.image?.map((curElem) => {
+                                                                return <img className='image_viewer' width="100px" height="100px" src={curElem} alt=" " />
+                                                            })
+                                                        }
+                                                        
                                                     </div>
                                                     <div className="image-action d-flex justify-content-start align-items-center gap-1">
-                                                        <input placeholder="Enter Your Outlet Name" type="file" className="w-100 d-none" name="offer_image" accept='image/jpeg, image/png, image/gif' id="offer_image" onChange={(e) => imageActions(e)} />
-                                                        <label htmlFor="offer_image" className='btn btn-success text-white'>
+                                                        <input placeholder="Enter Your Outlet Name" type="file" className="w-100 d-none" name="offer_image" accept='image/jpeg, image/png, image/gif' multiple id="offer_image" onChange={(e) => imageActions(e)} />
+                                                        <label htmlFor="offer_image" className='btn btn-sm btn-primary-main'>
                                                             <Paperclip size={17} />
                                                         </label>
-                                                        <label className='btn btn-danger' onClick={() => {
-                                                            setImageObject({})
-                                                            setSupportData({...supportData, image: ""})
+                                                        <label className='btn btn-sm btn-outline-danger text-danger' onClick={() => {
+                                                            // setImageObject({})
+                                                            setSupportData({...supportData, imageList: [], image: []})
                                                         }}>
-                                                            <Trash size={17} />
+                                                            <Trash size={17} color='#ea5455' />
                                                         </label>
 
                                                     </div>
                                                 </div>
-                                            </div>
+                                            {/* </div> */}
                                         </div>
                                         <p id="attachment_val" className="text-danger m-0 p-0 vaildMessage"></p>
 
@@ -454,7 +481,11 @@ const CreateSupportTicket = () => {
                                     
                                 </div>
                                 <div className='action-btn mt-3 d-flex justify-content-end'>
-                                    <a className="btn btn-primary" onClick={() => createTicket()}>Create</a>
+                                    <a className="btn btn-primary" onClick={() => createTicket()}>
+                                        {
+                                            isQuick ? "Submit" : 'Create'
+                                        }
+                                    </a>
                                 </div>
                             </form>
                         </Col>
