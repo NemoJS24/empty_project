@@ -88,7 +88,7 @@ const CrossLeads = () => {
             isEnable: true
         },
         {
-            name: "Is Finanace",
+            name: "Is Finance",
             maxWidth: "120px",
             selector: (row) => (
                 row?.is_finance === true ? (

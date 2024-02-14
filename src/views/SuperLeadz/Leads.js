@@ -113,6 +113,13 @@ export default function SuperLeadzLeads() {
             isEnable: true
         },
         {
+            name: 'Source',
+            minWidth: '200px',
+            selector: row => <span style={{ marginTop: '3px' }}>{row?.source ? row?.source : "Direct"}</span>,
+            type: 'text',
+            isEnable: true
+        },
+        {
             name: 'Status',
             minWidth: '10%',
             cell: (row) => {

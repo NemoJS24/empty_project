@@ -5564,7 +5564,7 @@ const CustomizationParent = () => {
                                                             <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Email From</label>
                                                             <div className="d-flex justify-content-center align-items-center" style={{ border: '1px solid #d8d6de', borderRadius: '0.357rem', gap: '5px' }}>
                                                                 {/* <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Email Template</label> */}
-                                                                <input type="text" value={outletSenderId ? outletSenderId : "no_reply@xircls.com"} className="form-control" style={{ width: '250px', border: 'none' }} disabled />
+                                                                <input type="text" value={outletSenderId ? outletSenderId : "no_reply@xircls.com"} className="form-control" style={{ width: '100%', border: 'none' }} disabled />
                                                                 <a style={{ marginRight: '5px' }} onClick={() => setChangeSenderEmail(!changeSenderEmail)}>
                                                                     <Edit size={'18px'} />
                                                                 </a>
@@ -5578,6 +5578,7 @@ const CustomizationParent = () => {
                                                             <Select onChange={(e) => {
                                                                 const form_data = new FormData()
                                                                 form_data.append("id", e.value)
+                                                                form_data.append("app", userPermission?.appName)
                                                                 fetch(`${SuperLeadzBaseURL}/api/v1/get_single_camp_details/`, {
                                                                     method: "POST",
                                                                     body: form_data

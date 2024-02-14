@@ -5,7 +5,7 @@ import { Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownTog
 import toast from 'react-hot-toast'
 import JsonToJsx from '../Components/SuperLeadz/JsonToJsx'
 import moment from 'moment/moment'
-import { PermissionProvider, ThemesProvider } from '../../Helper/Context'
+import { ThemesProvider } from '../../Helper/Context'
 import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
 // import { getCurrentOutlet } from '../Validator'
 import Spinner from '../Components/DataTable/Spinner'
@@ -18,7 +18,7 @@ import CampaignWiseData from '../Components/SuperLeadz/CampaignWiseData'
 import { HiOutlinePencilSquare } from "react-icons/hi2"
 import { MdOutlineContentCopy, MdDelete, MdDeleteOutline } from "react-icons/md"
 import AdvanceServerSide from '../Components/DataTable/AdvanceServerSide'
-import Swal from 'sweetalert2'
+// import Swal from 'sweetalert2'
 
 const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, create = true }) => {
 
@@ -34,7 +34,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
     const [isLoading, setIsLoading] = useState(true)
 
     const { setSelectedThemeNo, setEditTheme } = useContext(ThemesProvider)
-    const { userPermission } = useContext(PermissionProvider)
+    // const { userPermission } = useContext(PermissionProvider)
 
     const [activeThemes, setActiveThemes] = useState([])
     const [conflictThemes, setConflictThemes] = useState([])
@@ -276,17 +276,17 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                     return (
                         <div className="m-auto form-check form-switch form-check-success cursor-pointer p-0 m-0" style={{ filter: `drop-shadow(0px 0px 7.5px rgba(40, 199, 111, ${row.theme_name.is_active ? "0.5" : "0"}))` }}>
                             <input onChange={() => {
-                                if (userPermission?.currentPlan?.plan === "Forever Free") {
-                                    const activeCampaign = allCampaigns.filter((curElem) => curElem?.theme_name?.is_active === 1)
-                                    console.log(activeCampaign, "activeCampaign")
-                                    if (activeCampaign.length > 0) {
-                                        Swal.fire({
-                                            title: "Upgrade your plan"
-                                            // icon: "info"
-                                        })
-                                        return
-                                    }
-                                }
+                                // if (userPermission?.currentPlan?.plan === "Forever Free") {
+                                //     const activeCampaign = allCampaigns.filter((curElem) => curElem?.theme_name?.is_active === 1)
+                                //     console.log(activeCampaign, "activeCampaign")
+                                //     if (activeCampaign.length > 0) {
+                                //         Swal.fire({
+                                //             title: "Upgrade your plan"
+                                //             // icon: "info"
+                                //         })
+                                //         return
+                                //     }
+                                // }
                                 setCurrDetails(row.theme_name)
                                 const getUrl = new URL(`${SuperLeadzBaseURL}/api/v1/get/active-template/`)
                                 const form_data = new FormData()
@@ -433,9 +433,9 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                         border: 1px solid #efefef;
                         background-color: #ffffff;
                     }
-                    .swal2-styled.swal2-confirm {
-                        background: #006aff !important
-                    }
+                    // .swal2-styled.swal2-confirm {
+                    //     background: #006aff !important
+                    // }
                 `}
             </style>
 
@@ -493,17 +493,17 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
 
                                                                             <div className="m-auto form-check form-switch form-check-success cursor-pointer p-0 m-0" style={{ filter: `drop-shadow(0px 0px 7.5px rgba(40, 199, 111, ${curElem?.theme_name.is_active ? "0.5" : "0"}))` }}>
                                                                                 <input onChange={() => {
-                                                                                    if (userPermission?.currentPlan?.plan === "Forever Free") {
-                                                                                        const activeCampaign = allCampaigns.filter((curElem) => curElem?.theme_name?.is_active === 1)
-                                                                                        console.log(activeCampaign, "activeCampaign")
-                                                                                        if (activeCampaign.length > 0) {
-                                                                                            Swal.fire({
-                                                                                                title: "Upgrade your plan"
-                                                                                                // icon: "info"
-                                                                                            })
-                                                                                            return
-                                                                                        }
-                                                                                    }
+                                                                                    // if (userPermission?.currentPlan?.plan === "Forever Free") {
+                                                                                    //     const activeCampaign = allCampaigns.filter((curElem) => curElem?.theme_name?.is_active === 1)
+                                                                                    //     console.log(activeCampaign, "activeCampaign")
+                                                                                    //     if (activeCampaign.length > 0) {
+                                                                                    //         Swal.fire({
+                                                                                    //             title: "Upgrade your plan"
+                                                                                    //             // icon: "info"
+                                                                                    //         })
+                                                                                    //         return
+                                                                                    //     }
+                                                                                    // }
                                                                                     setCurrDetails(curElem?.theme_name)
                                                                                     const getUrl = new URL(`${SuperLeadzBaseURL}/api/v1/get/active-template/`)
                                                                                     const form_data = new FormData()

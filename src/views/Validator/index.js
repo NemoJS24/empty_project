@@ -4,8 +4,8 @@ import { PermissionProvider } from "../../Helper/Context"
 import { useContext } from "react"
 import { SuperLeadzBaseURL, baseURL } from "../../assets/auth/jwtService"
 
-export const imageValidation = (e) => {
-    const maxSizeKB = 100 //Size in KB
+export const imageValidation = (e, size = 100) => {
+    const maxSizeKB = size //Size in KB
     const maxSize = maxSizeKB * 1024 //File size is returned in Bytes
     const file_name = e.target.files[0].name.split('.').slice(0, -1).join('.')
 
