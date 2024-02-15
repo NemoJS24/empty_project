@@ -279,7 +279,7 @@ export const postReq = (path, data, customBaseURL = baseURL, config) => {
 }
 
 export const putReq = (path, data, customBaseURL = baseURL, config) => {
-    console.log(customBaseURL, "domian")
+    // console.log(customBaseURL, "domian")
     // if (customBaseURL) {
     axiosInstance.defaults.baseURL = customBaseURL
     // }
