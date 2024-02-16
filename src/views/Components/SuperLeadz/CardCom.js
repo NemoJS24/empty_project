@@ -6,7 +6,7 @@ const CardCom = ({ icon, title, data, info}) => {
     return (
         <Card>
             <CardBody>
-                <div className='icon'>
+                <div className='icon' style={{paddingBottom: '5px'}}>
                     {icon ? icon : ""}
                 </div>
                 <div className="d-flex justify-content-between align-items-baseline">

@@ -77,7 +77,9 @@ export default function SuperLeadzLeads() {
         {
             name: 'Visitor Type',
             minWidth: '15%',
-            selector: row => row.visitor_type,
+            selector: row => {
+                return row.visitor_type === "First Visitor" ? "First-Time Visitor" : row.visitor_type === "Returning Visitor" ? "Returning Visitor" : row.visitor_type === "Register User" ? "Registered Users" : ""
+            },
             type: 'select',
             options: [
                 { label: "Select", value: "" },
@@ -89,7 +91,7 @@ export default function SuperLeadzLeads() {
         },
         {
             name: 'Lead Type',
-            minWidth: '200px',
+            minWidth: '100px',
             cell: (row) => {
                 const letter = row?.is_new_letter ? "MQL" : "SQL"
                 return letter
@@ -104,7 +106,7 @@ export default function SuperLeadzLeads() {
         },
         {
             name: 'Rating',
-            minWidth: '200px',
+            minWidth: '100px',
             selector: row => <span style={{ marginTop: '3px' }}>{row.status === "HOT" ? "Hot" : row.status === "WARM" ? "Warm" : row.status === "COLD" ? "Cold" : ""}</span>,
             type: 'select',
             options: [
@@ -113,6 +115,20 @@ export default function SuperLeadzLeads() {
                 { label: "Cold", value: "COLD" },
                 { label: "Hot", value: "HOT" }
             ],
+            isEnable: true
+        },
+        {
+            name: 'Source',
+            minWidth: '200px',
+            selector: row => <span style={{ marginTop: '3px' }}>{row?.source ? row?.source : "Direct"}</span>,
+            type: 'text',
+            isEnable: true
+        },
+        {
+            name: 'Purchase',
+            minWidth: '100px',
+            selector: row => <span style={{ marginTop: '3px' }}>{row?.is_purchase ? "Yes" : "No"}</span>,
+            type: 'text',
             isEnable: true
         },
         {

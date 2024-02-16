@@ -4,7 +4,7 @@ import { SuperLeadzBaseURL } from "../../assets/auth/jwtService"
 import { formatNumberWithCommas, getCurrentOutlet } from "../Validator"
 import { PermissionProvider } from "../../Helper/Context"
 import axios from "axios"
-import { Link } from "react-router-dom"
+// import { Link } from "react-router-dom"
 // import Polar from "./components/PolarChart"
 import CardCom from "../Components/SuperLeadz/CardCom"
 // import { Row } from "reactstrap"
@@ -150,9 +150,9 @@ const Dashboard = () => {
           <div className="card">
             <div className="card-body d-flex justify-content-between">
               <h4 className="m-0">Dashboard</h4>
-              <Link className="text-dark" to="/merchant/Flash_Accounts/settings/">
+              {/* <Link className="text-dark" to="/merchant/Flash_Accounts/settings/">
                 <Settings size="18px" />
-              </Link>
+              </Link> */}
               {/* <div className="form-check-success form-switch cusor-pointer">
                     <input className="form-check-input" type="checkbox" role="switch" id="form-switch" onClick={(e) => changeStatus(e)} checked={toggle} />
                     <label className="form-check-label" htmlFor="form-switch" style={{ paddingLeft: '10px', whiteSpace: 'nowrap' }}>Plugin Setting</label>

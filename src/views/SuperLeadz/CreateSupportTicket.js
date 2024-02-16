@@ -482,9 +482,7 @@ const CreateSupportTicket = ({ isQuick = false, setBug, data }) => {
                                 </div>
                                 <div className='action-btn mt-3 d-flex justify-content-end'>
                                     <a className="btn btn-primary" onClick={() => createTicket()}>
-                                        {
-                                            isQuick ? "Submit" : 'Create'
-                                        }
+                                        Submit
                                     </a>
                                 </div>
                             </form>

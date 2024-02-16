@@ -186,11 +186,17 @@ const Apps = () => {
 
       <Modal
         isOpen={editModal}
-        toggle={() => setEditModal(!editModal)}
+        toggle={() => {
+          setEditModal(!editModal)
+          setData({...data, selectApp: ''})
+        }}
         className='modal-dialog-centered'
         size='lg'
       >
-        <ModalHeader toggle={() => setEditModal(!editModal)}>Select Platform</ModalHeader>
+        <ModalHeader toggle={() => {
+          setEditModal(!editModal)
+          setData({...data, selectApp: ''})
+        }}>Select Platform</ModalHeader>
         <ModalBody>
           <div className="row">
             {

@@ -110,7 +110,6 @@ const SuperLeads_Routes = [
   },
   {
     path: '/merchant/support/',
-    app: appName,
     element: <SuperLeadzSupport />
   },
   {

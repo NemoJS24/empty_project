@@ -12,7 +12,7 @@ export default function Superleadz_Pricing() {
       value: "0",
       subValue: "$00.00/year",
       button: "Get Started",
-      items: ["Free - Upto 15,000 visits", "1 campaign", "24/7 email support"]
+      items: ["Free - Upto 15,000 visits", "Unlimited campaigns", "24/7 email support"]
     },
     {
       head: "Lite",

@@ -78,25 +78,39 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
       </Fragment>
     )
   }
+  // let isFirst = true
 
+  // useEffect(() => {
+  //   if (searchValue) {
+  //     const delay = 1000
+  //     const request = setTimeout(() => {
+  //       getData(currentPage, currentEntry, searchValue, advanceSearchValue)
+  //       isFirst = false
+  //     }, delay)
+
+  //     return () => {
+  //       clearTimeout(request)
+  //     }
+  //   }
+  // }, [searchValue])
+
+
+  //------------------------
   useEffect(() => {
     if (searchValue) {
       const delay = 1000
       const request = setTimeout(() => {
         getData(currentPage, currentEntry, searchValue, advanceSearchValue)
+        // isFirst = false
       }, delay)
 
       return () => {
         clearTimeout(request)
       }
+    } else {
+      getData(currentPage, currentEntry, searchValue, advanceSearchValue)
     }
-  }, [searchValue])
-
-
-  //------------------------
-  useEffect(() => {
-    getData(currentPage, currentEntry, searchValue, advanceSearchValue)
-  }, [currentPage, currentEntry])
+  }, [currentPage, currentEntry, searchValue])
 
   // useEffect(() => {
   //   getData({currentPage, currentEntry, advanceSearchValue, searchValue})
