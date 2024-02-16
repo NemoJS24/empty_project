@@ -20,10 +20,6 @@ import AdvanceServerSide from '../Components/DataTable/AdvanceServerSide'
 // import Swal from 'sweetalert2'
 
 const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, create = true }) => {
-
-    // const [searchValue, setSearchValue] = useState('')
-    // const [filteredData, setFilteredData] = useState([])
-    // const [switch1, setSwitch1] = useState(false)
     const outletData = getCurrentOutlet()
     const [count, setCount] = useState(0)
     const navigate = useNavigate()
