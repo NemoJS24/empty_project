@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { User, BarChart2, CheckCircle, Link } from 'react-feather'
 import CardCom from '../Components/SuperLeadz/CardCom'
 import { Card, CardBody, Col, Input } from 'reactstrap'
 // import ComTableAdvance from '../Components/DataTable/ComTableAdvance'
-import { getCurrentOutlet } from '../Validator'
+import { defaultformatDate, getCurrentOutlet } from '../Validator'
 import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
 import moment from 'moment/moment'
 import ComTable from '../Components/DataTable/ComTable'
 import Spinner from '../Components/DataTable/Spinner'
 import AdvanceServerSide from '../Components/DataTable/AdvanceServerSide'
+import { PermissionProvider } from '../../Helper/Context'
 
 export default function SuperLeadzLeads() {
+
+    const { userPermission } = useContext(PermissionProvider)
 
     const [tableData, setTableData] = useState([])
     const [custVisit, setCustVisit] = useState(0)
@@ -54,7 +57,7 @@ export default function SuperLeadzLeads() {
         {
             name: 'Date',
             minWidth: '150px',
-            selector: row => moment(row.created_at).format('MMM D, YYYY'),
+            selector: row => defaultformatDate(row.created_at, userPermission?.user_settings?.date_format),
             type: 'date',
             isEnable: true
         },

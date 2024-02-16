@@ -354,7 +354,7 @@ const RenderPreview = (props) => {
                                 <div id='preview_section' style={{ width: "100%", height: "100%", position: "relative", overflowY: "auto", display: "flex", justifyContent: popPosition?.includes("L") ? "start" : popPosition?.includes("C") ? "center" : "end", alignItems: popPosition?.includes("T") ? "start" : popPosition?.includes("M") ? "center" : "end", flexGrow: "1" }}>
                                     <div style={currPage === "button" ? { position: "relative", width: btnStyles?.width, maxWidth: btnStyles?.maxWidth, maxHeight: "100%", minHeight: btnStyles?.minHeight, marginTop: btnStyles?.marginTop, marginRight: btnStyles?.marginRight, marginBottom: btnStyles?.marginBottom, marginLeft: btnStyles?.marginLeft, borderRadius: btnStyles?.borderRadius } : { position: "relative", width: bgStyles?.width, maxWidth: bgStyles?.maxWidth, maxHeight: "100%", minHeight: bgStyles?.minHeight, marginTop: bgStyles?.marginTop, marginRight: bgStyles?.marginRight, marginBottom: bgStyles?.marginBottom, marginLeft: bgStyles?.marginLeft, borderRadius: bgStyles?.borderRadius }}>
                                         {currPage !== "button" &&
-                                            <div id="cross_btn_cont" tabindex="0" style={{ position: "absolute", inset: "0px 0px auto auto", zIndex: "2", backgroundColor: crossStyle?.backgroundColor, borderRadius: crossStyle?.borderRadius, padding: `3px`, marginBottom: crossStyle?.marginBottom, transform: `translate(${crossStyle?.translateX}, ${crossStyle?.translateY})` }}>
+                                            <div id="cross_btn_cont" tabindex="0" style={{ position: "absolute", inset: "0px 0px auto auto", zIndex: "2", backgroundColor: crossStyle?.backgroundColor, borderRadius: crossStyle?.borderRadius, marginBottom: crossStyle?.marginBottom, transform: `translate(${crossStyle?.translateX}, ${crossStyle?.translateY})` }}>
                                                 <div id="cross_btn_box" className={`${currPosition?.selectedType === "close" ? "cross_btn_box_border" : ""}`}>
                                                     <X size={crossStyle?.width} height={crossStyle?.height} color={crossStyle?.color}
                                                         onClick={(e) => {
@@ -420,7 +420,7 @@ const RenderPreview = (props) => {
                                                         setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
                                                     }}
                                                     id={`${currPage}-${key}-parent-grandparent`}
-                                                    className={`${isEqual({ cur: key, curElem: "parent", subElem: "grandparent" }, { ...indexes }) ? "active-elem" : ""}`}
+                                                    className={`${isEqual({ cur: key, curElem: "parent", subElem: "grandparent" }, { ...indexes }) ? "active-elem" : ""} ${isColRes ? "prevent-select" : ""}`}
                                                 >
                                                     {isEqual({ cur: key, curElem: "parent", subElem: "grandparent" }, { ...gotDragOver }) && (
                                                         <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
@@ -481,14 +481,14 @@ const RenderPreview = (props) => {
                                                                             <div className="w-100 h-100 position-relative">
                                                                                 <span onMouseDown={e => {
                                                                                     e.stopPropagation()
-                                                                                    setCurrPosition({...currPosition, selectedType: "block"})
-                                                                                    setIndexes({cur: key, curElem: curElem.positionType, subElem: "parent"})
+                                                                                    setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                    setIndexes({ cur: key, curElem: curElem.positionType, subElem: "parent" })
                                                                                     setIsColRes(true)
                                                                                     const colDetails = document.getElementById(`${currPage}-${key}-${curElem?.positionType}-parent`)
                                                                                     const colWidth = colDetails.getBoundingClientRect().width
                                                                                     console.log("onMouseDown", curElem?.style)
 
-                                                                                    const ignoreCol =  elements.length < 3 ? "none" : curElem?.positionType === "left" ? "right" : "left"
+                                                                                    const ignoreCol = elements.length < 3 ? "none" : curElem?.positionType === "left" ? "right" : "left"
 
                                                                                     const ignoreColWidth = ignoreCol === "none" ? 0 : document.getElementById(`${currPage}-${key}-${ignoreCol}-parent`).getBoundingClientRect().width
 
@@ -967,7 +967,26 @@ const RenderPreview = (props) => {
                                                                                             {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
                                                                                             <div style={{ ...subElem?.style, display: "inline-flex", justifyContent: "center", alignItems: "center", fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} >
                                                                                                 <span onDragStart={e => e.stopPropagation()} id={`textField-${key}-${curElem?.positionType}-${j}`} style={{ display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems }}>
-                                                                                                    <Editor fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
+                                                                                                    <Editor
+                                                                                                        customElemnt={(
+                                                                                                            <UncontrolledButtonDropdown>
+                                                                                                                <DropdownToggle color='dark' style={{ padding: "0.5rem" }}
+                                                                                                                    className='hide-after-dropdown rounded'>
+                                                                                                                    {(subElem.isSameText || !isMobile) && <Monitor size={subElem.isSameText ? "12px" : "15px"} />}{(subElem.isSameText || isMobile) && <Smartphone size={subElem.isSameText ? "12px" : "15px"} />}
+                                                                                                                </DropdownToggle>
+                                                                                                                <DropdownMenu end>
+                                                                                                                    <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: false, key, i, j })} className={`w-100 ${!subElem?.isSameText && !isMobile ? "activeDrop" : ""}`}>
+                                                                                                                        Desktop View Only
+                                                                                                                    </DropdownItem>
+                                                                                                                    <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: true, key, i, j })} className={`w-100 ${!subElem?.isSameText && isMobile ? "activeDrop" : ""}`}>
+                                                                                                                        Mobile View Only
+                                                                                                                    </DropdownItem>
+                                                                                                                    <DropdownItem onClick={e => updateTextRes({ e, arrCondition: true, mobCondition: isMobile, key, i, j })} className={`w-100 ${subElem?.isSameText ? "activeDrop" : ""}`}>
+                                                                                                                        Desktop and Mobile View
+                                                                                                                    </DropdownItem>
+                                                                                                                </DropdownMenu>
+                                                                                                            </UncontrolledButtonDropdown>
+                                                                                                        )} fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
                                                                                                         key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${rearr}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
                                                                                                         onChange={(content, editorState) => {
                                                                                                             if (!isEqual(content, subElem?.editorState)) {
@@ -1095,19 +1114,38 @@ const RenderPreview = (props) => {
                                                                                                 }} />
                                                                                                 {subElem?.hasLabel && <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />}
                                                                                                 {/* <Copy color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }}
-                                                                                                                                    onClick={(e) => {
-                                                                                                                                        e.stopPropagation()
-                                                                                                                                        setCurrPosition({ ...currPosition, selectedType: "block" })
-                                                                                                                                        setIndexes({ cur: key, curElem: curElem.positionType, subElem: j + 1 })
-                                                                                                                                        const arr = [...colWise]
-                                                                                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 0, subElem)
-                                                                                                                                        setValues(subElem?.style)
-                                                                                                                                        setcolWise([...arr])
-                                                                                                                                    }} /> */}
+                                                                                                        onClick={(e) => {
+                                                                                                            e.stopPropagation()
+                                                                                                            setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                            setIndexes({ cur: key, curElem: curElem.positionType, subElem: j + 1 })
+                                                                                                            const arr = [...colWise]
+                                                                                                            arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 0, subElem)
+                                                                                                            setValues(subElem?.style)
+                                                                                                            setcolWise([...arr])
+                                                                                                        }} /> */}
                                                                                             </span>}
                                                                                             {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
                                                                                             <div style={{ width: subElem?.style?.width, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, display: "flex", flexDirection: "column", gap: subElem?.style?.elemGap ? subElem?.style?.elemGap : "0px" }}>
-                                                                                                {subElem?.hasLabel && (<Editor fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
+                                                                                                {subElem?.hasLabel && (<Editor
+                                                                                                    customElemnt={(
+                                                                                                        <UncontrolledButtonDropdown>
+                                                                                                            <DropdownToggle color='dark' style={{ padding: "0.5rem" }}
+                                                                                                                className='hide-after-dropdown rounded'>
+                                                                                                                {(subElem.isSameText || !isMobile) && <Monitor size={subElem.isSameText ? "12px" : "15px"} />}{(subElem.isSameText || isMobile) && <Smartphone size={subElem.isSameText ? "12px" : "15px"} />}
+                                                                                                            </DropdownToggle>
+                                                                                                            <DropdownMenu end>
+                                                                                                                <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: false, key, i, j })} className={`w-100 ${!subElem?.isSameText && !isMobile ? "activeDrop" : ""}`}>
+                                                                                                                    Desktop View Only
+                                                                                                                </DropdownItem>
+                                                                                                                <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: true, key, i, j })} className={`w-100 ${!subElem?.isSameText && isMobile ? "activeDrop" : ""}`}>
+                                                                                                                    Mobile View Only
+                                                                                                                </DropdownItem>
+                                                                                                                <DropdownItem onClick={e => updateTextRes({ e, arrCondition: true, mobCondition: isMobile, key, i, j })} className={`w-100 ${subElem?.isSameText ? "activeDrop" : ""}`}>
+                                                                                                                    Desktop and Mobile View
+                                                                                                                </DropdownItem>
+                                                                                                            </DropdownMenu>
+                                                                                                        </UncontrolledButtonDropdown>
+                                                                                                    )} fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
                                                                                                     key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${rearr}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} style={{ width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
                                                                                                     onChange={(content, editorState) => {
                                                                                                         if (!isEqual(content, subElem?.editorState)) {
@@ -1388,7 +1426,26 @@ const RenderPreview = (props) => {
                                                                                             </span>}
                                                                                             {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
                                                                                             <input type="checkbox" id={`tnc-${currPage}-${key}-${curElem.positionType}-${j}`} />
-                                                                                            <Editor fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
+                                                                                            <Editor
+                                                                                                customElemnt={(
+                                                                                                    <UncontrolledButtonDropdown>
+                                                                                                        <DropdownToggle color='dark' style={{ padding: "0.5rem" }}
+                                                                                                            className='hide-after-dropdown rounded'>
+                                                                                                            {(subElem.isSameText || !isMobile) && <Monitor size={subElem.isSameText ? "12px" : "15px"} />}{(subElem.isSameText || isMobile) && <Smartphone size={subElem.isSameText ? "12px" : "15px"} />}
+                                                                                                        </DropdownToggle>
+                                                                                                        <DropdownMenu end>
+                                                                                                            <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: false, key, i, j })} className={`w-100 ${!subElem?.isSameText && !isMobile ? "activeDrop" : ""}`}>
+                                                                                                                Desktop View Only
+                                                                                                            </DropdownItem>
+                                                                                                            <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: true, key, i, j })} className={`w-100 ${!subElem?.isSameText && isMobile ? "activeDrop" : ""}`}>
+                                                                                                                Mobile View Only
+                                                                                                            </DropdownItem>
+                                                                                                            <DropdownItem onClick={e => updateTextRes({ e, arrCondition: true, mobCondition: isMobile, key, i, j })} className={`w-100 ${subElem?.isSameText ? "activeDrop" : ""}`}>
+                                                                                                                Desktop and Mobile View
+                                                                                                            </DropdownItem>
+                                                                                                        </DropdownMenu>
+                                                                                                    </UncontrolledButtonDropdown>
+                                                                                                )} fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
                                                                                                 key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${rearr}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} style={{ width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })} onChange={(content, editorState) => {
                                                                                                     if (!isEqual(content, subElem?.editorState)) {
                                                                                                         const newObj = { ...finalObj }

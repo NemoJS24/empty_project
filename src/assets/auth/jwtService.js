@@ -24,6 +24,7 @@ export const configUrl = {
     login: "/merchant/login/",
     signup: "/merchant/signup/",
     refresh: "/api/token/refresh/",
+    generalPost:"/utility/api/v1/user_utility_settings_post/",
     // whatspp
     createTemplate:"talks/createTemplate/",
     // affilate

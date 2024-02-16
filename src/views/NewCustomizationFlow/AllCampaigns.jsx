@@ -4,13 +4,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Modal, ModalBody, Row, UncontrolledButtonDropdown, UncontrolledDropdown } from 'reactstrap'
 import toast from 'react-hot-toast'
 import JsonToJsx from '../Components/SuperLeadz/JsonToJsx'
-import moment from 'moment/moment'
 import { PermissionProvider, ThemesProvider } from '../../Helper/Context'
 import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
 // import { getCurrentOutlet } from '../Validator'
 import Spinner from '../Components/DataTable/Spinner'
 import { Copy, Edit, Edit2, Edit3, Eye, Grid, Layout, MoreVertical, Plus, Table, Trash, X } from 'react-feather'
-import { getCurrentOutlet } from '../Validator'
+import { defaultformatDate, getCurrentOutlet } from '../Validator'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 // import pixels from "../../assets/images/superLeadz/pixels.png"
 import Flatpickr from 'react-flatpickr'
@@ -262,7 +261,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                             // setSelectedThemeNo(row.theme_name.default_id)
                             // setEditTheme(row)
                             // navigate(`/merchant/SuperLeadz/overview/${row.theme_name.id}/`)
-                        }} className='fw-bolder text-primary cursor-pointer' style={{width: 'calc(100% - 135px)', overflow: 'hidden', textOverflow: 'ellipsis'}}>{row.theme_name.campaign_name}</div>
+                        }} className='fw-bolder text-primary cursor-pointer' style={{ width: 'calc(100% - 135px)', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.theme_name.campaign_name}</div>
                     </div>
                 )
             },
@@ -332,14 +331,14 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
         },
         {
             name: 'Start Date',
-            selector: row => <span className='cursor-pointer'>{moment(row.theme_name.start_date).format("DD-MM-YYYY")}</span>,
+            selector: row => <span className='cursor-pointer'>{defaultformatDate(row.theme_name.start_date, userPermission?.user_settings?.date_format)}</span>,
             dataType: 'offer_code',
             type: 'date',
             isEnable: true
         },
         {
             name: 'End Date',
-            selector: row => <span className='cursor-pointer'>{row.theme_name.end_date ? moment(row.theme_name.end_date).format("DD-MM-YYYY") : "perpetual"}</span>,
+            selector: row => <span className='cursor-pointer'>{Boolean(row.theme_name.end_date) ? defaultformatDate(row.theme_name.end_date, userPermission?.user_settings?.date_format) : "perpetual"}</span>,
             type: 'date',
             isEnable: true
         },
@@ -475,7 +474,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                                                             <div className='d-flex justify-content-between'>
                                                                 <div>
                                                                     <h4 className='text-start fw-bolder text-black ps-2'>{curElem?.theme_name?.campaign_name}</h4>
-                                                                    <p className='text-start  ps-2'> Created at : {moment(curElem?.theme_name.start_date).format("DD-MM-YYYY")}</p>
+                                                                    <p className='text-start  ps-2'> Created at : {defaultformatDate(curElem?.theme_name.start_date, userPermission?.user_settings?.date_format)}</p>
                                                                 </div>
 
                                                                 <div className="d-flex justify-cotent-center align-items-center gap-1">

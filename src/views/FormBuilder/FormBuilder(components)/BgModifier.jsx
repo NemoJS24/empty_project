@@ -485,6 +485,11 @@ const BgModifier = ({ type, setMainStyle, mainStyle, mobileCondition, styles, se
                     </div>
                     {imageTab !== "product" && <div className="p-1 pt-0 d-flex justify-content-center border-bottom">
                         <label htmlFor='uploadImg' className="btn btn-dark">Upload an Image <input onChange={e => {
+                            const k = 1024
+                            if (e.target.files[0].size > 100 * k) {
+                                toast.error("File size too large. Upload size must be upto 100kb")
+                                return
+                            }
                             setImgLoading(true)
                             const form_data = new FormData()
                             form_data.append("shop", outletData[0]?.web_url)

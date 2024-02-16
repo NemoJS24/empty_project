@@ -232,3 +232,9 @@ input[type=range] {
     transform: translate(140px, -70px) !important;
     /* top: ; */
 }
+
+.prevent-select {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

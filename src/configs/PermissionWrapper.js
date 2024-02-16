@@ -55,7 +55,7 @@ const PermissionWrapper = ({children}) => {
         .then((data) => {
             console.log(data)
             const activePlan = data?.data?.filter((cur) => cur.is_active === 1)
-            setUserPermission({...userPermission, currentPlan: {...userPermission?.currentPlan, plan: activePlan[0].plan_id}})
+            setUserPermission({...userPermission, currentPlan: {...userPermission?.currentPlan, plan: activePlan[0]?.plan_id}})
         })
     }
 

@@ -3,6 +3,7 @@ import $ from "jquery"
 import { PermissionProvider } from "../../Helper/Context"
 import { useContext } from "react"
 import { SuperLeadzBaseURL, baseURL } from "../../assets/auth/jwtService"
+import moment from "moment/moment"
 
 export const imageValidation = (e) => {
     const maxSizeKB = 100 //Size in KB
@@ -187,7 +188,7 @@ export function validForm(validator, value) {
 
 //     val = val.substr(0, 1).toUpperCase() + val.substr(1)
 //     $this.val(val)
-// });
+// })
 
 export function getCurrentOutlet() {
     const { userPermission } = useContext(PermissionProvider)
@@ -270,10 +271,69 @@ export const affiliateTracking = (aft_no) => {
                 .catch((error) => {
                     console.log(error)
                 })
-
         })
         .catch((error) => {
             console.log(error)
         })
+}
 
+
+export function defaultformatDate(date, type) {
+    if (!date) return
+    let formatDate
+    try {
+        formatDate = moment(date).format(Boolean(type) ? type : "DD-MM-YYYY")
+    } catch (_) {
+        formatDate = date
+    }
+    return (formatDate)
+}
+
+
+export const defaultformatNumber = (number, type) => {
+    try {
+        return new Intl.NumberFormat(type).format(number)
+    } catch (error) {
+        console.log(error)
+        return number
+    }
+
+}
+
+
+export function lightOrDark(color) {
+
+    // Variables for red, green, blue values
+    let r, g, b
+
+    // Check the format of the color, HEX or RGB?
+    if (color.match(/^rgb/)) {
+
+        // If RGB --> store the red, green, blue values in separate variables
+        color = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/)
+
+        r = color[1]
+        g = color[2]
+        b = color[3]
+    } else {
+
+        // If hex --> Convert it to RGB: http://gist.github.com/983661
+        color = +(`${"0x"}${color.slice(1).replace(color.length < 5 && /./g, '$&$&')}`)
+
+        r = color >> 16
+        g = color >> (8 & 255)
+        b = color & 255
+    }
+
+    // HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html
+    const hsp = Math.sqrt((0.299 * (r * r)) + (0.587 * (g * g)) + (0.114 * (b * b)))
+
+    // Using the HSP value, determine whether the color is light or dark
+    if (hsp > 127.5) {
+
+        return 'light'
+    } else {
+
+        return 'dark'
+    }
 }
