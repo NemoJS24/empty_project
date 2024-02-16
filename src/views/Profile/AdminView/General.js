@@ -3,7 +3,7 @@ import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import Select from 'react-select'
 import { PermissionProvider } from '../../../Helper/Context'
-import { postReq } from '../../../assets/auth/jwtService'
+import { baseURL, postReq } from '../../../assets/auth/jwtService'
 import toast from 'react-hot-toast'
 
 const General = () => {
@@ -18,7 +18,7 @@ const General = () => {
     }
 
     useEffect(() => {
-        axios.get('https://api.demo.xircls.in/utility/api/v1/get_settings_choices/').then((res) => {
+        axios.get(`${baseURL}/utility/api/v1/get_settings_choices/`).then((res) => {
             // setDateFormate(res.data.date_format)
             console.log(res.data)
             setDateFormate(convertToCustomFormat(res.data.date_format))
