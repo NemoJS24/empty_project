@@ -216,10 +216,10 @@ const ApplicantForm = ({ allData }) => {
 
     const vehicleTypeOptions = [
         { value: 'new', label: 'New Car' },
-        { value: 'used', label: 'Used Car' }
-        // { value: 'renewal', label: 'Renewal' },
-        // { value: 'rollover', label: 'Rollover' },
-        // { value: 'data', label: 'Data' },
+        { value: 'used', label: 'Used Car' },
+        { value: 'renewal', label: 'Renewal' },
+        { value: 'rollover', label: 'Rollover' },
+        { value: 'data', label: 'Data' }
     ]
 
     const insuranceOptions = [
