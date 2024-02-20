@@ -18,6 +18,7 @@ import SuperLeadzCampaign from '../Apps/SuperLeadzCampaign'
 import AllCampaigns from '../NewCustomizationFlow/AllCampaigns'
 import { PermissionProvider } from '../../Helper/Context'
 import Flatpickr from 'react-flatpickr'
+import twentyfourseven from "./assets/2020773.png"
 
 function SuperLeadzDashboard() {
     const { userPermission, setUserPermission } = useContext(PermissionProvider)
@@ -633,7 +634,8 @@ function SuperLeadzDashboard() {
                                                 <div className="right_side">
                                                     <div className="d-flex justify-content-end align-items-start gap-1">
                                                         <Link to='/merchant/create_support/' className='shedule_btn btn btn-sm btn-primary btnCustom text-nowrap' title="Support">
-                                                            <AiFillPhone size={14} style={{ marginBottom: "2px" }} />
+                                                            {/* <AiFillPhone size={14} style={{ marginBottom: "2px" }} /> */}
+                                                                <img src={twentyfourseven} width={14} alt="24/7" style={{ marginBottom: "2px" }} />
                                                         </Link>
                                                         <Link to='/merchant/SuperLeadz/faq/' className='shedule_btn btn btn-sm btn-primary btnCustom text-nowrap' title="FAQ">
                                                             <AiOutlineQuestion size={14} style={{ marginBottom: "2px" }} />
