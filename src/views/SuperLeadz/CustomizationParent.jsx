@@ -1594,7 +1594,9 @@ const CustomizationParent = () => {
                                     </div>
                                     <div className='p-0 mb-1 align-items-center'>
                                         {getMDToggle({ label: `Alignment`, value: `margin` })}
-                                        <Select value={alignOptions?.filter(item => item?.value === colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin)} onChange={e => {
+                                        <Select value={alignOptions?.filter(item => {
+                                            return ((colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin && colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin !== "") ? item?.value === colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin : "left")
+                                        })} onChange={e => {
                                             arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].style.margin = e.value
                                             arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandAlignment = false
                                             setcolWise([...arr])
@@ -4659,7 +4661,7 @@ const CustomizationParent = () => {
                                                                     </div>
                                                                 </>
                                                             }
-                                                            
+
                                                         </div>
                                                     </AccordionBody>
                                                 </AccordionItem>
