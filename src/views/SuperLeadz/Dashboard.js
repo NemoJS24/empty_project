@@ -663,6 +663,11 @@ function SuperLeadzDashboard() {
             </div>
 
             <Row className='match-height'>
+
+                <div className='col-md-6 cursor-pointer'>
+                    <CardCom icon={<UserPlus width={'27px'} />} title="Leads Generated" data={!isLoading ? performanceData?.leadsGenerated : <Spinner size={'25px'} />} info={`Total entries registered; including duplicates, verified or unverified`} />
+
+                </div>
                 
                 <Col className='col-md-6 cursor-default'>
                     <CardCom icon={<img src='https://cdn-icons-png.flaticon.com/512/1773/1773345.png' width='27px' />} title="Campaign Revenue" info={'Sum Total Revenue through SuperLeadz Campaign'} data={!isLoading ? `₹${Number(performanceData?.campaign_revenue).toFixed(2)}` : <Spinner size={'25px'} />} />
@@ -721,11 +726,6 @@ function SuperLeadzDashboard() {
 
                 <div className='col-md-6 cursor-default d-none'>
                     <CardCom icon={<Check width={'27px'} />} title={<>Engaged</>} data={!isLoading ? performanceData.engaged : <Spinner size={'25px'} />} info={`Number of clicks on any button; inside the pop-up`} />
-                </div>
-
-                <div className='col-md-6 cursor-pointer'>
-                    <CardCom icon={<UserPlus width={'27px'} />} title="Leads Generated" data={!isLoading ? performanceData?.leadsGenerated : <Spinner size={'25px'} />} info={`Total entries registered; including duplicates, verified or unverified`} />
-
                 </div>
 
                 <div className='col-md-6 cursor-pointer d-none'>
