@@ -4,13 +4,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Modal, ModalBody, Row, UncontrolledButtonDropdown, UncontrolledDropdown } from 'reactstrap'
 import toast from 'react-hot-toast'
 import JsonToJsx from '../Components/SuperLeadz/JsonToJsx'
-import moment from 'moment/moment'
-import { ThemesProvider } from '../../Helper/Context'
+import { PermissionProvider, ThemesProvider } from '../../Helper/Context'
 import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
 // import { getCurrentOutlet } from '../Validator'
 import Spinner from '../Components/DataTable/Spinner'
 import { Copy, Edit, Edit2, Edit3, Eye, Grid, Layout, MoreVertical, Plus, Table, Trash, X } from 'react-feather'
-import { getCurrentOutlet } from '../Validator'
+import { defaultformatDate, getCurrentOutlet } from '../Validator'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 // import pixels from "../../assets/images/superLeadz/pixels.png"
 import Flatpickr from 'react-flatpickr'
@@ -18,12 +17,9 @@ import CampaignWiseData from '../Components/SuperLeadz/CampaignWiseData'
 import { HiOutlinePencilSquare } from "react-icons/hi2"
 import { MdOutlineContentCopy, MdDelete, MdDeleteOutline } from "react-icons/md"
 import AdvanceServerSide from '../Components/DataTable/AdvanceServerSide'
+// import Swal from 'sweetalert2'
 
 const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, create = true }) => {
-
-    // const [searchValue, setSearchValue] = useState('')
-    // const [filteredData, setFilteredData] = useState([])
-    // const [switch1, setSwitch1] = useState(false)
     const outletData = getCurrentOutlet()
     const [count, setCount] = useState(0)
     const navigate = useNavigate()
@@ -33,6 +29,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
     const [isLoading, setIsLoading] = useState(true)
 
     const { setSelectedThemeNo, setEditTheme } = useContext(ThemesProvider)
+    const { userPermission } = useContext(PermissionProvider)
 
     const [activeThemes, setActiveThemes] = useState([])
     const [conflictThemes, setConflictThemes] = useState([])
@@ -260,7 +257,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                             // setSelectedThemeNo(row.theme_name.default_id)
                             // setEditTheme(row)
                             // navigate(`/merchant/SuperLeadz/overview/${row.theme_name.id}/`)
-                        }} className='fw-bolder text-primary cursor-pointer' style={{width: 'calc(100% - 135px)', overflow: 'hidden', textOverflow: 'ellipsis'}}>{row.theme_name.campaign_name}</div>
+                        }} className='fw-bolder text-primary cursor-pointer' style={{ width: 'calc(100% - 135px)', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.theme_name.campaign_name}</div>
                     </div>
                 )
             },
@@ -274,6 +271,17 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                     return (
                         <div className="m-auto form-check form-switch form-check-success cursor-pointer p-0 m-0" style={{ filter: `drop-shadow(0px 0px 7.5px rgba(40, 199, 111, ${row.theme_name.is_active ? "0.5" : "0"}))` }}>
                             <input onChange={() => {
+                                // if (userPermission?.currentPlan?.plan === "Forever Free") {
+                                //     const activeCampaign = allCampaigns.filter((curElem) => curElem?.theme_name?.is_active === 1)
+                                //     console.log(activeCampaign, "activeCampaign")
+                                //     if (activeCampaign.length > 0) {
+                                //         Swal.fire({
+                                //             title: "Upgrade your plan"
+                                //             // icon: "info"
+                                //         })
+                                //         return
+                                //     }
+                                // }
                                 setCurrDetails(row.theme_name)
                                 const getUrl = new URL(`${SuperLeadzBaseURL}/api/v1/get/active-template/`)
                                 const form_data = new FormData()
@@ -319,14 +327,14 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
         },
         {
             name: 'Start Date',
-            selector: row => <span className='cursor-pointer'>{moment(row.theme_name.start_date).format("DD-MM-YYYY")}</span>,
+            selector: row => <span className='cursor-pointer'>{defaultformatDate(row.theme_name.start_date, userPermission?.user_settings?.date_format)}</span>,
             dataType: 'offer_code',
             type: 'date',
             isEnable: true
         },
         {
             name: 'End Date',
-            selector: row => <span className='cursor-pointer'>{row.theme_name.end_date ? moment(row.theme_name.end_date).format("DD-MM-YYYY") : "perpetual"}</span>,
+            selector: row => <span className='cursor-pointer'>{Boolean(row.theme_name.end_date) ? defaultformatDate(row.theme_name.end_date, userPermission?.user_settings?.date_format) : "perpetual"}</span>,
             type: 'date',
             isEnable: true
         },
@@ -420,6 +428,9 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                         border: 1px solid #efefef;
                         background-color: #ffffff;
                     }
+                    // .swal2-styled.swal2-confirm {
+                    //     background: #006aff !important
+                    // }
                 `}
             </style>
 
@@ -459,7 +470,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                                                             <div className='d-flex justify-content-between'>
                                                                 <div>
                                                                     <h4 className='text-start fw-bolder text-black ps-2'>{curElem?.theme_name?.campaign_name}</h4>
-                                                                    <p className='text-start  ps-2'> Created at : {moment(curElem?.theme_name.start_date).format("DD-MM-YYYY")}</p>
+                                                                    <p className='text-start  ps-2'> Created at : {defaultformatDate(curElem?.theme_name.start_date, userPermission?.user_settings?.date_format)}</p>
                                                                 </div>
 
                                                                 <div className="d-flex justify-cotent-center align-items-center gap-1">
@@ -477,6 +488,17 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
 
                                                                             <div className="m-auto form-check form-switch form-check-success cursor-pointer p-0 m-0" style={{ filter: `drop-shadow(0px 0px 7.5px rgba(40, 199, 111, ${curElem?.theme_name.is_active ? "0.5" : "0"}))` }}>
                                                                                 <input onChange={() => {
+                                                                                    // if (userPermission?.currentPlan?.plan === "Forever Free") {
+                                                                                    //     const activeCampaign = allCampaigns.filter((curElem) => curElem?.theme_name?.is_active === 1)
+                                                                                    //     console.log(activeCampaign, "activeCampaign")
+                                                                                    //     if (activeCampaign.length > 0) {
+                                                                                    //         Swal.fire({
+                                                                                    //             title: "Upgrade your plan"
+                                                                                    //             // icon: "info"
+                                                                                    //         })
+                                                                                    //         return
+                                                                                    //     }
+                                                                                    // }
                                                                                     setCurrDetails(curElem?.theme_name)
                                                                                     const getUrl = new URL(`${SuperLeadzBaseURL}/api/v1/get/active-template/`)
                                                                                     const form_data = new FormData()
@@ -515,7 +537,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
 
                                                                 <GridCard title="Leads" data={curElem?.total_leads} info={`Number of leads (total)`} />
 
-                                                                <GridCard title="Conversion %" data={`${curElem?.conversion_rate}%`} info={`Number of leads (total) / Number of redemptions`} />
+                                                                <GridCard title="Conversion %" data={`${Number(curElem?.conversion_rate).toFixed(2)}%`} info={`Number of leads (total) / Number of redemptions`} />
 
                                                                 <GridCard title="CTR" data={`${(curElem?.clicks && curElem[`${condition}pop_up_view`]) ? Number(curElem[`${condition}clicks`] / curElem[`${condition}pop_up_view`] * 100).toFixed(2) : 0}%`} info={`Number of clicks / Number of impressions * 100`} />
 

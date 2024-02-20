@@ -82,11 +82,20 @@ const CustomColorModifier = ({ type, setMainStyle, mainStyle, pageCondition, sty
                                     ) : (
                                         <SketchPicker color={getBgColor(styles[colorType])} onChange={(e) => {
                                             // console.log({styles, setStyles, colorType}, "colorType")
-                                            if (isHex) {
-                                                setStyles({ ...styles, [colorType]: e?.hex })
+                                            if (colorType === "WebkitTextFillColor") {
+                                                if (isHex) {
+                                                    setStyles({ ...styles, [colorType]: e?.hex, color: e?.hex })
+                                                } else {
+                                                    const { r, g, b, a } = e.rgb
+                                                    setStyles({ ...styles, [colorType]: `rgba(${r},${g},${b},${a})`, color: `rgba(${r},${g},${b},${a})` })
+                                                }
                                             } else {
-                                                const { r, g, b, a } = e.rgb
-                                                setStyles({ ...styles, [colorType]: `rgba(${r},${g},${b},${a})` })
+                                                if (isHex) {
+                                                    setStyles({ ...styles, [colorType]: e?.hex })
+                                                } else {
+                                                    const { r, g, b, a } = e.rgb
+                                                    setStyles({ ...styles, [colorType]: `rgba(${r},${g},${b},${a})` })
+                                                }
                                             }
                                         }} />
                                     )

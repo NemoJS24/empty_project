@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Col, Row, Container } from 'reactstrap'
 import Navbar from '@src/views/main/utilities/navbar/Navbar'
 import Footer from '@src/views/main/utilities/footer/Footer'
 import { BsHeart, BsReverseLayoutTextSidebarReverse, BsHandThumbsUp, BsInboxes } from "react-icons/bs"
 import { Link } from 'react-router-dom'
+import { affiliateTracking } from '../../../Validator'
 
 export default function Sniper() {
     const happydata = [
@@ -50,6 +51,13 @@ export default function Sniper() {
             desc: 'Don’t worry about competition stealing the spotlight. We ensure that no two competing brands market to the same customer at one time.'
         }
     ]
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search)
+        if (params.get('aft_no') || localStorage.getItem('aft_no')) {
+            affiliateTracking(params.get('aft_no') ? params.get('aft_no') : localStorage.getItem('aft_no'))
+        }
+    }, [])
     return (
         <div style={{ background: "#fff" }} >
 

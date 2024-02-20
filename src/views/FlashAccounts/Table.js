@@ -18,19 +18,19 @@ const Table = () => {
   // const [currentPage, setCurrentPage] = useState(0)
   // const [currentEntry, setCurrentEntry] = useState(10)
   // const [count, setCount] = useState(10)
-  const [selected, setSelected] = useState([])
+  // const [selected, setSelected] = useState([])
   const { userPermission } = useContext(PermissionProvider)
   const outletData = getCurrentOutlet()
-  const [confirmationModal, setConfirmationModal] = useState(false)
+  // const [confirmationModal, setConfirmationModal] = useState(false)
   const [isModal, setIsModal] = useState(false)
   // const [isDownLoad, setIsDownLoad] = useState(false)
   // const [isadvance, setIsAdvance] = useState(false)
 
 
-  const confirmationContent = <button onClick={() => {
-    setConfirmationModal(!confirmationModal)
-    setIsModal(!isModal)
-  }} className="btn btn-success text-white" style={{ whiteSpace: "no-wrap" }}>Send Email</button> 
+  // const confirmationContent = <button onClick={() => {
+  //   setConfirmationModal(!confirmationModal)
+  //   setIsModal(!isModal)
+  // }} className="btn btn-success text-white" style={{ whiteSpace: "no-wrap" }}>Send Email</button> 
 
   const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
     // console.log(advanceSearchValue)
@@ -64,7 +64,7 @@ const Table = () => {
     {
       name: 'First Name',
       minWidth: '190px',
-      selector: row => `${row?.customer_first_name}`,
+      selector: row => `${row?.customer_first_name ?? '-'}`,
       type: 'text',
       isEnable: true
     },
@@ -146,7 +146,13 @@ const Table = () => {
     {
       name: 'Action',
       minWidth: '30px',
-      selector: row => row?.purchase_count,
+      selector: () => {
+        return (
+          <div style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
+            <a className="btn btn-sm btn-primary-main" onClick={() => setIsModal(!isModal)}>Send Mail</a>
+          </div>
+        )
+      },
       type: 'text',
       isEnable: true
     }
@@ -172,7 +178,7 @@ const Table = () => {
   //     </span>
   //   </Col>
   // </>
-  console.log(selected)
+  // console.log(selected)
 
   // const setSelectedId = (state) => {
   //   console.log(state)
@@ -200,10 +206,10 @@ const Table = () => {
               isLoading={isLoading}
               getData={getData}
               count={tableData?.recordsTotal}
-              selectableRows={true}
-              setSelectedRows={setSelected}
-              selectedRows={selected}
-              selectedContent={confirmationContent}
+              // selectableRows={true}
+              // setSelectedRows={setSelected}
+              // selectedRows={selected}
+              // selectedContent={confirmationContent}
               isExport={true}
               exportUrl={`${SuperLeadzBaseURL}/flash_accounts/all_customers/`}
               advanceFilter={true}

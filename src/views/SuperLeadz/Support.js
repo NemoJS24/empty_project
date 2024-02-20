@@ -26,7 +26,7 @@ const SuperLeadzSupport = () => {
         //     method: "POST",
         //     body: form_data
         // })
-        getReq('createSupportTicket')
+        getReq('createSupportTicket', `?shop_name=${outletData[0]?.web_url}&app_name=${userPermission?.appName}`)
         .then((data) => {
             // console.log(data, "data")
             setTableData(data.data)

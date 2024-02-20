@@ -11,7 +11,7 @@ import classnames from 'classnames'
 import { ArrowUp } from 'react-feather'
 
 // ** Reactstrap Imports
-import { Navbar, Button } from 'reactstrap'
+import { Navbar, Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
 
 // ** Configs
 import themeConfig from '@configs/themeConfig'
@@ -36,6 +36,7 @@ import { useRouterTransition } from '@hooks/useRouterTransition'
 import '@styles/base/core/menu/menu-types/vertical-menu.scss'
 import '@styles/base/core/menu/menu-types/vertical-overlay-menu.scss'
 import { PermissionProvider } from '../../Helper/Context'
+import CreateSupportTicket from '../../views/SuperLeadz/CreateSupportTicket'
 
 const VerticalLayout = props => {
   // ** Props
@@ -49,7 +50,7 @@ const VerticalLayout = props => {
   const { navbarColor, setNavbarColor } = useNavbarColor()
   const { layout, setLayout, setLastLayout } = useLayout()
   const { transition, setTransition } = useRouterTransition()
-
+  const [bug, setBug] = useState(false)
   // ** States
   const [isMounted, setIsMounted] = useState(false)
   const [menuVisibility, setMenuVisibility] = useState(false)
@@ -145,6 +146,13 @@ const VerticalLayout = props => {
       )}
       {...(isHidden ? { 'data-col': '1-column' } : {})}
     >
+      <style>
+        {`
+          .custom_header .btn-close {
+            transform: translate(15px, -25px) !important;
+          }
+        `}
+      </style>
       {!isHidden ? (
         <SidebarComponent
           skin={skin}
@@ -212,7 +220,15 @@ const VerticalLayout = props => {
           setMenuCollapsed={setMenuCollapsed}
         />
       ) : null}
-
+      {
+        userPermission?.appName && <>
+          <div style={{position: "fixed", bottom: '5%', zIndex: '99', right: '30px'}}>
+            <a className='btn btn-outline-danger shadow-md text-danger' style={{background: 'white'}} onClick={() => setBug(!bug)}>
+              Report a Bug
+            </a>
+          </div>
+        </>
+      }
       {themeConfig.layout.scrollTop === true ? (
         <div className='scroll-to-top'>
           <ScrollToTop showOffset={300} className='scroll-top d-block'>
@@ -222,7 +238,23 @@ const VerticalLayout = props => {
           </ScrollToTop>
         </div>
       ) : null}
+
+      <Modal
+        isOpen={bug}
+        toggle={() => setBug(!bug)}
+        className='modal-dialog-centered'
+        >
+        <ModalHeader className='p-2 pt-1 pb-0 custom_header' toggle={() => setBug(!bug)}>
+          <h5 className='m-0'>Help Us Build a Better Experience</h5>
+          <span style={{fontWeight: '400', fontSize: '12px'}}>Report a bug or leave your feedback and we'll get working on it!</span>
+        </ModalHeader>
+        <ModalBody>
+          <CreateSupportTicket isQuick={true} setBug={setBug} data={{priority: "High", issue: 23, subIssue: 24}} />
+        </ModalBody>
+      </Modal>
+
     </div>
+    
   )
 }
 

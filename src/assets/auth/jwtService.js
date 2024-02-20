@@ -1,6 +1,8 @@
 import axios from "axios"
 import { getToken, removeToken, setToken } from "./auth"
 import jwtDecode from "jwt-decode"
+import toast from "react-hot-toast"
+import { Navigate } from "react-router-dom"
 
 // export const baseURL = "https://api.demo.xircls.in"
 // export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
@@ -22,6 +24,14 @@ export const configUrl = {
     login: "/merchant/login/",
     signup: "/merchant/signup/",
     refresh: "/api/token/refresh/",
+    generalPost:"/utility/api/v1/user_utility_settings_post/",
+    // whatspp
+    createTemplate:"talks/createTemplate/",
+    // affilate
+    signupAffiliate:'/affiliate/affiliate_signup/',
+    loginAffiliate:'/affiliate/affiliate_login/',
+    admin_withdrawn_transactions: "/affiliate/admin_withdrawn_trans",
+    admin_withdrawn_request: "/affiliate/admin_withdrawn_req/",
     //Infiniti
     addPartners: "/merchant/xircls/make-a-xircls/",
     remarketing: "/merchant/campaign_setting/action_email_remarketing/",
@@ -199,8 +209,10 @@ axiosInstance.interceptors.request.use(
                     //     refresh: refreshToken
                     // })
                     removeToken()
-                    window.alert('session expired')
-                    window.location.replace('/merchant/login/')
+                    // window.alert('session expired')
+                    // window.location.replace('/merchant/login/')
+                    toast.error("Session expired. Please login")
+                    return <Navigate to={'/merchant/login/'} replace={true} />
                 }
                 const newAccessToken = await refreshTokenPromise
                 isRefreshing = false
@@ -217,8 +229,10 @@ axiosInstance.interceptors.request.use(
                 } else {
                     // Refresh token is also expired, remove token and redirect to login page
                     removeToken()
-                    window.alert('session expired')
-                    window.location.replace('/merchant/login/')
+                    // window.alert('session expired')
+                    // window.location.replace('/merchant/login/')
+                    toast.error("Session expired. Please login")
+                    return <Navigate to={'/merchant/login/'} replace={true} />
                 }
             } else {
                 config.headers['Authorization'] = `Bearer ${accessToken}`
@@ -243,9 +257,8 @@ axiosInstance.interceptors.response.use(
     (error) => {
         if (error.response && Number(error.response.status) === 401) {
             removeToken()
-            window.alert('session expired')
-            window.location.replace('/merchant/login/')
-            return error.response
+            toast.error("Session expired. Please login")
+            return <Navigate to={'/merchant/login/'} replace={true} />
         }
         return Promise.reject(error)
     }
@@ -267,7 +280,7 @@ export const postReq = (path, data, customBaseURL = baseURL, config) => {
 }
 
 export const putReq = (path, data, customBaseURL = baseURL, config) => {
-    console.log(customBaseURL, "domian")
+    // console.log(customBaseURL, "domian")
     // if (customBaseURL) {
     axiosInstance.defaults.baseURL = customBaseURL
     // }

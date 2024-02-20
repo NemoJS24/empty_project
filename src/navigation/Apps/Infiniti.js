@@ -27,17 +27,10 @@ export const InfinitiNavigation = [
     navLink: '/merchant/xircls/create-network/'
   },
   {
-    id: 'crm',
-    title: 'CRM',
-    icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/crm.png`} width='16px' />,
-    children: [
-      {
-        id: 'customers',
-        title: 'Customers',
-        icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/customers.png`} width='16px' />,
-        navLink: '/merchant/customers/'
-      }
-    ]
+    id: 'customers',
+    title: 'Customers',
+    icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/customers.png`} width='16px' />,
+    navLink: '/merchant/Infiniti/customers/'
   },
   {
     id: 'campaign_settings',

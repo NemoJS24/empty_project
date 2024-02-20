@@ -1,6 +1,6 @@
 // ** React Imports
 import { Link } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
@@ -11,7 +11,7 @@ import classnames from 'classnames'
 import { ArrowUp } from 'react-feather'
 
 // ** Reactstrap Imports
-import { Navbar, NavItem, Button } from 'reactstrap'
+import { Navbar, NavItem, Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
 
 // ** Configs
 import themeConfig from '@configs/themeConfig'
@@ -34,6 +34,8 @@ import { useRouterTransition } from '@hooks/useRouterTransition'
 
 // ** Styles
 import '@styles/base/core/menu/menu-types/horizontal-menu.scss'
+import CreateSupportTicket from '../../views/SuperLeadz/CreateSupportTicket'
+import { PermissionProvider } from '../../Helper/Context'
 
 const HorizontalLayout = props => {
   // ** Props
@@ -47,6 +49,8 @@ const HorizontalLayout = props => {
   const { navbarColor, setNavbarColor } = useNavbarColor()
   const { layout, setLayout, setLastLayout } = useLayout()
   const { transition, setTransition } = useRouterTransition()
+  const [bug, setBug] = useState(false)
+  const { userPermission } = useContext(PermissionProvider)
 
   // ** States
   const [isMounted, setIsMounted] = useState(false)
@@ -119,6 +123,13 @@ const HorizontalLayout = props => {
       )}
       {...(isHidden ? { 'data-col': '1-column' } : {})}
     >
+      <style>
+        {`
+          .custom_header .btn-close {
+            transform: translate(15px, -25px) !important;
+          }
+        `}
+      </style>
       <Navbar
         expand='lg'
         container={false}
@@ -188,6 +199,15 @@ const HorizontalLayout = props => {
         />
       ) : null}
 
+      {
+        userPermission?.appName && <>
+          <div style={{position: "fixed", bottom: '5%', zIndex: '99', right: '30px'}}>
+            <a className='btn btn-outline-danger shadow-md text-danger' style={{background: 'white'}} onClick={() => setBug(!bug)}>
+              Report a Bug
+            </a>
+          </div>
+        </>
+      }
       {themeConfig.layout.scrollTop === true ? (
         <div className='scroll-to-top'>
           <ScrollToTop showOffset={300} className='scroll-top d-block'>
@@ -197,6 +217,21 @@ const HorizontalLayout = props => {
           </ScrollToTop>
         </div>
       ) : null}
+
+      <Modal
+        isOpen={bug}
+        toggle={() => setBug(!bug)}
+        className='modal-dialog-centered'
+        >
+        <ModalHeader className='p-2 pt-1 pb-0 custom_header' toggle={() => setBug(!bug)}>
+          <h5 className='m-0'>Help Us Build a Better Experience</h5>
+          <span style={{fontWeight: '400', fontSize: '12px'}}>Report a bug or leave your feedback and we'll get working on it!</span>
+        </ModalHeader>
+        <ModalBody>
+          <CreateSupportTicket isQuick={true} setBug={setBug} data={{priority: "High", issue: 23, subIssue: 24}} />
+        </ModalBody>
+      </Modal>
+
     </div>
   )
 }

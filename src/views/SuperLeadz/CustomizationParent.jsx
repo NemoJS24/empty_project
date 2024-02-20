@@ -1,6 +1,7 @@
 import React, { Suspense, useContext, useEffect, useState } from 'react'
 import { Crosshair, Edit, Image, Monitor, PlusCircle, Smartphone, Square, Tag, Target, Type, X, Trash2, XCircle, Columns, Disc, Trash, Percent, MoreVertical, ArrowLeft, Home, CheckSquare, Mail, RotateCcw, RotateCw, Check, ChevronRight, Plus } from 'react-feather'
 import { AccordionBody, AccordionHeader, AccordionItem, Card, Container, DropdownItem, DropdownMenu, DropdownToggle, Modal, ModalBody, Row, UncontrolledAccordion, UncontrolledDropdown, Col, ModalHeader, UncontrolledButtonDropdown, CardBody, ModalFooter, Button, Input } from 'reactstrap'
+import { BiSolidOffer } from "react-icons/bi"
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import pixels from "../../assets/images/superLeadz/pixels.png"
 import PickerDefault from '../Components/Date-picker/NormalDatePicker'
@@ -29,13 +30,14 @@ import ReturnOfferHtml, { defaultOfferStyles } from '../NewCustomizationFlow/Ret
 import slPrevBg from "../../assets/images/vector/slPrevBg.png"
 import FrontBaseLoader from '../Components/Loader/Loader'
 import RenderPreview from "./RenderPreview"
-import "./Customization.css"
 import { CheckBox, RadioInput, SelectInput } from './campaignView/components'
 import RenderPreviewCopy from './RenderPreview copy'
 import VerifyYourEmailQuick from '../Outlet/VerifyYourEmailQuick'
 import VerifyYourEmail from '../Outlet/VerifyYourEmail'
 import ComTable from '../Components/DataTable/ComTable'
 import { TbReplace } from "react-icons/tb"
+import "./Customization.css"
+import { FaCrown } from "react-icons/fa"
 
 
 export const fontStyles = [
@@ -259,9 +261,9 @@ const CustomizationParent = () => {
     const [dropImage, setDropImage] = useState(false)
     const [rearr, setRearr] = useState(0)
     const [isColDragging, setIsColDragging] = useState(false)
-    const [deleteCols, setDeleteCols] = useState(["center", "right"])
-
-    console.log({ dropImage, imageType, finalObj })
+    const [deleteCols, setDeleteCols] = useState([])
+    const [isColRes, setIsColRes] = useState(false)
+    const [resizeMouse, setResizeMouse] = useState({ initial: null, move: { cur: null, col1: null, col2: null, curElem: {} } })
     // const [textValue, setTextValue] = useState("")
     // const [senderName, setSenderName] = useState("")
     // const [apiLoader, setApiLoader] = useState(false)
@@ -320,7 +322,7 @@ const CustomizationParent = () => {
         const newObj = { ...newState }
         const clonedFinalObj = JSON.parse(data)
         setFinalObj({ ...newObj })
-        const delay = 200
+        const delay = 1000
         const request = setTimeout(() => {
             if (data !== JSON.stringify(newState)) {
                 setPast([...past, { ...clonedFinalObj }])
@@ -334,6 +336,8 @@ const CustomizationParent = () => {
             clearTimeout(request)
         }
     }
+
+    console.log(past, future, "ppppppp")
 
     const undo = () => {
         if (past.length === 0) return
@@ -504,9 +508,39 @@ const CustomizationParent = () => {
                 const getId = `${currPage}-${gotDragOver?.cur}-parent-grandparent`
                 setMousePos({ ...mousePos, y: e.clientY, x: e.clientX })
                 const elem = document.getElementById(getId)
-                const { y, height } = elem?.getBoundingClientRect()
+                let y, height
+                if (Boolean(elem?.getBoundingClientRect())) {
+                    y = elem?.getBoundingClientRect().y
+                    height = elem?.getBoundingClientRect().height
+                }
 
-                if (mousePos.y - (y + (height / 2)) < 0) {
+                if (updatedColWise.length === 0) {
+                    updatedColWise[0] = {
+                        id: updatedColWise?.length + 1,
+                        col: 1,
+                        style: elementStyles?.block,
+                        elements: [
+                            {
+                                positionType: 'left',
+                                style: elementStyles?.col,
+                                element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
+                            }
+                        ]
+                    }
+
+                    mobile_updatedColWise[0] = {
+                        id: mobile_updatedColWise?.length + 1,
+                        col: 1,
+                        style: elementStyles?.block,
+                        elements: [
+                            {
+                                positionType: 'left',
+                                style: elementStyles?.col,
+                                element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
+                            }
+                        ]
+                    }
+                } else if (mousePos.y - (y + (height / 2)) < 0) {
                     updatedColWise.splice(gotDragOver?.cur, 0, {
                         id: updatedColWise?.length + 1,
                         col: 1,
@@ -776,12 +810,12 @@ const CustomizationParent = () => {
                 elements = [
                     {
                         positionType: 'left',
-                        style: { ...newRow[0]?.style },
+                        style: { ...newRow[0]?.style, width: "50%" },
                         element: [...newRow[0]?.element]
                     },
                     {
                         positionType: 'right',
-                        style: { ...newRow[1]?.style },
+                        style: { ...newRow[1]?.style, width: "50%" },
                         element: [...newRow[1]?.element]
                     }
                 ]
@@ -869,7 +903,7 @@ const CustomizationParent = () => {
             newObj.mobile_pages[newObj?.mobile_pages?.findIndex($ => $?.id === currPage)].values = mobile_dupArray
         }
         updatePresent({ ...newObj })
-        setDeleteCols(["center", "right"])
+        // setDeleteCols(["center", "right"])
         // setcolWise([...colWise])
     }
 
@@ -1038,7 +1072,6 @@ const CustomizationParent = () => {
 
     const replaceColumns = (e, { cur, mainCol, repCol }) => {
         e.stopPropagation()
-        console.log({ cur, mainCol, repCol })
         const newObj = { ...finalObj }
         const dupArray = currPage === "button" ? newObj?.button : newObj?.pages[newObj?.pages?.findIndex($ => $?.id === currPage)].values
         const mobile_dupArray = currPage === "button" ? newObj?.mobile_button : newObj?.mobile_pages[newObj?.mobile_pages?.findIndex($ => $?.id === currPage)].values
@@ -1104,6 +1137,9 @@ const CustomizationParent = () => {
                 { value: 'redirect', label: 'Redirect' },
                 { value: 'call', label: 'Call' },
                 { value: 'close', label: 'Close' },
+                { value: 'save_redirect', label: 'Save & Redirect' },
+                { value: 'save_call', label: 'Save & Call' },
+                { value: 'save_close', label: 'Save & Close' },
                 { value: 'sendOTP', label: 'Send OTP' },
                 { value: 'verify', label: 'Verify OTP' }
             ]
@@ -1451,13 +1487,22 @@ const CustomizationParent = () => {
             const imgHeight = colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.height
             styles = (
                 <>
-                    <UncontrolledAccordion defaultOpen={['1']} stayOpen>
+                    <UncontrolledAccordion defaultOpen={['1', '2']} stayOpen>
                         <AccordionItem>
                             <AccordionHeader className='acc-header' targetId='1' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
                                 <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}>Border and Shadow</p>
                             </AccordionHeader>
                             <AccordionBody accordionId='1'>
                                 <BorderChange pageCondition={pageCondition} getMDToggle={getMDToggle} styles={values} setStyles={setValues} />
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem>
+                            <AccordionHeader className='acc-header' targetId='2' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
+                                {getMDToggle({ label: `Opacity: ${Boolean(values?.opacity) ? values?.opacity : "100%"}`, value: "opacity" })}
+                                <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}></p>
+                            </AccordionHeader>
+                            <AccordionBody accordionId='2'>
+                                <input type='range' className='w-100' value={Boolean(values?.opacity) ? parseFloat(values?.opacity) : 100} min={0} max={100} onChange={e => setValues({ ...values, opacity: `${e.target.value}%` })} />
                             </AccordionBody>
                         </AccordionItem>
                     </UncontrolledAccordion>
@@ -1631,7 +1676,7 @@ const CustomizationParent = () => {
                         {/* Column Count Starts */}
                         <h6 style={{ marginLeft: "7px", marginTop: "10px" }}>Column Count</h6>
                         <div className='d-flex justify-content-around align-items-center'>
-                            {colWise[indexes?.cur].elements.length === 1 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("1", { left: "100%", right: "0%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            {colWise[indexes?.cur].elements.length === 1 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("1", { left: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <rect
                                         x={2}
@@ -1646,7 +1691,9 @@ const CustomizationParent = () => {
                                 </svg>
                             </button> : (
                                 <UncontrolledDropdown className='more-options-dropdown'>
-                                    <DropdownToggle className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
+                                    <DropdownToggle onClick={() => {
+                                        setDeleteCols(colWise[indexes?.cur].elements.length === 2 ? ["right"] : ["center", "right"])
+                                    }} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <rect
                                                 x={2}
@@ -1694,7 +1741,7 @@ const CustomizationParent = () => {
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
                             )}
-                            {colWise[indexes?.cur].elements.length <= 2 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("2", { left: "100%", right: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            {colWise[indexes?.cur].elements.length <= 2 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <g strokeWidth={3} stroke="#727272">
                                         <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1703,7 +1750,9 @@ const CustomizationParent = () => {
                                 </svg>
                             </button> : (
                                 <UncontrolledDropdown className='more-options-dropdown'>
-                                    <DropdownToggle className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
+                                    <DropdownToggle onClick={() => {
+                                        setDeleteCols(["right"])
+                                    }} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1729,7 +1778,7 @@ const CustomizationParent = () => {
                                                 if (deleteCols.length < colWise[indexes.cur].elements.length - 2) {
                                                     toast.error(`Select at least ${colWise[indexes.cur].elements.length - 2} columns`)
                                                 } else {
-                                                    changeColumn("2", { left: "100%", right: "100%" }, true)
+                                                    changeColumn("2", { left: "50%", right: "50%" }, true)
                                                 }
                                             }} className='flex-grow-1 text-center'>
                                                 Remove Columns
@@ -1741,7 +1790,7 @@ const CustomizationParent = () => {
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
                             )}
-                            <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("3", { left: "100%", center: "100%", right: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("3", { left: `${100 / 3}%`, center: `${100 / 3}%`, right: `${100 / 3}%` }, false)} style={{ aspectRatio: "1", width: "50px" }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <g strokeWidth={3} stroke="#727272">
                                         <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1826,7 +1875,7 @@ const CustomizationParent = () => {
                             <div>
                                 <h6 style={{ marginLeft: "7px", marginTop: "20px" }}>Column Split</h6>
                                 <div className='d-flex justify-content-around align-items-center'>
-                                    <button onClick={() => changeColumn("3", { left: `100%`, center: `100%`, right: `100%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button onClick={() => changeColumn("3", { left: `${100 / 3}%`, center: `${100 / 3}%`, right: `${100 / 3}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -2020,7 +2069,7 @@ const CustomizationParent = () => {
                                 <div className='p-0 mx-0 my-1'>
                                     <div className='p-0 mb-2 justify-content-start align-items-center'>
                                         {getMDToggle({ label: `Select Font: `, value: `fontFamily` })}
-                                        <Select className='w-100' name="" onChange={e => {
+                                        <Select value={fontStyles?.filter($ => $?.value === values?.fontFamily)} className='w-100' name="" onChange={e => {
                                             setValues({ ...values, fontFamily: e.value })
                                         }} id="" options={fontStyles} styles={{
                                             option: (provided, state) => {
@@ -2039,7 +2088,10 @@ const CustomizationParent = () => {
                                 <div className='p-0 mx-0 my-1'>
                                     <div className='p-0 mb-2 justify-content-start align-items-center'>
                                         {getMDToggle({ label: `Width Type: `, value: `widthType` })}
-                                        <Select className='w-100' name="" onChange={e => {
+                                        <Select value={[
+                                            { value: '100%', label: '100%' },
+                                            { value: 'custom', label: 'Custom' }
+                                        ].filter($ => $?.value === values?.widthType)} className='w-100' name="" onChange={e => {
                                             if (e.value === "100%") {
                                                 setValues({ ...values, widthType: e.value, width: e.value, minHeight: "0px", padding: "10px" })
                                             } else if (e.value === "custom") {
@@ -3203,6 +3255,7 @@ const CustomizationParent = () => {
                                                     {(!subElem?.type || subElem?.type === "") && <span>No element</span>}
                                                     {subElem?.type === 'text' && <Type size={16} color='#727272' />}
                                                     {subElem?.type === 'button' && <Disc size={16} color='#727272' />}
+                                                    {subElem?.type === 'offer' && <BiSolidOffer size={16} color='#727272' />}
                                                     {subElem?.type === 'input' && <img style={{ filter: "grayscale(100%)" }} src='https://cdn-app.optimonk.com/img/StructureInput.61ed2888.svg' alt='' />}
                                                     {subElem?.type === 'image' && (subElem.src === "" ? <Image width={16} color='#727272' /> : <div style={{ width: 16, aspectRatio: "1", backgroundImage: `url(${subElem.src})`, backgroundSize: "contain", backgroundPosition: "center center", backgroundRepeat: "no-repeat" }} />)}
                                                     {<span className={`${subElem.type !== "text" ? "text-capitalize" : ""}`} style={{ fontSize: "0.75rem" }}>{getSideText(subElem)}</span>}
@@ -3292,19 +3345,15 @@ const CustomizationParent = () => {
         const y = dragOverData?.y
         const height = dragOverData?.height
 
-        console.log("newObj ColDrop", transferedData)
         if ((transferedData !== "" && !transferedData.includes("col"))) {
             const arrCheck = dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element
             if (arrCheck.length <= 1 && (!arrCheck[0]?.type || arrCheck[0]?.type === "")) {
-                console.log({ arrCheck: "1" })
                 dupArray[cur].elements[dupArray[cur].elements.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }]
                 mobile_dupArray[cur].elements[mobile_dupArray[cur].elements.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }]
             } else if ((mousePos.y - (y + (height / 2)) > 0)) {
-                console.log({ arrCheck: "2" })
                 dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element?.push({ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
                 mobile_dupArray[cur]?.elements[mobile_dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element?.push({ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
             } else {
-                console.log({ arrCheck: "3" })
                 dupArray[cur].elements[dupArray[cur].elements?.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }, ...dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element]
                 mobile_dupArray[cur].elements[mobile_dupArray[cur].elements?.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }, ...dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element]
             }
@@ -3328,7 +3377,6 @@ const CustomizationParent = () => {
             handleLayoutDrop(e, cur)
         }
 
-        console.log({ cur, curElem, dupArray, mobile_dupArray, inputTypeCondition, y, height })
     }
 
     const handleElementDrop = (e, cur, curElem, subElem) => {
@@ -3340,7 +3388,6 @@ const CustomizationParent = () => {
         const dragOverData = document.getElementById(`${currPage}-${dragOverIndex.cur}-${dragOverIndex.curElem}-${dragOverIndex.subElem}`)?.getBoundingClientRect()
         const y = dragOverData?.y
         const height = dragOverData?.height
-        console.log("newObj ElementDrop", { transferedData })
         if ((transferedData !== "" && !transferedData.includes("col"))) {
             let dupArray
             let mobile_dupArray
@@ -4083,6 +4130,42 @@ const CustomizationParent = () => {
             setValues(currPage === "button" ? { ...finalObj?.[`${mobileCondition}button`][indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style } : { ...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style })
         }
 
+        document.addEventListener("mouseup", () => {
+            setIsColRes(false)
+            setResizeMouse({ ...resizeMouse, initial: null })
+        })
+
+        document.addEventListener("mousemove", (e) => {
+            // console.log("mousemove", {checker, isColRes})
+            if (isColRes) {
+                const row = document.getElementById(`${currPage}-${resizeMouse?.move?.cur}-sizeable`)
+
+                const rowSize = row?.getBoundingClientRect()
+
+                const colWidth3 = (resizeMouse?.move?.ignoreColWidth / rowSize?.width) * 100
+
+                const colWidthCalc = ((resizeMouse?.move?.colWidth - (resizeMouse.initial - e.clientX)) / rowSize?.width) * 100
+                const colWidth1 = colWidthCalc <= 5 ? 5 : colWidthCalc >= 95 - colWidth3 ? 95 - colWidth3 : colWidthCalc
+                const colWidth2 = 100 - colWidth3 - colWidth1
+
+                const newObj = { ...finalObj }
+
+                const dupArr = currPage === "button" ? newObj.button : newObj.pages[newObj.pages.findIndex($ => $.id === currPage)].values
+                console.log("co-ordinates onMouseMove", e, e.clientX - resizeMouse?.initial, resizeMouse?.initial, e.clientX, { rowSize, colWidth1, colWidth2, calcWidth: e.clientX - resizeMouse?.initial, resizeMouse })
+
+                dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col1].style.width = `${colWidth1}%`
+                dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col2].style.width = `${colWidth2}%`
+
+                if (currPage === "button") {
+                    newObj.button = dupArr
+                } else {
+                    newObj.pages[newObj.pages.findIndex($ => $.id === currPage)].values = dupArr
+                }
+
+                updatePresent({ ...newObj })
+            }
+        })
+
         // if (status) {
         //     document.getElementById("phone").click()
         // } else if (defaultIsMobile.get('isMobile') === 'false') {
@@ -4098,7 +4181,41 @@ const CustomizationParent = () => {
 
     return (
         <Suspense fallback={null}>
-            <div className='position-relative' id='customization-container'>
+            <div className='position-relative' id='customization-container'
+                onMouseUp={() => {
+                    setIsColRes(false)
+                    setResizeMouse({ ...resizeMouse, initial: null })
+                }}
+                onMouseMove={(e) => {
+                    // console.log("mousemove", {checker, isColRes})
+                    if (isColRes) {
+                        const row = document.getElementById(`${currPage}-${resizeMouse?.move?.cur}-sizeable`)
+
+                        const rowSize = row?.getBoundingClientRect()
+
+                        const colWidth3 = (resizeMouse?.move?.ignoreColWidth / rowSize?.width) * 100
+
+                        const colWidthCalc = ((resizeMouse?.move?.colWidth - (resizeMouse.initial - e.clientX)) / rowSize?.width) * 100
+                        const colWidth1 = colWidthCalc <= 5 ? 5 : colWidthCalc >= 95 - colWidth3 ? 95 - colWidth3 : colWidthCalc
+                        const colWidth2 = 100 - colWidth3 - colWidth1
+
+                        const newObj = { ...finalObj }
+
+                        const dupArr = currPage === "button" ? newObj.button : newObj.pages[newObj.pages.findIndex($ => $.id === currPage)].values
+                        console.log("co-ordinates onMouseMove", e, e.clientX - resizeMouse?.initial, resizeMouse?.initial, e.clientX, { rowSize, colWidth1, colWidth2, calcWidth: e.clientX - resizeMouse?.initial, resizeMouse })
+
+                        dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col1].style.width = `${colWidth1}%`
+                        dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col2].style.width = `${colWidth2}%`
+
+                        if (currPage === "button") {
+                            newObj.button = dupArr
+                        } else {
+                            newObj.pages[newObj.pages.findIndex($ => $.id === currPage)].values = dupArr
+                        }
+
+                        updatePresent({ ...newObj })
+                    }
+                }}>
                 {
                     apiLoader ? <FrontBaseLoader /> : ''
                 }
@@ -4447,17 +4564,17 @@ const CustomizationParent = () => {
                                                         <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}>Size</p>
                                                         <div className='p-0 mx-0 my-1'>
                                                             <div className='mb-1'>
-                                                                <span className='fw-bolder text-black text-capitalize' style={{ fontSize: "0.7rem" }}>{isMobile ? "Max Width" : "Width"}: {currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`][isMobile ? "maxWidth" : "width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"]}</span>
+                                                                <span className='fw-bolder text-black text-capitalize' style={{ fontSize: "0.7rem" }}>{isMobile && currPage !== "button" ? "Max Width" : "Width"}: {currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]["width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"]}</span>
                                                                 <div className="d-flex p-0 justify-content-between align-items-center gap-2">
                                                                     <input type='range'
                                                                         value={parseFloat(currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]["width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"])}
                                                                         className='w-100' onChange={e => {
-                                                                            currPage === "button" ? updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}button`]: { ...finalObj?.backgroundStyles[`${mobileCondition}button`], [e.target.name]: `${e.target.value}${isMobile ? "%" : "px"}` } } }) : updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: { ...finalObj?.backgroundStyles[`${mobileCondition}main`], [e.target.name]: `${e.target.value}${isMobile ? "%" : "px"}` } } })
-                                                                        }} name={currPage === "button" ? "width" : isMobile ? "maxWidth" : "width"} min="0" max={isMobile ? "100" : "800"} />
+                                                                            currPage === "button" ? updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}button`]: { ...finalObj?.backgroundStyles[`${mobileCondition}button`], [e.target.name]: `${e.target.value}px` } } }) : updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: { ...finalObj?.backgroundStyles[`${mobileCondition}main`], [e.target.name]: `${e.target.value}${isMobile ? "%" : "px"}` } } })
+                                                                        }} name={currPage === "button" ? "width" : isMobile ? "maxWidth" : "width"} min="0" max={isMobile && currPage !== "button" ? "100" : "800"} />
                                                                 </div>
                                                             </div>
                                                             <div className=''>
-                                                                <span className='fw-bolder text-black' style={{ fontSize: "0.7rem" }}>Min-Height: {finalObj?.backgroundStyles[`${mobileCondition}main`]?.minHeight}</span>
+                                                                <span className='fw-bolder text-black' style={{ fontSize: "0.7rem" }}>Min-Height: {finalObj?.backgroundStyles[`${mobileCondition}${pageCondition}`]?.minHeight}</span>
                                                                 <div className="d-flex p-0 justify-content-between align-items-center gap-2">
                                                                     <input type='range' value={parseFloat(currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]?.minHeight : finalObj?.backgroundStyles[`${mobileCondition}main`]?.minHeight)} onChange={e => {
                                                                         currPage === "button" ? updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}button`]: { ...finalObj?.backgroundStyles[`${mobileCondition}button`], minHeight: `${e.target.value}px` } } }) : updatePresent({ ...finalObj, backgroundStyles: { ...finalObj.backgroundStyles, [`${mobileCondition}main`]: { ...finalObj?.backgroundStyles[`${mobileCondition}main`], minHeight: `${e.target.value}px` } } })
@@ -4500,23 +4617,49 @@ const CustomizationParent = () => {
                                                             <div className="form-check mb-1">
                                                                 <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "ALL_VISITORS"} onChange={e => {
                                                                     updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
-                                                                }} id='all' value={"ALL_VISITORS"} className="form-check-input cursor-pointer" /><label className="cursor-pointer" style={{ fontSize: "13px" }} htmlFor="all">All Visitors</label>
+                                                                }} id='all' value={"ALL_VISITORS"} className="form-check-input cursor-pointer" />
+                                                                <label className="cursor-pointer" style={{ fontSize: "13px" }} htmlFor="all">All Visitors</label>
                                                             </div>
-                                                            <div className="form-check mb-1">
-                                                                <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "FIRST_VISITORS"} onChange={e => {
-                                                                    updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
-                                                                }} id='first' value={"FIRST_VISITORS"} className="form-check-input cursor-pointer" /><label htmlFor="first" className="cursor-pointer" style={{ fontSize: "13px" }}>First-Time Visitors</label>
-                                                            </div>
-                                                            <div className="form-check mb-1">
-                                                                <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "RETURNING_VISITORS"} onChange={e => {
-                                                                    updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
-                                                                }} id='return' value={"RETURNING_VISITORS"} className="form-check-input cursor-pointer" /><label htmlFor="return" className="cursor-pointer" style={{ fontSize: "13px" }}>Returning Shoppers</label>
-                                                            </div>
-                                                            <div className="form-check mb-1">
-                                                                <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "REGISTERED_USERS"} onChange={e => {
-                                                                    updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
-                                                                }} id='registered' value={"REGISTERED_USERS"} className="form-check-input cursor-pointer" /><label htmlFor="registered" className="cursor-pointer" style={{ fontSize: "13px" }}>Registered Users</label>
-                                                            </div>
+
+                                                            {
+                                                                userPermission?.currentPlan?.plan !== "Forever Free" ? <>
+                                                                    <div className="form-check mb-1">
+                                                                        <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "FIRST_VISITORS"} onChange={e => {
+                                                                            updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
+                                                                        }} id='first' value={"FIRST_VISITORS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="first" className="cursor-pointer" style={{ fontSize: "13px" }}>First-Time Visitors</label>
+                                                                    </div>
+                                                                    <div className="form-check mb-1">
+                                                                        <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "RETURNING_VISITORS"} onChange={e => {
+                                                                            updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
+                                                                        }} id='return' value={"RETURNING_VISITORS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="return" className="cursor-pointer" style={{ fontSize: "13px" }}>Returning Shoppers</label>
+                                                                    </div>
+                                                                    <div className="form-check mb-1">
+                                                                        <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "REGISTERED_USERS"} onChange={e => {
+                                                                            updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
+                                                                        }} id='registered' value={"REGISTERED_USERS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="registered" className="cursor-pointer" style={{ fontSize: "13px" }}>Registered Users</label>
+                                                                    </div>
+                                                                </> : <>
+                                                                    <div className="form-check mb-1">
+                                                                        <input disabled type="radio" name='visitor_settings' id='first' value={"FIRST_VISITORS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="first" className="cursor-pointer planCardUpgrade" style={{ fontSize: "13px" }}>First-Time Visitors</label>
+                                                                        <span className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</span>
+                                                                    </div>
+                                                                    <div className="form-check mb-1">
+                                                                        <input disabled type="radio" name='visitor_settings' id='return' value={"RETURNING_VISITORS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="return" className="cursor-pointer planCardUpgrade" style={{ fontSize: "13px" }}>Returning Shoppers</label>
+                                                                        <span className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</span>
+                                                                    </div>
+                                                                    <div className="form-check mb-1">
+                                                                        <input disabled type="radio" name='visitor_settings' id='registered' value={"REGISTERED_USERS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="registered" className="cursor-pointer planCardUpgrade" style={{ fontSize: "13px" }}>Registered Users</label>
+                                                                        <span className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</span>
+                                                                    </div>
+                                                                </>
+                                                            }
+                                                            
                                                         </div>
                                                     </AccordionBody>
                                                 </AccordionItem>
@@ -5421,7 +5564,7 @@ const CustomizationParent = () => {
                                                             <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Email From</label>
                                                             <div className="d-flex justify-content-center align-items-center" style={{ border: '1px solid #d8d6de', borderRadius: '0.357rem', gap: '5px' }}>
                                                                 {/* <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Email Template</label> */}
-                                                                <input type="text" value={outletSenderId ? outletSenderId : "no_reply@xircls.com"} className="form-control" style={{ width: '250px', border: 'none' }} disabled />
+                                                                <input type="text" value={outletSenderId ? outletSenderId : "no_reply@xircls.com"} className="form-control" style={{ width: '100%', border: 'none' }} disabled />
                                                                 <a style={{ marginRight: '5px' }} onClick={() => setChangeSenderEmail(!changeSenderEmail)}>
                                                                     <Edit size={'18px'} />
                                                                 </a>
@@ -5435,6 +5578,7 @@ const CustomizationParent = () => {
                                                             <Select onChange={(e) => {
                                                                 const form_data = new FormData()
                                                                 form_data.append("id", e.value)
+                                                                form_data.append("app", userPermission?.appName)
                                                                 fetch(`${SuperLeadzBaseURL}/api/v1/get_single_camp_details/`, {
                                                                     method: "POST",
                                                                     body: form_data
@@ -5442,7 +5586,7 @@ const CustomizationParent = () => {
                                                                     .then((data) => data.json())
                                                                     .then((resp) => {
                                                                         if (resp.data) {
-                                                                            setFinalObj({ ...finalObj, email_settings: { ...resp.data } })
+                                                                            updatePresent({ ...finalObj, email_settings: { ...resp.data } })
 
                                                                         }
                                                                     })
@@ -5454,7 +5598,7 @@ const CustomizationParent = () => {
 
                                                         <div className="py-1">
                                                             <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subject</label>
-                                                            <input value={finalObj?.email_settings?.subject} onChange={(e) => setFinalObj({ ...finalObj, email_settings: { ...finalObj.email_settings, subject: e.target.value } })} name="subject" type="text" className="form-control" id="subject" placeholder="Subject" />
+                                                            <input value={finalObj?.email_settings?.subject} onChange={(e) => updatePresent({ ...finalObj, email_settings: { ...finalObj.email_settings, subject: e.target.value } })} name="subject" type="text" className="form-control" id="subject" placeholder="Subject" />
                                                         </div>
 
                                                         <div className="py-1">
@@ -5517,7 +5661,7 @@ const CustomizationParent = () => {
                         {/* Section Drawer */}
                         {/* Theme Preview */}
                         <div className="d-flex flex-column align-items-center bg-light-secondary flex-grow-1" style={{ width: sideNav === "rules" ? "auto" : `calc(100vw - ${sideNav !== "" ? sectionWidths.editSection : "0"}px - ${sectionWidths.drawerWidth}px - ${sectionWidths.sidebar}px)`, transition: "0.3s ease-in-out" }}>
-                            {returnRender({ outletData, slPrevBg, bgsettings: finalObj?.overlayStyles, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition: finalObj?.positions?.[`${mobileCondition}${pageCondition}`], bgStyles: finalObj?.backgroundStyles?.[`${mobileCondition}main`], crossStyle: finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise: currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values], setcolWise, dragStartIndex, setDragStartIndex, dragOverIndex, setDragOverIndex, isMobile, setIsMobile, finalObj, setFinalObj: updatePresent, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles: finalObj?.backgroundStyles[`${mobileCondition}button`], offerTheme: finalObj?.offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, setRearr, isColDragging, setIsColDragging })}
+                            {returnRender({ outletData, slPrevBg, bgsettings: finalObj?.overlayStyles, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition: finalObj?.positions?.[`${mobileCondition}${pageCondition}`], bgStyles: finalObj?.backgroundStyles?.[`${mobileCondition}main`], crossStyle: finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise: currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values], setcolWise, dragStartIndex, setDragStartIndex, dragOverIndex, setDragOverIndex, isMobile, setIsMobile, finalObj, setFinalObj: updatePresent, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles: finalObj?.backgroundStyles[`${mobileCondition}button`], offerTheme: finalObj?.offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, setRearr, isColDragging, setIsColDragging, isColRes, setIsColRes, resizeMouse, setResizeMouse })}
                         </div>
                         {/* Theme Preview */}
                         {/* Edit Section */}
@@ -5572,6 +5716,11 @@ const CustomizationParent = () => {
                             </div>
                             {imageTab !== "product" && <div className="p-1 pt-0 d-flex justify-content-center border-bottom">
                                 <label htmlFor='uploadImg' className="btn btn-dark">Upload an Image <input onChange={e => {
+                                    const k = 1024
+                                    if (e.target.files[0].size > 100 * k) {
+                                        toast.error("File size too large. Upload size must be upto 100kb")
+                                        return
+                                    }
                                     setImgLoading(true)
                                     const form_data = new FormData()
                                     form_data.append("shop", outletData[0]?.web_url)

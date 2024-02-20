@@ -8,7 +8,7 @@ import moment from 'moment/moment'
 import { SuperLeadzBaseURL, getReq, postReq } from '../../assets/auth/jwtService'
 import Spinner from '../Components/DataTable/Spinner'
 import toast from 'react-hot-toast'
-import { getCurrentOutlet } from '../Validator'
+import { defaultformatDate, getCurrentOutlet } from '../Validator'
 import { Link, useNavigate } from 'react-router-dom'
 import { AiFillPhone, AiOutlineMail, AiFillCaretRight, AiOutlineQuestion } from 'react-icons/ai'
 import { BiDollar } from "react-icons/bi"
@@ -20,7 +20,7 @@ import { PermissionProvider } from '../../Helper/Context'
 import Flatpickr from 'react-flatpickr'
 
 function SuperLeadzDashboard() {
-    const { userPermission } = useContext(PermissionProvider)
+    const { userPermission, setUserPermission } = useContext(PermissionProvider)
     const [performanceData, setPerformanceData] = useState({
         active_campaign: "0",
         campaign_revenue: "0",
@@ -43,7 +43,7 @@ function SuperLeadzDashboard() {
     const [toLoadCampaign, setToLoadCampaign] = useState(false)
     const [cancel, setCancel] = useState(false)
     // const currentDate = moment()
-    const [selectedData, setSelectedData] = useState([moment(new Date()).subtract(7, 'd').format('YYYY-MM-DD'), moment(new Date()).format('YYYY-MM-DD')])
+    const [selectedData, setSelectedData] = useState([defaultformatDate(moment(new Date()).subtract(7, 'd'), userPermission?.user_settings?.date_format), defaultformatDate(new Date(), userPermission?.user_settings?.date_format)])
     const [filterType, setSetFilterType] = useState("week")
     const navigate = useNavigate()
     const [isCampagin, setIsCampagin] = useState(0)
@@ -247,6 +247,8 @@ function SuperLeadzDashboard() {
                     ...setData
                 }))
 
+                setUserPermission({...userPermission, currentPlan: {...userPermission?.currentPlan, plan: updatedDate[0].plan_id}})
+
                 setChargesLoader(false)
             })
             .catch((error) => {
@@ -282,7 +284,9 @@ function SuperLeadzDashboard() {
             .then((data) => {
                 console.log(data)
                 if (data?.data?.response === "billing created successfully") {
-                    navigate('/merchant/SuperLeadz/')
+                    if (location.pathname === "/merchant/SuperLeadz/" || location.pathname === "/merchant/SuperLeadz") {
+                        navigate('/merchant/SuperLeadz/', {replace: true})
+                    }
                     planData()
                     cancelApi()
 

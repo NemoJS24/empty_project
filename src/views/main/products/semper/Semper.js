@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import MediaEmbed from '@src/views/main/components/MediaEmbed'
 import CardLeft from '@src/views/main/components/CardLeft'
@@ -14,6 +14,7 @@ import { BiConversation } from "react-icons/bi"
 import { FaArrowTrendDown, FaArrowTrendUp } from "react-icons/fa6"
 import { GiLifeBar } from "react-icons/gi"
 import { TbPigMoney } from "react-icons/tb"
+import { affiliateTracking } from '../../../Validator'
 
 export default function Semper() {
   // data
@@ -135,6 +136,14 @@ export default function Semper() {
       desc: 'Lower your customer churn rates and increase your Customer Lifetime Value (CLV), both important indicators of your business health.'
     }
   ]
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    if (params.get('aft_no') || localStorage.getItem('aft_no')) {
+      affiliateTracking(params.get('aft_no') ? params.get('aft_no') : localStorage.getItem('aft_no'))
+    }
+  }, [])
+
   return (
     <div style={{ background: "#fff" }} >
 
@@ -311,7 +320,7 @@ export default function Semper() {
               <Link to='/merchant/signup' className=' btn btn-lg  main-btn-blue2 fw-lig fs-3 mt-2'>Get started for free</Link>
             </Col>
             <Col lg="6">
-             
+
               <video className='w-100' controls src="https://api.xircls.com/static/images/website-slide/videos/XIRCLS%20E-Commerce%20Demo.mp4" width="400" height="300" autoPlay muted loop />
 
             </Col>

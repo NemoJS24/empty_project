@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import Navbar from '@src/views/main/utilities/navbar/Navbar'
 import CardLeft from '@src/views/main/components/CardLeft'
@@ -18,6 +18,7 @@ import health from './imgs/health.png'
 import makeup from './imgs/makeup.png'
 import kids from './imgs/kids.png'
 import { Link } from 'react-router-dom'
+import { affiliateTracking } from '../../../Validator'
 
 export default function Infiniti() {
   // data
@@ -110,6 +111,13 @@ export default function Infiniti() {
       icon: <AiOutlineLink />
     }
   ]
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    if (params.get('aft_no') || localStorage.getItem('aft_no')) {
+        affiliateTracking(params.get('aft_no') ? params.get('aft_no') : localStorage.getItem('aft_no'))
+    }
+}, [])
   return (
     <div style={{ background: "#fff" }} >
 

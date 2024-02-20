@@ -26,7 +26,7 @@ const themeConfig = {
       type: 'static' // static, sticky, hidden
     },
     customizer: true,
-    scrollTop: true, // Enable scroll to top button
+    scrollTop: false, // Enable scroll to top button
     toastPosition: 'top-center'
   }
 }

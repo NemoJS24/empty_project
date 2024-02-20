@@ -84,7 +84,11 @@ const data = [
       },
       {
         title: "Rewards & Incentives",
-        subTitle: "Infiniti, Semper Fi",
+        subTitle: (<>
+          <a target='_blank' href="/products/infiniti/">Infiniti <FiArrowUpRight size={17} style={{ marginTop: "-5px" }} /></a>
+          <a target='_blank' href="/products/semperfi/">Semper Fi <FiArrowUpRight size={17} style={{ marginTop: "-5px" }} /></a> 
+        </>
+        ),
         desc: "Timely offers, delivered discreetly, to delight shoppers and convert them into customers guaranteed to return."
       }
     ]

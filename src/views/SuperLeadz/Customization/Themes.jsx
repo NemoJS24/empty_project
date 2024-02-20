@@ -73,50 +73,52 @@ const Themes = () => {
             <Container fluid className='px-0'>
                 <Row className='match-height'>
                     {allPreviews.map((theme, key) => {
-                        return (
-                            <Col className='d-flex flex-column align-items-stretch' md={6} key={key}>
-                                <Card>
-                                    <CardBody>
-                                        <div id={`themeContainer-${key}`} style={{ aspectRatio: "16/9" }}>
-                                            <div className="d-flex justify-content-center align-items-center rounded position-relative m-auto innerRect" style={{ aspectRatio: phoneView[key] ? '3/4' : '16/9', height: '100%', backgroundSize: "100%", backgroundImage: `url(${skeletonBg})`, backgroundColor: "rgba(0,0,0,0.25)", backgroundBlendMode: "soft-light" }}>
-                                                <div className='position-absolute w-100' style={{ scale: `${(((contWidth - 200) * 100) / contWidth) / 100}` }}>
-                                                    <JsonToJsx key={key} isMobile={phoneView[key]} renderObj={theme.object} />
+                        if (key <= 3) {
+                            return (
+                                <Col className='d-flex flex-column align-items-stretch' md={6} key={key}>
+                                    <Card>
+                                        <CardBody>
+                                            <div id={`themeContainer-${key}`} style={{ aspectRatio: "16/9" }}>
+                                                <div className="d-flex justify-content-center align-items-center rounded position-relative m-auto innerRect" style={{ aspectRatio: phoneView[key] ? '3/4' : '16/9', height: '100%', backgroundSize: "100%", backgroundImage: `url(${skeletonBg})`, backgroundColor: "rgba(0,0,0,0.25)", backgroundBlendMode: "soft-light" }}>
+                                                    <div className='position-absolute w-100' style={{ scale: `${(((contWidth - 200) * 100) / contWidth) / 100}` }}>
+                                                        <JsonToJsx key={key} isMobile={phoneView[key]} renderObj={theme.object} />
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="d-flex justify-content-between align-items-center gap-2 mt-2">
+                                            <div className="d-flex justify-content-between align-items-center gap-2 mt-2">
 
-                                            <h3 className="mt-2 mb-0">{theme.theme_name}</h3>
+                                                <h3 className="mt-2 mb-0">{theme.theme_name}</h3>
 
-                                            <button onClick={() => {
-                                                setSelectedThemeId(theme.theme_id)
-                                                navigate(`/merchant/SuperLeadz/new_customization/?isMobile=${phoneView[key]}`)
-                                                localStorage.setItem("defaultThemeId", theme.theme_id)
-                                                localStorage.removeItem("defaultTheme")
-                                            }} state={{ len: themeLength }} className="btn btn-primary">Use Template</button>
-                                        </div>
-                                        <div className="d-flex justify-content-between align-items-center gap-2 mt-2">
-                                            <div className="d-flex">
-                                                <button style={{ padding: "0px", width: "30px", aspectRatio: "1" }} onClick={() => {
-                                                    const newArr = [...phoneView]
-                                                    newArr[key] = false
-                                                    setPhoneView(newArr)
-                                                }} className={`btn ${phoneView[key] ? "text-dark" : "btn-outline-dark"}`}>
-                                                    <AiOutlineDesktop size={"15px"} />
-                                                </button>
-                                                <button style={{ padding: "0px", width: "30px", aspectRatio: "1" }} onClick={() => {
-                                                    const newArr = [...phoneView]
-                                                    newArr[key] = true
-                                                    setPhoneView(newArr)
-                                                }} className={`btn ${!phoneView[key] ? "text-dark" : "btn-outline-dark"}`}>
-                                                    <AiOutlineMobile size={"15px"} />
-                                                </button>
+                                                <button onClick={() => {
+                                                    setSelectedThemeId(theme.theme_id)
+                                                    navigate(`/merchant/SuperLeadz/new_customization/?isMobile=${phoneView[key]}`)
+                                                    localStorage.setItem("defaultThemeId", theme.theme_id)
+                                                    localStorage.removeItem("defaultTheme")
+                                                }} state={{ len: themeLength }} className="btn btn-primary">Use Template</button>
                                             </div>
-                                        </div>
-                                    </CardBody>
-                                </Card>
-                            </Col>
-                        )
+                                            <div className="d-flex justify-content-between align-items-center gap-2 mt-2">
+                                                <div className="d-flex">
+                                                    <button style={{ padding: "0px", width: "30px", aspectRatio: "1" }} onClick={() => {
+                                                        const newArr = [...phoneView]
+                                                        newArr[key] = false
+                                                        setPhoneView(newArr)
+                                                    }} className={`btn ${phoneView[key] ? "text-dark" : "btn-outline-dark"}`}>
+                                                        <AiOutlineDesktop size={"15px"} />
+                                                    </button>
+                                                    <button style={{ padding: "0px", width: "30px", aspectRatio: "1" }} onClick={() => {
+                                                        const newArr = [...phoneView]
+                                                        newArr[key] = true
+                                                        setPhoneView(newArr)
+                                                    }} className={`btn ${!phoneView[key] ? "text-dark" : "btn-outline-dark"}`}>
+                                                        <AiOutlineMobile size={"15px"} />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </CardBody>
+                                    </Card>
+                                </Col>
+                            )
+                        }
                     })}
                 </Row>
             </Container>

@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { User, BarChart2, CheckCircle, Link } from 'react-feather'
 import CardCom from '../Components/SuperLeadz/CardCom'
 import { Card, CardBody, Col, Input } from 'reactstrap'
 // import ComTableAdvance from '../Components/DataTable/ComTableAdvance'
-import { getCurrentOutlet } from '../Validator'
+import { defaultformatDate, getCurrentOutlet } from '../Validator'
 import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
 import moment from 'moment/moment'
 import ComTable from '../Components/DataTable/ComTable'
 import Spinner from '../Components/DataTable/Spinner'
 import AdvanceServerSide from '../Components/DataTable/AdvanceServerSide'
+import { PermissionProvider } from '../../Helper/Context'
 
 export default function SuperLeadzLeads() {
+
+    const { userPermission } = useContext(PermissionProvider)
 
     const [tableData, setTableData] = useState([])
     const [custVisit, setCustVisit] = useState(0)
@@ -54,7 +57,7 @@ export default function SuperLeadzLeads() {
         {
             name: 'Date',
             minWidth: '150px',
-            selector: row => moment(row.created_at).format('MMM D, YYYY'),
+            selector: row => defaultformatDate(row.created_at, userPermission?.user_settings?.date_format),
             type: 'date',
             isEnable: true
         },
@@ -74,7 +77,9 @@ export default function SuperLeadzLeads() {
         {
             name: 'Visitor Type',
             minWidth: '15%',
-            selector: row => row.visitor_type,
+            selector: row => {
+                return row.visitor_type === "First Visitor" ? "First-Time Visitor" : row.visitor_type === "Returning Visitor" ? "Returning Visitor" : row.visitor_type === "Register User" ? "Registered Users" : ""
+            },
             type: 'select',
             options: [
                 { label: "Select", value: "" },
@@ -86,7 +91,7 @@ export default function SuperLeadzLeads() {
         },
         {
             name: 'Lead Type',
-            minWidth: '200px',
+            minWidth: '100px',
             cell: (row) => {
                 const letter = row?.is_new_letter ? "MQL" : "SQL"
                 return letter
@@ -101,7 +106,7 @@ export default function SuperLeadzLeads() {
         },
         {
             name: 'Rating',
-            minWidth: '200px',
+            minWidth: '100px',
             selector: row => <span style={{ marginTop: '3px' }}>{row.status === "HOT" ? "Hot" : row.status === "WARM" ? "Warm" : row.status === "COLD" ? "Cold" : ""}</span>,
             type: 'select',
             options: [
@@ -110,6 +115,20 @@ export default function SuperLeadzLeads() {
                 { label: "Cold", value: "COLD" },
                 { label: "Hot", value: "HOT" }
             ],
+            isEnable: true
+        },
+        {
+            name: 'Source',
+            minWidth: '200px',
+            selector: row => <span style={{ marginTop: '3px' }}>{row?.source ? row?.source : "Direct"}</span>,
+            type: 'text',
+            isEnable: true
+        },
+        {
+            name: 'Purchase',
+            minWidth: '100px',
+            selector: row => <span style={{ marginTop: '3px' }}>{row?.is_purchase ? "Yes" : "No"}</span>,
+            type: 'text',
             isEnable: true
         },
         {
@@ -139,19 +158,19 @@ export default function SuperLeadzLeads() {
             <Card>
                 <CardBody>
                     {
-                        data?.data?.first_name ? <h5 className='mb-1'>First Name: {data?.data?.first_name}</h5> : ''
+                        <h5 className='mb-1'>First Name: {data?.data?.first_name ? data?.data?.first_name : '-'}</h5>
                     }
 
                     {
-                        data?.data?.last_name ? <h5 className='mb-1'>Last Name: {data?.data?.last_name}</h5> : ''
+                        <h5 className='mb-1'>Last Name: {data?.data?.last_name ? data?.data?.last_name : '-'}</h5>
                     }
 
                     {
-                        data?.data?.email ? <h5 className='mb-1'>Email: {data?.data?.email}</h5> : ''
+                        <h5 className='mb-1'>Email: {data?.data?.email ? data?.data?.email : '-'}</h5>
                     }
 
                     {
-                        data?.data?.mobile ? <h5 className='mb-1'>Phone Number: {data?.data?.mobile}</h5> : ''
+                        <h5 className='mb-1'>Phone Number: {data?.data?.mobile ? data?.data?.mobile : '-'}</h5>
                     }
 
                 </CardBody>
@@ -168,7 +187,7 @@ export default function SuperLeadzLeads() {
                         <CardCom icon={<User size='25px' />} title="Total Visitors" data={isLoading ? <Spinner size={'25px'} /> : custVisit} />
                     </div>
                     <div className="col-4">
-                        <CardCom icon={<BarChart2 size='25px' />} title="Total Leads" data={isLoading ? <Spinner size={'25px'} /> : tableData?.length} />
+                        <CardCom icon={<BarChart2 size='25px' />} title="Total Leads" data={isLoading ? <Spinner size={'25px'} /> : count} />
                     </div>
                     <div className="col-4">
                         <CardCom icon={<CheckCircle size='25px' />} title="Verified Leads" data={isLoading ? <Spinner size={'25px'} /> : verified} />
