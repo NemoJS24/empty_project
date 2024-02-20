@@ -75,6 +75,24 @@ export default function SuperLeadzLeads() {
             isEnable: true
         },
         {
+            name: 'Status',
+            minWidth: '10%',
+            cell: (row) => {
+                return (
+                    <div className='d-flex justify-content-start align-items-start flex-column'>
+                        <span>{row.is_offer === 1 || row.is_offer === "1" ? "Verified" : "Not Verified"}</span>
+                    </div>
+                )
+            },
+            type: 'select',
+            options: [
+                { label: "Select", value: "" },
+                { label: "Verified", value: 1 },
+                { label: "Not Verified", value: 0 }
+            ],
+            isEnable: true
+        },
+        {
             name: 'Visitor Type',
             minWidth: '15%',
             selector: row => {
@@ -133,24 +151,6 @@ export default function SuperLeadzLeads() {
                 { label: "Select", value: "" },
                 { label: "Yes", value: 1 },
                 { label: "No", value: 0 }
-            ],
-            isEnable: true
-        },
-        {
-            name: 'Status',
-            minWidth: '10%',
-            cell: (row) => {
-                return (
-                    <div className='d-flex justify-content-start align-items-start flex-column'>
-                        <span>{row.is_offer === 1 || row.is_offer === "1" ? "Verified" : "Not Verified"}</span>
-                    </div>
-                )
-            },
-            type: 'select',
-            options: [
-                { label: "Select", value: "" },
-                { label: "Verified", value: 1 },
-                { label: "Not Verified", value: 0 }
             ],
             isEnable: true
         }
