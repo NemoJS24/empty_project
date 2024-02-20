@@ -321,7 +321,7 @@ const CustomizationParent = () => {
         const data = JSON.stringify(finalObj)
         const newObj = { ...newState }
         const clonedFinalObj = JSON.parse(data)
-        setFinalObj({ ...newObj })
+        setFinalObj((prev) => ({ ...prev, ...newObj }))
         const delay = 1000
         const request = setTimeout(() => {
             if (data !== JSON.stringify(newState)) {
@@ -1594,7 +1594,9 @@ const CustomizationParent = () => {
                                     </div>
                                     <div className='p-0 mb-1 align-items-center'>
                                         {getMDToggle({ label: `Alignment`, value: `margin` })}
-                                        <Select value={alignOptions?.filter(item => item?.value === colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin)} onChange={e => {
+                                        <Select value={alignOptions?.filter(item => {
+                                            return ((colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin && colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin !== "") ? item?.value === colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin : "left")
+                                        })} onChange={e => {
                                             arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].style.margin = e.value
                                             arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandAlignment = false
                                             setcolWise([...arr])
@@ -4102,6 +4104,7 @@ const CustomizationParent = () => {
         getOffers()
         refreshOfferDraggable()
         getPlan()
+        // const newObj = {...finalObj}
         // generateSuggestion()
         const campaignStartDate = finalObj?.campaignStartDate === "" ? moment(new Date()).format("YYYY-MM-DD HH:mm:ss") : Array.isArray(finalObj?.campaignStartDate) ? moment(finalObj?.campaignStartDate[0]).format("YYYY-MM-DD HH:mm:ss") : finalObj?.campaignStartDate
         const campaignEndDate = !finalObj?.campaignHasEndDate ? "" : finalObj?.campaignEndDate === "" ? moment(new Date()).format("YYYY-MM-DD HH:mm:ss") : Array.isArray(finalObj?.campaignEndDate) ? moment(finalObj?.campaignEndDate[0]).format("YYYY-MM-DD HH:mm:ss") : finalObj?.campaignEndDate
@@ -4148,21 +4151,21 @@ const CustomizationParent = () => {
                 const colWidth1 = colWidthCalc <= 5 ? 5 : colWidthCalc >= 95 - colWidth3 ? 95 - colWidth3 : colWidthCalc
                 const colWidth2 = 100 - colWidth3 - colWidth1
 
-                const newObj = { ...finalObj }
+                const moveObj = { ...finalObj }
 
-                const dupArr = currPage === "button" ? newObj.button : newObj.pages[newObj.pages.findIndex($ => $.id === currPage)].values
+                const dupArr = currPage === "button" ? moveObj.button : moveObj.pages[moveObj.pages.findIndex($ => $.id === currPage)].values
                 console.log("co-ordinates onMouseMove", e, e.clientX - resizeMouse?.initial, resizeMouse?.initial, e.clientX, { rowSize, colWidth1, colWidth2, calcWidth: e.clientX - resizeMouse?.initial, resizeMouse })
 
                 dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col1].style.width = `${colWidth1}%`
                 dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col2].style.width = `${colWidth2}%`
 
                 if (currPage === "button") {
-                    newObj.button = dupArr
+                    moveObj.button = dupArr
                 } else {
-                    newObj.pages[newObj.pages.findIndex($ => $.id === currPage)].values = dupArr
+                    moveObj.pages[moveObj.pages.findIndex($ => $.id === currPage)].values = dupArr
                 }
 
-                updatePresent({ ...newObj })
+                updatePresent({ ...moveObj })
             }
         })
 
@@ -4659,7 +4662,7 @@ const CustomizationParent = () => {
                                                                     </div>
                                                                 </>
                                                             }
-                                                            
+
                                                         </div>
                                                     </AccordionBody>
                                                 </AccordionItem>
