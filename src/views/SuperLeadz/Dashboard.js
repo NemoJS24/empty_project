@@ -282,20 +282,20 @@ function SuperLeadzDashboard() {
             data: form_data,
             url: `${SuperLeadzBaseURL}/api/v1/add/billing/`
         })
-            .then((data) => {
-                console.log(data)
-                if (data?.data?.response === "billing created successfully") {
-                    if (location.pathname === "/merchant/SuperLeadz/" || location.pathname === "/merchant/SuperLeadz") {
-                        navigate('/merchant/SuperLeadz/', {replace: true})
-                    }
-                    planData()
-                    cancelApi()
-
-                } else {
-                    planData()
+        .then((data) => {
+            console.log(data)
+            if (data?.data?.response === "billing created successfully") {
+                if (location.pathname === "/merchant/SuperLeadz/" || location.pathname === "/merchant/SuperLeadz") {
+                    navigate('/merchant/SuperLeadz/', {replace: true})
                 }
-            })
-            .catch((error) => console.log(error))
+                planData()
+                cancelApi()
+
+            } else {
+                planData()
+            }
+        })
+        .catch((error) => console.log(error))
     }
 
     // console.log(moment(new Date()).diff(moment(JSON.parse(currentPlan?.created_at), 'days'), "pppppp"))
@@ -451,7 +451,7 @@ function SuperLeadzDashboard() {
                 </div>
                 {/* <div className="col-md-1"></div> */}
 
-                { 
+                {
                     campaignLoader ? (isCampagin === 0 || isCampagin === "0") ? (
                         <>
                             <div className=''>
