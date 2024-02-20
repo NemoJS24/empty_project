@@ -1,8 +1,9 @@
 import { Circle, Home } from "react-feather"
-import { ownUrl } from "../../views/Validator"
+// import { ownUrl } from "../../views/Validator"
 import { AiFillPhone, AiOutlineBars, AiOutlineClockCircle, AiOutlineHighlight, AiOutlineLineChart, AiOutlinePercentage, AiOutlineQuestion, AiOutlineSmile, AiOutlineStar, AiOutlineUser } from "react-icons/ai"
 import { BiDollar } from "react-icons/bi"
 import { DefaultNav } from "./DefualtNav"
+import twentyfourseven from "../../views/SuperLeadz/assets/2020773.png"
 
 export const SuperLeadzNavigation = [
   ...DefaultNav,
@@ -27,24 +28,24 @@ export const SuperLeadzNavigation = [
     icon: <AiOutlineClockCircle size={16} />,
     navLink: '/merchant/SuperLeadz/live/'
   },
+  // {
+  //   id: 'reports',
+  //   title: 'Reports',
+  //   icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/reports.png`} width='16px' />,
+  //   children: [
   {
-    id: 'reports',
-    title: 'Reports',
-    icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/reports.png`} width='16px' />,
-    children: [
-      {
-        id: 'Campaign',
-        title: 'Campaign',
-        icon: <Circle size={16} />,
-        navLink: '/merchant/SuperLeadz/reports/campaign/'
-      },
-      {
-        id: 'Offer',
-        title: 'Offers',
-        icon: <Circle size={16} />,
-        navLink: '/merchant/SuperLeadz/reports/offers/'
-      }
-    ]
+    id: 'Reports-Campaign',
+    title: 'Reports-Campaign',
+    icon: <Circle size={16} />,
+    navLink: '/merchant/SuperLeadz/reports/campaign/'
+  },
+  {
+    id: 'Reports-Offer',
+    title: 'Reports-Offers',
+    icon: <Circle size={16} />,
+    navLink: '/merchant/SuperLeadz/reports/offers/'
+    //   }
+    // ]
   },
   // {
   //   id: 'performance',
@@ -85,7 +86,7 @@ export const SuperLeadzNavigation = [
   {
     id: 'support',
     title: 'Support',
-    icon: <AiFillPhone size={16} />,
+    icon: <img style={{ marginRight: "1.1rem" }} src={twentyfourseven} width={16} />,
     navLink: '/merchant/support/'
   }
 ]

@@ -1,4 +1,5 @@
 import { BookOpen, Circle, Home, User } from 'react-feather'
+import twentyfourseven from "../../views/SuperLeadz/assets/2020773.png"
 
 export default [
   {
@@ -175,7 +176,7 @@ export default [
       {
         id: 'support',
         title: 'Support',
-        icon: <Circle size={16} />,
+        icon: <img src={twentyfourseven} width={16} />,
         navLink: '/merchant/support/'
       },
       {
