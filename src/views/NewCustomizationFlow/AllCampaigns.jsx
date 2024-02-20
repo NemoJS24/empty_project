@@ -24,7 +24,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
     const [count, setCount] = useState(0)
     const navigate = useNavigate()
     const [viewType, setViewType] = useState("table")
-
+    const [toggledClearRows, setToggleClearRows] = useState(false)
     const [allCampaigns, setAllCampaigns] = useState([])
     const [isLoading, setIsLoading] = useState(true)
 
@@ -39,6 +39,8 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
     const [checkedThemes, setCheckedThemes] = useState([])
     const [deleteMode, setDeleteMode] = useState("single")
     const condition = ''
+
+    console.log(checkedThemes, "checkedThemes")
 
     const [modal1, setModal1] = useState(false)
 
@@ -134,6 +136,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                 console.log({ data })
                 toast.success(data.data.message)
                 setCheckedThemes([])
+                setToggleClearRows(!toggledClearRows)
                 getAllThemes()
             })
             .catch((error) => {
@@ -401,7 +404,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
         return <CampaignWiseData campaignData={data.data} />
     }
 
-    const deleteContent = <button onClick={() => {
+    const deleteContent = checkedThemes.length > 0 && <button onClick={() => {
         setDeleteMode("multiple")
         setDeleteModal(!deleteModal)
     }} className="btn btn-danger d-block">Deleting {checkedThemes.length} items</button>
@@ -462,6 +465,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                                 createLink={"/merchant/SuperLeadz/Themes/"}
                                 createText={"Create Campaign"}
                                 setViewType={setViewType}
+                                toggledClearRows={toggledClearRows}
                                 viewContent={
                                     allCampaigns.length > 0 ? <Row>
                                         {

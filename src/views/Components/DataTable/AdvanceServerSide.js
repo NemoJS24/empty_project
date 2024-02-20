@@ -1,5 +1,5 @@
 // ** React Imports
-import { Fragment, useCallback, useContext, useEffect, useState } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 // ** Third Party Components
 import ReactPaginate from 'react-paginate'
 import { ArrowLeft, ChevronDown, File, FileText, Grid, Share, Sliders, Table, X } from 'react-feather'
@@ -19,7 +19,7 @@ import moment from 'moment'
 // import { Link } from 'react-router-dom'
 // import { pageNo } from '../../Validator'
 
-const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpand, ExpandableTable, custom, isStyling, selectableRows = false, selectedRows, setSelectedRows, getData, exportUrl, viewAll, isExport, selectedContent, advanceFilter, viewType = "table", setViewType, viewContent, deleteContent, create, createLink, createText }) => {
+const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpand, ExpandableTable, custom, isStyling, selectableRows = false, selectedRows, setSelectedRows, getData, exportUrl, viewAll, isExport, selectedContent, advanceFilter, viewType = "table", setViewType, viewContent, deleteContent, create, createLink, createText, toggledClearRows }) => {
   // ** State
   const [currentPage, setCurrentPage] = useState(0)
   const [currentEntry, setCurrentEntry] = useState(custom ? 5 : 10)
@@ -28,6 +28,7 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
     range: "ALL",
     selectedData: []
   })
+  
   const [searchValue, setSearchValue] = useState("")
   const [apiLoader, setApiLoader] = useState(false)
   const outletData = getCurrentOutlet()
@@ -236,9 +237,9 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
     }
   }
 
-  const handleRowSelected = useCallback(state => {
+  const handleRowSelected = (state) => {
     setSelectedRows(state.selectedRows.map((curElem) => curElem))
-  }, [])
+  }
 
   const handleAdvanceSearch = (e) => {
     setAdvanceSearchValue({ ...advanceSearchValue, [e.target.name]: e.target.value })
@@ -400,6 +401,7 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
           progressComponent={<Spinner size="40px" />}
           selectableRows={selectableRows}
           onSelectedRowsChange={handleRowSelected}
+          clearSelectedRows={toggledClearRows}
           expandableRows={isExpand}
           expandOnRowClicked={isExpand}
           expandableRowsComponent={ExpandableTable}

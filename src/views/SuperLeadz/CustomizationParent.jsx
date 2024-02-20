@@ -3447,15 +3447,15 @@ const CustomizationParent = () => {
                 app: "superleadz"
             })
         })
-            .then((resp) => resp.json())
-            .then((data) => {
-                setGotOffers(true)
-                setAllOffers(data)
-            })
-            .catch((error) => {
-                setGotOffers(true)
-                console.log(error)
-            })
+        .then((resp) => resp.json())
+        .then((data) => {
+            setGotOffers(true)
+            setAllOffers(data)
+        })
+        .catch((error) => {
+            setGotOffers(true)
+            console.log(error)
+        })
     }
 
     const handleRearrangeElement = (e) => {
