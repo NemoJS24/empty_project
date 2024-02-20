@@ -124,10 +124,10 @@ const CampaignWiseData = ({campaignData}) => {
                             <RenderData title="Impressions" data={campaignData[`${condition}pop_up_view`]} info={`Number of times pop-up was shown.`} />
                         </Col>
                         <Col md="3">
-                            <RenderData title="Conversions" data={campaignData?.conversion} info={`Number of redemptions.`} />
+                            <RenderData title="Conversions" data={campaignData[`${condition}conversion`]} info={`Number of redemptions.`} />
                         </Col>
                         <Col md="3">
-                            <RenderData title="Conversion %" data={`${Number(campaignData?.conversion_rate).toFixed(2)}%`} info={`(Number of redemptions / Total number of leads) * 100`} />
+                            <RenderData title="Conversion %" data={`${Number(campaignData[`${condition}conversion_rate`]).toFixed(2)}%`} info={`(Number of redemptions / Total number of leads) * 100`} />
                         </Col>
                         <Col md="3">
                             <RenderData title="Engaged" data={campaignData[`${condition}clicks`]} info={`Number of clicks in the pop-up`} />
@@ -136,16 +136,16 @@ const CampaignWiseData = ({campaignData}) => {
                             <RenderData title="CTR" data={`${(campaignData?.clicks && campaignData[`${condition}pop_up_view`]) ? Number(campaignData[`${condition}clicks`] / campaignData[`${condition}pop_up_view`] * 100).toFixed(2) : 0}%`} info={`(Number of clicks / Number of impressions) * 100`} />
                         </Col>
                         <Col md="3">
-                            <RenderData title="Revenue" data={campaignData?.Revenue} info={`Redemption amount`} />
+                            <RenderData title="Revenue" data={campaignData[`${condition}Revenue`]} info={`Redemption amount`} />
                         </Col>
                         <Col md="3">
                             <RenderData title="Immediately closed" data={campaignData[`${condition}immediate_closed`] ? campaignData[`${condition}immediate_closed`] : 0} info={`Pop-up closed within 2 second`} />
                         </Col>
                         <Col md="3">
-                            <RenderData title="Leads" data={campaignData?.total_leads} info={`Number of leads (total)`} />
+                            <RenderData title="Leads" data={campaignData[`${condition}total_leads`]} info={`Number of leads (total)`} />
                         </Col>
                         <Col md="3">
-                            <RenderData title="Offers sent" data={campaignData?.offer_sent} info={`Number of offers displayed`} />
+                            <RenderData title="Offers sent" data={campaignData[`${condition}offer_sent`]} info={`Number of offers displayed`} />
                         </Col>
                         <Col md="3">
                             <RenderData title="Redirected" data={campaignData[`${condition}offer_clicked`]} info={`Number of times they were redirected after clicking to redeem offer`} />

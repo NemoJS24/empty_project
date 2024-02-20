@@ -200,27 +200,30 @@ const Campaign = () => {
             <Card>
                 <CardBody className='d-flex justify-content-between align-items-center'>
                     <h4 className='mb-0'>Campaign Reports</h4>
-                    <select className='form-control' style={{ width: '120px' }} onChange={(e) => setSetFilterType(e.target.value)}>
+                    <div className='d-flex gap-1'>
+                        <select className='form-control' style={{ width: '120px' }} onChange={(e) => setSetFilterType(e.target.value)}>
+                            {
+                                options.map((curElem) => {
+                                    return <option value={curElem.value} selected={curElem.value === filterType}>{curElem.label}</option>
+                                })
+                            }
+
+                        </select>
+
                         {
-                            options.map((curElem) => {
-                                return <option value={curElem.value} selected={curElem.value === filterType}>{curElem.label}</option>
-                            })
+                            filterType === "custom" ? (
+                                <div className="custom">
+                                    <Flatpickr options={{ // Sets the minimum date as 14 days ago
+                                        maxDate: "today", // Sets the maximum date as today
+                                        mode: "range",
+                                        dateFormat: "Y-m-d"
+                                    }} className='form-control' value={selectedData} onChange={(date) => setSelectedData(date)} id='default-picker' placeholder='Search' />
+
+                                </div>
+                            ) : ''
                         }
 
-                    </select>
-
-                    {
-                        filterType === "custom" ? (
-                            <div className="custom">
-                                <Flatpickr options={{ // Sets the minimum date as 14 days ago
-                                    maxDate: "today", // Sets the maximum date as today
-                                    mode: "range",
-                                    dateFormat: "Y-m-d"
-                                }} className='form-control' value={selectedData} onChange={(date) => setSelectedData(date)} id='default-picker' placeholder='Search' />
-
-                            </div>
-                        ) : ''
-                    }
+                    </div>
                 </CardBody>
             </Card>
             <Row className='match-height'>
@@ -318,7 +321,7 @@ const Campaign = () => {
                 </div>
 
                 <div className='col-md-6'>
-                    <CardCom icon={<Percent width={'25px'} />} title={<>Lead-to-Customer <br /> Conversion Rate</>} data={!isLoading ? `${performanceData?.leadToCustomer}%` : <Spinner size={'25px'} />} info={`(Unique Leads / Customers) * 100`} />
+                    <CardCom icon={<Percent width={'25px'} />} title={<>Lead-to-Customer <br /> Conversion Rate</>} data={!isLoading ? `${performanceData?.leadToCustomer}%` : <Spinner size={'25px'} />} info={`(Verified Leads / Customers) * 100`} />
                 </div>
 
             </Row>

@@ -757,7 +757,7 @@ function SuperLeadzDashboard() {
                 </div>
 
                 <div className='col-md-6 cursor-default'>
-                    <CardCom icon={<Percent width={'27px'} />} title={<>Lead-to-Customer <br /> Conversion Rate</>} data={!isLoading ? `${performanceData?.leadToCustomer}%` : <Spinner size={'25px'} />} info={`(Unique Leads / Customers) * 100`} />
+                    <CardCom icon={<Percent width={'27px'} />} title={<>Lead-to-Customer <br /> Conversion Rate</>} data={!isLoading ? `${performanceData?.leadToCustomer}%` : <Spinner size={'25px'} />} info={`(Verified Leads / Customers) * 100`} />
                 </div>
 
             </Row>

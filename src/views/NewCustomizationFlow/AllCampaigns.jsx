@@ -91,7 +91,11 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                 //         return curElem.theme_name.is_draft === 0
                 //     }))
                 // } else {
-                setAllCampaigns(data?.grid_view_data)
+                console.log(data?.grid_view_data, "data?.grid_view_data")
+                
+                const campaignData = data?.grid_view_data
+                campaignData[0].defaultExpanded = true
+                setAllCampaigns(campaignData)
                 // }
                 setIsLoading(false)
                 setCount(data?.total_count)
@@ -535,9 +539,9 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
 
                                                                 <GridCard title="Impressions" data={curElem[`${condition}pop_up_view`]} info={`Number of times pop-up was shown.`} />
 
-                                                                <GridCard title="Leads" data={curElem?.total_leads} info={`Number of leads (total)`} />
+                                                                <GridCard title="Leads" data={curElem[`${condition}total_leads`]} info={`Number of leads (total)`} />
 
-                                                                <GridCard title="Conversion %" data={`${Number(curElem?.conversion_rate).toFixed(2)}%`} info={`Number of leads (total) / Number of redemptions`} />
+                                                                <GridCard title="Conversion %" data={`${Number(curElem[`${condition}conversion_rate`]).toFixed(2)}%`} info={`Number of leads (total) / Number of redemptions`} />
 
                                                                 <GridCard title="CTR" data={`${(curElem?.clicks && curElem[`${condition}pop_up_view`]) ? Number(curElem[`${condition}clicks`] / curElem[`${condition}pop_up_view`] * 100).toFixed(2) : 0}%`} info={`Number of clicks / Number of impressions * 100`} />
 

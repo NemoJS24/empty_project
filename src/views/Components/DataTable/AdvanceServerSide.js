@@ -403,6 +403,7 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
           expandableRows={isExpand}
           expandOnRowClicked={isExpand}
           expandableRowsComponent={ExpandableTable}
+          expandableRowExpanded={row => row?.defaultExpanded}
         /> : <>
           {viewContent}
           {(Array.isArray(data) && data.length > 0) && <CustomPagination />}

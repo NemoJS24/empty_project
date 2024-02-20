@@ -127,8 +127,13 @@ export default function SuperLeadzLeads() {
         {
             name: 'Purchase',
             minWidth: '100px',
-            selector: row => <span style={{ marginTop: '3px' }}>{row?.is_purchase ? "Yes" : "No"}</span>,
-            type: 'text',
+            selector: row => <span style={{ marginTop: '3px' }}>{row?.is_purchased === 1 || row?.is_purchased === "1" ? "Yes" : "No"}</span>,
+            type: 'select',
+            options: [
+                { label: "Select", value: "" },
+                { label: "Yes", value: 1 },
+                { label: "No", value: 0 }
+            ],
             isEnable: true
         },
         {
