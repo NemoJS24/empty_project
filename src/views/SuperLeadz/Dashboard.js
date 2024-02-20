@@ -674,14 +674,13 @@ function SuperLeadzDashboard() {
                 </Col>
 
                 <div className='col-md-6 cursor-default'>
-                    <CardCom icon={<Check width={'27px'}/>} title={<>Remaining <br /> Visits</>} data={!chargesLoader ? Number(billing?.usage_charge) - Number(billing?.usage_count)  : <Spinner size={'25px'} />} info={`Total number of pop-ups (according to the plan) - number of pop-ups loaded on the website`} />
-                </div>
-                
-                <div className='col-md-6 cursor-default'>
                     <CardCom icon={<Check width={'27px'}/>} title={<>Active Campaigns</>} data={!isLoading ? performanceData.active_campaign : <Spinner size={'25px'} />} info={`Number of SuperLeadz campaigns i.e. pop-ups that are active on the website`} />
                 </div>
 
-
+                <div className='col-md-6 cursor-default'>
+                    <CardCom icon={<Check width={'27px'}/>} title={<>Remaining <br /> Visits</>} data={!chargesLoader ? Number(billing?.usage_charge) - Number(billing?.usage_count)  : <Spinner size={'25px'} />} info={`Total number of pop-ups (according to the plan) - number of pop-ups loaded on the website`} />
+                </div>
+                
                 <Col md="6" className='d-none'>
                     <Card>
                         <CardBody>
