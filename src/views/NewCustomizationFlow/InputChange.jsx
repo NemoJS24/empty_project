@@ -3,7 +3,7 @@ import { Link2 } from 'react-feather'
 
 const InputChange = ({ parentType, setMainStyle, mainStyle, mobileCondition, allValues, setAllValues, type, hideLabel }) => {
   const [linked, setLinked] = useState(false)
-  const [lastValue, setLastValue] = useState("")
+  const [lastValue, setLastValue] = useState("0px")
 
   const handleInputChange = (event) => {
 
