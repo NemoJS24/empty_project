@@ -229,7 +229,8 @@ const Campaign = () => {
             <Row className='match-height'>
 
                 <div className='col-md-6'>
-                    <CardCom icon={<Check width={'20px'} />} title={<>Remaining <br /> Visits</>} data={!chargesLoader ? Number(billing?.usage_charge) - Number(billing?.usage_count) : <Spinner size={'25px'} />} info={`Total number of pop-ups (according to the plan) - number of pop-ups loaded on the website`} />
+                    <CardCom icon={<UserPlus width={'25px'} />} title="Leads Generated" data={!isLoading ? performanceData?.leadsGenerated : <Spinner size={'25px'} />} info={`Total entries registered; including duplicates, verified or unverified`} />
+
                 </div>
 
                 <Col className='col-md-6'>
@@ -280,16 +281,15 @@ const Campaign = () => {
                 </Col>
 
                 <div className='col-md-6'>
+                    <CardCom icon={<Check width={'20px'} />} title={<>Remaining <br /> Visits</>} data={!chargesLoader ? Number(billing?.usage_charge) - Number(billing?.usage_count) : <Spinner size={'25px'} />} info={`Total number of pop-ups (according to the plan) - number of pop-ups loaded on the website`} />
+                </div>
+                <div className='col-md-6'>
                     <CardCom icon={<Check width={'25px'} />} title={<>Impressions</>} data={!isLoading ? performanceData.impressions : <Spinner size={'25px'} />} info={`Number of times the pop-up is shown`} />
                 </div>
 
+
                 <div className='col-md-6'>
                     <CardCom icon={<Check width={'25px'} />} title={<>Engaged</>} data={!isLoading ? performanceData.engaged : <Spinner size={'25px'} />} info={`Number of clicks on any button; inside the pop-up`} />
-                </div>
-
-                <div className='col-md-6'>
-                    <CardCom icon={<UserPlus width={'25px'} />} title="Leads Generated" data={!isLoading ? performanceData?.leadsGenerated : <Spinner size={'25px'} />} info={`Total entries registered; including duplicates, verified or unverified`} />
-
                 </div>
 
                 <div className='col-md-6'>
