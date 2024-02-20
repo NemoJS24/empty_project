@@ -137,7 +137,7 @@ export default function SuperLeadzLeads() {
             cell: (row) => {
                 return (
                     <div className='d-flex justify-content-start align-items-start flex-column'>
-                        <span>{row.is_offer ? "Verified" : "Not Verified"}</span>
+                        <span>{row.is_offer === 1 || row.is_offer === "1" ? "Verified" : "Not Verified"}</span>
                     </div>
                 )
             },
