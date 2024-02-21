@@ -658,7 +658,7 @@ const CustomizationParent = () => {
             const newObj = { ...finalObj }
             const pageIndex = newObj?.pages?.findIndex($ => $.id === currPage)
             const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $.id === currPage)
-            const defaultStyles =  transferedData === "input" ? {...elementStyles?.[transferedData], fontFamily: finalObj?.fontFamilies?.secondary} : elementStyles?.[transferedData]
+            const defaultStyles = transferedData === "input" ? { ...elementStyles?.[transferedData], fontFamily: finalObj?.fontFamilies?.secondary } : elementStyles?.[transferedData]
             const updatedColWise = currPage === "button" ? newObj?.button?.map((col, index) => {
                 if (index === id) {
                     const updatedElements = col?.elements?.map((ele) => {
@@ -2850,7 +2850,7 @@ const CustomizationParent = () => {
         } else if (selectedType === "display_when") {
             return (
                 <div className='py-1 px-2 mt-1'>
-                    <h4 className='mb-2'>When to display</h4>
+                    <h4 className='mb-2'>Display Conditions</h4>
                     <div className="form-check mb-2">
                         <input checked={finalObj?.rules?.display_when === "immediately"} onChange={updateRules} type="radio" name='display_when' id='immediately' value={"immediately"} className="form-check-input cursor-pointer" /><label className="cursor-pointer" style={{ fontSize: "13px" }} htmlFor="immediately">Immediately</label>
                     </div>
@@ -2861,13 +2861,13 @@ const CustomizationParent = () => {
                         <input checked={finalObj?.rules?.display_when === "button_click"} onChange={updateRules} type="radio" name='display_when' id='button_click' value={"button_click"} className="form-check-input cursor-pointer" /><label htmlFor="button_click" className="cursor-pointer" style={{ fontSize: "13px" }}>On Button Click</label>
                     </div>
                     <div className="form-check mb-2">
-                        <input checked={finalObj?.rules?.display_when === "any_condition_met"} onChange={updateRules} type="radio" name='display_when' id='any_condition_met' value={"any_condition_met"} className="form-check-input cursor-pointer" /><label htmlFor="any_condition_met" className="cursor-pointer" style={{ fontSize: "13px" }}>When any Condition is met</label>
+                        <input checked={finalObj?.rules?.display_when === "any_condition_met"} onChange={updateRules} type="radio" name='display_when' id='any_condition_met' value={"any_condition_met"} className="form-check-input cursor-pointer" /><label htmlFor="any_condition_met" className="cursor-pointer" style={{ fontSize: "13px" }}>Other Conditions</label>
                     </div>
 
                     {
                         finalObj?.rules?.display_when === "any_condition_met" ? <>
                             <div className="form-check form-switch mb-1">
-                                <input onChange={updateRules} checked={finalObj?.rules?.spent_on_page} type="checkbox" role='switch' id='spent_on_page' name={"spent_on_page"} className="form-check-input cursor-pointer" /><label htmlFor="spent_on_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Spend on the Page</label>
+                                <input onChange={updateRules} checked={finalObj?.rules?.spent_on_page} type="checkbox" role='switch' id='spent_on_page' name={"spent_on_page"} className="form-check-input cursor-pointer" /><label htmlFor="spent_on_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Time spend on the page</label>
                             </div>
                             {finalObj?.rules?.spent_on_page && (  //condition here
                                 <div className="d-flex gap-1 mb-2">
@@ -2887,7 +2887,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.spent_on_website} onChange={updateRules} type="checkbox" role='switch' id='spent_on_website' name={"spent_on_website"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="spent_on_website" className="cursor-pointer" style={{ fontSize: "13px" }}>Spend on the Website</label>
+                                <label htmlFor="spent_on_website" className="cursor-pointer" style={{ fontSize: "13px" }}>Time spend on the Website</label>
                             </div>
                             {finalObj?.rules?.spent_on_website && (  //condition here  
                                 <div className="d-flex gap-1 mb-2">
@@ -2907,7 +2907,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.read_page_by} onChange={updateRules} type="checkbox" role='switch' id='read_page_by' name={"read_page_by"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="read_page_by" className="cursor-pointer" style={{ fontSize: "13px" }}>Read the page by</label>
+                                <label htmlFor="read_page_by" className="cursor-pointer" style={{ fontSize: "13px" }}>Page scroll percentage</label>
                             </div>
                             {finalObj?.rules?.read_page_by && (  //condition here
                                 <div className="d-flex gap-1 mb-2 justify-content-start align-items-center">
@@ -2920,7 +2920,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.visited} onChange={updateRules} type="checkbox" role='switch' id='visited' name={"visited"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="visited" className="cursor-pointer" style={{ fontSize: "13px" }}>Visited</label>
+                                <label htmlFor="visited" className="cursor-pointer" style={{ fontSize: "13px" }}>Number of page visits</label>
                             </div>
                             {finalObj?.rules?.visited && (  //condition here
                                 <div className="d-flex gap-1 mb-2 justify-content-start align-items-center">
@@ -2929,7 +2929,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.not_active_page} onChange={updateRules} type="checkbox" role='switch' id='not_active_page' name={"not_active_page"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="not_active_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Not active on the page</label>
+                                <label htmlFor="not_active_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Page inactivity period</label>
                             </div>
                             {finalObj?.rules?.not_active_page && (  //condition here
                                 <div className="d-flex gap-1 mb-2">
@@ -2958,10 +2958,13 @@ const CustomizationParent = () => {
         } else if (selectedType === "stop_display_when") {
             return (
                 <div className='py-1 px-2 mt-1'>
-                    <h4 className='mb-2'>When to Stop displaying</h4>
-
+                    <h4 className='mb-2'>Display Conclusion</h4>
+                    <p>Stop displaying pop-up after:</p>
                     <div className="form-check form-switch mb-1">
-                        <input checked={finalObj?.rules?.stop_display_pages} onChange={updateRules} type="checkbox" role='switch' id='stop_display_pages' name={"stop_display_pages"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_pages" className="cursor-pointer" style={{ fontSize: "13px" }}>After visiting {finalObj?.rules?.stop_display_pages_value} page(s)</label>
+                        <input checked={finalObj?.rules?.stop_display_pages} onChange={updateRules} type="checkbox" role='switch' id='stop_display_pages' name={"stop_display_pages"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_pages" className="cursor-pointer" style={{ fontSize: "13px" }}>
+                            {/* After visiting {finalObj?.rules?.stop_display_pages_value} page(s) */}
+                            Page visit/s
+                        </label>
                     </div>
                     {finalObj?.rules?.stop_display_pages && (  //condition here
                         <div className="d-flex gap-1 mb-1">
@@ -2973,7 +2976,10 @@ const CustomizationParent = () => {
                         </div>
                     )}
                     <div className="form-check form-switch mb-1">
-                        <input checked={finalObj?.rules?.stop_display_after_closing} onChange={updateRules} type="checkbox" role='switch' id='stop_display_after_closing' name={"stop_display_after_closing"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_after_closing" className="cursor-pointer" style={{ fontSize: "13px" }}>After closing {finalObj?.rules?.stop_display_after_closing_value} time(s)</label>
+                        <input checked={finalObj?.rules?.stop_display_after_closing} onChange={updateRules} type="checkbox" role='switch' id='stop_display_after_closing' name={"stop_display_after_closing"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_after_closing" className="cursor-pointer" style={{ fontSize: "13px" }}>
+                            {/* After closing {finalObj?.rules?.stop_display_after_closing_value} time(s) */}
+                            Page closure/s
+                            </label>
                     </div>
                     {finalObj?.rules?.stop_display_after_closing && (  //condition here
                         <div className="d-flex gap-1 justify-content-start align-items-center mb-1">
@@ -2990,7 +2996,7 @@ const CustomizationParent = () => {
         } else if (selectedType === "on_pages") {
             return (
                 <div className='py-1 px-2 mt-1'>
-                    <h4 className='mb-2'>Visible on</h4>
+                    <h4 className='mb-2'>Display Location</h4>
                     <div className="row">
                         {pagesSelection?.map((ele, key) => {
                             return (
@@ -3022,7 +3028,7 @@ const CustomizationParent = () => {
                                             const newObj = { ...finalObj }
                                             newObj.behaviour.CUSTOM_PAGE_LINK[key] = e.target.value
                                             updatePresent(newObj)
-                                        }} value={ele} className='form-control' type="text" placeholder={`www.url-example${key + 1}.com`} />{finalObj.behaviour.CUSTOM_PAGE_LINK.length > 1 && <span onClick={() => {
+                                        }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj.behaviour.CUSTOM_PAGE_LINK.length > 1 && <span onClick={() => {
                                             const newObj = { ...finalObj }
                                             newObj?.behaviour?.CUSTOM_PAGE_LINK?.splice(key, 1)
                                             updatePresent(newObj)
@@ -3448,15 +3454,15 @@ const CustomizationParent = () => {
                 app: "superleadz"
             })
         })
-        .then((resp) => resp.json())
-        .then((data) => {
-            setGotOffers(true)
-            setAllOffers(data)
-        })
-        .catch((error) => {
-            setGotOffers(true)
-            console.log(error)
-        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                setGotOffers(true)
+                setAllOffers(data)
+            })
+            .catch((error) => {
+                setGotOffers(true)
+                console.log(error)
+            })
     }
 
     const handleRearrangeElement = (e) => {
