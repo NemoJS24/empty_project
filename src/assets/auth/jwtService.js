@@ -171,7 +171,13 @@ export const configUrl = {
     saveUser: "/member/member_permission/",
     memebersDetails: "/member/members_details/",
     getAllCustomer: "/customers/get_customers/",
-    cross_leads: "/customers/cross_leads/"
+    cross_leads: "/customers/cross_leads/",
+    add_leads: '/customers/merchant/add_leads/',
+    leads_get:'/customers/merchant/leads_get/',
+    leads_stage_get:'/customers/merchant/leads_stage_get/',
+    leads_stage_table:'/customers/merchant/leads_stage_table/',
+    leadstable_get_view:'/customers/merchant/leadstable_get_view/',
+    lead_stage_add:'/customers/merchant/leads_stage_add/'
 }
 
 const axiosInstance = axios.create({

@@ -36,6 +36,9 @@ const Insurance = lazy(() => import('../../views/Leads/Insurance'))
 import AddCall from '../../views/CRM/Call/AddCall'
 import Vehicle from '../../views/Leads/Vehicle'
 import CrossLeads from '../../views/Leads/CrossLeads'
+import LeadsMain from '../../views/CRM/Leads/LeadsMain'
+import LeadsSetting from '../../views/CRM/Leads/LeadsSetting'
+import Leads_dashboard from '../../views/Leads/Leads_Dashboard'
 
 const appName = "crm"
 const Customers_Routes = [
@@ -357,6 +360,22 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/add_call/:id',
     element: <AddCall />
+  },
+  {
+    path: '/merchant/customers/leads',
+    element: <Leads_dashboard />
+  },
+  {
+    path: '/merchant/customers/add_lead',
+    element: <LeadsMain />
+  },
+  {
+    path: '/merchant/customer/leads_settings',
+    element: <LeadsSetting />
+  },
+  {
+    path: '/merchant/customers/lead/edit_lead/:id',
+    element: <LeadsMain />
   }
 ]
 
