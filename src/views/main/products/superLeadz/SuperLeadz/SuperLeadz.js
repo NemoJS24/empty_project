@@ -151,7 +151,7 @@ export const superFaqData = [
     //                 <p> c. Buy X, Get Y: Customers receive a discount on the second or subsequent
     //                 products when they purchase the first product in a specified quantity or reach a
     //                 certain total purchase amount.</p>
-                
+
     //         </div>
     //     )
     // },
@@ -165,7 +165,7 @@ export const superFaqData = [
     //                 product or the total purchase amount.</p>
     //                 <p> b. Flat Amount off - A specific monetary value deducted from the original price of a
     //                 product or the total purchase amount.</p>
-                
+
     //         </div>
     //     )
     // },
@@ -181,7 +181,7 @@ export const superFaqData = [
     //                 to be eligible for the offer</p>
     //                 <p> b. Cart Quantity: Set conditions based on the number of items or quantity of products in the
     //                 shopping cart.</p>
-                
+
     //         </div>
     //     )
     // },
@@ -383,7 +383,7 @@ export default function SuperLeadz() {
                         Who is a SuperLead?
                     </h1>
                     <Row className='justify-content-center  px-1 ' >
-                        <Col  md="8" className=' text-center main-heading  ' >
+                        <Col md="8" className=' text-center main-heading  ' >
                             <h1 className='text-center text-black ' >A high-potential customer who willfully shares and verifies their contact information to receive an incentive, thus demonstrating a clear intent to purchase.</h1>
 
                         </Col>

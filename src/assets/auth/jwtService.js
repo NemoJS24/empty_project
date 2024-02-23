@@ -18,6 +18,7 @@ import { Navigate } from "react-router-dom"
 export const baseURL = "https://api.xircls.com"
 export const SuperLeadzBaseURL = "https://apps.xircls.com"
 export const crmURL = "https://crm.xircls.com"
+export const affiliateURL = "https://api.affiliate.xircls.com"
 
 export const configUrl = {
 

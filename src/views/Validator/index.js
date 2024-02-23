@@ -2,7 +2,7 @@ import toast from "react-hot-toast"
 import $ from "jquery"
 import { PermissionProvider } from "../../Helper/Context"
 import { useContext } from "react"
-import { SuperLeadzBaseURL, baseURL } from "../../assets/auth/jwtService"
+import { SuperLeadzBaseURL, affiliateURL } from "../../assets/auth/jwtService"
 import moment from "moment/moment"
 
 export const imageValidation = (e, size = 100) => {
@@ -261,7 +261,7 @@ export const affiliateTracking = (aft_no) => {
             form_data.append("ip_address", resp?.ip_address)
             form_data.append("link", location.pathname)
 
-            fetch(`${baseURL}/affiliate/create_affiliate_click/`, {
+            fetch(`${affiliateURL}/affiliate/record/create_affiliate_click/`, {
                 method: "POST",
                 body: form_data
             })
