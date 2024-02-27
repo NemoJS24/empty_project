@@ -171,23 +171,31 @@ const RenderPreview = (props) => {
                             <p>Set specific rules for this campaign</p>
                         </div>
                         <div className="col-md-10 offset-md-1">
-                            <Card className={`${currPosition?.selectedType === "display_frequency" ? "card_active" : ""}`} style={{ boxShadow: `rgba(100, 100, 111, 0.2) 0px 7px 29px 0px`, cursor: 'pointer' }}
-                                onClick={() => setCurrPosition({ ...currPosition, selectedType: "display_frequency" })}
+                            <Card className={`${currPosition?.selectedType === "on_pages" ? "card_active" : ""}`} style={{ boxShadow: `rgba(100, 100, 111, 0.2) 0px 7px 29px 0px`, cursor: 'pointer' }}
+                                onClick={() => setCurrPosition({ ...currPosition, selectedType: "on_pages" })}
                             >
                                 <CardBody>
                                     <div className='d-flex justify-content-between align-items-center'>
                                         <div className="d-flex justify-content-start align-items-center gap-1">
                                             <div className="icon" style={{ padding: '10px', backgroundColor: '#f4f4f4', borderRadius: '7px' }}>
-                                                <ImDisplay size="18px" />
+                                                <Airplay size="18px" />
                                             </div>
-                                            <h5 className='m-0'>Display Frequency</h5>
+                                            <h5 className='m-0'>Display Location</h5>
                                         </div>
                                         <div>
                                             {
-                                                finalObj?.rules?.display_frequency ? <List>
-                                                    <div className='list'><li style={{ fontSize: "14px", fontWeight: "500" }}>{capitalizeFirstLetter(finalObj.rules.display_frequency.replace(/_/g, ' '))}</li></div>
-                                                </List> : ""
+                                                finalObj?.behaviour?.PAGES ? finalObj.behaviour.PAGES.map((page, index) => (
+                                                    index === 0 ? <>
+                                                        <div className='list'><li style={{ fontSize: "14px", fontWeight: "500" }} key={index}>{capitalizeFirstLetter(page.replace(/_/g, ' '))}</li></div>
+                                                        {index > -1 && (
+                                                            <div className='d-flex justify-content-end '>
+                                                                <span className=' text-primary'>View all</span>
+                                                            </div>
+                                                        )}
+                                                    </> : ''
+                                                )) : ""
                                             }
+
                                         </div>
                                     </div>
                                 </CardBody>
@@ -201,7 +209,7 @@ const RenderPreview = (props) => {
                                             <div className="icon" style={{ padding: '10px', backgroundColor: '#f4f4f4', borderRadius: '7px' }}>
                                                 <ImDisplay size="18px" />
                                             </div>
-                                            <h5 className='m-0'>When to display</h5>
+                                            <h5 className='m-0'>Display Conditions</h5>
                                         </div>
                                         <div>
                                             {
@@ -227,6 +235,27 @@ const RenderPreview = (props) => {
                                     </div>
                                 </CardBody>
                             </Card>
+                            <Card className={`${currPosition?.selectedType === "display_frequency" ? "card_active" : ""}`} style={{ boxShadow: `rgba(100, 100, 111, 0.2) 0px 7px 29px 0px`, cursor: 'pointer' }}
+                                onClick={() => setCurrPosition({ ...currPosition, selectedType: "display_frequency" })}
+                            >
+                                <CardBody>
+                                    <div className='d-flex justify-content-between align-items-center'>
+                                        <div className="d-flex justify-content-start align-items-center gap-1">
+                                            <div className="icon" style={{ padding: '10px', backgroundColor: '#f4f4f4', borderRadius: '7px' }}>
+                                                <ImDisplay size="18px" />
+                                            </div>
+                                            <h5 className='m-0'>Display Frequency</h5>
+                                        </div>
+                                        <div>
+                                            {
+                                                finalObj?.rules?.display_frequency ? <List>
+                                                    <div className='list'><li style={{ fontSize: "14px", fontWeight: "500" }}>{capitalizeFirstLetter(finalObj.rules.display_frequency.replace(/_/g, ' '))}</li></div>
+                                                </List> : ""
+                                            }
+                                        </div>
+                                    </div>
+                                </CardBody>
+                            </Card>
                             <Card className={`${currPosition?.selectedType === "stop_display_when" ? "card_active" : ""}`} style={{ boxShadow: `rgba(100, 100, 111, 0.2) 0px 7px 29px 0px`, cursor: 'pointer' }}
                                 onClick={() => setCurrPosition({ ...currPosition, selectedType: "stop_display_when" })}
                             >
@@ -236,7 +265,7 @@ const RenderPreview = (props) => {
                                             <div className="icon" style={{ padding: '10px', backgroundColor: '#f4f4f4', borderRadius: '7px' }}>
                                                 <StopCircle size="18px" />
                                             </div>
-                                            <h5 className='m-0'>When to Stop displaying</h5>
+                                            <h5 className='m-0'>Display Conclusion</h5>
                                         </div>
                                         <div>
                                             {
@@ -251,35 +280,6 @@ const RenderPreview = (props) => {
                                                     </> : ''
                                                 ))
                                             }
-                                        </div>
-                                    </div>
-                                </CardBody>
-                            </Card>
-                            <Card className={`${currPosition?.selectedType === "on_pages" ? "card_active" : ""}`} style={{ boxShadow: `rgba(100, 100, 111, 0.2) 0px 7px 29px 0px`, cursor: 'pointer' }}
-                                onClick={() => setCurrPosition({ ...currPosition, selectedType: "on_pages" })}
-                            >
-                                <CardBody>
-                                    <div className='d-flex justify-content-between align-items-center'>
-                                        <div className="d-flex justify-content-start align-items-center gap-1">
-                                            <div className="icon" style={{ padding: '10px', backgroundColor: '#f4f4f4', borderRadius: '7px' }}>
-                                                <Airplay size="18px" />
-                                            </div>
-                                            <h5 className='m-0'>On Pages</h5>
-                                        </div>
-                                        <div>
-                                            {
-                                                finalObj?.behaviour?.PAGES ? finalObj.behaviour.PAGES.map((page, index) => (
-                                                    index === 0 ? <>
-                                                        <div className='list'><li style={{ fontSize: "14px", fontWeight: "500" }} key={index}>{capitalizeFirstLetter(page.replace(/_/g, ' '))}</li></div>
-                                                        {index > -1 && (
-                                                            <div className='d-flex justify-content-end '>
-                                                                <span className=' text-primary'>View all</span>
-                                                            </div>
-                                                        )}
-                                                    </> : ''
-                                                )) : ""
-                                            }
-
                                         </div>
                                     </div>
                                 </CardBody>

@@ -658,7 +658,7 @@ const CustomizationParent = () => {
             const newObj = { ...finalObj }
             const pageIndex = newObj?.pages?.findIndex($ => $.id === currPage)
             const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $.id === currPage)
-            const defaultStyles =  transferedData === "input" ? {...elementStyles?.[transferedData], fontFamily: finalObj?.fontFamilies?.secondary} : elementStyles?.[transferedData]
+            const defaultStyles = transferedData === "input" ? { ...elementStyles?.[transferedData], fontFamily: finalObj?.fontFamilies?.secondary } : elementStyles?.[transferedData]
             const updatedColWise = currPage === "button" ? newObj?.button?.map((col, index) => {
                 if (index === id) {
                     const updatedElements = col?.elements?.map((ele) => {
@@ -2850,7 +2850,7 @@ const CustomizationParent = () => {
         } else if (selectedType === "display_when") {
             return (
                 <div className='py-1 px-2 mt-1'>
-                    <h4 className='mb-2'>When to display</h4>
+                    <h4 className='mb-2'>Display Conditions</h4>
                     <div className="form-check mb-2">
                         <input checked={finalObj?.rules?.display_when === "immediately"} onChange={updateRules} type="radio" name='display_when' id='immediately' value={"immediately"} className="form-check-input cursor-pointer" /><label className="cursor-pointer" style={{ fontSize: "13px" }} htmlFor="immediately">Immediately</label>
                     </div>
@@ -2861,13 +2861,13 @@ const CustomizationParent = () => {
                         <input checked={finalObj?.rules?.display_when === "button_click"} onChange={updateRules} type="radio" name='display_when' id='button_click' value={"button_click"} className="form-check-input cursor-pointer" /><label htmlFor="button_click" className="cursor-pointer" style={{ fontSize: "13px" }}>On Button Click</label>
                     </div>
                     <div className="form-check mb-2">
-                        <input checked={finalObj?.rules?.display_when === "any_condition_met"} onChange={updateRules} type="radio" name='display_when' id='any_condition_met' value={"any_condition_met"} className="form-check-input cursor-pointer" /><label htmlFor="any_condition_met" className="cursor-pointer" style={{ fontSize: "13px" }}>When any Condition is met</label>
+                        <input checked={finalObj?.rules?.display_when === "any_condition_met"} onChange={updateRules} type="radio" name='display_when' id='any_condition_met' value={"any_condition_met"} className="form-check-input cursor-pointer" /><label htmlFor="any_condition_met" className="cursor-pointer" style={{ fontSize: "13px" }}>Other Conditions</label>
                     </div>
 
                     {
                         finalObj?.rules?.display_when === "any_condition_met" ? <>
                             <div className="form-check form-switch mb-1">
-                                <input onChange={updateRules} checked={finalObj?.rules?.spent_on_page} type="checkbox" role='switch' id='spent_on_page' name={"spent_on_page"} className="form-check-input cursor-pointer" /><label htmlFor="spent_on_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Spend on the Page</label>
+                                <input onChange={updateRules} checked={finalObj?.rules?.spent_on_page} type="checkbox" role='switch' id='spent_on_page' name={"spent_on_page"} className="form-check-input cursor-pointer" /><label htmlFor="spent_on_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Time spend on the page</label>
                             </div>
                             {finalObj?.rules?.spent_on_page && (  //condition here
                                 <div className="d-flex gap-1 mb-2">
@@ -2887,7 +2887,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.spent_on_website} onChange={updateRules} type="checkbox" role='switch' id='spent_on_website' name={"spent_on_website"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="spent_on_website" className="cursor-pointer" style={{ fontSize: "13px" }}>Spend on the Website</label>
+                                <label htmlFor="spent_on_website" className="cursor-pointer" style={{ fontSize: "13px" }}>Time spend on the Website</label>
                             </div>
                             {finalObj?.rules?.spent_on_website && (  //condition here  
                                 <div className="d-flex gap-1 mb-2">
@@ -2907,7 +2907,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.read_page_by} onChange={updateRules} type="checkbox" role='switch' id='read_page_by' name={"read_page_by"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="read_page_by" className="cursor-pointer" style={{ fontSize: "13px" }}>Read the page by</label>
+                                <label htmlFor="read_page_by" className="cursor-pointer" style={{ fontSize: "13px" }}>Page scroll percentage</label>
                             </div>
                             {finalObj?.rules?.read_page_by && (  //condition here
                                 <div className="d-flex gap-1 mb-2 justify-content-start align-items-center">
@@ -2920,7 +2920,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.visited} onChange={updateRules} type="checkbox" role='switch' id='visited' name={"visited"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="visited" className="cursor-pointer" style={{ fontSize: "13px" }}>Visited</label>
+                                <label htmlFor="visited" className="cursor-pointer" style={{ fontSize: "13px" }}>Number of page visits</label>
                             </div>
                             {finalObj?.rules?.visited && (  //condition here
                                 <div className="d-flex gap-1 mb-2 justify-content-start align-items-center">
@@ -2929,7 +2929,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.not_active_page} onChange={updateRules} type="checkbox" role='switch' id='not_active_page' name={"not_active_page"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="not_active_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Not active on the page</label>
+                                <label htmlFor="not_active_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Page inactivity period</label>
                             </div>
                             {finalObj?.rules?.not_active_page && (  //condition here
                                 <div className="d-flex gap-1 mb-2">
@@ -2958,10 +2958,13 @@ const CustomizationParent = () => {
         } else if (selectedType === "stop_display_when") {
             return (
                 <div className='py-1 px-2 mt-1'>
-                    <h4 className='mb-2'>When to Stop displaying</h4>
-
+                    <h4 className='mb-2'>Display Conclusion</h4>
+                    <p>Stop displaying pop-up after:</p>
                     <div className="form-check form-switch mb-1">
-                        <input checked={finalObj?.rules?.stop_display_pages} onChange={updateRules} type="checkbox" role='switch' id='stop_display_pages' name={"stop_display_pages"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_pages" className="cursor-pointer" style={{ fontSize: "13px" }}>After visiting {finalObj?.rules?.stop_display_pages_value} page(s)</label>
+                        <input checked={finalObj?.rules?.stop_display_pages} onChange={updateRules} type="checkbox" role='switch' id='stop_display_pages' name={"stop_display_pages"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_pages" className="cursor-pointer" style={{ fontSize: "13px" }}>
+                            {/* After visiting {finalObj?.rules?.stop_display_pages_value} page(s) */}
+                            Page visit/s
+                        </label>
                     </div>
                     {finalObj?.rules?.stop_display_pages && (  //condition here
                         <div className="d-flex gap-1 mb-1">
@@ -2973,7 +2976,10 @@ const CustomizationParent = () => {
                         </div>
                     )}
                     <div className="form-check form-switch mb-1">
-                        <input checked={finalObj?.rules?.stop_display_after_closing} onChange={updateRules} type="checkbox" role='switch' id='stop_display_after_closing' name={"stop_display_after_closing"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_after_closing" className="cursor-pointer" style={{ fontSize: "13px" }}>After closing {finalObj?.rules?.stop_display_after_closing_value} time(s)</label>
+                        <input checked={finalObj?.rules?.stop_display_after_closing} onChange={updateRules} type="checkbox" role='switch' id='stop_display_after_closing' name={"stop_display_after_closing"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_after_closing" className="cursor-pointer" style={{ fontSize: "13px" }}>
+                            {/* After closing {finalObj?.rules?.stop_display_after_closing_value} time(s) */}
+                            Page closure/s
+                            </label>
                     </div>
                     {finalObj?.rules?.stop_display_after_closing && (  //condition here
                         <div className="d-flex gap-1 justify-content-start align-items-center mb-1">
@@ -2990,7 +2996,7 @@ const CustomizationParent = () => {
         } else if (selectedType === "on_pages") {
             return (
                 <div className='py-1 px-2 mt-1'>
-                    <h4 className='mb-2'>Visible on</h4>
+                    <h4 className='mb-2'>Display Location</h4>
                     <div className="row">
                         {pagesSelection?.map((ele, key) => {
                             return (
@@ -3022,7 +3028,7 @@ const CustomizationParent = () => {
                                             const newObj = { ...finalObj }
                                             newObj.behaviour.CUSTOM_PAGE_LINK[key] = e.target.value
                                             updatePresent(newObj)
-                                        }} value={ele} className='form-control' type="text" placeholder={`www.url-example${key + 1}.com`} />{finalObj.behaviour.CUSTOM_PAGE_LINK.length > 1 && <span onClick={() => {
+                                        }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj.behaviour.CUSTOM_PAGE_LINK.length > 1 && <span onClick={() => {
                                             const newObj = { ...finalObj }
                                             newObj?.behaviour?.CUSTOM_PAGE_LINK?.splice(key, 1)
                                             updatePresent(newObj)
@@ -3448,15 +3454,15 @@ const CustomizationParent = () => {
                 app: "superleadz"
             })
         })
-        .then((resp) => resp.json())
-        .then((data) => {
-            setGotOffers(true)
-            setAllOffers(data)
-        })
-        .catch((error) => {
-            setGotOffers(true)
-            console.log(error)
-        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                setGotOffers(true)
+                setAllOffers(data)
+            })
+            .catch((error) => {
+                setGotOffers(true)
+                console.log(error)
+            })
     }
 
     const handleRearrangeElement = (e) => {
@@ -4801,41 +4807,6 @@ const CustomizationParent = () => {
                                                                         />
                                                                     </g>
                                                                 </svg>
-                                                            ) : currPage !== "button" ? (
-                                                                <svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    viewBox="0 0 184.45 367.2"
-                                                                    style={{ width: "75px" }}
-                                                                    property="globalStyle.overlay.mobilePosition"
-                                                                >
-                                                                    <g id="mobile-position">
-                                                                        <rect x="11.76" y="239.71" width="162.2" height="116.24" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "BC" } })} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231f20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "BC" ? "#464646" : "#ffffff"} />
-                                                                        <rect x="11.99" y="124.46" width="162.2" height="116.24" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "MC" } })} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231f20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "MC" ? "#464646" : "#ffffff"} />
-                                                                        <rect x="11.61" y="9.2" width="162.2" height="116.24" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "TC" } })} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231f20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "TC" ? "#464646" : "#ffffff"} />
-                                                                    </g>
-                                                                    <path
-                                                                        fill="#58595b"
-                                                                        d="M182.49,26.65A26.65,26.65,0,0,0,155.84,0H28.61A26.65,26.65,0,0,0,2,26.65v313.9A26.65,26.65,0,0,0,28.61,367.2H155.84a26.65,26.65,0,0,0,26.65-26.65ZM178.4,340.29a22.82,22.82,0,0,1-22.82,22.82H28.36A22.82,22.82,0,0,1,5.54,340.29V26.4A22.82,22.82,0,0,1,28.36,3.58H155.58A22.82,22.82,0,0,1,178.4,26.4Z"
-                                                                    />
-                                                                    <path
-                                                                        d="M2,48.47H1.72A1.72,1.72,0,0,0,0,50.19V60.65a1.71,1.71,0,0,0,1.72,1.71H2"
-                                                                    />
-                                                                    <path
-                                                                        d="M182.49,126.27h0a2,2,0,0,0,2-2V85.48a2,2,0,0,0-2-2h0"
-                                                                    />
-                                                                    <path
-                                                                        d="M2,75.21H2a2,2,0,0,0-2,2V99.25a2,2,0,0,0,2,2H2"
-                                                                    />
-                                                                    <path
-                                                                        d="M2,108.58H2a2,2,0,0,0-2,2v22.08a2,2,0,0,0,2,2H2"
-                                                                    />
-                                                                    <path
-                                                                        fill="#231f20"
-                                                                        d="M178.4,26.4A22.82,22.82,0,0,0,155.58,3.58H28.36A22.82,22.82,0,0,0,5.54,26.4V340.29a22.82,22.82,0,0,0,22.82,22.82H155.58a22.82,22.82,0,0,0,22.82-22.82ZM113.31,12.54a2.24,2.24,0,1,1-2.24-2.23A2.24,2.24,0,0,1,113.31,12.54ZM82.88,11.25h19.94a1.4,1.4,0,0,1,1.54,1.28,1.4,1.4,0,0,1-1.54,1.28H82.88a1.4,1.4,0,0,1-1.54-1.28A1.4,1.4,0,0,1,82.88,11.25Zm89.89,328.42c0,8.93-7.48,15.77-16.41,15.77H29a15.53,15.53,0,0,1-15.81-15.77V26A16,16,0,0,1,29,9.72H43.74c3.11,0,4.26,0,4.45,4,.2,4.1,3,6.33,6.82,7.53a14,14,0,0,0,4.1.27H126.4a14.07,14.07,0,0,0,4.11-.17c3.81-1.2,6.62-3.63,6.82-7.72s1.33-3.87,4.45-3.87h14.58A16.5,16.5,0,0,1,172.77,26Z"
-                                                                    />
-                                                                    <circle cx="111.07" cy="12.54" r="2.24" />
-                                                                    <path d="M82.88,13.81h19.94a1.4,1.4,0,0,0,1.54-1.28,1.4,1.4,0,0,0-1.54-1.28H82.88a1.4,1.4,0,0,0-1.54,1.28A1.4,1.4,0,0,0,82.88,13.81Z" />
-                                                                </svg>
                                                             ) : (
                                                                 <svg style={{ width: "75px" }} viewBox="0 0 185 368" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                     <g clip-path="url(#clip0_0_1)">
@@ -4843,7 +4814,7 @@ const CustomizationParent = () => {
                                                                         <path d="M120 258H66V356H120V258Z" stroke="#231F20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "BC" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "BC" } })} />
                                                                         <path d="M66 258H12V356H66V258Z" stroke="#231F20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "BL" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "BL" } })} />
                                                                         <path d="M174 108H120V258H174V108Z" stroke="#231F20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "MR" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "MR" } })} />
-                                                                        <path d="M120 108H66V258H120V108Z" stroke="#231F20" fill={"#cccccc"} style={{ cursor: "pointer", transition: "0.3s ease" }} />
+                                                                        <path d="M120 108H66V258H120V108Z" stroke="#231F20" fill={currPage === "button" ? "#cccccc" : finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "MC" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: currPage === "button" ? finalObj?.positions?.[`${mobileCondition}${pageCondition}`] : "MC" } })} />
                                                                         <path d="M66 108H12V258H66V108Z" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "ML" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231F20" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "ML" } })} />
                                                                         <path d="M174 9H120V108H174V9Z" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "TR" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231F20" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "TR" } })} />
                                                                         <path d="M120 9H66V108H120V9Z" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "TC" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231F20" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "TC" } })} />

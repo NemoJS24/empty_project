@@ -151,7 +151,7 @@ const CreateSupportTicket = ({ isQuick = false, setBug, data }) => {
           console.log(res)
           setProduct(res?.data.map((curElem) => {
             // if (userPermission?.installedApps.includes(curElem.name.toLowerCase())) {
-                return {value: curElem.name.toLowerCase(), label: `${curElem.name.replaceAll("_", " ")}`}
+                return {value: curElem.slug.toLowerCase(), label: `${curElem.name}`}
             // }
           }))
         })

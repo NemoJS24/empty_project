@@ -199,7 +199,6 @@ const SuperLeads_Routes = [
   },
   {
     path: '/merchant/create_support/',
-    app: appName,
     element: <CreateSupportTicket />
   },
   {

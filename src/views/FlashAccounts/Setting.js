@@ -437,10 +437,10 @@ const Setting = ({ isAdmin = false }) => {
     let saveTimer
 
     const handleSaveDataAdmin = (e, type) => {
-        if (prevData?.page_1?.campaignStartDate) {
-            toast.error("Please select a start date")
-            return
-        }
+        // if (prevData?.page_1?.campaignStartDate) {
+        //     toast.error("Please select a start date")
+        //     return
+        // }
         e.preventDefault()
         setApiLoader(true)
         const timeout = 300

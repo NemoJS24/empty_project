@@ -3,7 +3,7 @@
 // import { AiFillPhone, AiOutlineSmile } from "react-icons/ai"
 import { GoShieldCheck, GoTools } from "react-icons/go"
 import { DefaultNav } from "./DefualtNav"
-import { PiMoneyThin, PiShareNetworkThin } from "react-icons/pi"
+import { PiMoneyThin, PiShareNetworkThin, PiUsersThree } from "react-icons/pi"
 import { RiCarLine } from "react-icons/ri"
 import { ownUrl } from "../../views/Validator"
 
@@ -47,6 +47,12 @@ export const CRMNavigation = [
         title: 'Cross Leads',
         icon: <PiShareNetworkThin style={{ marginRight: '18px' }} />,
         navLink: '/merchant/customers/cross_leads'
+    },
+    {
+        id: 'leads',
+        title: 'Leads',
+        icon: <PiUsersThree style={{ marginRight: '18px' }} />,
+        navLink: '/merchant/customers/leads'
     }
 
 ]
