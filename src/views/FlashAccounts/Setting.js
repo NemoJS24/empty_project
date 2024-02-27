@@ -468,7 +468,7 @@ const Setting = ({ isAdmin = false }) => {
                 if (type === "Save & Close") {
                     navigate(-1)
                 } else {
-                    navigate(`/merchant/Flash_Accounts/settings/${data.data.theme_id}`, {replace: true})
+                    navigate(`/merchant/Flash_Accounts/settings/${data.data.theme_id}`, { replace: true })
                 }
             }).catch((error) => {
                 console.log({ error })
@@ -479,6 +479,7 @@ const Setting = ({ isAdmin = false }) => {
     }
 
     const handleSaveData = (e, type) => {
+        console.log({prevData})
         e.preventDefault()
         setApiLoader(true)
         const timeout = 300
@@ -520,7 +521,7 @@ const Setting = ({ isAdmin = false }) => {
                 if (type === "Save & Close") {
                     navigate(-1)
                 } else {
-                    navigate(`/merchant/Flash_Accounts/settings/${data.data.theme_id}`, {replace: true})
+                    navigate(`/merchant/Flash_Accounts/settings/${data.data.theme_id}`, { replace: true })
                 }
                 console.log(data)
             }).catch((error) => {
@@ -1322,7 +1323,7 @@ const Setting = ({ isAdmin = false }) => {
                                                         <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.hidePassword} id="hidePassword" onChange={(e) => {
                                                             // setPrevData({...prevData, page_1: {...prevData?.page_1, hidePassword: e.target.checked}})
                                                             setCurrObj({ ...currObj, hidePassword: e.target.checked })
-                                                        }} name="hidePassword" /><label htmlFor="hidePassword" className="form-check-label ms-1">Show and hide Password icon.</label>
+                                                        }} name="hidePassword" /><label htmlFor="hidePassword" className="form-check-label ms-1">Show and Hide password icon.</label>
                                                     </div>
                                                 </Col>
                                             </div>
@@ -1617,16 +1618,16 @@ const Setting = ({ isAdmin = false }) => {
                                                         method: "POST",
                                                         body: form_data
                                                     })
-                                                    .then((data) => data.json())
-                                                    .then((resp) => {
-                                                        if (resp.data) {
-                                                            setCurrObj({ ...currObj, email_settings: { ...resp.data } })
-                                                            setEditorId(e.value)
-                                                        }
-                                                    })
-                                                    .catch((error) => {
-                                                        console.log(error)
-                                                    })
+                                                        .then((data) => data.json())
+                                                        .then((resp) => {
+                                                            if (resp.data) {
+                                                                setCurrObj({ ...currObj, email_settings: { ...resp.data } })
+                                                                setEditorId(e.value)
+                                                            }
+                                                        })
+                                                        .catch((error) => {
+                                                            console.log(error)
+                                                        })
                                                 }} options={emailTemplate} />
                                             </div>
 
@@ -1749,7 +1750,7 @@ const Setting = ({ isAdmin = false }) => {
                                                                 <div >
                                                                     <div id="emailTemplateId"></div>
                                                                     <BasicEditor elementId={`emailTemplateId`}
-                                                                        style={{ width: '100%' }} 
+                                                                        style={{ width: '100%' }}
                                                                         key={`${editorId}_${prevData?.page_1?.email_settings}`}
                                                                         hideToolbar={editorBar}
                                                                         editorState={prevData?.page_1?.email_settings?.editorState}
@@ -1836,30 +1837,60 @@ const Setting = ({ isAdmin = false }) => {
                                                                         style={{
                                                                             display: "flex",
                                                                             flexDirection: "column",
-                                                                            alignItems: "start",
-                                                                            fontFamily: prevData?.["page_1"]?.secondary_font
+                                                                            alignItems: "start"
                                                                         }}
                                                                     >
                                                                         <div htmlFor="" style={{ fontSize: 15, color: "rgb(91, 91, 91)" }}>
                                                                             {prevData?.["page_1"]?.password}
                                                                         </div>
-                                                                        <input
-                                                                            type="password"
-                                                                            placeholder={prevData?.["page_1"]?.password_placeHolder}
-                                                                            style={{
-                                                                                width: "100%",
-                                                                                border: "solid 1px rgb(185, 185, 185)",
-                                                                                borderRadius: 5,
-                                                                                fontSize: 14,
-                                                                                padding: "10px 20px",
-                                                                                marginTop: 5,
-                                                                                outline: "none",
-                                                                                color: "rgb(67, 67, 67)",
-                                                                                letterSpacing: 1,
-                                                                                cursor: "pointer"
-                                                                            }}
-                                                                            readOnly
-                                                                        />
+                                                                        <div style={{ position: "relative", width: "100%" }}>
+                                                                            <input
+                                                                                type="password"
+                                                                                placeholder={prevData?.["page_1"]?.password_placeHolder}
+                                                                                style={{
+                                                                                    width: "100%",
+                                                                                    border: "solid 1px rgb(185, 185, 185)",
+                                                                                    borderRadius: 5,
+                                                                                    fontSize: 14,
+                                                                                    padding: "10px 20px",
+                                                                                    marginTop: 5,
+                                                                                    outline: "none",
+                                                                                    color: "rgb(67, 67, 67)",
+                                                                                    letterSpacing: 1,
+                                                                                    cursor: "pointer"
+                                                                                }}
+                                                                                readOnly
+                                                                            />
+                                                                            {prevData?.page_1?.hidePassword && (<>
+                                                                                <img
+                                                                                    className="password_type_password show_password_function"
+                                                                                    onclick="showPassword('password')"
+                                                                                    src="https://www.api.xircls.com/static/images/eye.svg"
+                                                                                    width="18px"
+                                                                                    style={{
+                                                                                        position: "absolute",
+                                                                                        right: "10px",
+                                                                                        top: "35%",
+                                                                                        transform: "translateY(-50)",
+                                                                                        cursor: "pointer"
+                                                                                    }}
+                                                                                />
+                                                                                <img
+                                                                                    className="password_type_text show_password_function"
+                                                                                    onclick="showPassword('password')"
+                                                                                    src="https://www.api.xircls.com/static/images/eye-off.svg"
+                                                                                    width="18px"
+                                                                                    style={{
+                                                                                        position: "absolute",
+                                                                                        right: "-25px",
+                                                                                        top: "50%",
+                                                                                        transform: "translateY(-50)",
+                                                                                        display: "none",
+                                                                                        cursor: "pointer"
+                                                                                    }}
+                                                                                />
+                                                                            </>)}
+                                                                        </div>
                                                                     </div>
                                                                     {
                                                                         prevData?.page_1?.reEnter ? <>
@@ -1868,30 +1899,60 @@ const Setting = ({ isAdmin = false }) => {
                                                                                     display: "flex",
                                                                                     flexDirection: "column",
                                                                                     alignItems: "start",
-                                                                                    marginTop: 20,
-                                                                                    fontFamily: prevData?.["page_1"]?.secondary_font
+                                                                                    marginTop: 20
                                                                                 }}
                                                                             >
                                                                                 <div htmlFor="" style={{ fontSize: 15, color: "rgb(91, 91, 91)" }}>
                                                                                     {prevData?.["page_1"]?.confirm_password}
                                                                                 </div>
-                                                                                <input
-                                                                                    type="password"
-                                                                                    placeholder={prevData?.["page_1"]?.confirm_password_placeHolder}
-                                                                                    style={{
-                                                                                        width: "100%",
-                                                                                        border: "solid 1px rgb(185, 185, 185)",
-                                                                                        borderRadius: 5,
-                                                                                        fontSize: 14,
-                                                                                        padding: "10px 20px",
-                                                                                        marginTop: 5,
-                                                                                        outline: "none",
-                                                                                        color: "rgb(67, 67, 67)",
-                                                                                        letterSpacing: 1,
-                                                                                        cursor: "pointer"
-                                                                                    }}
-                                                                                    readOnly
-                                                                                />
+                                                                                <div style={{ position: "relative", width: "100%" }}>
+                                                                                    <input
+                                                                                        type="password"
+                                                                                        placeholder={prevData?.["page_1"]?.confirm_password_placeHolder}
+                                                                                        style={{
+                                                                                            width: "100%",
+                                                                                            border: "solid 1px rgb(185, 185, 185)",
+                                                                                            borderRadius: 5,
+                                                                                            fontSize: 14,
+                                                                                            padding: "10px 20px",
+                                                                                            marginTop: 5,
+                                                                                            outline: "none",
+                                                                                            color: "rgb(67, 67, 67)",
+                                                                                            letterSpacing: 1,
+                                                                                            cursor: "pointer"
+                                                                                        }}
+                                                                                        readOnly
+                                                                                    />
+                                                                                    {prevData?.page_1?.hidePassword && (<>
+                                                                                        <img
+                                                                                            className="password_type_password show_password_function"
+                                                                                            onclick="showPassword('password')"
+                                                                                            src="https://www.api.xircls.com/static/images/eye.svg"
+                                                                                            width="18px"
+                                                                                            style={{
+                                                                                                position: "absolute",
+                                                                                                right: "10px",
+                                                                                                top: "35%",
+                                                                                                transform: "translateY(-50)",
+                                                                                                cursor: "pointer"
+                                                                                            }}
+                                                                                        />
+                                                                                        <img
+                                                                                            className="password_type_text show_password_function"
+                                                                                            onclick="showPassword('password')"
+                                                                                            src="https://www.api.xircls.com/static/images/eye-off.svg"
+                                                                                            width="18px"
+                                                                                            style={{
+                                                                                                position: "absolute",
+                                                                                                right: "-25px",
+                                                                                                top: "50%",
+                                                                                                transform: "translateY(-50)",
+                                                                                                display: "none",
+                                                                                                cursor: "pointer"
+                                                                                            }}
+                                                                                        />
+                                                                                    </>)}
+                                                                                </div>
                                                                             </div>
                                                                         </> : ''
                                                                     }
@@ -1903,7 +1964,6 @@ const Setting = ({ isAdmin = false }) => {
                                                                         <>
                                                                             <div
                                                                                 style={{
-                                                                                    fontFamily: prevData?.["page_1"]?.secondary_font,
                                                                                     display: "flex",
                                                                                     gap: "10px",
                                                                                     alignItems: "center",
@@ -1930,7 +1990,6 @@ const Setting = ({ isAdmin = false }) => {
                                                                         <>
                                                                             <div
                                                                                 style={{
-                                                                                    fontFamily: prevData?.["page_1"]?.secondary_font,
                                                                                     display: "flex",
                                                                                     gap: "10px",
                                                                                     alignItems: "center",
@@ -1956,7 +2015,6 @@ const Setting = ({ isAdmin = false }) => {
                                                                         <>
                                                                             <div
                                                                                 style={{
-                                                                                    fontFamily: prevData?.["page_1"]?.secondary_font,
                                                                                     display: "flex",
                                                                                     gap: "10px",
                                                                                     alignItems: "center",
@@ -1989,8 +2047,7 @@ const Setting = ({ isAdmin = false }) => {
                                                                         borderRadius: "5px",
                                                                         margin: "auto",
                                                                         marginTop: "25px",
-                                                                        cursor: "pointer",
-                                                                        fontFamily: prevData?.["page_1"]?.secondary_font
+                                                                        cursor: "pointer"
                                                                     }}
                                                                     className="cursor-pointer"
                                                                     onClick={(e) => {
