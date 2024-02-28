@@ -178,7 +178,11 @@ export const configUrl = {
     leads_stage_get:'/customers/merchant/leads_stage_get/',
     leads_stage_table:'/customers/merchant/leads_stage_table/',
     leadstable_get_view:'/customers/merchant/leadstable_get_view/',
-    lead_stage_add:'/customers/merchant/leads_stage_add/'
+    lead_stage_add:'/customers/merchant/leads_stage_add/',
+
+    // crm leads profile
+    add_variant: `/vehicle/add_variant/`
+
 }
 
 const axiosInstance = axios.create({

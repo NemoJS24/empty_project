@@ -27,10 +27,11 @@ const Leads_dashboard = () => {
          .then((resp) => {
             console.log("sdsadad", resp.data)
             setTableData(resp.data)
-            setIsLoading(false)
          })
          .catch((error) => {
             console.log(error)
+         })
+         .finally(() => {
             setIsLoading(false)
          })
 

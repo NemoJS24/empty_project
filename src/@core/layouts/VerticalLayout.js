@@ -9,6 +9,7 @@ import { handleMenuCollapsed, handleContentWidth, handleMenuHidden } from '@stor
 // ** Third Party Components
 import classnames from 'classnames'
 import { ArrowUp } from 'react-feather'
+import { IoIosInformationCircle } from "react-icons/io"
 
 // ** Reactstrap Imports
 import { Navbar, Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
@@ -222,11 +223,39 @@ const VerticalLayout = props => {
       ) : null}
       {
         userPermission?.appName && <>
-          <div style={{position: "fixed", bottom: '5%', zIndex: '99', right: '30px'}}>
-            <a className='btn btn-outline-danger shadow-md text-danger' style={{background: 'white'}} onClick={() => setBug(!bug)}>
-              Report a Bug
+          <div style={{ position: "fixed", bottom: '2%', zIndex: '99', right: '10px' }}>
+            <a
+              className='text-danger'
+              style={{
+                background: 'white',
+                marginLeft: '10px',
+                display: 'flex',
+                alignItems: 'center'
+              }}
+              onClick={() => setBug(!bug)}
+            >
+              <span className="default-text "><IoIosInformationCircle size={20}/></span>
+              <span className="hover-text btn btn-outline-danger shadow-md " >Report a Bug</span>
             </a>
+
+            <style jsx>{`
+                a:hover .default-text {
+                  display: none;
+                  transition: display 3s ease;
+                }
+                .hover-text {
+                  display: none;
+                }
+                a:hover .hover-text {
+                  display: inline;
+                  transition: display 3s ease;
+                }
+            `}</style>
+
+
           </div>
+
+
         </>
       }
       {themeConfig.layout.scrollTop === true ? (

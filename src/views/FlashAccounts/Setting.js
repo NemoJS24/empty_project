@@ -466,7 +466,7 @@ const Setting = ({ isAdmin = false }) => {
                 toast.success('Saved Successfully')
                 setApiLoader(false)
                 if (type === "Save & Close") {
-                    navigate(-1)
+                    navigate("/merchant/Flash_Accounts/all_campaigns/")
                 } else {
                     navigate(`/merchant/Flash_Accounts/settings/${data.data.theme_id}`, { replace: true })
                 }
@@ -519,7 +519,7 @@ const Setting = ({ isAdmin = false }) => {
                 setApiLoader(false)
                 toast.success('Saved Successfully')
                 if (type === "Save & Close") {
-                    navigate(-1)
+                    navigate("/merchant/Flash_Accounts/all_campaigns/")
                 } else {
                     navigate(`/merchant/Flash_Accounts/settings/${data.data.theme_id}`, { replace: true })
                 }

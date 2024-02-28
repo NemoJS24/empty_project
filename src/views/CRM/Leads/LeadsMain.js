@@ -77,12 +77,12 @@ const LeadsMain = () => {
 
                const filteredParentCompanies = resp?.data?.data?.associated_accounts.filter((ele) => {
                   if (ele?.parent_id) {
-                      console.log(ele.parent_id, "hhh")
-                      return true
+                     console.log(ele.parent_id, "hhh")
+                     return true
                   }
                   return false
-              })
-              setParentComapny(filteredParentCompanies)
+               })
+               setParentComapny(filteredParentCompanies)
 
                //--
                console.log("ResponseId:", resp.data.data.associated_accounts.filter((ele) => ele?.parent_id && console.log(ele?.parent_id, "hhh")))
@@ -131,7 +131,7 @@ const LeadsMain = () => {
       fetchStageOptions()
    }, [])
 
-   const handleInputChange = (e, AddressType = 'userData') => {
+   const handleInputChange = (e, AddressType = 'userData', count) => {
       if (AddressType === 'userData') {
          const { name, type } = e.target
          let { value } = e.target
@@ -139,6 +139,11 @@ const LeadsMain = () => {
             value = value.replace(/[^0-9]/g, "")
          }
          setUserData(prev => ({ ...prev, [name]: value }))
+      } else if (AddressType === 'company') {
+         setFormData(prevFormData => ({
+            ...prevFormData,
+            [`associate_clients_${count}`]: e.id
+         }))
       }
    }
 

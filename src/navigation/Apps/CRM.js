@@ -13,6 +13,18 @@ export const CRMNavigation = [
         header: 'CRM'
     },
     {
+        id: 'leads',
+        title: 'Leads',
+        icon: <PiUsersThree style={{ marginRight: '18px' }} />,
+        navLink: '/merchant/customers/leads/'
+    },
+    {
+        id: 'cross_leads',
+        title: 'Cross Leads',
+        icon: <PiShareNetworkThin style={{ marginRight: '18px' }} />,
+        navLink: '/merchant/customers/cross_leads'
+    },
+    {
         id: 'customers',
         title: 'Customers',
         icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/customers.png`} width='16px' />,
@@ -41,18 +53,6 @@ export const CRMNavigation = [
         title: 'Vehicle',
         icon: <RiCarLine style={{ marginRight: '18px' }} />,
         navLink: '/merchant/customers/vehicle/'
-    },
-    {
-        id: 'cross_leads',
-        title: 'Cross Leads',
-        icon: <PiShareNetworkThin style={{ marginRight: '18px' }} />,
-        navLink: '/merchant/customers/cross_leads'
-    },
-    {
-        id: 'leads',
-        title: 'Leads',
-        icon: <PiUsersThree style={{ marginRight: '18px' }} />,
-        navLink: '/merchant/customers/leads'
     }
 
 ]

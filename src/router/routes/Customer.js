@@ -1,6 +1,7 @@
 import { lazy } from 'react'
 import ThankYouPage from '@src/views/CRM/Customers/ThankYouPage'
 import AddVehicle from '../../views/CRM/Vehicle/AddVehicle'
+import AddVehicleVariant from '../../views/CRM/Vehicle/AddVehicleVariant'
 const ViewCustomer = lazy(() => import('../../views/CRM/ViewCustomer/ViewCustomer'))
 const AddBusiness = lazy(() => import('@src/views/CRM/Business/AddBusiness'))
 const CustomerType = lazy(() => import('@src/views/CRM/Customers/CustomerType'))
@@ -39,6 +40,8 @@ import CrossLeads from '../../views/Leads/CrossLeads'
 import LeadsMain from '../../views/CRM/Leads/LeadsMain'
 import LeadsSetting from '../../views/CRM/Leads/LeadsSetting'
 import Leads_dashboard from '../../views/Leads/Leads_Dashboard'
+import LeadsProfile from '../../views/CRM/ViewLead/LeadsProfile'
+import LeadAddInteraction from '../../views/CRM/ViewLead/Components/AddInteraction'
 
 const appName = "crm"
 const Customers_Routes = [
@@ -259,10 +262,10 @@ const Customers_Routes = [
     }
   },
   // --------------------------------
-  // {
-  //   path: '/merchant/customers/finance/',
-  //   element: <Finance />
-  // },
+  {
+    path: '/merchant/customers/add-vehicle-variant/',
+    element: <AddVehicleVariant />
+  },
   // {
   //   path: '/merchant/customers/service/',
   //   element: <Service />
@@ -362,7 +365,7 @@ const Customers_Routes = [
     element: <AddCall />
   },
   {
-    path: '/merchant/customers/leads',
+    path: '/merchant/customers/leads/',
     element: <Leads_dashboard />
   },
   {
@@ -376,6 +379,14 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/lead/edit_lead/:id',
     element: <LeadsMain />
+  },
+  {
+    path: '/merchant/customers/view_lead/:id',
+    element: <LeadsProfile />
+  },
+  {
+    path: '/merchant/customers/Add-Call-lead/:id',
+    element: <LeadAddInteraction />
   }
 ]
 

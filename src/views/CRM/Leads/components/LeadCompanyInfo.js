@@ -46,21 +46,19 @@ const LeadCompanyInfo = ({ AllFormData }) => {
     par_city: "",
     par_state: "",
     par_pincode: "",
-    mark_parent: "",
+    mark_parent: "0",
     phone_code: "",
     platform: ""
   }
   )
   const [newCompanyPage, setNewCompanyPage] = useState(1)
 
-  // console.log('filteredData', filteredData)
+  console.log('filteredData', filteredData)
   // console.log('newCompany', newCompany)
 
   const { userData, handleInputChange, handleSelectInputChange, countryData, isEdit, parentComapany } = AllFormData
 
   const [show, setShow] = useState(false)
-
-  console.log(filteredData, "filteredData")
 
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
@@ -68,8 +66,6 @@ const LeadCompanyInfo = ({ AllFormData }) => {
   useEffect(() => {
     fetchCompanyData()
   }, []);
-
-  console.log(parentComapany?.parent_id, "parent_id")
 
   useEffect(() => {
     if (userData.associate_clients_count && !(companyData.length === 0)) {
@@ -94,8 +90,6 @@ const LeadCompanyInfo = ({ AllFormData }) => {
       })
     )
   }, [countryData])
-
-  console.log(newCompany.mark_parent, "mark_parent")
 
   const postNewCompany = () => {
     console.log("aa")
@@ -167,15 +161,7 @@ const LeadCompanyInfo = ({ AllFormData }) => {
   }
 
   const selectCompany = (event, id, i) => {
-    // console.log({
-    //   'event': event,
-    //   'event val': event.value,
-    //   'id': id,
-    //   'i': i
-    // })
-    // console.log('companyData', companyData)
     const foundObject = companyData.find(item => item.id === event.value)
-    // console.log('foundObject', foundObject)
     handleInputChange({ target: { name: `associate_clients_count`, value: filteredData.length } })
     handleInputChange({ target: { name: `associate_clients_${i}`, value: foundObject.id } })
     if (foundObject) {
@@ -197,17 +183,6 @@ const LeadCompanyInfo = ({ AllFormData }) => {
       }))
     }
   }
-  // const selectCountry = (e, id) => {
-  //   if (id === "new-company") {
-  //     setNewCompany((prev) => ({
-  //       ...prev,
-  //       country: e.label
-  //     }))
-  //   } else {
-  //     setFilteredData((prevForms) => (prevForms.map((form) => form.id === id ? { ...form, country: e.label } : form.formId == id ? { ...form, country: e.label } : form)
-  //     ))
-  //   }
-  // }
 
   const addCompany = () => {
     const newId = filteredData.length + 1
@@ -323,6 +298,280 @@ const LeadCompanyInfo = ({ AllFormData }) => {
       }
       `}
     </style>
+  )
+
+  const ParentCompany = (company, index) => (
+    <>
+      <Row>
+        <Col md={12} className="mt-2">
+          <h4 className="mb-0">Parent Company Details {index + 1}</h4>
+        </Col>
+        <Col md={6} lg={4} className="mt-1">
+          <Label
+            htmlFor="company-name"
+            style={{ margin: "0px" }}>
+            Name
+          </Label>
+          <Select
+            options={options}
+            closeMenuOnSelect={true}
+            // components={{ Menu: CustomSelectComponent }}
+            value={{ label: company?.parent_id?.company_name, value: company?.parent_id?.company_name }}
+            placeholder="Select company Name"
+            // onChange={(e) => selectCompany(e, form.id ?? form.formId)}
+            isDisabled
+          />
+        </Col>
+        <Col md={6} lg={4} className="mt-1">
+          <Label htmlFor="company-industry">Industry</Label>
+          <Input
+            placeholder="Industry"
+            type="text"
+            id="company-industry"
+            name="industry"
+            className="form-control"
+            value={company?.parent_id?.industry ?? ""}
+            // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+            disabled
+          />
+        </Col>
+        <Col md={6} lg={4} className="mt-1">
+          <Label htmlFor="company-1-phone">Company Phone</Label>
+          <Input
+            placeholder="Company Phone"
+            type="tel"
+            maxLength={10}
+            id="company-1-phone"
+            name="company_phone"
+            className="form-control"
+            value={company?.parent_id?.company_phone ?? ""}
+            // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+            disabled
+          />
+        </Col>
+        <Col md={6} lg={4} className="mt-1">
+          <Label htmlFor="company-email">Company Email</Label>
+          <Input
+            placeholder="Company Email"
+            type="text"
+            id="company-email"
+            name="company_email"
+            className="form-control"
+            value={company?.parent_id?.company_email ?? ""}
+            // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+            disabled
+          />
+        </Col>
+        <Col md={6} lg={4} className="mt-1">
+          <Label htmlFor="company-website">Company Website</Label>
+          <Input
+            placeholder="Company Website"
+            type="text"
+            id="company-website"
+            name="company_website"
+            className="form-control"
+            value={company?.parent_id?.company_website ?? ""}
+            // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+            disabled
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col md={12} className="mt-1">
+          <div className="d-flex justify-content-between ">
+            <h4 className="mb-0">Address</h4>
+          </div>
+        </Col>
+        <Col md={6} lg={4} className="mt-1">
+          <Label htmlFor="company-name">
+            Flat and/or Building/House Details
+          </Label>
+          <Input
+            placeholder="Flat and/or Building/House Details"
+            type="text"
+            id="company-name"
+            name="address_line1"
+            className="form-control"
+            value={company?.parent_id?.address_line1 ?? ""}
+            // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+            disabled
+          />
+        </Col>
+        <Col md={6} lg={4} className="mt-1">
+          <Label htmlFor="company-industry">Street, Lane or Road</Label>
+          <Input
+            placeholder="Street, Lane or Road"
+            type="text"
+            id="company-industry"
+            name="street"
+            className="form-control"
+            value={company?.parent_id?.street ?? ""}
+            // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+            disabled
+          />
+        </Col>
+        <Col md={6} lg={4} className="mt-1">
+          <Label htmlFor="company-area">
+            Enter Area, Locality or Suburb
+          </Label>
+          <Input
+            placeholder="Enter Area, Locality or Suburb"
+            type="text"
+            id="company-area"
+            name="area_building"
+            className="form-control"
+            value={company?.parent_id?.area_building ?? ""}
+            // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+            disabled
+          />
+        </Col>
+        <Col md={6} lg={4} className="mt-1">
+          <Label htmlFor="company-landmark">Landmark</Label>
+          <Input
+            placeholder="Landmark"
+            type="text"
+            id="company-landmark"
+            name="landmark"
+            className="form-control"
+            value={company?.parent_id?.landmark ?? ""}
+            // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+            disabled
+          />
+        </Col>
+        <Col md={6} lg={4} className="mt-1">
+          <Label htmlFor="company-city">City</Label>
+          <Input
+            placeholder="City"
+            type="text"
+            id="company-city"
+            name="city"
+            className="form-control"
+            value={company?.parent_id?.city ?? ""}
+            // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+            disabled
+          />
+        </Col>
+        <Col md={6} lg={4} className="mt-1">
+          <Label htmlFor="company-state">State</Label>
+          <Input
+            placeholder="State"
+            type="text"
+            id="company-state"
+            name="state"
+            className="form-control"
+            value={company?.parent_id?.state ?? ""}
+            // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+            disabled
+          />
+        </Col>
+        <Col md={6} lg={4} className="mt-1">
+          <Label htmlFor="company-pincard">Pincode</Label>
+          <Input
+            placeholder="Pincode"
+            type="text"
+            id="company-pincard"
+            name="pincode"
+            className="form-control"
+            value={company?.parent_id?.pincode ?? ""}
+            // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+            disabled
+          />
+        </Col>
+        <Col md={6} lg={4} className="mt-1">
+          <Label htmlFor="address-2-country">Country</Label>
+          <Select
+            // options={country}
+            inputId="address-2-country"
+            closeMenuOnSelect={true}
+            name="country"
+            placeholder="Select Country"
+            // onChange={(e) => selectCountry(e, form.id ?? form.formId)}
+            isDisabled={true}
+            value={{ label: company?.country, value: company?.country }}
+          // value={form?.parent_id?.country}
+          // value={country.find((item) => String(form?.country) === String(item.value))}
+          // value={country.filter(option => String(data?.country) === String(option.value))}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col md={12} className="mt-2">
+          <h4 className="mb-0">Social Presence</h4>
+        </Col>
+        <Col md={6} lg={3} className="mt-1">
+          <Label htmlFor="personalDetails-twitter">Twitter</Label>
+          <div className="input-group mb-3">
+            <span className="input-group-text">
+              <Twitter size={18} />
+            </span>
+            <Input
+              type="text"
+              id="personalDetails-twitter"
+              className="form-control social_input"
+              aria-label=""
+              name="company_twitter"
+              value={company?.parent_id?.company_twitter ?? "None"}
+              // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              disabled
+            />
+          </div>
+        </Col>
+        <Col md={6} lg={3} className="mt-0 mt-md-1">
+          <Label htmlFor="personalDetails-facebook">Facebook</Label>
+          <div className="input-group mb-3">
+            <span className="input-group-text">
+              <Facebook size={18} />
+            </span>
+            <Input
+              type="text"
+              id="personalDetails-facebook"
+              className="form-control social_input"
+              aria-label=""
+              name="company_fb"
+              value={company?.parent_id?.company_fb ?? "None"}
+              // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              disabled
+            />
+          </div>
+        </Col>
+        <Col md={6} lg={3} className="mt-0 mt-lg-1">
+          <Label htmlFor="personalDetails-instagram">Instagram</Label>
+          <div className="input-group mb-3">
+            <span className="input-group-text">
+              <Instagram size={18} />
+            </span>
+            <Input
+              type="text"
+              id="personalDetails-instagram"
+              className="form-control social_input"
+              aria-label=""
+              name="company_insta"
+              value={company?.parent_id?.company_insta ?? "None"}
+              // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              disabled
+            />
+          </div>
+        </Col>
+        <Col md={6} lg={3} className="mt-0 mt-lg-1">
+          <Label htmlFor="linkedin2">
+            Linkedin
+          </Label>
+          <div className="input-group mb-3">
+            <span className="input-group-text">
+              <Linkedin size='18px' />
+            </span>
+            <Input
+              id='linkedin2'
+              type='text'
+              className="form-control social_input"
+              name='company_linkedIn'
+              value={company?.parent_id?.company_linkedIn ?? "None"}
+              disabled
+            />
+          </div>
+        </Col>
+      </Row>
+    </>
   )
 
   const CompanyForm = (
@@ -614,314 +863,21 @@ const LeadCompanyInfo = ({ AllFormData }) => {
           </>
           <hr />
           <>
+            {
+              parentComapany.length !== 0  ? (
+                parentComapany.map((company, index) => (
+                  ParentCompany(company, index)
+                ))
+              ) : (
+                form.parent_id && ParentCompany(form, 1)
+              )
+            }
           </>
         </div>
       ))}
-
-      {
-        parentComapany.map((company, index) => (
-          <>
-            <Row>
-              <Col md={12} className="mt-2">
-                <h4 className="mb-0">Parent Company Details {index + 1}</h4>
-              </Col>
-              <Col md={6} lg={4} className="mt-1">
-                <Label
-                  htmlFor="company-name"
-                  style={{ margin: "0px" }}>
-                  Name
-                </Label>
-                <Select
-                  options={options}
-                  closeMenuOnSelect={true}
-                  // components={{ Menu: CustomSelectComponent }}
-                  value={{ label: company?.parent_id?.company_name, value: company?.parent_id?.company_name }}
-                  placeholder="Select company Name"
-                  // onChange={(e) => selectCompany(e, form.id ?? form.formId)}
-                  isDisabled
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-1">
-                <Label htmlFor="company-industry">Industry</Label>
-                <Input
-                  placeholder="Industry"
-                  type="text"
-                  id="company-industry"
-                  name="industry"
-                  className="form-control"
-                  value={company?.parent_id?.industry ?? ""}
-                  // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                  disabled
-                />
-              </Col>
-              {/* <Col md={6} lg={4} className="mt-1">
-                  <Label htmlFor="company-gst-no">GST Number</Label>
-                  <Input
-                    placeholder="GST Number"
-                    type="text"
-                    id="company-gst-no"
-                    name="gst"
-                    className="form-control"
-                    value={form?.parent_id?.gst ?? ""}
-                    // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                    disabled
-                  />
-                </Col>
-                <Col md={6} lg={4} className="mt-1">
-                  <Label htmlFor="company-pancard">Company Pan Card Number</Label>
-                  <Input
-                    placeholder="Company Pan Card Number"
-                    type="text"
-                    id="company-pancard"
-                    name="company_panCard"
-                    className="form-control"
-                    value={form?.parent_id?.company_panCard ?? ""}
-                    // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                    disabled
-                  />
-                </Col> */}
-              <Col md={6} lg={4} className="mt-1">
-                <Label htmlFor="company-1-phone">Company Phone</Label>
-                <Input
-                  placeholder="Company Phone"
-                  type="tel"
-                  maxLength={10}
-                  id="company-1-phone"
-                  name="company_phone"
-                  className="form-control"
-                  value={company?.parent_id?.company_phone ?? ""}
-                  // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                  disabled
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-1">
-                <Label htmlFor="company-email">Company Email</Label>
-                <Input
-                  placeholder="Company Email"
-                  type="text"
-                  id="company-email"
-                  name="company_email"
-                  className="form-control"
-                  value={company?.parent_id?.company_email ?? ""}
-                  // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                  disabled
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-1">
-                <Label htmlFor="company-website">Company Website</Label>
-                <Input
-                  placeholder="Company Website"
-                  type="text"
-                  id="company-website"
-                  name="company_website"
-                  className="form-control"
-                  value={company?.parent_id?.company_website ?? ""}
-                  // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                  disabled
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col md={12} className="mt-1">
-                <div className="d-flex justify-content-between ">
-                  <h4 className="mb-0">Address</h4>
-                </div>
-              </Col>
-              <Col md={6} lg={4} className="mt-1">
-                <Label htmlFor="company-name">
-                  Flat and/or Building/House Details
-                </Label>
-                <Input
-                  placeholder="Flat and/or Building/House Details"
-                  type="text"
-                  id="company-name"
-                  name="address_line1"
-                  className="form-control"
-                  value={company?.parent_id?.address_line1 ?? ""}
-                  // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                  disabled
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-1">
-                <Label htmlFor="company-industry">Street, Lane or Road</Label>
-                <Input
-                  placeholder="Street, Lane or Road"
-                  type="text"
-                  id="company-industry"
-                  name="street"
-                  className="form-control"
-                  value={company?.parent_id?.street ?? ""}
-                  // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                  disabled
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-1">
-                <Label htmlFor="company-area">
-                  Enter Area, Locality or Suburb
-                </Label>
-                <Input
-                  placeholder="Enter Area, Locality or Suburb"
-                  type="text"
-                  id="company-area"
-                  name="area_building"
-                  className="form-control"
-                  value={company?.parent_id?.area_building ?? ""}
-                  // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                  disabled
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-1">
-                <Label htmlFor="company-landmark">Landmark</Label>
-                <Input
-                  placeholder="Landmark"
-                  type="text"
-                  id="company-landmark"
-                  name="landmark"
-                  className="form-control"
-                  value={company?.parent_id?.landmark ?? ""}
-                  // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                  disabled
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-1">
-                <Label htmlFor="company-city">City</Label>
-                <Input
-                  placeholder="City"
-                  type="text"
-                  id="company-city"
-                  name="city"
-                  className="form-control"
-                  value={company?.parent_id?.city ?? ""}
-                  // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                  disabled
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-1">
-                <Label htmlFor="company-state">State</Label>
-                <Input
-                  placeholder="State"
-                  type="text"
-                  id="company-state"
-                  name="state"
-                  className="form-control"
-                  value={company?.parent_id?.state ?? ""}
-                  // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                  disabled
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-1">
-                <Label htmlFor="company-pincard">Pincode</Label>
-                <Input
-                  placeholder="Pincode"
-                  type="text"
-                  id="company-pincard"
-                  name="pincode"
-                  className="form-control"
-                  value={company?.parent_id?.pincode ?? ""}
-                  // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                  disabled
-                />
-              </Col>
-              <Col md={6} lg={4} className="mt-1">
-                <Label htmlFor="address-2-country">Country</Label>
-                <Select
-                  // options={country}
-                  inputId="address-2-country"
-                  closeMenuOnSelect={true}
-                  name="country"
-                  placeholder="Select Country"
-                  // onChange={(e) => selectCountry(e, form.id ?? form.formId)}
-                  isDisabled={true}
-                  value={{ label: company.country, value: company.country }}
-                // value={form?.parent_id?.country}
-                // value={country.find((item) => String(form?.country) === String(item.value))}
-                // value={country.filter(option => String(data?.country) === String(option.value))}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col md={12} className="mt-2">
-                <h4 className="mb-0">Social Presence</h4>
-              </Col>
-              <Col md={6} lg={3} className="mt-1">
-                <Label htmlFor="personalDetails-twitter">Twitter</Label>
-                <div className="input-group mb-3">
-                  <span className="input-group-text">
-                    <Twitter size={18} />
-                  </span>
-                  <Input
-                    type="text"
-                    id="personalDetails-twitter"
-                    className="form-control social_input"
-                    aria-label=""
-                    name="company_twitter"
-                    value={company?.parent_id?.company_twitter ?? "None"}
-                    // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                    disabled
-                  />
-                </div>
-              </Col>
-              <Col md={6} lg={3} className="mt-0 mt-md-1">
-                <Label htmlFor="personalDetails-facebook">Facebook</Label>
-                <div className="input-group mb-3">
-                  <span className="input-group-text">
-                    <Facebook size={18} />
-                  </span>
-                  <Input
-                    type="text"
-                    id="personalDetails-facebook"
-                    className="form-control social_input"
-                    aria-label=""
-                    name="company_fb"
-                    value={company?.parent_id?.company_fb ?? "None"}
-                    // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                    disabled
-                  />
-                </div>
-              </Col>
-              <Col md={6} lg={3} className="mt-0 mt-lg-1">
-                <Label htmlFor="personalDetails-instagram">Instagram</Label>
-                <div className="input-group mb-3">
-                  <span className="input-group-text">
-                    <Instagram size={18} />
-                  </span>
-                  <Input
-                    type="text"
-                    id="personalDetails-instagram"
-                    className="form-control social_input"
-                    aria-label=""
-                    name="company_insta"
-                    value={company?.parent_id?.company_insta ?? "None"}
-                    // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                    disabled
-                  />
-                </div>
-              </Col>
-              <Col md={6} lg={3} className="mt-0 mt-lg-1">
-                <Label htmlFor="linkedin2">
-                  Linkedin
-                </Label>
-                <div className="input-group mb-3">
-                  <span className="input-group-text">
-                    <Linkedin size='18px' />
-                  </span>
-                  <Input
-                    id='linkedin2'
-                    type='text'
-                    className="form-control social_input"
-                    name='company_linkedIn'
-                    value={company?.parent_id?.company_linkedIn ?? "None"}
-                    disabled
-                  />
-                </div>
-              </Col>
-
-            </Row>
-          </>
-        ))
-      }
     </>
   )
+  console.log('parentComapany',parentComapany)
 
   const SideForm = (
     <form>
@@ -953,33 +909,6 @@ const LeadCompanyInfo = ({ AllFormData }) => {
             />
             <p id="company_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
           </Col>
-          {/* <Col md={12} className="mt-1">
-            <Label htmlFor="address-2-category">Category:</Label>
-            <Select
-              placeholder="Category"
-              id="address-2-category"
-              // options={}
-              isMulti
-              closeMenuOnSelect={true}
-              onChange={handleInputChangeNewCompany}
-            // value={relationOptions?.find(option => option.value === userData?.shipping_relation)}
-            // onChange={(e) => handleInputChange2(e, 'shipping_relation')}
-            // disabled
-            />
-          </Col> */}
-          {/* <Col md={12} className="mt-1">
-            <Label htmlFor="address-2-subCategory">Sub Category:</Label>
-            <Select
-              placeholder="Sub Category"
-              id="address-2-subCategory"
-              // options={}
-              isMulti
-              closeMenuOnSelect={true}
-            // value={relationOptions?.find(option => option.value === userData?.shipping_relation)}
-            // onChange={(e) => handleInputChange2(e, 'shipping_relation')}
-            // disabled
-            />
-          </Col> */}
           <Col md={12} className="mt-2">
             <label htmlFor="basicDetails-last-name">Industry</label>
             <input
@@ -1412,9 +1341,6 @@ const LeadCompanyInfo = ({ AllFormData }) => {
                 <button
                   className="btn btn-primary"
                   type="button"
-                  // onClick={() => {
-                  //   setNewCompanyPage(2)
-                  // }}
                   onClick={() => {
                     const checkForm = validForm(AddCompanyParentValueToCheck, newCompany)
                     if (checkForm) {
@@ -1433,13 +1359,6 @@ const LeadCompanyInfo = ({ AllFormData }) => {
                 <button
                   className="btn btn-primary ms-2"
                   type="button"
-                  // onClick={() => {
-                  //   const checkForm = validForm(AddCompanySubsidiaryValueToCheck, newCompany)
-                  //   if (checkForm) {
-                  //     setNewCompanyPage(4)
-                  //   }
-                  // }
-                  // }
                   onClick={() => {
                     const checkForm = validForm(AddCompanyParentValueToCheck, newCompany)
                     if (checkForm) {
@@ -1557,16 +1476,9 @@ const LeadCompanyInfo = ({ AllFormData }) => {
               options={country}
               inputId="aria-example-input"
               closeMenuOnSelect={true}
-              // value={{value: 'India', label: 'India'}}
-              // value={country.find(option => option.value === newCompany?.country) ?? ''}
               value={country.find(option => option.value === newCompany?.par_country) ?? ''}
               placeholder="Select Country"
               name='par_country'
-              // onChange={(e) => {
-              //   selectCountry(e, "new-company")
-              //   // handleInputChange2(e, "new-company", 'country')
-              // }
-              // }
               onChange={(value, actionMeta) => selectCountry(value, actionMeta, 'new-company')}
             />
           </Col>
