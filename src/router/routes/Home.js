@@ -45,6 +45,7 @@ import Skin_type_form from '../../views/XirclsFrontend/test/Skin_type_form'
 import FlashAccount from '../../views/main/products/flash/FlashAccount'
 import FaqFlash from '../../views/main/products/flash/FaqFlash'
 import Flash_Pricing from '../../views/main/products/flash/Flash_Pricing'
+import FlashAccount_Features from '../../views/main/products/flash/FlashAccount_Features'
 
 const Homes_Routes = [
 
@@ -154,25 +155,34 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Semper Fi - Customer loyalty"
+    title: "Flash Accounts"
   },
   {
-    path: '/products/flash-accounts/faq',
+    path: '/products/flash-accounts/faq/',
     element: <FaqFlash />,
     meta: {
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Semper Fi - Customer loyalty"
+    title: "Flash Accounts - FAQ"
   },
   {
-    path: '/products/flash-accounts/pricing',
+    path: '/products/flash-accounts/pricing/',
     element: <Flash_Pricing />,
     meta: {
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Semper Fi - Customer loyalty"
+    title: "Flash Accounts - Pricing"
+  },
+  {
+    path: '/products/flash-accounts/features/',
+    element: <FlashAccount_Features />,
+    meta: {
+      layout: "homeLayout",
+      publicRoute: true
+    },
+    title: "Flash Accounts - Features"
   },
   {
     path: '/contact-us/:type',

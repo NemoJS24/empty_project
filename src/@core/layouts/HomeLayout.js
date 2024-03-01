@@ -28,7 +28,7 @@ const HomeLayout = () => {
   // console.log(pathname)
 
   const NavbarFun = () => {
-    const list = ['/partners', '/partners/faq', '/products/superleadz/', '/products/superleadz/features/', '/products/superleadz/pricing', '/products/superleadz/faq', '/products/flash-accounts/', '/products/flash-accounts/faq', '/products/flash-accounts/pricing']
+    const list = ['/partners/', '/partners', '/partners/faq/', '/partners/faq', '/products/superleadz/', '/products/superleadz', '/products/superleadz/features/', '/products/superleadz/features', '/products/superleadz/pricing/', '/products/superleadz/pricing', '/products/superleadz/faq/', '/products/superleadz/faq', '/products/flash-accounts/', '/products/flash-accounts', '/products/flash-accounts/faq/', '/products/flash-accounts/faq', '/products/flash-accounts/pricing/', '/products/flash-accounts/pricing']
     if (list.includes(pathname)) {
       setisDifferent(true)
       if (pathname.includes("partners")) {

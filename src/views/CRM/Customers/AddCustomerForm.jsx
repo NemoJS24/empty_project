@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Col, Row } from 'reactstrap'
-import { crmURL } from '../../../assets/auth/jwtService'
+import { baseURL } from '../../../assets/auth/jwtService'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import FrontBaseLoader from '../../Components/Loader/Loader'
@@ -30,7 +30,7 @@ const AddCustomerForm = () => {
         setApiLoader(true)
         const arr = new Array()
         const form_data = new FormData()
-        const url = new URL(`${crmURL}/Customers/quick-add-customer/`)
+        const url = new URL(`${baseURL}/Customers/quick-add-customer/`)
         Object.entries(details)?.map(([key, value]) => {
             if (value === "") {
                 arr.push(key)
