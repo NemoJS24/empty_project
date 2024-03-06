@@ -9,6 +9,8 @@ import { useSkin } from '@hooks/useSkin'
 
 // ** Third Party Components
 import classnames from 'classnames'
+import axios from 'axios'
+import { baseURL } from '../../assets/auth/jwtService'
 const Header = lazy(() => import('../../views/XirclsFrontend/base/Header'))
 
 const BlankLayout = () => {
@@ -24,6 +26,22 @@ const BlankLayout = () => {
   useEffect(() => {
     setIsMounted(true)
     const list = ['/new_signup/new_mode/', 'select-outlet', '/select_product/', '/outlet_details/', '/create_offers/', '/new_signup/', "/new_login/", "/plan_pricing/1/", "/merchant/SuperLeadz/intro/", "/merchant/SuperLeadz/TheAudience/", "/merchant/SuperLeadz/Editbutton/", '/merchant/SuperLeadz/Thebutton/', '/merchant/SuperLeadz/discount/', '/merchant/SuperLeadz/joinus/']
+    axios({
+      method: "GET",
+      url: `${baseURL}/merchant/all_apps/`
+    })
+    .then((data) => {
+      console.log("all_apps", data)
+      data.data.forEach(element => {
+        list.push(`/${element.slug}/signup`)
+        list.push(`/${element.slug}/signup`)
+      })
+    })
+    .catch((err) => {
+      console.log("all_apps", err)
+    })
+
+    console.log({list})
     if (list.includes(pathname)) {
       setisDifferent(true)
       // console.log(true)

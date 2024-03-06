@@ -539,7 +539,7 @@ const Homes_Routes = [
     path: '/:flow/signup/',
     element: <FlowSignUp />,
     meta: {
-      layout: "custom",
+      layout: "homeLayout",
       publicRoute: true
     }
   },

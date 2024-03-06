@@ -94,9 +94,13 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                 //     }))
                 // } else {
                 console.log(data?.grid_view_data, "data?.grid_view_data")
-                
+
                 const campaignData = data?.grid_view_data
-                campaignData[0].defaultExpanded = true
+                if (Array.isArray(campaignData) && campaignData.length >= 1) {
+                    campaignData[0].defaultExpanded = true
+                }
+                // if (Boolean(campaignData[0].defaultExpanded)) {
+                // }
                 setAllCampaigns(campaignData)
                 // }
                 setIsLoading(false)

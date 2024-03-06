@@ -30,13 +30,13 @@ import ReturnOfferHtml, { defaultOfferStyles } from '../NewCustomizationFlow/Ret
 import slPrevBg from "../../assets/images/vector/slPrevBg.png"
 import FrontBaseLoader from '../Components/Loader/Loader'
 import RenderPreview from "./RenderPreview"
-import "./Customization.css"
 import { CheckBox, RadioInput, SelectInput } from './campaignView/components'
 import RenderPreviewCopy from './RenderPreview copy'
 import VerifyYourEmailQuick from '../Outlet/VerifyYourEmailQuick'
 import VerifyYourEmail from '../Outlet/VerifyYourEmail'
 import ComTable from '../Components/DataTable/ComTable'
 import { TbReplace } from "react-icons/tb"
+import "./Customization.css"
 import { FaCrown } from "react-icons/fa"
 
 
@@ -261,9 +261,9 @@ const CustomizationParent = () => {
     const [dropImage, setDropImage] = useState(false)
     const [rearr, setRearr] = useState(0)
     const [isColDragging, setIsColDragging] = useState(false)
-    const [deleteCols, setDeleteCols] = useState(["center", "right"])
-
-    console.log({ dropImage, imageType, finalObj })
+    const [deleteCols, setDeleteCols] = useState([])
+    const [isColRes, setIsColRes] = useState(false)
+    const [resizeMouse, setResizeMouse] = useState({ initial: null, move: { cur: null, col1: null, col2: null, curElem: {} } })
     // const [textValue, setTextValue] = useState("")
     // const [senderName, setSenderName] = useState("")
     // const [apiLoader, setApiLoader] = useState(false)
@@ -321,7 +321,7 @@ const CustomizationParent = () => {
         const data = JSON.stringify(finalObj)
         const newObj = { ...newState }
         const clonedFinalObj = JSON.parse(data)
-        setFinalObj({ ...newObj })
+        setFinalObj((prev) => ({ ...prev, ...newObj }))
         const delay = 1000
         const request = setTimeout(() => {
             if (data !== JSON.stringify(newState)) {
@@ -363,6 +363,27 @@ const CustomizationParent = () => {
             }
         }
     }
+
+    const pageHasOffers = () => {
+        const obj = { cur: null, curElem: null, subElem: null, hasOffersList: false, offersList: [] }
+        const pageIndex = finalObj?.pages?.findIndex($ => $.id === currPage)
+        finalObj?.pages[pageIndex]?.values?.forEach((cur, key) => {
+            cur.elements.forEach((curElem, i) => {
+                curElem.element.forEach((subElem, j) => {
+                    if (subElem?.type === "offer") {
+                        obj.cur = key
+                        obj.curElem = i
+                        obj.subElem = j
+                        obj.hasOffersList = Boolean(subElem.offersList) && subElem.type === "offer"
+                        obj.offersList = Boolean(subElem.offersList) && subElem.type === "offer" ? [...subElem?.offersList] : []
+                    }
+                })
+            })
+        })
+        return obj
+    }
+
+    const offerIndexes = pageHasOffers()
 
     const redo = () => {
         if (future.length === 0) return
@@ -658,12 +679,13 @@ const CustomizationParent = () => {
             const newObj = { ...finalObj }
             const pageIndex = newObj?.pages?.findIndex($ => $.id === currPage)
             const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $.id === currPage)
+            const defaultStyles = transferedData === "input" ? { ...elementStyles?.[transferedData], fontFamily: finalObj?.fontFamilies?.secondary } : elementStyles?.[transferedData]
             const updatedColWise = currPage === "button" ? newObj?.button?.map((col, index) => {
                 if (index === id) {
                     const updatedElements = col?.elements?.map((ele) => {
                         if (ele?.positionType === position) {
                             const dupArray = [...ele?.element]
-                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles?.[transferedData] }
+                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: defaultStyles }
                             return {
                                 ...ele,
                                 element: [...dupArray]
@@ -683,7 +705,7 @@ const CustomizationParent = () => {
                     const updatedElements = col?.elements?.map((ele) => {
                         if (ele?.positionType === position) {
                             const dupArray = [...ele?.element]
-                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles?.[transferedData] }
+                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: defaultStyles }
                             return {
                                 ...ele,
                                 element: [...dupArray]
@@ -704,7 +726,7 @@ const CustomizationParent = () => {
                     const updatedElements = col?.elements?.map((ele) => {
                         if (ele?.positionType === position) {
                             const dupArray = [...ele?.element]
-                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles?.[transferedData] }
+                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: defaultStyles }
                             return {
                                 ...ele,
                                 element: [...dupArray]
@@ -724,7 +746,7 @@ const CustomizationParent = () => {
                     const updatedElements = col?.elements?.map((ele) => {
                         if (ele?.positionType === position) {
                             const dupArray = [...ele?.element]
-                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles?.[transferedData] }
+                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: defaultStyles }
                             return {
                                 ...ele,
                                 element: [...dupArray]
@@ -810,12 +832,12 @@ const CustomizationParent = () => {
                 elements = [
                     {
                         positionType: 'left',
-                        style: { ...newRow[0]?.style },
+                        style: { ...newRow[0]?.style, width: "50%" },
                         element: [...newRow[0]?.element]
                     },
                     {
                         positionType: 'right',
-                        style: { ...newRow[1]?.style },
+                        style: { ...newRow[1]?.style, width: "50%" },
                         element: [...newRow[1]?.element]
                     }
                 ]
@@ -903,7 +925,7 @@ const CustomizationParent = () => {
             newObj.mobile_pages[newObj?.mobile_pages?.findIndex($ => $?.id === currPage)].values = mobile_dupArray
         }
         updatePresent({ ...newObj })
-        setDeleteCols(["center", "right"])
+        // setDeleteCols(["center", "right"])
         // setcolWise([...colWise])
     }
 
@@ -1072,7 +1094,6 @@ const CustomizationParent = () => {
 
     const replaceColumns = (e, { cur, mainCol, repCol }) => {
         e.stopPropagation()
-        console.log({ cur, mainCol, repCol })
         const newObj = { ...finalObj }
         const dupArray = currPage === "button" ? newObj?.button : newObj?.pages[newObj?.pages?.findIndex($ => $?.id === currPage)].values
         const mobile_dupArray = currPage === "button" ? newObj?.mobile_button : newObj?.mobile_pages[newObj?.mobile_pages?.findIndex($ => $?.id === currPage)].values
@@ -1488,13 +1509,22 @@ const CustomizationParent = () => {
             const imgHeight = colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.height
             styles = (
                 <>
-                    <UncontrolledAccordion defaultOpen={['1']} stayOpen>
+                    <UncontrolledAccordion defaultOpen={['1', '2']} stayOpen>
                         <AccordionItem>
                             <AccordionHeader className='acc-header' targetId='1' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
                                 <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}>Border and Shadow</p>
                             </AccordionHeader>
                             <AccordionBody accordionId='1'>
                                 <BorderChange pageCondition={pageCondition} getMDToggle={getMDToggle} styles={values} setStyles={setValues} />
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem>
+                            <AccordionHeader className='acc-header' targetId='2' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
+                                {getMDToggle({ label: `Opacity: ${Boolean(values?.opacity) ? values?.opacity : "100%"}`, value: "opacity" })}
+                                <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}></p>
+                            </AccordionHeader>
+                            <AccordionBody accordionId='2'>
+                                <input type='range' className='w-100' value={Boolean(values?.opacity) ? parseFloat(values?.opacity) : 100} min={0} max={100} onChange={e => setValues({ ...values, opacity: `${e.target.value}%` })} />
                             </AccordionBody>
                         </AccordionItem>
                     </UncontrolledAccordion>
@@ -1586,7 +1616,9 @@ const CustomizationParent = () => {
                                     </div>
                                     <div className='p-0 mb-1 align-items-center'>
                                         {getMDToggle({ label: `Alignment`, value: `margin` })}
-                                        <Select value={alignOptions?.filter(item => item?.value === colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin)} onChange={e => {
+                                        <Select value={alignOptions?.filter(item => {
+                                            return ((colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin && colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin !== "") ? item?.value === colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin : "left")
+                                        })} onChange={e => {
                                             arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].style.margin = e.value
                                             arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandAlignment = false
                                             setcolWise([...arr])
@@ -1668,7 +1700,7 @@ const CustomizationParent = () => {
                         {/* Column Count Starts */}
                         <h6 style={{ marginLeft: "7px", marginTop: "10px" }}>Column Count</h6>
                         <div className='d-flex justify-content-around align-items-center'>
-                            {colWise[indexes?.cur].elements.length === 1 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("1", { left: "100%", right: "0%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            {colWise[indexes?.cur].elements.length === 1 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("1", { left: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <rect
                                         x={2}
@@ -1683,7 +1715,9 @@ const CustomizationParent = () => {
                                 </svg>
                             </button> : (
                                 <UncontrolledDropdown className='more-options-dropdown'>
-                                    <DropdownToggle className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
+                                    <DropdownToggle onClick={() => {
+                                        setDeleteCols(colWise[indexes?.cur].elements.length === 2 ? ["right"] : ["center", "right"])
+                                    }} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <rect
                                                 x={2}
@@ -1731,7 +1765,7 @@ const CustomizationParent = () => {
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
                             )}
-                            {colWise[indexes?.cur].elements.length <= 2 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("2", { left: "100%", right: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            {colWise[indexes?.cur].elements.length <= 2 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <g strokeWidth={3} stroke="#727272">
                                         <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1740,7 +1774,9 @@ const CustomizationParent = () => {
                                 </svg>
                             </button> : (
                                 <UncontrolledDropdown className='more-options-dropdown'>
-                                    <DropdownToggle className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
+                                    <DropdownToggle onClick={() => {
+                                        setDeleteCols(["right"])
+                                    }} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1766,7 +1802,7 @@ const CustomizationParent = () => {
                                                 if (deleteCols.length < colWise[indexes.cur].elements.length - 2) {
                                                     toast.error(`Select at least ${colWise[indexes.cur].elements.length - 2} columns`)
                                                 } else {
-                                                    changeColumn("2", { left: "100%", right: "100%" }, true)
+                                                    changeColumn("2", { left: "50%", right: "50%" }, true)
                                                 }
                                             }} className='flex-grow-1 text-center'>
                                                 Remove Columns
@@ -1778,7 +1814,7 @@ const CustomizationParent = () => {
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
                             )}
-                            <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("3", { left: "100%", center: "100%", right: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("3", { left: `${100 / 3}%`, center: `${100 / 3}%`, right: `${100 / 3}%` }, false)} style={{ aspectRatio: "1", width: "50px" }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <g strokeWidth={3} stroke="#727272">
                                         <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1863,7 +1899,7 @@ const CustomizationParent = () => {
                             <div>
                                 <h6 style={{ marginLeft: "7px", marginTop: "20px" }}>Column Split</h6>
                                 <div className='d-flex justify-content-around align-items-center'>
-                                    <button onClick={() => changeColumn("3", { left: `100%`, center: `100%`, right: `100%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button onClick={() => changeColumn("3", { left: `${100 / 3}%`, center: `${100 / 3}%`, right: `${100 / 3}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -2057,7 +2093,7 @@ const CustomizationParent = () => {
                                 <div className='p-0 mx-0 my-1'>
                                     <div className='p-0 mb-2 justify-content-start align-items-center'>
                                         {getMDToggle({ label: `Select Font: `, value: `fontFamily` })}
-                                        <Select className='w-100' name="" onChange={e => {
+                                        <Select value={fontStyles?.filter($ => $?.value === values?.fontFamily)} className='w-100' name="" onChange={e => {
                                             setValues({ ...values, fontFamily: e.value })
                                         }} id="" options={fontStyles} styles={{
                                             option: (provided, state) => {
@@ -2076,7 +2112,10 @@ const CustomizationParent = () => {
                                 <div className='p-0 mx-0 my-1'>
                                     <div className='p-0 mb-2 justify-content-start align-items-center'>
                                         {getMDToggle({ label: `Width Type: `, value: `widthType` })}
-                                        <Select className='w-100' name="" onChange={e => {
+                                        <Select value={[
+                                            { value: '100%', label: '100%' },
+                                            { value: 'custom', label: 'Custom' }
+                                        ].filter($ => $?.value === values?.widthType)} className='w-100' name="" onChange={e => {
                                             if (e.value === "100%") {
                                                 setValues({ ...values, widthType: e.value, width: e.value, minHeight: "0px", padding: "10px" })
                                             } else if (e.value === "custom") {
@@ -2832,7 +2871,7 @@ const CustomizationParent = () => {
         } else if (selectedType === "display_when") {
             return (
                 <div className='py-1 px-2 mt-1'>
-                    <h4 className='mb-2'>When to display</h4>
+                    <h4 className='mb-2'>Display Conditions</h4>
                     <div className="form-check mb-2">
                         <input checked={finalObj?.rules?.display_when === "immediately"} onChange={updateRules} type="radio" name='display_when' id='immediately' value={"immediately"} className="form-check-input cursor-pointer" /><label className="cursor-pointer" style={{ fontSize: "13px" }} htmlFor="immediately">Immediately</label>
                     </div>
@@ -2843,13 +2882,13 @@ const CustomizationParent = () => {
                         <input checked={finalObj?.rules?.display_when === "button_click"} onChange={updateRules} type="radio" name='display_when' id='button_click' value={"button_click"} className="form-check-input cursor-pointer" /><label htmlFor="button_click" className="cursor-pointer" style={{ fontSize: "13px" }}>On Button Click</label>
                     </div>
                     <div className="form-check mb-2">
-                        <input checked={finalObj?.rules?.display_when === "any_condition_met"} onChange={updateRules} type="radio" name='display_when' id='any_condition_met' value={"any_condition_met"} className="form-check-input cursor-pointer" /><label htmlFor="any_condition_met" className="cursor-pointer" style={{ fontSize: "13px" }}>When any Condition is met</label>
+                        <input checked={finalObj?.rules?.display_when === "any_condition_met"} onChange={updateRules} type="radio" name='display_when' id='any_condition_met' value={"any_condition_met"} className="form-check-input cursor-pointer" /><label htmlFor="any_condition_met" className="cursor-pointer" style={{ fontSize: "13px" }}>Other Conditions</label>
                     </div>
 
                     {
                         finalObj?.rules?.display_when === "any_condition_met" ? <>
                             <div className="form-check form-switch mb-1">
-                                <input onChange={updateRules} checked={finalObj?.rules?.spent_on_page} type="checkbox" role='switch' id='spent_on_page' name={"spent_on_page"} className="form-check-input cursor-pointer" /><label htmlFor="spent_on_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Spend on the Page</label>
+                                <input onChange={updateRules} checked={finalObj?.rules?.spent_on_page} type="checkbox" role='switch' id='spent_on_page' name={"spent_on_page"} className="form-check-input cursor-pointer" /><label htmlFor="spent_on_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Time spend on the page</label>
                             </div>
                             {finalObj?.rules?.spent_on_page && (  //condition here
                                 <div className="d-flex gap-1 mb-2">
@@ -2869,7 +2908,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.spent_on_website} onChange={updateRules} type="checkbox" role='switch' id='spent_on_website' name={"spent_on_website"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="spent_on_website" className="cursor-pointer" style={{ fontSize: "13px" }}>Spend on the Website</label>
+                                <label htmlFor="spent_on_website" className="cursor-pointer" style={{ fontSize: "13px" }}>Time spend on the Website</label>
                             </div>
                             {finalObj?.rules?.spent_on_website && (  //condition here  
                                 <div className="d-flex gap-1 mb-2">
@@ -2889,7 +2928,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.read_page_by} onChange={updateRules} type="checkbox" role='switch' id='read_page_by' name={"read_page_by"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="read_page_by" className="cursor-pointer" style={{ fontSize: "13px" }}>Read the page by</label>
+                                <label htmlFor="read_page_by" className="cursor-pointer" style={{ fontSize: "13px" }}>Page scroll percentage</label>
                             </div>
                             {finalObj?.rules?.read_page_by && (  //condition here
                                 <div className="d-flex gap-1 mb-2 justify-content-start align-items-center">
@@ -2902,7 +2941,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.visited} onChange={updateRules} type="checkbox" role='switch' id='visited' name={"visited"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="visited" className="cursor-pointer" style={{ fontSize: "13px" }}>Visited</label>
+                                <label htmlFor="visited" className="cursor-pointer" style={{ fontSize: "13px" }}>Number of page visits</label>
                             </div>
                             {finalObj?.rules?.visited && (  //condition here
                                 <div className="d-flex gap-1 mb-2 justify-content-start align-items-center">
@@ -2911,7 +2950,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.not_active_page} onChange={updateRules} type="checkbox" role='switch' id='not_active_page' name={"not_active_page"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="not_active_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Not active on the page</label>
+                                <label htmlFor="not_active_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Page inactivity period</label>
                             </div>
                             {finalObj?.rules?.not_active_page && (  //condition here
                                 <div className="d-flex gap-1 mb-2">
@@ -2940,10 +2979,13 @@ const CustomizationParent = () => {
         } else if (selectedType === "stop_display_when") {
             return (
                 <div className='py-1 px-2 mt-1'>
-                    <h4 className='mb-2'>When to Stop displaying</h4>
-
+                    <h4 className='mb-2'>Display Conclusion</h4>
+                    <p>Stop displaying pop-up after:</p>
                     <div className="form-check form-switch mb-1">
-                        <input checked={finalObj?.rules?.stop_display_pages} onChange={updateRules} type="checkbox" role='switch' id='stop_display_pages' name={"stop_display_pages"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_pages" className="cursor-pointer" style={{ fontSize: "13px" }}>After visiting {finalObj?.rules?.stop_display_pages_value} page(s)</label>
+                        <input checked={finalObj?.rules?.stop_display_pages} onChange={updateRules} type="checkbox" role='switch' id='stop_display_pages' name={"stop_display_pages"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_pages" className="cursor-pointer" style={{ fontSize: "13px" }}>
+                            {/* After visiting {finalObj?.rules?.stop_display_pages_value} page(s) */}
+                            Page visit/s
+                        </label>
                     </div>
                     {finalObj?.rules?.stop_display_pages && (  //condition here
                         <div className="d-flex gap-1 mb-1">
@@ -2955,7 +2997,10 @@ const CustomizationParent = () => {
                         </div>
                     )}
                     <div className="form-check form-switch mb-1">
-                        <input checked={finalObj?.rules?.stop_display_after_closing} onChange={updateRules} type="checkbox" role='switch' id='stop_display_after_closing' name={"stop_display_after_closing"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_after_closing" className="cursor-pointer" style={{ fontSize: "13px" }}>After closing {finalObj?.rules?.stop_display_after_closing_value} time(s)</label>
+                        <input checked={finalObj?.rules?.stop_display_after_closing} onChange={updateRules} type="checkbox" role='switch' id='stop_display_after_closing' name={"stop_display_after_closing"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_after_closing" className="cursor-pointer" style={{ fontSize: "13px" }}>
+                            {/* After closing {finalObj?.rules?.stop_display_after_closing_value} time(s) */}
+                            Page closure/s
+                        </label>
                     </div>
                     {finalObj?.rules?.stop_display_after_closing && (  //condition here
                         <div className="d-flex gap-1 justify-content-start align-items-center mb-1">
@@ -2972,7 +3017,7 @@ const CustomizationParent = () => {
         } else if (selectedType === "on_pages") {
             return (
                 <div className='py-1 px-2 mt-1'>
-                    <h4 className='mb-2'>Visible on</h4>
+                    <h4 className='mb-2'>Display Location</h4>
                     <div className="row">
                         {pagesSelection?.map((ele, key) => {
                             return (
@@ -3004,7 +3049,7 @@ const CustomizationParent = () => {
                                             const newObj = { ...finalObj }
                                             newObj.behaviour.CUSTOM_PAGE_LINK[key] = e.target.value
                                             updatePresent(newObj)
-                                        }} value={ele} className='form-control' type="text" placeholder={`www.url-example${key + 1}.com`} />{finalObj.behaviour.CUSTOM_PAGE_LINK.length > 1 && <span onClick={() => {
+                                        }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj.behaviour.CUSTOM_PAGE_LINK.length > 1 && <span onClick={() => {
                                             const newObj = { ...finalObj }
                                             newObj?.behaviour?.CUSTOM_PAGE_LINK?.splice(key, 1)
                                             updatePresent(newObj)
@@ -3330,19 +3375,15 @@ const CustomizationParent = () => {
         const y = dragOverData?.y
         const height = dragOverData?.height
 
-        console.log("newObj ColDrop", transferedData)
         if ((transferedData !== "" && !transferedData.includes("col"))) {
             const arrCheck = dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element
             if (arrCheck.length <= 1 && (!arrCheck[0]?.type || arrCheck[0]?.type === "")) {
-                console.log({ arrCheck: "1" })
                 dupArray[cur].elements[dupArray[cur].elements.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }]
                 mobile_dupArray[cur].elements[mobile_dupArray[cur].elements.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }]
             } else if ((mousePos.y - (y + (height / 2)) > 0)) {
-                console.log({ arrCheck: "2" })
                 dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element?.push({ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
                 mobile_dupArray[cur]?.elements[mobile_dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element?.push({ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
             } else {
-                console.log({ arrCheck: "3" })
                 dupArray[cur].elements[dupArray[cur].elements?.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }, ...dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element]
                 mobile_dupArray[cur].elements[mobile_dupArray[cur].elements?.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }, ...dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element]
             }
@@ -3366,7 +3407,6 @@ const CustomizationParent = () => {
             handleLayoutDrop(e, cur)
         }
 
-        console.log({ cur, curElem, dupArray, mobile_dupArray, inputTypeCondition, y, height })
     }
 
     const handleElementDrop = (e, cur, curElem, subElem) => {
@@ -3378,7 +3418,6 @@ const CustomizationParent = () => {
         const dragOverData = document.getElementById(`${currPage}-${dragOverIndex.cur}-${dragOverIndex.curElem}-${dragOverIndex.subElem}`)?.getBoundingClientRect()
         const y = dragOverData?.y
         const height = dragOverData?.height
-        console.log("newObj ElementDrop", { transferedData })
         if ((transferedData !== "" && !transferedData.includes("col"))) {
             let dupArray
             let mobile_dupArray
@@ -4093,6 +4132,7 @@ const CustomizationParent = () => {
         getOffers()
         refreshOfferDraggable()
         getPlan()
+        // const newObj = {...finalObj}
         // generateSuggestion()
         const campaignStartDate = finalObj?.campaignStartDate === "" ? moment(new Date()).format("YYYY-MM-DD HH:mm:ss") : Array.isArray(finalObj?.campaignStartDate) ? moment(finalObj?.campaignStartDate[0]).format("YYYY-MM-DD HH:mm:ss") : finalObj?.campaignStartDate
         const campaignEndDate = !finalObj?.campaignHasEndDate ? "" : finalObj?.campaignEndDate === "" ? moment(new Date()).format("YYYY-MM-DD HH:mm:ss") : Array.isArray(finalObj?.campaignEndDate) ? moment(finalObj?.campaignEndDate[0]).format("YYYY-MM-DD HH:mm:ss") : finalObj?.campaignEndDate
@@ -4121,6 +4161,42 @@ const CustomizationParent = () => {
             setValues(currPage === "button" ? { ...finalObj?.[`${mobileCondition}button`][indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style } : { ...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style })
         }
 
+        document.addEventListener("mouseup", () => {
+            setIsColRes(false)
+            setResizeMouse({ ...resizeMouse, initial: null })
+        })
+
+        document.addEventListener("mousemove", (e) => {
+            // console.log("mousemove", {checker, isColRes})
+            if (isColRes) {
+                const row = document.getElementById(`${currPage}-${resizeMouse?.move?.cur}-sizeable`)
+
+                const rowSize = row?.getBoundingClientRect()
+
+                const colWidth3 = (resizeMouse?.move?.ignoreColWidth / rowSize?.width) * 100
+
+                const colWidthCalc = ((resizeMouse?.move?.colWidth - (resizeMouse.initial - e.clientX)) / rowSize?.width) * 100
+                const colWidth1 = colWidthCalc <= 5 ? 5 : colWidthCalc >= 95 - colWidth3 ? 95 - colWidth3 : colWidthCalc
+                const colWidth2 = 100 - colWidth3 - colWidth1
+
+                const moveObj = { ...finalObj }
+
+                const dupArr = currPage === "button" ? moveObj.button : moveObj.pages[moveObj.pages.findIndex($ => $.id === currPage)].values
+                console.log("co-ordinates onMouseMove", e, e.clientX - resizeMouse?.initial, resizeMouse?.initial, e.clientX, { rowSize, colWidth1, colWidth2, calcWidth: e.clientX - resizeMouse?.initial, resizeMouse })
+
+                dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col1].style.width = `${colWidth1}%`
+                dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col2].style.width = `${colWidth2}%`
+
+                if (currPage === "button") {
+                    moveObj.button = dupArr
+                } else {
+                    moveObj.pages[moveObj.pages.findIndex($ => $.id === currPage)].values = dupArr
+                }
+
+                updatePresent({ ...moveObj })
+            }
+        })
+
         // if (status) {
         //     document.getElementById("phone").click()
         // } else if (defaultIsMobile.get('isMobile') === 'false') {
@@ -4136,7 +4212,41 @@ const CustomizationParent = () => {
 
     return (
         <Suspense fallback={null}>
-            <div className='position-relative' id='customization-container'>
+            <div className='position-relative' id='customization-container'
+                onMouseUp={() => {
+                    setIsColRes(false)
+                    setResizeMouse({ ...resizeMouse, initial: null })
+                }}
+                onMouseMove={(e) => {
+                    // console.log("mousemove", {checker, isColRes})
+                    if (isColRes) {
+                        const row = document.getElementById(`${currPage}-${resizeMouse?.move?.cur}-sizeable`)
+
+                        const rowSize = row?.getBoundingClientRect()
+
+                        const colWidth3 = (resizeMouse?.move?.ignoreColWidth / rowSize?.width) * 100
+
+                        const colWidthCalc = ((resizeMouse?.move?.colWidth - (resizeMouse.initial - e.clientX)) / rowSize?.width) * 100
+                        const colWidth1 = colWidthCalc <= 5 ? 5 : colWidthCalc >= 95 - colWidth3 ? 95 - colWidth3 : colWidthCalc
+                        const colWidth2 = 100 - colWidth3 - colWidth1
+
+                        const newObj = { ...finalObj }
+
+                        const dupArr = currPage === "button" ? newObj.button : newObj.pages[newObj.pages.findIndex($ => $.id === currPage)].values
+                        console.log("co-ordinates onMouseMove", e, e.clientX - resizeMouse?.initial, resizeMouse?.initial, e.clientX, { rowSize, colWidth1, colWidth2, calcWidth: e.clientX - resizeMouse?.initial, resizeMouse })
+
+                        dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col1].style.width = `${colWidth1}%`
+                        dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col2].style.width = `${colWidth2}%`
+
+                        if (currPage === "button") {
+                            newObj.button = dupArr
+                        } else {
+                            newObj.pages[newObj.pages.findIndex($ => $.id === currPage)].values = dupArr
+                        }
+
+                        updatePresent({ ...newObj })
+                    }
+                }}>
                 {
                     apiLoader ? <FrontBaseLoader /> : ''
                 }
@@ -4243,7 +4353,7 @@ const CustomizationParent = () => {
                             <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Elements</span>
                         </div>
                         <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "offers" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => {
-                            setSideNav(sideNav === "offers" ? "" : "offers")
+                            setSideNav(currPage === "button" ? sidenav : sideNav === "offers" ? "" : "offers")
                             setCurrPage("offers")
                         }}>
                             <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
@@ -4485,17 +4595,17 @@ const CustomizationParent = () => {
                                                         <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}>Size</p>
                                                         <div className='p-0 mx-0 my-1'>
                                                             <div className='mb-1'>
-                                                                <span className='fw-bolder text-black text-capitalize' style={{ fontSize: "0.7rem" }}>{isMobile ? "Max Width" : "Width"}: {currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`][isMobile ? "maxWidth" : "width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"]}</span>
+                                                                <span className='fw-bolder text-black text-capitalize' style={{ fontSize: "0.7rem" }}>{isMobile && currPage !== "button" ? "Max Width" : "Width"}: {currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]["width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"]}</span>
                                                                 <div className="d-flex p-0 justify-content-between align-items-center gap-2">
                                                                     <input type='range'
                                                                         value={parseFloat(currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]["width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"])}
                                                                         className='w-100' onChange={e => {
-                                                                            currPage === "button" ? updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}button`]: { ...finalObj?.backgroundStyles[`${mobileCondition}button`], [e.target.name]: `${e.target.value}${isMobile ? "%" : "px"}` } } }) : updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: { ...finalObj?.backgroundStyles[`${mobileCondition}main`], [e.target.name]: `${e.target.value}${isMobile ? "%" : "px"}` } } })
-                                                                        }} name={currPage === "button" ? "width" : isMobile ? "maxWidth" : "width"} min="0" max={isMobile ? "100" : "800"} />
+                                                                            currPage === "button" ? updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}button`]: { ...finalObj?.backgroundStyles[`${mobileCondition}button`], [e.target.name]: `${e.target.value}px` } } }) : updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: { ...finalObj?.backgroundStyles[`${mobileCondition}main`], [e.target.name]: `${e.target.value}${isMobile ? "%" : "px"}` } } })
+                                                                        }} name={currPage === "button" ? "width" : isMobile ? "maxWidth" : "width"} min="0" max={isMobile && currPage !== "button" ? "100" : "800"} />
                                                                 </div>
                                                             </div>
                                                             <div className=''>
-                                                                <span className='fw-bolder text-black' style={{ fontSize: "0.7rem" }}>Min-Height: {finalObj?.backgroundStyles[`${mobileCondition}main`]?.minHeight}</span>
+                                                                <span className='fw-bolder text-black' style={{ fontSize: "0.7rem" }}>Min-Height: {finalObj?.backgroundStyles[`${mobileCondition}${pageCondition}`]?.minHeight}</span>
                                                                 <div className="d-flex p-0 justify-content-between align-items-center gap-2">
                                                                     <input type='range' value={parseFloat(currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]?.minHeight : finalObj?.backgroundStyles[`${mobileCondition}main`]?.minHeight)} onChange={e => {
                                                                         currPage === "button" ? updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}button`]: { ...finalObj?.backgroundStyles[`${mobileCondition}button`], minHeight: `${e.target.value}px` } } }) : updatePresent({ ...finalObj, backgroundStyles: { ...finalObj.backgroundStyles, [`${mobileCondition}main`]: { ...finalObj?.backgroundStyles[`${mobileCondition}main`], minHeight: `${e.target.value}px` } } })
@@ -4580,7 +4690,7 @@ const CustomizationParent = () => {
                                                                     </div>
                                                                 </>
                                                             }
-                                                            
+
                                                         </div>
                                                     </AccordionBody>
                                                 </AccordionItem>
@@ -4718,41 +4828,6 @@ const CustomizationParent = () => {
                                                                         />
                                                                     </g>
                                                                 </svg>
-                                                            ) : currPage !== "button" ? (
-                                                                <svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    viewBox="0 0 184.45 367.2"
-                                                                    style={{ width: "75px" }}
-                                                                    property="globalStyle.overlay.mobilePosition"
-                                                                >
-                                                                    <g id="mobile-position">
-                                                                        <rect x="11.76" y="239.71" width="162.2" height="116.24" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "BC" } })} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231f20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "BC" ? "#464646" : "#ffffff"} />
-                                                                        <rect x="11.99" y="124.46" width="162.2" height="116.24" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "MC" } })} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231f20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "MC" ? "#464646" : "#ffffff"} />
-                                                                        <rect x="11.61" y="9.2" width="162.2" height="116.24" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "TC" } })} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231f20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "TC" ? "#464646" : "#ffffff"} />
-                                                                    </g>
-                                                                    <path
-                                                                        fill="#58595b"
-                                                                        d="M182.49,26.65A26.65,26.65,0,0,0,155.84,0H28.61A26.65,26.65,0,0,0,2,26.65v313.9A26.65,26.65,0,0,0,28.61,367.2H155.84a26.65,26.65,0,0,0,26.65-26.65ZM178.4,340.29a22.82,22.82,0,0,1-22.82,22.82H28.36A22.82,22.82,0,0,1,5.54,340.29V26.4A22.82,22.82,0,0,1,28.36,3.58H155.58A22.82,22.82,0,0,1,178.4,26.4Z"
-                                                                    />
-                                                                    <path
-                                                                        d="M2,48.47H1.72A1.72,1.72,0,0,0,0,50.19V60.65a1.71,1.71,0,0,0,1.72,1.71H2"
-                                                                    />
-                                                                    <path
-                                                                        d="M182.49,126.27h0a2,2,0,0,0,2-2V85.48a2,2,0,0,0-2-2h0"
-                                                                    />
-                                                                    <path
-                                                                        d="M2,75.21H2a2,2,0,0,0-2,2V99.25a2,2,0,0,0,2,2H2"
-                                                                    />
-                                                                    <path
-                                                                        d="M2,108.58H2a2,2,0,0,0-2,2v22.08a2,2,0,0,0,2,2H2"
-                                                                    />
-                                                                    <path
-                                                                        fill="#231f20"
-                                                                        d="M178.4,26.4A22.82,22.82,0,0,0,155.58,3.58H28.36A22.82,22.82,0,0,0,5.54,26.4V340.29a22.82,22.82,0,0,0,22.82,22.82H155.58a22.82,22.82,0,0,0,22.82-22.82ZM113.31,12.54a2.24,2.24,0,1,1-2.24-2.23A2.24,2.24,0,0,1,113.31,12.54ZM82.88,11.25h19.94a1.4,1.4,0,0,1,1.54,1.28,1.4,1.4,0,0,1-1.54,1.28H82.88a1.4,1.4,0,0,1-1.54-1.28A1.4,1.4,0,0,1,82.88,11.25Zm89.89,328.42c0,8.93-7.48,15.77-16.41,15.77H29a15.53,15.53,0,0,1-15.81-15.77V26A16,16,0,0,1,29,9.72H43.74c3.11,0,4.26,0,4.45,4,.2,4.1,3,6.33,6.82,7.53a14,14,0,0,0,4.1.27H126.4a14.07,14.07,0,0,0,4.11-.17c3.81-1.2,6.62-3.63,6.82-7.72s1.33-3.87,4.45-3.87h14.58A16.5,16.5,0,0,1,172.77,26Z"
-                                                                    />
-                                                                    <circle cx="111.07" cy="12.54" r="2.24" />
-                                                                    <path d="M82.88,13.81h19.94a1.4,1.4,0,0,0,1.54-1.28,1.4,1.4,0,0,0-1.54-1.28H82.88a1.4,1.4,0,0,0-1.54,1.28A1.4,1.4,0,0,0,82.88,13.81Z" />
-                                                                </svg>
                                                             ) : (
                                                                 <svg style={{ width: "75px" }} viewBox="0 0 185 368" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                     <g clip-path="url(#clip0_0_1)">
@@ -4760,7 +4835,7 @@ const CustomizationParent = () => {
                                                                         <path d="M120 258H66V356H120V258Z" stroke="#231F20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "BC" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "BC" } })} />
                                                                         <path d="M66 258H12V356H66V258Z" stroke="#231F20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "BL" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "BL" } })} />
                                                                         <path d="M174 108H120V258H174V108Z" stroke="#231F20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "MR" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "MR" } })} />
-                                                                        <path d="M120 108H66V258H120V108Z" stroke="#231F20" fill={"#cccccc"} style={{ cursor: "pointer", transition: "0.3s ease" }} />
+                                                                        <path d="M120 108H66V258H120V108Z" stroke="#231F20" fill={currPage === "button" ? "#cccccc" : finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "MC" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: currPage === "button" ? finalObj?.positions?.[`${mobileCondition}${pageCondition}`] : "MC" } })} />
                                                                         <path d="M66 108H12V258H66V108Z" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "ML" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231F20" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "ML" } })} />
                                                                         <path d="M174 9H120V108H174V9Z" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "TR" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231F20" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "TR" } })} />
                                                                         <path d="M120 9H66V108H120V9Z" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "TC" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231F20" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "TC" } })} />
@@ -5402,15 +5477,44 @@ const CustomizationParent = () => {
                                                     <AccordionBody accordionId='1'>
                                                         {(gotOffers && Array.isArray(allOffers)) ? allOffers?.map((ele, key) => {
                                                             return (
-                                                                <span className="position-relative" style={{ cursor: "pointer", outline: `2px solid ${finalObj?.selectedOffers?.some($ => $?.Code === ele.Code) ? "#FF671C" : "rgba(0,0,0,0)"}` }} onClick={() => {
-                                                                    if (finalObj?.selectedOffers?.some($ => $?.Code === ele.Code)) {
-                                                                        const newArr = [...finalObj.selectedOffers]
-                                                                        const filteredArr = [...newArr?.filter(item => item.Code !== ele.Code)]
+                                                                <span className="position-relative" style={{ cursor: "pointer", outline: `2px solid ${(finalObj?.selectedOffers?.some($ => $?.Code === ele.Code) && offerIndexes?.hasOfferList?.includes(ele.id)) ? "#FF671C" : "rgba(0,0,0,0)"}` }} onClick={() => {
+                                                                    if ((finalObj?.selectedOffers?.some($ => $?.Code === ele.Code) && offerIndexes?.hasOfferList?.includes(ele.id))) {
+                                                                        const newObj = { ...finalObj }
+                                                                        const filteredArr = [...newObj?.selectedOffers?.filter(item => item.Code !== ele.Code)]
                                                                         // setSelectedOffer(filteredArr[filteredArr.length - 1])
-                                                                        updatePresent({ ...finalObj, selectedOffers: filteredArr })
+                                                                        updatePresent({ ...newObj, selectedOffers: filteredArr })
                                                                     } else {
-                                                                        // setSelectedOffer(ele)
-                                                                        updatePresent({ ...finalObj, selectedOffers: [...finalObj?.selectedOffers, ele] })
+                                                                        // setSelectedOffer(ele)const pageIndex = newObj.pages.findIndex($ => $.id === currPage)
+                                                                        const newObj = { ...finalObj }
+                                                                        console.log({offerIndexes})
+                                                                        const pageIndex = newObj?.pages?.findIndex($ => $.id === currPage)
+                                                                        // newObj?.pages[pageIndex]?.values?.forEach((cur, key) => {
+                                                                        //     cur.elements.forEach((curElem, i) => {
+                                                                        //         curElem.element.forEach((subElem, j) => {
+                                                                        //             if (subElem?.type === "offer") {
+                                                                        //                 offerIndexes.cur = key
+                                                                        //                 offerIndexes.curElem = i
+                                                                        //                 offerIndexes.subElem = j
+                                                                        //             } else {
+                                                                        //                 toast.error("Add an Offer element to add offers")
+                                                                        //             }
+                                                                        //         })
+                                                                        //     })
+                                                                        // })
+                                                                        // console.log("if outside entered offerIndexes", offerIndexes?.cur, offerIndexes?.curElem, offerIndexes?.subElem)
+                                                                        if (offerIndexes?.cur !== null && offerIndexes?.curElem !== null && offerIndexes?.subElem !== null) {
+                                                                            console.log("if entered offerIndexes")
+                                                                            if (offerIndexes.hasOfferList) {
+                                                                                console.log("if if entered offerIndexes")
+                                                                                newObj?.pages[pageIndex]?.values[offerIndexes?.cur]?.elements[offerIndexes?.curElem]?.element[offerIndexes?.subElem]?.offersList.push(ele.id)
+                                                                                newObj?.mobile_pages[pageIndex]?.values[offerIndexes?.cur]?.elements[offerIndexes?.curElem]?.element[offerIndexes?.subElem]?.offersList.push(ele.id)
+                                                                            } else {
+                                                                                console.log("else if entered offerIndexes")
+                                                                                newObj.pages[pageIndex].values[offerIndexes.cur].elements[offerIndexes?.curElem].element[offerIndexes?.subElem].offersList = [ele.id]
+                                                                                newObj.mobile_pages[pageIndex].values[offerIndexes?.cur].elements[offerIndexes?.curElem].element[offerIndexes?.subElem].offersList = [ele.id]
+                                                                            }
+                                                                            updatePresent({ ...newObj, selectedOffers: [...finalObj?.selectedOffers, ele] })
+                                                                        }
                                                                     }
                                                                 }}>
                                                                     {/* {finalObj?.selectedOffers?.some($ => $?.Code === ele?.Code) && <span style={{ position: "absolute", inset: "0px 0px auto auto", transform: `translateX(35%) translateY(-35%)`, width: "25px", aspectRatio: "1", display: "flex", justifyContent: "center", alignItems: "center", color: "#FF671C", backgroundColor: "white", borderRadius: "100px", zIndex: "99999999999", border: "2px solid #FF671C" }}>{(finalObj?.selectedOffers?.findIndex($ => $?.Code === ele.Code)) + 1}</span>} */}
@@ -5485,7 +5589,7 @@ const CustomizationParent = () => {
                                                             <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Email From</label>
                                                             <div className="d-flex justify-content-center align-items-center" style={{ border: '1px solid #d8d6de', borderRadius: '0.357rem', gap: '5px' }}>
                                                                 {/* <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Email Template</label> */}
-                                                                <input type="text" value={outletSenderId ? outletSenderId : "no_reply@xircls.com"} className="form-control" style={{ width: '250px', border: 'none' }} disabled />
+                                                                <input type="text" value={outletSenderId ? outletSenderId : "no_reply@xircls.com"} className="form-control" style={{ width: '100%', border: 'none' }} disabled />
                                                                 <a style={{ marginRight: '5px' }} onClick={() => setChangeSenderEmail(!changeSenderEmail)}>
                                                                     <Edit size={'18px'} />
                                                                 </a>
@@ -5499,6 +5603,7 @@ const CustomizationParent = () => {
                                                             <Select onChange={(e) => {
                                                                 const form_data = new FormData()
                                                                 form_data.append("id", e.value)
+                                                                form_data.append("app", userPermission?.appName)
                                                                 fetch(`${SuperLeadzBaseURL}/api/v1/get_single_camp_details/`, {
                                                                     method: "POST",
                                                                     body: form_data
@@ -5581,7 +5686,7 @@ const CustomizationParent = () => {
                         {/* Section Drawer */}
                         {/* Theme Preview */}
                         <div className="d-flex flex-column align-items-center bg-light-secondary flex-grow-1" style={{ width: sideNav === "rules" ? "auto" : `calc(100vw - ${sideNav !== "" ? sectionWidths.editSection : "0"}px - ${sectionWidths.drawerWidth}px - ${sectionWidths.sidebar}px)`, transition: "0.3s ease-in-out" }}>
-                            {returnRender({ outletData, slPrevBg, bgsettings: finalObj?.overlayStyles, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition: finalObj?.positions?.[`${mobileCondition}${pageCondition}`], bgStyles: finalObj?.backgroundStyles?.[`${mobileCondition}main`], crossStyle: finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise: currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values], setcolWise, dragStartIndex, setDragStartIndex, dragOverIndex, setDragOverIndex, isMobile, setIsMobile, finalObj, setFinalObj: updatePresent, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles: finalObj?.backgroundStyles[`${mobileCondition}button`], offerTheme: finalObj?.offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, setRearr, isColDragging, setIsColDragging })}
+                            {returnRender({ outletData, slPrevBg, bgsettings: finalObj?.overlayStyles, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition: finalObj?.positions?.[`${mobileCondition}${pageCondition}`], bgStyles: finalObj?.backgroundStyles?.[`${mobileCondition}main`], crossStyle: finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise: currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values], setcolWise, dragStartIndex, setDragStartIndex, dragOverIndex, setDragOverIndex, isMobile, setIsMobile, finalObj, setFinalObj: updatePresent, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles: finalObj?.backgroundStyles[`${mobileCondition}button`], offerTheme: finalObj?.offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, setRearr, isColDragging, setIsColDragging, isColRes, setIsColRes, resizeMouse, setResizeMouse })}
                         </div>
                         {/* Theme Preview */}
                         {/* Edit Section */}
@@ -5636,6 +5741,11 @@ const CustomizationParent = () => {
                             </div>
                             {imageTab !== "product" && <div className="p-1 pt-0 d-flex justify-content-center border-bottom">
                                 <label htmlFor='uploadImg' className="btn btn-dark">Upload an Image <input onChange={e => {
+                                    const k = 1024
+                                    if (e.target.files[0].size > 100 * k) {
+                                        toast.error("File size too large. Upload size must be upto 100kb")
+                                        return
+                                    }
                                     setImgLoading(true)
                                     const form_data = new FormData()
                                     form_data.append("shop", outletData[0]?.web_url)

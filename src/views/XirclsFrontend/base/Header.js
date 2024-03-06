@@ -16,7 +16,7 @@ import why_collaborative_marketing_logo from "./assets/why_collaborative_marketi
 import { Accordion, AccordionBody, AccordionHeader, AccordionItem, Dropdown, DropdownMenu, Container, Row, Col } from 'reactstrap'
 import { xircls_url } from "../../Validator"
 
-export default function Header() {
+export default function Header({hideLinks}) {
   const [dropDown, setDropDown] = useState({
     aboutUs: false,
     product: false,
@@ -136,7 +136,7 @@ export default function Header() {
                   <Link to='/'><img src={logo} alt="" height={scroll > 300 ? 60 : 100} style={{ transition: '0.35s ease-in-out' }} /></Link>
                 </Col>
                 
-                <Col xs={6} className={`xircls-navlinks d-flex px-0`}>
+                {!hideLinks && <Col xs={6} className={`xircls-navlinks d-flex px-0`}>
                   <Link to='/' className="flex-grow-1 px-0 menu-items d-flex bg-white align-items-center font-13px-st letter-spacing-1">Home</Link>
                   <div onMouseEnter={() => handleEnter(1)} onMouseLeave={() => handleLeave(1)} className="flex-grow-1 px-0 about-hover font-13px-st letter-spacing-1 menu-items cursor-pointer d-flex bg-white align-items-center" style={{gap: `5px`}}>
                     <span className="icon-gap-small">
@@ -165,7 +165,7 @@ export default function Header() {
                   <Link to='/merchant/login/' className="flex-grow-1 px-0 menu-items d-flex bg-white align-items-center font-13px-st letter-spacing-1">Login</Link>
 
 
-                </Col>
+                </Col>}
               </Row>
               <div id="about" className="d-flex justify-content-center hide align-items-center mx-auto nav-dropdown">
                 <Dropdown toggle={() => setDropDown({...dropDown, aboutUs: true})} className="w-90 mx-auto" onClick={() => setDropDown({...dropDown, aboutUs: true})} onMouseEnter={() => handleEnter(1)} onMouseLeave={() => handleLeave(1)} isOpen={dropDown.aboutUs}>
@@ -279,7 +279,7 @@ export default function Header() {
               <Col xs={12} className='border-bottom'>
                 <div className='d-flex align-items-center justify-content-between px-2'>
                   <Link className="text-center flex-fill" to='/'><img src={logo} alt="" height={100} /></Link>
-                  <span targetId='1' onClick={mainMenu} style={{ rotate: navVis && '180deg', transition: '0.25s ease-in-out' }} className=" cursor-pointer">{navVis ? <X /> : <Menu />}</span>
+                  {!hideLinks && <span targetId='1' onClick={mainMenu} style={{ rotate: navVis && '180deg', transition: '0.25s ease-in-out' }} className=" cursor-pointer">{navVis ? <X /> : <Menu />}</span>}
                 </div>
                 <Accordion flush open={menu} toggle={toggleMainMenu} className="py-0">
                   <AccordionItem className="py-0">
