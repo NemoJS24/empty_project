@@ -7,6 +7,8 @@ import { Info, Monitor, Smartphone } from 'react-feather'
 
 const CampaignWiseData = ({campaignData}) => {
 
+    console.log({campaignData})
+
     // const [isLoading, setIsLoading] = useState(true)
     const [displayType, setDisplayType] = useState("")
     console.log(displayType, "displayType")
@@ -136,7 +138,7 @@ const CampaignWiseData = ({campaignData}) => {
                             <RenderData title="CTR" data={`${(campaignData?.clicks && campaignData[`${condition}pop_up_view`]) ? Number(campaignData[`${condition}clicks`] / campaignData[`${condition}pop_up_view`] * 100).toFixed(2) : 0}%`} info={`(Number of clicks / Number of impressions) * 100`} />
                         </Col>
                         <Col md="3">
-                            <RenderData title="Revenue" data={campaignData[`${condition}Revenue`]} info={`Redemption amount`} />
+                            <RenderData title="Revenue" data={`${localStorage.getItem("userPermission") ? JSON.parse(localStorage.getItem("userPermission")).currencySymbol : ""}${campaignData[`${condition}Revenue`]}`} info={`Redemption amount`} />
                         </Col>
                         <Col md="3">
                             <RenderData title="Immediately closed" data={campaignData[`${condition}immediate_closed`] ? campaignData[`${condition}immediate_closed`] : 0} info={`Pop-up closed within 2 second`} />

@@ -38,7 +38,7 @@ const PricingCard = ({ data, id, title, price, planTitle, selectedPlan, setSelec
                     <div className="action">
                         {
                             btnCondition ? (
-                                <a className={`btn ${selectedPlan === planTitle ? 'bg-primary text-white' : 'btn btn-outline-primary'} w-100 btn-block`} onClick={() => callPlans(id, data)}>Buy Now</a>
+                                <a className={`btn ${selectedPlan === planTitle ? 'bg-primary text-white' : 'btn btn-outline-primary'} w-100 btn-block`} onClick={() => callPlans(id, data)}>Get Started</a>
                             ) : (
                                 <a className="btn bg-light-secondary w-100 text-primary btn-block">Buy Now</a>
                             )

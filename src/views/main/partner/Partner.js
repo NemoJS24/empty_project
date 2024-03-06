@@ -94,7 +94,7 @@ const steps = [
     },
     {
         title: "Earn!",
-        desc: "Earn 30% lifetime commission for every paying customer on XIRCLS through your affiliate links."
+        desc: "Earn 20% lifetime commission for every paying customer on XIRCLS through your affiliate links."
     }
 ]
 // faq data
@@ -301,7 +301,7 @@ export default function Partner() {
                             }
                         </Row>
                         <div className='text-center mt-1 mt-sm-0'>
-                            <Link to="/contact-us" className=' btn  btn-lg main-btn-dark fs-3 mt-3 '> Start for Free</Link>
+                            <Link to="/contact-us" className=' btn  btn-lg main-btn-dark fs-3 mt-3 '> Get Started</Link>
                         </div>
                     </Col>
                 </Row>

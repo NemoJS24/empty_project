@@ -306,7 +306,7 @@ const Home = () => {
                 <div>
                   <h1 className='mainHeader display-3 main-heading fw-bolder m-0 mt-2'>
                     Refer Us And Earn<br />
-                    30% Lifetime Commission.
+                    20% Lifetime Commission.
                   </h1>
                   <h1 className='fs-2 main-heading m-0 mt-2'>
                     Recommend our solutions to your customers or simply help us spread the word as an affiliate.

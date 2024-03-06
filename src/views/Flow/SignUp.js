@@ -105,7 +105,7 @@ export default function FlowSignUp() {
                 // console.log(resp)
                 if (resp.status === 400) {
                     toast.error(resp.message)
-                    setFormErrors({ email_exist: "Email already exist in our database" })
+                    setFormErrors({ email_exist: "Email already exists in our database" })
                     setFormData({ ...formData, checkEmail: false })
                     Email_error.style.display = "block"
                 } else {
@@ -119,10 +119,10 @@ export default function FlowSignUp() {
             })
             .catch((error) => {
                 console.log(error)
-                setFormErrors({ email_exist: "Email already exist in our database" })
+                setFormErrors({ email_exist: "Email already exists in our database" })
                 setFormData({ ...formData, checkEmail: false })
                 Email_error.style.display = "block"
-                toast.error(`Email already exist in our database`)
+                toast.error(`Email already exists in our database`)
             })
         console.log(formData)
         return isExist
@@ -247,7 +247,7 @@ export default function FlowSignUp() {
             return false
         }
         if (!formData.termsAndCondition) {
-            setFormErrors({ termsAndCondition: <>Please agree to the <Link to={"/terms-of-use/"}>Terms of Use</Link> and <Link to={"/privacy-policy/"}>Privacy Policy</Link></> })
+            setFormErrors({ termsAndCondition: <>Please agree to the Terms of Use and Privacy Policy</> })
             return false
         }
         setFormErrors({})
@@ -341,7 +341,7 @@ export default function FlowSignUp() {
                                     <label className="fs-4 main-heading">Email Address  </label>
                                     <input type="text" className="form-control form-control  fs-5 text-dark rounded-1" onChange={handleInputChange} onBlur={() => { isEmailExist('email') }} placeholder="Email" name="email" value={formData?.email} style={{ marginTop: "4px" }} />
                                     <span className="error text-danger ">{formErrors.email}</span>
-                                    <span className="error text-danger " id="Email_error" style={{ display: "none" }}>Email already exist in our database</span>
+                                    <span className="error text-danger " id="Email_error" style={{ display: "none" }}>Email already exists in our database</span>
                                 </Col>
 
                                 {/* mobile  */}
@@ -404,7 +404,7 @@ export default function FlowSignUp() {
 
                                 <Col xs="12" className='mt-2'>
 
-                                    <h5 className='text-black'> <input type="checkbox" name="termsAndCondition" id="" className='me-1' checked={formData?.termsAndCondition} onChange={handleInputChange} /> BY SIGNING UP, YOU AGREE TO XIRCLS' <Link to={"/terms-of-use/"}>TERMS OF USE</Link> AND <Link to={"/privacy-policy/"}>PRIVACY POLICY</Link>.</h5>
+                                    <h5 className='text-black'> <input type="checkbox" name="termsAndCondition" id="" className='me-1' checked={formData?.termsAndCondition} onChange={handleInputChange} /> BY SIGNING UP, I AGREE TO XIRCLS' <Link target='_blank' className='text-primary' to={"/terms-of-use/"}>TERMS OF USE</Link> AND <Link target='_blank' className='text-primary' to={"/privacy-policy/"}>PRIVACY POLICY</Link>.</h5>
                                     <span className="error text-danger ">{formErrors.termsAndCondition}</span>
 
                                 </Col>

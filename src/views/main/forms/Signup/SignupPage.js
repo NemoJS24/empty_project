@@ -43,7 +43,7 @@ export default function SignupPage() {
         phone_code: 'Please enter your country code',
         password: 'Please enter your password',
         confirm_password: 'Please confirm your password',
-        termsAndCondition: 'Please check the terms and privacy policy',
+        termsAndCondition: "Please agree to the Terms of Use and Privacy Policy",
         uppercase: 'one uppercase letter,',
         lowercase: 'one lowercase letter,',
         number: 'one number,',
@@ -70,13 +70,13 @@ export default function SignupPage() {
 
         const isValid = passwordPattern.test(value)
 
-        errors.uppercase = generateErrorMessage(!/(?=.*[A-Z])/.test(value), 'one uppercase letter,')
-        errors.lowercase = generateErrorMessage(!/(?=.*[a-z])/.test(value), 'one lowercase letter,')
-        errors.number = generateErrorMessage(!/(?=.*\d)/.test(value), 'one number,')
-        errors.specialChar = generateErrorMessage(!/(?=.*[@#$%^&+=!])/.test(value), 'one special character')
+        errors.uppercase = generateErrorMessage(!/(?=.*[A-Z])/.test(value), 'Passsword must contain 1 uppercase letter,')
+        errors.lowercase = generateErrorMessage(!/(?=.*[a-z])/.test(value), 'Passsword must contain 1  lowercase letter,')
+        errors.number = generateErrorMessage(!/(?=.*\d)/.test(value), 'Passsword must contain 1 number,')
+        errors.specialChar = generateErrorMessage(!/(?=.*[@#$%^&+=!])/.test(value), 'Passsword must contain 1  special character')
         errors.length = generateErrorMessage(
             value.length < 8 || value.length > 18,
-            'password must be 8 to 18 characters long'
+            'Password must be 8 to 18 characters long'
         )
 
         setFormErrors(errors)
@@ -101,7 +101,7 @@ export default function SignupPage() {
                 // console.log(resp)
                 if (resp.status === 400) {
                     toast.error(resp.message)
-                    setFormErrors({ email_exist: "Email already exist" })
+                    setFormErrors({ email_exist: "Email already exists in our database" })
                     setFormData({ ...formData, checkEmail: false })
                     Email_error.style.display = "block"
                 } else {
@@ -115,10 +115,10 @@ export default function SignupPage() {
             })
             .catch((error) => {
                 console.log(error)
-                setFormErrors({ email_exist: "Email already exist" })
+                setFormErrors({ email_exist: "Email already exists in our database" })
                 setFormData({ ...formData, checkEmail: false })
                 Email_error.style.display = "block"
-                toast.error(`Email already exist`)
+                toast.error(`Email already exists in our database`)
             })
         console.log(formData)
         return isExist
@@ -243,7 +243,7 @@ export default function SignupPage() {
             return false
         }
         if (!formData.termsAndCondition) {
-            setFormErrors({ termsAndCondition: "Please check the terms and privacy policy" })
+            setFormErrors({ termsAndCondition: <>Please agree to the Terms of Use and Privacy Policy</> })
             return false
         }
         setFormErrors({})
@@ -334,7 +334,7 @@ export default function SignupPage() {
                                     <label className="fs-4 main-heading">Email Address  </label>
                                     <input type="text" className="form-control form-control  fs-5 text-dark rounded-1" onChange={handleInputChange} onBlur={() => { isEmailExist('email') }} placeholder="Email" name="email" style={{ marginTop: "4px" }} />
                                     <span className="error text-danger ">{formErrors.email}</span>
-                                    <span className="error text-danger " id="Email_error" style={{ display: "none" }}>Email already exist</span>
+                                    <span className="error text-danger " id="Email_error" style={{ display: "none" }}>Email already exists in our database</span>
                                 </Col>
 
                                 {/* mobile  */}
@@ -397,12 +397,12 @@ export default function SignupPage() {
 
                                 <Col xs="12" className='mt-2'>
 
-                                    <h5 className='text-black'> <input type="checkbox" name="termsAndCondition" id="" className='me-1' onChange={handleInputChange} /> BY SIGNING UP, YOU AGREE TO XIRCLS' TERMS OF USE AND PRIVACY POLICY.</h5>
+                                    <h5 className='text-black'> <input type="checkbox" name="termsAndCondition" id="" className='me-1' checked={formData?.termsAndCondition} onChange={handleInputChange} /> BY SIGNING UP, I AGREE TO XIRCLS' <Link target='_blank' className='text-primary' to={"/terms-of-use/"}>TERMS OF USE</Link> AND <Link target='_blank' className='text-primary' to={"/privacy-policy/"}>PRIVACY POLICY</Link>.</h5>
                                     <span className="error text-danger ">{formErrors.termsAndCondition}</span>
 
                                 </Col>
                             </Row>
-                            <div className='text-center mt-3'>
+                            <div className='text-center my-3'>
                                 <button type='submit' className='btn  main-btn-black btn-lg fs-4 px-5 fw-lig' onClick={handleSubmit}> Signup</button>
                             </div>
                             <div className='text-center'>

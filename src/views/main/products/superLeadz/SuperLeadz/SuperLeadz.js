@@ -19,7 +19,7 @@ import { IoShieldCheckmarkOutline } from 'react-icons/io5'
 import CardLeft from '../../../components/CardLeft'
 // import gif1 from './images/Horizontal.gif'
 // import arrow from './images/arrow.png'
-import giff1 from './images/gif1.gif'
+// import giff1 from './images/gif1.gif'
 import { Check, X } from 'react-feather'
 import { affiliateTracking } from '../../../../Validator'
 
@@ -368,8 +368,10 @@ export default function SuperLeadz() {
                                         </div>
                                     </div>
                                 </Col>
-                                <Col md="5" className='d-none  align-items-center justify-content-center mt-1 mt-md-0 ' >
-                                    <img src={giff1} alt='...' style={{ width: '100%' }} />
+                                <Col md="5" className='align-items-center justify-content-center mt-1 mt-md-0 ' >
+
+                                    <video className='w-100' controls src="https://xircls-static-files.s3.amazonaws.com/website_statics/superleadz_preview.mp4" width="400" height="300" autoPlay muted loop />
+                                    {/* <img src={"https://api.xircls.com/static/images/website-slide/videos/XIRCLS%20E-Commerce%20Demo.mp4"} alt='...' style={{ width: '100%' }} /> */}
                                 </Col>
                             </Row>
                         </Col>
