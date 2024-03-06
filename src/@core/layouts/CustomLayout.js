@@ -21,7 +21,7 @@ const CustomLayout = () => {
   // ** Hooks
   const { skin } = useSkin()
 
-  console.log({ pathname })
+  // console.log({ pathname })
 
   useEffect(() => {
     setIsMounted(true)
@@ -65,7 +65,7 @@ const CustomLayout = () => {
   if (!isMounted) {
     return null
   }
-  console.log(userPermission?.appName)
+  // console.log(userPermission?.appName)
   return (
     <div
       className={classnames('blank-page', {

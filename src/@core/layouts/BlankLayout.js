@@ -31,7 +31,7 @@ const BlankLayout = () => {
       url: `${baseURL}/merchant/all_apps/`
     })
     .then((data) => {
-      console.log("all_apps", data)
+      // console.log("all_apps", data)
       data.data.forEach(element => {
         list.push(`/${element.slug}/signup`)
         list.push(`/${element.slug}/signup`)
@@ -41,7 +41,7 @@ const BlankLayout = () => {
       console.log("all_apps", err)
     })
 
-    console.log({list})
+    // console.log({list})
     if (list.includes(pathname)) {
       setisDifferent(true)
       // console.log(true)

@@ -31,7 +31,7 @@ const Admin = () => {
     })
     .then((data) => data.json())
     .then((resp) => {
-      console.log(resp)
+      // console.log("setting user permission", resp)
       if (resp.status !== 400 && resp.is_superadmin) {
         Cookies.set('superUser', resp.is_superadmin, { expires: 1, path: '/' })
         setUserPermission({...userPermission, isAdmin: true})

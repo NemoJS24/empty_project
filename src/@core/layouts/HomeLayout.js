@@ -100,11 +100,11 @@ const HomeLayout = () => {
       url: `${baseURL}/merchant/all_apps/`
     })
       .then((data) => {
-        console.log("all_apps hahaha", data)
+        // console.log("all_apps hahaha", data)
         data.data.forEach(element => {
           list.push(`/${element.slug.toLowerCase()}/signup/`)
           list.push(`/${element.slug.toLowerCase()}/signup`)
-          console.log({ list })
+          // console.log({ list })
         })
       })
       .catch((err) => {
