@@ -667,20 +667,20 @@ function SuperLeadzDashboard() {
             <Row className='match-height'>
 
                 <div className='col-md-6 cursor-pointer'>
-                    <CardCom icon={<UserPlus width={'27px'} />} title="Leads Generated" data={!isLoading ? performanceData?.leadsGenerated : <Spinner size={'25px'} />} info={`Total entries registered; including duplicates, verified or unverified`} />
+                    <CardCom id={"leadsgeneratedSuperLeadz"} icon={<UserPlus width={'27px'} />} title="Leads Generated" data={!isLoading ? performanceData?.leadsGenerated : <Spinner size={'25px'} />} info={` Total instances of visitors submitting their contact information through a SuperLeadz pop-up`} />
 
                 </div>
                 
                 <Col className='col-md-6 cursor-default'>
-                    <CardCom icon={<img src='https://cdn-icons-png.flaticon.com/512/1773/1773345.png' width='27px' />} title="Campaign Revenue" info={'Sum Total Revenue through SuperLeadz Campaign'} data={!isLoading ? `₹${Number(performanceData?.campaign_revenue).toFixed(2)}` : <Spinner size={'25px'} />} />
+                    <CardCom id={"campaignrevenueSuperLeadz"} icon={<img src='https://cdn-icons-png.flaticon.com/512/1773/1773345.png' width='27px' />} title="Campaign Revenue" info={'Total earnings from all transactions directly attributable to SuperLeadz campaigns'} data={!isLoading ? `₹${Number(performanceData?.campaign_revenue).toFixed(2)}` : <Spinner size={'25px'} />} />
                 </Col>
 
                 <div className='col-md-6 cursor-default'>
-                    <CardCom icon={<Check width={'27px'}/>} title={<>Active Campaigns</>} data={!isLoading ? performanceData.active_campaign : <Spinner size={'25px'} />} info={`Number of SuperLeadz campaigns i.e. pop-ups that are active on the website`} />
+                    <CardCom id={"activecampaignsSuperLeadz"} icon={<Check width={'27px'}/>} title={<>Active Campaigns</>} data={!isLoading ? performanceData.active_campaign : <Spinner size={'25px'} />} info={` Total number of SuperLeadz campaigns i.e. pop-ups currently active on your website`} />
                 </div>
 
                 <div className='col-md-6 cursor-default'>
-                    <CardCom icon={<Check width={'27px'}/>} title={<>Remaining <br /> Visits</>} data={!chargesLoader ? Number(billing?.usage_charge) - Number(billing?.usage_count)  : <Spinner size={'25px'} />} info={`Total number of pop-ups (according to the plan) - number of pop-ups loaded on the website`} />
+                    <CardCom id={"remainingvisitsSuperLeadz"} icon={<Check width={'27px'}/>} title={<>Remaining <br /> Visits</>} data={!chargesLoader ? Number(billing?.usage_charge) - Number(billing?.usage_count)  : <Spinner size={'25px'} />} info={`Visits remaining in your plan’s usage limit Add a Renew/Upgrade button here`} />
                 </div>
                 
                 <Col md="6" className='d-none'>
@@ -722,43 +722,43 @@ function SuperLeadzDashboard() {
                 </Col>
 
                 <div className='col-md-6 cursor-default d-none'>
-                    <CardCom icon={<Check width={'27px'} />} title={<>Impressions</>} data={!isLoading ? performanceData.impressions : <Spinner size={'25px'} />} info={`Number of times the pop-up is shown`} />
+                    <CardCom id={"ImpressionsSuperLeadz"} icon={<Check width={'27px'} />} title={<>Impressions</>} data={!isLoading ? performanceData.impressions : <Spinner size={'25px'} />} info={`Number of times the pop-up is shown`} />
                 </div>
 
                 <div className='col-md-6 cursor-default d-none'>
-                    <CardCom icon={<Check width={'27px'} />} title={<>Engaged</>} data={!isLoading ? performanceData.engaged : <Spinner size={'25px'} />} info={`Number of clicks on any button; inside the pop-up`} />
+                    <CardCom id={"EngagedSuperLeadz"} icon={<Check width={'27px'} />} title={<>Engaged</>} data={!isLoading ? performanceData.engaged : <Spinner size={'25px'} />} info={`Number of clicks on any button; inside the pop-up`} />
                 </div>
 
                 <div className='col-md-6 cursor-pointer d-none'>
-                    <CardCom icon={<UserPlus width={'27px'} />} title="Unique leads Generated" data={!isLoading ? performanceData?.uniqueLeadsGenerated : <Spinner size={'25px'} />} info={`Total entries registered excluding duplicate entries`} />
-
-                </div>
-
-                <div className='col-md-6 cursor-pointer d-none'>
-                    <CardCom icon={<UserCheck width={'27px'} />} title="Verified Leads" data={!isLoading ? performanceData?.verifiedLeads : <Spinner size={'25px'} />} info={`Total entries registered who have verified via OTP`} />
+                    <CardCom id={"UniqueleadsGeneratedSuperLeadz"} icon={<UserPlus width={'27px'} />} title="Unique leads Generated" data={!isLoading ? performanceData?.uniqueLeadsGenerated : <Spinner size={'25px'} />} info={`Total entries registered excluding duplicate entries`} />
 
                 </div>
 
                 <div className='col-md-6 cursor-pointer d-none'>
-                    <CardCom icon={<UserCheck width={'27px'} />} title="Unique Verified Leads" data={!isLoading ? performanceData?.uniqueVerifiedLeads : <Spinner size={'25px'} />} info={`Total entries registered who have verified via OTP excluding duplicates`} />
+                    <CardCom id={"VerifiedSuperLeadz"} icon={<UserCheck width={'27px'} />} title="Verified Leads" data={!isLoading ? performanceData?.verifiedLeads : <Spinner size={'25px'} />} info={`Total entries registered who have verified via OTP`} />
+
+                </div>
+
+                <div className='col-md-6 cursor-pointer d-none'>
+                    <CardCom id={"UniqueVerifiedLeadsSuperLeadz"} icon={<UserCheck width={'27px'} />} title="Unique Verified Leads" data={!isLoading ? performanceData?.uniqueVerifiedLeads : <Spinner size={'25px'} />} info={`Total entries registered who have verified via OTP excluding duplicates`} />
 
                 </div>
 
                 <div className='col-md-6 cursor-pointer'>
-                    <CardCom icon={<User width={'27px'} />} title="Visits" data={!isLoading ? performanceData?.vists : <Spinner size={'25px'} />} info={`Total visits on all pages`}/>
+                    <CardCom id={"VisitsSuperLeadz"} icon={<User width={'27px'} />} title="Visits" data={!isLoading ? performanceData?.vists : <Spinner size={'25px'} />} info={`Total website traffic`}/>
 
                 </div>
 
                 <div className='col-md-6 cursor-default'>
-                    <CardCom icon={<Users width={'27px'} />} title={<>Visitor-to-Lead <br /> Conversion Rate</>} data={!isLoading ? `${performanceData?.vistsToLead}%` : <Spinner size={'25px'} />} info={`Number of Sessions to Leads`} />
+                    <CardCom id={"Visitor-to-LeadSuperLeadz"} icon={<Users width={'27px'} />} title={<>Visitor-to-Lead <br /> Conversion Rate</>} data={!isLoading ? `${performanceData?.vistsToLead}%` : <Spinner size={'25px'} />} info={`Total percentage of website traffic that successfully converted to leads.`} />
                 </div>
 
                 <div className='col-md-6 cursor-pointer'>
-                    <CardCom icon={<SiConvertio size={'25px'} />} title="Leads Converted" data={!isLoading ? performanceData.leadConverted : <Spinner size={'25px'} />} info={`Unique Leads / Customers`}/>
+                    <CardCom id={"LeadsConvertedSuperLeadz"} icon={<SiConvertio size={'25px'} />} title="Leads Converted" data={!isLoading ? performanceData.leadConverted : <Spinner size={'25px'} />} info={`Total unique leads that successfully converted to paying customers`}/>
                 </div>
 
                 <div className='col-md-6 cursor-default'>
-                    <CardCom icon={<Percent width={'27px'} />} title={<>Lead-to-Customer <br /> Conversion Rate</>} data={!isLoading ? `${performanceData?.leadToCustomer}%` : <Spinner size={'25px'} />} info={`(Verified Leads / Customers) * 100`} />
+                    <CardCom id={"Lead-to-CustomerSuperLeadz"} icon={<Percent width={'27px'} />} title={<>Lead-to-Customer <br /> Conversion Rate</>} data={!isLoading ? `${performanceData?.leadToCustomer}%` : <Spinner size={'25px'} />} info={`The percentage of unique leads that successfully converted to paying customers`} />
                 </div>
 
             </Row>

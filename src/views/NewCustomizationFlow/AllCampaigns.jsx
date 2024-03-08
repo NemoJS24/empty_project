@@ -256,7 +256,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                             <div onClick={() => {
                                 // setSelectedThemeNo(row.default_id)
                                 // setEditTheme(row)
-                                localStorage.setItem("is_draft", row.theme_name.is_draft)
+                                localStorage.setItem("is_draft", row.theme_name.draft_status)
                                 // navigate(`/merchant/SuperLeadz/overview/${row.theme_name.id}/`)
                             }} className="prev d-flex justify-content-center align-items-center rounded position-relative overflow-hidden cursor-pointer" style={{ width: "120px", height: "67.5px", backgroundColor: JSON.parse(row.theme_name.custom_theme).overlayStyles.backgroundColor, backgroundImage: JSON.parse(row.theme_name.custom_theme).overlayStyles.backgroundImage }}>
                                 <span className="position-absolute">
@@ -278,7 +278,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
         {
             name: 'Status',
             selector: row => {
-                if (row.theme_name.is_draft === 0) {
+                if (row.theme_name.draft_status === 0) {
                     return (
                         <div className="m-auto form-check form-switch form-check-success cursor-pointer p-0 m-0" style={{ filter: `drop-shadow(0px 0px 7.5px rgba(40, 199, 111, ${row.theme_name.is_active ? "0.5" : "0"}))` }}>
                             <input onChange={() => {
@@ -379,7 +379,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                             <DropdownItem onClick={() => {
                                 setSelectedThemeNo(row.theme_name.default_id)
                                 setEditTheme(row.theme_name)
-                                localStorage.setItem("is_draft", row.theme_name.is_draft)
+                                localStorage.setItem("is_draft", row.theme_name.draft_status)
                                 navigate(`/merchant/SuperLeadz/new_customization/${row.theme_name.id}`, { state: row.theme_name })
                             }} className='w-100'>
                                 <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>

@@ -189,13 +189,13 @@ export default function SuperLeadzLeads() {
             <section>
                 <div className="row">
                     <div className="col-4">
-                        <CardCom icon={<User size='25px' />} title="Total Visitors" data={isLoading ? <Spinner size={'25px'} /> : custVisit} />
+                        <CardCom id={"TotalVisitorsLeads"} icon={<User size='25px' />} title="Total Visitors" data={isLoading ? <Spinner size={'25px'} /> : custVisit} />
                     </div>
                     <div className="col-4">
-                        <CardCom icon={<BarChart2 size='25px' />} title="Total Leads" data={isLoading ? <Spinner size={'25px'} /> : count} />
+                        <CardCom id={"TotalLeads"} icon={<BarChart2 size='25px' />} title="Total Leads" data={isLoading ? <Spinner size={'25px'} /> : count} />
                     </div>
                     <div className="col-4">
-                        <CardCom icon={<CheckCircle size='25px' />} title="Verified Leads" data={isLoading ? <Spinner size={'25px'} /> : verified} />
+                        <CardCom id={"VerifiedLeadsLeads"} icon={<CheckCircle size='25px' />} title="Verified Leads" data={isLoading ? <Spinner size={'25px'} /> : verified} />
                     </div>
                 </div>
             </section>

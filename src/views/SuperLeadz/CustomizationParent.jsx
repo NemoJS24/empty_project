@@ -105,6 +105,8 @@ const CustomizationParent = () => {
     // themeLoc variable has the transferred from the AllCampaigns page 
     const themeLoc = useLocation()
 
+    console.log({themeLoc})
+
     const { EditThemeId } = useParams()
 
     const defaultIsMobile = new URLSearchParams(themeLoc.search)
@@ -129,18 +131,20 @@ const CustomizationParent = () => {
 
     console.log("finalObj: ", localStorage.getItem("defaultThemeId"))
 
+    const defObj = themeLoc?.state?.custom_theme ? JSON.parse(themeLoc?.state?.custom_theme) : Boolean(localStorage.getItem("defaultTheme")) ? JSON.parse(localStorage.getItem("defaultTheme")) : Boolean(localStorage.getItem("defaultThemeId")) ? allPreviews[allPreviews.findIndex($ => $?.theme_id === parseFloat(localStorage.getItem("defaultThemeId")))]?.object : selectedThemeId !== "" ? { ...allPreviews[allPreviews?.findIndex($ => $?.theme_id === selectedThemeId)]?.object, campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") } : defaultObj
+
     const navigate = useNavigate()
     const [mousePos, setMousePos] = useState({})
-    const [finalObj, setFinalObj] = useState(themeLoc?.state?.custom_theme ? JSON.parse(themeLoc?.state?.custom_theme) : Boolean(localStorage.getItem("defaultTheme")) ? JSON.parse(localStorage.getItem("defaultTheme")) : Boolean(localStorage.getItem("defaultThemeId")) ? allPreviews[allPreviews.findIndex($ => $?.theme_id === parseFloat(localStorage.getItem("defaultThemeId")))]?.object : selectedThemeId !== "" ? { ...allPreviews[allPreviews?.findIndex($ => $?.theme_id === selectedThemeId)]?.object, campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") } : defaultObj)
+    const [finalObj, setFinalObj] = useState(defObj)
     const [past, setPast] = useState([])
     const [future, setFuture] = useState([])
-    const [themeName, setThemeName] = useState(themeLoc?.state?.custom_theme ? finalObj?.theme_name : `Campaign-${generateRandomString()}`)
-    const [defColors, setDefColors] = useState(finalObj.defaultThemeColors || {})
+    const [themeName, setThemeName] = useState(themeLoc?.state?.custom_theme ? defObj?.theme_name : `Campaign-${generateRandomString()}`)
+    const [defColors, setDefColors] = useState(defObj.defaultThemeColors || {})
     const [textValue, setTextValue] = useState("")
     const [senderName, setSenderName] = useState("")
     const [currColor, setCurrColor] = useState("primary")
     const [nameEdit, setNameEdit] = useState(true)
-    const [currPage, setCurrPage] = useState(finalObj?.[`${mobileCondition}pages`][0]?.id)
+    const [currPage, setCurrPage] = useState(defObj?.[`${mobileCondition}pages`][0]?.id)
     const [draggedInputType, setDraggedInputType] = useState("none")
 
     const pageCondition = currPage === "button" ? "button" : "main"
@@ -4271,9 +4275,9 @@ const CustomizationParent = () => {
                             <button disabled={currPage === "button"} onClick={() => {
                                 setCurrPage(currPage === finalObj.pages[finalObj.pages.length - 1].id ? "button" : finalObj.pages[currPageIndex + 1].id)
                             }} className="btn custom-btn-outline">Next</button>
-                            <button onClick={(e) => sendData(e, "Save & Preview")} id='saveBtn' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Preview</button>
-                            <button onClick={(e) => sendData(e, "Save")} id='saveBtn' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Save</button>
-                            <button onClick={(e) => sendData(e, "Save & Close")} id='saveBtn' className="btn btn-primary-main" style={{ whiteSpace: 'nowrap' }}>Save & Close</button>
+                            <button onClick={(e) => sendData(e, "Save & Preview")} id='saveBtn1' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Preview</button>
+                            <button onClick={(e) => sendData(e, "Save")} id='saveBtn2' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Save</button>
+                            <button onClick={(e) => sendData(e, "Save & Close")} id='saveBtn3' className="btn btn-primary-main" style={{ whiteSpace: 'nowrap' }}>Save & Close</button>
                         </div>
                     </Row>
                 </Container>

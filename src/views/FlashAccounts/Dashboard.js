@@ -218,9 +218,9 @@ const Dashboard = () => {
 
       <div className="row match-height">
         <div className="col-md-6">
-          <CardCom icon={<User width={'27px'} />} title={<>Total Flash Accounts Created</>} data={!isLoading ? formatNumberWithCommas(data.total_non_guests) : <Spinner size={'25px'} /> } />
-          <CardCom icon={<RefreshCcw width={'27px'} />} title={<>Guest Conversion Rate</>} data={!isLoading ? `${Number(data.conversion_rate).toFixed(2)}%` : <Spinner size={'25px'} />} info={`% of guest checkouts converted at Thank You page`} />
-          <CardCom icon={<RefreshCcw width={'27px'} />} title={<>Revenue Generated from<br />Flash Accounts Registered Customers</>} data={!isLoading ? formatNumberWithCommas(data.total_revenue) : <Spinner size={'25px'} /> } />
+          <CardCom id={"TotalFlashAccountsCreatedFlash"} icon={<User width={'27px'} />} title={<>Total Flash Accounts Created</>} data={!isLoading ? formatNumberWithCommas(data.total_non_guests) : <Spinner size={'25px'} /> } />
+          <CardCom id={"GuestConversionRateFlash"} icon={<RefreshCcw width={'27px'} />} title={<>Guest Conversion Rate</>} data={!isLoading ? `${Number(data.conversion_rate).toFixed(2)}%` : <Spinner size={'25px'} />} info={`% of guest checkouts converted at Thank You page`} />
+          <CardCom id={"RevenueGeneratedfromFlash"} icon={<RefreshCcw width={'27px'} />} title={<>Revenue Generated from<br />Flash Accounts Registered Customers</>} data={!isLoading ? formatNumberWithCommas(data.total_revenue) : <Spinner size={'25px'} /> } />
         </div>
         <div className="col-md-6">
           <div className="card">
