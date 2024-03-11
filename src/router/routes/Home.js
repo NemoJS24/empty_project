@@ -46,6 +46,8 @@ import FlashAccount from '../../views/main/products/flash/FlashAccount'
 import FaqFlash from '../../views/main/products/flash/FaqFlash'
 import Flash_Pricing from '../../views/main/products/flash/Flash_Pricing'
 import FlashAccount_Features from '../../views/main/products/flash/FlashAccount_Features'
+import SuperLeadzLandingPage from '../../views/main/LandingPage/SuperLeadzLandingPage'
+import EmailLists from '../../views/main/LandingPage/EmailLists'
 
 const Homes_Routes = [
 
@@ -574,6 +576,15 @@ const Homes_Routes = [
       layout: "NewBlank",
       publicRoute: true
     }
+  },
+  {
+    path: '/products/superleadz/build-email-lists-verified-leads',
+    element: <EmailLists />,
+    meta: {
+      layout: "homeLayout",
+      publicRoute: true
+    },
+    title: "SuperLeadz- Build email lists of verified leads"
   }
 ]
 

@@ -360,7 +360,7 @@ export default function SuperLeadz() {
                                         <h1 className='display-1 lh-83 text-md-start main-heading fw-bolder'>
                                             Built to Convert
                                         </h1>
-                                        <h1 className=' text-black  mt-1 text-start'  >Strengthen your sales cycle with high-intent, verified leads.<br />
+                                        <h1 className=' text-black  mt-1 text-start'>Strengthen your sales cycle with high-intent, verified leads.<br />
                                             Reduce marketing wastage. Increase Revenue.</h1>
                                         <div className=' d-flex  justify-content-start align-items-center gap-1  mt-2' >
                                             <a target='_blank' href='https://apps.shopify.com/superleadz-by-xircls' className='btn  main-btn-blue fs-3'>Install on Shopify</a>
