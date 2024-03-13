@@ -181,7 +181,17 @@ export const configUrl = {
     lead_stage_add:'/customers/merchant/leads_stage_add/',
 
     // crm leads profile
-    add_variant: `/vehicle/add_variant/`
+    add_variant: `/vehicle/add_variant/`,
+
+    // affiliate
+
+    affiliate_person_all: "/affiliate/admin/affiliate_person_all/",
+    affiliate_commission: "/affiliate/admin/admin_affiliate_commission_view/",
+    signupAffiliate: '/affiliate/affiliate_signup/',
+    loginAffiliate: '/affiliate/affiliate_login/',
+    admin_withdrawn_transactions: "/affiliate/admin/admin_withdrawn_trans",
+    admin_withdrawn_request: "/affiliate/admin/admin_withdrawn_req/",
+    affiliate_active: "/affiliate/admin/affiliate_activate/"
 
 }
 

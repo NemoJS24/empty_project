@@ -2261,7 +2261,7 @@ const CustomizationParent = () => {
                         {colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.isRequired && <div className='my-1'>
                             <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Error message:</span>
                             <div className="d-flex p-0 justify-content-between align-items-center gap-2">
-                                <input checked={colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.isRequiredText} onChange={e => {
+                                <input value={colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.isRequiredText} onChange={e => {
                                     arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isRequiredText = e.target.value
                                     setcolWise([...arr])
                                 }} defaultValue={"Please fill this field"} type="text" name='title' min="0" max="300" className='form-control' />
@@ -2871,7 +2871,7 @@ const CustomizationParent = () => {
                     {
                         finalObj?.rules?.display_when === "any_condition_met" ? <>
                             <div className="form-check form-switch mb-1">
-                                <input onChange={updateRules} checked={finalObj?.rules?.spent_on_page} type="checkbox" role='switch' id='spent_on_page' name={"spent_on_page"} className="form-check-input cursor-pointer" /><label htmlFor="spent_on_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Time spend on the page</label>
+                                <input onChange={updateRules} checked={finalObj?.rules?.spent_on_page} type="checkbox" role='switch' id='spent_on_page' name={"spent_on_page"} className="form-check-input cursor-pointer" /><label htmlFor="spent_on_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Time spent on page</label>
                             </div>
                             {finalObj?.rules?.spent_on_page && (  //condition here
                                 <div className="d-flex gap-1 mb-2">
@@ -2891,7 +2891,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.spent_on_website} onChange={updateRules} type="checkbox" role='switch' id='spent_on_website' name={"spent_on_website"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="spent_on_website" className="cursor-pointer" style={{ fontSize: "13px" }}>Time spend on the Website</label>
+                                <label htmlFor="spent_on_website" className="cursor-pointer" style={{ fontSize: "13px" }}>Time spent on website</label>
                             </div>
                             {finalObj?.rules?.spent_on_website && (  //condition here  
                                 <div className="d-flex gap-1 mb-2">

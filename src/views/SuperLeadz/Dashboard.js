@@ -680,7 +680,7 @@ function SuperLeadzDashboard() {
                 </div>
 
                 <div className='col-md-6 cursor-default'>
-                    <CardCom id={"remainingvisitsSuperLeadz"} icon={<Check width={'27px'}/>} title={<>Remaining <br /> Visits</>} data={!chargesLoader ? Number(billing?.usage_charge) - Number(billing?.usage_count)  : <Spinner size={'25px'} />} info={`Visits remaining in your plan’s usage limit Add a Renew/Upgrade button here`} />
+                    <CardCom id={"remainingvisitsSuperLeadz"} icon={<Check width={'27px'}/>} title={<>Remaining <br /> Visits</>} data={!chargesLoader ? Number(billing?.usage_charge) - Number(billing?.usage_count)  : <Spinner size={'25px'} />} info={`Visits remaining in your plan’s usage limit.`} />
                 </div>
                 
                 <Col md="6" className='d-none'>
@@ -745,7 +745,7 @@ function SuperLeadzDashboard() {
                 </div>
 
                 <div className='col-md-6 cursor-pointer'>
-                    <CardCom id={"VisitsSuperLeadz"} icon={<User width={'27px'} />} title="Visits" data={!isLoading ? performanceData?.vists : <Spinner size={'25px'} />} info={`Total website traffic`}/>
+                    <CardCom id={"VisitsSuperLeadz"} icon={<User width={'27px'} />} title="Visits" data={!isLoading ? performanceData?.vists : <Spinner size={'25px'} />} info={`Total page visits`}/>
 
                 </div>
 

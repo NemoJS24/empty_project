@@ -584,7 +584,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "SuperLeadz- Build email lists of verified leads"
+    title: "SuperLeadz - Build email lists of verified leads"
   }
 ]
 

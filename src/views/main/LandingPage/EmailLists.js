@@ -78,11 +78,11 @@ function EmailLists() {
         }
             `}
             </style>
-            <SubNavbar navTitle={'superleadz'} />
+            {/* <SubNavbar navTitle={'superleadz'} /> */}
 
             <Row className=' justify-content-center mt180 match-height'>
                 <Col lg="11" xs="10" className='  px-0 rounded-2'>
-                    <Row className='mt-5'>
+                    <Row className=''>
                         <Col lg="6" className='d-flex flex-column justify-content-center'>
                             <h1 className='display-1 lh-83 text-md-start main-heading fw-bolder' >Stop wasting money
                                 with fake or <br /> low-quality leads!</h1>

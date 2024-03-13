@@ -93,22 +93,40 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                 //         return curElem.theme_name.is_draft === 0
                 //     }))
                 // } else {
+                // console.log(data?.grid_view_data, "data?.grid_view_data")
+
+                // const campaignData = data?.grid_view_data
+                // if (Array.isArray(campaignData) && campaignData.length >= 1) {
+                //     campaignData[0].defaultExpanded = true
+                // }
+                // // if (Boolean(campaignData[0].defaultExpanded)) {
+                // // }
+                // setAllCampaigns(campaignData)
+                // // }
+                // setIsLoading(false)
+                // setCount(data?.total_count)
+                // data.is_active.forEach(ele => {
+                //     newArr.push(Number(ele))
+                // })
+                // setActiveThemes([...newArr])
                 console.log(data?.grid_view_data, "data?.grid_view_data")
 
                 const campaignData = data?.grid_view_data
-                if (Array.isArray(campaignData) && campaignData.length >= 1) {
-                    campaignData[0].defaultExpanded = true
+                if (campaignData && campaignData?.length > 0) {
+                    if (Array.isArray(campaignData) && campaignData.length >= 1) {
+                        campaignData[0].defaultExpanded = true
+                    }
+                    // if (Boolean(campaignData[0].defaultExpanded)) {
+                    // }
+                    setAllCampaigns(campaignData)
+                    // }
+                    setCount(data?.total_count)
+                    data.is_active.forEach(ele => {
+                        newArr.push(Number(ele))
+                    })
+                    setActiveThemes([...newArr])
                 }
-                // if (Boolean(campaignData[0].defaultExpanded)) {
-                // }
-                setAllCampaigns(campaignData)
-                // }
                 setIsLoading(false)
-                setCount(data?.total_count)
-                data.is_active.forEach(ele => {
-                    newArr.push(Number(ele))
-                })
-                setActiveThemes([...newArr])
             }).catch((err) => {
                 console.log(err)
                 toast.error("Data could not be loaded")
