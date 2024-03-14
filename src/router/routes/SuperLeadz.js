@@ -154,7 +154,7 @@ const SuperLeads_Routes = [
     }
   }, 
   {
-    path: '/merchant/SuperLeadz/Themes/',
+    path: '/merchant/superleadz/templates',
     app: appName,
     element: <Themes />
   },

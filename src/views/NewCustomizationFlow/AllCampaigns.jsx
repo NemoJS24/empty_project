@@ -258,7 +258,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
     //     </Col>
     //     <Col className='d-flex align-items-center justify-content-end' md='4' sm='12'>
     //         <div className="d-flex gap-2 align-items-center">
-    //             <Link to={"/merchant/SuperLeadz/themes/"} className='btn btn-primary-main' style={{ width: "240px" }}> Create Campaign</Link>
+    //             <Link to={"/merchant/superleadz/templates"} className='btn btn-primary-main' style={{ width: "240px" }}> Create Campaign</Link>
     //             <input type="text" className="form-control w-75" value={searchValue} onChange={handleFilter} placeholder='Search...' />
     //         </div>
     //     </Col>
@@ -484,7 +484,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                                 deleteContent={deleteContent}
                                 viewType={viewType}
                                 create={create}
-                                createLink={"/merchant/SuperLeadz/Themes/"}
+                                createLink={"/merchant/superleadz/templates"}
                                 createText={"Create Campaign"}
                                 setViewType={setViewType}
                                 toggledClearRows={toggledClearRows}

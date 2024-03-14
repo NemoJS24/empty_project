@@ -3,38 +3,74 @@ import { Card, CardBody, Col, Row, DropdownItem, DropdownMenu, DropdownToggle, M
 import moment from 'moment'
 import ComTable from '../Components/DataTable/ComTable'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { getReq, postReq } from '../../assets/auth/jwtService'
+import { affiliateURL, getReq, postReq } from '../../assets/auth/jwtService'
 import { MoreVertical } from 'react-feather'
 import toast from 'react-hot-toast'
 import NavbarAdmin from '../Admin/NavbarAdmin'
 // import { getReq } from '../../../assets/auth/jwtService'
 
+
 const WithdrawalTransaction = () => {
 
   const { state } = useLocation()
   const withdrawalUserID = state && state.withdrawalUserID
-
   const [searchFilter, setSearchFilter] = useState("")
   const [isLoading, setIsLoading] = useState(true)  // make it true
   const [tableData, setTableData] = useState([])
   const [selectedAction, setSelectedAction] = useState()
+  const [argument, setArgument] = useState()
   const navigate = useNavigate()
-const getData = () => {
-  getReq(`admin_withdrawn_transactions`, `/?affiliate_id=${withdrawalUserID}`)
-  .then((data) => {
-    console.log("admin_withdrawn_transactions", data?.data?.withdrawn_trans_all)
-    setTableData(data?.data?.withdrawn_trans_all)
-    setIsLoading(false)
-  })
-  .catch((error) => {
-    console.log(error)
-  })
-}
+
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+
+  const openModal = () => {
+    setModalIsOpen(true)
+  }
+
+  const closeModal = () => {
+    setModalIsOpen(false)
+  }
+  const handleChange = (e) => {
+    setArgument(prevState => ({
+      ...prevState,
+      [e.target.id]: e.target.value
+    }))
+  }
+  const getData = () => {
+    getReq(`admin_withdrawn_transactions`, `/?affiliate_id=${withdrawalUserID}`, affiliateURL)
+      .then((data) => {
+        setTableData(data?.data?.withdrawn_trans_all)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+  const handleSubmit = (obj) => {
+    const form_data = new FormData()
+
+    Object.entries(obj ? obj : argument).map(([key, value]) => {
+      form_data.append(key, value)
+    })
+    console.log(form_data, "====form_data")
+
+    postReq(`admin_withdrawn_request`, form_data, affiliateURL)
+      .then((res) => {
+        console.log(res, "Data")
+        toast.success(`Action Change`)
+        getData()
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
   useEffect(() => {
     getData()
   }, [])
   const filteredArray = tableData?.filter(cur => (cur.affiliate_person.firstname?.toLowerCase()?.includes(searchFilter.toLowerCase())) || (cur.affiliate_person.lastname?.toLowerCase()?.includes(searchFilter.toLowerCase())) || (cur.created_at?.toLowerCase()?.includes(searchFilter.toLowerCase())) || (cur.remark?.toLowerCase()?.includes(searchFilter.toLowerCase())) || (cur.action?.toLowerCase()?.includes(searchFilter.toLowerCase())))
 
+
+  console.log(affiliateURL, 'affilate')
   console.log(selectedAction)
   const options = [
     { value: "Pending", label: "Pending" },
@@ -132,20 +168,28 @@ const getData = () => {
                     onClick={(e) => {
                       const newSelectedAction = e.target.value
                       setSelectedAction(newSelectedAction)
-                      const form_data = new FormData()
-                      form_data.append("affiliate_id", row.affiliate_person.id)
-                      form_data.append("action", e.target.value)
-                      form_data.append("created_at", row.created_at)
-
-                      postReq("admin_withdrawn_request", form_data)
-                        .then((res) => {
-                          console.log(res)
-                          toast.success(`Action Change ${row.action} to ${newSelectedAction}`)
-                          getData()
+                      console.log({
+                        affiliate_id: row.affiliate_person.id,
+                        action: e.target.value,
+                        created_at: row.created_at,
+                        trans_id: row.id
+                      })
+                      if (newSelectedAction === 'Paid') {
+                        openModal()
+                        setArgument({
+                          affiliate_id: row.affiliate_person.id,
+                          action: e.target.value,
+                          created_at: row.created_at,
+                          trans_id: row.id
                         })
-                        .catch((err) => {
-                          console.log(err)
+                      } else {
+                        handleSubmit({
+                          affiliate_id: row.affiliate_person.id,
+                          action: e.target.value,
+                          created_at: row.created_at,
+                          trans_id: row.id
                         })
+                      }
                     }}
                   >
                     {ele.label}
@@ -199,6 +243,27 @@ const getData = () => {
               </CardBody>
             </Card>
           </div>
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            contentLabel="Paid Modal"
+          >
+            <ModalBody className="position-relative">
+
+              <label className='pt-1' htmlFor="value">Remark</label>
+              <input value={argument?.remark} name="Remark" id="remark" onChange={(e) => handleChange(e)} className="form-control" />
+              <label className='pt-1' htmlFor="value">Referance ID</label>
+              <input value={argument?.ref_id} name="Referance ID" id="ref_id" onChange={(e) => handleChange(e)} className="form-control" />
+              <label className='pt-1' htmlFor="value">Transaction ID</label>
+              <input value={argument?.transaction_id} name="Transaction id" id="transaction_id" onChange={(e) => handleChange(e)} className="form-control" />
+
+
+              <button onClick={() => {
+                handleSubmit()
+                closeModal(false)
+              }} className='btn btn-primary mt-1'>Save</button>
+            </ModalBody>
+          </Modal>
         </Col>
       </Row>
     </>

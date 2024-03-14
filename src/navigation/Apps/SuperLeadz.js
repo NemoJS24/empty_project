@@ -63,7 +63,7 @@ export const SuperLeadzNavigation = [
     id: 'templates',
     title: 'Templates',
     icon: <AiOutlineHighlight size={16} />,
-    navLink: '/merchant/SuperLeadz/Themes/'
+    navLink: '/merchant/superleadz/templates/'
   },
   {
     id: 'campaign',

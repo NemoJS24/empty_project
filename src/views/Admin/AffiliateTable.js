@@ -82,9 +82,9 @@ export default function AffiliateTable() {
       name: 'Is Active',
       minWidth: '150px',
       cell: row => (row?.is_active === true ? (
-        <div>True</div>
+        <div>Active</div>
       ) : (
-        <div>False</div>
+        <div>Inactive</div>
       ))
     },
     // {
@@ -100,7 +100,7 @@ export default function AffiliateTable() {
       minWidth: '150px',
       cell: row => (
         <div className="d-flex justify-content-center align-items-center gap-2">
-          <UncontrolledButtonDropdown style={{minWidth:'13vh'}} className='more-options-dropdown'>
+          <UncontrolledButtonDropdown style={{ minWidth: '13vh' }} className='more-options-dropdown'>
             <DropdownToggle className={`btn-icon cursor-pointer`} color='transparent' size='sm'>
               <span className={`border-none`}>
                 <MoreVertical size={15} />
@@ -128,26 +128,26 @@ export default function AffiliateTable() {
               {/* //------- */}
 
               <DropdownItem className='w-100'
-  style={{ display: row.is_active ? 'none' : 'block' }}
-  onClick={() => {
-    handleActive(row.user, "True")
-  }}
->
-  <div className="d-flex align-items-center" style={{ gap: "0.5rem"}}>
-    <BookOpen stroke='#28c76f' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Activate</span>
-  </div>
-</DropdownItem>
+                style={{ display: row.is_active ? 'none' : 'block' }}
+                onClick={() => {
+                  handleActive(row.user, "True")
+                }}
+              >
+                <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                  <BookOpen stroke='#28c76f' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Activate</span>
+                </div>
+              </DropdownItem>
 
-<DropdownItem className='w-100'
-  style={{ display: row.is_active ? 'block' : 'none' }}
-  onClick={() => {
-    handleActive(row.user, "False")
-  }}
->
-  <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
-    <BookOpen stroke='#28c76f' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Deactivate</span>
-  </div>
-</DropdownItem>
+              <DropdownItem className='w-100'
+                style={{ display: row.is_active ? 'block' : 'none' }}
+                onClick={() => {
+                  handleActive(row.user, "False")
+                }}
+              >
+                <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                  <BookOpen stroke='#28c76f' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Deactivate</span>
+                </div>
+              </DropdownItem>
 
             </DropdownMenu>
           </UncontrolledButtonDropdown>

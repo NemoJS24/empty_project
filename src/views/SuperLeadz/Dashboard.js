@@ -538,7 +538,7 @@ function SuperLeadzDashboard() {
                                             <div className='col-md-4'>
                                                 <div className='d-flex justify-content-center align-items-center h-100 gap-1'>
                                                     {/* <Link className="btn btn-primary" to="/merchant/SuperLeadz/"> Quick Set-Up</Link> */}
-                                                    <Link className="btn btn-primary" to="/merchant/SuperLeadz/themes/"> Create Campaign</Link>
+                                                    <Link className="btn btn-primary" to="/merchant/superleadz/templates"> Create Campaign</Link>
                                                 </div>
 
                                             </div>
@@ -602,7 +602,7 @@ function SuperLeadzDashboard() {
                                         <div className='col-md-4'>
                                             <div className='d-flex justify-content-center align-items-center h-100 gap-1'>
                                                 {/* <Link className="btn btn-primary" to="/merchant/SuperLeadz/"> Quick Set-Up</Link> */}
-                                                <Link className="btn btn-primary" to="/merchant/SuperLeadz/themes/"> Create Campaign</Link>
+                                                <Link className="btn btn-primary" to="/merchant/superleadz/templates"> Create Campaign</Link>
                                             </div>
 
                                         </div>

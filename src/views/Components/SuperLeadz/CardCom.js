@@ -21,7 +21,7 @@ const CardCom = ({ icon, title, data, info, id }) => {
                         {title ? title : ""}
                         {info && data ? <span className='position-absolute' style={{ top: '-10px', right: '-15px', cursor: 'pointer' }} id={id ? id : "testId"}>
 
-                            <Tooltip style={{ maxWidth: '100vh' }} key={info} placement="top" isOpen={tooltipOpen} autohide={true} target={id ? id : "testId"} onMouseOver={toggle} onMouseLeave={info} toggle={toggle}>{info}</Tooltip>
+                            <Tooltip style={{ maxWidth: '50vh'}} key={info} placement="top" isOpen={tooltipOpen} autohide={true} target={id ? id : "testId"} onMouseOver={toggle} onMouseLeave={info} toggle={toggle}>{info}</Tooltip>
                             <Info size={12} />
                         </span> : ''}
                     </p>

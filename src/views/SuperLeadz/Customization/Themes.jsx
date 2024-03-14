@@ -70,6 +70,13 @@ const Themes = () => {
 
     return (
         <>
+        <Card>
+                <CardBody className='d-flex justify-content-between align-items-center'>
+                    <h4 className='mb-0'>Templates page</h4>
+                    <div className='d-flex gap-1'>
+                    </div>
+                </CardBody>
+            </Card>
             <Container fluid className='px-0'>
                 <Row className='match-height'>
                     {allPreviews.map((theme, key) => {
