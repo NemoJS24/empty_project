@@ -38,6 +38,7 @@ import ComTable from '../Components/DataTable/ComTable'
 import { TbReplace } from "react-icons/tb"
 import "./Customization.css"
 import { FaCrown } from "react-icons/fa"
+import { MdOutlineRefresh } from "react-icons/md"
 
 
 export const fontStyles = [
@@ -4659,17 +4660,17 @@ const CustomizationParent = () => {
                                                                     <div className="form-check mb-1">
                                                                         <input disabled type="radio" name='visitor_settings' id='first' value={"FIRST_VISITORS"} className="form-check-input cursor-pointer" />
                                                                         <label htmlFor="first" className="cursor-pointer planCardUpgrade" style={{ fontSize: "13px" }}>First-Time Visitors</label>
-                                                                        <span className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</span>
+                                                                        <Link style={{ color: "#6e6b7b" }} to='/merchant/SuperLeadz/joinus/' className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</Link>
                                                                     </div>
                                                                     <div className="form-check mb-1">
                                                                         <input disabled type="radio" name='visitor_settings' id='return' value={"RETURNING_VISITORS"} className="form-check-input cursor-pointer" />
                                                                         <label htmlFor="return" className="cursor-pointer planCardUpgrade" style={{ fontSize: "13px" }}>Returning Shoppers</label>
-                                                                        <span className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</span>
+                                                                        <Link style={{ color: "#6e6b7b" }} to='/merchant/SuperLeadz/joinus/' className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</Link>
                                                                     </div>
                                                                     <div className="form-check mb-1">
                                                                         <input disabled type="radio" name='visitor_settings' id='registered' value={"REGISTERED_USERS"} className="form-check-input cursor-pointer" />
                                                                         <label htmlFor="registered" className="cursor-pointer planCardUpgrade" style={{ fontSize: "13px" }}>Registered Users</label>
-                                                                        <span className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</span>
+                                                                        <Link style={{ color: "#6e6b7b" }} to='/merchant/SuperLeadz/joinus/' className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</Link>
                                                                     </div>
                                                                 </>
                                                             }
@@ -5455,7 +5456,9 @@ const CustomizationParent = () => {
                                             <UncontrolledAccordion defaultOpen={['1']} stayOpen>
                                                 <AccordionItem className='bg-white border-bottom'>
                                                     <AccordionHeader className='acc-header border-bottom' targetId='1'>
-                                                        <p className='m-0 fw-bolder text-black text-uppercase' style={{ fontSize: "0.75rem" }}>Add Offers</p>
+                                                        <div className='d-flex w-100 justify-content-between me-1'><p className='m-0 fw-bolder text-black text-uppercase' style={{ fontSize: "0.75rem" }}>Add Offers</p>
+                                                        <MdOutlineRefresh style={{display:'none'}} size='20px' /></div>
+                                                        
                                                     </AccordionHeader>
                                                     <AccordionBody accordionId='1'>
                                                         {(gotOffers && Array.isArray(allOffers)) ? allOffers?.map((ele, key) => {

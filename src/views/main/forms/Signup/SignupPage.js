@@ -66,14 +66,14 @@ export default function SignupPage() {
     }
     const passValid = (value) => {
         const errors = {}
-        const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,18}$/
+        const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&*+=!]).{8,18}$/
 
         const isValid = passwordPattern.test(value)
 
         errors.uppercase = generateErrorMessage(!/(?=.*[A-Z])/.test(value), 'Passsword must contain 1 uppercase letter,')
         errors.lowercase = generateErrorMessage(!/(?=.*[a-z])/.test(value), 'Passsword must contain 1  lowercase letter,')
         errors.number = generateErrorMessage(!/(?=.*\d)/.test(value), 'Passsword must contain 1 number,')
-        errors.specialChar = generateErrorMessage(!/(?=.*[@#$%^&+=!])/.test(value), 'Passsword must contain 1  special character')
+        errors.specialChar = generateErrorMessage(!/(?=.*[@#$%^&*+=!])/.test(value), 'Passsword must contain 1  special character')
         errors.length = generateErrorMessage(
             value.length < 8 || value.length > 18,
             'Password must be 8 to 18 characters long'

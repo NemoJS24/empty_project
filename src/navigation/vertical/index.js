@@ -151,7 +151,7 @@ export default [
             id: 'themes',
             title: 'Themes',
             icon: <Circle size={16} />,
-            navLink: '/merchant/SuperLeadz/Themes/'
+            navLink: '/merchant/superleadz/templates'
           },
           {
             id: 'themes',

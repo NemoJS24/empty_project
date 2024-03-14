@@ -81,7 +81,7 @@ export const timelineName = {
         is_outlet_created: "/merchant/campaign/outlet_profiling/",
         is_offer_created: "/merchant/SuperLeadz/create_offers/",
         is_offer_synced: "/merchant/SuperLeadz/offers/",
-        is_campaign_started: "/merchant/SuperLeadz/Themes/",
+        is_campaign_started: "/merchant/superleadz/templates",
         is_campaign_completed: "/merchant/campaign/"
     }
 }

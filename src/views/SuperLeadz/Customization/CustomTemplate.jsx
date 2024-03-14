@@ -601,7 +601,7 @@ const CustomTemplate = () => {
                                                         <button className='primary-btn-outline' onClick={e => {
                                                             sendData(e)
                                                             setNameModal(false)
-                                                            openSection === "button" ? setOpenSection("text") : openSection === "text" ? setOpenSection("image") : openSection === "image" ? setOpenSection("background") : navigate("/merchant/SuperLeadz/Themes/")
+                                                            openSection === "button" ? setOpenSection("text") : openSection === "text" ? setOpenSection("image") : openSection === "image" ? setOpenSection("background") : navigate("/merchant/superleadz/templates")
                                                         }}>Back</button>
                                                         <div className='d-flex align-items-center justify-content-start gap-2 border p-1 rounded'>
                                                             <label htmlFor="prev-name">Theme Name: </label>

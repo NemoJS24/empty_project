@@ -49,7 +49,7 @@ const JoinUs = () => {
             })
             .then((data) => {
                 console.log(data)
-                toast.success("Free plan purchased")
+                toast.success("Forever Free plan activated")
                 const form_data = new FormData()
                 form_data.append('app', appName?.toLowerCase())
                 const shop = userPermission?.multipleDomain.filter((cur) => cur.api_key === userPermission?.apiKey)
@@ -154,7 +154,7 @@ const JoinUs = () => {
                             </div>
                             <div className="textContent text-center pt-3">
                                 <h2 className="pb-1" style={{ fontSize: '2rem' }}>Choose a Plan</h2>
-                                <p> Commit to a lifetime of effortless lead capture & conversion. <br /> Scale as you grow. We promise you'll make more than you pay us (or we'll cut you a check, really).</p>
+                                <p> Start for free and upgrade when you want to. Cancel anytime. No hidden fees.</p>
 
                             </div>
                             <Row className="mb-2">

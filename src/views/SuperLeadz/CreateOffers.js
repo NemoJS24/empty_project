@@ -1402,9 +1402,9 @@ const SuperLeadzCreateOffers = () => {
                                     </> : ""
                                 }
 
-                                <div className="action_btn mt-3 d-flex justify-content-between align-items-center">
-                                    <a className='btn btn-outline-secondary' onClick={() => setCurStep(curStep === 1 ? navigate('/merchant/SuperLeadz/offers/') : curStep - 1)} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }}>{curStep === 1 ? "View all offers" : "Back"}</a>
-                                    <a className='btn btn-primary-main' onClick={() => nextPage(null)} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }}>{curStep === 3 ? "Save" : "Next"} </a>
+                                <div className="action_btn mt-3 d-flex justify-content-end w-100 align-items-center">
+                                    {/* <a className='btn btn-outline-secondary' onClick={() => setCurStep(curStep === 1 ? navigate('/merchant/SuperLeadz/offers/') : curStep - 1)} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }}>{curStep === 1 ? "View all offers" : "Back"}</a> */}
+                                    <a className='btn btn-primary-main ' onClick={() => nextPage(null)} style={{ display: 'flex', justifyContent: 'end', alignItems: 'end', cursor: 'pointer' }}>{curStep === 3 ? "Save" : "Next"} </a>
                                 </div>
                             </div>
                             <div className="col-xl-4">
