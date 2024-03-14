@@ -22,7 +22,8 @@ export const commonObj = {
     labelText: "Email",
     redirectType: "nextPage",
     redirectTo: "",
-    style: {}
+    style: {},
+    offerIds: []
 }
 
 export const elementStyles = {

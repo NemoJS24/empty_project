@@ -570,7 +570,7 @@ const RenderPreview = (props) => {
                                                                                             onClick={e => {
                                                                                                 e.stopPropagation()
                                                                                                 makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                setCurrPosition({ ...currPosition, selectedType: "text" })
+                                                                                                setCurrPosition({ ...currPosition, selectedType: "text", subElem })
                                                                                                 setIndexes({ cur: key, curElem: curElem.positionType, subElem: j })
                                                                                                 setValues(subElem?.style)
                                                                                                 setSelectedOffer({})
@@ -752,7 +752,7 @@ const RenderPreview = (props) => {
                                                                                                 onClick={e => {
                                                                                                     e.stopPropagation()
                                                                                                     makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                    setCurrPosition({ ...currPosition, selectedType: "image" })
+                                                                                                    setCurrPosition({ ...currPosition, selectedType: "image", subElem })
                                                                                                     setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                     setValues(subElem?.style)
                                                                                                     setSelectedOffer({})
@@ -875,7 +875,7 @@ const RenderPreview = (props) => {
                                                                                             onClick={e => {
                                                                                                 e.stopPropagation()
                                                                                                 makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                setCurrPosition({ ...currPosition, selectedType: "button" })
+                                                                                                setCurrPosition({ ...currPosition, selectedType: "button", subElem })
                                                                                                 setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                 setValues(subElem?.style)
                                                                                                 setSelectedOffer({})
@@ -1035,7 +1035,7 @@ const RenderPreview = (props) => {
                                                                                             onClick={e => {
                                                                                                 e.stopPropagation()
                                                                                                 makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                setCurrPosition({ ...currPosition, selectedType: "input" })
+                                                                                                setCurrPosition({ ...currPosition, selectedType: "input", subElem })
                                                                                                 setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                 setValues(subElem.style)
                                                                                                 setSelectedOffer({})
@@ -1171,6 +1171,7 @@ const RenderPreview = (props) => {
                                                                                         </div>
                                                                                     )
                                                                                 case 'offer':
+                                                                                    const renderOffer = subElem?.offerIds && Array.isArray(subElem?.offerIds) ? finalObj?.selectedOffers?.filter($ => subElem?.offerIds?.includes($?.id)) : finalObj?.selectedOffers
                                                                                     return (
                                                                                         <div
                                                                                             onDragStart={e => {
@@ -1202,7 +1203,7 @@ const RenderPreview = (props) => {
                                                                                             onClick={e => {
                                                                                                 e.stopPropagation()
                                                                                                 makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                setCurrPosition({ ...currPosition, selectedType: "offer" })
+                                                                                                setCurrPosition({ ...currPosition, selectedType: "offer", subElem })
                                                                                                 setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                 setValues(subElem?.style)
                                                                                                 if (!isEqual(indexes, { cur: key, curElem: curElem?.positionType, subElem: j })) {
@@ -1288,7 +1289,7 @@ const RenderPreview = (props) => {
                                                                                                     }} /> */}
                                                                                             </span>}
                                                                                             {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
-                                                                                            {gotOffers ? finalObj?.selectedOffers?.map((ele, key) => {
+                                                                                            {gotOffers ? renderOffer?.map((ele, key) => {
                                                                                                 return (
                                                                                                     <div title="Click on offer to edit more settings" style={{ position: "relative" }}
                                                                                                         // onClick={(e) => {
@@ -1298,7 +1299,7 @@ const RenderPreview = (props) => {
                                                                                                         onClick={(e) => {
                                                                                                             e.stopPropagation()
                                                                                                             makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                            setCurrPosition({ ...currPosition, selectedType: "offer" })
+                                                                                                            setCurrPosition({ ...currPosition, selectedType: "offer", subElem })
                                                                                                             setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                             setValues(subElem?.style)
                                                                                                             setSelectedOffer(ele)
@@ -1352,7 +1353,7 @@ const RenderPreview = (props) => {
                                                                                             onClick={e => {
                                                                                                 e.stopPropagation()
                                                                                                 makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                setCurrPosition({ ...currPosition, selectedType: "tnc" })
+                                                                                                setCurrPosition({ ...currPosition, selectedType: "tnc", subElem })
                                                                                                 setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                 setValues(subElem?.style)
                                                                                                 setSelectedOffer({})
@@ -1543,11 +1544,11 @@ const RenderPreview = (props) => {
                                                         <div onClick={() => {
                                                             if (finalObj?.verificationEnabled || ele?.id !== "user_verification") {
                                                                 setCurrPage(ele?.id)
-                                                                if (ele?.id === "offers") {
-                                                                    setSideNav("offers")
-                                                                } else {
-                                                                    setSideNav("add-elements")
-                                                                }
+                                                                // if (ele?.id === "offers") {
+                                                                //     setSideNav("offers")
+                                                                // } else {
+                                                                setSideNav("add-elements")
+                                                                // }
                                                                 setIndexes(({ cur: 0, curElem: "left", subElem: "grandparent" }))
                                                                 setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
                                                                 updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: bgStyles } })
@@ -1614,10 +1615,11 @@ const RenderPreview = (props) => {
                                                                                                                             </div>
                                                                                                                         )
                                                                                                                     case 'offer':
+                                                                                                                        const renderOffer = subElem?.offerIds && Array.isArray(subElem?.offerIds) ? finalObj?.selectedOffers?.filter($ => subElem?.offerIds?.includes($?.id)) : finalObj?.selectedOffers
                                                                                                                         return (
                                                                                                                             <div style={{ ...subElem?.style, position: "relative", fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
                                                                                                                                 id={`${currPage}-${key}-${curElem.positionType}-${j}`}>
-                                                                                                                                {gotOffers ? finalObj?.selectedOffers?.map((ele, key) => {
+                                                                                                                                {gotOffers ? renderOffer?.map((ele, key) => {
                                                                                                                                     return (
                                                                                                                                         <div title="Click on offer to edit more settings" style={{ position: "relative" }} onClick={() => {
                                                                                                                                             setSelectedOffer(ele)
@@ -1865,10 +1867,11 @@ const RenderPreview = (props) => {
                                                                                                                         </div>
                                                                                                                     )
                                                                                                                 case 'offer':
+                                                                                                                    const renderOffer = subElem?.offerIds && Array.isArray(subElem?.offerIds) ? finalObj?.selectedOffers?.filter($ => subElem?.offerIds?.includes($?.id)) : finalObj?.selectedOffers
                                                                                                                     return (
 
                                                                                                                         <div className='p-1' style={{ ...values }}>
-                                                                                                                            {gotOffers ? finalObj?.selectedOffers?.map((ele) => {
+                                                                                                                            {gotOffers ? renderOffer?.map((ele) => {
                                                                                                                                 return (
                                                                                                                                     <div className='p-0 mx-0 mt-1 mb-2'>
                                                                                                                                         <div style={{

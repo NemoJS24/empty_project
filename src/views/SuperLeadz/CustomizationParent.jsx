@@ -275,7 +275,9 @@ const CustomizationParent = () => {
     const refreshOfferDraggable = () => {
         const arr = []
         const phoneArr = []
-        finalObj?.pages?.forEach(page => {
+        const openPage = currPage === "button" ? finalObj?.button : finalObj?.pages[finalObj?.pages?.findIndex($ => $.id === currPage)]?.values
+        const mobile_openPage = currPage === "button" ? finalObj?.mobile_button : finalObj?.mobile_pages[finalObj?.mobile_pages?.findIndex($ => $.id === currPage)]?.values
+        openPage?.forEach(page => {
             page?.values?.forEach(cur => {
                 cur?.elements?.forEach(curElem => {
                     curElem?.element?.forEach(subElem => {
@@ -284,7 +286,7 @@ const CustomizationParent = () => {
                 })
             })
         })
-        finalObj?.mobile_pages?.forEach(page => {
+        mobile_openPage?.forEach(page => {
             page?.values?.forEach(cur => {
                 cur?.elements?.forEach(curElem => {
                     curElem?.element?.forEach(subElem => {
@@ -4337,7 +4339,7 @@ const CustomizationParent = () => {
                         </div>
                         <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "offers" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => {
                             setSideNav(sideNav === "offers" ? "" : "offers")
-                            setCurrPage("offers")
+                            // setCurrPage("offers")
                         }}>
                             <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
                                 <Tag size={15} />
@@ -5427,8 +5429,8 @@ const CustomizationParent = () => {
                                         {sideNav === "offers" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%", maxHeight: "100%", overflow: "auto" }}>
                                             <div className="toggleSection border-end d-flex align-items-stretch justify-content-start mb-1">
                                                 <div style={{ width: `33.3333%`, padding: "0.35rem", height: "100%" }}>
-                                                    <div draggable={isMobile ? phoneIsOfferDraggable : isOfferDraggable} onDragStart={(e) => {
-                                                        if (isMobile ? phoneIsOfferDraggable : isOfferDraggable) {
+                                                    <div draggable={currPage !== "button" && (isMobile ? phoneIsOfferDraggable : isOfferDraggable)} onDragStart={(e) => {
+                                                        if (currPage !== "button" && (isMobile ? phoneIsOfferDraggable : isOfferDraggable)) {
                                                             handleDragStart(e, "offer", "type")
                                                         }
                                                     }} className="border rounded w-100 d-flex flex-column justify-content-between align-items-center p-1 h-100" style={{ aspectRatio: "1", cursor: "grab", gap: "0.5rem", boxShadow: "1px 1px 5px rgba(0,0,0,0.125)", cursor: isOfferDraggable ? "grab" : "default", opacity: isOfferDraggable ? "1" : "0.5" }}>
@@ -5452,23 +5454,48 @@ const CustomizationParent = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <UncontrolledAccordion defaultOpen={['1']} stayOpen>
+                                            {currPosition?.selectedType === "offer" && <UncontrolledAccordion defaultOpen={['1']} stayOpen>
                                                 <AccordionItem className='bg-white border-bottom'>
                                                     <AccordionHeader className='acc-header border-bottom' targetId='1'>
                                                         <p className='m-0 fw-bolder text-black text-uppercase' style={{ fontSize: "0.75rem" }}>Add Offers</p>
                                                     </AccordionHeader>
                                                     <AccordionBody accordionId='1'>
                                                         {(gotOffers && Array.isArray(allOffers)) ? allOffers?.map((ele, key) => {
+                                                            let checkCondition
+                                                            if (!currPosition?.subElem?.offerIds) {
+                                                                checkCondition = true
+                                                            } else {
+                                                                checkCondition = currPosition?.subElem?.offerIds?.includes(ele.id)
+                                                            }
                                                             return (
-                                                                <span className="position-relative" style={{ cursor: "pointer", outline: `2px solid ${finalObj?.selectedOffers?.some($ => $?.Code === ele.Code) ? "#FF671C" : "rgba(0,0,0,0)"}` }} onClick={() => {
+                                                                <span className="position-relative" style={{ cursor: "pointer", outline: `2px solid ${finalObj?.selectedOffers?.some($ => $?.Code === ele.Code) && checkCondition ? "#FF671C" : "rgba(0,0,0,0)"}` }} onClick={() => {
                                                                     if (finalObj?.selectedOffers?.some($ => $?.Code === ele.Code)) {
                                                                         const newArr = [...finalObj.selectedOffers]
                                                                         const filteredArr = [...newArr?.filter(item => item.Code !== ele.Code)]
                                                                         // setSelectedOffer(filteredArr[filteredArr.length - 1])
-                                                                        updatePresent({ ...finalObj, selectedOffers: filteredArr })
+                                                                        const newObj = {...finalObj}
+                                                                        newObj.selectedOffers = [...filteredArr]
+                                                                        const currPageIndex = currPage === "button" ? null : newObj?.pages?.findIndex($ => $.id === currPage)
+                                                                        
+                                                                        if (currPageIndex) {
+                                                                            const positionIndex = newObj?.pages[currPageIndex]?.values[indexes?.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
+                                                                            newObj.pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = filteredArr.map($ => $?.id)
+                                                                            newObj.mobile_pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = filteredArr.map($ => $?.id)
+                                                                        }
+                                                                        updatePresent({ ...newObj })
                                                                     } else {
                                                                         // setSelectedOffer(ele)
-                                                                        updatePresent({ ...finalObj, selectedOffers: [...finalObj?.selectedOffers, ele] })
+                                                                        const filteredArr = [...finalObj?.selectedOffers, ele]
+                                                                        const newObj = {...finalObj}
+                                                                        newObj.selectedOffers = [...filteredArr]
+                                                                        const currPageIndex = currPage === "button" ? null : newObj?.pages?.findIndex($ => $.id === currPage)
+                                                                        
+                                                                        if (currPageIndex) {
+                                                                            const positionIndex = newObj?.pages[currPageIndex]?.values[indexes?.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
+                                                                            newObj.pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = filteredArr.map($ => $?.id)
+                                                                            newObj.mobile_pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = filteredArr.map($ => $?.id)
+                                                                        }
+                                                                        updatePresent({ ...newObj })
                                                                     }
                                                                 }}>
                                                                     {/* {finalObj?.selectedOffers?.some($ => $?.Code === ele?.Code) && <span style={{ position: "absolute", inset: "0px 0px auto auto", transform: `translateX(35%) translateY(-35%)`, width: "25px", aspectRatio: "1", display: "flex", justifyContent: "center", alignItems: "center", color: "#FF671C", backgroundColor: "white", borderRadius: "100px", zIndex: "99999999999", border: "2px solid #FF671C" }}>{(finalObj?.selectedOffers?.findIndex($ => $?.Code === ele.Code)) + 1}</span>} */}
@@ -5503,7 +5530,7 @@ const CustomizationParent = () => {
                                                         <div><button onClick={() => navigate("/merchant/SuperLeadz/create_offers/")} className="btn btn-dark w-100">Create new offer</button></div>
                                                     </AccordionBody>
                                                 </AccordionItem>
-                                            </UncontrolledAccordion>
+                                            </UncontrolledAccordion>}
                                         </div>}
                                         {/* Offer Section */}
                                         {/* Criteria section */}
