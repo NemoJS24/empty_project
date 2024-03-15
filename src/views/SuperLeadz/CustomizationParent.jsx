@@ -4239,6 +4239,7 @@ const CustomizationParent = () => {
                 {
                     apiLoader ? <FrontBaseLoader /> : ''
                 }
+                {/* Top Section */}
                 <Container fluid className='border-bottom px-0' style={{ height: "55px" }}>
                     <Row className='align-items-center px-0'>
                         <div className='col-md-2 d-flex justify-content-start align-items-center gap-1'>
@@ -4287,6 +4288,8 @@ const CustomizationParent = () => {
                         </div>
                     </Row>
                 </Container>
+                {/* Top Section */}
+                {/* Main Section */}
                 <div className="d-flex justify-content-center align-items-stretch border position-relative" style={{ height: "calc(100vh - 55px)" }}>
                     {/* Component for changing background of the selected element */}
                     {/* <BgModifier pageCondition={pageCondition} mobileCondition={mobileCondition} mobileConditionRev={mobileConditionRev} styles={bgStyles} setStyles={setBgStyles} /> */}
@@ -6056,6 +6059,7 @@ const CustomizationParent = () => {
                     </Modal>
                     {/*Modals */}
                 </div>
+                {/* Main Section */}
             </div>
 
         </Suspense>

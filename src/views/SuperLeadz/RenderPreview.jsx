@@ -1324,7 +1324,6 @@ const RenderPreview = (props) => {
                                                                                                     setCurrPosition({ ...currPosition, selectedType: "offer", subElem })
                                                                                                     setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                     setValues(subElem?.style)
-                                                                                                    setSelectedOffer(ele)
                                                                                                     setSideNav("offers")
                                                                                                 }} style={{ textAlign: "center" }}>Click to select offers</div>
                                                                                             )}
