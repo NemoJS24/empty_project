@@ -768,7 +768,7 @@ const CustomizationParent = () => {
     }
 
     const makActive = (e, cur, curData, position, id, j) => {
-        setCurrPosition({ ...currPosition, position, id, name: e.target.name, curData, cur, j })
+        setCurrPosition((prev) => ({ ...prev, position, id, name: e.target.name, curData, cur, j }))
     }
 
     const changeColumn = (col, width, isDelete) => {
@@ -1077,6 +1077,8 @@ const CustomizationParent = () => {
         triggerImage()
         setImageType("SINGLE")
     }
+
+    console.log("particular offer", { currPosition })
 
     const replaceColumns = (e, { cur, mainCol, repCol }) => {
         e.stopPropagation()
@@ -3416,17 +3418,21 @@ const CustomizationParent = () => {
                 mobile_dupArray = finalObj.mobile_pages[finalObj.pages.findIndex($ => $?.id === currPage)].values
             }
 
-            if (mousePos.y - (y + (height / 2)) < 0) {
-                dupArray[dragOverIndex?.cur]?.elements[dupArray[dragOverIndex.cur]?.elements?.findIndex($ => $?.positionType === dragOverIndex?.curElem)]?.element?.splice(dragOverIndex?.subElem, 0, { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
+            const newCurrObj = { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }
 
-                mobile_dupArray[dragOverIndex?.cur]?.elements[mobile_dupArray[dragOverIndex.cur]?.elements?.findIndex($ => $?.positionType === dragOverIndex?.curElem)]?.element?.splice(dragOverIndex?.subElem, 0, { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
+            if (mousePos.y - (y + (height / 2)) < 0) {
+                dupArray[dragOverIndex?.cur]?.elements[dupArray[dragOverIndex.cur]?.elements?.findIndex($ => $?.positionType === dragOverIndex?.curElem)]?.element?.splice(dragOverIndex?.subElem, 0, newCurrObj)
+
+                mobile_dupArray[dragOverIndex?.cur]?.elements[mobile_dupArray[dragOverIndex.cur]?.elements?.findIndex($ => $?.positionType === dragOverIndex?.curElem)]?.element?.splice(dragOverIndex?.subElem, 0, newCurrObj)
                 setIndexes({ ...dragOverIndex })
             } else {
-                dupArray[dragOverIndex.cur]?.elements[dupArray[dragOverIndex.cur]?.elements?.findIndex($ => $?.positionType === dragOverIndex?.curElem)]?.element?.splice(dragOverIndex?.subElem + 1, 0, { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
+                dupArray[dragOverIndex.cur]?.elements[dupArray[dragOverIndex.cur]?.elements?.findIndex($ => $?.positionType === dragOverIndex?.curElem)]?.element?.splice(dragOverIndex?.subElem + 1, 0, newCurrObj)
 
-                mobile_dupArray[dragOverIndex.cur]?.elements[mobile_dupArray[dragOverIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragOverIndex?.curElem)]?.element?.splice(dragOverIndex?.subElem + 1, 0, { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
+                mobile_dupArray[dragOverIndex.cur]?.elements[mobile_dupArray[dragOverIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragOverIndex?.curElem)]?.element?.splice(dragOverIndex?.subElem + 1, 0, newCurrObj)
                 setIndexes({ cur, curElem, subElem: dragOverIndex?.subElem + 1 })
             }
+
+            setCurrPosition((prev) => ({ ...prev, subElem: newCurrObj }))
 
             if (transferedData?.includes("image")) {
                 setDropImage(true)
@@ -3712,6 +3718,96 @@ const CustomizationParent = () => {
         // }
         updatePresent({ ...newObj })
         setIsMobile(mobCondition)
+    }
+
+    const getCurrSelectedOffers = () => {
+        const { selectedType } = currPosition
+
+        if (selectedType === "offer") {
+            return (
+                <UncontrolledAccordion defaultOpen={['1']} stayOpen>
+                    <AccordionItem className='bg-white border-bottom'>
+                        <AccordionHeader className='acc-header border-bottom' targetId='1'>
+                            <div className='d-flex w-100 justify-content-between me-1'><p className='m-0 fw-bolder text-black text-uppercase' style={{ fontSize: "0.75rem" }}>Add Offers</p>
+                                <MdOutlineRefresh style={{ display: 'none' }} size='20px' /></div>
+
+                        </AccordionHeader>
+                        <AccordionBody accordionId='1'>
+                            {(gotOffers && Array.isArray(allOffers)) ? allOffers?.map((ele, key) => {
+                                let checkCondition
+                                if (!currPosition?.subElem?.offerIds) {
+                                    checkCondition = false
+                                } else {
+                                    checkCondition = currPosition?.subElem?.offerIds?.includes(ele.id)
+                                }
+                                return (
+                                    <span className="position-relative" style={{ cursor: "pointer", outline: `2px solid ${finalObj?.selectedOffers?.some($ => $?.Code === ele.Code) && checkCondition ? "#FF671C" : "rgba(0,0,0,0)"}` }} onClick={() => {
+                                        if (currPosition?.subElem?.offerIds && currPosition?.subElem?.offerIds?.includes(ele?.id)) {
+                                            // const newArr = [...finalObj.selectedOffers]
+                                            const newFilter = currPosition?.subElem?.offerIds?.filter($ => $ !== ele?.id)
+                                            // setSelectedOffer(filteredArr[filteredArr.length - 1])
+                                            const newObj = { ...finalObj }
+                                            // newObj.selectedOffers = [...filteredArr]
+                                            const currPageIndex = currPage === "button" ? null : newObj?.pages?.findIndex($ => $.id === currPage)
+                                            console.log({ currPage, indexes, currPageIndex }, "changedOffer")
+                                            if (currPageIndex || currPageIndex === 0) { // have to specify the === 0 condition because 0 is considered as false, which resullts in the block not executing
+                                                const positionIndex = newObj?.pages[currPageIndex]?.values[indexes?.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
+                                                console.log({ currPage, indexes, currPageIndex, positionIndex }, "changedOffer")
+                                                newObj.pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = newFilter
+                                                newObj.mobile_pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = newFilter
+                                            }
+                                            updatePresent({ ...newObj })
+                                        } else {
+                                            // setSelectedOffer(ele)
+                                            const newFilter = currPosition?.subElem?.offerIds ? [...currPosition?.subElem?.offerIds, ele.id] : [ele.id]
+                                            const newObj = { ...finalObj }
+                                            newObj.selectedOffers = finalObj?.selectedOffers?.some($ => ele.id === $.id) ? [...finalObj?.selectedOffers] : [...finalObj?.selectedOffers, ele]
+                                            const currPageIndex = currPage === "button" ? null : newObj?.pages?.findIndex($ => $.id === currPage)
+                                            console.log({ currPage, indexes, currPageIndex }, "changedOffer")
+                                            if (currPageIndex || currPageIndex === 0) { // have to specify the === 0 condition because 0 is considered as false, which resullts in the block not executing
+                                                const positionIndex = newObj?.pages[currPageIndex]?.values[indexes?.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
+                                                console.log({ currPage, indexes, currPageIndex, positionIndex }, "changedOffer")
+                                                newObj.pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = newFilter
+                                                newObj.mobile_pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = newFilter
+                                            }
+                                            updatePresent({ ...newObj })
+                                        }
+                                    }}>
+                                        {/* {finalObj?.selectedOffers?.some($ => $?.Code === ele?.Code) && <span style={{ position: "absolute", inset: "0px 0px auto auto", transform: `translateX(35%) translateY(-35%)`, width: "25px", aspectRatio: "1", display: "flex", justifyContent: "center", alignItems: "center", color: "#FF671C", backgroundColor: "white", borderRadius: "100px", zIndex: "99999999999", border: "2px solid #FF671C" }}>{(finalObj?.selectedOffers?.findIndex($ => $?.Code === ele.Code)) + 1}</span>} */}
+                                        <div>
+                                            {/* <ReturnOfferHtml details={ele} key={key} theme={finalObj?.offerTheme} colors={finalObj?.offerProperties?.colors} /> */}
+                                            <Card key={key} style={{ filter: "drop-shadow(rgba(0, 0, 0, 0.2) 0px 0px 10px)" }}>
+                                                <CardBody style={{ padding: "10px" }}>
+                                                    <div>
+                                                        <div>
+                                                            <span style={{ fontSize: "13px" }}>Code: <span className=' text-black '>{ele?.Code}</span></span>
+                                                        </div>
+                                                        <div className='mt-1'>
+                                                            <span style={{ fontSize: "13px" }}>Offer: <span className=' text-black'>{ele?.Type === "PERCENTAGE" ? `${Math.ceil(ele?.Value)}%` : `${userPermission?.currencySymbol}${Math.ceil(ele?.Value)}`}</span></span>
+                                                        </div>
+                                                        <div className='mt-1'>
+                                                            <span style={{ fontSize: "13px" }}>Summary: <br /> <span className=' text-black'> {ele?.Summary} </span></span>
+                                                        </div>
+                                                        <div>
+                                                            <p style={{ fontSize: "13px" }} className='mt-1'>Validity: <br /><span className=' text-black'>{ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format("YYYY-MM-DD HH:mm:ss") : "Never ending"}</span></p>
+                                                        </div>
+                                                    </div>
+                                                </CardBody>
+                                            </Card>
+                                        </div>
+                                    </span>
+                                )
+                            }) : (
+                                <div className="d-flex justify-content-center align-items-center" style={{ inset: "0px", backgroundColor: "rgba(255,255,255,0.5)" }}>
+                                    <Spinner />
+                                </div>
+                            )}
+                            <div><button onClick={() => navigate("/merchant/SuperLeadz/create_offers/")} className="btn btn-dark w-100">Create new offer</button></div>
+                        </AccordionBody>
+                    </AccordionItem>
+                </UncontrolledAccordion>
+            )
+        }
     }
 
     useEffect(() => {
@@ -5433,7 +5529,7 @@ const CustomizationParent = () => {
                                         </div>}
                                         {/* Button Section */}
                                         {/* Offer Section */}
-                                        {sideNav === "offers" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%", maxHeight: "100%", overflow: "auto" }}>
+                                        {sideNav === "offers" && <div key={currPosition.selectedType} style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%", maxHeight: "100%", overflow: "auto" }}>
                                             <div className="toggleSection border-end d-flex align-items-stretch justify-content-start mb-1">
                                                 <div style={{ width: `33.3333%`, padding: "0.35rem", height: "100%" }}>
                                                     <div draggable={currPage !== "button" && (isMobile ? phoneIsOfferDraggable : isOfferDraggable)} onDragStart={(e) => {
@@ -5461,7 +5557,8 @@ const CustomizationParent = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            {currPosition?.selectedType === "offer" && <UncontrolledAccordion defaultOpen={['1']} stayOpen>
+                                            {getCurrSelectedOffers()}
+                                            {currPosition.selectedType === "offer" && <UncontrolledAccordion defaultOpen={['1']} stayOpen>
                                                 <AccordionItem className='bg-white border-bottom'>
                                                     <AccordionHeader className='acc-header border-bottom' targetId='1'>
                                                         <div className='d-flex w-100 justify-content-between me-1'><p className='m-0 fw-bolder text-black text-uppercase' style={{ fontSize: "0.75rem" }}>Add Offers</p>
@@ -5479,8 +5576,8 @@ const CustomizationParent = () => {
                                                             return (
                                                                 <span className="position-relative" style={{ cursor: "pointer", outline: `2px solid ${finalObj?.selectedOffers?.some($ => $?.Code === ele.Code) && checkCondition ? "#FF671C" : "rgba(0,0,0,0)"}` }} onClick={() => {
                                                                     if (currPosition?.subElem?.offerIds && currPosition?.subElem?.offerIds?.includes(ele?.id)) {
-                                                                        const newArr = [...finalObj.selectedOffers]
-                                                                        const filteredArr = [...newArr?.filter(item => item.Code !== ele.Code)]
+                                                                        // const newArr = [...finalObj.selectedOffers]
+                                                                        const newFilter = currPosition?.subElem?.offerIds?.filter($ => $ !== ele?.id)
                                                                         // setSelectedOffer(filteredArr[filteredArr.length - 1])
                                                                         const newObj = { ...finalObj }
                                                                         // newObj.selectedOffers = [...filteredArr]
@@ -5489,23 +5586,22 @@ const CustomizationParent = () => {
                                                                         if (currPageIndex || currPageIndex === 0) { // have to specify the === 0 condition because 0 is considered as false, which resullts in the block not executing
                                                                             const positionIndex = newObj?.pages[currPageIndex]?.values[indexes?.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
                                                                             console.log({ currPage, indexes, currPageIndex, positionIndex }, "changedOffer")
-                                                                            newObj.pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = filteredArr.map($ => $?.id)
-                                                                            newObj.mobile_pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = filteredArr.map($ => $?.id)
+                                                                            newObj.pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = newFilter
+                                                                            newObj.mobile_pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = newFilter
                                                                         }
                                                                         updatePresent({ ...newObj })
                                                                     } else {
                                                                         // setSelectedOffer(ele)
-                                                                        const filteredArr = finalObj?.selectedOffers?.some($ => ele.id === $.id) ? [...finalObj?.selectedOffers] : [...finalObj?.selectedOffers, ele]
-                                                                        const newFilter = currPosition?.subElem?.offerIds ? [...currPosition?.subElem?.offerIds, ele] : [ele]
+                                                                        const newFilter = currPosition?.subElem?.offerIds ? [...currPosition?.subElem?.offerIds, ele.id] : [ele.id]
                                                                         const newObj = { ...finalObj }
-                                                                        newObj.selectedOffers = [...filteredArr]
+                                                                        newObj.selectedOffers = finalObj?.selectedOffers?.some($ => ele.id === $.id) ? [...finalObj?.selectedOffers] : [...finalObj?.selectedOffers, ele]
                                                                         const currPageIndex = currPage === "button" ? null : newObj?.pages?.findIndex($ => $.id === currPage)
                                                                         console.log({ currPage, indexes, currPageIndex }, "changedOffer")
                                                                         if (currPageIndex || currPageIndex === 0) { // have to specify the === 0 condition because 0 is considered as false, which resullts in the block not executing
                                                                             const positionIndex = newObj?.pages[currPageIndex]?.values[indexes?.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
                                                                             console.log({ currPage, indexes, currPageIndex, positionIndex }, "changedOffer")
-                                                                            newObj.pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = newFilter?.map($ => ($?.id ? $.id : $))
-                                                                            newObj.mobile_pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = newFilter?.map($ => ($?.id ? $.id : $))
+                                                                            newObj.pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = newFilter
+                                                                            newObj.mobile_pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = newFilter
                                                                         }
                                                                         updatePresent({ ...newObj })
                                                                     }

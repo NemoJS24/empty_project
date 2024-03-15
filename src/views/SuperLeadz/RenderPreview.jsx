@@ -1204,7 +1204,7 @@ const RenderPreview = (props) => {
                                                                                             onClick={e => {
                                                                                                 e.stopPropagation()
                                                                                                 makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                setCurrPosition({ ...currPosition, selectedType: "offer", subElem })
+                                                                                                setCurrPosition((prev) => ({ ...prev, selectedType: "offer", subElem }))
                                                                                                 setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                 setValues(subElem?.style)
                                                                                                 setSideNav("offers")
@@ -1305,11 +1305,12 @@ const RenderPreview = (props) => {
                                                                                                         onClick={(e) => {
                                                                                                             e.stopPropagation()
                                                                                                             makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                            setCurrPosition({ ...currPosition, selectedType: "offer", subElem })
+                                                                                                            setCurrPosition((prev) => ({ ...prev, selectedType: "offer", subElem }))
                                                                                                             setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                             setValues(subElem?.style)
                                                                                                             setSelectedOffer(ele)
                                                                                                             setSideNav("offers")
+                                                                                                            console.log("particular offer", { selectedType: "offer", subElem })
                                                                                                         }}>
                                                                                                         {isEqual(ele, selectedOffer) && (
                                                                                                             <div className='position-absolute w-100 h-100 bg-black opacity-25 top-0 start-0 z-1'></div>
@@ -1321,7 +1322,7 @@ const RenderPreview = (props) => {
                                                                                                 <div onClick={(e) => {
                                                                                                     e.stopPropagation()
                                                                                                     makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                    setCurrPosition({ ...currPosition, selectedType: "offer", subElem })
+                                                                                                    setCurrPosition((prev) => ({ ...prev, selectedType: "offer", subElem }))
                                                                                                     setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                     setValues(subElem?.style)
                                                                                                     setSideNav("offers")
