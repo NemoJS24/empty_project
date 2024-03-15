@@ -42,6 +42,7 @@ import LeadsSetting from '../../views/CRM/Leads/LeadsSetting'
 import Leads_dashboard from '../../views/Leads/Leads_Dashboard'
 import LeadsProfile from '../../views/CRM/ViewLead/LeadsProfile'
 import LeadAddInteraction from '../../views/CRM/ViewLead/Components/AddInteraction'
+import  BuyerSeller from '../../views/CRM/BuyerSeller/Buyerseller'
 
 const appName = "crm"
 const Customers_Routes = [
@@ -387,6 +388,10 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/Add-Call-lead/:id',
     element: <LeadAddInteraction />
+  },
+  {
+    path: '/merchant/customers/buyerseller',
+    element: <BuyerSeller />
   }
 ]
 
