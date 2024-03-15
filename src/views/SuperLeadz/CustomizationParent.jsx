@@ -106,7 +106,7 @@ const CustomizationParent = () => {
     // themeLoc variable has the transferred from the AllCampaigns page 
     const themeLoc = useLocation()
 
-    console.log({themeLoc})
+    console.log({ themeLoc })
 
     const { EditThemeId } = useParams()
 
@@ -2986,7 +2986,7 @@ const CustomizationParent = () => {
                         <input checked={finalObj?.rules?.stop_display_after_closing} onChange={updateRules} type="checkbox" role='switch' id='stop_display_after_closing' name={"stop_display_after_closing"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_after_closing" className="cursor-pointer" style={{ fontSize: "13px" }}>
                             {/* After closing {finalObj?.rules?.stop_display_after_closing_value} time(s) */}
                             Page closure/s
-                            </label>
+                        </label>
                     </div>
                     {finalObj?.rules?.stop_display_after_closing && (  //condition here
                         <div className="d-flex gap-1 justify-content-start align-items-center mb-1">
@@ -3395,7 +3395,7 @@ const CustomizationParent = () => {
 
     }
 
-    const handleElementDrop = (e, cur, curElem, subElem) => {
+    const handleElementDrop = (e, cur, curElem) => {
         e.stopPropagation()
         setIsColDragging(false)
         setGotDragOver({ cur: false, curElem: false, subElem: false })
@@ -3425,7 +3425,7 @@ const CustomizationParent = () => {
                 dupArray[dragOverIndex.cur]?.elements[dupArray[dragOverIndex.cur]?.elements?.findIndex($ => $?.positionType === dragOverIndex?.curElem)]?.element?.splice(dragOverIndex?.subElem + 1, 0, { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
 
                 mobile_dupArray[dragOverIndex.cur]?.elements[mobile_dupArray[dragOverIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragOverIndex?.curElem)]?.element?.splice(dragOverIndex?.subElem + 1, 0, { ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
-                setIndexes({ cur, curElem, subElem })
+                setIndexes({ cur, curElem, subElem: dragOverIndex?.subElem + 1 })
             }
 
             if (transferedData?.includes("image")) {
@@ -3486,6 +3486,8 @@ const CustomizationParent = () => {
         const elementDetails = elementId?.getBoundingClientRect()
         const { y, height } = elementDetails
 
+        let subElem = dragOverIndex?.subElem
+
         const removedElem = dupArray[dragStartIndex.cur].elements[dupArray[dragStartIndex.cur].elements.findIndex($ => $?.positionType === dragStartIndex.curElem)].element.splice(dragStartIndex.subElem, 1)[0]
         const mobile_removedElem = mobile_dupArray[dragStartIndex?.cur]?.elements[mobile_dupArray[dragStartIndex.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element?.splice(dragStartIndex?.subElem, 1)[0]
         if (dupArray[dragStartIndex.cur].elements[dupArray[dragStartIndex.cur].elements.findIndex($ => $?.positionType === dragStartIndex.curElem)].element.length === 0) {
@@ -3499,13 +3501,14 @@ const CustomizationParent = () => {
         } else if ((mousePos.y - (y + (height / 2)) > 0) || (dragStartIndex.subElem === dragOverIndex.subElem - 1)) {
             dupArray[dragOverIndex.cur].elements[dupArray[dragOverIndex.cur].elements.findIndex($ => $?.positionType === dragOverIndex.curElem)].element.splice(dragOverIndex.subElem + 1, 0, removedElem)
             mobile_dupArray[dragOverIndex.cur].elements[mobile_dupArray[dragOverIndex.cur].elements.findIndex($ => $?.positionType === dragOverIndex.curElem)].element.splice(dragOverIndex.subElem + 1, 0, mobile_removedElem)
+            subElem = dragOverIndex.subElem + 1
         }
         setcolWise([...dupArray])
         const newObj = { ...finalObj }
         newObj.mobile_pages[newObj.mobile_pages.findIndex($ => $?.id === currPage)].values = mobile_dupArray
         setDragStartIndex({ cur: 0, curElem: "left", subElem: "grandparent" })
         setValues({ ...dupArray[dragOverIndex.cur].elements[dupArray[dragOverIndex.cur].elements.findIndex($ => $?.positionType === dragOverIndex.curElem)].element[dragOverIndex.subElem].style })
-        setIndexes({ ...dragOverIndex })
+        setIndexes({ ...dragOverIndex, subElem })
         updatePresent({ ...newObj })
         setRearr(rearr + 1)
         // }
@@ -5459,8 +5462,8 @@ const CustomizationParent = () => {
                                                 <AccordionItem className='bg-white border-bottom'>
                                                     <AccordionHeader className='acc-header border-bottom' targetId='1'>
                                                         <div className='d-flex w-100 justify-content-between me-1'><p className='m-0 fw-bolder text-black text-uppercase' style={{ fontSize: "0.75rem" }}>Add Offers</p>
-                                                        <MdOutlineRefresh style={{display:'none'}} size='20px' /></div>
-                                                        
+                                                            <MdOutlineRefresh style={{ display: 'none' }} size='20px' /></div>
+
                                                     </AccordionHeader>
                                                     <AccordionBody accordionId='1'>
                                                         {(gotOffers && Array.isArray(allOffers)) ? allOffers?.map((ele, key) => {
@@ -5476,10 +5479,10 @@ const CustomizationParent = () => {
                                                                         const newArr = [...finalObj.selectedOffers]
                                                                         const filteredArr = [...newArr?.filter(item => item.Code !== ele.Code)]
                                                                         // setSelectedOffer(filteredArr[filteredArr.length - 1])
-                                                                        const newObj = {...finalObj}
+                                                                        const newObj = { ...finalObj }
                                                                         newObj.selectedOffers = [...filteredArr]
                                                                         const currPageIndex = currPage === "button" ? null : newObj?.pages?.findIndex($ => $.id === currPage)
-                                                                        
+
                                                                         if (currPageIndex) {
                                                                             const positionIndex = newObj?.pages[currPageIndex]?.values[indexes?.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
                                                                             newObj.pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = filteredArr.map($ => $?.id)
@@ -5489,10 +5492,10 @@ const CustomizationParent = () => {
                                                                     } else {
                                                                         // setSelectedOffer(ele)
                                                                         const filteredArr = [...finalObj?.selectedOffers, ele]
-                                                                        const newObj = {...finalObj}
+                                                                        const newObj = { ...finalObj }
                                                                         newObj.selectedOffers = [...filteredArr]
                                                                         const currPageIndex = currPage === "button" ? null : newObj?.pages?.findIndex($ => $.id === currPage)
-                                                                        
+
                                                                         if (currPageIndex) {
                                                                             const positionIndex = newObj?.pages[currPageIndex]?.values[indexes?.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
                                                                             newObj.pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = filteredArr.map($ => $?.id)

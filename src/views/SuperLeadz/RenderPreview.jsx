@@ -347,6 +347,7 @@ const RenderPreview = (props) => {
                         </div>
                         <div onClick={() => {
                             setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
+                            setSideNav("display")
                             setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
                             setSelectedOffer({})
                         }} className="flex-grow-1 position-relative" style={{ backgroundImage: `url(${slPrevBg})`, backgroundSize: '100% 100%' }}>
@@ -1206,6 +1207,7 @@ const RenderPreview = (props) => {
                                                                                                 setCurrPosition({ ...currPosition, selectedType: "offer", subElem })
                                                                                                 setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                 setValues(subElem?.style)
+                                                                                                setSideNav("offers")
                                                                                                 if (!isEqual(indexes, { cur: key, curElem: curElem?.positionType, subElem: j })) {
                                                                                                     setSelectedOffer({})
                                                                                                 } else if (finalObj?.selectedOffers.length > 0) {
@@ -1289,7 +1291,11 @@ const RenderPreview = (props) => {
                                                                                                     }} /> */}
                                                                                             </span>}
                                                                                             {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
-                                                                                            {gotOffers ? renderOffer?.map((ele, key) => {
+                                                                                            {!gotOffers ? (
+                                                                                                <div className="d-flex justify-content-center align-items-center" style={{ inset: "0px", backgroundColor: "rgba(255,255,255,0.5)" }}>
+                                                                                                    <Spinner />
+                                                                                                </div>
+                                                                                            ) : renderOffer?.length >= 1 ? renderOffer?.map((ele, key) => {
                                                                                                 return (
                                                                                                     <div title="Click on offer to edit more settings" style={{ position: "relative" }}
                                                                                                         // onClick={(e) => {
@@ -1303,6 +1309,7 @@ const RenderPreview = (props) => {
                                                                                                             setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                             setValues(subElem?.style)
                                                                                                             setSelectedOffer(ele)
+                                                                                                            setSideNav("offers")
                                                                                                         }}>
                                                                                                         {isEqual(ele, selectedOffer) && (
                                                                                                             <div className='position-absolute w-100 h-100 bg-black opacity-25 top-0 start-0 z-1'></div>
@@ -1311,9 +1318,15 @@ const RenderPreview = (props) => {
                                                                                                     </div>
                                                                                                 )
                                                                                             }) : (
-                                                                                                <div className="d-flex justify-content-center align-items-center" style={{ inset: "0px", backgroundColor: "rgba(255,255,255,0.5)" }}>
-                                                                                                    <Spinner />
-                                                                                                </div>
+                                                                                                <div onClick={(e) => {
+                                                                                                    e.stopPropagation()
+                                                                                                    makActive(e, cur, curElem, curElem?.positionType, key, i, j)
+                                                                                                    setCurrPosition({ ...currPosition, selectedType: "offer", subElem })
+                                                                                                    setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                    setValues(subElem?.style)
+                                                                                                    setSelectedOffer(ele)
+                                                                                                    setSideNav("offers")
+                                                                                                }} style={{ textAlign: "center" }}>Click to select offers</div>
                                                                                             )}
                                                                                         </div>
                                                                                     )
