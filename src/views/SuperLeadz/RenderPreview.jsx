@@ -1203,8 +1203,8 @@ const RenderPreview = (props) => {
                                                                                             }}
                                                                                             onClick={e => {
                                                                                                 e.stopPropagation()
-                                                                                                makActive(e, cur, curElem, curElem?.positionType, key, i, j)
                                                                                                 setCurrPosition((prev) => ({ ...prev, selectedType: "offer", subElem }))
+                                                                                                makActive(e, cur, curElem, curElem?.positionType, key, i, j)
                                                                                                 setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                 setValues(subElem?.style)
                                                                                                 setSideNav("offers")
@@ -1304,8 +1304,8 @@ const RenderPreview = (props) => {
                                                                                                         // }}
                                                                                                         onClick={(e) => {
                                                                                                             e.stopPropagation()
-                                                                                                            makActive(e, cur, curElem, curElem?.positionType, key, i, j)
                                                                                                             setCurrPosition((prev) => ({ ...prev, selectedType: "offer", subElem }))
+                                                                                                            makActive(e, cur, curElem, curElem?.positionType, key, i, j)
                                                                                                             setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                             setValues(subElem?.style)
                                                                                                             setSelectedOffer(ele)
@@ -1321,8 +1321,8 @@ const RenderPreview = (props) => {
                                                                                             }) : (
                                                                                                 <div onClick={(e) => {
                                                                                                     e.stopPropagation()
-                                                                                                    makActive(e, cur, curElem, curElem?.positionType, key, i, j)
                                                                                                     setCurrPosition((prev) => ({ ...prev, selectedType: "offer", subElem }))
+                                                                                                    makActive(e, cur, curElem, curElem?.positionType, key, i, j)
                                                                                                     setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                     setValues(subElem?.style)
                                                                                                     setSideNav("offers")
