@@ -5472,37 +5472,40 @@ const CustomizationParent = () => {
                                                         {(gotOffers && Array.isArray(allOffers)) ? allOffers?.map((ele, key) => {
                                                             let checkCondition
                                                             if (!currPosition?.subElem?.offerIds) {
-                                                                checkCondition = true
+                                                                checkCondition = false
                                                             } else {
                                                                 checkCondition = currPosition?.subElem?.offerIds?.includes(ele.id)
                                                             }
                                                             return (
                                                                 <span className="position-relative" style={{ cursor: "pointer", outline: `2px solid ${finalObj?.selectedOffers?.some($ => $?.Code === ele.Code) && checkCondition ? "#FF671C" : "rgba(0,0,0,0)"}` }} onClick={() => {
-                                                                    if (finalObj?.selectedOffers?.some($ => $?.Code === ele.Code)) {
+                                                                    if (currPosition?.subElem?.offerIds && currPosition?.subElem?.offerIds?.includes(ele?.id)) {
                                                                         const newArr = [...finalObj.selectedOffers]
                                                                         const filteredArr = [...newArr?.filter(item => item.Code !== ele.Code)]
                                                                         // setSelectedOffer(filteredArr[filteredArr.length - 1])
                                                                         const newObj = { ...finalObj }
-                                                                        newObj.selectedOffers = [...filteredArr]
+                                                                        // newObj.selectedOffers = [...filteredArr]
                                                                         const currPageIndex = currPage === "button" ? null : newObj?.pages?.findIndex($ => $.id === currPage)
-
-                                                                        if (currPageIndex) {
+                                                                        console.log({ currPage, indexes, currPageIndex }, "changedOffer")
+                                                                        if (currPageIndex || currPageIndex === 0) { // have to specify the === 0 condition because 0 is considered as false, which resullts in the block not executing
                                                                             const positionIndex = newObj?.pages[currPageIndex]?.values[indexes?.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
+                                                                            console.log({ currPage, indexes, currPageIndex, positionIndex }, "changedOffer")
                                                                             newObj.pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = filteredArr.map($ => $?.id)
                                                                             newObj.mobile_pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = filteredArr.map($ => $?.id)
                                                                         }
                                                                         updatePresent({ ...newObj })
                                                                     } else {
                                                                         // setSelectedOffer(ele)
-                                                                        const filteredArr = [...finalObj?.selectedOffers, ele]
+                                                                        const filteredArr = finalObj?.selectedOffers?.some($ => ele.id === $.id) ? [...finalObj?.selectedOffers] : [...finalObj?.selectedOffers, ele]
+                                                                        const newFilter = currPosition?.subElem?.offerIds ? [...currPosition?.subElem?.offerIds, ele] : [ele]
                                                                         const newObj = { ...finalObj }
                                                                         newObj.selectedOffers = [...filteredArr]
                                                                         const currPageIndex = currPage === "button" ? null : newObj?.pages?.findIndex($ => $.id === currPage)
-
-                                                                        if (currPageIndex) {
+                                                                        console.log({ currPage, indexes, currPageIndex }, "changedOffer")
+                                                                        if (currPageIndex || currPageIndex === 0) { // have to specify the === 0 condition because 0 is considered as false, which resullts in the block not executing
                                                                             const positionIndex = newObj?.pages[currPageIndex]?.values[indexes?.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
-                                                                            newObj.pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = filteredArr.map($ => $?.id)
-                                                                            newObj.mobile_pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = filteredArr.map($ => $?.id)
+                                                                            console.log({ currPage, indexes, currPageIndex, positionIndex }, "changedOffer")
+                                                                            newObj.pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = newFilter?.map($ => ($?.id ? $.id : $))
+                                                                            newObj.mobile_pages[currPageIndex].values[indexes?.cur].elements[positionIndex].element[indexes?.subElem].offerIds = newFilter?.map($ => ($?.id ? $.id : $))
                                                                         }
                                                                         updatePresent({ ...newObj })
                                                                     }
