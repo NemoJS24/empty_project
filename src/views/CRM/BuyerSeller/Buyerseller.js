@@ -166,7 +166,7 @@ const AddFinance = () => {
 
   const navigate = useNavigate()
 
-  let PageTitle = 'Add Finance'
+  let PageTitle = 'Sell Vehicle'
 
   // const formatDate = (inputDate) => {
   //   const parts = inputDate.split('-')
@@ -464,7 +464,7 @@ const AddFinance = () => {
       <div className="customer-profile">
         <Card>
           <CardBody>
-            <h3 className="mb-0">{isEdit ? "Edit Finance" : "Add Finance"}</h3>
+            <h3 className="mb-0">{isEdit ? "Buy Vehicle" : "Sell Vehicle"}</h3>
           </CardBody>
         </Card>
         <Card>
