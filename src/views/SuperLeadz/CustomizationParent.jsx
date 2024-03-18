@@ -274,30 +274,22 @@ const CustomizationParent = () => {
     // const [apiLoader, setApiLoader] = useState(false)
 
     const refreshOfferDraggable = () => {
-        const arr = []
-        const phoneArr = []
+        let arr = false
+        let phoneArr = false
         const openPage = currPage === "button" ? finalObj?.button : finalObj?.pages[finalObj?.pages?.findIndex($ => $.id === currPage)]?.values
         const mobile_openPage = currPage === "button" ? finalObj?.mobile_button : finalObj?.mobile_pages[finalObj?.mobile_pages?.findIndex($ => $.id === currPage)]?.values
-        openPage?.forEach(page => {
-            page?.values?.forEach(cur => {
+        openPage?.forEach(cur => {
                 cur?.elements?.forEach(curElem => {
-                    curElem?.element?.forEach(subElem => {
-                        arr?.push(subElem?.type === "offer")
-                    })
+                    arr = curElem?.element?.some($ => $?.type === "offer")
                 })
-            })
         })
-        mobile_openPage?.forEach(page => {
-            page?.values?.forEach(cur => {
+        mobile_openPage?.forEach(cur => {
                 cur?.elements?.forEach(curElem => {
-                    curElem?.element?.forEach(subElem => {
-                        phoneArr?.push(subElem?.type === "offer")
-                    })
+                    phoneArr = curElem?.element?.some($ => $?.type === "offer")
                 })
-            })
         })
-        setIsOfferDraggable(!arr.includes(true))
-        setPhoneIsOfferDraggable(!phoneArr.includes(true))
+        setIsOfferDraggable(!arr)
+        setPhoneIsOfferDraggable(!phoneArr)
     }
 
     const handleFilter = e => {
@@ -3399,6 +3391,7 @@ const CustomizationParent = () => {
 
     const handleElementDrop = (e, cur, curElem) => {
         e.stopPropagation()
+        refreshOfferDraggable()
         setIsColDragging(false)
         setGotDragOver({ cur: false, curElem: false, subElem: false })
         const transferedData = e.dataTransfer.getData("type")
@@ -3811,6 +3804,7 @@ const CustomizationParent = () => {
     }
 
     useEffect(() => {
+        refreshOfferDraggable()
         const colWise = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
         setBrandStyles({ ...finalObj?.[`${mobileCondition}brandStyles`] })
         const positionIndex = colWise[indexes.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
@@ -4156,6 +4150,7 @@ const CustomizationParent = () => {
     // }, [offerTheme])
 
     useEffect(() => {
+        refreshOfferDraggable()
         const draggedTypes = new Array()
         const colWise = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
         colWise?.forEach(cur => {
