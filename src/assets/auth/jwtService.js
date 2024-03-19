@@ -26,8 +26,7 @@ export const configUrl = {
     signup: "/merchant/signup/",
     refresh: "/api/token/refresh/",
     generalPost:"/utility/api/v1/user_utility_settings_post/",
-    // whatspp
-    createTemplate:"talks/createTemplate/",
+
     // affilate
     signupAffiliate:'/affiliate/affiliate_signup/',
     loginAffiliate:'/affiliate/affiliate_login/',
@@ -191,8 +190,38 @@ export const configUrl = {
     loginAffiliate: '/affiliate/affiliate_login/',
     admin_withdrawn_transactions: "/affiliate/admin/admin_withdrawn_trans",
     admin_withdrawn_request: "/affiliate/admin/admin_withdrawn_req/",
-    affiliate_active: "/affiliate/admin/affiliate_activate/"
+    affiliate_active: "/affiliate/admin/affiliate_activate/",
 
+    // whatsapp
+
+    whatsapp_dashboard_view: "talk/dashboard_view/",
+    getTemplates: "talk/getTemplates/",
+    project_get: "talk/project_get/",
+    getTemplateById: "talk/getTemplateById/",
+    createTemplate: "talk/createTemplate/",
+    sendMessage: "talk/sendMessage/",
+    embeddedSignup: "talk/embeddedSignup/",
+    import_customer: "talk/import_customer/",
+    fbVerification: "talk/fbVerification/",
+    projectCreation: "talk/projectCreation/",
+    editTemplate: "talk/editTemplate/",
+    Business_view: "talk/whatsapp/business_view/",
+    add_group: "talk/add_group/",
+    group_base_details: "talk/group_base_details/",
+    group_contact: "talk/group_contact/",
+    contact_details: "talk/contact_details/",
+    group_delete: "talk/group_delete/",
+    contact_delete: "talk/contact_delete/",
+    bulk_message: "talk/bulk_message/",
+    get_group_contact: "talk/get_group_contact/",
+    inactiveTemplate: "talk/inactiveTemplate/",
+    group_details: "talk/group_details/",
+    get_catalog: "talk/get_catalog/",
+    catalog_details: "talk/catalog_details/",
+    send_catalog: "talk/send_catalog/",
+    template_active: "talk/template_active/",
+    template_view: "talk/template_view/",
+    messagelog_view: "talk/messagelog_view/"
 }
 
 const axiosInstance = axios.create({

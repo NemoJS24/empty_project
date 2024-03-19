@@ -17,6 +17,7 @@ import { DefaultNav } from '../navigation/Apps/DefualtNav'
 import { ProductReviewNavigation } from '../navigation/Apps/ProductReview'
 import { OhMyCustomerNavigation } from '../navigation/Apps/OhMyCustomer'
 import { CRMNavigation } from '../navigation/Apps/CRM'
+import { WhatsappNavigation } from '../navigation/Apps/Whatsapp'
 // import { getNavbar } from '../views/Validator'
 
 // ** Menu Items Array
@@ -25,7 +26,7 @@ import { CRMNavigation } from '../navigation/Apps/CRM'
 const VerticalLayout = props => {
 
   const { userPermission } = useContext(PermissionProvider)
-
+console.log(userPermission)
   let navigation = []
 
   if (userPermission?.appName === "superleadz") {
@@ -40,6 +41,8 @@ const VerticalLayout = props => {
     navigation = ProductReviewNavigation
   } else if (userPermission?.appName === "crm") {
     navigation = CRMNavigation
+  } else if (userPermission?.appName === "whatsapp") {
+    navigation = WhatsappNavigation
   } else {
     navigation = DefaultNav
   }

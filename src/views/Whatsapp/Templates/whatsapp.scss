@@ -1,0 +1,73 @@
+.whatsapp_template_card {
+  background-color: rgb(255, 255, 255);
+  position: relative;
+
+  &::before {
+
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10px;
+    border: 10px solid transparent;
+    border-top: 10px solid #fff;
+
+  }
+}
+#send-icon {
+  transition: all ease .2s;
+  transform: rotate(0deg);
+}
+
+.send-btn:hover>#send-icon {
+  transform: rotate(45deg);
+}
+
+.sendMenuHeader {
+  background: aliceblue;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+$dropdown-background: #f1f1f1;
+$dropdown-shadow: rgba(0, 0, 0, 0.2);
+
+.dropbtn {
+  color: rgb(11, 11, 11);
+  font-size: 16px;
+  border: none;
+  background: white;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    // top:-120px;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px $dropdown-shadow;
+    z-index: 1;
+    border-radius: 5px;
+    overflow: hidden;
+
+    .items {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+
+      &:hover {
+        background-color: #efefef;
+      }
+    }
+  }
+
+  &:hover {
+    .dropdown-content {
+      display: block;
+    }
+  }
+}

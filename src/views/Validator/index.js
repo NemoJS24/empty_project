@@ -83,6 +83,13 @@ export const timelineName = {
         is_offer_synced: "/merchant/SuperLeadz/offers/",
         is_campaign_started: "/merchant/superleadz/templates",
         is_campaign_completed: "/merchant/campaign/"
+    },
+    whatsapp: {
+        is_business: "/merchant/whatsapp/business_creation/",
+        // is_business: "/merchant/whatsapp/is_business/",
+        is_project: "/merchant/whatsapp/is_business/",
+        is_fb_verified: "/merchant/whatsapp/EmbeddedSignup/",
+        is_template: "/merchant/whatsapp/is_template/"
     }
 }
 
@@ -206,7 +213,8 @@ export const dashboardURL = {
     product_review: "/merchant/product-review/",
     oh_my_customer: "/merchant/oh-my-customer/",
     otp_verification: "/merchant/apps/",
-    crm: "/merchant/customers/"
+    crm: "/merchant/customers/",
+    whatsapp:"/merchant/whatsapp/"
 }
 
 export function generateRandomString() {

@@ -19,7 +19,7 @@ import moment from 'moment'
 // import { Link } from 'react-router-dom'
 // import { pageNo } from '../../Validator'
 
-const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpand, ExpandableTable, custom, isStyling, selectableRows = false, selectedRows, setSelectedRows, getData, exportUrl, viewAll, isExport, selectedContent, advanceFilter, viewType = "table", setViewType, viewContent, deleteContent, create, createLink, createText, toggledClearRows }) => {
+const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpand, ExpandableTable, custom, isStyling, selectableRows = false, selectedRows, setSelectedRows, getData, exportUrl, viewAll, isExport, selectedContent, advanceFilter, viewType = "table", setViewType, viewContent, deleteContent, create, createLink, createText, toggledClearRows, customButtonLeft, customButtonRight }) => {
   // ** State
   const [currentPage, setCurrentPage] = useState(0)
   const [currentEntry, setCurrentEntry] = useState(custom ? 5 : 10)
@@ -321,7 +321,11 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
               {selectedContent}
             </> : ''
           }
-
+{
+            customButtonLeft && <>
+              {customButtonLeft()}
+            </>
+          }
         </Col>
         <Col className='d-flex align-items-center justify-content-center' md='4' sm='12'>
           <h4 className='m-0'>{tableName}</h4>
@@ -331,6 +335,11 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
             create ? <>
               <Link className='btn btn-primary-main' to={createLink}>{createText}</Link>
             </> : ''
+          }
+           {
+            customButtonRight && <>
+              {customButtonRight()}
+            </>
           }
           <Input
             className='dataTable-filter form-control'

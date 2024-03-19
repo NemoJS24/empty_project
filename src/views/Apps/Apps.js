@@ -111,7 +111,7 @@ const Apps = () => {
         console.log(resp)
         // setApiLoader(false)
         if (name === "other") {
-          navigate("/merchant/customers/")
+          navigate("/merchant/apps/")
           setUserPermission({ ...userPermission, appName: data?.selectApp, installedApps: [...resp?.data?.install_app] })
         } else {
           window.location.href = resp?.data?.data
