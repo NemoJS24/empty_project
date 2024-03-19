@@ -590,7 +590,7 @@ export default function TemplateUI() {
                               }
                               {
                                  AllTemplatesData && AllTemplatesData.map((SingleTemplate) => {
-                                    const isActive = ActiveTemplates.includes(SingleTemplate.id)
+                                    const isActive = ActiveTemplates?.includes(SingleTemplate?.id)
                                     return (
 
                                        <Col md="6" xl="6" xxl="4" className='d-flex justify-content-center ' >
@@ -927,7 +927,7 @@ export default function TemplateUI() {
                                  {
                                     useGroupList.map((elm) => {
                                        // console.log(elm)
-                                       if (useSelectedGroups.includes(elm.value)) {
+                                       if (useSelectedGroups?.includes(elm.value)) {
                                           return (
                                              <Col md="4" >
                                                 <div className='btn border btn-dark w-100 position-relative p-2 ' onClick={(e) => setSelectedGroups(() => useSelectedGroups.filter((ee) => ee !== elm.value))}>
@@ -989,7 +989,7 @@ export default function TemplateUI() {
                      {useBulkModalScreen === 1 && useGroupList.length !== 0 && useSelectedGroups.length !== 0 && <Button color="primary" onClick={() => { setBulkModalScreen(2); tableDataFun(useSelectedGroups) }}>
                         Next
                      </Button>}
-                     {useBulkModalScreen === 2 && <Button color="primary" onClick={() => { sendTemplateBulk() }}>
+                     {useSelectedContacts.length !== 0 && useBulkModalScreen === 2 && <Button color="primary" onClick={() => { sendTemplateBulk() }}>
                         Send
                      </Button>}
                   </ModalFooter>

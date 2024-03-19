@@ -33,7 +33,7 @@ export default function SendContactTable({ groupID }) {
     {
       name: 'First Name',
       minWidth: '200px',
-      selector: row => row.first_name, // Assuming 'name' is the property in your data for the name
+      selector: row => row?.first_name, // Assuming 'name' is the property in your data for the name
       dataType: 'email',
       type: 'text',
       isEnable: true
@@ -41,14 +41,21 @@ export default function SendContactTable({ groupID }) {
     {
       name: 'Last Name',
       minWidth: '15%',
-      selector: row => row.last_name, // Assuming 'category' is the property in your data for the category
+      selector: row => row?.last_name, // Assuming 'category' is the property in your data for the category
+      type: 'select',
+      isEnable: true
+    },
+    {
+      name: 'Country Code',
+      minWidth: '15%',
+      selector: row => row?.phone_code, // Assuming 'category' is the property in your data for the category
       type: 'select',
       isEnable: true
     },
     {
       name: 'Contact',
       minWidth: '15%',
-      selector: row => row.contact, // Assuming 'category' is the property in your data for the category
+      selector: row => row?.contact, // Assuming 'category' is the property in your data for the category
       type: 'select',
       isEnable: true
     }

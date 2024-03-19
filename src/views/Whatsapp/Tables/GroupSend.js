@@ -237,12 +237,12 @@ const {id} = useParams()
                                 <Row className='match-height align-items-center '>
 
                                     {
-                                        AllTemplatesData.length === 0 && <div className='fs-4 text-center mt-5 fw-bolder'>No Templates Available</div>
+                                        !AllTemplatesData  && <div className='fs-4 text-center mt-5 fw-bolder'>No Templates Available</div>
                                     }
                                     {
                                         AllTemplatesData && AllTemplatesData.map((SingleTemplate) => {
                                             let IsActive = true
-                                            if (ActiveTemplates.includes(SingleTemplate.id)) {
+                                            if (ActiveTemplates?.includes(SingleTemplate?.id)) {
                                                 IsActive = true
                                             } else {
                                                 IsActive = false

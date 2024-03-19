@@ -135,7 +135,8 @@ function GroupTable() {
           return (<div className='d-flex gap-2'>
               <button className='btn ' style={{padding:"5px 10px" }} onClick={() => handleDelete(row.group_id)} ><Trash size={18}/></button>
               <Link to={`/merchant/whatsapp/${row.group_name}/${row.group_id}`} className='btn ' style={{padding:"5px 10px" }}><Eye size={18}/></Link>
-              <Link to={`/merchant/whatsapp/sent-to-group/${row.group_id}`} className='btn btn-primary' style={{padding:"5px 10px" }}>Sent Messages</Link>
+              
+             {row.group_contact !== 0 && <Link to={`/merchant/whatsapp/sent-to-group/${row.group_id}`} className='btn btn-primary' style={{padding:"5px 10px" }}>Sent Messages</Link> }
           </div>
           )
       },

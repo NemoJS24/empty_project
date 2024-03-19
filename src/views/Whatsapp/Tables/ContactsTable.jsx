@@ -133,7 +133,7 @@ export default function ContactsTable() {
     {
       name: 'First Name',
       minWidth: '200px',
-      selector: row => row.contact_first_name, // Assuming 'name' is the property in your data for the name
+      selector: row => row?.contact_first_name, // Assuming 'name' is the property in your data for the name
       dataType: 'email',
       type: 'text',
       isEnable: true
@@ -141,14 +141,21 @@ export default function ContactsTable() {
     {
       name: 'Last Name',
       minWidth: '15%',
-      selector: row => row.contact_last_name, // Assuming 'category' is the property in your data for the category
+      selector: row => row?.contact_last_name, // Assuming 'category' is the property in your data for the category
+      type: 'select',
+      isEnable: true
+    },
+    {
+      name: 'Country Code',
+      minWidth: '15%',
+      selector: row => row?.contact_phone_code, // Assuming 'category' is the property in your data for the category
       type: 'select',
       isEnable: true
     },
     {
       name: 'Contact',
       minWidth: '15%',
-      selector: row => row.contact_details_contact, // Assuming 'category' is the property in your data for the category
+      selector: row => row?.contact_details_contact, // Assuming 'category' is the property in your data for the category
       type: 'select',
       isEnable: true
     }
