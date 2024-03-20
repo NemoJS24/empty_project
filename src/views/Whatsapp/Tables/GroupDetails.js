@@ -1,16 +1,13 @@
 
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Button, Card, CardBody, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap'
-import { FiUpload } from "react-icons/fi"
-import { IoIosCheckmarkCircleOutline } from "react-icons/io"
-import toast from 'react-hot-toast'
-import { getReq, postReq } from '../../../assets/auth/jwtService'
-import FrontBaseLoader from '../../Components/Loader/Loader'
-import AdvanceServerSide from '../../Components/DataTable/AdvanceServerSide'
-import Select from 'react-select'
+import React, { useState } from 'react'
 import { ArrowLeft } from 'react-feather'
+import toast from 'react-hot-toast'
+import { Link, useParams } from 'react-router-dom'
+import { Card, CardBody, Row } from 'reactstrap'
+import { postReq } from '../../../assets/auth/jwtService'
+import AdvanceServerSide from '../../Components/DataTable/AdvanceServerSide'
+import FrontBaseLoader from '../../Components/Loader/Loader'
 export default function GroupDetails() {
   const { name, id } = useParams()
   const [useLoader, setLoader] = useState(false)
@@ -72,6 +69,13 @@ export default function GroupDetails() {
       name: 'Last Name',
       minWidth: '15%',
       selector: row => row.contact_last_name, // Assuming 'category' is the property in your data for the category
+      type: 'select',
+      isEnable: true
+    },
+    {
+      name: 'Country Code',
+      minWidth: '15%',
+      selector: row => row?.contact_phone_code, // Assuming 'category' is the property in your data for the category
       type: 'select',
       isEnable: true
     },

@@ -12,14 +12,19 @@ export default function SendContactTable({ groupID }) {
   const [totalData, settotalData] = useState(0)
   const [useSelectedContacts, setSelectedContacts] = useState([])
 
-  const getData = () => {
+  const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
     const form_data = new FormData()
+    Object.entries(advanceSearchValue).map(([key, value]) => value && form_data.append(key, value))
+    
     form_data.append("group_contact", groupID)
+    form_data.append("page", currentPage + 1)
+    form_data.append("size", currentEntry)
+    form_data.append("searchValue", searchValue)
     postReq(`get_group_contact`, form_data)
       .then(res => {
         console.log('res:', res.data)
         settableData(res.data.contact_grp)
-        settotalData(res.data.group_count)
+        settotalData(res.data.contact_grp_count)
         setSelectedRows(() => res.data.contact_grp.map((elm) => elm.id))
 
       })
@@ -33,7 +38,7 @@ export default function SendContactTable({ groupID }) {
     {
       name: 'First Name',
       minWidth: '200px',
-      selector: row => row?.first_name, // Assuming 'name' is the property in your data for the name
+      selector: row => row?.contact_first_name ?? ' ', // Assuming 'name' is the property in your data for the name
       dataType: 'email',
       type: 'text',
       isEnable: true
@@ -41,21 +46,21 @@ export default function SendContactTable({ groupID }) {
     {
       name: 'Last Name',
       minWidth: '15%',
-      selector: row => row?.last_name, // Assuming 'category' is the property in your data for the category
+      selector: row => row?.contact_last_name ?? ' ', // Assuming 'category' is the property in your data for the category
       type: 'select',
       isEnable: true
     },
     {
       name: 'Country Code',
       minWidth: '15%',
-      selector: row => row?.phone_code, // Assuming 'category' is the property in your data for the category
+      selector: row => row?.contact_details_phone_code ?? ' ', // Assuming 'category' is the property in your data for the category
       type: 'select',
       isEnable: true
     },
     {
       name: 'Contact',
       minWidth: '15%',
-      selector: row => row?.contact, // Assuming 'category' is the property in your data for the category
+      selector: row => row?.contact_details_contact ?? ' ', // Assuming 'category' is the property in your data for the category
       type: 'select',
       isEnable: true
     }

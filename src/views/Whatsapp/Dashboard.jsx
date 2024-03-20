@@ -139,21 +139,6 @@ const Dashboard = () => {
                                                         ) : ''
                                                     }
                                                 </div>
-                                                <div className="right_side">
-                                                    <div className="d-flex justify-content-end align-items-start gap-1">
-                                                        <Link to='/merchant/create_support/' className='shedule_btn btn btn-sm btn-primary btnCustom text-nowrap' title="Support">
-                                                            <AiFillPhone size={14} style={{ marginBottom: "2px" }} />
-                                                        </Link>
-                                                        <Link to='/merchant/SuperLeadz/faq/' className='shedule_btn btn btn-sm btn-primary btnCustom text-nowrap' title="FAQ">
-                                                            <AiOutlineQuestion size={14} style={{ marginBottom: "2px" }} />
-                                                            {/* <span className='boxPadbtn' style={{fontSize:"11px"}}>Support</span> */}
-                                                        </Link>
-                                                        <Link to='/merchant/SuperLeadz/billing/' className='shedule_btn btn btn-sm btn-primary btnCustom text-nowrap' title="Billing">
-                                                            <BiDollar size={14} style={{ marginBottom: "2px" }} />
-                                                            {/* <span className='boxPadbtn' style={{fontSize:"11px"}}>Support</span> */}
-                                                        </Link>
-                                                    </div>
-                                                </div>
                                             </div>
 
                                         </div>
@@ -179,7 +164,7 @@ const Dashboard = () => {
 
                 <div className='col-md-6 cursor-default'>
                     <Link to="/merchant/whatsapp/reports/template" >
-                        <CardCom icon={<Check width={'27px'} />} title="Total Sent Templates" data={useDashboardData?.total_sent ?? 0 }  />
+                        <CardCom icon={<Check width={'27px'} />} title="Sent Templates" data={useDashboardData?.total_sent ?? 0 }  />
                     </Link>
                 </div>
 

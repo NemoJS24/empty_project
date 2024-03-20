@@ -11,7 +11,7 @@ import { selectPhoneList } from '../../../Helper/data'
 import { postReq } from '../../../assets/auth/jwtService'
 import FrontBaseLoader from '../../Components/Loader/Loader'
 import { Link, useParams } from 'react-router-dom'
-import { getBoldStr } from '../SmallFunction'
+import { HeaderTypeList, getBoldStr, paramatersList } from '../SmallFunction'
 
 export default function EditTemplate() {
   const { templateID } = useParams()
@@ -19,30 +19,7 @@ export default function EditTemplate() {
   const [CurrentTemplate, setCurrentTemplate] = useState()
   const [useLoader, setLoader] = useState(false)
   const [useLinkType, setLinkType] = useState("custom")
-  const paramVals = [{ value: 'FirstName', label: "FirstName" }, { value: 'LastName', label: "LastName" }, { value: 'customerName', label: "customerName" }, { value: 'CompanyName', label: "CompanyName" }, { value: 'OrderID', label: "OrderID" }, { value: 'ProductName', label: "ProductName" }]
-  const msgTypeList = [
-    {
-      value: "Text",
-      label: "Text"
-    },
-    {
-      value: "Image",
-      label: "Image"
-    },
-    {
-      value: "Document",
-      label: "Document"
-    },
-    {
-      value: "Video",
-      label: "Video"
-    },
-    {
-      value: "None",
-      label: "None"
-    }
-  ]
-
+ 
   const [BasicTemplateData, setBasicTemplateData] = useState({
     templateName: '',
     templateCategory: '',
@@ -292,6 +269,7 @@ export default function EditTemplate() {
             if (elm.type === "BODY") {
               setMsgBody(elm.text)
               setBody_Parameters(elm.example?.body_text[0] ?? [])
+              console.log(elm.example?.body_text[0])
               handleBodyDisplay(elm.text, elm.example?.body_text[0] ?? [])
             }
             if (elm.type === "FOOTER") {
@@ -543,7 +521,7 @@ export default function EditTemplate() {
                 <p className="fs-5  text-secondary">Your template type should fall under one of these categories.</p>
                 <Select
                   className=''
-                  options={msgTypeList}
+                  options={HeaderTypeList}
                   closeMenuOnSelect={true}
                   value={{ value: Header.type, label: Header.type }}
                   onChange={(e) => {
@@ -576,7 +554,7 @@ export default function EditTemplate() {
                             console.log(item)
                             return (
                               <div className="mt-1">
-                                <Select options={paramVals}
+                                <Select options={paramatersList}
                                   value={{ value: item, label: item }}
                                   onChange={(e) => { setHeader_Parameters([e.value]) }}
                                   closeMenuOnSelect={true} />
@@ -650,14 +628,15 @@ export default function EditTemplate() {
                     </p>
                     <div className='d-flex flex-column gap-1'>
                       {Body_Parameters?.map((paramData, index) => {
-                        console.log(paramData)
+                        // console.log(paramData)
+                        console.log(`${index} ==== ${paramData}`)
                         return (
                           <div className='d-flex' key={index + 1}>
                             <div className='w-25 d-flex justify-content-center align-items-center '>
                               <h5>{`{{ ${index + 1} }}`}</h5>
                             </div>
                             <div className='w-100'>
-                              <Select options={paramVals}
+                              <Select options={paramatersList}
                                 value={{ value: paramData, label: paramData }}
                                 defaultValue={{ value: paramData, label: paramData }}
                                 onChange={(e) => handleParameterChange(index, e.label)}
@@ -696,11 +675,6 @@ export default function EditTemplate() {
 
                 <Card className='rounded-3 shadow-lg  position-relative mb-0 whatsapp_template_card' >
                   <CardBody className='p-2'>
-                    {/* {Header.type === "None" && <div className='border rounded-3 d-flex justify-content-center  align-items-center ' style={{ height: "170px", background: "#ffddb0" }}>
-                      <Image size={45} color='#faad20' />
-                      <PlayCircle size={45} color='#5f66cd' />
-                      <FileText size={45} color='#f33d79' />
-                    </div>} */}
                     {Header.type === "Image" && <div className='border rounded-3 d-flex justify-content-center  align-items-center ' style={{ minHeight: "170px", background: "#ffddb0" }}>
                       {
                         Header.file === '' ? <Image size={45} color='#faad20' /> : <img
@@ -824,7 +798,7 @@ export default function EditTemplate() {
                             </Row>)
                         }
                         if (ele.type === 'URL') {
-                          console.log(ele)
+                          // console.log(ele)
                           return (
                             <Row key={index}>
                               <Col lg="2" className='d-flex justify-content-center  align-items-center '><p className='m-0'>Call to Action {index + 1} :</p></Col>
@@ -858,7 +832,7 @@ export default function EditTemplate() {
                                   useLinkType === "custom" && <input
                                     type="text"
                                     className="form-control "
-                                    placeholder='Button Value'
+                                    placeholder='url'
                                     value={ele.url}
                                     onChange={(e) => handleInputChange(index, 'url', e.target.value)}
                                   />}

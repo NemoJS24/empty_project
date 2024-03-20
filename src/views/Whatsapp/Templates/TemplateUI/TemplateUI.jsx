@@ -42,7 +42,6 @@ export default function TemplateUI() {
    const [msgBody, setMsgBody] = useState('')
    const [oldBodyPara, setoldBodyPara] = useState([])
    const [useDisplayBody, setDisplayBody] = useState('')
-   const [useFileName, setFileName] = useState('')
    const [useBulkModalScreen, setBulkModalScreen] = useState(1)
 
    const [msgHeader, setMsgHeader] = useState('')
@@ -55,20 +54,22 @@ export default function TemplateUI() {
    const toggle = () => setModal(!modal)
    const toggle2 = () => setModal2(!modal2)
 
-   const [groups, setGroups] = useState(false)
-
    // tavble tdata
    const tableDataFun = (useSelectedGroups) => {
       const form_data = new FormData()
       form_data.append("group_contact", useSelectedGroups)
+      form_data.append("page", 1)
+      form_data.append("size", 1000)
+      form_data.append("searchValue", '')
       postReq(`get_group_contact`, form_data)
-         .then(res => {
-            setSelectedContacts(() => res.data.contact_grp.map((elm) => parseInt(elm.id)))
-         })
-         .catch(error => {
-            // Handle errors here
-            console.error('Error:', error)
-         })
+        .then(res => {
+          console.log('res:', res.data)
+          setSelectedContacts(() => res.data.contact_grp.map((elm) => elm.contact_details_id))
+        })
+        .catch(error => {
+          // Handle errors here
+          console.error('Error:', error)
+        })
    }
 
 
@@ -135,7 +136,6 @@ export default function TemplateUI() {
 
       postReq("getTemplates", formData)
          .then(data => {
-            // Handle the successful response here
             // console.log('Response:', data.data.data)
             setAllTemplatesData(data.data.data)
             setActiveTemplates(data.data.active_id)
@@ -225,15 +225,6 @@ export default function TemplateUI() {
       setLoader(true)
       const formData = new FormData()
 
-      // if (useButtonLink) {
-      //    formData.append("button_variables", JSON.stringify([
-      //       {
-      //          type:"text",
-      //          text:"XYZ888"
-      //       }
-      //    ]))
-      // }
-
       if (HeaderParameterList.length > 0 && HeaderParameterList[0] !== '') {
          const header_variables = [
             {
@@ -259,7 +250,7 @@ export default function TemplateUI() {
          formData.append("link", CurrentTemplate.components[0].example.header_handle[0])
       } else if (CurrentTemplate.components[0].format === "DOCUMENT") {
          formData.append("type", "DOCUMENT")
-         formData.append("filename", useFileName)
+         formData.append("filename", "NotDefined")
          formData.append("link", CurrentTemplate.components[0].example.header_handle[0])
       } else {
          formData.append("type", "TEXT")
@@ -338,6 +329,8 @@ export default function TemplateUI() {
       postReq("bulk_message", formData)
          .then(data => {
             toast.success("Message has sent!")
+            setModal2(false)
+
          })
          .catch(error => {
             // Handle errors here
@@ -375,15 +368,7 @@ export default function TemplateUI() {
                      setoldBodyPara(elm.example?.body_text[0])
                      updateDisplayedMessage2(elm.text, elm.example?.body_text[0])
                   }
-                  // if (elm.type === "BUTTONS") {
-                  //    elm.buttons?.map((btnElm) => {
-                  //       if (btnElm.type === "URL") {
-                  //          if (btnElm?.example) {
-                  //             setButtonLink(true)
-                  //          }
-                  //       }
-                  //    })
-                  // }
+                
                })
                if (modal === 'modal') {
                   setModal(true)
@@ -614,16 +599,7 @@ export default function TemplateUI() {
                                                       }
                                                    </div>
 
-                                                   {/* <button className='btn btn-primary' onClick={() => delTemplate(SingleTemplate.name)} >Delete</button> */}
-                                                   {/* <div class="form-check form-switch form-switch-sm">
-                                                      <input class="form-check-input" type="checkbox" checked={ActiveTemplates.includes(SingleTemplate.id)}
-                                                         onChange={() => toggleActive(SingleTemplate.id, !ActiveTemplates.includes(SingleTemplate.id))}
-                                                         role="switch" id={`flexSwitchCheckDefault${SingleTemplate.id}`} />
-                                                      <label class="form-check-label" for={`flexSwitchCheckDefault${SingleTemplate.id}`} >Activated</label>
-                                                   </div>
-
-                                                   <button className='btn btn-primary' onClick={() => nagivate(`/merchant/whatsapp/editTemplate/${SingleTemplate.id}`)} >Edit</button>
-                                                   <button className='btn btn-primary' onClick={() => getCurrentTemplate(SingleTemplate.id, 'modal')}>Test</button> */}
+                                                 
                                                    {
                                                       SingleTemplate.status === "APPROVED" && isActive && <>
                                                          <div class="dropdown">
@@ -721,7 +697,6 @@ export default function TemplateUI() {
                                              })}
                                           </div>
                                        )
-
                                     }
                                  })
                               }
@@ -757,7 +732,7 @@ export default function TemplateUI() {
                                     if (data.type === "BUTTONS") {
                                        // console.log(data)
                                        return data.buttons.map((elm) => {
-                                          console.log(elm)
+                                          // console.log(elm)
                                           if (elm.example) {
                                              return (
                                                 <div className='mt-1'>
@@ -982,9 +957,8 @@ export default function TemplateUI() {
                      </Row>
                   </ModalBody>
                   <ModalFooter>
-                     <div className='btn me-2' onClick={toggle2}>
-                        Cancel
-                     </div>
+                    <div className='btn me-2' onClick={toggle2}> Cancel </div>
+                     
 
                      {useBulkModalScreen === 1 && useGroupList.length !== 0 && useSelectedGroups.length !== 0 && <Button color="primary" onClick={() => { setBulkModalScreen(2); tableDataFun(useSelectedGroups) }}>
                         Next

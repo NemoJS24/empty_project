@@ -148,7 +148,7 @@ export default function ContactsTable() {
     {
       name: 'Country Code',
       minWidth: '15%',
-      selector: row => row?.contact_phone_code, // Assuming 'category' is the property in your data for the category
+      selector: row => row?.contact_details_phone_code, // Assuming 'category' is the property in your data for the category
       type: 'select',
       isEnable: true
     },
