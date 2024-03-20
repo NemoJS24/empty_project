@@ -38,12 +38,18 @@ export default function TemplateReports() {
 
  
   const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
+    const form_data = new FormData()
+    Object.entries(advanceSearchValue).map(([key, value]) => value && form_data.append(key, value))
+    form_data.append("page", currentPage + 1)
+    form_data.append("size", currentEntry)
+    form_data.append("searchValue", searchValue)
     setisLoading(true)
-
-    getReq("template_view")
+    postReq("template_view", form_data)
     .then((resp) => {
       console.log("resp :", resp)
       setTableData(resp.data.template)
+      settotalData(resp.data.template_count)
+
     }).catch((err) => {
       console.log(err)
     }).finally(() => { setLoader(false); setisLoading(false) })
@@ -83,7 +89,7 @@ export default function TemplateReports() {
     {
       name: 'Created',
       minWidth: '200px',
-      selector: row => moment(row.created_at).format('DD MMM YYYY'), // Assuming 'name' is the property in your data for the name
+      selector: row => `${moment(row.template_created_at).format('HH:mm:ss')}, ${moment(row.template_created_at).format('DD MMM YYYY')}`, // Assuming 'name' is the property in your data for the name
       dataType: 'text',
       type: 'text',
       isEnable: true
@@ -91,7 +97,7 @@ export default function TemplateReports() {
     {
       name: 'Name',
       minWidth: '200px',
-      selector: row => row.templateName, // Assuming 'name' is the property in your data for the name
+      selector: row => row.template_templateName, // Assuming 'name' is the property in your data for the name
       dataType: 'text',
       type: 'text',
       isEnable: true
@@ -99,7 +105,7 @@ export default function TemplateReports() {
     {
       name: 'Total Sent',
       minWidth: '15%',
-      selector: row => row.template_clicks, // Assuming 'category' is the property in your data for the category
+      selector: row => row.template_template_clicks, // Assuming 'category' is the property in your data for the category
       type: 'select',
       isEnable: true
     },
@@ -109,7 +115,7 @@ export default function TemplateReports() {
       cell: (row) => {
           return (<div className='d-flex gap-2'>
               {/* <button className='btn ' style={{padding:"5px 10px" }} onClick={() => handleDelete(row.group_id)} ><Trash size={18}/></button> */}
-              <Link to={`/merchant/whatsapp/reports/template/${row.templateId}`} className='btn ' style={{padding:"5px 10px" }}><Eye size={18}/></Link>
+              <Link to={`/merchant/whatsapp/reports/template/${row.template_templateId}`} className='btn ' style={{padding:"5px 10px" }}><Eye size={18}/></Link>
           </div>
           )
       },

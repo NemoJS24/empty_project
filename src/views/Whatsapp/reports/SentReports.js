@@ -39,12 +39,18 @@ export default function SentReports() {
 
  
   const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
+    const form_data = new FormData()
+    Object.entries(advanceSearchValue).map(([key, value]) => value && form_data.append(key, value))
+    form_data.append("page", currentPage + 1)
+    form_data.append("size", currentEntry)
+    form_data.append("searchValue", searchValue)
+    form_data.append("templateId", templateId)
     setisLoading(true)
-
-    getReq("messagelog_view", `?templateId=${templateId}`)
+    postReq("messagelog_view", form_data)
     .then((resp) => {
       console.log("resp :", resp)
       setTableData(resp.data.messagelog)
+      settotalData(resp.data.messagelog_count)
       
     }).catch((err) => {
       console.log(err)
@@ -85,7 +91,7 @@ export default function SentReports() {
     {
       name: 'Created',
       minWidth: '200px',
-      selector: row =>  moment(row.created_at).format('DD MMM YYYY'), // Assuming 'name' is the property in your data for the name
+      selector: row => `${moment(row.messagelog_created_at).format('HH:mm:ss')}, ${moment(row.messagelog_created_at).format('DD MMM YYYY')}`, // Assuming 'name' is the property in your data for the name
       dataType: 'text',
       type: 'text',
       isEnable: true
@@ -93,7 +99,7 @@ export default function SentReports() {
     {
       name: 'Message ID',
       minWidth: '200px',
-      selector: row => row.message_id, // Assuming 'name' is the property in your data for the name
+      selector: row => row.messagelog_message_id, // Assuming 'name' is the property in your data for the name
       dataType: 'text',
       type: 'text',
       isEnable: true
@@ -101,7 +107,7 @@ export default function SentReports() {
     {
       name: 'Contact',
       minWidth: '15%',
-      selector: row => row.contact, // Assuming 'category' is the property in your data for the category
+      selector: row => row.messagelog_contact, // Assuming 'category' is the property in your data for the category
       type: 'select',
       isEnable: true
     }
