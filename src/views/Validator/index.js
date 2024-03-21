@@ -287,12 +287,13 @@ export const affiliateTracking = (aft_no) => {
 
 
 export function defaultformatDate(date, type) {
-    if (!date) return
+    if (!date) return ''
+    if (date === '') return ''
     let formatDate
     try {
         formatDate = moment(date).format(Boolean(type) ? type : "DD-MM-YYYY")
     } catch (_) {
-        formatDate = date
+        formatDate = ''
     }
     return (formatDate)
 }
