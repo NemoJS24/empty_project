@@ -9,6 +9,7 @@ import { affiliateURL, getReq, postReq } from '../../assets/auth/jwtService'
 import ComTable from '../Components/DataTable/ComTable'
 
 import NavbarAdmin from './NavbarAdmin'
+import moment from 'moment'
 
 export default function AffiliateTable() {
   const navigate = useNavigate()
@@ -64,12 +65,18 @@ export default function AffiliateTable() {
 
   const columns = [
     {
+      name: 'Created at',
+      minWidth: '150px',
+      selector: row => moment(row.created_at).format("DD-MM-YYYY, h:mm:ss")
+      // selector: row => row.created_at
+    },
+    {
       name: 'First Name',
       minWidth: '150px',
       selector: row => row.firstname
     },
     {
-      name: 'First Name',
+      name: 'Last Name',
       minWidth: '150px',
       selector: row => row.lastname
     },
