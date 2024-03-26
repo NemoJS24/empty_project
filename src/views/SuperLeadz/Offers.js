@@ -3,7 +3,7 @@ import { Card, CardBody, Col, Input } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import ComTableAdvance from '../Components/DataTable/ComTableAdvance'
 import ComTable from '../Components/DataTable/ComTable'
-import { defaultformatDate, getCurrentOutlet } from '../Validator'
+import { defaultFormatDate, getCurrentOutlet } from '../Validator'
 import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
 import { PermissionProvider } from '../../Helper/Context'
 // import moment from 'moment/moment'
@@ -108,7 +108,7 @@ export default function SuperLeadzOffers() {
         },
         {
             name: 'Date',
-            selector: row => defaultformatDate(row.created_at, userPermission?.user_settings?.date_format)
+            selector: row => defaultFormatDate(row.created_at, userPermission?.user_settings?.date_format)
             // new Date(row.created_at).toUTCString().replace("GMT", "")
         },
         {

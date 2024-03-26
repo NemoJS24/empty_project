@@ -1,15 +1,18 @@
 /* eslint-disable no-unused-vars */
 import moment from 'moment'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Copy, Edit3, Eye, Trash2 } from 'react-feather'
 import { Card, CardBody } from 'reactstrap'
 import AdvanceServerSide from '../../../../Components/DataTable/AdvanceServerSide'
 import { postReq } from '../../../../../assets/auth/jwtService'
+import { PermissionProvider } from '../../../../../Helper/Context'
+import { defaultFormatDate } from '../../../../Validator'
 
 export default function AllTempTable() {
     const [isLoading, setIsLoading] = useState(true)
     const [tableData, settableData] = useState(null)
-    const [total, settotal] = useState(0)
+  const { userPermission } = useContext(PermissionProvider)
+  const [total, settotal] = useState(0)
     function convertTimestampToDateString(timestamp) {
         // Multiply the timestamp by 1000 to convert it to milliseconds
         const milliseconds = timestamp * 1000
@@ -26,7 +29,8 @@ export default function AllTempTable() {
         {
             name: 'Created At',
             minWidth: '200px',
-            selector: row => convertTimestampToDateString(row?.quality_score.date),
+      selector: row => `${defaultFormatDate(row?.quality_score.date, userPermission?.user_settings?.date_format)}, ${moment(row?.quality_score.date).format('HH:mm:ss')}`,
+    //   selector: row => convertTimestampToDateString(row?.quality_score.date),
             isEnable: true
         },
         {

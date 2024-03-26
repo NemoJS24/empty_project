@@ -9,7 +9,7 @@ import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
 // import { getCurrentOutlet } from '../Validator'
 import Spinner from '../Components/DataTable/Spinner'
 import { Copy, Edit, Edit2, Edit3, Eye, Grid, Layout, MoreVertical, Plus, Table, Trash, X } from 'react-feather'
-import { defaultformatDate, getCurrentOutlet } from '../Validator'
+import { defaultFormatDate, getCurrentOutlet } from '../Validator'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 // import pixels from "../../assets/images/superLeadz/pixels.png"
 import Flatpickr from 'react-flatpickr'
@@ -356,14 +356,14 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
         },
         {
             name: 'Start Date',
-            selector: row => <span className='cursor-pointer'>{defaultformatDate(row.theme_name.start_date, userPermission?.user_settings?.date_format)}</span>,
+            selector: row => <span className='cursor-pointer'>{defaultFormatDate(row.theme_name.start_date, userPermission?.user_settings?.date_format)}</span>,
             dataType: 'offer_code',
             type: 'date',
             isEnable: true
         },
         {
             name: 'End Date',
-            selector: row => <span className='cursor-pointer'>{Boolean(row.theme_name.end_date) ? defaultformatDate(row.theme_name.end_date, userPermission?.user_settings?.date_format) : "perpetual"}</span>,
+            selector: row => <span className='cursor-pointer'>{Boolean(row.theme_name.end_date) ? defaultFormatDate(row.theme_name.end_date, userPermission?.user_settings?.date_format) : "perpetual"}</span>,
             type: 'date',
             isEnable: true
         },
@@ -500,7 +500,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                                                             <div className='d-flex justify-content-between'>
                                                                 <div>
                                                                     <h4 className='text-start fw-bolder text-black ps-2'>{curElem?.theme_name?.campaign_name}</h4>
-                                                                    <p className='text-start  ps-2'> Created at : {defaultformatDate(curElem?.theme_name.start_date, userPermission?.user_settings?.date_format)}</p>
+                                                                    <p className='text-start  ps-2'> Created at : {defaultFormatDate(curElem?.theme_name.start_date, userPermission?.user_settings?.date_format)}</p>
                                                                 </div>
 
                                                                 <div className="d-flex justify-cotent-center align-items-center gap-1">

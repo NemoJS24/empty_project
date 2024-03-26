@@ -3,7 +3,7 @@ import { User, BarChart2, CheckCircle, Link } from 'react-feather'
 import CardCom from '../Components/SuperLeadz/CardCom'
 import { Card, CardBody, Col, Input } from 'reactstrap'
 // import ComTableAdvance from '../Components/DataTable/ComTableAdvance'
-import { defaultformatDate, getCurrentOutlet } from '../Validator'
+import { defaultFormatDate, getCurrentOutlet } from '../Validator'
 import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
 import moment from 'moment/moment'
 import ComTable from '../Components/DataTable/ComTable'
@@ -57,7 +57,7 @@ export default function SuperLeadzLeads() {
         {
             name: 'Date',
             minWidth: '150px',
-            selector: row => defaultformatDate(row.created_at, userPermission?.user_settings?.date_format),
+            selector: row => defaultFormatDate(row.created_at, userPermission?.user_settings?.date_format),
             type: 'date',
             isEnable: true
         },

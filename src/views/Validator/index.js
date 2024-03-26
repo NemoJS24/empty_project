@@ -286,7 +286,7 @@ export const affiliateTracking = (aft_no) => {
 }
 
 
-export function defaultformatDate(date, type) {
+export function defaultFormatDate(date, type) {
     if (!date) return ''
     if (date === '') return ''
     let formatDate
@@ -299,7 +299,7 @@ export function defaultformatDate(date, type) {
 }
 
 
-export const defaultformatNumber = (number, type) => {
+export const defaultFormatNumber = (number, type) => {
     try {
         return new Intl.NumberFormat(type).format(number)
     } catch (error) {

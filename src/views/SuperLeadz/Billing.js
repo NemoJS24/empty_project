@@ -3,7 +3,7 @@ import { Card, CardBody, Col, Input, Row } from 'reactstrap'
 import ComTable from '../Components/DataTable/ComTable'
 import { SuperLeadzBaseURL, getReq } from '../../assets/auth/jwtService'
 import moment from 'moment/moment'
-import { defaultformatDate, getCurrentOutlet } from '../Validator'
+import { defaultFormatDate, getCurrentOutlet } from '../Validator'
 import Spinner from '../Components/DataTable/Spinner'
 import { Link, useNavigate } from 'react-router-dom'
 import CardCom from '../Components/SuperLeadz/CardCom'
@@ -72,7 +72,7 @@ const SuperLeadzBilling = () => {
             const setData = {
                 usage_charge: updatedDate[0]?.billing_usage_apply_after,
                 usage_count: updatedDate[0]?.usage_count,
-                daysLeft: json?.created_at ? defaultformatDate(moment(new Date()).diff(moment(json?.created_at), 'days'), userPermission?.user_settings?.date_format) : 0,
+                daysLeft: json?.created_at ? defaultFormatDate(moment(new Date()).diff(moment(json?.created_at), 'days'), userPermission?.user_settings?.date_format) : 0,
                 trial_days: json?.trial_days,
                 price: json?.price,
                 mainData: data?.data
@@ -140,7 +140,7 @@ const SuperLeadzBilling = () => {
                 let date
                 try {
                     // data = JSON.parse(row.plan_details_json)
-                    date = defaultformatDate(row?.payment_date, userPermission?.user_settings?.date_format)
+                    date = defaultFormatDate(row?.payment_date, userPermission?.user_settings?.date_format)
                 } catch (error) {
                     // data = {}
                     date = ''

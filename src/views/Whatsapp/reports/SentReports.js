@@ -8,7 +8,7 @@ import toast from 'react-hot-toast'
 import { Eye, Trash, X } from 'react-feather'
 import { Link, useParams } from 'react-router-dom'
 import moment from 'moment'
-import { defaultformatDate } from '../../Validator'
+import { defaultFormatDate } from '../../Validator'
 import { PermissionProvider } from '../../../Helper/Context'
 export default function SentReports() {
   const { templateId } = useParams()
@@ -95,20 +95,20 @@ export default function SentReports() {
       name: 'Created at',
       minWidth: '150px',
       // selector: row => `${moment(row.messagelog_created_at).format('HH:mm:ss')}, ${moment(row.messagelog_created_at).format('DD MMM YYYY')}`, // Assuming 'name' is the property in your data for the name
-      selector: row => `${defaultformatDate(row?.messagelog_created_at, userPermission?.user_settings?.date_format)}`, // Assuming 'name' is the property in your data for the name
-      dataType: 'text',
-      type: 'text',
+      selector: row => `${defaultFormatDate(row.messagelog_created_at, userPermission?.user_settings?.date_format)}, ${moment(row.messagelog_created_at).format('HH:mm:ss')}`,
+      dataType: 'date',
+      type: 'date',
       isEnable: true
     },
-    {
-      name: 'Time',
-      minWidth: '150px',
-      // selector: row => `${moment(row.messagelog_created_at).format('HH:mm:ss')}, ${moment(row.messagelog_created_at).format('DD MMM YYYY')}`, // Assuming 'name' is the property in your data for the name
-      selector: row => `${moment(row.messagelog_created_at, moment.ISO_8601, true).isValid() ? moment(row.messagelog_created_at).format('HH:mm:ss') : ''}`, // Assuming 'name' is the property in your data for the name
-      dataType: 'text',
-      type: 'text',
-      isEnable: true
-    },
+    // {
+    //   name: 'Time',
+    //   minWidth: '150px',
+    //   // selector: row => `${moment(row.messagelog_created_at).format('HH:mm:ss')}, ${moment(row.messagelog_created_at).format('DD MMM YYYY')}`, // Assuming 'name' is the property in your data for the name
+    //   selector: row => `${moment(row.messagelog_created_at, moment.ISO_8601, true).isValid() ? moment(row.messagelog_created_at).format('HH:mm:ss') : ''}`, // Assuming 'name' is the property in your data for the name
+    //   dataType: 'date',
+    //   type: 'date',
+    //   isEnable: true
+    // },
     // {
     //   name: 'Message ID',
     //   minWidth: '150px',
@@ -121,7 +121,7 @@ export default function SentReports() {
       name: 'Contact',
       minWidth: '150px',
       selector: row => row?.messagelog_contact ?? '', // Assuming 'category' is the property in your data for the category
-      type: 'select',
+      type: 'text',
       isEnable: true
     },
     {
@@ -129,8 +129,8 @@ export default function SentReports() {
       minWidth: '150px',
       // selector: row => row?.messagelog_timestamp_sent ?? '', // Assuming 'name' is the property in your data for the name
       selector: row => `${moment(row.messagelog_timestamp_sent, moment.ISO_8601, true).isValid() ? moment(row.messagelog_timestamp_sent).format('HH:mm:ss') : ''}`, // Assuming 'name' is the property in your data for the name
-      dataType: 'text',
-      type: 'text',
+      dataType: 'date',
+      type: 'date',
       isEnable: true
     },
     {
@@ -138,8 +138,8 @@ export default function SentReports() {
       minWidth: '150px',
       // selector: row => row?.messagelog_timestamp_delivered ?? '', // Assuming 'name' is the property in your data for the name
       selector: row => `${moment(row.messagelog_timestamp_delivered, moment.ISO_8601, true).isValid() ? moment(row.messagelog_timestamp_delivered).format('HH:mm:ss') : ''}`, // Assuming 'name' is the property in your data for the name
-      dataType: 'text',
-      type: 'text',
+      dataType: 'date',
+      type: 'date',
       isEnable: true
     },
     {
@@ -147,8 +147,8 @@ export default function SentReports() {
       minWidth: '150px',
       // selector: row => row?.messagelog_timestamp_read ?? '', // Assuming 'name' is the property in your data for the name
       selector: row => `${moment(row.messagelog_timestamp_read, moment.ISO_8601, true).isValid() ? moment(row.messagelog_timestamp_read).format('HH:mm:ss') : ''}`, // Assuming 'name' is the property in your data for the name
-      dataType: 'text',
-      type: 'text',
+      dataType: 'date',
+      type: 'date',
       isEnable: true
     },
     {
@@ -156,8 +156,8 @@ export default function SentReports() {
       minWidth: '150px',
       // selector: row => row?.messagelog_timestamp_failed ?? '', // Assuming 'name' is the property in your data for the name
       selector: row => `${moment(row.messagelog_timestamp_failed, moment.ISO_8601, true).isValid() ? moment(row.messagelog_timestamp_failed).format('HH:mm:ss') : ''}`, // Assuming 'name' is the property in your data for the name
-      dataType: 'text',
-      type: 'text',
+      dataType: 'date',
+      type: 'date',
       isEnable: true
     },
     {
@@ -188,7 +188,7 @@ export default function SentReports() {
             count={totalData}
             getData={getData}
             isLoading={useisLoading}
-            advanceFilter={false}
+            advanceFilter={true}
           />
 
         </CardBody>

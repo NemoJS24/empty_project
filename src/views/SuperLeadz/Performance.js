@@ -3,7 +3,7 @@ import ComTable from "../Components/DataTable/ComTable"
 import CardCom from "../Components/SuperLeadz/CardCom"
 import { Col, Input } from "reactstrap"
 import moment from "moment/moment"
-import { defaultformatDate, getCurrentOutlet } from "../Validator"
+import { defaultFormatDate, getCurrentOutlet } from "../Validator"
 import { SuperLeadzBaseURL, baseURL } from "../../assets/auth/jwtService"
 import Spinner from "../Components/DataTable/Spinner"
 import { PermissionProvider } from "../../Helper/Context"
@@ -25,7 +25,7 @@ export default function SuperLeadzPerformance() {
         isOfferData: false
     })
     const [heatMapData, setHeatMapData] = useState([])
-    const [startDate, setStartDate] = useState([defaultformatDate(moment(new Date()).subtract(7, 'd'), userPermission?.user_settings?.date_format), defaultformatDate(moment(new Date()).format('YYYY-MM-DD'), userPermission?.user_settings?.date_format)])
+    const [startDate, setStartDate] = useState([defaultFormatDate(moment(new Date()).subtract(7, 'd'), userPermission?.user_settings?.date_format), defaultFormatDate(moment(new Date()).format('YYYY-MM-DD'), userPermission?.user_settings?.date_format)])
     // const [barGraph, setBarGraph] = useState(false)
     const outletData = getCurrentOutlet()
     console.log(setHeatMapData, heatMapData)

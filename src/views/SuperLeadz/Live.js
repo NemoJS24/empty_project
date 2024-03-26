@@ -6,7 +6,7 @@ import MomentTime from '../Components/Time-Moment/MomentTime'
 import SlUsersAnalytics from "./SlUsersAnalytics"
 import moment from 'moment/moment'
 import axios from 'axios'
-import { defaultformatDate, getCurrentOutlet } from '../Validator'
+import { defaultFormatDate, getCurrentOutlet } from '../Validator'
 import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
 import { MdOutlineRefresh } from "react-icons/md"
 import worker from './app.worker'
@@ -147,7 +147,7 @@ const LiveUpdates = () => {
 
     useEffect(() => {
         getUpdates()
-        setDateRange(`${defaultformatDate(moment(new Date()).subtract(7, 'd'), userPermission?.user_settings?.date_format)} - ${defaultformatDate(new Date(), userPermission?.user_settings?.date_format)}`)
+        setDateRange(`${defaultFormatDate(moment(new Date()).subtract(7, 'd'), userPermission?.user_settings?.date_format)} - ${defaultFormatDate(new Date(), userPermission?.user_settings?.date_format)}`)
         const interval = setInterval(() => {
             getUpdates()
         }, 300000)
@@ -156,7 +156,7 @@ const LiveUpdates = () => {
 
     useEffect(() => {
         if (Array.isArray(dateRange)) {
-            getGraphData(defaultformatDate(dateRange[0], userPermission?.user_settings?.date_format), dateRange[1], defaultformatDate(dateRange[1], userPermission?.user_settings?.date_format))
+            getGraphData(defaultFormatDate(dateRange[0], userPermission?.user_settings?.date_format), dateRange[1], defaultFormatDate(dateRange[1], userPermission?.user_settings?.date_format))
         }
     }, [dateRange])
 
@@ -290,7 +290,7 @@ const LiveUpdates = () => {
                                                         <Row className="scroll-custom scrollbar-hide" style={{ maxHeight: '500px', overflow: 'auto' }}>
                                                             {Object.keys(dataByDate).map((date, index) => (
                                                                 <div key={index}>
-                                                                    <h4 className='mb-2'>{defaultformatDate(date, userPermission?.user_settings?.date_format)}</h4>
+                                                                    <h4 className='mb-2'>{defaultFormatDate(date, userPermission?.user_settings?.date_format)}</h4>
                                                                     <div className="row mb-3 ">
                                                                         {dataByDate[date].map((item, key) => (
                                                                             <TimelineItem key={key} item={item} />

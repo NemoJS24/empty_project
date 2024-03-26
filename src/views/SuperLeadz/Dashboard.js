@@ -8,7 +8,7 @@ import moment from 'moment/moment'
 import { SuperLeadzBaseURL, getReq, postReq } from '../../assets/auth/jwtService'
 import Spinner from '../Components/DataTable/Spinner'
 import toast from 'react-hot-toast'
-import { defaultformatDate, getCurrentOutlet } from '../Validator'
+import { defaultFormatDate, getCurrentOutlet } from '../Validator'
 import { Link, useNavigate } from 'react-router-dom'
 import { AiFillPhone, AiOutlineMail, AiFillCaretRight, AiOutlineQuestion } from 'react-icons/ai'
 import { BiDollar } from "react-icons/bi"
@@ -44,7 +44,7 @@ function SuperLeadzDashboard() {
     const [toLoadCampaign, setToLoadCampaign] = useState(false)
     const [cancel, setCancel] = useState(false)
     // const currentDate = moment()
-    const [selectedData, setSelectedData] = useState([defaultformatDate(moment(new Date()).subtract(7, 'd'), userPermission?.user_settings?.date_format), defaultformatDate(new Date(), userPermission?.user_settings?.date_format)])
+    const [selectedData, setSelectedData] = useState([defaultFormatDate(moment(new Date()).subtract(7, 'd'), userPermission?.user_settings?.date_format), defaultFormatDate(new Date(), userPermission?.user_settings?.date_format)])
     const [filterType, setSetFilterType] = useState("week")
     const navigate = useNavigate()
     const [isCampagin, setIsCampagin] = useState(0)

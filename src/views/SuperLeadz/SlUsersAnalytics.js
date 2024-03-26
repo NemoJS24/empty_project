@@ -4,7 +4,7 @@ import { CardBody } from 'reactstrap'
 // import SlUsersAnalyticsLine from '../Components/Charts/SuperLeads/SlUsersAnalyticsLine'
 // import PickerDefault from '../Components/Date-picker/NormalDatePicker'
 import moment from 'moment/moment'
-import { defaultformatDate } from '../Validator'
+import { defaultFormatDate } from '../Validator'
 import { PermissionProvider } from '../../Helper/Context'
 
 export default function SlUsersAnalytics({cardDataObj}) {
@@ -24,7 +24,7 @@ export default function SlUsersAnalytics({cardDataObj}) {
                             <h4>Daily</h4>
                             <div className="d-flex justify-content-between align-items-center mt-1">
                                 <div>
-                                    <p style={{ fontSize: '16px' }}>Yesterday <br /><span style={{ fontSize: '12px' }}>{defaultformatDate(moment(new Date()).subtract(1, 'd'), userPermission?.user_settings?.date_format)}</span></p>
+                                    <p style={{ fontSize: '16px' }}>Yesterday <br /><span style={{ fontSize: '12px' }}>{defaultFormatDate(moment(new Date()).subtract(1, 'd'), userPermission?.user_settings?.date_format)}</span></p>
                                 </div>
                                 <div>
                                     <p style={{ fontSize: '24px' }}>{cardDataObj.yesterday}</p>
@@ -32,7 +32,7 @@ export default function SlUsersAnalytics({cardDataObj}) {
                             </div>
                             <div className="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <p style={{ fontSize: '16px' }}>Today <br /><span style={{ fontSize: '12px' }}>{defaultformatDate(new Date(), userPermission?.user_settings?.date_format)}</span></p>
+                                    <p style={{ fontSize: '16px' }}>Today <br /><span style={{ fontSize: '12px' }}>{defaultFormatDate(new Date(), userPermission?.user_settings?.date_format)}</span></p>
                                 </div>
                                 <div>
                                     <p style={{ fontSize: '24px' }}>{cardDataObj.today}</p>
@@ -47,7 +47,7 @@ export default function SlUsersAnalytics({cardDataObj}) {
                             <h4>Weekly</h4>
                             <div className="d-flex justify-content-between align-items-center mt-1">
                                 <div>
-                                    <p style={{ fontSize: '16px' }}>Last Week <br /><span style={{ fontSize: '12px' }}>{defaultformatDate(moment(new Date()).subtract(7, 'd'), userPermission?.user_settings?.date_format)}</span></p>
+                                    <p style={{ fontSize: '16px' }}>Last Week <br /><span style={{ fontSize: '12px' }}>{defaultFormatDate(moment(new Date()).subtract(7, 'd'), userPermission?.user_settings?.date_format)}</span></p>
                                 </div>
                                 <div>
                                     <p style={{ fontSize: '24px' }}>{cardDataObj.last_week_data}</p>
@@ -55,7 +55,7 @@ export default function SlUsersAnalytics({cardDataObj}) {
                             </div>
                             <div className="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <p style={{ fontSize: '16px' }}>This Week <br /><span style={{ fontSize: '12px' }}>{defaultformatDate(new Date(), userPermission?.user_settings?.date_format)}</span></p>
+                                    <p style={{ fontSize: '16px' }}>This Week <br /><span style={{ fontSize: '12px' }}>{defaultFormatDate(new Date(), userPermission?.user_settings?.date_format)}</span></p>
                                 </div>
                                 <div>
                                     <p style={{ fontSize: '24px' }}>{cardDataObj.this_week}</p>
@@ -70,7 +70,7 @@ export default function SlUsersAnalytics({cardDataObj}) {
                             <h4>Monthly</h4>
                             <div className="d-flex justify-content-between align-items-center mt-1">
                                 <div>
-                                    <p style={{ fontSize: '16px' }}>Last Month <br /><span style={{ fontSize: '12px' }}>{defaultformatDate(moment(new Date()).subtract(30, 'd'), userPermission?.user_settings?.date_format)}</span></p>
+                                    <p style={{ fontSize: '16px' }}>Last Month <br /><span style={{ fontSize: '12px' }}>{defaultFormatDate(moment(new Date()).subtract(30, 'd'), userPermission?.user_settings?.date_format)}</span></p>
                                 </div>
                                 <div>
                                     <p style={{ fontSize: '24px' }}>{cardDataObj.last_month_data}</p>
@@ -78,7 +78,7 @@ export default function SlUsersAnalytics({cardDataObj}) {
                             </div>
                             <div className="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <p style={{ fontSize: '16px' }}>This Month <br /><span style={{ fontSize: '12px' }}>{defaultformatDate(new Date(), userPermission?.user_settings?.date_format)}</span></p>
+                                    <p style={{ fontSize: '16px' }}>This Month <br /><span style={{ fontSize: '12px' }}>{defaultFormatDate(new Date(), userPermission?.user_settings?.date_format)}</span></p>
                                 </div>
                                 <div>
                                     <p style={{ fontSize: '24px' }}>{cardDataObj.this_month_data}</p>
@@ -93,7 +93,7 @@ export default function SlUsersAnalytics({cardDataObj}) {
                             <h4>All-Time</h4>
                             <div className="d-flex justify-content-between align-items-center mt-1 pd-5" >
                                 <div>
-                                    <p style={{ fontSize: '16px' }}>Last 365 Days <br /><span style={{ fontSize: '12px' }}>{defaultformatDate(moment(new Date()).subtract(365, 'd'), userPermission?.user_settings?.date_format)}</span></p>
+                                    <p style={{ fontSize: '16px' }}>Last 365 Days <br /><span style={{ fontSize: '12px' }}>{defaultFormatDate(moment(new Date()).subtract(365, 'd'), userPermission?.user_settings?.date_format)}</span></p>
                                 </div>
                                 <div>
                                     <p style={{ fontSize: '24px' }}>{cardDataObj.last_30days}</p>
@@ -101,7 +101,7 @@ export default function SlUsersAnalytics({cardDataObj}) {
                             </div>
                             <div className="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <p style={{ fontSize: '16px' }}>Total <br /><span style={{ fontSize: '12px' }}>{defaultformatDate(new Date(), userPermission?.user_settings?.date_format)}</span></p>
+                                    <p style={{ fontSize: '16px' }}>Total <br /><span style={{ fontSize: '12px' }}>{defaultFormatDate(new Date(), userPermission?.user_settings?.date_format)}</span></p>
                                 </div>
                                 <div>
                                     <p style={{ fontSize: '24px' }}>{cardDataObj.total_visitors}</p>
