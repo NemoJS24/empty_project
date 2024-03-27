@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Lock, PlusCircle, X, Download, Trash, ChevronUp, MoreVertical, Airplay, StopCircle, Edit3, Check, Copy, Edit, Monitor, Smartphone } from 'react-feather'
 import Editor from '../NewCustomizationFlow/Editor'
 import { Pagination, Navigation } from 'swiper'
@@ -20,7 +20,7 @@ import { GiHorizontalFlip } from "react-icons/gi"
 const RenderPreview = (props) => {
     const { outletData, slPrevBg, bgsettings, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition, bgStyles, crossStyle, values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise, setcolWise, setDragStartIndex, setDragOverIndex, isMobile, finalObj, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles, offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, isColDragging, isColRes, setIsColRes, resizeMouse, setResizeMouse } = props
     const [editorBar, setEditorBar] = useState(true)
-    const { userPermission } = useContext(PermissionProvider)
+    // const { userPermission } = useContext(PermissionProvider)
     const setDragEnter = (e, { position, id }) => {
         setGotDragOver({ ...position, curElem: isColDragging ? "parent" : position?.curElem, subElem: isColDragging ? "grandparent" : position?.subElem })
         const getId = isColDragging ? `${currPage}-${position.cur}-parent-grandparent` : id
@@ -347,6 +347,7 @@ const RenderPreview = (props) => {
                         </div>
                         <div onClick={() => {
                             setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
+                            setSideNav("display")
                             setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
                             setSelectedOffer({})
                         }} className="flex-grow-1 position-relative" style={{ backgroundImage: `url(${slPrevBg})`, backgroundSize: '100% 100%' }}>
@@ -570,7 +571,7 @@ const RenderPreview = (props) => {
                                                                                             onClick={e => {
                                                                                                 e.stopPropagation()
                                                                                                 makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                setCurrPosition({ ...currPosition, selectedType: "text" })
+                                                                                                setCurrPosition({ ...currPosition, selectedType: "text", subElem })
                                                                                                 setIndexes({ cur: key, curElem: curElem.positionType, subElem: j })
                                                                                                 setValues(subElem?.style)
                                                                                                 setSelectedOffer({})
@@ -752,7 +753,7 @@ const RenderPreview = (props) => {
                                                                                                 onClick={e => {
                                                                                                     e.stopPropagation()
                                                                                                     makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                    setCurrPosition({ ...currPosition, selectedType: "image" })
+                                                                                                    setCurrPosition({ ...currPosition, selectedType: "image", subElem })
                                                                                                     setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                     setValues(subElem?.style)
                                                                                                     setSelectedOffer({})
@@ -875,7 +876,7 @@ const RenderPreview = (props) => {
                                                                                             onClick={e => {
                                                                                                 e.stopPropagation()
                                                                                                 makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                setCurrPosition({ ...currPosition, selectedType: "button" })
+                                                                                                setCurrPosition({ ...currPosition, selectedType: "button", subElem })
                                                                                                 setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                 setValues(subElem?.style)
                                                                                                 setSelectedOffer({})
@@ -1035,7 +1036,7 @@ const RenderPreview = (props) => {
                                                                                             onClick={e => {
                                                                                                 e.stopPropagation()
                                                                                                 makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                setCurrPosition({ ...currPosition, selectedType: "input" })
+                                                                                                setCurrPosition({ ...currPosition, selectedType: "input", subElem })
                                                                                                 setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                 setValues(subElem.style)
                                                                                                 setSelectedOffer({})
@@ -1171,6 +1172,7 @@ const RenderPreview = (props) => {
                                                                                         </div>
                                                                                     )
                                                                                 case 'offer':
+                                                                                    const renderOffer = subElem?.offerIds && Array.isArray(subElem?.offerIds) ? finalObj?.selectedOffers?.filter($ => subElem?.offerIds?.includes($?.id)) : finalObj?.selectedOffers
                                                                                     return (
                                                                                         <div
                                                                                             onDragStart={e => {
@@ -1201,10 +1203,11 @@ const RenderPreview = (props) => {
                                                                                             }}
                                                                                             onClick={e => {
                                                                                                 e.stopPropagation()
+                                                                                                setCurrPosition((prev) => ({ ...prev, selectedType: "offer", subElem }))
                                                                                                 makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                setCurrPosition({ ...currPosition, selectedType: "offer" })
                                                                                                 setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                 setValues(subElem?.style)
+                                                                                                setSideNav("offers")
                                                                                                 if (!isEqual(indexes, { cur: key, curElem: curElem?.positionType, subElem: j })) {
                                                                                                     setSelectedOffer({})
                                                                                                 } else if (finalObj?.selectedOffers.length > 0) {
@@ -1288,7 +1291,11 @@ const RenderPreview = (props) => {
                                                                                                     }} /> */}
                                                                                             </span>}
                                                                                             {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
-                                                                                            {gotOffers ? finalObj?.selectedOffers?.map((ele, key) => {
+                                                                                            {!gotOffers ? (
+                                                                                                <div className="d-flex justify-content-center align-items-center" style={{ inset: "0px", backgroundColor: "rgba(255,255,255,0.5)" }}>
+                                                                                                    <Spinner />
+                                                                                                </div>
+                                                                                            ) : renderOffer?.length >= 1 ? renderOffer?.map((ele, key) => {
                                                                                                 return (
                                                                                                     <div title="Click on offer to edit more settings" style={{ position: "relative" }}
                                                                                                         // onClick={(e) => {
@@ -1297,11 +1304,13 @@ const RenderPreview = (props) => {
                                                                                                         // }}
                                                                                                         onClick={(e) => {
                                                                                                             e.stopPropagation()
+                                                                                                            setCurrPosition((prev) => ({ ...prev, selectedType: "offer", subElem }))
                                                                                                             makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                            setCurrPosition({ ...currPosition, selectedType: "offer" })
                                                                                                             setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                             setValues(subElem?.style)
                                                                                                             setSelectedOffer(ele)
+                                                                                                            setSideNav("offers")
+                                                                                                            console.log("particular offer", { selectedType: "offer", subElem })
                                                                                                         }}>
                                                                                                         {isEqual(ele, selectedOffer) && (
                                                                                                             <div className='position-absolute w-100 h-100 bg-black opacity-25 top-0 start-0 z-1'></div>
@@ -1310,9 +1319,14 @@ const RenderPreview = (props) => {
                                                                                                     </div>
                                                                                                 )
                                                                                             }) : (
-                                                                                                <div className="d-flex justify-content-center align-items-center" style={{ inset: "0px", backgroundColor: "rgba(255,255,255,0.5)" }}>
-                                                                                                    <Spinner />
-                                                                                                </div>
+                                                                                                <div onClick={(e) => {
+                                                                                                    e.stopPropagation()
+                                                                                                    setCurrPosition((prev) => ({ ...prev, selectedType: "offer", subElem }))
+                                                                                                    makActive(e, cur, curElem, curElem?.positionType, key, i, j)
+                                                                                                    setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
+                                                                                                    setValues(subElem?.style)
+                                                                                                    setSideNav("offers")
+                                                                                                }} style={{ textAlign: "center" }}>Click to select offers</div>
                                                                                             )}
                                                                                         </div>
                                                                                     )
@@ -1352,7 +1366,7 @@ const RenderPreview = (props) => {
                                                                                             onClick={e => {
                                                                                                 e.stopPropagation()
                                                                                                 makActive(e, cur, curElem, curElem?.positionType, key, i, j)
-                                                                                                setCurrPosition({ ...currPosition, selectedType: "tnc" })
+                                                                                                setCurrPosition({ ...currPosition, selectedType: "tnc", subElem })
                                                                                                 setIndexes({ cur: key, curElem: curElem?.positionType, subElem: j })
                                                                                                 setValues(subElem?.style)
                                                                                                 setSelectedOffer({})
@@ -1543,11 +1557,11 @@ const RenderPreview = (props) => {
                                                         <div onClick={() => {
                                                             if (finalObj?.verificationEnabled || ele?.id !== "user_verification") {
                                                                 setCurrPage(ele?.id)
-                                                                if (ele?.id === "offers") {
-                                                                    setSideNav("offers")
-                                                                } else {
-                                                                    setSideNav("add-elements")
-                                                                }
+                                                                // if (ele?.id === "offers") {
+                                                                //     setSideNav("offers")
+                                                                // } else {
+                                                                setSideNav("add-elements")
+                                                                // }
                                                                 setIndexes(({ cur: 0, curElem: "left", subElem: "grandparent" }))
                                                                 setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
                                                                 updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: bgStyles } })
@@ -1614,14 +1628,17 @@ const RenderPreview = (props) => {
                                                                                                                             </div>
                                                                                                                         )
                                                                                                                     case 'offer':
+                                                                                                                        const renderOffer = subElem?.offerIds && Array.isArray(subElem?.offerIds) ? finalObj?.selectedOffers?.filter($ => subElem?.offerIds?.includes($?.id)) : finalObj?.selectedOffers
                                                                                                                         return (
                                                                                                                             <div style={{ ...subElem?.style, position: "relative", fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, zIndex: isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j }) ? "2" : "1" }}
                                                                                                                                 id={`${currPage}-${key}-${curElem.positionType}-${j}`}>
-                                                                                                                                {gotOffers ? finalObj?.selectedOffers?.map((ele, key) => {
+                                                                                                                                {!gotOffers ? (
+                                                                                                                                    <div className="d-flex justify-content-center align-items-center" style={{ inset: "0px", backgroundColor: "rgba(255,255,255,0.5)" }}>
+                                                                                                                                        <Spinner />
+                                                                                                                                    </div>
+                                                                                                                                ) : renderOffer?.length >= 1 ? renderOffer?.map((ele, key) => {
                                                                                                                                     return (
-                                                                                                                                        <div title="Click on offer to edit more settings" style={{ position: "relative" }} onClick={() => {
-                                                                                                                                            setSelectedOffer(ele)
-                                                                                                                                        }}>
+                                                                                                                                        <div title="Click on offer to edit more settings" style={{ position: "relative" }}>
                                                                                                                                             {isEqual(ele, selectedOffer) && (
                                                                                                                                                 <div className='position-absolute w-100 h-100 bg-black opacity-25 top-0 start-0 z-1'></div>
                                                                                                                                             )}
@@ -1629,9 +1646,7 @@ const RenderPreview = (props) => {
                                                                                                                                         </div>
                                                                                                                                     )
                                                                                                                                 }) : (
-                                                                                                                                    <div className="d-flex justify-content-center align-items-center" style={{ inset: "0px", backgroundColor: "rgba(255,255,255,0.5)" }}>
-                                                                                                                                        <Spinner />
-                                                                                                                                    </div>
+                                                                                                                                    <div style={{ textAlign: "center" }}>Click to select offers</div>
                                                                                                                                 )}
                                                                                                                             </div>
                                                                                                                         )
@@ -1865,123 +1880,25 @@ const RenderPreview = (props) => {
                                                                                                                         </div>
                                                                                                                     )
                                                                                                                 case 'offer':
+                                                                                                                    const renderOffer = subElem?.offerIds && Array.isArray(subElem?.offerIds) ? finalObj?.selectedOffers?.filter($ => subElem?.offerIds?.includes($?.id)) : finalObj?.selectedOffers
                                                                                                                     return (
 
                                                                                                                         <div className='p-1' style={{ ...values }}>
-                                                                                                                            {gotOffers ? finalObj?.selectedOffers?.map((ele) => {
-                                                                                                                                return (
-                                                                                                                                    <div className='p-0 mx-0 mt-1 mb-2'>
-                                                                                                                                        <div style={{
-                                                                                                                                            flexDirection: 'column',
-                                                                                                                                            justifyContent: 'center',
-                                                                                                                                            alignItems: 'center',
-                                                                                                                                            position: "relative"
-                                                                                                                                        }}>
-                                                                                                                                            <div style={{
-                                                                                                                                                width: '100%',
-                                                                                                                                                minHeight: '100%',
-                                                                                                                                                justifyContent: 'center',
-                                                                                                                                                // boxShadow: 'rgba(0, 0, 0, 0.125) 10px 2px 5px',
-                                                                                                                                                filter: 'drop-shadow(rgba(0, 0, 0, 0.2) 0px 0px 10px',
-                                                                                                                                                borderRadius: '10px',
-                                                                                                                                                display: 'flex',
-                                                                                                                                                position: "relative",
-                                                                                                                                                backgroundColor: 'white'
-                                                                                                                                            }}>
-                                                                                                                                                <div className='flex-grow-1 d-flex flex-column justify-content-between' style={{ padding: '15px' }}>
-                                                                                                                                                    <div style={{ text: 'wrap' }}>
-                                                                                                                                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', textTransform: 'uppercase' }}>
-                                                                                                                                                            <h2 style={{ fontWeight: 'bolder', fontSize: '0.9rem', color: '#FF671C' }}>
-                                                                                                                                                                {ele?.Code}
-                                                                                                                                                            </h2>
-                                                                                                                                                            <span style={{ textTransform: 'lowercase', fontSize: '0.75rem', color: 'black' }}>
-                                                                                                                                                                {ele?.Summary}
-                                                                                                                                                            </span>
-                                                                                                                                                        </div>
-                                                                                                                                                    </div>
-                                                                                                                                                    <div>
-                                                                                                                                                        <div style={{ paddingTop: '0.5rem' }}>
-                                                                                                                                                            <span style={{ color: 'black', textTransform: 'uppercase', fontWeight: '500', fontSize: '0.65rem' }}>
-                                                                                                                                                                valid until: {ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format('L') : "Never ending"}
-                                                                                                                                                            </span>
-                                                                                                                                                        </div>
-                                                                                                                                                    </div>
-                                                                                                                                                </div>
-                                                                                                                                                <div style={{ display: 'flex', flexDirection: 'column', gap: "0.5rem", padding: "0px 15px 15px" }}>
-                                                                                                                                                    <div style={{
-                                                                                                                                                        position: 'relative',
-                                                                                                                                                        display: 'flex',
-                                                                                                                                                        flexDirection: 'column',
-                                                                                                                                                        justifyContent: 'space-between',
-                                                                                                                                                        alignItems: 'center',
-                                                                                                                                                        backgroundColor: '#FF671C',
-                                                                                                                                                        // filter: `hue-rotate(${i * (i + 20)}deg)`,
-                                                                                                                                                        padding: "1rem 0.25rem",
-                                                                                                                                                        borderRadius: "0px 0px 5px 5px"
-                                                                                                                                                    }}>
-                                                                                                                                                        <h1 style={{
-                                                                                                                                                            fontSize: '1.829rem',
-                                                                                                                                                            fontWeight: '750',
-                                                                                                                                                            fontFamily: 'Montserrat',
-                                                                                                                                                            color: 'white'
-                                                                                                                                                        }}>
-                                                                                                                                                            {
-                                                                                                                                                                ele?.Type === "PERCENTAGE" ? (
-                                                                                                                                                                    `${Number(ele?.Value)?.toFixed(0)}%`
-                                                                                                                                                                ) : `${userPermission?.currencySymbol}${Number(ele?.Value)?.toFixed(0)}`
-                                                                                                                                                            }
-                                                                                                                                                        </h1>
-                                                                                                                                                    </div>
-                                                                                                                                                    <div style={{
-                                                                                                                                                        display: 'flex',
-                                                                                                                                                        flexDirection: 'column',
-                                                                                                                                                        justifyContent: 'flex-end',
-                                                                                                                                                        alignItems: 'center'
-                                                                                                                                                    }}>
-                                                                                                                                                        <button type="button" style={{
-                                                                                                                                                            color: '#FF671C',
-                                                                                                                                                            // filter: `hue-rotate(${i * (i + 20)}deg)`,
-                                                                                                                                                            fontSize: '0.65rem',
-                                                                                                                                                            fontWeight: '700',
-                                                                                                                                                            cursor: 'pointer',
-                                                                                                                                                            border: '0.75px solid #FF671C',
-                                                                                                                                                            borderRadius: '15px',
-                                                                                                                                                            padding: '0.195rem',
-                                                                                                                                                            backgroundColor: 'transparent',
-                                                                                                                                                            textTransform: 'uppercase',
-                                                                                                                                                            cursor: 'pointer'
-                                                                                                                                                        }}>
-                                                                                                                                                            <span >
-                                                                                                                                                                Redeem
-                                                                                                                                                            </span>
-                                                                                                                                                        </button>
-                                                                                                                                                    </div>
-                                                                                                                                                </div>
-                                                                                                                                            </div>
-                                                                                                                                            <div style={{
-                                                                                                                                                width: 'auto',
-                                                                                                                                                // margin: '-0.5rem auto',
-                                                                                                                                                position: 'absolute',
-                                                                                                                                                bottom: "0px",
-                                                                                                                                                backgroundColor: 'white',
-                                                                                                                                                textAlign: 'center',
-                                                                                                                                                padding: '0.25rem 0.5rem',
-                                                                                                                                                borderRadius: '10px',
-                                                                                                                                                boxShadow: '0 4px 24px 0 rgba(34, 41, 47, 0.15)',
-                                                                                                                                                transform: "translate(-50%, 50%)",
-                                                                                                                                                left: "50%"
-                                                                                                                                            }}>
-                                                                                                                                                <span style={{ textTransform: 'lowercase', fontSize: '0.75rem', color: 'black', fontWeight: '300', whiteSpace: "nowrap" }}>
-                                                                                                                                                    Used xyz times
-                                                                                                                                                </span>
-                                                                                                                                            </div>
-                                                                                                                                        </div>
-                                                                                                                                    </div>
-                                                                                                                                )
-                                                                                                                            }) : (
+                                                                                                                            {!gotOffers ? (
                                                                                                                                 <div className="d-flex justify-content-center align-items-center" style={{ inset: "0px", backgroundColor: "rgba(255,255,255,0.5)" }}>
                                                                                                                                     <Spinner />
                                                                                                                                 </div>
+                                                                                                                            ) : renderOffer?.length >= 1 ? renderOffer?.map((ele, key) => {
+                                                                                                                                return (
+                                                                                                                                    <div title="Click on offer to edit more settings" style={{ position: "relative" }}>
+                                                                                                                                        {isEqual(ele, selectedOffer) && (
+                                                                                                                                            <div className='position-absolute w-100 h-100 bg-black opacity-25 top-0 start-0 z-1'></div>
+                                                                                                                                        )}
+                                                                                                                                        <ReturnOfferHtml details={ele} key={key} theme={offerTheme} offerProperties={finalObj?.offerProperties} />
+                                                                                                                                    </div>
+                                                                                                                                )
+                                                                                                                            }) : (
+                                                                                                                                <div style={{ textAlign: "center" }}>Click to select offers</div>
                                                                                                                             )}
                                                                                                                         </div>
                                                                                                                     )

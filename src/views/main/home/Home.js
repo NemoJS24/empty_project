@@ -2,6 +2,7 @@ import React from 'react'
 import Footer from '@src/views/main/utilities/footer/Footer'
 import Navbar from '@src/views/main/utilities/navbar/Navbar'
 import { Link } from 'react-router-dom'
+import ReactGA from 'react-ga'
 
 
 // compomponents
@@ -158,8 +159,11 @@ const data = [
 ]
 
 const Home = () => {
+
+  ReactGA.initialize('G-4NRGB5EKCP')
+  ReactGA.pageview(window.location.pathname + window.location.search)
   return (
-    <div style={{ background: "#fff" }}  >
+    <div style={{ background: "#fff" }} >
 
 
         {/* <Navbar /> */}
