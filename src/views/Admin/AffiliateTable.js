@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Col, DropdownItem, DropdownMenu, DropdownToggle, Modal, ModalBody, Row, UncontrolledButtonDropdown } from 'reactstrap'
 import { affiliateURL, getReq, postReq } from '../../assets/auth/jwtService'
 import ComTable from '../Components/DataTable/ComTable'
-
+import { FaRegCircle, FaRegDotCircle, FaBan } from "react-icons/fa"
 import NavbarAdmin from './NavbarAdmin'
 import moment from 'moment'
 
@@ -72,12 +72,12 @@ export default function AffiliateTable() {
     },
     {
       name: 'First Name',
-      minWidth: '150px',
+      minWidth: '100px',
       selector: row => row.firstname
     },
     {
       name: 'Last Name',
-      minWidth: '150px',
+      minWidth: '100px',
       selector: row => row.lastname
     },
     {
@@ -87,11 +87,15 @@ export default function AffiliateTable() {
     },
     {
       name: 'Is Active',
-      minWidth: '150px',
+      minWidth: '40px',
       cell: row => (row?.is_active === true ? (
-        <div>Active</div>
+        <div className='d-flex'>
+          <div style={{marginRight:"5px"}}><FaRegDotCircle size={12} color='green'/></div>
+          Active</div>
       ) : (
-        <div>Inactive</div>
+        <div className='d-flex'>
+        <div style={{marginRight:"5px"}}><FaRegCircle  size={8} color='red'/></div>
+        Inactive</div>
       ))
     },
     // {
@@ -152,7 +156,7 @@ export default function AffiliateTable() {
                 }}
               >
                 <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
-                  <BookOpen stroke='#28c76f' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Deactivate</span>
+                  <FaBan stroke='#ea5455' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Deactivate</span>
                 </div>
               </DropdownItem>
 

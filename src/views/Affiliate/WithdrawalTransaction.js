@@ -48,6 +48,13 @@ const WithdrawalTransaction = () => {
   }
   const handleSubmit = (obj) => {
     const form_data = new FormData()
+    console.log("SDFsdf", argument)
+    if (argument?.ref_id === '') {
+      return toast.error("Enter Referance ID")
+    }
+    if (argument?.transaction_id === '') {
+      return toast.error("Enter Transaction ID")
+    } 
 
     Object.entries(obj ? obj : argument).map(([key, value]) => {
       form_data.append(key, value)
@@ -62,7 +69,9 @@ const WithdrawalTransaction = () => {
       })
       .catch((err) => {
         console.log(err)
-      })
+
+      }).finally(() => closeModal(false))
+    setArgument()
   }
   useEffect(() => {
     getData()
@@ -152,6 +161,8 @@ const WithdrawalTransaction = () => {
       minWidth: '100px',
       cell: row => (
         <>
+          {
+            row.action !== "Paid" &&
           <div className="d-flex justify-content-center align-items-center gap-2">
             <UncontrolledButtonDropdown className='more-options-dropdown'>
               <DropdownToggle className={`btn-icon cursor-pointer`} color='transparent' size='sm'>
@@ -173,6 +184,7 @@ const WithdrawalTransaction = () => {
                         action: e.target.value,
                         created_at: row.created_at,
                         trans_id: row.id
+
                       })
                       if (newSelectedAction === 'Paid') {
                         openModal()
@@ -180,7 +192,10 @@ const WithdrawalTransaction = () => {
                           affiliate_id: row.affiliate_person.id,
                           action: e.target.value,
                           created_at: row.created_at,
-                          trans_id: row.id
+                          trans_id: row.id,
+                          remark: "",
+                          ref_id: "",
+                          transaction_id: ""
                         })
                       } else {
                         handleSubmit({
@@ -198,6 +213,8 @@ const WithdrawalTransaction = () => {
               </DropdownMenu>
             </UncontrolledButtonDropdown>
           </div>
+          }
+
         </>
       ),
       width: "100px"
@@ -257,11 +274,14 @@ const WithdrawalTransaction = () => {
               <label className='pt-1' htmlFor="value">Transaction ID</label>
               <input value={argument?.transaction_id} name="Transaction id" id="transaction_id" onChange={(e) => handleChange(e)} className="form-control" />
 
-
-              <button onClick={() => {
-                handleSubmit()
-                closeModal(false)
-              }} className='btn btn-primary mt-1'>Save</button>
+              <div className='d-flex justify-content-end gap-2 mt-3'>
+                <button onClick={() => {
+                  closeModal(false)
+                }} className='btn'>Cancel</button>
+                <button onClick={() => {
+                  handleSubmit()
+                }} className='btn btn-primary'>Save</button>
+              </div>
             </ModalBody>
           </Modal>
         </Col>

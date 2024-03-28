@@ -54,11 +54,11 @@ export const CRMNavigation = [
         title: 'Vehicle',
         icon: <RiCarLine style={{ marginRight: '18px' }} />,
         navLink: '/merchant/customers/vehicle/'
-    },
-    {
-        id: 'buyer-seller',
-        title: 'Buyer & Seller',
-        icon: <LiaHandshake style={{ marginRight: '18px' }} />,
-        navLink: '/merchant/customers/buyerseller/'
     }
+    // {
+    //     id: 'buyer-seller',
+    //     title: 'Buyer & Seller',
+    //     icon: <LiaHandshake style={{ marginRight: '18px' }} />,
+    //     navLink: '/merchant/customers/buyerseller/'
+    // }
 ]
