@@ -174,7 +174,7 @@ export default function TemplateUI() {
    const updateDisplayedMessage = (inputString, defData) => {
       let updatedMessage = getBoldStr(inputString)
       if (defData.example) {
-         const data = defData.example.body_text[0]
+         const data = defData.example?.body_text[0]
          updatedMessage = updatedMessage.replace(/{{(\d+)}}/g, (_match, index) => {
             return `[${data[index - 1]}]`
          })
@@ -184,7 +184,7 @@ export default function TemplateUI() {
    const updateHeaderDisplayedMessage = (inputString, defData) => {
       let updatedMessage = inputString
       if (defData.example) {
-         const data = defData.example.header_text[0]
+         const data = defData.example?.header_text[0]
          updatedMessage = updatedMessage.replace(/{{(\d+)}}/g, () => {
             return `[${data}]`
          })
@@ -244,14 +244,14 @@ export default function TemplateUI() {
       }
       if (CurrentTemplate.components[0].format === "IMAGE") {
          formData.append("type", "IMAGE")
-         formData.append("link", CurrentTemplate.components[0].example.header_handle[0])
+         formData.append("link", CurrentTemplate.components[0].example?.header_handle[0])
       } else if (CurrentTemplate.components[0].format === "VIDEO") {
          formData.append("type", "VIDEO")
-         formData.append("link", CurrentTemplate.components[0].example.header_handle[0])
+         formData.append("link", CurrentTemplate.components[0].example?.header_handle[0])
       } else if (CurrentTemplate.components[0].format === "DOCUMENT") {
          formData.append("type", "DOCUMENT")
          formData.append("filename", "NotDefined")
-         formData.append("link", CurrentTemplate.components[0].example.header_handle[0])
+         formData.append("link", CurrentTemplate.components[0].example?.header_handle[0])
       } else {
          formData.append("type", "TEXT")
       }
@@ -431,7 +431,7 @@ export default function TemplateUI() {
                               <div className='p-1'  >
                                  <video className='rounded-3  object-fit-cover w-100' controls autoPlay mute style={{ height: "170px" }}>
                                     <source
-                                       src={data.example.header_handle[0] ?? ""}
+                                       src={data.example?.header_handle[0] ?? ""}
                                        type="video/mp4"
                                     />
                                     Video not supported.
@@ -657,7 +657,7 @@ export default function TemplateUI() {
                               {/* {
                                  CurrentTemplate && CurrentTemplate.components.map((data) => {
                                     if (data.type === "HEADER" && data.format === "DOCUMENT" && data.example) {
-                                       // console.log(data.example.header_text)
+                                       // console.log(data.example?.header_text)
                                        return (
                                           <div>
                                              <h4 className='mt-3'>File Name</h4>
@@ -677,11 +677,11 @@ export default function TemplateUI() {
                               {
                                  CurrentTemplate && CurrentTemplate.components.map((data) => {
                                     if (data.type === "HEADER" && data.format === "TEXT" && data.example) {
-                                       // console.log(data.example.header_text)
+                                       // console.log(data.example?.header_text)
                                        return (
                                           <div>
                                              <h4 className='mt-3  sendMenuHeader'>Header</h4>
-                                             {data.example.header_text && data.example.header_text.map((label, index) => {
+                                             {data.example?.header_text && data.example?.header_text.map((label, index) => {
                                                 return (
                                                    <div className='mt-1' key={index}>
                                                       <h5 className="">{label}</h5>
@@ -708,7 +708,7 @@ export default function TemplateUI() {
                                        return (
                                           <div>
                                              <h4 className='mt-3 sendMenuHeader '>Body</h4>
-                                             {data.example.body_text[0].map((label, index) => {
+                                             {data.example?.body_text[0].map((label, index) => {
                                                 return (
                                                    <div className='mt-1'>
                                                       <h5 className="">{label}</h5>
@@ -796,7 +796,7 @@ export default function TemplateUI() {
                                                 <div className='p-1'  >
                                                    <video className='rounded-3  object-fit-cover w-100' controls autoPlay mute style={{ height: "170px" }}>
                                                       <source
-                                                         src={data.example.header_handle[0] ?? ""}
+                                                         src={data.example?.header_handle[0] ?? ""}
                                                          type="video/mp4"
                                                       />
                                                       Video not supported.
