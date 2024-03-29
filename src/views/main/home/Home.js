@@ -2,10 +2,6 @@ import React from 'react'
 import Footer from '@src/views/main/utilities/footer/Footer'
 import Navbar from '@src/views/main/utilities/navbar/Navbar'
 import { Link } from 'react-router-dom'
-import ReactGA from 'react-ga'
-ReactGA.initialize('G-4NRGB5EKCP')
-ReactGA.pageview(window.location.pathname + window.location.search)
-
 
 // compomponents
 import CardLeft from '@src/views/main/components/CardLeft'
