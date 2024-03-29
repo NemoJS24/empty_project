@@ -136,7 +136,7 @@ function GroupTable() {
               <button className='btn ' style={{padding:"5px 10px" }} onClick={() => handleDelete(row.group_id)} ><Trash size={18}/></button>
               <Link to={`/merchant/whatsapp/${row.group_name}/${row.group_id}`} className='btn ' style={{padding:"5px 10px" }}><Eye size={18}/></Link>
               
-             {row.group_contact !== 0 && <Link to={`/merchant/whatsapp/sent-to-group/${row.group_id}`} className='btn btn-primary ms-1' style={{padding:"5px 10px" }}>Send Messages</Link> }
+             {/* {row.group_contact !== 0 && <Link to={`/merchant/whatsapp/sent-to-group/${row.group_id}`} className='btn btn-primary ms-1' style={{padding:"5px 10px" }}>Send Messages</Link> } */}
           </div>
           )
       },
