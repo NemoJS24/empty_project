@@ -79,7 +79,7 @@ const {id} = useParams()
     const updateDisplayedMessage = (inputString, defData) => {
         let updatedMessage = getBoldStr(inputString)
         if (defData.example) {
-            const data = defData.example.body_text[0]
+            const data = defData.example?.body_text[0]
             updatedMessage = updatedMessage.replace(/{{(\d+)}}/g, (_match, index) => {
                 return `[${data[index - 1]}]`
             })
@@ -89,7 +89,7 @@ const {id} = useParams()
     const updateHeaderDisplayedMessage = (inputString, defData) => {
         let updatedMessage = getBoldStr(inputString)
         if (defData.example) {
-            const data = defData.example.header_text[0]
+            const data = defData.example?.header_text[0]
             updatedMessage = updatedMessage.replace(/{{(\d+)}}/g, () => {
                 return `[${data}]`
             })
@@ -154,7 +154,7 @@ const {id} = useParams()
                                         <div className='p-1'  >
                                             <video className='rounded-3  object-fit-cover w-100' controls autoPlay mute style={{ height: "170px" }}>
                                                 <source
-                                                    src={data.example.header_handle[0] ?? ""}
+                                                    src={data.example?.header_handle[0] ?? ""}
                                                     type="video/mp4"
                                                 />
                                                 Video not supported.

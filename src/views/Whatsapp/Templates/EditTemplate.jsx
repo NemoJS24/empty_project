@@ -10,11 +10,12 @@ import wp_back from './imgs/wp_back.png'
 import { selectPhoneList } from '../../../Helper/data'
 import { postReq } from '../../../assets/auth/jwtService'
 import FrontBaseLoader from '../../Components/Loader/Loader'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { HeaderTypeList, getBoldStr, paramatersList } from '../SmallFunction'
 
 export default function EditTemplate() {
   const { templateID } = useParams()
+  const nagivate = useNavigate()
 
   const [CurrentTemplate, setCurrentTemplate] = useState()
   const [useLoader, setLoader] = useState(false)
@@ -253,7 +254,7 @@ export default function EditTemplate() {
           const formatType = res.data.components[0]
           setCurrentTemplate(res.data)
           if (["IMAGE", "VIDEO", "DOCUMENT"].includes(formatType.format)) {
-            setHeader({ ...Header, type: formatType.format.replace(/(\B)[^ ]*/g, match => (match.toLowerCase())).replace(/^[^ ]/g, match => (match.toUpperCase())), file: formatType.example.header_handle[0] })
+            setHeader({ ...Header, type: formatType.format.replace(/(\B)[^ ]*/g, match => (match.toLowerCase())).replace(/^[^ ]/g, match => (match.toUpperCase())), file: formatType.example?.header_handle[0] })
           } else if (formatType.format === 'TEXT') {
             setHeader({ ...Header, type: formatType.format.replace(/(\B)[^ ]*/g, match => (match.toLowerCase())).replace(/^[^ ]/g, match => (match.toUpperCase())), text: formatType.text })
             if (formatType?.example?.header_text.length > 0) {
@@ -324,7 +325,7 @@ export default function EditTemplate() {
         return {
           type: item.type,
           text: item.text,
-          phone_number: item.code.replace(/\+/g, '') + item.value
+          phone_number: item.code?.replace(/\+/g, '') + item.value
         }
       } else if (item.type === "URL" && useLinkType === "custom") {
         return {
@@ -443,6 +444,8 @@ export default function EditTemplate() {
         if (res.data.success) {
           // toast.success(res.data.error_msg)
           toast.success("Template has updated!")
+          nagivate('/merchant/whatsapp/message/')
+
         } else if (!res.data.success) {
           toast.error(res.data.error_msg)
         } else {
