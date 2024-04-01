@@ -199,12 +199,12 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
             method: 'POST',
             data: form_data
         })
-            .then(() => {
-                getAllThemes()
-            })
-            .catch(err => {
-                alert(err)
-            })
+        .then(() => {
+            getAllThemes()
+        })
+        .catch(err => {
+            alert(err)
+        })
     }
 
     const sendDuplicate = (ele) => {
@@ -363,7 +363,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
         },
         {
             name: 'End Date',
-            selector: row => <span className='cursor-pointer'>{Boolean(row.theme_name.end_date) ? defaultFormatDate(row.theme_name.end_date, userPermission?.user_settings?.date_format) : "perpetual"}</span>,
+            selector: row => <span className='cursor-pointer'>{Boolean(row.theme_name.end_date) ? defaultFormatDate(row.theme_name.end_date, userPermission?.user_settings?.date_format) : "Perpetual"}</span>,
             type: 'date',
             isEnable: true
         },
@@ -398,7 +398,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                                 setSelectedThemeNo(row.theme_name.default_id)
                                 setEditTheme(row.theme_name)
                                 localStorage.setItem("is_draft", row.theme_name.draft_status)
-                                navigate(`/merchant/SuperLeadz/new_customization/${row.theme_name.id}`, { state: row.theme_name })
+                                navigate(`/merchant/SuperLeadz/new_customization/${row.theme_name.id}?status=${activeThemes.includes(row.theme_name.id)}`, { state: row.theme_name })
                             }} className='w-100'>
                                 <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
                                     <Edit2 stroke='#ff9f43' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Edit</span>

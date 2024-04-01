@@ -5533,7 +5533,7 @@ const CustomizationParent = () => {
                                                                                         <span style={{ fontSize: "13px" }}>Summary: <br /> <span className=' text-black'> {ele?.Summary} </span></span>
                                                                                     </div>
                                                                                     <div>
-                                                                                        <p style={{ fontSize: "13px" }} className='mt-1'>Validity: <br /><span className=' text-black'>{ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format("YYYY-MM-DD HH:mm:ss") : "Never ending"}</span></p>
+                                                                                        <p style={{ fontSize: "13px" }} className='mt-1'>Validity: <br /><span className=' text-black'>{ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format("YYYY-MM-DD HH:mm:ss") : "Perpetual"}</span></p>
                                                                                     </div>
                                                                                 </div>
                                                                             </CardBody>

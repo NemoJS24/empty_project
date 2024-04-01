@@ -1137,7 +1137,7 @@ const Customization = () => {
                                                                                                                                         {finalObj?.offerProperties?.showSections?.includes("validity") && <div>
                                                                                                                                             <div style={{ paddingTop: '0.5rem' }}>
                                                                                                                                                 <span style={{ color: finalObj?.offerProperties?.colors?.validity, textTransform: 'uppercase', fontWeight: '500', fontSize: '0.65rem' }}>
-                                                                                                                                                    valid until: {ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format('L') : "Never ending"}
+                                                                                                                                                    valid until: {ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format('L') : "Perpetual"}
                                                                                                                                                 </span>
                                                                                                                                             </div>
                                                                                                                                         </div>}
@@ -1743,7 +1743,7 @@ const Customization = () => {
                                                                                                                                                             {finalObj?.offerProperties?.showSections?.includes("validity") && <div>
                                                                                                                                                                 <div style={{ paddingTop: '0.5rem' }}>
                                                                                                                                                                     <span style={{ color: finalObj?.offerProperties?.colors?.validity, textTransform: 'uppercase', fontWeight: '500', fontSize: '0.65rem' }}>
-                                                                                                                                                                        valid until: {ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format('L') : "Never ending"}
+                                                                                                                                                                        valid until: {ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format('L') : "Perpetual"}
                                                                                                                                                                     </span>
                                                                                                                                                                 </div>
                                                                                                                                                             </div>}
@@ -2554,7 +2554,7 @@ const Customization = () => {
                                                                                             <div>
                                                                                                 <div style={{ paddingTop: '0.5rem' }}>
                                                                                                     <span style={{ color: 'black', textTransform: 'uppercase', fontWeight: '500', fontSize: '0.65rem' }}>
-                                                                                                        valid until: {ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format('L') : "Never ending"}
+                                                                                                        valid until: {ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format('L') : "Perpetual"}
                                                                                                     </span>
                                                                                                 </div>
                                                                                             </div>

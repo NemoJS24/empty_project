@@ -111,7 +111,7 @@ const CustomizationParent = () => {
     const { EditThemeId } = useParams()
 
     const defaultIsMobile = new URLSearchParams(themeLoc.search)
-
+    console.log(defaultIsMobile, "defaultIsMobile")
     // const dateFormat = "%Y-%m-%d %H:%M:%S"
 
     // status variable shows whether the user has monile view or desktop view selected while visiting the page
@@ -342,7 +342,7 @@ const CustomizationParent = () => {
         }
     }
 
-    console.log(past, future, "ppppppp")
+    // console.log(past, future, "ppppppp")
 
     const undo = () => {
         if (past.length === 0) return
@@ -3539,6 +3539,7 @@ const CustomizationParent = () => {
             toast.error("Enter a theme name")
             setApiLoader(false)
         } else if (isOfferDraggable && phoneIsOfferDraggable && finalObj.selectedOffers.length === 0) {
+            setApiLoader(false)
             toast.error("Add some offers to your Theme!")
         } else if (includesInput?.length > 0) {
             setApiLoader(false)
@@ -3581,22 +3582,86 @@ const CustomizationParent = () => {
             axios({
                 method: "POST", url: `${SuperLeadzBaseURL}/api/v1/form_builder_template/`, data: form_data
             }).then((data) => {
-                setApiLoader(false)
+                
                 if (data?.data?.exist) {
+                    setApiLoader(false)
                     toast.error("Campaign name already exist")
                 } else {
+
                     localStorage.removeItem("draftId")
                     setThemeId(data?.data.theme_id)
                     toast.success("Successfully saved")
-                    if (actionType === "Save & Close") {
-                        navigate('/merchant/SuperLeadz/all_campaigns/')
-                    } else if (actionType === "Save & Preview") {
-                        navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) } })
+                    if (defaultIsMobile.get("status") === "true") {
+                        const getUrl = new URL(`${SuperLeadzBaseURL}/api/v1/get/active-template/`)
+                        const form_data = new FormData()
+                        form_data.append("shop", outletData[0]?.web_url)
+                        form_data.append("app", "superleadz")
+                        form_data.append('theme_id', data?.data.theme_id)
+                        form_data.append('campaign_name', themeName)
+                        axios({
+                            method: "POST",
+                            url: getUrl,
+                            data: form_data
+                        })
+                        .then((resp) => {
+                            console.log(resp)
+                            if (resp.data.response.length === 0) {
+                                const form_data = new FormData()
+                                form_data.append("shop", outletData[0]?.web_url)
+                                form_data.append("app", "superleadz")
+                                form_data.append('theme_id', data?.data.theme_id)
+                                form_data.append('campaign_name', themeName)
+                                form_data.append('is_active', 1)
+                                axios(`${SuperLeadzBaseURL}/api/v1/get/change-theme-status/`, {
+                                    method: 'POST',
+                                    data: form_data
+                                })
+                                .then(() => {
+                                    if (actionType === "Save & Close") {
+                                        navigate('/merchant/SuperLeadz/all_campaigns/')
+                                    } else if (actionType === "Save & Preview") {
+                                        navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) } })
+                                    }
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                    toast.error("Somthing went wrong!")
+                                })
+                                .finally(() => {
+                                    setApiLoader(false)
+                                })
+
+                            } else {
+                                if (actionType === "Save & Close") {
+                                    navigate('/merchant/SuperLeadz/all_campaigns/')
+                                } else if (actionType === "Save & Preview") {
+                                    navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) } })
+                                }
+                            }
+                            
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                            toast.error("Somthing went wrong!")
+                        })
+                        .finally(() => {
+                            setApiLoader(false)
+                        })
+                    } else {
+                        setApiLoader(false)
+                        if (actionType === "Save & Close") {
+                            navigate('/merchant/SuperLeadz/all_campaigns/')
+                        } else if (actionType === "Save & Preview") {
+                            navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) } })
+                        }
                     }
                 }
             }).catch((error) => {
                 setApiLoader(false)
                 console.log({ error })
+            })
+            .finally(() => {
+                setApiLoader(false)
             })
         }
     }
@@ -5490,7 +5555,7 @@ const CustomizationParent = () => {
                                                                                         <span style={{ fontSize: "13px" }}>Summary: <br /> <span className=' text-black'> {ele?.Summary} </span></span>
                                                                                     </div>
                                                                                     <div>
-                                                                                        <p style={{ fontSize: "13px" }} className='mt-1'>Validity: <br /><span className=' text-black'>{ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format("YYYY-MM-DD HH:mm:ss") : "Never ending"}</span></p>
+                                                                                        <p style={{ fontSize: "13px" }} className='mt-1'>Validity: <br /><span className=' text-black'>{ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format("YYYY-MM-DD HH:mm:ss") : "Perpetual"}</span></p>
                                                                                     </div>
                                                                                 </div>
                                                                             </CardBody>
