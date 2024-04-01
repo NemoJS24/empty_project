@@ -42,6 +42,8 @@ import './assets/scss/style.scss'
 // ** Service Worker
 import * as serviceWorker from './serviceWorker'
 import ScrollToTop from './default_components/ScrollTop'
+import ReactGA from 'react-ga'
+ReactGA.initialize('G-4NRGB5EKCP')
 
 import "./index.css"
 

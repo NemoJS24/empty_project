@@ -10,6 +10,8 @@ import Testimonial from './components/testimonial/Testimonial'
 
 // bootstrap
 import { Card, Col, Container, Row } from 'reactstrap'
+import ReactGA from 'react-ga'
+ReactGA.initialize('G-4NRGB5EKCP')
 
 // icons
 import { FiArrowUpRight } from 'react-icons/fi'
