@@ -3622,6 +3622,7 @@ const CustomizationParent = () => {
                                     } else if (actionType === "Save & Preview") {
                                         navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) } })
                                     }
+                                    setApiLoader(false)
                                 })
                                 .catch(err => {
                                     console.log(err)
@@ -3637,6 +3638,7 @@ const CustomizationParent = () => {
                                 } else if (actionType === "Save & Preview") {
                                     navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) } })
                                 }
+                                setApiLoader(false)
                             }
                             
                         })
