@@ -26,7 +26,7 @@ const Footer = () => {
                 <Col md="10" xs="10" lg="11" xl="11">
                     <div className=' d-flex flex-wrap justify-content-between'  >
                         <div  >
-                            <img className='mb-1' src={logo} alt="logo" width={200} style={{ marginTop: "-30px" }} />
+                            <Link to='/'><img className='mb-1' src={logo} alt="logo" width={200} style={{ marginTop: "-30px" }} /></Link>
                             <h5>An end-to-end martech stack.</h5>
 
 
