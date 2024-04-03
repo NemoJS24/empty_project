@@ -15,12 +15,11 @@ import { HeaderTypeList, getBoldStr, paramatersList } from '../SmallFunction'
 
 export default function EditTemplate() {
   const { templateID } = useParams()
-  const nagivate = useNavigate()
-
+const navigate = useNavigate()
   const [CurrentTemplate, setCurrentTemplate] = useState()
   const [useLoader, setLoader] = useState(false)
   const [useLinkType, setLinkType] = useState("custom")
- 
+
   const [BasicTemplateData, setBasicTemplateData] = useState({
     templateName: '',
     templateCategory: '',
@@ -141,39 +140,42 @@ export default function EditTemplate() {
       }
     } else {
       setInteractive([])
-      uptInteractiveBtnDisplay(oldData)
       console.log(oldData)
       return // No need to proceed further if type is not recognized
     }
-
-    setInteractive([...oldData, newData])
-    uptInteractiveBtnDisplay([...oldData, newData])
-  }
-
-
-  const uptInteractiveBtnDisplay = (data) => {
-    let btnList = [...data]
-    let btnData = useButtons
-    if (btnList.length >= 3) {
-      setButtons({
-        QUICK_REPLY: 0,
-        URL: 0,
-        PHONE_NUMBER: 0
-      })
-
-    } else {
-      btnList.map((ele) => {
-        if (btnData[ele.type] === 0) {
-        } else {
-          btnData[ele.type] -= 1
-        }
-      })
-      setButtons(btnData)
+    // Determine the priority of each button type
+    const priorityMap = {
+      QUICK_REPLY: 1,
+      URL: 2,
+      PHONE_NUMBER: 3
     }
+
+    // Sort the buttons based on their priority
+    const updatedData = [...oldData, newData].sort((a, b) => priorityMap[a.type] - priorityMap[b.type])
+
+    setInteractive(updatedData)
+    // setInteractive([...oldData, newData])
   }
   useEffect(() => {
-    uptInteractiveBtnDisplay(useInteractive)
-  }, [])
+    const count = useInteractive.reduce((acc, elm) => {
+      if (elm.type === "QUICK_REPLY") {
+        acc.QUICK_REPLY++
+      } else if (elm.type === "URL") {
+        acc.URL++
+        acc.QUICK_REPLY++
+      } else if (elm.type === "PHONE_NUMBER") {
+        acc.PHONE_NUMBER++
+        acc.QUICK_REPLY++
+      }
+      return acc
+    }, {
+      QUICK_REPLY: 0,
+      URL: 0,
+      PHONE_NUMBER: 0
+    })
+    setButtons(count)
+    console.log(count)
+  }, [useInteractive])
 
   const handleInputChange = (index, field, value) => {
     let oldData = [...useInteractive]
@@ -216,24 +218,6 @@ export default function EditTemplate() {
       language: "Select Template Language"
     }
 
-    if (BasicTemplateData.templateName === '') {
-      toast.error(errorMsg['templateName'])
-      return false
-    }
-    const pattern = /[^a-z0-9_]/
-    if (pattern.test(BasicTemplateData.templateName)) {
-      // String contains special characters or whitespace
-      toast.error("Only lower case alphabets, numbers and underscore is allowed for Template Name")
-      return false
-    }
-    if (BasicTemplateData.templateCategory === '') {
-      toast.error(errorMsg['templateCategory'])
-      return false
-    }
-    if (BasicTemplateData.language === '') {
-      toast.error(errorMsg['language'])
-      return false
-    }
     if (BasicTemplateData.useMsgBody === '') {
       toast.error(errorMsg['useMsgBody'])
       return false
@@ -254,7 +238,7 @@ export default function EditTemplate() {
           const formatType = res.data.components[0]
           setCurrentTemplate(res.data)
           if (["IMAGE", "VIDEO", "DOCUMENT"].includes(formatType.format)) {
-            setHeader({ ...Header, type: formatType.format.replace(/(\B)[^ ]*/g, match => (match.toLowerCase())).replace(/^[^ ]/g, match => (match.toUpperCase())), file: formatType.example?.header_handle[0] })
+            setHeader({ ...Header, type: formatType.format.replace(/(\B)[^ ]*/g, match => (match.toLowerCase())).replace(/^[^ ]/g, match => (match.toUpperCase())), file: formatType.example.header_handle[0] })
           } else if (formatType.format === 'TEXT') {
             setHeader({ ...Header, type: formatType.format.replace(/(\B)[^ ]*/g, match => (match.toLowerCase())).replace(/^[^ ]/g, match => (match.toUpperCase())), text: formatType.text })
             if (formatType?.example?.header_text.length > 0) {
@@ -278,7 +262,6 @@ export default function EditTemplate() {
             }
             if (elm.type === "BUTTONS") {
               setInteractive(elm.buttons)
-              uptInteractiveBtnDisplay(elm.buttons)
             }
           })
 
@@ -444,8 +427,7 @@ export default function EditTemplate() {
         if (res.data.success) {
           // toast.success(res.data.error_msg)
           toast.success("Template has updated!")
-          nagivate('/merchant/whatsapp/message/')
-
+          navigate('/merchant/whatsapp/message/')
         } else if (!res.data.success) {
           toast.error(res.data.error_msg)
         } else {
@@ -632,7 +614,7 @@ export default function EditTemplate() {
                     <div className='d-flex flex-column gap-1'>
                       {Body_Parameters?.map((paramData, index) => {
                         // console.log(paramData)
-                        console.log(`${index} ==== ${paramData}`)
+                        // console.log(`${index} ==== ${paramData}`)
                         return (
                           <div className='d-flex' key={index + 1}>
                             <div className='w-25 d-flex justify-content-center align-items-center '>
@@ -908,14 +890,14 @@ export default function EditTemplate() {
 
                     </div>}
                   <div className='d-flex gap-2 mt-1'>
-                    <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center   gap-1 ${useButtons.QUICK_REPLY === 0 ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("QUICK_REPLY")} >
-                      <Plus size={18} /> <p className='m-0'>Quick Reply</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{useButtons.QUICK_REPLY}</p></div>
+                    <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center   gap-1 ${(useButtons.QUICK_REPLY - 10) === 0 ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("QUICK_REPLY")} >
+                      <Plus size={18} /> <p className='m-0'>Quick Reply</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{10 - (useButtons.QUICK_REPLY)}</p></div>
                     </div>
-                    <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center  gap-1 ${(useButtons.URL === 0) ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("URL")}>
-                      <Plus size={18} /> <p className='m-0'>URL</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{useButtons.URL}</p></div>
+                    <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center  gap-1 ${((useButtons.URL - 2) === 0) ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("URL")}>
+                      <Plus size={18} /> <p className='m-0'>URL</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{2 - (useButtons.URL)}</p></div>
                     </div>
-                    <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center  gap-1 ${(useButtons.PHONE_NUMBER === 0) ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("PHONE_NUMBER")}>
-                      <Plus size={18} /> <p className='m-0'>Phone Number</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{useButtons.PHONE_NUMBER}</p></div>
+                    <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center  gap-1 ${((useButtons.PHONE_NUMBER - 1) === 0) ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("PHONE_NUMBER")}>
+                      <Plus size={18} /> <p className='m-0'>Phone Number</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{1 - useButtons.PHONE_NUMBER}</p></div>
                     </div>
                   </div>
                 </div>

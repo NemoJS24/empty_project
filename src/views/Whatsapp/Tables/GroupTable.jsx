@@ -177,7 +177,7 @@ function GroupTable() {
           useLoader && <FrontBaseLoader />
         }
         <div className='px-2 py-1 border-bottom d-flex justify-content-between align-items-center  '>
-          <h2 className='m-0'>Create WhatsApp Group </h2>
+          <h2 className='m-0'>Create Group </h2>
           <X size={18} className='cursor-pointer' onClick={toggle}/>
           </div>
         <ModalBody className='m'>

@@ -1,4 +1,4 @@
-import TemplateUI from "../../views/Whatsapp/Templates/TemplateUI/TemplateUI"
+import TemplateDashboard from "../../views/Whatsapp/Templates/TemplateDashboard/TemplateDashboard"
 import OtpinManage from "../../views/Whatsapp/Templates/OtpinManage"
 import ProjectTable from "../../views/Whatsapp/Tables/ProjectTable"
 import EmbededSignup from "../../views/Whatsapp/Forms/EmbededSignup"
@@ -9,11 +9,13 @@ import Dashboard from "../../views/Whatsapp/Dashboard"
 import ContactsTable from "../../views/Whatsapp/Tables/ContactsTable"
 import BusinessCreation from "../../views/Whatsapp/Forms/BusinessCreation"
 import GroupDetails from "../../views/Whatsapp/Tables/GroupDetails"
-import CatalogueView from "../../views/Whatsapp/Templates/CatalogueView"
-import Catalogue from "../../views/Whatsapp/Templates/Catalogue"
+import CatalogueView from "../../views/Whatsapp/catalog/CatalogueView"
 import TemplateReports from "../../views/Whatsapp/reports/TemplateReports"
 import SentReports from "../../views/Whatsapp/reports/SentReports"
 import GroupSend from "../../views/Whatsapp/Tables/GroupSend"
+import Catalogue from "../../views/Whatsapp/catalog/Catalogue"
+import StartCampaign from "../../views/Whatsapp/Templates/TemplateDashboard/pages/StartCampaign"
+import LiveChat from "../../views/Whatsapp/liveChat/LiveChat"
 // import ProjectTable from "../../views/Whatsapp/Templates/ProjectTable"
 
 export const WhatsAppRoutes = [
@@ -23,7 +25,11 @@ export const WhatsAppRoutes = [
     },
     {
         path: '/merchant/whatsapp/message/',
-        element: <TemplateUI />
+        element: <TemplateDashboard />
+    },
+    {
+        path: '/merchant/whatsapp/campaign/:id',
+        element: <StartCampaign />
     },
     {
         path: '/merchant/whatsapp/optinManage/',
@@ -84,5 +90,9 @@ export const WhatsAppRoutes = [
     {
         path: '/merchant/whatsapp/reports/template/:templateId',
         element: <SentReports />
+    },
+    {
+        path: '/merchant/whatsapp/LiveChat',
+        element: <LiveChat />
     }
 ]

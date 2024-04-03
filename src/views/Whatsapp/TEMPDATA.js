@@ -891,3 +891,97 @@ export const TEMPDATA_DEMO = [
     category: "MARKETING",
     id: "1129201498087692"
   }
+
+
+  export const messageTempData = [
+    {
+      text: "aaaa",
+      messageBy: "sender",
+      timeStamp: "11:58 AM"
+    },
+    {
+      text: "bbbb",
+      messageBy: "receiver",
+      timeStamp: "11:58 AM"
+    },
+    {
+      text: "Hey there!",
+      messageBy: "sender",
+      timeStamp: "12:05 PM"
+    },
+    {
+      text: "Hi! How are you?",
+      messageBy: "receiver",
+      timeStamp: "12:06 PM"
+    },
+    {
+      text: "I'm doing well, thanks! How about you?",
+      messageBy: "sender",
+      timeStamp: "12:07 PM"
+    },
+    {
+      text: "Not too bad, just busy with work.",
+      messageBy: "receiver",
+      timeStamp: "12:08 PM"
+    },
+    {
+      text: "That sounds hectic. Hope you get some rest soon.",
+      messageBy: "sender",
+      timeStamp: "12:10 PM"
+    },
+    {
+      text: "Thanks, I appreciate it.",
+      messageBy: "receiver",
+      timeStamp: "12:12 PM"
+    },
+    {
+      text: "What are your plans for the weekend?",
+      messageBy: "sender",
+      timeStamp: "12:15 PM"
+    },
+    {
+      text: "Not sure yet, maybe catch up on some reading.",
+      messageBy: "receiver",
+      timeStamp: "12:17 PM"
+    },
+    {
+      text: "Sounds relaxing. I might go for a hike if the weather's nice.",
+      messageBy: "sender",
+      timeStamp: "12:20 PM"
+    },
+    {
+      text: "That sounds like fun. Hopefully, the weather cooperates.",
+      messageBy: "receiver",
+      timeStamp: "12:22 PM"
+    },
+    {
+      text: "Yeah, fingers crossed!",
+      messageBy: "sender",
+      timeStamp: "12:23 PM"
+    },
+    {
+      text: "Definitely!",
+      messageBy: "receiver",
+      timeStamp: "12:24 PM"
+    },
+    {
+      text: "What's your favorite movie genre?",
+      messageBy: "sender",
+      timeStamp: "12:28 PM"
+    },
+    {
+      text: "I like action and comedy. How about you?",
+      messageBy: "receiver",
+      timeStamp: "12:30 PM"
+    },
+    {
+      text: "Same here! Action-packed comedies are the best.",
+      messageBy: "sender",
+      timeStamp: "12:31 PM"
+    },
+    {
+      text: "Agreed!",
+      messageBy: "receiver",
+      timeStamp: "12:31 PM"
+    }
+  ]

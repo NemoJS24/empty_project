@@ -111,7 +111,7 @@ const Dashboard = () => {
                                         <div className='col-md-4'>
                                             <div className='d-flex justify-content-center align-items-center h-100 gap-1'>
                                                 {/* <Link className="btn btn-primary" to="/merchant/SuperLeadz/"> Quick Set-Up</Link> */}
-                                                <Link className="btn btn-primary" to="/merchant/whatsapp/message/"> Create Campaign</Link>
+                                                <Link className="btn btn-primary" to="/merchant/SuperLeadz/themes/"> Create Campaign</Link>
                                             </div>
 
                                         </div>

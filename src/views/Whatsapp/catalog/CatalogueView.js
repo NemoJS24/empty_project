@@ -5,7 +5,6 @@ import { Card, CardBody, Col, Row, Modal,
     ModalBody,
     ModalFooter, 
     Button} from 'reactstrap'
-import wp_back from './imgs/wp_back.png'
 import { Link, useParams } from 'react-router-dom'
 import { getReq, postReq } from '../../../assets/auth/jwtService'
 import { CheckCircle, X } from 'react-feather'
