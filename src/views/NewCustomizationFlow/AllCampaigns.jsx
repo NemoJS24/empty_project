@@ -37,6 +37,8 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
     const [deleteModal, setDeleteModal] = useState(false)
     const [currDetails, setCurrDetails] = useState({})
     const [checkedThemes, setCheckedThemes] = useState([])
+    const [afterModal, setAfterModal] = useState(false)
+    const [deactivateModal, setDeactivateModel] = useState(false)
     const [deleteMode, setDeleteMode] = useState("single")
     const condition = ''
 
@@ -205,6 +207,11 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
         })
         .then(() => {
             getAllThemes()
+            if (!activeThemes.includes(currDetails.id)) {
+                setAfterModal(!afterModal)
+            } else {
+                setDeactivateModel(!deactivateModal)
+            }
         })
         .catch(err => {
             alert(err)
@@ -636,6 +643,32 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                     </Card>
                 </Col>
             </Row>
+            <Modal isOpen={afterModal} toggle={() => setAfterModal(!afterModal)} className='position-relative popup-cust'>
+                <ModalBody>
+                    <span className="position-absolute top-0 end-0" style={{ cursor: 'pointer', padding: "0.25rem" }} onClick={() => setAfterModal(!afterModal)}>
+                        <X size={17.5} />
+                    </span>
+                        Your campaign is live!
+                    <div className="text-end mt-2 d-flex justify-content-end align-items-center gap-1">
+                        <button onClick={() => {
+                            setAfterModal(!afterModal)
+                        }} className={`btn btn-${activeThemes.includes(currDetails.id) ? 'outline-primary' : 'primary'} text-capitalize`}>OK</button>
+                    </div>
+                </ModalBody>
+            </Modal>
+            <Modal isOpen={deactivateModal} toggle={() => setDeactivateModel(!deactivateModal)} className='position-relative popup-cust' >
+                <ModalBody>
+                    <span className="position-absolute top-0 end-0" style={{ cursor: 'pointer', padding: "0.25rem" }} onClick={() => setDeactivateModel(!deactivateModal)}>
+                        <X size={17.5} />
+                    </span>
+                        Your campaign has been deactivated.
+                    <div className="text-end mt-2 d-flex justify-content-end align-items-center gap-1">
+                        <button onClick={() => {
+                            setDeactivateModel(!deactivateModal)
+                        }} className={`btn btn-${activeThemes.includes(currDetails.id) ? 'outline-primary' : 'primary'} text-capitalize`}>OK</button>
+                    </div>
+                </ModalBody>
+            </Modal>
             {/* {checkedThemes.length > 0 && } */}
             <Modal isOpen={modal1} toggle={() => setModal1(!modal1)} className='position-relative popup-cust' >
                 <ModalBody>
@@ -643,10 +676,15 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                         <X size={17.5} />
                     </span>
                     Are you sure you want to {activeThemes.includes(currDetails.id) && 'de'}activate this campaign?
-                    <div className="text-end mt-2"><button onClick={() => {
-                        setModal1(!modal1)
-                        sendConfirmation()
-                    }} className={`btn btn-${activeThemes.includes(currDetails.id) ? 'outline-primary' : 'primary'} text-capitalize`}>{activeThemes.includes(currDetails.id) && 'de'}activate</button></div>
+                    <div className="text-end mt-2 d-flex justify-content-end align-items-center gap-1">
+                        <button onClick={() => {
+                            setModal1(!modal1)
+                        }} className={`btn btn-${activeThemes.includes(currDetails.id) ? 'outline-primary' : 'primary'} text-capitalize`}>No</button>
+                        <button onClick={() => {
+                            setModal1(!modal1)
+                            sendConfirmation()
+                        }} className={`btn btn-${activeThemes.includes(currDetails.id) ? 'outline-primary' : 'primary'} text-capitalize`}>Yes</button>
+                    </div>
                 </ModalBody>
             </Modal>
             <Modal isOpen={conflictModal} onClick={() => setConflictModal(!conflictModal)} toggle={() => setConflictModal(!conflictModal)}>

@@ -33,6 +33,10 @@ export const Integrations = () => {
     }
 
     const integrationPlug = (data) => {
+        if (!userPermission?.installedApps?.includes(data?.integration_app[0]?.slug)) {
+            toast.error("App is not installed")
+            return
+        }
         setApiLoader(true)
         const form_data = new FormData()
         const status = connectedList.includes(data?.integration_app[0]?.unique_id)

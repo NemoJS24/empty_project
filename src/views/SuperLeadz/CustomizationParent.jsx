@@ -3590,7 +3590,7 @@ const CustomizationParent = () => {
 
                     localStorage.removeItem("draftId")
                     setThemeId(data?.data.theme_id)
-                    toast.success("Successfully saved")
+                    toast.success("Your campaign is ready to go live!")
                     if (defaultIsMobile.get("status") === "true") {
                         const getUrl = new URL(`${SuperLeadzBaseURL}/api/v1/get/active-template/`)
                         const form_data = new FormData()
