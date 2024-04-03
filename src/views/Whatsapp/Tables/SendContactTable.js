@@ -7,9 +7,9 @@ import AdvanceServerSide from '../../Components/DataTable/AdvanceServerSide'
 export default function SendContactTable({ groupID }) {
   // const [useLoader, setLoader] = useState(false)
   const [tableData, settableData] = useState([])
+  const [totalData, settotalData] = useState(0)
   const [useSelectedRows, setSelectedRows] = useState([])
   const [isLoading, setIsLoading] = useState(false)
-  const [totalData, settotalData] = useState(0)
   const [useSelectedContacts, setSelectedContacts] = useState([])
 
   const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {

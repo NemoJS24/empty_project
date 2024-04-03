@@ -127,9 +127,9 @@ export default function CreateTemplate() {
   const [useInteractive, setInteractive] = useState([])
   const [useLinkType, setLinkType] = useState("custom")
   const [useButtons, setButtons] = useState({
-    QUICK_REPLY: 3,
-    URL: 2,
-    PHONE_NUMBER: 1
+    QUICK_REPLY: 0,
+    URL: 0,
+    PHONE_NUMBER: 0
   })
 
   // interactive change---------------------------------------------------
@@ -157,41 +157,43 @@ export default function CreateTemplate() {
       }
     } else {
       setInteractive([])
-      uptInteractiveBtnDisplay(oldData)
       // console.log(oldData)
       return // No need to proceed further if type is not recognized
     }
-
-    setInteractive([...oldData, newData])
-    uptInteractiveBtnDisplay([...oldData, newData])
-  }
-
-
-  const uptInteractiveBtnDisplay = (data) => {
-    let btnList = [...data]
-    console.log(data)
-    let btnData = useButtons
-
-    if (btnList.length >= 3) {
-      setButtons({
-        QUICK_REPLY: 0,
-        URL: 0,
-        PHONE_NUMBER: 0
-      })
-
-    } else {
-      btnList.map((ele) => {
-        if (btnData[ele.type] === 0) {
-        } else {
-          btnData[ele.type] -= 1
-        }
-      })
-      setButtons(btnData)
+    const priorityMap = {
+      QUICK_REPLY: 1,
+      URL: 2,
+      PHONE_NUMBER: 3
     }
+
+    // Sort the buttons based on their priority
+    const updatedData = [...oldData, newData].sort((a, b) => priorityMap[a.type] - priorityMap[b.type])
+
+    setInteractive(updatedData)
+    // setInteractive([...oldData, newData])
   }
+
   useEffect(() => {
-    uptInteractiveBtnDisplay(useInteractive)
-  }, [])
+    const count = useInteractive.reduce((acc, elm) => {
+      if (elm.type === "QUICK_REPLY") {
+        acc.QUICK_REPLY++
+      } else if (elm.type === "URL") {
+        acc.URL++
+        acc.QUICK_REPLY++
+      } else if (elm.type === "PHONE_NUMBER") {
+        acc.PHONE_NUMBER++
+        acc.QUICK_REPLY++
+      }
+      return acc
+    }, {
+      QUICK_REPLY: 0,
+      URL: 0,
+      PHONE_NUMBER: 0
+    })
+    setButtons(count)
+    console.log(count)
+  }, [useInteractive])
+
 
   const handleInputChange = (index, field, value) => {
     let oldData = [...useInteractive]
@@ -263,7 +265,7 @@ export default function CreateTemplate() {
   }
 
   const handleTemplateSubmit = () => {
-
+    // console.log("useInteractive", useInteractive)
     if (!formValidation()) {
       return false
     }
@@ -692,22 +694,22 @@ export default function CreateTemplate() {
                   </CardBody>
                   {
                     useInteractive && useInteractive.map((elem) => {
-                      if (elem.type === 'PHONE_NUMBER' && elem.title !== '') {
+                      if (elem.type === 'PHONE_NUMBER' && elem.text !== '') {
                         return (
-                          <div className="border-top  bg-white  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
-                            <Phone size={17} /><h6 className='m-0 text-primary' > {elem.title}</h6>
+                          <div className="border-top bg-white  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                            <Phone size={17} /><h6 className='m-0 text-primary' > {elem.text}</h6>
                           </div>)
                       }
-                      if (elem.type === 'URL' && elem.title !== '') {
+                      if (elem.type === 'URL' && elem.text !== '') {
                         return (
-                          <div className="border-top  bg-white  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
-                            <ExternalLink size={17} /><h6 className='m-0 text-primary' > {elem.title}</h6>
+                          <div className="border-top bg-white  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                            <ExternalLink size={17} /><h6 className='m-0 text-primary' > {elem.text}</h6>
                           </div>)
                       }
-                      if (elem.type === 'QUICK_REPLY' && elem.title !== '') {
+                      if (elem.type === 'QUICK_REPLY' && elem.text !== '') {
                         return (
-                          <div className="border-top  bg-white  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
-                            <CornerDownLeft size={17} /> <h6 className='m-0 text-primary' > {elem.title}</h6>
+                          <div className="border-top bg-white  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                            <CornerDownLeft size={17} /> <h6 className='m-0 text-primary' > {elem.text}</h6>
                           </div>)
                       }
                     })
@@ -865,14 +867,14 @@ export default function CreateTemplate() {
 
                     </div>}
                   <div className='d-flex gap-2 mt-1'>
-                    <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center   gap-1 ${useButtons.QUICK_REPLY === 0 ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("QUICK_REPLY")} >
-                      <Plus size={18} /> <p className='m-0'>Quick Reply</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{useButtons.QUICK_REPLY}</p></div>
+                    <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center   gap-1 ${(useButtons.QUICK_REPLY - 10) === 0 ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("QUICK_REPLY")} >
+                      <Plus size={18} /> <p className='m-0'>Quick Reply</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{10 - (useButtons.QUICK_REPLY)}</p></div>
                     </div>
-                    <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center  gap-1 ${(useButtons.URL === 0) ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("URL")}>
-                      <Plus size={18} /> <p className='m-0'>URL</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{useButtons.URL}</p></div>
+                    <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center  gap-1 ${((useButtons.URL - 2) === 0) ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("URL")}>
+                      <Plus size={18} /> <p className='m-0'>URL</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{2 - (useButtons.URL)}</p></div>
                     </div>
-                    <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center  gap-1 ${(useButtons.PHONE_NUMBER === 0) ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("PHONE_NUMBER")}>
-                      <Plus size={18} /> <p className='m-0'>Phone Number</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{useButtons.PHONE_NUMBER}</p></div>
+                    <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center  gap-1 ${((useButtons.PHONE_NUMBER - 1) === 0) ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("PHONE_NUMBER")}>
+                      <Plus size={18} /> <p className='m-0'>Phone Number</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{1 - useButtons.PHONE_NUMBER}</p></div>
                     </div>
                   </div>
                 </div>
