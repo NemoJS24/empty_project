@@ -275,7 +275,7 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
             </label>
             <select className='form-control' disabled={custom} value={currentEntry} onChange={(e) => {
               setCurrentEntry(Number(e.target.value))
-            }} style={{ appearance: 'auto' }}>
+            }} style={{ appearance: 'auto', minWidth:"70px" }}>
               {
                 custom ? <option value={5}>5</option> : pageNo.map(page => <option value={page.value}>{page.label}</option>)
               }

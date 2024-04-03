@@ -15,11 +15,11 @@ export default function ContactsTable() {
   const [useLoader, setLoader] = useState(false)
   const fileInputRef = useRef(null)
   const containerRef = useRef(null)
-  const [tableData, settableData] = useState([])
+  const [tableData, setTableData] = useState([])
   const [useSelectedRows, setSelectedRows] = useState([])
   const [useSelectedGroups, setSelectedGroups] = useState([])
   const [isLoading, setIsLoading] = useState(false)
-  const [totalData, settotalData] = useState(0)
+  const [totalData, setTotalData] = useState(0)
   const [useGroupList, setGroupList] = useState([])
 
   const [modal1, setModal1] = useState(false)
@@ -44,8 +44,8 @@ export default function ContactsTable() {
       .then(response => {
         // Handle the successful response here
         console.log('Response:', response.data.contact_details_obj)
-        settableData(response.data.contact_details_obj)
-        settotalData(response.data.contact_count)
+        setTableData(response.data.contact_details_obj)
+        setTotalData(response.data.contact_count)
       })
       .catch(error => {
         // Handle errors here
@@ -133,29 +133,48 @@ export default function ContactsTable() {
     {
       name: 'First Name',
       minWidth: '200px',
-      selector: row => row?.contact_first_name, // Assuming 'name' is the property in your data for the name
+      selector: row => row?.contact_first_name ?? '', // Assuming 'name' is the property in your data for the name
       dataType: 'email',
       type: 'text',
       isEnable: true
     },
     {
       name: 'Last Name',
-      minWidth: '15%',
-      selector: row => row?.contact_last_name, // Assuming 'category' is the property in your data for the category
+      minWidth: '100px',
+      selector: row => row?.contact_last_name ?? '', // Assuming 'category' is the property in your data for the category
       type: 'select',
       isEnable: true
     },
     {
       name: 'Country Code',
-      minWidth: '15%',
-      selector: row => row?.contact_details_phone_code, // Assuming 'category' is the property in your data for the category
+      minWidth: '100px',
+      selector: row => row?.contact_details_phone_code ?? '', // Assuming 'category' is the property in your data for the category
       type: 'select',
       isEnable: true
     },
     {
       name: 'Contact',
-      minWidth: '15%',
-      selector: row => row?.contact_details_contact, // Assuming 'category' is the property in your data for the category
+      minWidth: '100px',
+      selector: row => row?.contact_details_contact ?? '', // Assuming 'category' is the property in your data for the category
+      type: 'select',
+      isEnable: true
+    },
+    {
+      name: 'Groups',
+      minWidth: '100px',
+      selector: row => (row?.contact_details_groups ? (<div className='d-flex flex-wrap' >
+        {
+          JSON.parse(row?.contact_details_groups) && JSON.parse(row?.contact_details_groups).map((data, index) => {
+            return (
+              <div key={index}>
+                <span className='ms-1'>{data}</span>
+                {index < JSON.parse(row?.contact_details_groups).length - 1 && <span className=''>, </span>}
+              </div>
+            )
+          })
+        }
+      </div>) : ''), // Assuming 'category' is the property in your data for the category
+      // selector: row => row?.contact_details_groups ?? (<div className='  ' > <span className='btn border'> Vips </span> <span className='btn border'> Offers </span> <span className='btn border'> Vips </span> <span className='btn border'> Offers </span></div>), // Assuming 'category' is the property in your data for the category
       type: 'select',
       isEnable: true
     }
