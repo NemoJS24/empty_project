@@ -4,6 +4,14 @@ import { PermissionProvider } from "../../Helper/Context"
 import { useContext } from "react"
 import { SuperLeadzBaseURL, affiliateURL } from "../../assets/auth/jwtService"
 import moment from "moment/moment"
+import ReactGA from "react-ga4"
+
+export const useAnalyticsPageViewTracker = (curTitle, path) => {
+    ReactGA.initialize('G-4NRGB5EKCP') //xircls
+    // ReactGA.initialize('G-0K44CMK09X') //demo
+    console.log("hitting Google")
+    ReactGA.send({ page: path, title: curTitle })
+}
 
 export const imageValidation = (e, size = 100) => {
     const maxSizeKB = size //Size in KB

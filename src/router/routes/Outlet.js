@@ -2,6 +2,7 @@ import { lazy } from 'react'
 import VerifyYourEmail from '../../views/Outlet/VerifyYourEmail'
 import Campaign from '../../views/Apps/CampaignPage'
 import VerifyYourDomain from '../../views/Outlet/VerifyYourDomain'
+import { Integrations } from '../../views/Outlet/Integrations'
 const OutletProfiling = lazy(() => import('../../views/Outlet/OutletProfiling'))
 const TargetProfiling = lazy(() => import('../../views/Outlet/TargetProfiling'))
 const AddCompany = lazy(() => import('../../views/Outlet/AddCompany'))
@@ -66,6 +67,10 @@ const Outlet_Routes = [
   {
     path: "/merchant/campaign/verify_your_email/:id/",
     element: <VerifyYourEmail /> 
+  },
+  {
+    path: "/merchant/integrations/",
+    element: <Integrations />
   }
 ]
 

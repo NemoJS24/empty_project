@@ -147,16 +147,16 @@ const BlogDetails = ({ blogTitle }) => {
               <div className='t mt-5' >
                   <h3 className='fs-4 '>Share This Post:
                     <div className='d-inline-block' >
-                      <a href="http://twitter.com/share?text=XIRCLS&url=www.xircls.com" target="_blank" style={{ color: 'inherit' }}>
+                      <a href={`https://twitter.com/intent/tweet?url=${location.href}`} target="_blank" style={{ color: 'inherit' }}>
                         <FaTwitter className='ms-3' />
                       </a>
-                      <a href='https://www.linkedin.com/sharing/share-offsite/?url={www.xircls.com}' target='_blank' style={{ color: 'inherit' }} className='text-decoration-none' >
+                      <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${location.href}`} target='_blank' style={{ color: 'inherit' }} className='text-decoration-none' >
                         <FaLinkedin className='ms-4' />
                       </a>
-                      <a href="whatsapp://send?text=www.xircls.com" target="_blank" className='text-decoration-none' style={{ color: 'inherit' }}>
+                      <a href={`whatsapp://send?text=${location.href}`} target="_blank" className='text-decoration-none' style={{ color: 'inherit' }}>
                         <FaWhatsapp className='ms-4' />
                       </a>
-                      <a href="mailto:?subject=I wanted you to see this blog page&ampbody=Check out this blog http://www.xircls.com"
+                      <a href={`mailto:?subject=I wanted you to see this blog page&body=Check out this blog ${location.href}`}
                         title="Share by Email" target="_blank" className='text-decoration-none' style={{ color: 'inherit' }}>
                         <AiOutlineMail className='ms-4' />
                       </a>

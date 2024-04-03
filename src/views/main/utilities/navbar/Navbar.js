@@ -190,9 +190,9 @@ const Navbar = ({ position, hideMenu }) => {
                   </ul>
                 </div>
               </li>
-              <Link to='/partners' className='navTitle fs-4 text-dark text-center' > <li ><p>Partners</p></li></Link>
+              <Link to='/partners' className='navTitle fs-4 text-dark text-center'> <li ><p>Partners</p></li></Link>
               {/* <Link to='/developers' className='fs-4 text-dark text-center'> <li ><p>Developers</p></li></Link> */}
-              <Link to='/blog' className='navTitle fs-4 text-dark text-center' > <li ><p>Blog</p></li></Link>
+              <Link to='/blog' className='navTitle fs-4 text-dark text-center'> <li ><p>Blog</p></li></Link>
 
               <li className='aboutLi ItemsList' onClick={() => mouseClick("company")} onMouseEnter={() => mouseEnter("company")} onMouseLeave={() => mouseLeave("company")}>
                 <p className='navTitle text-dark fs-4 '>Company <IoIosArrowDown color="#9e9e9eff" className={ShowCompany ? "rotate-180" : ""} /></p>

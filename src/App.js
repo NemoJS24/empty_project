@@ -5,8 +5,9 @@ import Router from './router/Router'
 
 // ** Routes & Default Routes
 import { getRoutes } from './router/routes'
-import ReactGA from 'react-ga'
-ReactGA.initialize('G-4NRGB5EKCP')
+import ReactGA from 'react-ga4'
+ReactGA.initialize('G-4NRGB5EKCP') //xircls
+// ReactGA.initialize('G-0K44CMK09X') //demo
 
 // ** Hooks Imports
 import { useLayout } from '@hooks/useLayout'

@@ -82,12 +82,12 @@ export const InfinitiNavigation = [
         //   navLink: '/merchant/report/visual_reports/'
       }
     ]
-  },
-  {
-    id: 'support',
-    title: 'Support',
-    icon: <AiFillPhone size={16} />,
-    navLink: '/merchant/support/'
   }
+  // {
+  //   id: 'support',
+  //   title: 'Support',
+  //   icon: <AiFillPhone size={16} />,
+  //   navLink: '/merchant/support/'
+  // }
 
 ]

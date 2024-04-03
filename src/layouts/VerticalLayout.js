@@ -13,7 +13,7 @@ import { referralNavigation } from '../navigation/Apps/Referral'
 import { flashAccountsNavigation } from '../navigation/Apps/FlashAccounts'
 // import { useContext } from 'react'
 // import { PermissionProvider } from '../Helper/Context'
-import { DefaultNav } from '../navigation/Apps/DefualtNav'
+import { DefaultNav, FooterNav } from '../navigation/Apps/DefualtNav'
 import { ProductReviewNavigation } from '../navigation/Apps/ProductReview'
 import { OhMyCustomerNavigation } from '../navigation/Apps/OhMyCustomer'
 import { CRMNavigation } from '../navigation/Apps/CRM'
@@ -30,19 +30,19 @@ console.log(userPermission)
   let navigation = []
 
   if (userPermission?.appName === "superleadz") {
-    navigation = SuperLeadzNavigation
+    navigation = [...SuperLeadzNavigation, ...FooterNav]
   } else if (userPermission?.appName === "infiniti") {
-    navigation = InfinitiNavigation
+    navigation = [...InfinitiNavigation, ...FooterNav]
   } else if (userPermission?.appName === "referral") {
-    navigation = referralNavigation
+    navigation = [...referralNavigation, ...FooterNav]
   } else if (userPermission?.appName === "flash_accounts") {
-    navigation = flashAccountsNavigation
+    navigation = [...flashAccountsNavigation, ...FooterNav]
   } else if (userPermission?.appName === "product_review") {
-    navigation = ProductReviewNavigation
+    navigation = [...ProductReviewNavigation, ...FooterNav]
   } else if (userPermission?.appName === "crm") {
-    navigation = CRMNavigation
+    navigation = [...CRMNavigation, ...FooterNav]
   } else if (userPermission?.appName === "whatsapp") {
-    navigation = WhatsappNavigation
+    navigation = [...WhatsappNavigation, ...FooterNav]
   } else {
     navigation = DefaultNav
   }

@@ -8,7 +8,7 @@ import { PermissionProvider, ThemesProvider } from '../../Helper/Context'
 import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
 // import { getCurrentOutlet } from '../Validator'
 import Spinner from '../Components/DataTable/Spinner'
-import { Copy, Edit, Edit2, Edit3, Eye, Grid, Layout, MoreVertical, Plus, Table, Trash, X } from 'react-feather'
+import { Copy, Edit, Edit2, Edit3, Eye, Grid, Info, Layout, MoreVertical, Plus, Table, Trash, X } from 'react-feather'
 import { defaultFormatDate, getCurrentOutlet } from '../Validator'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 // import pixels from "../../assets/images/superLeadz/pixels.png"
@@ -58,9 +58,13 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
 
     // const toggleDateModal = () => setDateModal(!dateModal)
 
-    const GridCard = ({ title, data }) => {
+    const GridCard = ({ title, data, info }) => {
         return <Col md="6" className='border text-start d-flex align-items-center justify-content-between p-2'>
-            <p className=" h5 card-text ms-1">{title} </p>
+            <p style={{ borderBottom: '0px dotted lightgray', fontSize: '18px', whiteSpace: 'nowrap', paddingRight: '10px' }} className='h5 card-text m-0 ms-1 position-relative cursor-default'>
+                {title}
+                {info ? <span className='position-absolute' title={info} style={{ top: '-10px', right: '-4px', cursor: 'pointer' }}><Info size={12} /></span> : ''}
+            </p>
+            {/* <p className=" h5 card-text ms-1">{title} </p> */}
             <h4 className=' ps-2 me-1'>{data ? data : 0}</h4>
         </Col>
     }
@@ -112,20 +116,20 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                 console.log(data?.grid_view_data, "data?.grid_view_data")
 
                 const campaignData = data?.grid_view_data
-                if (campaignData && campaignData?.length > 0) {
-                    if (Array.isArray(campaignData) && campaignData.length >= 1) {
-                        campaignData[0].defaultExpanded = true
-                    }
-                    // if (Boolean(campaignData[0].defaultExpanded)) {
-                    // }
-                    setAllCampaigns(campaignData)
-                    // }
-                    setCount(data?.total_count)
-                    data.is_active.forEach(ele => {
-                        newArr.push(Number(ele))
-                    })
-                    setActiveThemes([...newArr])
+                // if (campaignData && campaignData?.length > 0) {
+                if (Array.isArray(campaignData) && campaignData.length >= 1) {
+                    campaignData[0].defaultExpanded = true
                 }
+                // if (Boolean(campaignData[0].defaultExpanded)) {
+                // }
+                setAllCampaigns(campaignData)
+                // }
+                setCount(data?.total_count)
+                data.is_active.forEach(ele => {
+                    newArr.push(Number(ele))
+                })
+                setActiveThemes([...newArr])
+                // }++
                 setIsLoading(false)
             }).catch((err) => {
                 console.log(err)
@@ -565,11 +569,11 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
 
                                                                 <GridCard title="Impressions" data={curElem[`${condition}pop_up_view`]} info={`Number of times pop-up was shown.`} />
 
-                                                                <GridCard title="Leads" data={curElem[`${condition}total_leads`]} info={`Number of leads (total)`} />
+                                                                <GridCard title="Leads" data={curElem[`${condition}total_leads`]} info={`Total instances of visitors submitting their contact information through a SuperLeadz pop-up`} />
 
                                                                 <GridCard title="Conversion %" data={`${Number(curElem[`${condition}conversion_rate`]).toFixed(2)}%`} info={`Number of leads (total) / Number of redemptions`} />
 
-                                                                <GridCard title="CTR" data={`${(curElem?.clicks && curElem[`${condition}pop_up_view`]) ? Number(curElem[`${condition}clicks`] / curElem[`${condition}pop_up_view`] * 100).toFixed(2) : 0}%`} info={`Number of clicks / Number of impressions * 100`} />
+                                                                <GridCard title="CTR" data={`${(curElem?.clicks && curElem[`${condition}pop_up_view`]) ? Number(curElem[`${condition}clicks`] / curElem[`${condition}pop_up_view`] * 100).toFixed(2) : 0}%`} info={`The percentage of clicks relative to the total number of impressions`} />
 
                                                                 <Col md="6" className='d-none'>
                                                                     <GridCard title="Conversions" data={curElem?.conversion} info={`Number of redemptions.`} />
@@ -638,8 +642,8 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                     <span className="position-absolute top-0 end-0" style={{ cursor: 'pointer', padding: "0.25rem" }} onClick={() => setModal1(!modal1)}>
                         <X size={17.5} />
                     </span>
-                    Do you want to {activeThemes.includes(currDetails.id) && 'de'}activate this theme?
-                    <div className="text-end"><button onClick={() => {
+                    Are you sure you want to {activeThemes.includes(currDetails.id) && 'de'}activate this campaign?
+                    <div className="text-end mt-2"><button onClick={() => {
                         setModal1(!modal1)
                         sendConfirmation()
                     }} className={`btn btn-${activeThemes.includes(currDetails.id) ? 'outline-primary' : 'primary'} text-capitalize`}>{activeThemes.includes(currDetails.id) && 'de'}activate</button></div>

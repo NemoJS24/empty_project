@@ -58,7 +58,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "An end-to-end martech stack for every step of the buyer journey."
+    title: "An end-to-end martech stack for every step of the buyer journey.",
+    trackingTitle: "Home"
   },
   {
     path: '/partners',
@@ -67,7 +68,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Partners - Grow your business"
+    title: "Partners - Grow your business",
+    trackingTitle: "Partners"
   },
   {
     path: '/partners/faq',
@@ -247,7 +249,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Blog: News, opinions and perspectives"
+    title: "Blog: News, opinions and perspectives",
+    trackingTitle: "Blog"
   },
   // {
   //   path: '/blog/:blogTitle',

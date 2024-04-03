@@ -10,6 +10,7 @@ import usa from './img/usa.png'
 import { Link } from "react-router-dom"
 import toast from "react-hot-toast"
 import { aboutList, productList } from "../navbar/Navbar"
+// import { useAnalyticsEventTracker } from "../../../Validator"
 
 const Footer = () => {
 
@@ -28,7 +29,7 @@ const Footer = () => {
                         <div  >
                             <Link to='/'><img className='mb-1' src={logo} alt="logo" width={200} style={{ marginTop: "-30px" }} /></Link>
                             <h5>An end-to-end martech stack.</h5>
-
+                            {/* <a className="" onClick={() => useAnalyticsEventTracker()}>Click</a> */}
 
                             <div className='d-flex justify-content-start align-items-center mt-2 '>
                                 <a href="/" className=''>

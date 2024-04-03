@@ -3,7 +3,6 @@ import { Circle, Home } from "react-feather"
 import { AiFillPhone, AiOutlineBars, AiOutlineClockCircle, AiOutlineHighlight, AiOutlineLineChart, AiOutlinePercentage, AiOutlineQuestion, AiOutlineSmile, AiOutlineStar, AiOutlineUser } from "react-icons/ai"
 import { BiDollar } from "react-icons/bi"
 import { DefaultNav } from "./DefualtNav"
-import twentyfourseven from "../../views/SuperLeadz/assets/2020773.png"
 
 export const SuperLeadzNavigation = [
   ...DefaultNav,
@@ -82,11 +81,17 @@ export const SuperLeadzNavigation = [
     title: 'FAQs',
     icon: <AiOutlineQuestion size={16} />,
     navLink: '/merchant/SuperLeadz/faq/'
-  },
-  {
-    id: 'support',
-    title: 'Support',
-    icon: <img style={{ marginRight: "1.1rem" }} src={twentyfourseven} width={16} />,
-    navLink: '/merchant/support/'
   }
+  // {
+  //   id: 'integrations',
+  //   title: 'Integrations',
+  //   icon: <Circle size={16} />,
+  //   navLink: '/merchant/integrations/'
+  // },
+  // {
+  //   id: 'support',
+  //   title: 'Support',
+  //   icon: <img style={{ marginRight: "1.1rem" }} src={twentyfourseven} width={16} />,
+  //   navLink: '/merchant/support/'
+  // }
 ]

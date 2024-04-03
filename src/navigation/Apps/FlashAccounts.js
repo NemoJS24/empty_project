@@ -32,7 +32,7 @@ export const flashAccountsNavigation = [
         title: 'Campaigns',
         icon: <AiOutlineBars size={16} />,
         navLink: '/merchant/Flash_Accounts/all_campaigns/'
-    },
+    }
     // {
     //     id: 'setup',
     //     title: 'Setup',
@@ -51,10 +51,10 @@ export const flashAccountsNavigation = [
     //     icon: <BiDollar size={16} />,
     //     navLink: '/merchant/Flash_Accounts/billing/'
     // },
-    {
-        id: 'support',
-        title: 'Support',
-        icon: <AiFillPhone size={16} />,
-        navLink: '/merchant/support/'
-    }
+    // {
+    //     id: 'support',
+    //     title: 'Support',
+    //     icon: <AiFillPhone size={16} />,
+    //     navLink: '/merchant/support/'
+    // }
 ]

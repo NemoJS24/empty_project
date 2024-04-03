@@ -220,8 +220,12 @@ const SuperLeadzBilling = () => {
                                 <DollarSign size="27px" />
                             </div>
                             <div className="d-flex justify-content-between align-items-baseline">
-                                <p className="mb-0 h5 card-text position-relative cursor-default p-0">
+                                {/* <p className="mb-0 h5 card-text position-relative cursor-default p-0">
                                     Current Plan
+                                </p> */}
+                                <p style={{ borderBottom: '0px dotted lightgray', whiteSpace: 'nowrap', paddingRight: '10px' }} className='m-0 h5 position-relative cursor-default'>
+                                    Current Plan
+                                    <span className='position-absolute' title={"The plan you are currently subscribed to"} style={{ top: '-10px', right: '-4px', cursor: 'pointer' }}><Info size={12} /></span>
                                 </p>
                                 <h3 className='m-0'>
                                     {billing?.mainData[0]?.plan_id}
@@ -241,8 +245,12 @@ const SuperLeadzBilling = () => {
                                 }} className='btn btn-sm btn-success text-white'>Upgrade</button>
                             </div>
                             <div className="d-flex justify-content-between align-items-baseline">
-                                <p className="mb-0 h5 card-text position-relative cursor-default p-0">
+                                {/* <p className="mb-0 h5 card-text position-relative cursor-default p-0">
                                     Visits
+                                </p> */}
+                                <p style={{ borderBottom: '0px dotted lightgray', whiteSpace: 'nowrap', paddingRight: '10px' }} className='m-0 h5 position-relative cursor-default'>
+                                    Remaining Visits
+                                    <span className='position-absolute' title={"Visits remaining in your plan’s usage limit"} style={{ top: '-10px', right: '-4px', cursor: 'pointer' }}><Info size={12} /></span>
                                 </p>
                                 <h3 className='m-0'>
                                     {billing?.usage_count}/{billing?.usage_charge}

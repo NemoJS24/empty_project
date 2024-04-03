@@ -4,9 +4,10 @@ import jwtDecode from "jwt-decode"
 import toast from "react-hot-toast"
 import { Navigate } from "react-router-dom"
 
-// export const baseURL = "https://api.demo.xircls.in"
-// export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
-// export const crmURL = "https://crm.demo.xircls.in"
+export const baseURL = "https://api.demo.xircls.in"
+export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
+export const crmURL = "https://crm.demo.xircls.in"
+export const affiliateURL = "https://api.demo.affiliate.xircls.com"
 
 // const URLs = {
 //     baseURL,
@@ -15,11 +16,10 @@ import { Navigate } from "react-router-dom"
 // }
 
 // Live 
-export const baseURL = "https://api.xircls.com"
-export const SuperLeadzBaseURL = "https://apps.xircls.com"
-export const crmURL = "https://crm.xircls.com"
-
-export const affiliateURL = "https://api.affiliate.xircls.com"
+// export const baseURL = "https://api.xircls.com"
+// export const SuperLeadzBaseURL = "https://apps.xircls.com"
+// export const crmURL = "https://crm.xircls.com"
+// export const affiliateURL = "https://api.affiliate.xircls.com"
 
 export const configUrl = {
 
@@ -222,7 +222,9 @@ export const configUrl = {
     send_catalog: "talk/send_catalog/",
     template_active: "talk/template_active/",
     template_view: "talk/template_view/",
-    messagelog_view: "talk/messagelog_view/"
+    messagelog_view: "talk/messagelog_view/",
+    integration: "integration-hub/integration_get_details/",
+    integrationPlug: "integration-hub/integration_connect/"
 }
 
 const axiosInstance = axios.create({

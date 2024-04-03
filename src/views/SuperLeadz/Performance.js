@@ -205,7 +205,7 @@ export default function SuperLeadzPerformance() {
             selector: (row) => row.codeDiscount.title
         },
         {
-            name: "Redemption",
+            name: "Redemptions",
             selector: (row) => row.codeDiscount.asyncUsageCount
         },
         // {
@@ -269,7 +269,7 @@ export default function SuperLeadzPerformance() {
                 <div className="col-4">
                     <CardCom
                         icon={<img src="https://cdn-icons-png.flaticon.com/512/2864/2864787.png" width="25px" />}
-                        title="Total Redemption"
+                        title="Total Redemptions"
                         data={offerData?.isOfferData ? offerData?.redemption : <Spinner size={'25px'} />}
                         info={`Total leads who redeemed their discount`}
                     />

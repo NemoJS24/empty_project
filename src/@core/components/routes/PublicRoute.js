@@ -1,11 +1,13 @@
 // ** React Imports
-import { Suspense } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Suspense, useEffect } from 'react'
+import { Navigate, useLocation } from 'react-router-dom'
 
 // ** Utils
 import { getUserData, getHomeRouteForLoggedInUser } from '@utils'
+import { useAnalyticsPageViewTracker } from '@src/views/Validator'
 
 const PublicRoute = ({ children, route }) => {
+  const location = useLocation()
   if (route) {
     const user = getUserData()
 
@@ -15,6 +17,13 @@ const PublicRoute = ({ children, route }) => {
       return <Navigate to={getHomeRouteForLoggedInUser(user.role)} />
     }
   }
+
+  useEffect(() => {
+    if (route?.trackingTitle) {
+      console.log(route, "route")
+      useAnalyticsPageViewTracker(route?.trackingTitle, location.pathname)
+    }
+  }, [location.pathname])
 
   return <Suspense fallback={null}>{children}</Suspense>
 }
