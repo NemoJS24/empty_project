@@ -27,9 +27,9 @@ const PermissionWrapper = ({children}) => {
 
     useEffect(() => {
         // console.log(userPermission, "changed")
-        console.log("Entered useEffect")
+        // console.log("Entered useEffect")
         if (getToken()) {
-            console.log("Entered getToken()", getToken())
+            // console.log("Entered getToken()", getToken())
             localStorage.setItem('userPermission', JSON.stringify(userPermission))
         }
 

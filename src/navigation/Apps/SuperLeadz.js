@@ -86,7 +86,7 @@ export const SuperLeadzNavigation = [
   //   id: 'integrations',
   //   title: 'Integrations',
   //   icon: <Circle size={16} />,
-  //   navLink: '/merchant/integrations/'
+  //   navLink: '/merchant/integration/'
   // },
   // {
   //   id: 'support',

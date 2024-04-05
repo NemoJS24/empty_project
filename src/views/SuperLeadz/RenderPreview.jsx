@@ -18,7 +18,7 @@ import BasicEditor from '../Components/Editor/BaseEditor'
 import { GiHorizontalFlip } from "react-icons/gi"
 
 const RenderPreview = (props) => {
-    const { outletData, slPrevBg, bgsettings, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition, bgStyles, crossStyle, values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise, setcolWise, setDragStartIndex, setDragOverIndex, isMobile, finalObj, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles, offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, isColDragging, isColRes, setIsColRes, resizeMouse, setResizeMouse } = props
+    const { outletData, slPrevBg, bgsettings, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition, bgStyles, crossStyle, values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise, setcolWise, setDragStartIndex, setDragOverIndex, isMobile, finalObj, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles, offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, isColDragging, isColRes, setIsColRes, resizeMouse, setResizeMouse, selectedTemID } = props
     const [editorBar, setEditorBar] = useState(true)
     const { userPermission } = useContext(PermissionProvider)
     const setDragEnter = (e, { position, id }) => {
@@ -308,7 +308,7 @@ const RenderPreview = (props) => {
                                             <div >
                                                 <div id="emailTemplateId"></div>
                                                 <BasicEditor elementId={`emailTemplateId`}
-                                                    style={{ width: '100%' }} key={finalObj?.email_settings?.editorState}
+                                                    style={{ width: '100%' }} key={selectedTemID}
                                                     // hideToolbar={editorBar}
                                                     editorState={finalObj?.email_settings?.editorState}
                                                     htmlContent={finalObj?.email_settings?.htmlContent}

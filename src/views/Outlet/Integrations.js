@@ -49,9 +49,9 @@ export const Integrations = () => {
             console.log(resp)
             setConnectedList(resp?.data?.connected_app_list?.map((curElem) => curElem?.unique_id))
             if (status) {
-                toast.success("Disconnected")
+                toast.success("App Disconnected")
             } else {
-                toast.success("Connected")
+                toast.success("App Integrated")
             }
         })
         .catch((error) => {

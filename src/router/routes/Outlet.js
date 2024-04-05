@@ -69,7 +69,7 @@ const Outlet_Routes = [
     element: <VerifyYourEmail /> 
   },
   {
-    path: "/merchant/integrations/",
+    path: "/merchant/integration/",
     element: <Integrations />
   }
 ]

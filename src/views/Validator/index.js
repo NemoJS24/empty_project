@@ -92,6 +92,10 @@ export const timelineName = {
         is_campaign_started: "/merchant/superleadz/templates",
         is_campaign_completed: "/merchant/campaign/"
     },
+    flash_accounts: {
+        is_plan_purchased: "/merchant/Flash_Accounts/joinus/",
+        is_campaign_started: "/merchant/Flash_Accounts/all_campaigns/"
+    },
     whatsapp: {
         is_business: "/merchant/whatsapp/business_creation/",
         // is_business: "/merchant/whatsapp/is_business/",

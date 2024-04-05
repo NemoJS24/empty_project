@@ -76,25 +76,10 @@ const SuperLeadzCampaign = ({toLoadCampaign, outletData}) => {
         <>
         {
             data.isLoading ? <div> <Spinner size={'30px'} /> </div> : data?.timeLine.filter((cur) => cur.isShow).map((curElem, key) => {
-                
-                // const noView = ["is_plugin_installed", "is_plan_purchased", "is_ret_offer_created", "is_acq_offer_created"]
 
                 const url = curElem.key === "is_outlet_created" ? `${outletDetails[0]?.id}/` : ''
                 const color = curElem.isComplete ? 'success' : 'danger'
-                // const showView = noView.includes(curElem.key)
-
-
                 return (
-                    // <li key={key} className="position-relative px-2 pb-2" style={{ borderLeft: '0.5px dotted black' }}>
-                    //     <span className={`position-absolute rounded-pill bg-${color}`} style={{ width: 14, height: 14, top: 0, left: 0, transform: 'translate(-7px, 2.5px)' }}></span>
-                    //     <div>
-                            
-                    //         <h5>{curElem.name}</h5>
-                    //         {
-                    //             curElem.isComplete === 1 ? showView ? <Link className='isComplete' to={`${timelineName[userPermission.appName][curElem.key]}${url}`}>Preview </Link> : "" : <Link className='isComplete' to={`${timelineName[userPermission.appName][curElem.key]}${url}`}>Complete Now</Link>
-                    //         }
-                    //     </div>
-                    // </li>
                     <div key={key} className="boxs aa col-md p-2 d-flex justify-content-center align-item-center">
                         {
                             color === "success" ? <>

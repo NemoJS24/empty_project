@@ -58,7 +58,12 @@ const Processing = () => {
           if (params.get('app') === "infiniti") {
             navigate("/merchant/campaign/")
           } else {
-            navigate(dashboardURL[params.get('app')])
+            try {
+              navigate(dashboardURL[params.get('app')])
+            } catch (error) {
+              navigate("/merchant/apps/")
+              console.log(error)
+            }
           }
 
         }

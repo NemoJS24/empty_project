@@ -494,29 +494,6 @@ function SuperLeadzDashboard() {
                                                 <div className='bg-primary text-center rounded-right WidthAdjust' style={{ width: "425px", padding: "6px", marginLeft: '-25px' }}>
                                                     <h4 className='bb text-white m-0' style={{ fontSize: "16px" }}>Complete these steps to convert leads faster!</h4>
                                                 </div>
-                                                <div className="right d-none justify-content-end align-items-center gap-1">
-                                                    <select className='form-control' style={{ width: '140px' }} onChange={(e) => setSetFilterType(e.target.value)}>
-                                                        {
-                                                            options.map((curElem) => {
-                                                                return  <option value={curElem.value} selected={curElem.value === filterType}>{curElem.label}</option>
-                                                            })
-                                                        }
-                                                        
-                                                    </select>
-
-                                                    {
-                                                        filterType === "custom" ? (
-                                                            <div className="custom">
-                                                                <Flatpickr options={{ // Sets the minimum date as 14 days ago
-                                                                    maxDate: "today", // Sets the maximum date as today
-                                                                    mode: "range",
-                                                                    dateFormat: "Y-m-d"
-                                                                }} className='form-control' value={selectedData} onChange={(date) => setSelectedData(date)} id='default-picker' placeholder='Search' />
-
-                                                            </div>
-                                                        ) : ''
-                                                    }
-                                                </div>
                                             </div>
                                             {/* <div className='cc text-center my-1 rounded-right ' style={{ width: "40px", padding: "6px", position: "absolute", left: "30px", top: "-1px", rotate: "290deg", zIndex: "-999", backgroundColor: "#4233ea" }}>
                                                 <h4 className='text-info'>Complete</h4>

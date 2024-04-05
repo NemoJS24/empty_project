@@ -57,7 +57,11 @@ const JoinUs = () => {
                 postReq('planSubscription', form_data)
                 .then((resp) => {
                     console.log(resp)
-                    navigate("/merchant/SuperLeadz/billing/")
+                    if (appName.toLocaleLowerCase() === "superLeadz") {
+                        navigate("/merchant/SuperLeadz/billing/")
+                    } else {
+                        navigate("/merchant/Flash_Accounts/billing/")
+                    }
                     setUserPermission({...userPermission, currentPlan: {...userPermission?.currentPlan, plan: planName}})
                 })
                 .catch((error) => {

@@ -39,6 +39,8 @@ import { TbReplace } from "react-icons/tb"
 import "./Customization.css"
 import { FaCrown } from "react-icons/fa"
 import { MdOutlineRefresh } from "react-icons/md"
+import { Reload } from 'tabler-icons-react'
+import { RenderTemplateUI } from '../Whatsapp/SmallFunction'
 
 
 export const fontStyles = [
@@ -88,6 +90,8 @@ const convertToSeconds = ({ time, type }) => {
         return time * 3600
     } else if (type === "minutes") {
         return time * 60
+    } else if (type === "days") {
+        return time * 86400
     } else {
         return time
     }
@@ -118,14 +122,14 @@ const CustomizationParent = () => {
     // const status = (defaultIsMobile.get('isMobile') !== "false" && defaultIsMobile.get('isMobile') !== undefined && defaultIsMobile.get('isMobile') !== null && defaultIsMobile.get('isMobile') !== false)
 
     const [isMobile, setIsMobile] = useState(defaultIsMobile.get('isMobile') !== "false" && defaultIsMobile.get('isMobile') !== undefined && defaultIsMobile.get('isMobile') !== null && defaultIsMobile.get('isMobile') !== false)
-
+    const [whatsAppTemplate, setWhatsAppTemplate] = useState([])
     // const [isDragging, setIsDragging] = useState(false)
 
     // const [suggestions, setSuggestions] = useState([])
 
     const mobileCondition = isMobile ? "mobile_" : ""
     const mobileConditionRev = !isMobile ? "mobile_" : ""
-
+    const [selectedTemID, setSelectedTemID] = useState("")
     const { allThemes, selectedThemeId } = useContext(ThemesProvider)
 
     const allPreviews = [...allThemes]
@@ -147,14 +151,23 @@ const CustomizationParent = () => {
     const [nameEdit, setNameEdit] = useState(true)
     const [currPage, setCurrPage] = useState(defObj?.[`${mobileCondition}pages`][0]?.id)
     const [draggedInputType, setDraggedInputType] = useState("none")
-
+    const [whatsAppTem, setWhatsappTem] = useState([])
     const pageCondition = currPage === "button" ? "button" : "main"
-
+    // const [whatsappJson, setWhatsappJson] = useState({
+    //     template: "",
+    //     delay: ""
+    // })
     const outletData = getCurrentOutlet()
     const visibleOnOptions = [
         { value: 'scroll', label: 'Scroll' },
         { value: 'delay', label: 'Delay' },
         { value: 'button_click', label: 'Button Click' }
+    ]
+
+    const deplayTime = [
+        {label: "Minutes", value: "minutes"},
+        {label: "Hours", value: "hours"},
+        {label: "Days", value: "days"}
     ]
 
     const pagesSelection = [
@@ -195,6 +208,8 @@ const CustomizationParent = () => {
         selectedType: "navMenuStyles"
     })
 
+    const [connectedList, setConnectedList] = useState([])
+
     const [openPage, setOpenPage] = useState(true)
 
     const [gotDragOver, setGotDragOver] = useState({ cur: false, curElem: false, subElem: false })
@@ -216,7 +231,7 @@ const CustomizationParent = () => {
     const [bgModal5, setBgModal5] = useState(false)
     const [customColorModal, setCustomColorModal] = useState(false)
     const [customColorModal2, setCustomColorModal2] = useState(false)
-
+    const [singleTemplate, setSingleTemplate] = useState([])
     const [outletSenderId, setOutletSenderId] = useState("")
     const [placeholder, setPlaceholder] = useState([])
 
@@ -3509,6 +3524,27 @@ const CustomizationParent = () => {
         // }
     }
 
+    const saveWhatsAppTemplate = async (id) => {
+        console.log(id, ">>>>>>>>>> id")
+        const form_data = new FormData()
+        form_data.append("superleadz_template", id)
+        const secondsConverted = await convertToSeconds({time: Number(finalObj?.whatsapp?.time), type: finalObj?.whatsapp?.timeType})
+        console.log(secondsConverted, "secondsConverted")
+        const json_data = {
+            template: finalObj?.whatsapp?.template,
+            delay: secondsConverted
+        }
+        form_data.append("json_data", JSON.stringify(json_data))
+        
+        postReq("saveWhatsappTem", form_data)
+        .then((resp) => {
+            console.log(resp)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
+
     const sendData = (e, actionType) => {
         e.preventDefault()
         setApiLoader(true)
@@ -3591,6 +3627,10 @@ const CustomizationParent = () => {
                     localStorage.removeItem("draftId")
                     setThemeId(data?.data.theme_id)
                     toast.success("Your campaign is ready to go live!")
+
+                    saveWhatsAppTemplate(data?.data.theme_id)
+
+
                     if (defaultIsMobile.get("status") === "true") {
                         const getUrl = new URL(`${SuperLeadzBaseURL}/api/v1/get/active-template/`)
                         const form_data = new FormData()
@@ -4114,6 +4154,12 @@ const CustomizationParent = () => {
     }, [defColors, currColor])
 
     useEffect(() => {
+        if (finalObj.whatsapp?.template) {
+            setSingleTemplate(whatsAppTemplate?.filter((curElem) => String(curElem?.id) === String(finalObj.whatsapp?.template)))
+        }
+    }, [finalObj.whatsapp?.template])
+
+    useEffect(() => {
         localStorage.setItem("draftId", themeId)
     }, [themeId])
 
@@ -4172,6 +4218,34 @@ const CustomizationParent = () => {
         } else if (toggleView === 2) {
             return <RenderPreviewCopy {...props} />
         }
+    }
+
+    const integratedList = () => {
+        getReq("integration", `?app_name=${userPermission?.appName}`)
+        .then((resp) => {
+            setConnectedList(resp?.data?.connected_app_list?.map((curElem) => curElem?.slug))
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+
+        getReq("getTemplates")
+        .then((resp) => {
+            console.log(resp, "ppppppp")
+            setWhatsAppTemplate(resp?.data?.data)
+            const activeTemplate = resp?.data?.data?.map((curElem) => {
+                if (resp?.data?.active_id.includes(curElem?.id)) {
+                    return {label: curElem?.name, value: curElem?.id}
+                } else {
+                    return null
+                }
+            }).filter(elem => elem !== null)
+            // console.log(activeTemplate, "ppppppp")
+            setWhatsappTem(activeTemplate)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }
 
     useEffect(() => {
@@ -4247,6 +4321,8 @@ const CustomizationParent = () => {
                 updatePresent({ ...moveObj })
             }
         })
+
+        integratedList()
 
         // if (status) {
         //     document.getElementById("phone").click()
@@ -4434,6 +4510,17 @@ const CustomizationParent = () => {
                             </button>
                             <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Email</span>
                         </div>
+
+                        {
+                            <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "whatsapp" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => {
+                                setSideNav("whatsapp")
+                            }}>
+                                <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
+                                    <Mail size={15} />
+                                </button>
+                                <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Whatsapp</span>
+                            </div>
+                        }
                     </div>
                     {/* Sidebar */}
 
@@ -5625,6 +5712,7 @@ const CustomizationParent = () => {
                                                             <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Email Template</label>
 
                                                             <Select onChange={(e) => {
+                                                                setSelectedTemID(e.value)
                                                                 const form_data = new FormData()
                                                                 form_data.append("id", e.value)
                                                                 form_data.append("app", userPermission?.appName)
@@ -5636,7 +5724,6 @@ const CustomizationParent = () => {
                                                                     .then((resp) => {
                                                                         if (resp.data) {
                                                                             updatePresent({ ...finalObj, email_settings: { ...resp.data } })
-
                                                                         }
                                                                     })
                                                                     .catch((error) => {
@@ -5702,6 +5789,86 @@ const CustomizationParent = () => {
                                                 </AccordionItem>
                                             </UncontrolledAccordion>
                                         </div>}
+
+                                        {sideNav === "whatsapp" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%", height: '100%' }}>
+                                            <UncontrolledAccordion stayOpen defaultOpen={["1"]}>
+                                                <AccordionItem>
+                                                    <AccordionHeader className='acc-header border-top' targetId='1' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
+                                                        <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">
+                                                            Whatsapp
+                                                            
+                                                        </label>
+                                                    </AccordionHeader>
+                                                    <AccordionBody accordionId='1'>
+                                                        <div className='d-flex justify-content-end align-items-center'>
+                                                            <a style={{zIndex: "9999"}} onClick={() => integratedList()}>
+                                                                <Reload size={'20px'} />
+                                                            </a>
+                                                        </div>
+                                                        {
+                                                            connectedList.includes("whatsapp") ? (
+                                                                <>
+                                                                    <div className='py-1 pt-0'>
+                                                                        <Row className='match-height'>
+                                                                            <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Delay</label>
+                                                                            <Col md="6">
+                                                                                <div className='h-100'>
+                                                                                    <input type="text" 
+                                                                                        className='form-control h-100' 
+                                                                                        value={finalObj?.whatsapp?.time}
+                                                                                        onChange={(e) => {
+                                                                                            if (!isNaN(e.target.value)) {
+                                                                                                updatePresent({ ...finalObj, whatsapp: { ...finalObj.whatsapp, time: e.target.value } })
+                                                                                            }
+                                                                                        }}
+                                                                                    />
+                                                                                </div>
+                                                                            </Col>
+                                                                            <Col md="6">
+                                                                                <div>
+                                                                                    <Select
+                                                                                        options={deplayTime}
+                                                                                        value={deplayTime?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.timeType))}
+                                                                                        // onChange={(e) => setWhatsappJson({...whatsappJson, delay: e.value})}
+                                                                                        onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj.whatsapp, timeType: e.value } })}
+                                                                                    />
+                                                                                </div>
+                                                                            </Col>
+                                                                        </Row>
+                                                                    </div>
+                                                                    <div className='py-1'>
+                                                                        <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Templates</label>
+
+                                                                        <Select
+                                                                            options={whatsAppTem}
+                                                                            value={whatsAppTem?.filter((curElem) => String(curElem?.value) === String(finalObj.whatsapp?.template))}
+                                                                            // onChange={(e) => setWhatsappJson({...whatsappJson, template: e.value})}
+                                                                            onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj.whatsapp, template: e.value } })}
+
+                                                                        />
+                                                                    </div>
+                                                                    {
+                                                                        singleTemplate.length > 0 && (
+                                                                            <>
+                                                                                <div className='py-1'>
+                                                                                    <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Preview</label>
+                                                                                    <RenderTemplateUI SingleTemplate={singleTemplate[0]}/>
+                                                                                </div>
+                                                                            </>
+                                                                        )
+                                                                    }
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <h5 className='my-1'> <a href="/merchant/integration/" target='_blank'>Click here</a> to Integrate</h5>
+
+                                                                </>
+                                                            )
+                                                        }
+                                                    </AccordionBody>
+                                                </AccordionItem>
+                                            </UncontrolledAccordion>
+                                        </div>}
                                         {/* Criteria section */}
                                     </div>
                                 </div>
@@ -5710,7 +5877,7 @@ const CustomizationParent = () => {
                         {/* Section Drawer */}
                         {/* Theme Preview */}
                         <div className="d-flex flex-column align-items-center bg-light-secondary flex-grow-1" style={{ width: sideNav === "rules" ? "auto" : `calc(100vw - ${sideNav !== "" ? sectionWidths.editSection : "0"}px - ${sectionWidths.drawerWidth}px - ${sectionWidths.sidebar}px)`, transition: "0.3s ease-in-out" }}>
-                            {returnRender({ outletData, slPrevBg, bgsettings: finalObj?.overlayStyles, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition: finalObj?.positions?.[`${mobileCondition}${pageCondition}`], bgStyles: finalObj?.backgroundStyles?.[`${mobileCondition}main`], crossStyle: finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise: currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values], setcolWise, dragStartIndex, setDragStartIndex, dragOverIndex, setDragOverIndex, isMobile, setIsMobile, finalObj, setFinalObj: updatePresent, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles: finalObj?.backgroundStyles[`${mobileCondition}button`], offerTheme: finalObj?.offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, setRearr, isColDragging, setIsColDragging, isColRes, setIsColRes, resizeMouse, setResizeMouse })}
+                            {returnRender({ outletData, slPrevBg, bgsettings: finalObj?.overlayStyles, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition: finalObj?.positions?.[`${mobileCondition}${pageCondition}`], bgStyles: finalObj?.backgroundStyles?.[`${mobileCondition}main`], crossStyle: finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise: currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values], setcolWise, dragStartIndex, setDragStartIndex, dragOverIndex, setDragOverIndex, isMobile, setIsMobile, finalObj, setFinalObj: updatePresent, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles: finalObj?.backgroundStyles[`${mobileCondition}button`], offerTheme: finalObj?.offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, setRearr, isColDragging, setIsColDragging, isColRes, setIsColRes, resizeMouse, setResizeMouse, selectedTemID })}
                         </div>
                         {/* Theme Preview */}
                         {/* Edit Section */}

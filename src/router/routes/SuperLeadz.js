@@ -41,7 +41,6 @@ const appName = "superleadz"
 const SuperLeads_Routes = [
   {
     path: '/merchant/:appName/joinus/',
-    app: appName,
     element: <JoinUs />
   },
   {

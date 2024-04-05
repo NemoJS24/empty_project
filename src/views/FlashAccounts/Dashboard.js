@@ -1,19 +1,18 @@
 import React, { useContext, useEffect, useState } from "react"
-import { BarChart2, RefreshCcw, Settings, User, Info } from "react-feather"
-import { SuperLeadzBaseURL } from "../../assets/auth/jwtService"
-import { formatNumberWithCommas, getCurrentOutlet } from "../Validator"
+import { BarChart2, RefreshCcw, Settings, User, Info, X, Copy } from "react-feather"
+import { SuperLeadzBaseURL, getReq } from "../../assets/auth/jwtService"
+import { CompleteTimelineName, formatNumberWithCommas, getCurrentOutlet, timelineName } from "../Validator"
 import { PermissionProvider } from "../../Helper/Context"
 import axios from "axios"
-// import { Link } from "react-router-dom"
-// import Polar from "./components/PolarChart"
 import CardCom from "../Components/SuperLeadz/CardCom"
-// import { Row } from "reactstrap"
 import Spinner from "../Components/DataTable/Spinner"
 import PieChart from "./components/PieChart"
-// import toast from "react-hot-toast"
+import { Card, CardBody, Modal, ModalBody, ModalHeader } from "reactstrap"
+import { ImCheckmark } from 'react-icons/im'
+import { Link } from "react-router-dom"
+import toast from "react-hot-toast"
 
 const Dashboard = () => {
-  // const [toggle, setToggle] = useState(false)
   const [data, setData] = useState({
     total_cust: "",
     total_non_guests: "",
@@ -23,46 +22,25 @@ const Dashboard = () => {
     sms_subscribed: ""
   })
 
-  // const [billing, setBilling] = useState({
-  //   usage_count: 0,
-  //   usage_charge: 0,
-  //   mainLoadeder: true,
-  //   daysLeft: 0,
-  //   trial_days: 0,
-  //   mainData: [],
-  //   price: ""
-  // })
+    const copyCode = (id) => {
+        document.getElementById(id).select()
+        document.execCommand('copy')
+        console.log('True')
+        toast.success('Copied!')  
+    }
+
   const params = new URLSearchParams(location.search)
   const outletData = getCurrentOutlet()
   const [isLoading, setIsLoading] = useState(true)
-
-  // console.log(billing)
-
-  // const campaignData = userPermission?.campaign ? userPermission?.campaign?.filter((cur) => {
-  //   return userPermission?.appName === cur.app
-  // }) : []
-
+  const [campaign, setCampaign] = useState({
+    isCampagin: 0,
+    campaignLoader: true,
+    timeline: [],
+    addScriptModel: false
+  })
+  // const [isCampagin, setIsCampagin] = useState(0)
   const outletDetail = getCurrentOutlet()
   const { userPermission } = useContext(PermissionProvider)
-  // console.log(setToggle)
-  // const getData = () => {
-  //   axios.get(`${SuperLeadzBaseURL}/api/v1/change-app-status/?shop=${outletDetail[0]?.web_url}&app=${userPermission?.appName}`)
-  //   .then((resp) => {
-  //     console.log(resp)
-  //     // setToggle(resp?.data?.status)
-  //     const updatedData = {
-  //       data: ""
-  //     }
-
-  //     setData((preData) => ({
-  //       ...preData,
-  //       ...updatedData
-  //     }))
-  //   })
-  //   .catch((error) => {
-  //     console.log(error)
-  //   })
-  // }
 
   const getDataMain = () => {
     axios.get(`${SuperLeadzBaseURL}/flash_accounts/flash_dash/?shop=${outletDetail[0]?.web_url}&app=${userPermission?.appName}`)
@@ -90,27 +68,6 @@ const Dashboard = () => {
       })
   }
 
-  // const changeStatus = (e) => {
-  //   const form_data = new FormData()
-
-  //   form_data.append("shop", outletDetail[0]?.web_url)
-  //   form_data.append("app", userPermission?.appName)
-  //   form_data.append("value", e.target.checked ? "1" : "0")
-
-  //   axios.post(`${SuperLeadzBaseURL}/api/v1/change-app-status/`, form_data)
-  //   .then((resp) => {
-  //     console.log(resp)
-  //     toast.success(!e.target.checked ? "Plugin Activated" : "Plugin Deactivated")
-  //     setToggle(!e.target.checked)
-  //   })
-  //   .catch((error) => {
-  //     console.log(error)
-  //     setToggle(e.target.checked)
-  //     toast.error("Something went wrong")
-  //   })
-  // }
-
-
   const chargeApi = () => {
     const form_data = new FormData()
     form_data.append('charge_id', params.get('charge_id'))
@@ -135,8 +92,52 @@ const Dashboard = () => {
       .catch((error) => console.log(error))
   }
 
+  const checkCampaignStatus = () => {
+    getReq('campaignData', `?app=${userPermission?.appName}`)
+    .then((resp) => {
+      console.log(resp)
+      const timeLine = resp?.data?.data?.timeline
+
+      const showingTimeLine = timeLine?.filter((curElem) => curElem?.isShow === 1)
+      const completedTimeLine = timeLine?.filter((curElem) => curElem?.isShow === 1 && curElem?.isComplete === 1)
+      let status
+      
+      if (showingTimeLine.length === completedTimeLine.length) {
+        status = 1
+      } else {
+        status = 0
+      }
+
+      const updatedData = {
+        isCampagin: status,
+        campaignLoader: false,
+        timeline: showingTimeLine
+      }
+
+      setCampaign((preData) => ({
+        ...preData,
+        ...updatedData
+      }))
+        // setIsCampagin(resp?.data?.data?.status)
+    })
+    .catch((error) => {
+      console.log(error)
+      const updatedData = {
+        isCampagin: 0,
+        campaignLoader: false,
+        timeline: []
+      }
+
+      setCampaign((preData) => ({
+        ...preData,
+        ...updatedData
+      }))
+    })
+  }
+
   useEffect(() => {
     // getData()
+    checkCampaignStatus()
     getDataMain()
     if (params.get('charge_id')) {
       chargeApi()
@@ -147,74 +148,74 @@ const Dashboard = () => {
     <>
       <div className="row">
         <div className="col-12">
-          <div className="card">
-            <div className="card-body d-flex justify-content-between">
-              <h4 className="m-0">Dashboard</h4>
-              {/* <Link className="text-dark" to="/merchant/Flash_Accounts/settings/">
-                <Settings size="18px" />
-              </Link> */}
-              {/* <div className="form-check-success form-switch cusor-pointer">
-                    <input className="form-check-input" type="checkbox" role="switch" id="form-switch" onClick={(e) => changeStatus(e)} checked={toggle} />
-                    <label className="form-check-label" htmlFor="form-switch" style={{ paddingLeft: '10px', whiteSpace: 'nowrap' }}>Plugin Setting</label>
-                </div> */}
-            </div>
-          </div>
+          {
+            campaign.campaignLoader ? <>
+              <Card>
+                <CardBody>
+                  <div className="d-flex justify-content-center align-items-center">
+                    <Spinner size={'30px'} />
+                  </div>
+
+                </CardBody>
+              </Card>
+            </> : campaign.isCampagin === 0 ? (
+              <>
+                <Card>
+                    <CardBody>
+                        
+                      <div className="left_side d-flex justify-content-between align-items-center mb-1">
+                        <div className='bg-primary text-center rounded-right WidthAdjust' style={{ width: "250px", padding: "6px", marginLeft: '-25px' }}>
+                          <h4 className='bb text-white m-0' style={{ fontSize: "16px" }}>Complete these steps</h4>
+                        </div>
+                      </div>
+                      <div className="row justify-content-start align-items-center flex-nowrap overflow-auto">
+                        {
+                            campaign?.timeline?.map((curElem, key) => {
+                              const url = curElem.key === "is_outlet_created" ? `${outletData[0]?.id}/` : ''
+                              const color = curElem.isComplete ? 'success' : 'danger'
+                              return (
+                                  <div key={key} className="boxs aa col-md p-2 d-flex justify-content-center align-item-center">
+                                      {
+                                          color === "success" ? <>
+                                              <ImCheckmark color='#00c900' size={20}/>
+                                          </> : ''
+                                      }
+                                      <h6 className='boxPad text-black fw-bolder d-flex align-items-center'>
+                                          {
+              
+                                              curElem.key === "is_extension_enabled" ? (
+                                                  color === "success" ? curElem.name : <a onClick={() => setCampaign({...campaign, addScriptModel: true})}>
+                                                      Add Script
+                                                  </a>
+                                              ) : (
+                                                  color === "success" ? curElem.name : <Link to={`${timelineName[userPermission?.appName] ? timelineName[userPermission?.appName][curElem.key] : ''}${url}`}>
+                                                      {curElem.name}
+                                                  </Link>
+                                              )
+                                          }
+                                          
+                                      </h6>
+              
+                                  </div>
+                              )
+                          })
+                        }
+                      </div>
+                    </CardBody>
+                </Card>
+              </>
+            ) : (
+              <>
+                <div className="card">
+                  <div className="card-body d-flex justify-content-between">
+                    <h4 className="m-0">Dashboard</h4>
+                  </div>
+                </div>
+              </>
+            )
+          }
         </div>
       </div>
-
-
-      {/* <div className="row match-height">
-        <div className="col-md-6">
-          <div className="card">
-            <div className="card-body">
-              <User size="27px" />
-              <div className="d-flex mt-1 justify-content-between">
-                <p className="me-5 h5 card-text">Total Flash Accounts Created</p>
-                <h3>
-                  {data.total_non_guests ? formatNumberWithCommas(data.total_non_guests) : 0}
-                </h3>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <div className="card-body ">
-              <RefreshCcw size="27px" />
-              <div className="d-flex mt-1 justify-content-between">
-                <div>
-                  <p className="me-5 mb-0 h5 card-text">Guest Conversion Rate</p>
-      
-                </div>
-                <h3 className="d-flex ">
-                  {data.conversion_rate ? `${Number(data.conversion_rate).toFixed(2)}%` : 0}
-                  <span className="" style={{marginTop:"-10px"}} data-bs-toggle="tooltip" data-bs-placement="top" title="% of guest checkouts converted at Thank You page">
-                  <Info size={15} />
-                  </span>
-                </h3>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <div className="card-body">
-              <RefreshCcw size="27px" />
-              <div className="d-flex mt-1 justify-content-between">
-                <p className="me-0 h5 card-text">Revenue Generated from<br />Flash Accounts Registered Customers</p>
-                <h3>
-                  {data.total_revenue ? formatNumberWithCommas(data.total_revenue) : 0}
-                </h3>
-              </div>
-            </div>
-          </div>
-
-        </div>
-        <div className="col-md-6">
-          <div className="card">
-            <div className="card-body">
-              <Polar labels={['Customers', 'Accounts Created', 'Email Subscribed', 'SMS Subscribed']} data={[data?.total_cust, data?.total_non_guests, data?.email_subscribed, data?.sms_subscribed]} />
-            </div>  
-          </div>
-        </div>
-      </div> */}
-
 
       <div className="row match-height">
         <div className="col-md-6">
@@ -239,6 +240,24 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+        <Modal isOpen={campaign?.addScriptModel}>
+            <ModalHeader toggle={() => setCampaign({...campaign, addScriptModel: !campaign?.addScriptModel})}>Add Script</ModalHeader>
+            <ModalBody>
+                <div className="d-flex justify-content-start align-items-center pb-2" style={{gap: '8px'}}>
+                    <input
+                        id="code1"
+                        className="form-control"
+                        value={`<script src="https://apps.xircls.com/static/flash_accounts/my_script.js"></script>`}
+                    />
+                    <div className="text-success btn btn-sm btn-outline-secondary" onClick={() => copyCode('code1')}>
+                        <Copy size="18px" />
+                    </div>
+                </div>
+                <p className="">Copy the above code and paste in Additional scripts. <a target="_blank" href="https://flashacc.myshopify.com/admin/settings/checkout">Click here</a></p>
+
+            </ModalBody>
+        </Modal>
     </>
   )
 }

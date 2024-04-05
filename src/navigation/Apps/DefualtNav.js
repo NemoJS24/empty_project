@@ -18,12 +18,12 @@ export const DefaultNav = [
 ]
 
 export const FooterNav = [
-    {
-        id: 'integrations',
-        title: 'Integration',
-        icon: <Circle size={16} />,
-        navLink: '/merchant/integrations/'
-    },
+    // {
+    //     id: 'integrations',
+    //     title: 'Integration',
+    //     icon: <Circle size={16} />,
+    //     navLink: '/merchant/integration/'
+    // },
     {
         id: 'support',
         title: 'Support',

@@ -178,6 +178,7 @@ export const updateHeaderDisplayedMessage = (inputString, defData) => {
  }
 //  whatsapp template ui
 export const RenderTemplateUI = ({SingleTemplate}) => {
+   console.log(SingleTemplate, "SingleTemplate")
   return (
      <CardBody className="border-0 p-2  pe-5 hideScroll rounded-2 " style={{ backgroundImage: `url(${wp_back})`, gap: "5px", whiteSpace: 'pre-wrap', height: "400px", overflowY: "auto", scrollbarWidth: "0" }}>
 
