@@ -56,7 +56,7 @@ ReactDOM.render(
         <ThemeContext>
           <ScrollToTop />
           <LazyApp />
-          <Toaster position={themeConfig.layout.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+          <Toaster position={themeConfig.layout.toastPosition} duration={3000} toastOptions={{ className: 'react-hot-toast' }} />
         </ThemeContext>
       </Suspense>
     </Provider>

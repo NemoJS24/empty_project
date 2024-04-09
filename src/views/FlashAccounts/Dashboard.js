@@ -184,9 +184,11 @@ const Dashboard = () => {
                                           {
               
                                               curElem.key === "is_extension_enabled" ? (
-                                                  color === "success" ? curElem.name : <a onClick={() => setCampaign({...campaign, addScriptModel: true})}>
-                                                      Add Script
-                                                  </a>
+                                                  color === "success" ? curElem.name : <div onClick={() => setCampaign({...campaign, addScriptModel: true})} className="d-flex justify-content-start align-items-start cursor-pointer" style={{gap: '6px'}}>
+                                                  Add Script
+                                                  <span style={{ cursor: 'pointer', display: 'flex' }} title="This script allows the account creation form to swiftly appear on your store's Thank You page."><Info size={'12'} /></span>
+                                  
+                                                </div>
                                               ) : (
                                                   color === "success" ? curElem.name : <Link to={`${timelineName[userPermission?.appName] ? timelineName[userPermission?.appName][curElem.key] : ''}${url}`}>
                                                       {curElem.name}
@@ -242,7 +244,13 @@ const Dashboard = () => {
       </div>
 
         <Modal isOpen={campaign?.addScriptModel}>
-            <ModalHeader toggle={() => setCampaign({...campaign, addScriptModel: !campaign?.addScriptModel})}>Add Script</ModalHeader>
+            <ModalHeader toggle={() => setCampaign({...campaign, addScriptModel: !campaign?.addScriptModel})}>
+              <div className="d-flex justify-content-start align-items-start" style={{gap: '6px'}}>
+                Add Script
+                <span style={{ cursor: 'pointer', display: 'flex' }} title="This script allows the account creation form to swiftly appear on your store's Thank You page."><Info size={'12'} /></span>
+
+              </div>
+            </ModalHeader>
             <ModalBody>
                 <div className="d-flex justify-content-start align-items-center pb-2" style={{gap: '8px'}}>
                     <input
@@ -254,7 +262,7 @@ const Dashboard = () => {
                         <Copy size="18px" />
                     </div>
                 </div>
-                <p className="">Copy the above code and paste in Additional scripts. <a target="_blank" href="https://flashacc.myshopify.com/admin/settings/checkout">Click here</a></p>
+                <p className="">Copy-paste this code into the "Additional Scripts" field in your Shopify store. <a target="_blank" href={`https://${outletData[0]?.web_url}/admin/settings/checkout`}>Take me there</a></p>
 
             </ModalBody>
         </Modal>

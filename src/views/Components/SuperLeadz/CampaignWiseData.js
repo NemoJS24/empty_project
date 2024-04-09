@@ -92,15 +92,15 @@ const CampaignWiseData = ({campaignData}) => {
                                     <DropdownToggle color='dark' style={{ padding: "0.5rem" }} className='hide-after-dropdown rounded'>
                                         {
                                             displayType === "DESKTOP" ? (
-                                                <div title='Performance on desktop devices only'>
+                                                <div>
                                                     <Monitor size={"18px"} />
                                                 </div>
                                             ) : displayType === "MOBILE" ? (
-                                                <div title='Performance on mobile devices only'>
+                                                <div>
                                                     <Smartphone size={"18px"} />
                                                 </div>
                                             ) : (
-                                                <div className="d-flex align-items-center gap-2" title='Overall campaign performance'>
+                                                <div className="d-flex align-items-center gap-2">
                                                     <Monitor size={"18px"} /><Smartphone size={"18px"} />
                                                 </div>
                                             )
@@ -110,15 +110,15 @@ const CampaignWiseData = ({campaignData}) => {
                                         <DropdownItem onClick={() => {
                                             setDisplayType("DESKTOP")
                                         }} className={`w-100`}>
-                                            Desktop View Only
+                                            Performance on desktop devices only
                                         </DropdownItem>
                                         <DropdownItem onClick={() => {
                                             setDisplayType("MOBILE")
                                         }} className={`w-100`}>
-                                            Mobile View Only
+                                            Performance on mobile devices only
                                         </DropdownItem>
                                         <DropdownItem onClick={() => setDisplayType("")} className={`w-100`}>
-                                            Desktop and Mobile View
+                                            Overall campaign performance
                                         </DropdownItem>
                                     </DropdownMenu>
                                 </UncontrolledButtonDropdown>

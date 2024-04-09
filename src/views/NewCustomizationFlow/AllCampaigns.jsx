@@ -43,7 +43,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
     const condition = ''
 
     console.log(checkedThemes, "checkedThemes")
-
+    const [activatedTheme, setActivatedTheme] = useState({})
     const [modal1, setModal1] = useState(false)
 
     // const [dateModal, setDateModal] = useState(false)
@@ -207,6 +207,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
         })
         .then(() => {
             getAllThemes()
+            
             if (!activeThemes.includes(currDetails.id)) {
                 setAfterModal(!afterModal)
             } else {
@@ -337,6 +338,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                                     // data.data.response.forEach(row => {
                                     //     newArr.push(row.theme_name.
                                     // })
+                                    setActivatedTheme(row.theme_name)
                                     if ((data.data.response.length === 0) || (data.data.response.length > 0 && activeThemes.includes(row.theme_name.id))) {
                                         setModal1(true)
                                     } else {
@@ -440,7 +442,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
     const deleteContent = checkedThemes.length > 0 && <button onClick={() => {
         setDeleteMode("multiple")
         setDeleteModal(!deleteModal)
-    }} className="btn btn-danger d-block">Deleting {checkedThemes.length} items</button>
+    }} className="btn btn-danger d-block">Deleting {checkedThemes.length} item/s</button>
 
     return (
         <>
@@ -653,6 +655,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                         <button onClick={() => {
                             setAfterModal(!afterModal)
                         }} className={`btn btn-${activeThemes.includes(currDetails.id) ? 'outline-primary' : 'primary'} text-capitalize`}>OK</button>
+                        <Link className={`btn btn-${activeThemes.includes(currDetails.id) ? 'outline-primary' : 'primary'} text-capitalize`} to={`/merchant/SuperLeadz/preview/${activatedTheme.id}`} state={activatedTheme}>View Pop-Up</Link>
                     </div>
                 </ModalBody>
             </Modal>
@@ -703,7 +706,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                     <span className="position-absolute top-0 end-0" style={{ cursor: 'pointer', padding: "0.25rem" }} onClick={() => setDeleteModal(!deleteModal)}>
                         <X size={17.5} />
                     </span>
-                    Are you sure you want to delete {deleteMode === "single" ? "this theme" : "these themes"}?
+                    Are you sure you want to delete {deleteMode === "single" ? "this campaign" : checkedThemes.length === 1 ? "this campaign" : "these campaigns"}?
                     <div className="mt-2 d-flex gap-3 justify-content-end align-items-center">
                         <button className="btn btn-outline-primary" onClick={() => deleteThemes()}>Delete</button>
                     </div>

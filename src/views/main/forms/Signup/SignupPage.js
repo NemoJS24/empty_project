@@ -313,12 +313,12 @@ export default function SignupPage() {
                             <h4 className='text-center text-secondary '>For a New Merchant Account</h4>
                             <Row className=' px-0 px-md-5 mt-3 '>
                                 <Col xs="12" md="6" className=''>
-                                    <label className="fs-4 main-heading">First Name  </label>
+                                    <label className="fs-4 main-heading">First Name *  </label>
                                     <input type="text" className="form-control form-control  fs-5 text-capitalize text-dark rounded-1" onChange={handleInputChange} placeholder="First Name" name="first_name" style={{ marginTop: "4px" }} />
                                     <span className="error text-danger ">{formErrors.first_name}</span>
                                 </Col>
                                 <Col xs="12" md="6" className='mt-1 mt-md-0'>
-                                    <label className="fs-4 main-heading">Last Name  </label>
+                                    <label className="fs-4 main-heading">Last Name * </label>
                                     <input type="text" className="form-control form-control  fs-5 text-capitalize text-dark rounded-1" onChange={handleInputChange} placeholder="Last Name" name="last_name" style={{ marginTop: "4px" }} />
                                     <span className="error text-danger ">{formErrors.last_name}</span>
 
@@ -331,7 +331,7 @@ export default function SignupPage() {
 
                                 </Col>
                                 <Col xs="12" className='mt-2'>
-                                    <label className="fs-4 main-heading">Email Address  </label>
+                                    <label className="fs-4 main-heading">Email Address * </label>
                                     <input type="text" className="form-control form-control  fs-5 text-dark rounded-1" onChange={handleInputChange} onBlur={() => { isEmailExist('email') }} placeholder="Email" name="email" style={{ marginTop: "4px" }} />
                                     <span className="error text-danger ">{formErrors.email}</span>
                                     <span className="error text-danger " id="Email_error" style={{ display: "none" }}>Email already exists in our database</span>
@@ -339,7 +339,7 @@ export default function SignupPage() {
 
                                 {/* mobile  */}
                                 <Col xs="12" className='mt-2'>
-                                    <label className="fs-4 main-heading">Mobile Number</label>
+                                    <label className="fs-4 main-heading">Mobile Number *</label>
                                     <Row className=' row-gap-1 '>
                                         <Col xs="12" md="4" className=''>
                                             <Select
@@ -371,7 +371,7 @@ export default function SignupPage() {
                                 </Col>
 
                                 <Col xs="12" className='mt-2  position-relative '>
-                                    <label className="fs-4 main-heading">Password  </label>
+                                    <label className="fs-4 main-heading">Password * </label>
                                     <input type={ShowPass.pass ? 'text' : 'password'} className="form-control form-control  fs-5 text-dark rounded-1" id="signup_pass_input" onChange={handleInputChange} placeholder="Password" name="password" style={{ marginTop: "4px" }} autoComplete="new-password" />
 
                                     <h4 className='position-absolute  cursor-pointer' style={{ top: "38px", right: "30px", color: "#a9a9a9" }} onClick={() => setShowPass({ ...ShowPass, pass: !ShowPass.pass })} >{ShowPass.pass ? <BsEyeFill /> : <BsEyeSlashFill />}</h4>
@@ -387,7 +387,7 @@ export default function SignupPage() {
 
                                 </Col>
                                 <Col xs="12" className='mt-2 mt-2 position-relative'>
-                                    <label className="fs-4 main-heading">Confirm Password  </label>
+                                    <label className="fs-4 main-heading">Confirm Password * </label>
                                     <input type={ShowPass.cpass ? 'text' : 'password'} className="form-control form-control  fs-5 text-dark rounded-1" onChange={handleInputChange} placeholder="Confirm Password" name="confirm_password" style={{ marginTop: "4px" }} autoComplete="new-password" />
                                     <h4 className='position-absolute  cursor-pointer' style={{ top: "38px", right: "30px", color: "#a9a9a9" }} onClick={() => setShowPass({ ...ShowPass, cpass: !ShowPass.cpass })} >{ShowPass.cpass ? <BsEyeFill /> : <BsEyeSlashFill />}</h4>
 

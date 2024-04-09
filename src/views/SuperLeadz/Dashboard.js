@@ -492,7 +492,7 @@ function SuperLeadzDashboard() {
                                             
                                             <div className="left_side d-flex justify-content-between align-items-center mb-1">
                                                 <div className='bg-primary text-center rounded-right WidthAdjust' style={{ width: "425px", padding: "6px", marginLeft: '-25px' }}>
-                                                    <h4 className='bb text-white m-0' style={{ fontSize: "16px" }}>Complete these steps to convert leads faster!</h4>
+                                                    <h4 className='bb text-white m-0' style={{ fontSize: "16px" }}>Complete these steps to go live with SuperLeadz!</h4>
                                                 </div>
                                             </div>
                                             {/* <div className='cc text-center my-1 rounded-right ' style={{ width: "40px", padding: "6px", position: "absolute", left: "30px", top: "-1px", rotate: "290deg", zIndex: "-999", backgroundColor: "#4233ea" }}>
@@ -722,7 +722,7 @@ function SuperLeadzDashboard() {
                 </div>
 
                 <div className='col-md-6 cursor-pointer'>
-                    <CardCom id={"VisitsSuperLeadz"} icon={<User width={'27px'} />} title="Visits" data={!isLoading ? performanceData?.vists : <Spinner size={'25px'} />} info={`Total page visits`}/>
+                    <CardCom id={"VisitsSuperLeadz"} icon={<User width={'27px'} />} title="Visits" data={!isLoading ? performanceData?.vists : <Spinner size={'25px'} />} info={`Total page visits (since SuperLeadz! was installed)`}/>
 
                 </div>
 

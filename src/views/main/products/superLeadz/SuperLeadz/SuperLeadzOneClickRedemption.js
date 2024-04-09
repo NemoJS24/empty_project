@@ -4,6 +4,7 @@ import { Card, Col, Row } from 'react-bootstrap'
 import { FaArrowRight } from "react-icons/fa6"
 import video from './images/Leadz.mp4'
 import Footer from '../../../utilities/footer/Footer'
+import { Link } from 'react-router-dom'
 const Data = [
     'Reduce cart abandonments',
     'Increase redemption rates',
@@ -122,7 +123,7 @@ export const superFaqData = [
     }
 ]
 
-export default function SuperLeadz() {
+export default function SuperLeadzOneClickRedemption() {
 
 
     return (
@@ -161,7 +162,9 @@ export default function SuperLeadz() {
                                 <h1 className='display-3 main-heading fw-bolder '>
                                     See it in action.
                                 </h1>
-                                <button className='btn btn-lg  fs-3 main-btn-dark mt-2 fw-bolder'>Book a demo</button>
+                                <Link to="/contact-us" className='btn btn-lg  fs-3 main-btn-dark mt-2 fw-bolder'>
+                                    Book a demo
+                                </Link>
                             </Col>
                         </Row>
                     </Col>
@@ -203,7 +206,7 @@ export default function SuperLeadz() {
                         <h1 className='display-3 main-heading fw-bolder '>
                             Instantly boost your offer redemption rate!
                         </h1>
-                        <button className='btn btn-lg  fs-3 main-btn-dark mt-2 fw-bolder'>Start for free</button>
+                        <a target='_blank' href='https://apps.shopify.com/superleadz-by-xircls' className='btn btn-lg  fs-3 main-btn-dark mt-2 fw-bolder'>Start for free</a>
                     </Col>
                 </Row>
                 <div className='mt100'>

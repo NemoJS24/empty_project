@@ -1136,10 +1136,10 @@ const Setting = ({ isAdmin = false }) => {
                                                     </DropdownMenu>
                                                 </UncontrolledDropdown>
                                             </div>
-
-                                            {(!prevData?.page_1?.nextPage || currPage === "page_2") && <Col md={12} style={{ marginBottom: "1.25rem" }}>
-                                                <label style={{ fontSize: "0.85rem", marginBottom: '6px' }} htmlFor="successredirect_url" className="form-control-label">Button Redirect URL</label>
-                                                <input onChange={handleDataChange} value={prevData?.[currPage]?.successredirect_url} name="successredirect_url" type="text" className="form-control" id="successredirect_url" placeholder="Redirect URL" />
+                                            {/* Success */}
+                                            {(prevData?.page_1?.nextPage) && <Col md={12} style={{ marginBottom: "1.25rem" }}>
+                                                <label style={{ fontSize: "0.85rem", marginBottom: '6px' }} htmlFor="redirect_url" className="form-control-label">Button Redirect URL</label>
+                                                <input onChange={handleDataChange} value={prevData?.page_1?.redirect_url} name="redirect_url" type="text" className="form-control" id="redirect_url" placeholder="Redirect URL" />
                                             </Col>}
 
                                         </AccordionBody>
@@ -1578,10 +1578,13 @@ const Setting = ({ isAdmin = false }) => {
                                                 </UncontrolledDropdown>
                                             </div>
 
-                                            {(!prevData?.page_1?.nextPage || currPage === "page_2") && <Col md={12} style={{ marginBottom: "1.25rem" }}>
-                                                <label style={{ fontSize: "0.85rem", marginBottom: '6px' }} htmlFor="redirect_url" className="form-control-label">Button Redirect URL</label>
-                                                <input onChange={handleDataChange} value={prevData?.[currPage]?.redirect_url} name="redirect_url" type="text" className="form-control" id="redirect_url" placeholder="Redirect URL" />
-                                            </Col>}
+                                            <div>
+                                                <Col md={12} style={{ marginBottom: "1.25rem" }} >
+                                                    <label style={{ fontSize: "0.85rem", marginBottom: '6px' }} htmlFor="redirect_url" className="form-control-label">Button Redirect URL</label>
+                                                    <input onChange={handleDataChange} value={prevData?.page_1?.nextPage ? "Account Success Page" : prevData?.page_1?.redirect_url} name="redirect_url" type="text" className="form-control" id="redirect_url" placeholder="Redirect URL" disabled={prevData?.page_1?.nextPage} />
+                                                </Col>
+
+                                            </div>
 
                                         </AccordionBody>
                                     </AccordionItem>

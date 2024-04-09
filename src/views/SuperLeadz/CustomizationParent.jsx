@@ -3626,7 +3626,7 @@ const CustomizationParent = () => {
 
                     localStorage.removeItem("draftId")
                     setThemeId(data?.data.theme_id)
-                    toast.success("Your campaign is ready to go live!")
+                    toast.success(<div style={{fontSize: '14px'}}><span className='pb-1'>Your campaign is ready to go live!</span>  <br /><span>Toggle the status to activate the campaign.</span> </div>)
 
                     saveWhatsAppTemplate(data?.data.theme_id)
 
@@ -5927,7 +5927,7 @@ const CustomizationParent = () => {
                                     Your Images
                                 </button>
                                 <button onClick={() => setImageTab("product")} className={`${imageTab === "product" ? "btn-primary-main" : ""} btn w-50`}>
-                                    Product Images
+                                    Product Gallery
                                 </button>
                             </div>
                             {imageTab !== "product" && <div className="p-1 pt-0 d-flex justify-content-center border-bottom">

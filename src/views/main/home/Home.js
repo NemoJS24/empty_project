@@ -69,7 +69,7 @@ const data = [
       {
         title: "Visitor Authentication",
         subTitle: (<> <a target='_blank' href="/products/superleadz/">SuperLeadz <FiArrowUpRight size={17} style={{ marginTop: "-5px" }} /></a></>),
-        desc: "Make this clickable and open SuperLeadz overview page in a new tab"
+        desc: "Ground zero tools that detect & verify high-intent shoppers within the first few seconds of arrival."
       }
     ]
   },

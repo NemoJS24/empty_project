@@ -48,6 +48,8 @@ import Flash_Pricing from '../../views/main/products/flash/Flash_Pricing'
 import FlashAccount_Features from '../../views/main/products/flash/FlashAccount_Features'
 import SuperLeadzLandingPage from '../../views/main/LandingPage/SuperLeadzLandingPage'
 import EmailLists from '../../views/main/LandingPage/EmailLists'
+import SuperLeadzOneClickRedemption from '../../views/main/products/superLeadz/SuperLeadz/SuperLeadzOneClickRedemption'
+import SuperLeadzLeadGen from '../../views/main/products/superLeadz/SuperLeadz/SuperLeadzLeadGen'
 
 const Homes_Routes = [
 
@@ -588,6 +590,24 @@ const Homes_Routes = [
       publicRoute: true
     },
     title: "SuperLeadz - Build email lists of verified leads"
+  },
+  {
+    path: "/products/superleadz/one-click-offer-redemption/",
+    element: <SuperLeadzOneClickRedemption />,
+    meta: {
+      layout: "homeLayout",
+      publicRoute: true
+    },
+    title: "SuperLeadz - One-click Offer Redemption"
+  },
+  {
+    path: "/products/superleadz/dual-verification-qualified-lead-generation/",
+    element: <SuperLeadzLeadGen />,
+    meta: {
+      layout: "homeLayout",
+      publicRoute: true
+    },
+    title: "SuperLeadz - Dual Verification Process"
   }
 ]
 
