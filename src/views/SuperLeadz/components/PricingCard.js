@@ -15,11 +15,21 @@ const PricingCard = ({ data, id, title, price, planTitle, selectedPlan, setSelec
                     </div>
 
                     <div className="pricing" style={{ padding: '0px 24px 24px' }}>
-                        <h4 style={{ fontSize: '3rem', lineHeight: '1' }} className="position-relative d-inline">
-                            <sup className="text-dark" style={{ position: 'absolute', top: '8px', left: '-10px', fontSize: '.8125rem' }}>$</sup>
-                            {price}
-                        </h4>
-                        <sup className="text-dark mb-0" style={{ fontSize: '.8125rem', marginLeft: '5px' }}>/month</sup>
+                        {
+                            title === "Custom Pricing" ? (
+                                <>
+                                    <h4>Contact us for a personalized quote.</h4>
+                                </>
+                            ) : (
+                                <>
+                                    <h4 style={{ fontSize: '3rem', lineHeight: '1' }} className="position-relative d-inline">
+                                        <sup className="text-dark" style={{ position: 'absolute', top: '8px', left: '-10px', fontSize: '.8125rem' }}>$</sup>
+                                        {price}
+                                    </h4>
+                                    <sup className="text-dark mb-0" style={{ fontSize: '.8125rem', marginLeft: '5px' }}>/month</sup>
+                                </>
+                            )
+                        }
                     </div>
 
                     <hr />
@@ -38,7 +48,7 @@ const PricingCard = ({ data, id, title, price, planTitle, selectedPlan, setSelec
                     <div className="action">
                         {
                             btnCondition ? (
-                                <a className={`btn ${selectedPlan === planTitle ? 'bg-primary text-white' : 'btn btn-outline-primary'} w-100 btn-block`} onClick={() => callPlans(id, data)}>Get Started</a>
+                                <a className={`btn ${selectedPlan === planTitle ? 'bg-primary text-white' : 'btn btn-outline-primary'} w-100 btn-block`} onClick={() => callPlans(id, data)}> { title === "Custom Pricing" ? "Request" : "Get Started" }</a>
                             ) : (
                                 <a className="btn bg-light-secondary w-100 text-primary btn-block">Buy Now</a>
                             )

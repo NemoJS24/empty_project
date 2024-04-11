@@ -8,8 +8,8 @@ import ReactGA from "react-ga4"
 
 export const useAnalyticsPageViewTracker = (curTitle, path) => {
     ReactGA.initialize('G-4NRGB5EKCP') //xircls
-    // ReactGA.initialize('G-0K44CMK09X') //demo
-    console.log("hitting Google")
+    //ReactGA.initialize('G-0K44CMK09X') //demo
+    console.log("hitting Google", {curTitle, path})
     ReactGA.send({ page: path, title: curTitle })
 }
 

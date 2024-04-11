@@ -34,6 +34,11 @@ export default function SuperLeadzOffers() {
         .then((resp) => resp.json())
         .then((data) => {
             console.log(data)
+            if (data.error) {
+                setTableData([])
+                setIsLoading(false)
+                return
+            }
             // data?.status?.map(ele => {
             //     console.log(ele)
             //     // console.log(JSON.parse(ele.offer_json))

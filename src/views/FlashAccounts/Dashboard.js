@@ -8,7 +8,7 @@ import CardCom from "../Components/SuperLeadz/CardCom"
 import Spinner from "../Components/DataTable/Spinner"
 import PieChart from "./components/PieChart"
 import { Card, CardBody, Modal, ModalBody, ModalHeader } from "reactstrap"
-import { ImCheckmark } from 'react-icons/im'
+import { ImCheckmark, ImCross } from 'react-icons/im'
 import { Link } from "react-router-dom"
 import toast from "react-hot-toast"
 
@@ -174,21 +174,24 @@ const Dashboard = () => {
                               const url = curElem.key === "is_outlet_created" ? `${outletData[0]?.id}/` : ''
                               const color = curElem.isComplete ? 'success' : 'danger'
                               return (
+                                <>
                                   <div key={key} className="boxs aa col-md p-2 d-flex justify-content-center align-item-center">
                                       {
                                           color === "success" ? <>
-                                              <ImCheckmark color='#00c900' size={20}/>
-                                          </> : ''
+                                              <ImCheckmark color='#00c900' size={18}/>
+                                          </> : <ImCross color="#dc3545" size={18} />
                                       }
-                                      <h6 className='boxPad text-black fw-bolder d-flex align-items-center'>
+                                      <h6 className={`boxPad text-black fw-bolder ${curElem.key === "is_extension_enabled" && userPermission?.appName === "flash_accounts" ? "" : "d-flex align-items-center"}  m-0`}>
                                           {
-              
+            
                                               curElem.key === "is_extension_enabled" ? (
-                                                  color === "success" ? curElem.name : <div onClick={() => setCampaign({...campaign, addScriptModel: true})} className="d-flex justify-content-start align-items-start cursor-pointer" style={{gap: '6px'}}>
-                                                  Add Script
-                                                  <span style={{ cursor: 'pointer', display: 'flex' }} title="This script allows the account creation form to swiftly appear on your store's Thank You page."><Info size={'12'} /></span>
-                                  
-                                                </div>
+                                                  color === "success" ? curElem.name : <>
+                                                    <div onClick={() => setCampaign({...campaign, addScriptModel: true})} className={`d-flex justify-content-start align-items-start cursor-pointer`} style={{gap: '6px', color: '#007aff'}}>
+                                                      Add Script
+                                                      <span style={{ cursor: 'pointer', display: 'flex' }} title="This script allows the account creation form to swiftly appear on your store's Thank You page."><Info size={'12'} color="#464646" /></span>
+                                                    </div>
+                                                    <span style={{fontSize: '11px', fontWeight: '400'}}>Adding this script is crucial for the account creation form to appear on your store's Thank You page. Once the campaign is live and the script runs, this step is complete.</span>
+                                                  </> 
                                               ) : (
                                                   color === "success" ? curElem.name : <Link to={`${timelineName[userPermission?.appName] ? timelineName[userPermission?.appName][curElem.key] : ''}${url}`}>
                                                       {curElem.name}
@@ -197,8 +200,8 @@ const Dashboard = () => {
                                           }
                                           
                                       </h6>
-              
                                   </div>
+                                </>
                               )
                           })
                         }

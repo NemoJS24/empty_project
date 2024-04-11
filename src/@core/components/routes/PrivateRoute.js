@@ -74,7 +74,15 @@ const PrivateRoute = ({ children, route }) => {
   if (route) {
     checkUserToken()
   }
-  return <Suspense fallback={null}>{children}</Suspense>
+  return <Suspense fallback={null}>
+    <head>
+      <meta name="robots" id='noindex' content="noindex"></meta>
+      <meta name="robots" content="nofollow"></meta>
+      <meta name="robots" content="noindex,nofollow"></meta>
+
+    </head>
+    {children}
+  </Suspense>
 }
 
 export default PrivateRoute

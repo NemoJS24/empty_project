@@ -107,9 +107,13 @@ const UserDropdown = () => {
       </DropdownToggle>
       <DropdownMenu end>
         <DropdownItem tag={Link} to='/merchant/admin_view/'>
+          <Settings size={14} className='me-75' />
+          <span className='align-middle'>Global Settings</span>
+        </DropdownItem>
+        {/* <DropdownItem tag={Link} to='/merchant/admin_view/'>
           <User size={14} className='me-75' />
           <span className='align-middle'>Profile</span>
-        </DropdownItem>
+        </DropdownItem> */}
         <DropdownItem tag={Link} to='/merchant/company/profile/'>
           <Award size={14} className='me-75' />
           <span className='align-middle'>Company</span>
@@ -127,14 +131,14 @@ const UserDropdown = () => {
           <span className='align-middle'>User</span>
         </DropdownItem>
         <DropdownItem divider />
-        <DropdownItem tag={Link} to='/merchant/admin_view/'>
+        {/* <DropdownItem tag={Link} to='/merchant/admin_view/'>
           <Settings size={14} className='me-75' />
           <span className='align-middle'>Settings</span>
-        </DropdownItem>
-        <DropdownItem tag={Link} to='/merchant/faqs/'>
+        </DropdownItem> */}
+        {/* <DropdownItem tag={Link} to='/merchant/faqs/'>
           <HelpCircle size={14} className='me-75' />
           <span className='align-middle'>FAQ</span>
-        </DropdownItem>
+        </DropdownItem> */}
         <DropdownItem to="/" tag={Link} onClick={(e) => LogOut(e)}>
           <Power size={14} className='me-75' />
           <span className='align-middle'>Logout</span>

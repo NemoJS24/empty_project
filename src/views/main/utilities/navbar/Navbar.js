@@ -20,7 +20,7 @@ import { getToken } from '../../../../assets/auth/auth'
 export const productList = [
   {
     title: "SuperLeadz",
-    desc: "Lead Generation pop-ups ",
+    desc: "Lead Generation Pop-ups ",
     logo: <img src={SuperLeadzLogo} alt='SuperLeadz_logo' />,
     link: "/products/superleadz/"
   },

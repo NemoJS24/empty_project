@@ -47,9 +47,14 @@ const JoinUs = () => {
                 data: formData,
                 url
             })
-            .then((data) => {
-                console.log(data)
-                toast.success("Forever Free plan activated")
+            .then((resp) => {
+                console.log(resp)
+                if (data.plan_name === "Custom Pricing") {
+                    toast.success("Custom plan activated")
+                } else {
+                    toast.success("Forever Free plan activated")
+
+                }
                 const form_data = new FormData()
                 form_data.append('app', appName?.toLowerCase())
                 const shop = userPermission?.multipleDomain.filter((cur) => cur.api_key === userPermission?.apiKey)
@@ -57,7 +62,7 @@ const JoinUs = () => {
                 postReq('planSubscription', form_data)
                 .then((resp) => {
                     console.log(resp)
-                    if (appName.toLocaleLowerCase() === "superLeadz") {
+                    if (appName.toLocaleLowerCase() === "superleadz") {
                         navigate("/merchant/SuperLeadz/billing/")
                     } else {
                         navigate("/merchant/Flash_Accounts/billing/")
@@ -167,16 +172,35 @@ const JoinUs = () => {
                                         {
                                             isLoading ? <div className="d-flex justify-content-center align-items-center">
                                                 <Spinner size={'40px'} />
-                                            </div> : planData?.map((cur) => {
-                                                let details
-                                                try {
-                                                    details = JSON.parse(cur?.details)
-                                                } catch (error) {
-                                                    details = cur?.details
-                                                }
-                                                return <PricingCard data={cur} id={cur.id} title={cur.plan_name} price={cur.app_price} planTitle={cur.plan_name} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} callPlans={callPlans} btnCondition={Number(location?.state) <= Number(cur.app_price)} features={details ? details : []} popular={false} />
+                                            </div> : (
+                                                <>
+                                                    {
+                                                        planData?.map((cur) => {
+                                                            let details
+                                                            try {
+                                                                details = JSON.parse(cur?.details)
+                                                            } catch (error) {
+                                                                details = cur?.details
+                                                            }
+                                                            return cur.plan_name !== "Custom Pricing" ? <PricingCard data={cur} id={cur.id} title={cur.plan_name} price={cur.app_price} planTitle={cur.plan_name} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} callPlans={callPlans} btnCondition={Number(location?.state) <= Number(cur.app_price)} features={details ? details : []} popular={false} /> : ''
+            
+                                                        })
+                                                    }
 
-                                            })
+                                                    {
+                                                        planData?.map((cur) => {
+                                                            let details
+                                                            try {
+                                                                details = JSON.parse(cur?.details)
+                                                            } catch (error) {
+                                                                details = cur?.details
+                                                            }
+                                                            return cur.plan_name === "Custom Pricing" ? <PricingCard data={cur} id={cur.id} title={cur.plan_name} price={cur.app_price} planTitle={cur.plan_name} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} callPlans={callPlans} btnCondition={Number(location?.state) <= Number(cur.app_price)} features={details ? details : []} popular={false} /> : ''
+            
+                                                        })
+                                                    }
+                                                </>
+                                            ) 
                                         }
 
                                     </div>

@@ -356,7 +356,7 @@ export default function SuperLeadz() {
                             <Row className='' >
                                 <Col md="7" className='d-flex justify-content-center flex-column align-items-start'>
                                     <div className=' text-sm-start '>
-                                        <h3 className='fs-3 fw-bolder  text-dark text-start'>LEAD GENERATION</h3>
+                                        <h3 className='fs-3 fw-bolder  text-dark text-start'>LEAD GENERATION POP-UPS</h3>
                                         <h1 className='display-1 lh-83 text-md-start main-heading fw-bolder'>
                                             Built to Convert
                                         </h1>

@@ -4223,7 +4223,7 @@ const CustomizationParent = () => {
     const integratedList = () => {
         getReq("integration", `?app_name=${userPermission?.appName}`)
         .then((resp) => {
-            setConnectedList(resp?.data?.connected_app_list?.map((curElem) => curElem?.slug))
+            setConnectedList(resp?.data?.connected_app_list?.map((curElem) => curElem?.integrated_app?.slug))
         })
         .catch((error) => {
             console.log(error)
@@ -4533,7 +4533,7 @@ const CustomizationParent = () => {
                             </span>
                             <div className="overflow-x-hidden h-100 position-relative hideScroll">
                                 <div className='w-100' style={{ height: "100%", overflowY: "auto" }}>
-                                    <div style={{ width: `${sectionWidths.drawerWidth}px`, transform: `translateX(${(sideNav !== "" && sideNav !== "rules") ? "0px" : `-${sectionWidths.drawerWidth}px`})`, transition: "0.3s ease-in-out", position: "absolute", inset: "0px 0px 0px auto" }}>
+                                    <div id="1212" style={{ width: `100%`, transform: `translateX(${(sideNav !== "" && sideNav !== "rules") ? "0px" : `-${sectionWidths.drawerWidth}px`})`, transition: "0.3s ease-in-out", position: "absolute", inset: "0px 0px 0px auto" }}>
                                         {/* Theme Section */}
                                         {sideNav === "theme" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%" }}>
                                             <UncontrolledAccordion stayOpen defaultOpen={["1"]}>

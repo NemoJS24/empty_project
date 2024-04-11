@@ -21,8 +21,9 @@ export const Integrations = () => {
         setIsLoading(true)
         getReq("integration", `?app_name=${userPermission?.appName}`)
         .then((resp) => {
+            console.log(resp?.data?.app_list, "resprespresp")
             setInegrationList(resp?.data?.app_list)
-            setConnectedList(resp?.data?.connected_app_list?.map((curElem) => curElem?.unique_id))
+            setConnectedList(resp?.data?.connected_app_list?.map((curElem) => curElem?.integrated_app?.slug))
         })
         .catch((error) => {
             console.log(error)
@@ -33,21 +34,21 @@ export const Integrations = () => {
     }
 
     const integrationPlug = (data) => {
-        if (!userPermission?.installedApps?.includes(data?.integration_app[0]?.slug)) {
+        if (!userPermission?.installedApps?.includes(data?.app?.slug)) {
             toast.error("App is not installed")
             return
         }
         setApiLoader(true)
         const form_data = new FormData()
-        const status = connectedList.includes(data?.integration_app[0]?.unique_id)
-        form_data.append("slug", data?.integration_app[0]?.unique_id)
+        const status = connectedList.includes(data?.slug)
+        form_data.append("slug", data?.slug ? data?.slug : "whatsapp")
         form_data.append("app_name", userPermission?.appName)
         form_data.append("connect", status ? "False" : "True")
 
         postReq("integrationPlug", form_data)
         .then((resp) => {
             console.log(resp)
-            setConnectedList(resp?.data?.connected_app_list?.map((curElem) => curElem?.unique_id))
+            setConnectedList(resp?.data?.connected_app_list?.map((curElem) => curElem?.integrated_app?.slug))
             if (status) {
                 toast.success("App Disconnected")
             } else {
@@ -94,15 +95,15 @@ export const Integrations = () => {
                                     <>
                                         <Col xxl="3" xl="4" md="6" key={key}>
                                             <IntegrationCard
-                                                title={curElem?.integration_app[0]?.app_name}
-                                                description={curElem?.integration_app[0]?.description}
-                                                icon={curElem?.integration_app[0]?.logo}
+                                                title={curElem?.app_name}
+                                                description={curElem?.description}
+                                                icon={curElem?.logo}
                                                 button={
                                                     <>
                                                         
                                                         <a onClick={() => integrationPlug(curElem)} className="btn btn-primary d-flex justify-content-center align-items-center w-100" style={{gap: '4px'}}>
                                                             {
-                                                                connectedList.includes(curElem?.integration_app[0]?.unique_id) ? (
+                                                                connectedList.includes(curElem?.slug) ? (
                                                                     <>
                                                                         Disconnect <ChevronRight size="17px" />
                                                                     </>
