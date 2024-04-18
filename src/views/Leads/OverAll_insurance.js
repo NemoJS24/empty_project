@@ -160,6 +160,8 @@ const Customers = () => {
                 isLoading={isLoading}
                 getData={getData}
                 count={tableData?.recordsTotal}
+                exportUrl={`${crmURL}/insurance/insurance_dashboard/`}
+                isExport={true}
                 // selectableRows={true}
                 // setSelectedRows={setSelected}
                 // selectedRows={selected}

@@ -77,8 +77,19 @@ const Table = () => {
     },
     {
       name: 'Email',
-      minWidth: '300px',
-      selector: row => row?.customer_email,
+      minWidth: '250px',
+      selector: (row) => {
+        return row?.customer_email ? row?.customer_email : "--"
+      },
+      type: 'text',
+      isEnable: true
+    },
+    {
+      name: 'Phone No',
+      minWidth: '250px',
+      selector: (row) => {
+        return  row?.customer_phone_no ? row?.customer_phone_no : "--"
+      },
       type: 'text',
       isEnable: true
     },
@@ -128,9 +139,9 @@ const Table = () => {
 
         return row?.is_guest === false ? <>
           {
-            list?.map((cur, key) => {
+            list.length > 0 ? list?.map((cur, key) => {
               return (key + 1) === list.length ? cur : `${cur}, `
-            })
+            }) : "--"
           }
         </> : "--"
       },
@@ -142,20 +153,20 @@ const Table = () => {
         {label: "Both", value: "both"}
       ],
       isEnable: true
-    },
-    {
-      name: 'Action',
-      minWidth: '30px',
-      selector: () => {
-        return (
-          <div style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
-            <a className="btn btn-sm btn-primary-main" onClick={() => setIsModal(!isModal)}>Send Mail</a>
-          </div>
-        )
-      },
-      type: 'text',
-      isEnable: true
     }
+    // {
+    //   name: 'Action',
+    //   minWidth: '30px',
+    //   selector: () => {
+    //     return (
+    //       <div style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
+    //         <a className="btn btn-sm btn-primary-main" onClick={() => setIsModal(!isModal)}>Send Mail</a>
+    //       </div>
+    //     )
+    //   },
+    //   type: 'text',
+    //   isEnable: true
+    // }
   ]
 
   // const defferContent = <>

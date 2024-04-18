@@ -40,6 +40,14 @@ const SuperLeadzSupport = () => {
 
     useEffect(() => {
         getData()
+        // const form_data = new FormData()
+        getReq('test')
+        .then((resp) => {
+            console.log(resp)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }, [])
 
     const handleFilter = e => {

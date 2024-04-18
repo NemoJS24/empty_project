@@ -16,10 +16,11 @@ import { PermissionProvider } from '../../../Helper/Context'
 import AdvanceOptions from '../../../Helper/AdvanceOptions'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
+import { postReq } from '../../../assets/auth/jwtService'
 // import { Link } from 'react-router-dom'
 // import { pageNo } from '../../Validator'
 
-const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpand, ExpandableTable, custom, isStyling, selectableRows = false, selectedRows, setSelectedRows, getData, exportUrl, viewAll, isExport, selectedContent, advanceFilter, viewType = "table", setViewType, viewContent, deleteContent, create, createLink, createText, toggledClearRows, customButtonLeft, customButtonRight }) => {
+const AdvanceServerSide = ({ date = true, tableName, tableCol, data, isLoading, count, isExpand, ExpandableTable, custom, isStyling, selectableRows = false, selectedRows, setSelectedRows, getData, exportUrl, viewAll, isExport, selectedContent, advanceFilter, viewType = "table", setViewType, viewContent, deleteContent, create, createLink, createText, toggledClearRows, customButtonLeft, customButtonRight }) => {
   // ** State
   const [currentPage, setCurrentPage] = useState(0)
   const [currentEntry, setCurrentEntry] = useState(custom ? 5 : 10)
@@ -44,15 +45,11 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
     {
       value: "csv",
       label: "CSV"
-    },
-    {
-      value: "pdf",
-      label: "PDF"
-    },
-    {
-      value: "xlsx",
-      label: "Excel"
     }
+    // {
+    //   value: "xlsx",
+    //   label: "Excel"
+    // }
   ]
   // ** Hooks
   const { t } = useTranslation()
@@ -128,32 +125,35 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
     form_data.append('file_type', exportData.fileType)
     form_data.append('page_size', exportData.range)
     form_data.append('table_data', JSON.stringify(data))
+    form_data.append('count', count ? count : 10)
     if (exportData.selectedData[0] && exportData.selectedData[1]) {
       form_data.append('start_date', moment(exportData.selectedData[0]).format('YYYY-MM-DD'))
       form_data.append('end_date', moment(exportData.selectedData[1]).format('YYYY-MM-DD'))
     }
 
-    fetch(exportUrl, {
-      method: "POST",
-      body: form_data
+    // fetch(exportUrl, {
+    //   method: "POST",
+    //   body: form_data
+    // })
+    postReq('export', form_data, '', '', exportUrl)
+    // .then((resp) => resp.json())
+    // .then(response => response.blob())
+    .then(blob => {
+      console.log(blob.data)
+      const url = window.URL.createObjectURL(new Blob([blob.data]))
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `export_file.${exportData.fileType}`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      window.URL.revokeObjectURL(url)
+      setApiLoader(false)
     })
-      .then(response => response.blob())
-      .then(blob => {
-        console.log({blob})
-        const url = window.URL.createObjectURL(new Blob([blob]))
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `export_file.${exportData.fileType}`
-        document.body.appendChild(a)
-        a.click()
-        document.body.removeChild(a)
-        window.URL.revokeObjectURL(url)
-        setApiLoader(false)
-      })
-      .catch((error) => {
-        console.log(error)
-        setApiLoader(false)
-      })
+    .catch((error) => {
+      console.log(error)
+      setApiLoader(false)
+    })
 
   }
 
@@ -451,14 +451,18 @@ const AdvanceServerSide = ({ tableName, tableCol, data, isLoading, count, isExpa
                   }
                 </select>
               </div>
-              <div className="col-12 mb-1">
-                <label htmlFor="date">Date</label>
-                <Flatpickr options={{ // Sets the minimum date as 14 days ago
-                  maxDate: "today", // Sets the maximum date as today
-                  mode: "range",
-                  dateFormat: "Y-m-d"
-                }} className='form-control' value={exportData?.selectedData} onChange={(date) => setExportData({ ...exportData, selectedData: date })} placeholder='Select date' />
-              </div>
+              {
+                date ? (
+                  <div className="col-12 mb-1">
+                    <label htmlFor="date">Date</label>
+                    <Flatpickr options={{ // Sets the minimum date as 14 days ago
+                      maxDate: "today", // Sets the maximum date as today
+                      mode: "range",
+                      dateFormat: "Y-m-d"
+                    }} className='form-control' value={exportData?.selectedData} onChange={(date) => setExportData({ ...exportData, selectedData: date })} placeholder='Select date' />
+                  </div>
+                ) : ''
+              }
             </div>
 
           </form>

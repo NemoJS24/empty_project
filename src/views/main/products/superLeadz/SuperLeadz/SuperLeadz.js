@@ -27,31 +27,35 @@ import { affiliateTracking } from '../../../../Validator'
 export const superFaqData = [
     {
         q: "What is SuperLeadz?",
-        a: " SuperLeadz is a lead generation tool to generate 100% self-verified leads, engage them with on-site incentives tailored by visit frequency and engagement, and facilitate one-click offer redemptions for a frictionless purchase journey."
+        a: " SuperLeadz is a lead generation pop-up tool to generate 100% self-verified leads, engage them with on-site incentives tailored by visit frequency and engagement, and facilitate one-click offer redemptions for a frictionless purchase journey."
     },
     {
         q: "How is SuperLeadz different from other lead generation & conversion tools?",
         a: (
             <div>
-                <p>SuperLeadz is markedly different from other lead generation tools, mainly in these aspects:</p>
-                <p>
+                <div className='pb-1'>SuperLeadz is markedly different from other lead generation tools, mainly in these aspects:</div>
+                <div className='pb-1'>
 
-                    i. Lead Verification: SuperLeadz employs a Dual Verification Process, validating
+                    1. Lead Verification: SuperLeadz employs a Dual Verification Process, validating
                     both the authenticity and purchase intent of website visitors through OTP
                     verification. This guarantees the generation of 100% self-verified leads, who
                     can then be incentivized with offers personalized by visit frequency &
-                    engagement.</p>
-                <p>
-                    ii.  Diverse Offer Creation: Merchants can create different types of offers, from
-                    flat discount on order value to Buy & Get Free offers.</p>
-                <p>
-                    iii.Multiple Offer Display: Visitors can choose from multiple offers in a single
-                    pop-up interaction, increasing the likelihood of conversions.</p>
-                <p>
-                    iv.One-Click Offer Redemptions: Leads can click the "Redeem" button adjacent
+                    engagement.
+                </div>
+                <div className='pb-1'>
+                    2.  Diverse Offer Creation: Merchants can create different types of offers, from
+                    flat discount on order value to Buy & Get Free offers.
+                </div>
+                <div className='pb-1'>
+                    3.Multiple Offer Display: Visitors can choose from multiple offers in a single
+                    pop-up interaction, increasing the likelihood of conversions.
+                </div>
+                <div className='pb-1'>
+                    4.One-Click Offer Redemptions: Leads can click the "Redeem" button adjacent
                     to their selected offer in the pop-up and continue shopping. The chosen offer
                     is automatically applied during the checkout process (even if the shopper
-                    forgets!)</p>
+                    forgets!)
+                </div>
             </div >
         )
     },

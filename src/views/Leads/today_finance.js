@@ -253,6 +253,9 @@ const Customers = () => {
                 isLoading={isLoading}
                 getData={getData}
                 count={tableData?.recordsTotal}
+                exportUrl={`${crmURL}/finance/finance_dashboard/`}
+                isExport={true}
+                date={false}
                 // selectableRows={true}
                 // setSelectedRows={setSelected}
                 // selectedRows={selected}

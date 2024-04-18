@@ -29,6 +29,7 @@ const JoinUs = () => {
     const outletData = getCurrentOutlet()
     const callPlans = (id, data) => {
         // e.preventDefault()
+        console.log(data?.parent_plan_name)
         if (data?.parent_plan_name === "free") {
             const planName = data?.plan_name
             const url = new URL(`${SuperLeadzBaseURL}/api/v1/free_plan_shopify/`)

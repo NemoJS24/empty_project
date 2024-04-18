@@ -212,7 +212,7 @@ export default function Features() {
                 SuperLeadz
                 Features
               </h1>
-              <h1 className='text-black fw-bold mt-1'>A revenue-first lead generation tool built to engage, verify and convert high-value shoppers.</h1>
+              <h1 className='text-black fw-bold mt-1'>A revenue-first lead generation pop-up tool built to engage, verify and convert high-value shoppers.</h1>
               <div className='d-block mt-2' >
                 <Link to='/merchant/signup' className=' btn  main-btn-blue fs-4 fw-bolder  '>Get Started</Link>
               </div>

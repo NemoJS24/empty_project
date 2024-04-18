@@ -8,6 +8,8 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 // ** Vertical Menu Components
 import VerticalMenuHeader from './VerticalMenuHeader'
 import VerticalNavMenuItems from './VerticalNavMenuItems'
+import { mainFooterNav } from '../../../../../navigation/Apps/DefualtNav'
+import { Link } from 'react-router-dom'
 
 const Sidebar = props => {
   // ** Props
@@ -84,7 +86,25 @@ const Sidebar = props => {
                   setCurrentActiveGroup={setCurrentActiveGroup}
                 />
               </ul>
+              <div style={{height: '100px'}}></div>
+              <ul className='navigation navigation-main' style={{position: 'fixed', bottom: '0px', width: '100%'}}>
+                <hr />
+                {
+                  mainFooterNav?.map((curElem, key) => {
+                    return (
+                      <li class="nav-item" key={key}>
+                        <Link to={curElem?.navLink}>
+                          {curElem?.icon}
+                          <span class="menu-item text-truncate">{curElem?.title}</span>
+                          <div></div>
+                        </Link>
+                      </li>
+                    )
+                  })
+                }
+              </ul>
             </PerfectScrollbar>
+
           </Fragment>
         )}
       </div>

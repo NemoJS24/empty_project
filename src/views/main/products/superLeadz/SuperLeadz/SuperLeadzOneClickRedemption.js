@@ -18,7 +18,7 @@ const url = "https://www.xircls.com/products/superleadz/features/"
 export const superFaqData = [
     {
         q: "What is SuperLeadz?",
-        a: " SuperLeadz is a lead generation tool to generate 100% self-verified leads, engage them with on-site incentives tailored by visit frequency and engagement, and facilitate one-click offer redemptions for a frictionless purchase journey."
+        a: " SuperLeadz is a lead generation pop-up tool to generate 100% self-verified leads, engage them with on-site incentives tailored by visit frequency and engagement, and facilitate one-click offer redemptions for a frictionless purchase journey."
     },
     {
         q: "How is SuperLeadz different from other lead generation & conversion tools?",

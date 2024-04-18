@@ -75,13 +75,13 @@ export const SuperLeadzNavigation = [
     title: 'Billing',
     icon: <BiDollar size={16} />,
     navLink: '/merchant/SuperLeadz/billing/'
-  },
-  {
-    id: 'faq',
-    title: 'FAQs',
-    icon: <AiOutlineQuestion size={16} />,
-    navLink: '/merchant/SuperLeadz/faq/'
   }
+  // {
+  //   id: 'faq',
+  //   title: 'FAQs',
+  //   icon: <AiOutlineQuestion size={16} />,
+  //   navLink: '/merchant/SuperLeadz/faq/'
+  // }
   // {
   //   id: 'integrations',
   //   title: 'Integrations',

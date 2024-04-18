@@ -68,30 +68,6 @@ const Dashboard = () => {
       })
   }
 
-  const chargeApi = () => {
-    const form_data = new FormData()
-    form_data.append('charge_id', params.get('charge_id'))
-    form_data.append('app', userPermission?.appName)
-    form_data.append('shop', outletData[0]?.web_url)
-    axios({
-      method: "POST",
-      data: form_data,
-      url: `${SuperLeadzBaseURL}/api/v1/add/billing/`
-    })
-      .then((data) => {
-        console.log(data)
-        if (data?.data?.response === "billing created successfully") {
-          navigate('/merchant/SuperLeadz/')
-          planData()
-          cancelApi()
-
-        } else {
-          planData()
-        }
-      })
-      .catch((error) => console.log(error))
-  }
-
   const checkCampaignStatus = () => {
     getReq('campaignData', `?app=${userPermission?.appName}`)
     .then((resp) => {
@@ -133,6 +109,30 @@ const Dashboard = () => {
         ...updatedData
       }))
     })
+  }
+
+  const chargeApi = () => {
+    const form_data = new FormData()
+    form_data.append('charge_id', params.get('charge_id'))
+    form_data.append('app', userPermission?.appName)
+    form_data.append('shop', outletData[0]?.web_url)
+    axios({
+      method: "POST",
+      data: form_data,
+      url: `${SuperLeadzBaseURL}/api/v1/add/billing/`
+    })
+      .then((data) => {
+        console.log(data)
+        if (data?.data?.response === "billing created successfully") {
+          // navigate('/merchant/SuperLeadz/')
+          checkCampaignStatus()
+          // cancelApi()
+
+        } else {
+          checkCampaignStatus()
+        }
+      })
+      .catch((error) => console.log(error))
   }
 
   useEffect(() => {

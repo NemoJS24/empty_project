@@ -212,7 +212,7 @@ const FlashAccountsBilling = () => {
                 </CardBody>
             </Card> */}
             <Row>
-                <Col md="6" className='offset-md-3'>
+                <Col md="8" className='offset-md-2'>
                     <Card>
                         <CardBody>
                             {
@@ -234,11 +234,11 @@ const FlashAccountsBilling = () => {
                                         </div>
                                         {
                                             chargesLoader ? <div className='d-flex justify-content-center align-items-center'><Spinner width='45px' /></div> : <div className="d-flex justify-content-between align-items-center w-100">
-                                                <h4 style={{ borderBottom: '0px dotted lightgray', fontSize: '18px', position: "relative", cursor: 'pointer' }}>{<p style={{color:""}}>Your Current PLan is <span style={{color:"#48a441", textTransform: 'capitalize'}}>{billing?.mainData[0]?.plan_id}</span></p>}<span className='position-absolute cursor-pointer' title={`Plan that you have subscribed to`} style={{ top: '-8px', right: '-16px' }}></span></h4>
-                                                {/* <div className='d-flex gap-3 align-items-center'>
-                                                    <p className='position-relative' style={{ fontSize: `0.85rem`, borderBottom: '0.5px dotted lightgray;', cursor: 'pointer' }} onClick={() => navigate('/leads')}>{"Pop-ups - "}</p>
+                                                <h4 style={{ borderBottom: '0px dotted lightgray', fontSize: '18px', position: "relative", cursor: 'pointer' }}>{<p style={{color:""}}>Your Current Plan is <span style={{color:"#48a441", textTransform: 'capitalize'}}>{billing?.mainData[0]?.plan_id}</span></p>}<span className='position-absolute cursor-pointer' title={`Plan that you have subscribed to`} style={{ top: '-8px', right: '-16px' }}></span></h4>
+                                                <div className='d-flex gap-3 align-items-center'>
+                                                    <p className='position-relative m-0' style={{ fontSize: `0.85rem`, borderBottom: '0.5px dotted lightgray;', cursor: 'pointer' }}>{"Transactions - "}</p>
                                                     <h5 style={{ fontSize: `3rem`, cursor:"default"}}>{`${billing?.usage_count}/${billing?.usage_charge}`}</h5>
-                                                </div> */}
+                                                </div>
                                             </div>
                                         }
                                         
@@ -250,7 +250,7 @@ const FlashAccountsBilling = () => {
                     </Card>
                 </Col>
             </Row>
-            <Card>
+            <Card className='d-none'>
                 <CardBody>
                     <ComTable
                         content={defferContent}

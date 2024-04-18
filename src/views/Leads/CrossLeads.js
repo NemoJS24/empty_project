@@ -176,6 +176,8 @@ const CrossLeads = () => {
                                 isLoading={isLoading}
                                 getData={getData}
                                 count={tableData?.recordsTotal}
+                                // exportUrl={`${crmURL}/customers/cross_leads/`}
+                                // isExport={true}
                                 // selectableRows={true}
                                 // setSelectedRows={setSelected}
                                 // selectedRows={selected}

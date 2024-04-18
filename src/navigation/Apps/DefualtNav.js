@@ -1,6 +1,7 @@
 import { Circle, Home } from "react-feather"
 import { ownUrl } from "../../views/Validator"
 import twentyfourseven from "@src/views/SuperLeadz/assets/2020773.png"
+import { AiOutlineQuestion } from "react-icons/ai"
 
 export const DefaultNav = [
     {
@@ -17,13 +18,22 @@ export const DefaultNav = [
     }
 ]
 
-export const FooterNav = [
+export const FooterNav = []
     // {
     //     id: 'integrations',
     //     title: 'Integration',
     //     icon: <Circle size={16} />,
     //     navLink: '/merchant/integration/'
     // },
+// ]
+
+export const mainFooterNav = [
+    {
+        id: 'faq',
+        title: 'FAQs',
+        icon: <AiOutlineQuestion size={16} />,
+        navLink: '/merchant/SuperLeadz/faq/'
+    },
     {
         id: 'support',
         title: 'Support',

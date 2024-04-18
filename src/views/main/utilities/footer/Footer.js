@@ -70,10 +70,10 @@ const Footer = () => {
                         </div>
                         <div className="p-0 mt-3 mt-lg-0" >
                             <h5 className='text-black fw-bolder mb-' style={{fontSize:"17px"}}><Link className="text-black" to='/partners' >Partners </Link></h5>
-                            <div className="d-none">
+                            <div>
                                 <ul className=' list-unstyled'>
-                                    <li className=' ' style={{ marginTop: "7px" }} ><Link className="text-black" to="/affiliate/login" >  Login </Link></li>
-                                    <li className=' ' style={{ marginTop: "7px" }} ><Link className="text-black" to="/affiliate/signup" >  Signup </Link></li>
+                                    <li className=' ' style={{ marginTop: "7px" }} ><a className="text-black" target="_blank" href="https://affiliate.xircls.com/affiliate/login" >  Login </a></li>
+                                    <li className=' ' style={{ marginTop: "7px" }} ><a className="text-black" target="_blank" href="https://affiliate.xircls.com/affiliate/signup" >  Signup </a></li>
                                 </ul>
 
                             </div>

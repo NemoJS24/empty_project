@@ -225,7 +225,8 @@ export const configUrl = {
     messagelog_view: "talk/messagelog_view/",
     integration: "integration-hub/integration_get_details_new/",
     integrationPlug: "integration-hub/integration_connect_new/",
-    saveWhatsappTem: "integration-hub/event_flow/"
+    saveWhatsappTem: "integration-hub/event_flow/",
+    test: "merchant/update_field"
 }
 
 const axiosInstance = axios.create({
@@ -318,7 +319,7 @@ axiosInstance.interceptors.response.use(
     }
 )
 
-export const postReq = (path, data, customBaseURL = baseURL, config) => {
+export const postReq = (path, data, customBaseURL = baseURL, config, exportURL) => {
     console.log(customBaseURL, "domian")
     // if (customBaseURL) {
     axiosInstance.defaults.baseURL = customBaseURL
@@ -328,6 +329,8 @@ export const postReq = (path, data, customBaseURL = baseURL, config) => {
     const time = new Date().getTime()
     if (path === 'login' || path === "signup") {
         return axios.post(`${baseURL}${configUrl[`${path}`]}?time=${time}`, data)
+    } else if (path === "export") {
+        return axiosInstance.post(`${exportURL}`, data)
     } else {
         return axiosInstance.post(`${configUrl[path]}?time=${time}`, data, config ? config : null)
     }

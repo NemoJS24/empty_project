@@ -682,7 +682,7 @@ const Setting = ({ isAdmin = false }) => {
                         <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase`}>Form</span>
                     </div>
 
-                    <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideHeaderNav === "email" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => setSideHeaderNav("email")}>
+                    <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideHeaderNav === "email" ? "text-black active-item" : ""} d-none`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => setSideHeaderNav("email")}>
                         <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
                             <Mail size="15px" />
                         </button>
@@ -1601,7 +1601,6 @@ const Setting = ({ isAdmin = false }) => {
                                             <div className="py-1">
                                                 <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Email From</label>
                                                 <div className="d-flex justify-content-center align-items-center" style={{ border: '1px solid #d8d6de', borderRadius: '0.357rem', gap: '5px' }}>
-                                                    {/* <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Email Template</label> */}
                                                     <input type="text" value={outletSenderId ? outletSenderId : "no_reply@xircls.com"} className="form-control" style={{ width: '100%', border: 'none' }} disabled />
                                                     <a style={{ marginRight: '5px' }} onClick={() => setChangeSenderEmail(!changeSenderEmail)}>
                                                         <Edit size={'18px'} />

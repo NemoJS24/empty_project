@@ -91,7 +91,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "SuperLeadz - Lead generation, nurturing and conversion",
+    title: "SuperLeadz - Pop-ups for lead generation, nurturing and conversion",
     trackingTitle: "SuperLeadz"
   },
 
@@ -103,7 +103,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Features - Lead generation, nurturing and conversion",
+    title: "SuperLeadz Features - Pop-ups for lead generation, nurturing and conversion",
     trackingTitle: "SuperLeadz Features"
   },
   {
@@ -114,7 +114,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Pricing - Lead generation, nurturing and conversion",
+    title: "SuperLeadz Pricing - Pop-ups for lead generation, nurturing and conversion",
     trackingTitle: "SuperLeadz Pricing"
   },
   {
@@ -125,7 +125,7 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "FAQ - Lead generation, nurturing and conversion",
+    title: "SuperLeadz FAQ - Pop-ups for lead generation, nurturing and conversion",
     trackingTitle: "SuperLeadz FAQ"
   },
   {

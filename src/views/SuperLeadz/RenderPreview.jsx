@@ -1759,9 +1759,9 @@ const RenderPreview = (props) => {
                                                                         toast.success(<div className="d-flex gap-1 align-items-center">Page removed! <button onClick={undo} className="btn-primary btn">Undo</button></div>)
                                                                         updatePresent({ ...finalObj, pages: pageArray, mobile_pages: mobilePageArray })
                                                                     }} className='w-100'>
-                                                                        <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                                                        {/* <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
                                                                             <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Delete</span>
-                                                                        </div>
+                                                                        </div> */}
                                                                     </DropdownItem>}
                                                                 </DropdownMenu>
                                                             </UncontrolledButtonDropdown>
