@@ -48,6 +48,7 @@ const MerchantHome = lazy(() => import('../../views/Apps/Home'))
 const FlowLogin = lazy(() => import("../../views/Flow/Login"))
 const FlowSignUp = lazy(() => import("../../views/Flow/SignUp"))
 import Skin_type_form from '../../views/XirclsFrontend/test/Skin_type_form'
+import Iframe from '../../views/main/Extension/Iframe'
 
 const appName = ""
 
@@ -488,6 +489,14 @@ const Xircls_Frontend_Routes = [
   {
     path: '/codeskin/skin-type-test',
     element: <Skin_type_form />,
+    meta: {
+      layout: "NewBlank",
+      publicRoute: true
+    }
+  },
+  {
+    path: '/ext/frame/',
+    element: <Iframe />,
     meta: {
       layout: "NewBlank",
       publicRoute: true

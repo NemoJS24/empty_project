@@ -24,7 +24,7 @@ const JoinUs = () => {
     const { appName } = useParams()
 
     console.log(appName, "appName")
-    const [selectedPlan, setSelectedPlan] = useState("grow plan")
+    const [selectedPlan, setSelectedPlan] = useState(location.state ? location.state : "grow plan")
     // console.log(activeCard)
     const outletData = getCurrentOutlet()
     const callPlans = (id, data) => {
@@ -157,7 +157,7 @@ const JoinUs = () => {
                 <Col md='12'>
                     <Card>
                         <CardBody>
-                            <div className="d-flex justify-content-end align-items-center">
+                            <div className="d-none justify-content-end align-items-center">
                                 <a className="btn btn-outline-primary" onClick={() => {
                                   navigate(`/merchant/${appName}/joinus/`, {replace: true})
                                 }}>Show All Plans</a>
@@ -183,7 +183,7 @@ const JoinUs = () => {
                                                             } catch (error) {
                                                                 details = cur?.details
                                                             }
-                                                            return cur.plan_name !== "Custom Pricing" ? <PricingCard data={cur} id={cur.id} title={cur.plan_name} price={cur.app_price} planTitle={cur.plan_name} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} callPlans={callPlans} btnCondition={Number(location?.state) <= Number(cur.app_price)} features={details ? details : []} popular={false} /> : ''
+                                                            return cur.plan_name !== "Custom Pricing" ? <PricingCard data={cur} id={cur.id} title={cur.plan_name} price={cur.app_price} planTitle={cur.plan_name} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} callPlans={callPlans} btnCondition={String(location?.state).toLowerCase() === String(cur.plan_name).toLowerCase()} features={details ? details : []} popular={false} /> : ''
             
                                                         })
                                                     }
@@ -196,7 +196,7 @@ const JoinUs = () => {
                                                             } catch (error) {
                                                                 details = cur?.details
                                                             }
-                                                            return cur.plan_name === "Custom Pricing" ? <PricingCard data={cur} id={cur.id} title={cur.plan_name} price={cur.app_price} planTitle={cur.plan_name} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} callPlans={callPlans} btnCondition={Number(location?.state) <= Number(cur.app_price)} features={details ? details : []} popular={false} /> : ''
+                                                            return cur.plan_name === "Custom Pricing" ? <PricingCard data={cur} id={cur.id} title={cur.plan_name} price={cur.app_price} planTitle={cur.plan_name} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} callPlans={callPlans} btnCondition={String(location?.state).toLowerCase() === String(cur.plan_name).toLowerCase()} features={details ? details : []} popular={false} /> : ''
             
                                                         })
                                                     }

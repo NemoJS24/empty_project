@@ -34,7 +34,7 @@ export const Integrations = () => {
     }
 
     const integrationPlug = (data) => {
-        if (!userPermission?.installedApps?.includes(data?.app?.slug)) {
+        if (!userPermission?.installedApps?.includes(data?.slug)) {
             toast.error("App is not installed")
             return
         }

@@ -223,8 +223,8 @@ export const configUrl = {
     template_active: "talk/template_active/",
     template_view: "talk/template_view/",
     messagelog_view: "talk/messagelog_view/",
-    integration: "integration-hub/integration_get_details_new/",
-    integrationPlug: "integration-hub/integration_connect_new/",
+    integration: "integration-hub/integration_get_details/",
+    integrationPlug: "integration-hub/integration_connect/",
     saveWhatsappTem: "integration-hub/event_flow/",
     test: "merchant/update_field"
 }

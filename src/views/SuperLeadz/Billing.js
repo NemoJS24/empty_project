@@ -244,7 +244,7 @@ const SuperLeadzBilling = () => {
                                     if (billing?.mainData[0]?.plan_id === "Custom Pricing") {
                                         navigate("/merchant/support/")
                                     } else {
-                                        navigate("/merchant/SuperLeadz/joinus/", {state: billing?.price})
+                                        navigate("/merchant/SuperLeadz/joinus/", {state: billing?.mainData[0]?.plan_id})
                                     }
                                 }} className='btn btn-sm btn-success text-white'>Upgrade</button>
                             </div>
@@ -284,7 +284,7 @@ const SuperLeadzBilling = () => {
                                                 if (billing?.mainData[0]?.plan_id === "Custom Pricing") {
                                                     navigate("/merchant/support/")
                                                 } else {
-                                                    navigate("/merchant/SuperLeadz/joinus/", {state: billing?.price})
+                                                    navigate("/merchant/SuperLeadz/joinus/", {state: billing?.mainData[0]?.plan_id})
                                                 }
                                             }} className='btn btn-sm btn-success text-white'>Upgrade</button>
                                         </div>

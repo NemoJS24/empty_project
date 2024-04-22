@@ -86,7 +86,7 @@ const Sidebar = props => {
                   setCurrentActiveGroup={setCurrentActiveGroup}
                 />
               </ul>
-              <div style={{height: '100px'}}></div>
+              <div style={{height: '135px'}}></div>
               <ul className='navigation navigation-main' style={{position: 'fixed', bottom: '0px', width: '100%'}}>
                 <hr />
                 {

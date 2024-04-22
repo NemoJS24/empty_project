@@ -75,6 +75,12 @@ export const SuperLeadzNavigation = [
     title: 'Billing',
     icon: <BiDollar size={16} />,
     navLink: '/merchant/SuperLeadz/billing/'
+  },
+  {
+    id: 'integrations',
+    title: 'Integration',
+    icon: <Circle size={16} />,
+    navLink: '/merchant/integration/'
   }
   // {
   //   id: 'faq',

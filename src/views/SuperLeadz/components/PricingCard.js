@@ -1,11 +1,11 @@
 import React from 'react'
 import { Circle } from 'react-feather'
 
-const PricingCard = ({ data, id, title, price, planTitle, selectedPlan, setSelectedPlan, btnCondition, callPlans, popular, features }) => {
+const PricingCard = ({ data, id, title, price, selectedPlan, setSelectedPlan, btnCondition, callPlans, features }) => {
     return (
         <div className="col-lg-3 col-md-6">
-            <div className={`card position-relative cursor-pointer ${selectedPlan === planTitle ? 'border-primary' : ''}`} onClick={() => setSelectedPlan(planTitle)} style={{ border: '1px solid #dddde0', backgroundColor:"#fff" }}>
-                {popular ? (<span className="badge" style={{ position: 'absolute', top: '15px', right: '15px', backgroundColor: 'transparent', border: '1px solid #464646', color: "#464646" }}>Popular</span>) : ""}
+            <div className={`card position-relative cursor-pointer ${selectedPlan === title ? 'border-primary' : ''}`} onClick={() => setSelectedPlan(title)} style={{ border: '1px solid #dddde0', backgroundColor:"#fff" }}>
+                {btnCondition ? (<span className="badge" style={{ position: 'absolute', top: '15px', right: '15px', backgroundColor: 'transparent', border: '1px solid #464646', color: "#464646" }}>Current Plan</span>) : ""}
 
                 <div className="card-body pt-2 pb-2">
                     <div className="image" style={{ padding: '24px' }}>
@@ -46,13 +46,15 @@ const PricingCard = ({ data, id, title, price, planTitle, selectedPlan, setSelec
 
                     </div>
                     <div className="action">
-                        {
+                        <a className={`btn ${selectedPlan === title ? 'bg-primary text-white' : 'btn btn-outline-primary'} w-100 btn-block`} onClick={() => callPlans(id, data)}> { btnCondition ? "Renew" : title === "Custom Pricing" ? "Request" : "Get Started" }</a>
+                        {/* {
                             btnCondition ? (
-                                <a className={`btn ${selectedPlan === planTitle ? 'bg-primary text-white' : 'btn btn-outline-primary'} w-100 btn-block`} onClick={() => callPlans(id, data)}> { title === "Custom Pricing" ? "Request" : "Get Started" }</a>
-                            ) : (
                                 <a className="btn bg-light-secondary w-100 text-primary btn-block">Buy Now</a>
+                                
+                            ) : (
+                                <a className={`btn ${selectedPlan === planTitle ? 'bg-primary text-white' : 'btn btn-outline-primary'} w-100 btn-block`} onClick={() => callPlans(id, data)}> { title === "Custom Pricing" ? "Request" : "Get Started" }</a>
                             )
-                        }
+                        } */}
                     </div>
                 </div>
             </div>
