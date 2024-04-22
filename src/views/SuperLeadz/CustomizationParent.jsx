@@ -1195,29 +1195,29 @@ const CustomizationParent = () => {
                                     </div>
                                     {values.widthType === "custom" && <div className='mb-2 pb-1 border-bottom'>
                                         {getMDToggle({
-                                            label: <>Width: <input value={parseFloat(values?.width)} type='number' className='form-control' style={{ width: "8ch" }} onChange={e => {
+                                            label: <>Width: <input value={parseFloat(values?.width)} type='number' className='form-control' style={{ width: "12ch", appearance: "none" }} onChange={e => {
                                                 setValues({ ...values, width: `${parseFloat(e.target.value)}px` })
                                             }} />px</>,
                                             value: "width"
                                         })}
-                                        <div className="d-flex p-0 justify-content-center align-items-center gap-2">
+                                        {/* <div className="d-flex p-0 justify-content-center align-items-center gap-2">
                                             <input value={parseFloat(values?.width)} type='range' className='w-100' onChange={e => {
                                                 setValues({ ...values, width: `${e.target.value}px` })
                                             }} />
-                                        </div>
+                                        </div> */}
                                     </div>}
                                     {values.widthType !== "auto" && <div className='mb-2 pb-1 border-bottom'>
                                         {getMDToggle({
-                                            label: <>Height: <input value={parseFloat(values?.height)} type='number' className='form-control' style={{ width: "8ch" }} onChange={e => {
+                                            label: <>Height: <input value={parseFloat(values?.height)} type='number' className='form-control' style={{ width: "12ch", appearance: "none" }} onChange={e => {
                                                 setValues({ ...values, height: `${parseFloat(e.target.value)}px`, maxHeight: `${parseFloat(e.target.value)}px` })
                                             }} />px</>,
                                             value: ["height", "maxHeight"]
                                         })}
-                                        <div className="d-flex p-0 justify-content-between align-items-center gap-2">
+                                        {/* <div className="d-flex p-0 justify-content-between align-items-center gap-2">
                                             <input value={parseFloat(values?.height)} type='range' className='w-100' onChange={e => {
                                                 setValues({ ...values, height: `${e.target.value}px`, maxHeight: `${e.target.value}px` })
                                             }} />
-                                        </div>
+                                        </div> */}
                                     </div>}
                                     {values?.widthType !== "100%" && (<div className='mb-2  pb-1 border-bottom'>
                                         {getMDToggle({ label: `Alignment: `, value: "alignType" })}
@@ -4732,24 +4732,206 @@ const CustomizationParent = () => {
                                                         </div>
                                                         <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}>Size</p>
                                                         <div className='p-0 mx-0 my-1'>
-                                                            <div className='mb-1'>
+                                                            {/* <div className='mb-1'>
                                                                 <span className='fw-bolder text-black text-capitalize' style={{ fontSize: "0.7rem" }}>{isMobile && currPage !== "button" ? "Max Width" : "Width"}: {currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]["width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"]}</span>
                                                                 <div className="d-flex p-0 justify-content-between align-items-center gap-2">
                                                                     <input type='range'
                                                                         value={parseFloat(currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]["width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"])}
                                                                         className='w-100' onChange={e => {
                                                                             currPage === "button" ? updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}button`]: { ...finalObj?.backgroundStyles[`${mobileCondition}button`], [e.target.name]: `${e.target.value}px` } } }) : updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: { ...finalObj?.backgroundStyles[`${mobileCondition}main`], [e.target.name]: `${e.target.value}${isMobile ? "%" : "px"}` } } })
-                                                                        }} name={currPage === "button" ? "width" : isMobile ? "maxWidth" : "width"} min="0" max={isMobile && currPage !== "button" ? "100" : "800"} />
+                                                                        }} name={currPage === "button" ? "width" : isMobile ? "maxWidth" : "width"} min="0" max={isMobile && currPage !== "button" ? "100" : "1920"} />
+                                                                </div>
+                                                            </div> */}
+                                                            <div className='mb-1'>
+
+                                                                <div className=" p-0 align-items-center gap-2">
+                                                                    <div className='d-flex justify-content-between'>
+                                                                        <span className='fw-bolder text-black text-capitalize' style={{ fontSize: "0.7rem" }}>
+                                                                            {isMobile && currPage !== "button" ? "Max Width" : "Width"}:
+                                                                            {currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]["width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"]}
+                                                                        </span>
+                                                                        <div className='d-flex justify-content-between'>
+                                                                            <label className="form-check-label ms-1 fw-bolder text-black text-capitalize" style={{ fontSize: "0.7rem" }} htmlFor="widthCheck">
+                                                                                Max Width
+                                                                            </label>
+
+
+                                                                            <input
+                                                                            style={{marginBottom:'5px'}}
+                                                                                className="form-check-input ms-1"
+                                                                                type="checkbox"
+                                                                                value=""
+                                                                                id="widthCheck"
+                                                                                onChange={(e) => {
+                                                                                    const isChecked = e.target.checked
+                                                                                    const newWidth = isChecked ? '1920px' : `${finalObj?.backgroundStyles[`${mobileCondition}${currPage === "button" ? "button" : "main"}`]?.width}px`
+
+                                                                                    if (currPage === "button") {
+                                                                                        updatePresent({
+                                                                                            ...finalObj,
+                                                                                            backgroundStyles: {
+                                                                                                ...finalObj?.backgroundStyles,
+                                                                                                [`${mobileCondition}button`]: {
+                                                                                                    ...finalObj?.backgroundStyles[`${mobileCondition}button`],
+                                                                                                    width: newWidth
+                                                                                                }
+                                                                                            }
+                                                                                        })
+                                                                                    } else {
+                                                                                        updatePresent({
+                                                                                            ...finalObj,
+                                                                                            backgroundStyles: {
+                                                                                                ...finalObj.backgroundStyles,
+                                                                                                [`${mobileCondition}main`]: {
+                                                                                                    ...finalObj?.backgroundStyles[`${mobileCondition}main`],
+                                                                                                    [isMobile ? "maxWidth" : "width"]: newWidth
+                                                                                                }
+                                                                                            }
+                                                                                        })
+                                                                                    }
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    <input
+                                                                        type='range'
+                                                                        value={parseFloat(currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]["width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"])}
+                                                                        className='w-100'
+                                                                        onChange={(e) => {
+                                                                            const newWidth = `${e.target.value}${isMobile ? "%" : "px"}`
+
+                                                                            if (currPage === "button") {
+                                                                                updatePresent({
+                                                                                    ...finalObj,
+                                                                                    backgroundStyles: {
+                                                                                        ...finalObj?.backgroundStyles,
+                                                                                        [`${mobileCondition}button`]: {
+                                                                                            ...finalObj?.backgroundStyles[`${mobileCondition}button`],
+                                                                                            width: newWidth
+                                                                                        }
+                                                                                    }
+                                                                                })
+                                                                            } else {
+                                                                                updatePresent({
+                                                                                    ...finalObj,
+                                                                                    backgroundStyles: {
+                                                                                        ...finalObj.backgroundStyles,
+                                                                                        [`${mobileCondition}main`]: {
+                                                                                            ...finalObj?.backgroundStyles[`${mobileCondition}main`],
+                                                                                            [isMobile ? "maxWidth" : "width"]: newWidth
+                                                                                        }
+                                                                                    }
+                                                                                })
+                                                                            }
+                                                                        }}
+                                                                        name={currPage === "button" ? "width" : isMobile ? "maxWidth" : "width"}
+                                                                        min="0"
+                                                                        max={isMobile && currPage !== "button" ? "100" : "1920"}
+                                                                    />
+
                                                                 </div>
                                                             </div>
-                                                            <div className=''>
+                                                            {/* <div className=''>
                                                                 <span className='fw-bolder text-black' style={{ fontSize: "0.7rem" }}>Min-Height: {finalObj?.backgroundStyles[`${mobileCondition}${pageCondition}`]?.minHeight}</span>
                                                                 <div className="d-flex p-0 justify-content-between align-items-center gap-2">
                                                                     <input type='range' value={parseFloat(currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]?.minHeight : finalObj?.backgroundStyles[`${mobileCondition}main`]?.minHeight)} onChange={e => {
                                                                         currPage === "button" ? updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}button`]: { ...finalObj?.backgroundStyles[`${mobileCondition}button`], minHeight: `${e.target.value}px` } } }) : updatePresent({ ...finalObj, backgroundStyles: { ...finalObj.backgroundStyles, [`${mobileCondition}main`]: { ...finalObj?.backgroundStyles[`${mobileCondition}main`], minHeight: `${e.target.value}px` } } })
-                                                                    }} className='w-100' name="height" min="0" max="800" />
+                                                                    }} className='w-100' name="height" min="0" max="1080" />
+                                                                </div>
+                                                            </div> */}
+                                                            <div className='align-item-center'>
+                                                                <div className='d-flex justify-content-between'>
+                                                                    <span className='fw-bolder text-black' style={{ fontSize: "0.7rem" }}>
+                                                                        Height: {finalObj?.backgroundStyles[`${mobileCondition}${pageCondition}`]?.height}
+                                                                    </span>
+                                                                    <div className='d-flex justify-content-between'>
+                                                                        <label className="form-check-label ms-1 fw-bolder text-black text-capitalize" style={{ fontSize: "0.7rem" }} htmlFor="flexCheckDefault">
+                                                                            Max Height
+                                                                        </label>
+                                                                        <input
+                                                                            style={{marginBottom:'5px'}}
+                                                                            className="form-check-input ms-1"
+                                                                            type="checkbox"
+                                                                            value=""
+                                                                            id="flexCheckDefault"
+                                                                            onChange={(e) => {
+                                                                                const isChecked = e.target.checked
+                                                                                const newHeight = isChecked ? '1080px' : `${finalObj?.backgroundStyles[`${mobileCondition}${pageCondition}`]?.height}px`
+                                                                                const newMaxHeight = isChecked ? '90%' : 'unset'
+
+                                                                                if (currPage === "button") {
+                                                                                    updatePresent({
+                                                                                        ...finalObj,
+                                                                                        backgroundStyles: {
+                                                                                            ...finalObj?.backgroundStyles,
+                                                                                            [`${mobileCondition}button`]: {
+                                                                                                ...finalObj?.backgroundStyles[`${mobileCondition}button`],
+                                                                                                height: newHeight,
+                                                                                                maxHeight: newMaxHeight
+                                                                                            }
+                                                                                        }
+                                                                                    })
+                                                                                } else {
+                                                                                    updatePresent({
+                                                                                        ...finalObj,
+                                                                                        backgroundStyles: {
+                                                                                            ...finalObj.backgroundStyles,
+                                                                                            [`${mobileCondition}main`]: {
+                                                                                                ...finalObj?.backgroundStyles[`${mobileCondition}main`],
+                                                                                                height: newHeight,
+                                                                                                maxHeight: newMaxHeight
+                                                                                            }
+                                                                                        }
+                                                                                    })
+                                                                                }
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="d-flex p-0 justify-content-between align-items-center gap-2">
+                                                                    <input
+                                                                        type='range'
+                                                                        value={parseFloat(currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]?.height : finalObj?.backgroundStyles[`${mobileCondition}main`]?.height)}
+                                                                        onChange={(e) => {
+                                                                            const newHeight = `${e.target.value}px`
+                                                                            const newMaxHeight = '90%'
+
+                                                                            if (currPage === "button") {
+                                                                                updatePresent({
+                                                                                    ...finalObj,
+                                                                                    backgroundStyles: {
+                                                                                        ...finalObj?.backgroundStyles,
+                                                                                        [`${mobileCondition}button`]: {
+                                                                                            ...finalObj?.backgroundStyles[`${mobileCondition}button`],
+                                                                                            height: newHeight,
+                                                                                            maxHeight: newMaxHeight
+                                                                                        }
+                                                                                    }
+                                                                                })
+                                                                            } else {
+                                                                                updatePresent({
+                                                                                    ...finalObj,
+                                                                                    backgroundStyles: {
+                                                                                        ...finalObj.backgroundStyles,
+                                                                                        [`${mobileCondition}main`]: {
+                                                                                            ...finalObj?.backgroundStyles[`${mobileCondition}main`],
+                                                                                            height: newHeight,
+                                                                                            maxHeight: newMaxHeight
+                                                                                        }
+                                                                                    }
+                                                                                })
+                                                                            }
+                                                                        }}
+                                                                        className='w-100'
+                                                                        name="height"
+                                                                        min="0"
+                                                                        max="1080"
+                                                                    />
                                                                 </div>
                                                             </div>
+
+
                                                         </div>
                                                         <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}>Border and Shadow</p>
                                                         {currPage === "button" ? <BorderChange pageCondition={pageCondition} type={`btnStyles`} mainStyle={finalObj} setMainStyle={updatePresent} mobileCondition={mobileCondition} /> : <BorderChange pageCondition={pageCondition} type={`bgStyles`} mainStyle={finalObj} setMainStyle={updatePresent} mobileCondition={mobileCondition} />}
