@@ -3,57 +3,64 @@ const Sitemap = require('react-router-sitemap').default;
 
 const router = [
     {
-        path: '/partners',
+        path: '/',
     },
-    {
-        path: '/partners/faq',
-    },
-
     {
         path: '/products/superleadz/',
     },
-
     {
-        // path: '/products/superleadz/lead-generation-nurturing-and-conversion/features',
         path: '/products/superleadz/features/',
     },
     {
-        // path: '/products/superleadz/lead-generation-nurturing-and-conversion/pricing',
         path: '/products/superleadz/pricing/',
     },
     {
-        // path: '/products/superleadz/lead-generation-nurturing-and-conversion/faqs',
         path: '/products/superleadz/faq',
     },
     {
-        // path: '/products/sniper/',
-        path: '/products/sniper/',
+        path: '/products/superleadz/build-email-lists-verified-leads',
     },
     {
-        path: '/products/infiniti/',
-            // path: '/products/infiniti/',
+        path: "/products/superleadz/one-click-offer-redemption/",
     },
     {
-        // path: '/products/semperfi/',
-        path: '/products/semperfi/',
+        path: "/products/superleadz/dual-verification-qualified-lead-generation/",
     },
     {
         path: '/products/flash-accounts/',
     },
     {
-        path: '/products/flash-accounts/faq/',
+        path: '/products/flash-accounts/features/',
     },
     {
         path: '/products/flash-accounts/pricing/',
     },
     {
-        path: '/products/flash-accounts/features/',
+        path: '/products/flash-accounts/faq/',
     },
     {
-        path: '/contact-us/:type',
+        path: '/products/infiniti/',
     },
     {
-        path: '/contact-us',
+        path: '/products/sniper/',
+    },
+    {
+        path: '/products/semperfi/',
+    },
+    {
+        path: '/merchant/signup',
+    },
+    {
+        path: '/merchant/login',
+    },
+    {
+        path: '/partners',
+    },
+    {
+        path: '/partners/faq',
+    },
+    {
+        path: '/blog',
     },
     {
         path: '/about-us/why-XIRCLS',
@@ -64,16 +71,12 @@ const router = [
     {
         path: '/about-us/vision-&-mission-statement/',
     },
-
-    // {
-    // path: '/team',
-    // },
     {
-        path: '/blog',
+        path: '/contact-us',
     },
-    // {
-    // path: '/blog/:blogTitle',
-    // },
+    {
+        path: '/contact-us/:type',
+    },
     {
         path: '/blog/Conflict-Torture-or-Tool/',
     },
@@ -97,7 +100,6 @@ const router = [
     },
     {
         path: '/blog/Are-Influencers-Worth-The-Price-Tag/',
-
     },
     {
         path: '/blog/The-Harsh-Truth-About-Customer-Loyalty-Programs/',
@@ -108,9 +110,6 @@ const router = [
     {
         path: '/blog/The-Devils-Currency-Our-Lives-For-Auction/',
     },
-    // {
-    // path: '/blog/author/:blogger',
-    // },
     {
         path: '/blog/author/Darina_Litvina/',
     },
@@ -144,65 +143,11 @@ const router = [
     {
         path: '/blog/author/Allie_Hinds/',
     },
-    // {
-    // path: '/developers',
-    // },
-    {
-        path: '/merchant/login',
-    },
-    {
-        path: '/merchant/password_reset',
-    },
-    {
-        path: '/merchant/signup',
-    },
-    {
-        path: '/affiliate/login',
-    },
-    {
-        path: '/affiliate/signup',
-    },
     {
         path: '/terms-of-use/',
     },
     {
         path: '/privacy-policy/',
-    },
-    {
-        path: '/merchant/home/',
-    },
-    {
-        path: '/merchant/apps/',
-    },
-    // {
-    //     path: '*',
-    // },
-    // {
-    //     path: '/processing/',
-    // },
-    // {
-    //     path: '/:flow/signup/',
-    // },
-    // {
-    //     path: '/flow/login/',
-    // },
-    {
-        path: '/merchant/verify-your-email/:slug/',
-    },
-    // {
-    //     path: '/install_flow_failed/',
-    // },
-    // {
-    //     path: '/codeskin/skin-type-test',
-    // },
-    {
-        path: '/products/superleadz/build-email-lists-verified-leads',
-    },
-    {
-        path: "/products/superleadz/one-click-offer-redemption/",
-    },
-    {
-        path: "/products/superleadz/dual-verification-qualified-lead-generation/",
     }
 ];
 
