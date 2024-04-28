@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useCallback, useEffect, useState } from 'react'
-import { Container, Row, Col } from 'reactstrap'
+import { Container, Row, Col, Button } from 'reactstrap'
 import Select from "react-select"
 import { createPortal } from 'react-dom'
 import axios from "axios"
@@ -14,51 +14,56 @@ import Flatpickr from 'react-flatpickr'
 import moment from 'moment'
 import { useNavigate, useParams } from 'react-router-dom'
 import Spinner from '../../Components/DataTable/Spinner'
-// import toast from "react-hot-toast"
+import { Eye } from "react-feather"
 
-const ApplicantForm = ({ allData }) => {
-    // const { id } = useParams()
-    // const parmas = new URLSearchParams(location.search)
+const Buyer = ({ allData }) => {
     const { id } = useParams()
-    // const isEdit = parmas.get("type") === "edit"
-    // const isCustomer = parmas.get("type") === "customer"
 
     const navigate = useNavigate()
-    const { formData, handleNext, handleInputChange, setFormData, handleChange, country, isCustomer } = allData
+    const { formData, handleNext, handleInputChange, setFormData, handleChange, country, isEdit , isCustomer } = allData
     const [productModelOption, setProductModelOption] = useState([])
     const [productVariantOption, setProductVariantOption] = useState([])
-    // const [allOptions, setAllOptions] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [customerList, setCustomerList] = useState([])
-    // const [isLoading, setIsLoading] = useState(true)
+    const [showAdditionalFields, setShowAdditionalFields] = useState(false)
+    const [selectedVehicleType, setSelectedVehicleType] = useState('')
+    const [changeVehicle, setChangeVehicle] = useState(false)
+    const [customer, setCustomer] = useState({
+        customer: {},
+        finance: false,
+        vehicle: {},
+        insurance: []
+    })
+    const [isChecked, setIsChecked] = useState(formData?.is_insurance ? false : true)
+    const [fileName, setFileName] = useState('')
+    const [productFormData, setProductFormData] = useState({})
+
+    console.log(allData, 'alldata')
 
 
-    // const mainFormvalueToCheck = [
-    //     {
-    //         name: 'customer_name',
-    //         message: 'Select Customer Name',
-    //         type: 'string',
-    //         id: 'customer_name'
-    //     },
-    //     {
-    //         name: 'client',
-    //         message: 'Select Client Type',
-    //         type: 'string',
-    //         id: 'client'
-    //     },
-    //     {
-    //         name: 'product_name_id',
-    //         message: 'Select Product Name',
-    //         type: 'string',
-    //         id: 'product_name_id'
-    //     },
-    //     {
-    //         name: 'Loan_Type',
-    //         message: 'Select Loan Type',
-    //         type: 'string',
-    //         id: 'Loan_Type'
-    //     }
-    // ]
+    const handleCheckboxChange = (event) => {
+        const newValue = event.target.checked; 
+        console.log(newValue, "helooooooooV")
+        setIsChecked(newValue)
+        
+        setFormData(prevState => ({
+            ...prevState,
+            is_insurance: newValue
+        }));
+    }
+
+
+    useEffect(() => {
+        if (selectedVehicleType === 'used') {
+            setShowAdditionalFields(true)
+        } else {
+            setShowAdditionalFields(false)
+        }
+    }, [selectedVehicleType])
+
+    const handleVehicleTypeChange = (selectedOption) => {
+        setSelectedVehicleType(selectedOption?.value)
+    }
 
     const addFormvalueToCheck = [
         {
@@ -90,6 +95,18 @@ const ApplicantForm = ({ allData }) => {
             message: 'Enter Phone No',
             type: 'number',
             id: 'phone_no'
+        },
+        {
+            name: 'Adharcard',
+            message: 'Enter Aadhaar No',
+            type: 'number',
+            id: 'Adharcard'
+        },
+        {
+            name: 'pancard',
+            message: 'Enter PAN No',
+            type: 'string',
+            id: 'pancard'
         }
     ]
 
@@ -120,13 +137,16 @@ const ApplicantForm = ({ allData }) => {
             cust_first_name: '',
             cust_last_name: "",
             email: "",
-            phone_no: ""
+            phone_no: "",
         },
         productForm: {
             xircls_customer_id: isCustomer ? id : '',
-            engine_number: '',
-            // brand: '',
-            model: ''
+            // engine_number: '',
+            // model: ''
+            // insurance_no:'',
+            insurance_document:'',
+            // insurance_end_date:'',
+            roc_document:''
         }
     })
 
@@ -143,9 +163,6 @@ const ApplicantForm = ({ allData }) => {
         postReq('add_customer', form_data)
             .then((resp) => {
                 console.log("Response:", resp)
-                // if (resp?.status === 409) {
-                //     throw new Error('Customer already exists')
-                // }
                 toast.success('Customer saved successfully')
                 const addForm = { ...check.addForm }
                 Object.keys(check.addForm).forEach((key) => {
@@ -169,49 +186,84 @@ const ApplicantForm = ({ allData }) => {
     }
 
 
+    const postBuyer = () => {
+        console.log(check.addForm)
+        const form_data = new FormData()
+        Object.entries(check.addForm).map(([key, value]) => {
+            form_data.append(key, value)
+        })
+        form_data.append("dropdown", 'regular')
+        form_data.append("pin", 'INsdfsdfsDV')
+        form_data.append("entry_point", 'INDV')
+        form_data.append("press_btn", 'SAVE & CLOSE')
+        postReq('automotivetransaction', form_data)
+            .then((resp) => {
+                console.log("Response:", resp)
+                toast.success('Customer saved successfully')
+                const addForm = { ...check.addForm }
+                Object.keys(check.addForm).forEach((key) => {
+                    addForm[key] = ""
+                })
+                setCheck(prev => {
+                    return { ...prev, addForm }
+                })
+                handleClose("customer")
+                getCustomer()
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+                if (error?.response?.status === 409) {
+                    toast.error('Customer already exists')
+                } else {
+                    toast.error('Failed to save customer')
+                }
+                handleClose("customer")
+            })
+    }
+
+    const postData = () => {
+        const check = checkVaildation()
+        if (check) {
+            const form_data = new FormData()
+            Object.entries(formData).map(([key, value]) => {
+                form_data.append(key, value)
+            })
+            form_data.append("press_btn", btn)
+            if (isEdit) {
+                form_data.append("finance_instance_id", id)
+            }
+
+            postReq("automotivetransaction", form_data, crmURL)
+                .then((resp) => {
+                    console.log("Response:", resp)
+                    toast.success('Finance saved successfully')
+                    resp.data?.is_edit_url ? navigate(`/merchant/customers/edit_finance/${resp.data?.finance_code}?type=edit`) : navigate(-1)
+                })
+                .catch((error) => {
+                    console.error("Error:", error)
+                    if (error.message === 'Customer already exists') {
+                        toast.error('Customer already exists')
+                    } else {
+                        toast.error('Failed to save customer')
+                    }
+                })
+        }
+    }
+
     const handleAddInputChange = (e, keyType) => {
-        console.log(e)
         setCheck(prevData => ({ ...prevData, [keyType]: { ...prevData[keyType], [e.target.name]: e.target.value } }))
     }
 
-    // const inputChangeHandler = (e) => {
-    //     setCheck({ ...check, mainForm: { ...check.mainForm, [e.target.name]: e.target.value } })
-    // }
 
-    // const addInputChangeHandler = (e) => {
-    //     setCheck({ ...check, addForm: { ...check.addForm, [e.target.name]: e.target.value } })
-    // }
-
-    // const handleSubmitSection = (e, action) => {
-    //     e.preventDefault();
-
-    //     const checkForm = validForm(mainFormvalueToCheck, check.mainForm)  // Use mainFormvalueToCheck for validation
-    //     console.log(checkForm);
-
-    //     if (checkForm.isValid) {
-    //         console.log('Form is valid');
-
-    //         if (action === 'SAVE') {
-    //             // Save
-    //         } else if (action === 'SAVE & CLOSE') {
-    //             // Save and close
-    //         }
-    //     }
-    // }
 
     const handleAddSubmitSection = (e, action) => {
-        e.preventDefault();
+        e.preventDefault()
 
         const checkForm = validForm(addFormvalueToCheck, check.addForm)  // Use addFormvalueToCheck for validation
-        console.log(checkForm, "dd");
+        console.log(checkForm, "dd")
         if (checkForm) {
-            postNewCustomerData()
+            postData()
         }
-
-        // if (checkForm) {
-        //     console.log('Form is valid')
-
-        // }
     }
 
     const vehicleTypeOptions = [
@@ -235,37 +287,7 @@ const ApplicantForm = ({ allData }) => {
 
     console.log(check)
 
-    // const handleProductSubmitSection = (e, action) => {
-    //     e.preventDefault();
-
-    //     const checkForm = validForm(productFormvalueToCheck, check.productForm)  // Use productFormvalueToCheck for validation
-    //     console.log(checkForm);
-
-    //     if (checkForm) {
-    //         const form_data = new FormData()
-    //         Object.entries(check?.productForm).map(([key, value]) => {
-    //             form_data.append(key, value)
-    //         })
-    //         form_data.append("press_btn", 'SAVE')
-    //         form_data.append("xircls_customer_id", formData?.xircls_customer_id)
-
-    //         postReq('add_vehicle', form_data, crmURL)
-    //         .then((resp) => {
-    //             console.log("Response:", resp)
-    //             toast.success('Vehicle saved successfully')
-    //             handleClose('product')
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error:", error)
-    //             toast.error('Failed to save Vehicle')
-    //         })
-
-    //     }
-    // }
-
     const selectCustomer = () => {
-        // handleInputChange(e, 'xircls_customer_id')
-        // setIsLoading(true)
         console.log(formData?.xircls_customer_id)
         const form_data = new FormData()
         const url = new URL(`${crmURL}/vehicle/fetch_vehicle_details/`)
@@ -284,6 +306,8 @@ const ApplicantForm = ({ allData }) => {
 
             })
     }
+
+
 
     const postVehicleDetails = () => {
         const form_data = new FormData()
@@ -313,28 +337,7 @@ const ApplicantForm = ({ allData }) => {
         }
     }
 
-    // const handleChange = (options, actionMeta, check, type = "formData") => {
-    //     if (check) {
-    //         const option_list = options.map((cur) => {
-    //             return cur.value
-    //         })
-    //         if (type === "formData") {
-    //             setFormData(prev => ({ ...prev, [actionMeta.name]: option_list }))
-
-    //         } else {
-    //             setCustomerFormData(prev => ({ ...prev, [actionMeta.name]: option_list }))
-    //         }
-    //     } else {
-    //         if (type === "product") {
-    //             setCheck(prevData => ({ ...prevData, productForm: { ...prevData?.productForm, [actionMeta.name]: options.value } }))
-    //         }
-
-    //     }
-
-    // }
-
     const loadBrandOptions = (inputValue, callback) => {
-        // const getUrl = new URL(`${crmURL}/vehicle/fetch_car_details/`)
         getReq('fetch_car_details', ``, crmURL)
             .then((response) => {
                 const successData = response.data.car_brand
@@ -358,7 +361,6 @@ const ApplicantForm = ({ allData }) => {
         const form_data = new FormData()
         if (actionMeta.name === 'brand') {
             form_data.append("brand", value.value)
-            // handleChange(value, actionMeta, false, "product")
             handleAddInputChange({ target: { name: actionMeta.name, value: value.value } }, "productForm")
             setProductModelOption([])
             setProductVariantOption([])
@@ -366,7 +368,6 @@ const ApplicantForm = ({ allData }) => {
             form_data.append("carmodel", value.value)
             actionMeta.name = 'car_model'
             handleAddInputChange({ target: { name: "car_model", value: value.value } }, "productForm")
-            // handleChange(value, actionMeta, false, "product")
             setProductVariantOption([])
         }
         postReq('fetch_car_details', form_data, crmURL)
@@ -413,132 +414,12 @@ const ApplicantForm = ({ allData }) => {
     const [customerOptions, setCustomerOptions] = useState([])
     const [productOptions, setProductOptions] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    // console.log('customerDetails')
-    // console.log(customerDetails)
-    // console.log('customerOptions')
-    // console.log(customerOptions)
-    // console.log('productOptions')
-    // console.log(productOptions)
-
-    // const { handleNext, formData, handleInputChange } = formHandler
-
-    // const fetchCustomerData = async () => {
-    //     try {
-    //         const getUrl = new URL(`${crmURL}/customers/merchant/get_customer_details/`);
-    //         const response = await axios.get(getUrl);
-
-    //         // Assuming res.data.success is an array
-    //         return response.data.success;
-    //     } catch (error) {
-    //         console.error('Error fetching customer data:', error);
-    //         throw error; // Re-throw the error to be caught by the calling function
-    //     }
-    // };
-
-    // const fetchCustomerData = async (page, inputValue, callback) => {
-    //     // console.log(callback, 'callback2')
-    //     try {
-    //         const response = await axios.get(
-    //             `${baseURL}/customers/merchant/get_customer_details/?page=${page}`
-    //         )
-    //         const successData = response.data.success
-    //         if (successData && Array.isArray(successData)) {
-    //             const customerOptions = successData
-    //                 .filter((item) => item.customer_name !== "")
-    //                 .map((customer) => ({
-    //                     value: customer.id,
-    //                     label: customer.customer_name
-    //                 }))
-    //             const option = [...allOptions, ...customerOptions]
-    //             console.log(option, "option")
-    //             setAllOptions(option)
-    //             callback(option)
-    //             // setCurrentPage((prevPage) => prevPage + 1)
-    //             setCurrentPage((prevPage) => {
-    //                 const nextPage = Math.min(prevPage + 1, (response.data.total_count / 100))
-    //                 return nextPage
-    //             })
-    //         } else {
-    //             console.error("Invalid or missing data in the API response")
-    //             callback([])
-    //         }
-    //     } catch (error) {
-    //         console.error("Error fetching data:", error.message)
-    //     }
-    // }
-
-
 
     useEffect(() => {
         if (formData.xircls_customer_id) {
             selectCustomer()
         }
     }, [formData.xircls_customer_id])
-
-    // const loadOptions = (inputValue, callback) => {
-    //     const getUrl = new URL(`${baseURL}/customers/merchant/get_customer_details/`);
-    //     // getUrl.searchParams.set("q", inputValue)
-    //     axios.get(getUrl.toString())
-    //         .then((response) => {
-    //             const successData = response.data.success;
-    //             if (successData && Array.isArray(successData)) {
-    //                 const customerOptions = successData
-    //                     .filter((item) => item.customer_name !== "")
-    //                     .map((customer) => ({
-    //                         value: customer.id,
-    //                         label: customer.customer_name,
-    //                     }));
-    //                 callback(customerOptions);
-    //             } else {
-    //                 console.error("Invalid or missing data in the API response");
-    //                 callback([]);
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error fetching data:", error.message);
-    //             callback([]);
-    //         });
-    // };
-    // const fetchData = async () => {
-    //     try {
-    //     const getUrl = new URL(`${crmURL}/customers/merchant/get_customer_details/`);
-    //         const response = await axios.get(getUrl.toString());
-    //         const successData = response.data.success;
-    //         const customerOptionss = successData
-    //             .filter((item) => item.customer_name !== "")
-    //             .map((customer) => ({
-    //                 value: customer.id,
-    //                 label: customer.customer_name,
-    //             }));
-    //             // console.log(customerOptions);
-    //         setCustomerOptions(customerOptionss);
-    //         // setCustomerOptions(filteredData);
-    //     } catch (error) {
-    //         console.error("Error fetching data:", error.message);
-    //         setCustomerOptions([]);
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     fetchData()
-    // }, [])
-    // console.log(customerOptions);
-
-    // const loadOptions = (inputValue = '', callback) => {
-    //     console.log('inputValue')
-    //     console.log(inputValue)
-    //     if (!inputValue) {
-    //         // If no input, return all options
-    //         callback(customerOptions);
-    //       } else {
-    //         // If input provided, filter options based on input
-    //         const filteredOptions = customerOptions.filter((option) =>
-    //           option.label.toLowerCase().includes(inputValue.toLowerCase())
-    //         );
-    //         callback(filteredOptions);
-    //       }
-    //   };
-
     const changeProductName = (data) => {
         const productOptions = data?.data?.car_variant.map(item => {
             let value = item[0]
@@ -548,7 +429,6 @@ const ApplicantForm = ({ allData }) => {
                 label: label
             }
         })
-        // setIsLoading(false)
         setProductOptions(productOptions)
     }
 
@@ -596,7 +476,8 @@ const ApplicantForm = ({ allData }) => {
     const getCustomer = () => {
         getReq("getAllCustomer", "", crmURL)
             .then((resp) => {
-                console.log(resp)
+                console.log(resp, "customer")
+
                 setCustomerList(resp?.data?.success?.map((curElem) => {
                     return { label: curElem?.customer_name ? curElem?.customer_name : '-', value: curElem?.xircls_customer_id }
                 }))
@@ -606,9 +487,47 @@ const ApplicantForm = ({ allData }) => {
                 console.log(error)
             })
     }
+    console.log(customerList, 'Email')
+
+
+    const selectInsurance = () => {
+        // getReq(`automotivetransaction`, `?customer_id=${formData?.xircls_customer_id}&vehicle_id=${formData?.product_name_id}`, crmURL)
+        getReq('check_customer_details', `?customer_id=${formData?.xircls_customer_id}&vehicle_id=${formData?.product_name_id || ''}`, crmURL)
+            .then((resp) => {
+                console.log("ResponseMail", resp?.data?.customer?.email)
+                console.log("Get Customer", resp?.data?.customer?.is_finance)
+                const updatedData = {
+                    customer: resp?.data?.customer ? resp?.data?.customer : {},
+                    finance: resp?.data?.customer?.is_finance ? resp?.data?.customer?.is_finance : {},
+
+                    vehicle: resp?.data?.vehicle ? resp?.data?.vehicle : {},
+                    insurance: resp?.data?.insurance ? resp?.data?.insurance : []
+                }
+
+                setCustomer((preData) => ({
+                    ...preData,
+                    ...updatedData
+                }))
+                setFormData({...formData, is_insurance: resp?.data?.insurance?.length === 0 ? false : true})
+                if (resp?.data?.car_variant) {
+                    changeProductName(resp)
+                    console.log(resp, "vehicle")
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+                toast.error('Something went wrong')
+
+            })
+    }
 
     useEffect(() => {
-        // fetchCustomerData(currentPage, null, () => { })
+        if (formData?.xircls_customer_id) {
+            selectInsurance()
+        }
+    }, [formData?.xircls_customer_id, formData?.product_name_id])
+
+    useEffect(() => {
         getCustomer()
     }, [])
 
@@ -617,7 +536,8 @@ const ApplicantForm = ({ allData }) => {
             {`
             .hiddenRight{
                 right: 0 !important
-            }
+            }import Vehicle from '../../Leads/Vehicle';
+
             .hiddenEle{
                 overflow: auto;
                 width: 30%;
@@ -654,7 +574,7 @@ const ApplicantForm = ({ allData }) => {
                         ]}
                         closeMenuOnSelect={true}
                         onChange={(event) => {
-                            const e = { target: { name: "title", value: event.value } };
+                            const e = { target: { name: "title", value: event.value } }
                             handleAddInputChange(e, "addForm")
                         }}
                     />
@@ -665,12 +585,8 @@ const ApplicantForm = ({ allData }) => {
                         First Name
                     </label>
                     <input placeholder="First Name" type='text' id='cust_first_name' name='cust_first_name' className="form-control"
-                        // value={formData?.basicDetail?.cust_first_name} 
-                        // onChange={handleInputChange} 
-                        // onChange={}
                         onChange={(e) => {
                             handleAddInputChange(e, "addForm")
-                            // addInputChangeHandler(e)
                         }}
 
                     />
@@ -681,11 +597,8 @@ const ApplicantForm = ({ allData }) => {
                         Last Name
                     </label>
                     <input placeholder="Last Name" type='text' id='cust_last_name' name='cust_last_name' className="form-control"
-                        // value={formData?.basicDetail?.cust_last_name} 
-                        // onChange={handleInputChange} 
                         onChange={(e) => {
                             handleAddInputChange(e, "addForm")
-                            // addInputChangeHandler(e)
                         }}
                     />
                     <p id="cust_last_name_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -695,11 +608,8 @@ const ApplicantForm = ({ allData }) => {
                         Email
                     </label>
                     <input placeholder="Email" type='text' id='basicDetails-email' name='email' className="form-control"
-                        //  value={formData?.basicDetail?.email} 
-                        //  onChange={handleInputChange}
                         onChange={(e) => {
                             handleAddInputChange(e, "addForm")
-                            // addInputChangeHandler(e)
                         }}
                     />
                     <p id="email_val" className="text-danger m-0 p-0 vaildMessage"></p>
@@ -710,12 +620,6 @@ const ApplicantForm = ({ allData }) => {
                         Mobile Number
                     </label>
                     <input placeholder="Mobile Number" type='tel' id='basicDetails-mobile' name='phone_no' className="form-control"
-                        // value={formData?.basicDetail?.phone_no}
-                        //  onChange={handleInputChange} 
-                        // onChange={(e) => {
-                        //     handleAddInputChange(e, "addForm")
-                        //     // addInputChangeHandler(e)
-                        // }}
                         onChange={(e) => {
                             if (!isNaN(e.target.value)) {
                                 handleAddInputChange(e, "addForm")
@@ -724,7 +628,32 @@ const ApplicantForm = ({ allData }) => {
                         }}
                     />
                     <p id="phone_no_val" className="text-danger m-0 p-0 vaildMessage"></p>
-
+                </Col>
+                <Col md={12} className="mt-2">
+                    <label htmlFor="address-1-city">Aadhaar Card</label>
+                    <input
+                        placeholder="Aadhaar Card"
+                        type="text"
+                        id="aadhaarcard"
+                        name="Adharcard"
+                        className="form-control"
+                        onChange={(e) => {
+                            handleAddInputChange(e, "addForm")
+                        }}
+                    />
+                </Col>
+                <Col md={12} className="mt-2">
+                    <label htmlFor="address-1-city">PAN Card</label>
+                    <input
+                        placeholder="PAN Card"
+                        type="text"
+                        id="pancard"
+                        name="pancard"
+                        className="form-control"
+                        onChange={(e) => {
+                            handleAddInputChange(e, "addForm")
+                        }}
+                    />
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="address-1-country">Country</label>
@@ -749,10 +678,7 @@ const ApplicantForm = ({ allData }) => {
                         className="form-control"
                         onChange={(e) => {
                             handleAddInputChange(e, "addForm")
-                            // addInputChangeHandler(e)
                         }}
-                    // value={formData.billingAddress.city}
-                    // onChange={handleInputChange}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -765,10 +691,7 @@ const ApplicantForm = ({ allData }) => {
                         className="form-control"
                         onChange={(e) => {
                             handleAddInputChange(e, "addForm")
-                            // addInputChangeHandler(e)
                         }}
-                    // value={formData.billingAddress.state}
-                    // onChange={handleInputChange}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
@@ -779,18 +702,12 @@ const ApplicantForm = ({ allData }) => {
                         id="address-1-pincode"
                         name="billingAddress.pincode"
                         className="form-control"
-                        // onChange={(e) => {
-                        //     handleAddInputChange(e, "addForm")
-                        //     // addInputChangeHandler(e)
-                        // }}
                         onChange={(e) => {
                             if (!isNaN(e.target.value)) {
                                 handleAddInputChange(e, "addForm")
                                 console.log("this is a number")
                             }
                         }}
-                    // value={formData.billingAddress.pincode}
-                    // onChange={handleInputChange}
                     />
                 </Col>
 
@@ -820,18 +737,12 @@ const ApplicantForm = ({ allData }) => {
                     <label htmlFor="customer-name">
                         Customer Name
                     </label>
-                    {/* <input type='text' id='customer-name' name='customer_name' className="form-control"
-                        value={formData?.customer_name}
-                        // onChange={handleInputChange} 
-                        disabled
-                    /> */}
                     <Select
                         placeholder='Customer Name'
                         id="insurance-type"
                         options={customerList}
                         closeMenuOnSelect={true}
                         name='customer_name'
-                        // onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
                         value={customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.xircls_customer_id))}
                         isDisabled={true}
                     />
@@ -892,18 +803,80 @@ const ApplicantForm = ({ allData }) => {
                         options={vehicleTypeOptions}
                         closeMenuOnSelect={true}
                         value={insuranceOptions?.find(option => option.value === check?.productForm?.vehicle_type)}
-                        onChange={(e) => {
-                            handleAddInputChange({ target: { name: "vehicle_type", value: e.value } }, "productForm")
+                        onChange={(selectedOption, actionMeta) => {
+                            handleVehicleTypeChange(selectedOption)
+                            handleChange(selectedOption, actionMeta, false, "productForm")
                         }}
-                    // onChange={(value, actionMeta) => handleChange(value, actionMeta, false, "customerData")}
-                    // onChange={e => e => handleInputChange(e, 'product')}
-                    // onChange={(value) => {
-                    //     const e = {target: {name: "vehicle_type", value: value?.value}}
-                    //     handleAddInputChange(e, "productForm")
-                    //     handleChange(value, actionMeta, false, "product")
-                    // }}
                     />
                 </Col>
+
+                {showAdditionalFields && (
+                    <>
+                        <Col md={12} className="mt-2">
+                            <label htmlFor="engine-number">
+                                Upload Your Insurance
+                            </label>
+                            <input
+                                type="file"
+                                id="basicDetails-rot"
+                                name="Insurance_document"
+                                className="form-control"
+                                onChange={(e) => {
+                                    const file = e.target.files[0]
+                                    const fileName = file.name
+                                    const reader = new FileReader()
+                                    reader.onload = function (event) {
+                                        const binaryImageData = new Blob([event.target.result])
+                                        const formData = new FormData()
+                                        formData.append('insurance_document', binaryImageData, fileName)
+
+                                        setFormData(formData)
+
+                                        setCheck(prevData => ({
+                                            ...prevData,
+                                            productForm: {
+                                                ...prevData.productForm,
+                                                insurance_document: file
+                                            }
+                                        }))
+                                    }
+                                    reader.readAsArrayBuffer(file)
+                                }}
+
+                            />
+
+
+                        </Col>
+                        <Col md={12} className="mt-2">
+                            <label htmlFor="insurance-no">
+                                Insurance Number
+                            </label>
+                            <input
+                                placeholder='Insurance Number'
+                                type='text' id='insurance-no' name='insurance_no' className="form-control"
+                                value={check?.productForm?.insurance_no}
+                                onChange={e => handleAddInputChange(e, 'productForm')}
+                            />
+                        </Col>
+                        <Col md={12} className="mt-2">
+                            <label htmlFor="engine-number">
+                                Insurance Expiry Date
+                            </label>
+                            <Flatpickr
+                                placeholder="Insurance Expiry Date"
+                                id='vehicle-registration-date'
+                                name='insurance_end_date'
+                                className="form-control"
+                                value={productFormData?.insurance_end_date}
+                                onChange={(date) => {
+                                    handleAddInputChange({ target: { name: 'insurance_end_date', value: moment(date[0]).format("YYYY-MM-DD") } }, 'productForm')
+                                }}
+
+                            />
+                        </Col>
+                    </>
+                )}
+
                 <Col md={12} className="mt-2">
                     <label htmlFor="brand-select" className="" style={{ margin: '0px' }}>
                         Select Brand
@@ -916,8 +889,6 @@ const ApplicantForm = ({ allData }) => {
                         loadOptions={loadBrandOptions}
                         name='brand'
                         onChange={(value, actionMeta) => selectChange(value, actionMeta)}
-                    // onChange={(e) => selectChange(e, 'brand')}
-                    //   value={selectedOption}
                     />
                     <p id="brand_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
@@ -933,7 +904,6 @@ const ApplicantForm = ({ allData }) => {
                         closeMenuOnSelect={true}
                         name='carmodel'
                         onChange={(value, actionMeta) => selectChange(value, actionMeta)}
-                    // isLoading={loading}
                     />
                     <p id="car_model_val" className="text-danger m-0 p-0 vaildMessage"></p>
                 </Col>
@@ -947,7 +917,6 @@ const ApplicantForm = ({ allData }) => {
                         name="variant"
                         options={productVariantOption}
                         closeMenuOnSelect={true}
-                        // onChange={e => e => handleInputChange(e, 'product')}
                         onChange={e => {
                             handleAddInputChange({ target: { name: "variant", value: e.value } }, "productForm")
                         }}
@@ -959,18 +928,30 @@ const ApplicantForm = ({ allData }) => {
                     <label htmlFor="vehicle-delivery-date">
                         Vehicle Delivery Date
                     </label>
-                    <input placeholder="Vehicle Delivery Date" type='date' id='vehicle-delivery-date' name='delivery_date' className="form-control"
-                        value={check?.productForm.delivery_date}
-                        onChange={e => handleInputChange(e, 'product')}
+                    <Flatpickr
+                        placeholder="Insurance Expiry Date"
+                        id='vehicle-registration-date'
+                        name='vehicle_delivery_date'
+                        className="form-control"
+                        value={productFormData?.vehicle_delivery}
+                        onChange={(date) => {
+                            handleAddInputChange({ target: { name: 'delivery_date', value: moment(date[0]).format("YYYY-MM-DD") } }, 'productForm')
+                        }}
                     />
                 </Col>
                 <Col md={12} className="mt-2">
                     <label htmlFor="vehicle-registration-date">
                         Vehicle Registration Date
                     </label>
-                    <input placeholder="Vehicle Registration Date" type='date' id='vehicle-registration-date' name='registeration_date' className="form-control"
-                        value={check?.productForm?.registeration_date}
-                        onChange={e => handleInputChange(e, 'product')}
+                    <Flatpickr
+                        placeholder="Insurance Expiry Date"
+                        id='vehicle-registration-date'
+                        name='vehicle_reg_date'
+                        className="form-control"
+                        value={productFormData?.insurance_end_date}
+                        onChange={(date) => {
+                            handleAddInputChange({ target: { name: 'registeration_date', value: moment(date[0]).format("YYYY-MM-DD") } }, 'productForm')
+                        }}
                     />
                 </Col>
                 <div className='d-flex justify-content-end mt-2'>
@@ -988,7 +969,6 @@ const ApplicantForm = ({ allData }) => {
             <>
                 <Offcanvas show={isHidden} onHide={() => handleClose('customer')} placement="end">
                     <Offcanvas.Header closeButton>
-                        {/* <Offcanvas.Title>Offcanvas</Offcanvas.Title> */}
                     </Offcanvas.Header>
                     <Offcanvas.Body>
                         {AddCustomerForm}
@@ -996,7 +976,6 @@ const ApplicantForm = ({ allData }) => {
                 </Offcanvas>
                 <Offcanvas show={isAddProductHidden} onHide={() => handleClose('product')} placement="end">
                     <Offcanvas.Header closeButton>
-                        {/* <Offcanvas.Title>Offcanvas</Offcanvas.Title> */}
                     </Offcanvas.Header>
                     <Offcanvas.Body>
                         {AddNewProductSideForm}
@@ -1006,7 +985,6 @@ const ApplicantForm = ({ allData }) => {
             {
                 !isLoading ? (
                     <Container fluid className="px-0 py-1">
-                        {/* <form onSubmit={handleSubmit}> */}
                         <Row>
                             <Col md={12} className="mt-2">
                                 <h4 className="mb-0">Applicant Details</h4>
@@ -1015,6 +993,28 @@ const ApplicantForm = ({ allData }) => {
                                 <label htmlFor="customer-name" className="form-label" style={{ margin: '0px' }}>
                                     Customer Name
                                 </label>
+                                {/* <Select
+                                    placeholder='Customer Name'
+                                    isDisabled={isCustomer}
+                                    id="insurance-type"
+                                    options={customerList}
+                                    closeMenuOnSelect={true}
+                                    name='customer_name'
+                                    components={{ Menu: CustomSelectComponent }}
+                                    value={customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.xircls_customer_id))}
+                                    onChange={(e) => {
+                                        console.log(e);
+                                        const updatedData = {
+                                            customer_name: e.label,
+                                            xircls_customer_id: e.value
+                                        }
+                                        setFormData((preData) => ({
+                                            ...preData,
+                                            ...updatedData
+                                        }))
+                                        handleAddInputChange({ target: { value: e.value, name: "xircls_customer_id" } }, 'productForm');
+                                    }}
+                                /> */}
                                 <Select
                                     placeholder='Customer Name'
                                     isDisabled={isCustomer}
@@ -1022,63 +1022,29 @@ const ApplicantForm = ({ allData }) => {
                                     options={customerList}
                                     closeMenuOnSelect={true}
                                     name='customer_name'
-                                    // onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
                                     components={{ Menu: CustomSelectComponent }}
+                                    // value={customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.xircls_customer_id))}
+                                    value={(customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.xircls_customer_id)))}
                                     onChange={(e) => {
-                                        console.log(e)
-                                        // selectCustomer(e);
-                                        // handleInputChange(e, 'xircls_customer_id')
                                         const updatedData = {
                                             customer_name: e.label,
-                                            xircls_customer_id: e.value
+                                            xircls_customer_id: e.value,
+                                            seller_id: e.value
                                         }
 
                                         setFormData((preData) => ({
                                             ...preData,
-                                            ...updatedData
+                                            ...updatedData,
+                                            value: e.value,
+                                            product_name_label: "",
+                                            product_name_id: ""
                                         }))
-
+                                        // selectInsurance()
                                         handleAddInputChange({ target: { value: e.value, name: "xircls_customer_id" } }, 'productForm')
                                     }}
-                                    value={customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.xircls_customer_id))}
                                 />
+
                                 <p id="xircls_customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                            </Col>
-                            <Col md={6} className="mt-2">
-                                <label htmlFor="basicDetails-client-type" className="form-label" style={{ margin: '0px' }}>
-                                    Client
-                                </label>
-                                <Select
-                                    placeholder='Client Type'
-                                    id="basicDetails-client-type"
-                                    name="client"
-                                    options={clientTypeOptions}
-                                    value={clientTypeOptions?.find(option => option.value === formData?.client)}
-                                    onChange={(value, actionMeta) => handleChange(value, actionMeta)}
-                                    closeMenuOnSelect={true}
-                                // name='client'
-                                />
-                                <p id="client_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                            </Col>
-                            <Col md={6} className="mt-2">
-                                <label htmlFor="basicDetails-se_dsa-name">
-                                    SE/DSA Name
-                                </label>
-                                <input placeholder="SE/DSA Name" type='text' id='basicDetails-se_dsa-name' name='SE_DSA_Name' className="form-control"
-                                    value={formData?.SE_DSA_Name}
-                                    onChange={handleInputChange}
-                                />
-                                <p id="SE_DSA_Name_val" className="text-danger m-0 p-0 vaildMessage"></p>
-                            </Col>
-                            <Col md={6} className="mt-2">
-                                <label htmlFor="basicDetails-Bank-name">
-                                    Bank Name
-                                </label>
-                                <input placeholder="Bank Name" type='text' id='basicDetails-Bank-name' name='Bank_Name' className="form-control"
-                                    value={formData?.Bank_Name}
-                                    onChange={handleInputChange}
-                                />
-                                <p id="Bank_Name_val" className="text-danger m-0 p-0 vaildMessage"></p>
                             </Col>
                             <Col md={6} className="mt-2">
                                 <label htmlFor="product-name" className="form-label" style={{ margin: '0px' }}>
@@ -1090,98 +1056,185 @@ const ApplicantForm = ({ allData }) => {
                                     options={productOptions}
                                     name="product_name_id"
                                     components={{ Menu: CustomProductSelectComponent }}
-                                    onChange={(value, actionMeta) => handleChange(value, actionMeta)}
-                                    value={productOptions?.filter((curElem) => curElem?.value === formData?.product_name_id)}
-                                    // onChange={((event) => {
-                                    //     selectCustomer(event)
-                                    //     const e = { target: { name: 'product_name_id', value: e?.value } }
-                                    //     handleAddInputChange(e, "mainForm")
-                                    // })}
-                                    // onChange={(e) => {
-                                    //     selectCustomer(e);
-                                    //     handleInputChange(e, 'product_name_id')
-                                    // }}
+                                    value={{ value: formData.product_name_label, label: formData.product_name_label }}
+                                    onChange={(e) => {
+                                        setChangeVehicle(true)
+                                        // selectInsurance()
+                                        // handleChange(value, actionMeta)
+                                        const updatedData = {
+                                            product_name_label: e.label,
+                                            product_name_id: e.value,
+                                        }
+
+                                        setFormData((preData) => ({
+                                            ...preData,
+                                            ...updatedData, 
+                                        }))
+                                    }}
+                                    // value={productOptions?.filter((curElem) => curElem?.value === formData?.product_name_id)}
                                     closeMenuOnSelect={true}
+                                    
                                 />
                                 <p id="product_name_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
                             </Col>
                             <Col md={6} className="mt-2">
-                                <label htmlFor="basicDetails-loan-type" className="form-label" style={{ margin: '0px' }}>
-                                    Loan Type
+                                <label htmlFor="basicDetails-rot">
+                                    Mobile Number
                                 </label>
-                                <Select
-                                    placeholder='Loan Type'
-                                    id="basicDetails-loan-type"
-                                    options={loanTypeOptions}
-                                    name="Loan_Type"
-                                    value={loanTypeOptions?.find(option => option.value === formData?.Loan_Type)}
-                                    onChange={(value, actionMeta) => handleChange(value, actionMeta)}
-                                    // onChange={((event) => {
-                                    //     selectCustomer(event)
-                                    //     const e = { target: { name: 'Loan_Type', value: e?.value } }
-                                    //     handleInputChange(e, "mainForm")
-                                    // })}
-                                    // onChange={(e) => {
-                                    //     // selectCustomer(e);
-                                    //     handleInputChange(e, 'Loan_Type')
-                                    // }}
-                                    closeMenuOnSelect={true}
+                                <input placeholder="Enter your Mobile" id='basicDetails-rot' name='phone_no' className="form-control"
+                                    value={customer?.customer?.phone_no ?? formData?.seller_phone_no}
+                                    disabled
+                                    onChange={e => handleInputChange(e, "addForm")
+                                    }
                                 />
-                                <p id="Loan_Type_val" className="text-danger m-0 p-0 vaildMessage"></p>
                             </Col>
                             <Col md={6} className="mt-2">
                                 <label htmlFor="basicDetails-rot">
-                                    Rate of Interest - %
+                                    Email ID
                                 </label>
-                                <input placeholder="Rate of Interest" type='tel' id='basicDetails-rot' name='Rate_of_Interest' className="form-control"
-                                    value={formData?.Rate_of_Interest}
-                                    onChange={e => handleInputChange(e, 'tel')}
+                                <input placeholder="Enter your Email" id='basicDetails-rot' name='email' className="form-control"
+                                    value={customer?.customer?.email ?? formData?.seller_email}
+                                    disabled
+                                    onChange={e => handleInputChange(e, "addForm")}
                                 />
                             </Col>
                             <Col md={6} className="mt-2">
-                                <label htmlFor="basicDetails-loan-acc-number">
-                                    Loan Account Number
+                                <label htmlFor="sales-person">
+                                    Sales Person
                                 </label>
-                                <input placeholder="Loan Account Number" type='tel' id='basicDetails-loan-acc-number' name='Loan_Number' className="form-control"
-                                    value={formData?.Loan_Number}
-                                    onChange={e => handleInputChange(e)}
+                                <input placeholder="Sales Person" type='text' id='sales-person' name='seller_dealer' className="form-control"
+                                    value={formData?.seller_dealer}
+                                    onChange={e => handleInputChange(e, "addForm")}
                                 />
                             </Col>
                             <Col md={6} className="mt-2">
-                                <label htmlFor="basicDetails-bank-acc-number">
-                                    Bank Account Number
-                                </label>
-                                <input placeholder="Bank Account Number" type='tel' id='basicDetails-bank-acc-number' name='Bank_Number' className="form-control"
-                                    value={formData?.Bank_Number}
-                                    onChange={handleInputChange}
-                                />
-                            </Col>
-                            <Col md={6} className="mt-2">
-                                <label htmlFor="basicDetails-loan-amount">
-                                    Loan Amount - ₹
-                                </label>
-                                <input placeholder="Loan Amount" type='tel' id='basicDetails-loan-amount' name='Loan_amount' className="form-control"
-                                    value={formData?.Loan_amount}
-                                    // onChange={e => (handleInputChange(e, 'tel'))}
+                            {/* <iframe src={`https://crm.xircls.com/static/${formData?.productroc_document}`}></iframe>  */}
+                                <div className='d-flex'><label htmlFor="basicDetails-rot">
+                                    ROC Document
+                                </label> 
+                                {console.log(customer?.vehicle?.roc_document, "============")}
+                            {isEdit === true && customer?.vehicle?.roc_document ? (<span className='d-flex'><span className='fs-6'>view </span><a target='_blank' href={`https://crm.xircls.com/static${customer?.vehicle?.roc_document}`}> <Eye size={15}/></a></span>) : (<></>)}
+                            </div>
+                                <input
+                                    type="file"
+                                    // accept=".pdf, .jpg, .jpeg, .png"
+                                    id="ROC"
+                                    name="roc_document"
+                                    className="form-control"
                                     onChange={(e) => {
-                                        if (!isNaN(e.target.value)) {
-                                            (handleInputChange(e, 'tel'))
-                                            console.log("this is a number")
+                                        handleInputChange(e, 'file')
+                                        const file = e.target.files[0]
+                                        setFileName(file.name)
+                                        const reader = new FileReader()
+                                        reader.onload = function (event) {
+                                            const binaryImageData = new Blob([event.target.result])
+                                            const updatedData1 = {
+                                                roc_document: file,
+                                            }
+                                            setFormData((prevData) => ({
+                                                ...prevData,
+                                                ...updatedData1
+                                            }))
                                         }
+                                        reader.readAsArrayBuffer(file)
                                     }}
                                 />
+                               
+                                 
                             </Col>
-                            <Col md={6} className="mt-2">
-                                <label htmlFor="loan-disbursement">Loan Disbursement Date</label>
-                                <Flatpickr options={{ // Sets the minimum date as 14 days ago
-                                    dateFormat: "Y-m-d"
-                                }}
-                                    className='form-control'
-                                    value={formData?.Loan_Disbursement_Date} onChange={(date) => {
-                                        setFormData({ ...formData, Loan_Disbursement_Date: moment(date[0]).format("YYYY-MM-DD") })
-                                    }}
-                                    placeholder='Select date'
-                                />
+
+                            {isChecked === false ? (
+
+                                
+                                formData.is_insurance ? "" : (
+                                    <>
+                                        <Col md={6} className="mt-2">
+                                            <div className="d-flex">
+                                                <label htmlFor="basicDetails-rot">
+                                                Insurance Document
+                                            </label>
+                                            {isEdit === true && customer?.vehicle?.insurance_document ? (<span className='d-flex'><span className='fs-6'>view </span><a target='_blank' href={`https://crm.xircls.com/static${customer?.vehicle?.insurance_document}`}> <Eye size={15}/></a></span>) : (<></>)}
+                                            </div>
+                                            <input
+                                                type="file"
+                                                // accept=".pdf, .jpg, .jpeg, .png"
+                                                id="Insurance"
+                                                name="insurance_document"
+                                                className="form-control"
+                                                onChange={(e) => {
+                                                    handleInputChange(e, 'file')
+                                                    const file = e.target.files[0]
+                                                    setFileName(file.name)
+                                                    const reader = new FileReader()
+                                                    reader.onload = function (event) {
+                                                        const updatedData1 = {
+                                                            insurance_document: file,
+                                                        }
+                                                        setFormData((prevData) => ({
+                                                            ...prevData,
+                                                            ...updatedData1
+                                                        }))
+                                                    }
+                                                    reader.readAsArrayBuffer(file)
+                                                }}
+                                            />
+                                        </Col>
+                                        <Col md={6} className="mt-2">
+                                            <label htmlFor="basicDetails-rot">
+                                                Insurance ID
+                                            </label>
+                                            <input placeholder="Insurance ID" id='basicDetails-rot' name='insurance_no' className="form-control"
+                                                value={formData?.insurance_no}
+                                                onChange={(e) => {
+                                                    handleInputChange(e, "addForm")
+                                                }}
+                                            />
+                                        </Col>
+                                    </>
+                                )
+                                
+                                
+                            ) :
+                                <></>
+                            }
+                            <Col xs={12} className='mt-2'>
+                                {isEdit === true && changeVehicle === false && customer?.insurance.length === 0 ? (
+                                    <div className={formData?.is_insurance} style={{ display: formData?.is_insurance === true ? '' : 'none' }}>
+                                    {console.log("helooooooooooooo",formData.is_insurance )}
+                                    <label>
+                                        <input
+                                            className='me-1'
+                                            name='is_insurance'
+                                            type="checkbox"
+                                            checked={formData?.is_insurance}
+                                            onChange={(e) => {
+                                                
+                                                handleCheckboxChange(e)
+                                                handleInputChange(e, "addForm")
+                                            }}
+                                        />
+                                        Transfer Vehicle Insurance
+                                    </label>
+                                </div>
+                                ):(
+                                    <div className={customer?.insurance} style={{ display: customer?.insurance.length === 0 ? 'none' : '' }}>
+                                    {console.log("helooooooooooooo",formData.is_insurance )}
+                                    <label>
+                                        <input
+                                            className='me-1'
+                                            name='is_insurance'
+                                            type="checkbox"
+                                            checked={formData?.is_insurance}
+                                            onChange={(e) => {
+                                                
+                                                handleCheckboxChange(e)
+                                                handleInputChange(e, "addForm")
+                                            }}
+                                        />
+                                        Transfer Vehicle Insurance
+                                    </label>                
+                                </div> 
+                                )}
                             </Col>
                             <Col xs={12} className='mt-2'>
                                 <div className='d-flex justify-content-between mt-2'>
@@ -1196,7 +1249,6 @@ const ApplicantForm = ({ allData }) => {
                                 </div>
                             </Col>
                         </Row>
-                        {/* </form> */}
                     </Container>
                 ) : (
                     <Container>
@@ -1212,4 +1264,4 @@ const ApplicantForm = ({ allData }) => {
     )
 }
 
-export default ApplicantForm
+export default Buyer

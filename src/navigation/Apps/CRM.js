@@ -4,7 +4,8 @@
 import { GoShieldCheck, GoTools } from "react-icons/go"
 import { DefaultNav } from "./DefualtNav"
 import { PiMoneyThin, PiShareNetworkThin, PiUsersThree } from "react-icons/pi"
-import { LiaHandshake } from "react-icons/lia"
+// import { LiaHandshake } from "react-icons/lia"
+import { IoPricetagOutline } from "react-icons/io5"
 import { RiCarLine } from "react-icons/ri"
 import { ownUrl } from "../../views/Validator"
 
@@ -54,6 +55,12 @@ export const CRMNavigation = [
         title: 'Vehicle',
         icon: <RiCarLine style={{ marginRight: '18px' }} />,
         navLink: '/merchant/customers/vehicle/'
+    },
+    {
+        id: 'usedcar',
+        title: 'Used Car',
+        icon: <IoPricetagOutline style={{ marginRight: '18px' }} />,
+        navLink: '/merchant/customers/usedcar/'
     }
     // {
     //     id: 'buyer-seller',

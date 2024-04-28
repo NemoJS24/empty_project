@@ -226,7 +226,8 @@ export const dashboardURL = {
     oh_my_customer: "/merchant/oh-my-customer/",
     otp_verification: "/merchant/apps/",
     crm: "/merchant/customers/",
-    whatsapp:"/merchant/whatsapp/"
+    whatsapp:"/merchant/whatsapp/",
+    email: "/merchant/email/"
 }
 
 export function generateRandomString() {

@@ -1,7 +1,10 @@
 import React from 'react'
 import { Circle } from 'react-feather'
+import { useNavigate } from 'react-router-dom'
 
 const PricingCard = ({ data, id, title, price, selectedPlan, setSelectedPlan, btnCondition, callPlans, features }) => {
+    const navigate = useNavigate()
+
     return (
         <div className="col-lg-3 col-md-6">
             <div className={`card position-relative cursor-pointer ${selectedPlan === title ? 'border-primary' : ''}`} onClick={() => setSelectedPlan(title)} style={{ border: '1px solid #dddde0', backgroundColor:"#fff" }}>
@@ -21,13 +24,23 @@ const PricingCard = ({ data, id, title, price, selectedPlan, setSelectedPlan, bt
                                     <h4>Contact us for a personalized quote.</h4>
                                 </>
                             ) : (
-                                <>
-                                    <h4 style={{ fontSize: '3rem', lineHeight: '1' }} className="position-relative d-inline">
-                                        <sup className="text-dark" style={{ position: 'absolute', top: '8px', left: '-10px', fontSize: '.8125rem' }}>$</sup>
-                                        {price}
-                                    </h4>
-                                    <sup className="text-dark mb-0" style={{ fontSize: '.8125rem', marginLeft: '5px' }}>/month</sup>
-                                </>
+
+                                title === "Forever Free" ? (
+                                    <>
+                                        <h4>
+                                            Free
+                                        </h4>
+                                    </>
+                                ) : (
+                                    <>
+                                        <h4 style={{ fontSize: '3rem', lineHeight: '1' }} className="position-relative d-inline">
+                                            <sup className="text-dark" style={{ position: 'absolute', top: '8px', left: '-10px', fontSize: '.8125rem' }}>$</sup>
+                                            {price}
+                                        </h4>
+                                        <sup className="text-dark mb-0" style={{ fontSize: '.8125rem', marginLeft: '5px' }}>/month</sup>
+                                    </>
+
+                                )
                             )
                         }
                     </div>
@@ -46,7 +59,13 @@ const PricingCard = ({ data, id, title, price, selectedPlan, setSelectedPlan, bt
 
                     </div>
                     <div className="action">
-                        <a className={`btn ${selectedPlan === title ? 'bg-primary text-white' : 'btn btn-outline-primary'} w-100 btn-block`} onClick={() => callPlans(id, data)}> { btnCondition ? "Renew" : title === "Custom Pricing" ? "Request" : "Get Started" }</a>
+                        <a className={`btn ${selectedPlan === title ? 'bg-primary text-white' : 'btn btn-outline-primary'} w-100 btn-block`} onClick={() => {
+                            if (title === "Custom Pricing") {
+                                navigate("/merchant/support/")
+                            } else {
+                                callPlans(id, data)
+                            }
+                        }}> { btnCondition ? "Renew" : title === "Custom Pricing" ? "Request" : "Get Started" }</a>
                         {/* {
                             btnCondition ? (
                                 <a className="btn bg-light-secondary w-100 text-primary btn-block">Buy Now</a>

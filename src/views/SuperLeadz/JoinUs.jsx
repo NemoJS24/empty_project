@@ -28,6 +28,11 @@ const JoinUs = () => {
     // console.log(activeCard)
     const outletData = getCurrentOutlet()
     const callPlans = (id, data) => {
+
+        if (data.plan_name === "Custom Pricing") {
+            navigate("/merchant/support/")
+            return
+        }
         // e.preventDefault()
         console.log(data?.parent_plan_name)
         if (data?.parent_plan_name === "free") {

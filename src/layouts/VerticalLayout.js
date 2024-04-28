@@ -18,6 +18,7 @@ import { ProductReviewNavigation } from '../navigation/Apps/ProductReview'
 import { OhMyCustomerNavigation } from '../navigation/Apps/OhMyCustomer'
 import { CRMNavigation } from '../navigation/Apps/CRM'
 import { WhatsappNavigation } from '../navigation/Apps/Whatsapp'
+import { EmailNavigation } from '../navigation/Apps/Email'
 // import { getNavbar } from '../views/Validator'
 
 // ** Menu Items Array
@@ -43,6 +44,8 @@ console.log(userPermission)
     navigation = [...CRMNavigation, ...FooterNav]
   } else if (userPermission?.appName === "whatsapp") {
     navigation = [...WhatsappNavigation, ...FooterNav]
+  } else if (userPermission?.appName === "email") {
+    navigation = [...EmailNavigation, ...FooterNav]
   } else {
     navigation = DefaultNav
   }

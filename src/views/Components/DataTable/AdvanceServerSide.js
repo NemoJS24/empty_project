@@ -20,7 +20,7 @@ import { postReq } from '../../../assets/auth/jwtService'
 // import { Link } from 'react-router-dom'
 // import { pageNo } from '../../Validator'
 
-const AdvanceServerSide = ({ date = true, tableName, tableCol, data, isLoading, count, isExpand, ExpandableTable, custom, isStyling, selectableRows = false, selectedRows, setSelectedRows, getData, exportUrl, viewAll, isExport, selectedContent, advanceFilter, viewType = "table", setViewType, viewContent, deleteContent, create, createLink, createText, toggledClearRows, customButtonLeft, customButtonRight }) => {
+const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, data, isLoading, count, isExpand, ExpandableTable, custom, isStyling, selectableRows = false, selectedRows, setSelectedRows, getData, exportUrl, viewAll, isExport, selectedContent, advanceFilter, viewType = "table", setViewType, viewContent, deleteContent, create, createLink, createText, toggledClearRows, customButtonLeft, customButtonRight }) => {
   // ** State
   const [currentPage, setCurrentPage] = useState(0)
   const [currentEntry, setCurrentEntry] = useState(custom ? 5 : 10)
@@ -399,7 +399,7 @@ const AdvanceServerSide = ({ date = true, tableName, tableCol, data, isLoading, 
           key={currentEntry}
           pagination
           customStyles={!isStyling ? customStyles : {}}
-          columns={tableCol}
+          columns={dynamicCol.length > 0 ? dynamicCol : tableCol}
           className='react-dataTable'
           paginationPerPage={currentEntry ? currentEntry : 7}
           sortIcon={<ChevronDown size={10} />}

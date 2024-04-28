@@ -12,6 +12,7 @@ import { referralNavigation } from '../navigation/Apps/Referral'
 import { ProductReviewNavigation } from '../navigation/Apps/ProductReview'
 import { CRMNavigation } from '../navigation/Apps/CRM'
 import { WhatsappNavigation } from '../navigation/Apps/Whatsapp'
+import { EmailNavigation } from '../navigation/Apps/Email'
 
 // ** Menu Items Array
 // import navigation from '@src/navigation/horizontal'
@@ -35,6 +36,8 @@ const HorizontalLayout = props => {
     navigation = [...CRMNavigation, ...FooterNav]
   } else if (userPermission?.appName === "whatsapp") {
     navigation = [...WhatsappNavigation, ...FooterNav]
+  } else if (userPermission?.appName === "email") {
+    navigation = [...EmailNavigation, ...FooterNav]
   } else {
     navigation = DefaultNav
   }

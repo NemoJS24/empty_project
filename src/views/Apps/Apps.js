@@ -111,8 +111,10 @@ const Apps = () => {
         console.log(resp)
         // setApiLoader(false)
         if (name === "other") {
-          navigate("/merchant/apps/")
+          // navigate("/merchant/apps/")
+          navigate(dashboardURL[data?.selectApp])
           setUserPermission({ ...userPermission, appName: data?.selectApp, installedApps: [...resp?.data?.install_app] })
+
         } else {
           window.location.href = resp?.data?.data
         }
@@ -122,6 +124,9 @@ const Apps = () => {
         console.log(error)
         setApiLoader(false)
 
+      })
+      .finally(() => {
+        setApiLoader(false)
       })
 
   }

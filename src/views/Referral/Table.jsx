@@ -5,11 +5,13 @@ import ComTableAdvance from '../Components/DataTable/ComTableAdvance'
 // import ComTable from '../Components/DataTable/ComTable'
 // import moment from 'moment/moment'
 import { getCurrentOutlet } from '../Validator'
-import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
+import { SuperLeadzBaseURL, postReq } from '../../assets/auth/jwtService'
 import ComTable from '../Components/DataTable/ComTable'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { Edit, Trash, X } from 'react-feather'
+import Swal from 'sweetalert2'
+import moment from 'moment'
 
 export default function Table() {
 
@@ -26,7 +28,7 @@ export default function Table() {
     const [currRow, setCurrRow] = useState()
 
     function getOffers() {
-
+        setIsLoading(true)
         const url = new URL(`${SuperLeadzBaseURL}/referral/get_offers/?shop=${outletData[0]?.web_url}`)
 
         axios({
@@ -96,6 +98,51 @@ export default function Table() {
         }
     }
 
+    const checkState = (e, id) => {
+        const form_data = new FormData()
+
+        form_data.append('status', e.target.checked)
+        form_data.append('offer_id', id)
+        form_data.append('action', "ACTIVE")
+        form_data.append('shop', outletData[0]?.web_url)
+
+        postReq("active_refeeral_offer", form_data, SuperLeadzBaseURL)
+        .then((resp) => {
+            console.log(resp, "ppp")
+            e.target.checked ? toast.success('Offer Activated ') : toast.success('Offer Deactivated ')
+            getOffers()
+        })
+        .catch((error) => {
+            console.log(error)
+            toast.error('Something went wrong')
+        })
+    }
+
+    const confirmStatus = (e, id) => {
+        console.log(e)
+        let text = ""
+        if (e.target.checked) {
+            text = "<h4>Are you sure you want activate this Offer</h4>"
+        } else {
+            text = "<h4>Are you sure you want deactivate this Offer</h4>"
+        }
+        Swal.fire({
+            title: text,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#7367f0',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                checkState(e, id)
+            } else {
+                e.target.checked = !e.target.checked
+            }
+        })
+
+    }
+
     const columns = [
         {
             name: 'Sr No.',
@@ -112,7 +159,13 @@ export default function Table() {
         },
         {
             name: 'Referrer Minimum',
-            selector: row => row.referree_minimum
+            selector: row => row.referrer_minimum
+        },
+        {
+            name: 'Referrer End Date',
+            selector: (row) => {
+                return row.referrer_end_date ? moment(row.referrer_end_date).format('YYYY-MM-DD') : "--"
+            }
         },
         {
             name: 'Referree Value',
@@ -123,15 +176,31 @@ export default function Table() {
             selector: row => row.referree_type
         },
         {
+            name: 'Referree End Date',
+            selector: (row) => {
+                return row.referree_end_date ? moment(row.referree_end_date).format('YYYY-MM-DD') : "--"
+            }
+        },
+        {
             name: 'Referree Minimum',
-            selector: row => row.referrer_minimum
+            selector: row => row.referree_minimum
         },
         {
             name: 'Status',
-            selector: row => {
-                return row.is_active ? <span className="text-success">Active</span> : <span className="text-danger">Inactive</span>
+            cell: (row) => {
+               return <>
+                    <div className='form-check form-switch form-check-success cursor-pointer d-flex justify-content-start p-0' style={{cursor: 'pointer'}}>
+                        <input className='form-check-input cursor-pointer m-0' type='checkbox' id='verify' defaultChecked={row.is_active} onChange={(e) => confirmStatus(e, row.id)} />
+                    </div>
+                </>
             }
         },
+        // {
+        //     name: 'Status',
+        //     selector: row => {
+        //         return row.is_active ? <span className="text-success">Active</span> : <span className="text-danger">Inactive</span>
+        //     }
+        // },
         {
             name: 'Actions',
             selector: (row) => {
