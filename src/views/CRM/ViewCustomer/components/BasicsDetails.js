@@ -50,7 +50,7 @@ const BasicsDetails = () => {
                 }
                 console.log(newObject, "userData ")
                 setUserData(newObject)
-                const name = newObject.customer_name.split(' ')
+                const name = newObject.customer_name.replace("  ", " ").split(' ')
                 const datePart = newObject?.cust_dob ? newObject?.cust_dob.substring(0, 10) : ''
                 setUserData(prefData => ({
                     ...prefData,
@@ -89,7 +89,7 @@ const BasicsDetails = () => {
         // })
         postReq("add_customer_individual", form_data)
             .then((resp) => {
-                if (resp.status === 409) {
+                if (resp?.status === 409) {
                     throw new Error('Customer already exists')
                 }
             })

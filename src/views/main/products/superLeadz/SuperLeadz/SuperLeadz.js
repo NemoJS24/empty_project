@@ -1,6 +1,6 @@
 import FaqComponent from '@src/views/main/components/Faq/FaqComponent'
 import Footer from '@src/views/main/utilities/footer/Footer'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BsArrowRight } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 import { Card, Col, Container, Row } from 'reactstrap'
@@ -19,38 +19,43 @@ import { IoShieldCheckmarkOutline } from 'react-icons/io5'
 import CardLeft from '../../../components/CardLeft'
 // import gif1 from './images/Horizontal.gif'
 // import arrow from './images/arrow.png'
-import giff1 from './images/gif1.gif'
+// import giff1 from './images/gif1.gif'
 import { Check, X } from 'react-feather'
+import { affiliateTracking } from '../../../../Validator'
 
 // faq data
 export const superFaqData = [
     {
         q: "What is SuperLeadz?",
-        a: " SuperLeadz is a lead generation tool to generate 100% self-verified leads, engage them with on-site incentives tailored by visit frequency and engagement, and facilitate one-click offer redemptions for a frictionless purchase journey."
+        a: " SuperLeadz is a lead generation pop-up tool to generate 100% self-verified leads, engage them with on-site incentives tailored by visit frequency and engagement, and facilitate one-click offer redemptions for a frictionless purchase journey."
     },
     {
         q: "How is SuperLeadz different from other lead generation & conversion tools?",
         a: (
             <div>
-                <p>SuperLeadz is markedly different from other lead generation tools, mainly in these aspects:</p>
-                <p>
+                <div className='pb-1'>SuperLeadz is markedly different from other lead generation tools, mainly in these aspects:</div>
+                <div className='pb-1'>
 
-                    i. Lead Verification: SuperLeadz employs a Dual Verification Process, validating
+                    1. Lead Verification: SuperLeadz employs a Dual Verification Process, validating
                     both the authenticity and purchase intent of website visitors through OTP
                     verification. This guarantees the generation of 100% self-verified leads, who
                     can then be incentivized with offers personalized by visit frequency &
-                    engagement.</p>
-                <p>
-                    ii.  Diverse Offer Creation: Merchants can create different types of offers, from
-                    flat discount on order value to Buy & Get Free offers.</p>
-                <p>
-                    iii.Multiple Offer Display: Visitors can choose from multiple offers in a single
-                    pop-up interaction, increasing the likelihood of conversions.</p>
-                <p>
-                    iv.One-Click Offer Redemptions: Leads can click the "Redeem" button adjacent
+                    engagement.
+                </div>
+                <div className='pb-1'>
+                    2.  Diverse Offer Creation: Merchants can create different types of offers, from
+                    flat discount on order value to Buy & Get Free offers.
+                </div>
+                <div className='pb-1'>
+                    3.Multiple Offer Display: Visitors can choose from multiple offers in a single
+                    pop-up interaction, increasing the likelihood of conversions.
+                </div>
+                <div className='pb-1'>
+                    4.One-Click Offer Redemptions: Leads can click the "Redeem" button adjacent
                     to their selected offer in the pop-up and continue shopping. The chosen offer
                     is automatically applied during the checkout process (even if the shopper
-                    forgets!)</p>
+                    forgets!)
+                </div>
             </div >
         )
     },
@@ -150,7 +155,7 @@ export const superFaqData = [
     //                 <p> c. Buy X, Get Y: Customers receive a discount on the second or subsequent
     //                 products when they purchase the first product in a specified quantity or reach a
     //                 certain total purchase amount.</p>
-                
+
     //         </div>
     //     )
     // },
@@ -164,7 +169,7 @@ export const superFaqData = [
     //                 product or the total purchase amount.</p>
     //                 <p> b. Flat Amount off - A specific monetary value deducted from the original price of a
     //                 product or the total purchase amount.</p>
-                
+
     //         </div>
     //     )
     // },
@@ -180,7 +185,7 @@ export const superFaqData = [
     //                 to be eligible for the offer</p>
     //                 <p> b. Cart Quantity: Set conditions based on the number of items or quantity of products in the
     //                 shopping cart.</p>
-                
+
     //         </div>
     //     )
     // },
@@ -319,6 +324,14 @@ export default function SuperLeadz() {
     ]
 
 
+    useEffect(() => {
+        const params = new URLSearchParams(location.search)
+        if (params.get('aft_no') || localStorage.getItem('aft_no')) {
+            affiliateTracking(params.get('aft_no') ? params.get('aft_no') : localStorage.getItem('aft_no'))
+        }
+    }, [])
+
+
     return (
         <>
 
@@ -347,11 +360,11 @@ export default function SuperLeadz() {
                             <Row className='' >
                                 <Col md="7" className='d-flex justify-content-center flex-column align-items-start'>
                                     <div className=' text-sm-start '>
-                                        <h3 className='fs-3 fw-bolder  text-dark text-start'>LEAD GENERATION</h3>
+                                        <h3 className='fs-3 fw-bolder  text-dark text-start'>LEAD GENERATION POP-UPS</h3>
                                         <h1 className='display-1 lh-83 text-md-start main-heading fw-bolder'>
                                             Built to Convert
                                         </h1>
-                                        <h1 className=' text-black  mt-1 text-start'  >Strengthen your sales cycle with high-intent, verified leads.<br />
+                                        <h1 className=' text-black  mt-1 text-start'>Strengthen your sales cycle with high-intent, verified leads.<br />
                                             Reduce marketing wastage. Increase Revenue.</h1>
                                         <div className=' d-flex  justify-content-start align-items-center gap-1  mt-2' >
                                             <a target='_blank' href='https://apps.shopify.com/superleadz-by-xircls' className='btn  main-btn-blue fs-3'>Install on Shopify</a>
@@ -359,8 +372,10 @@ export default function SuperLeadz() {
                                         </div>
                                     </div>
                                 </Col>
-                                <Col md="5" className='d-none  align-items-center justify-content-center mt-1 mt-md-0 ' >
-                                    <img src={giff1} alt='...' style={{ width: '100%' }} />
+                                <Col md="5" className='align-items-center justify-content-center mt-1 mt-md-0 ' >
+
+                                    <video className='w-100' controls src="https://xircls-static-files.s3.amazonaws.com/website_statics/superleadz_preview.mp4" width="400" height="300" autoPlay muted loop />
+                                    {/* <img src={"https://api.xircls.com/static/images/website-slide/videos/XIRCLS%20E-Commerce%20Demo.mp4"} alt='...' style={{ width: '100%' }} /> */}
                                 </Col>
                             </Row>
                         </Col>
@@ -374,7 +389,7 @@ export default function SuperLeadz() {
                         Who is a SuperLead?
                     </h1>
                     <Row className='justify-content-center  px-1 ' >
-                        <Col  md="8" className=' text-center main-heading  ' >
+                        <Col md="8" className=' text-center main-heading  ' >
                             <h1 className='text-center text-black ' >A high-potential customer who willfully shares and verifies their contact information to receive an incentive, thus demonstrating a clear intent to purchase.</h1>
 
                         </Col>
@@ -398,9 +413,9 @@ export default function SuperLeadz() {
                                 </div>
 
                                 <p className='fs-1  fw-lig'>unverified, no-intent leads</p>
-                                <p className='fs-3 '>80% unverified Intent Emails</p>
-                                <p className='fs-3 '>5% to 15% Incorrect Emails</p>
-                                <p className='fs-3 '>5% Bot Emails</p>
+                                <p className='fs-3 '>80% unverified intent emails</p>
+                                <p className='fs-3 '>5% to 15% incorrect emails</p>
+                                <p className='fs-3 '>5% bot emails</p>
                             </div>
                         </Col>
                         <Col md="2" className='d-flex align-items-center justify-content-center' >

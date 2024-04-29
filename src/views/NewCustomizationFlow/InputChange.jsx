@@ -3,7 +3,7 @@ import { Link2 } from 'react-feather'
 
 const InputChange = ({ parentType, setMainStyle, mainStyle, mobileCondition, allValues, setAllValues, type, hideLabel }) => {
   const [linked, setLinked] = useState(false)
-  const [lastValue, setLastValue] = useState("")
+  const [lastValue, setLastValue] = useState("0px")
 
   const handleInputChange = (event) => {
 
@@ -46,7 +46,7 @@ const InputChange = ({ parentType, setMainStyle, mainStyle, mobileCondition, all
   return (
     <div>
       <div className='my-1'>
-        {!hideLabel && <label className='text-capitalize' style={{ marginBottom: '0.3rem' }}>{type}</label>}
+        {!hideLabel && <label style={{ marginBottom: '0.3rem' }}>{type === "padding" ? "Inner spacing" : "Outer spacing"}</label>}
         <div style={{ aspectRatio: '1', gridTemplateColumns: '1fr 1fr 1fr', display: 'grid' }}>
           <div></div>
           <div className="d-flex justify-content-center align-items-center">

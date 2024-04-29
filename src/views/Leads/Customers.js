@@ -208,6 +208,8 @@ const Customers = () => {
                 isLoading={isLoading}
                 getData={getData}
                 count={tableData?.customer_detailsrecordsTotal}
+                exportUrl={`${crmURL}/customers/cust_all_dashboard/`}
+                isExport={true}
                 // selectableRows={true}
                 // setSelectedRows={setSelected}
                 // selectedRows={selected}

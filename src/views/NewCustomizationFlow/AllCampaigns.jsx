@@ -4,13 +4,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Card, CardBody, Col, Container, DropdownItem, DropdownMenu, DropdownToggle, Modal, ModalBody, Row, UncontrolledButtonDropdown, UncontrolledDropdown } from 'reactstrap'
 import toast from 'react-hot-toast'
 import JsonToJsx from '../Components/SuperLeadz/JsonToJsx'
-import moment from 'moment/moment'
-import { ThemesProvider } from '../../Helper/Context'
+import { PermissionProvider, ThemesProvider } from '../../Helper/Context'
 import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
 // import { getCurrentOutlet } from '../Validator'
 import Spinner from '../Components/DataTable/Spinner'
-import { Copy, Edit, Edit2, Edit3, Eye, Grid, Layout, MoreVertical, Plus, Table, Trash, X } from 'react-feather'
-import { getCurrentOutlet } from '../Validator'
+import { Copy, Edit, Edit2, Edit3, Eye, Grid, Info, Layout, MoreVertical, Plus, Table, Trash, X } from 'react-feather'
+import { defaultFormatDate, getCurrentOutlet } from '../Validator'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 // import pixels from "../../assets/images/superLeadz/pixels.png"
 import Flatpickr from 'react-flatpickr'
@@ -18,21 +17,19 @@ import CampaignWiseData from '../Components/SuperLeadz/CampaignWiseData'
 import { HiOutlinePencilSquare } from "react-icons/hi2"
 import { MdOutlineContentCopy, MdDelete, MdDeleteOutline } from "react-icons/md"
 import AdvanceServerSide from '../Components/DataTable/AdvanceServerSide'
+// import Swal from 'sweetalert2'
 
 const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, create = true }) => {
-
-    // const [searchValue, setSearchValue] = useState('')
-    // const [filteredData, setFilteredData] = useState([])
-    // const [switch1, setSwitch1] = useState(false)
     const outletData = getCurrentOutlet()
     const [count, setCount] = useState(0)
     const navigate = useNavigate()
     const [viewType, setViewType] = useState("table")
-
+    const [toggledClearRows, setToggleClearRows] = useState(false)
     const [allCampaigns, setAllCampaigns] = useState([])
     const [isLoading, setIsLoading] = useState(true)
 
     const { setSelectedThemeNo, setEditTheme } = useContext(ThemesProvider)
+    const { userPermission } = useContext(PermissionProvider)
 
     const [activeThemes, setActiveThemes] = useState([])
     const [conflictThemes, setConflictThemes] = useState([])
@@ -40,9 +37,13 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
     const [deleteModal, setDeleteModal] = useState(false)
     const [currDetails, setCurrDetails] = useState({})
     const [checkedThemes, setCheckedThemes] = useState([])
+    const [afterModal, setAfterModal] = useState(false)
+    const [deactivateModal, setDeactivateModel] = useState(false)
     const [deleteMode, setDeleteMode] = useState("single")
     const condition = ''
 
+    console.log(checkedThemes, "checkedThemes")
+    const [activatedTheme, setActivatedTheme] = useState({})
     const [modal1, setModal1] = useState(false)
 
     // const [dateModal, setDateModal] = useState(false)
@@ -59,9 +60,13 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
 
     // const toggleDateModal = () => setDateModal(!dateModal)
 
-    const GridCard = ({ title, data }) => {
+    const GridCard = ({ title, data, info }) => {
         return <Col md="6" className='border text-start d-flex align-items-center justify-content-between p-2'>
-            <p className=" h5 card-text ms-1">{title} </p>
+            <p style={{ borderBottom: '0px dotted lightgray', fontSize: '18px', whiteSpace: 'nowrap', paddingRight: '10px' }} className='h5 card-text m-0 ms-1 position-relative cursor-default'>
+                {title}
+                {info ? <span className='position-absolute' title={info} style={{ top: '-10px', right: '-4px', cursor: 'pointer' }}><Info size={12} /></span> : ''}
+            </p>
+            {/* <p className=" h5 card-text ms-1">{title} </p> */}
             <h4 className=' ps-2 me-1'>{data ? data : 0}</h4>
         </Col>
     }
@@ -94,14 +99,40 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                 //         return curElem.theme_name.is_draft === 0
                 //     }))
                 // } else {
-                setAllCampaigns(data?.grid_view_data)
+                // console.log(data?.grid_view_data, "data?.grid_view_data")
+
+                // const campaignData = data?.grid_view_data
+                // if (Array.isArray(campaignData) && campaignData.length >= 1) {
+                //     campaignData[0].defaultExpanded = true
                 // }
-                setIsLoading(false)
+                // // if (Boolean(campaignData[0].defaultExpanded)) {
+                // // }
+                // setAllCampaigns(campaignData)
+                // // }
+                // setIsLoading(false)
+                // setCount(data?.total_count)
+                // data.is_active.forEach(ele => {
+                //     newArr.push(Number(ele))
+                // })
+                // setActiveThemes([...newArr])
+                console.log(data?.grid_view_data, "data?.grid_view_data")
+
+                const campaignData = data?.grid_view_data
+                // if (campaignData && campaignData?.length > 0) {
+                if (Array.isArray(campaignData) && campaignData.length >= 1) {
+                    campaignData[0].defaultExpanded = true
+                }
+                // if (Boolean(campaignData[0].defaultExpanded)) {
+                // }
+                setAllCampaigns(campaignData)
+                // }
                 setCount(data?.total_count)
                 data.is_active.forEach(ele => {
                     newArr.push(Number(ele))
                 })
                 setActiveThemes([...newArr])
+                // }++
+                setIsLoading(false)
             }).catch((err) => {
                 console.log(err)
                 toast.error("Data could not be loaded")
@@ -133,6 +164,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                 console.log({ data })
                 toast.success(data.data.message)
                 setCheckedThemes([])
+                setToggleClearRows(!toggledClearRows)
                 getAllThemes()
             })
             .catch((error) => {
@@ -173,12 +205,18 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
             method: 'POST',
             data: form_data
         })
-            .then(() => {
-                getAllThemes()
-            })
-            .catch(err => {
-                alert(err)
-            })
+        .then(() => {
+            getAllThemes()
+            
+            if (!activeThemes.includes(currDetails.id)) {
+                setAfterModal(!afterModal)
+            } else {
+                setDeactivateModel(!deactivateModal)
+            }
+        })
+        .catch(err => {
+            alert(err)
+        })
     }
 
     const sendDuplicate = (ele) => {
@@ -232,7 +270,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
     //     </Col>
     //     <Col className='d-flex align-items-center justify-content-end' md='4' sm='12'>
     //         <div className="d-flex gap-2 align-items-center">
-    //             <Link to={"/merchant/SuperLeadz/themes/"} className='btn btn-primary-main' style={{ width: "240px" }}> Create Campaign</Link>
+    //             <Link to={"/merchant/superleadz/templates"} className='btn btn-primary-main' style={{ width: "240px" }}> Create Campaign</Link>
     //             <input type="text" className="form-control w-75" value={searchValue} onChange={handleFilter} placeholder='Search...' />
     //         </div>
     //     </Col>
@@ -248,7 +286,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                             <div onClick={() => {
                                 // setSelectedThemeNo(row.default_id)
                                 // setEditTheme(row)
-                                localStorage.setItem("is_draft", row.theme_name.is_draft)
+                                localStorage.setItem("is_draft", row.theme_name.draft_status)
                                 // navigate(`/merchant/SuperLeadz/overview/${row.theme_name.id}/`)
                             }} className="prev d-flex justify-content-center align-items-center rounded position-relative overflow-hidden cursor-pointer" style={{ width: "120px", height: "67.5px", backgroundColor: JSON.parse(row.theme_name.custom_theme).overlayStyles.backgroundColor, backgroundImage: JSON.parse(row.theme_name.custom_theme).overlayStyles.backgroundImage }}>
                                 <span className="position-absolute">
@@ -260,7 +298,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                             // setSelectedThemeNo(row.theme_name.default_id)
                             // setEditTheme(row)
                             // navigate(`/merchant/SuperLeadz/overview/${row.theme_name.id}/`)
-                        }} className='fw-bolder text-primary cursor-pointer' style={{width: 'calc(100% - 135px)', overflow: 'hidden', textOverflow: 'ellipsis'}}>{row.theme_name.campaign_name}</div>
+                        }} className='fw-bolder text-primary cursor-pointer' style={{ width: 'calc(100% - 135px)', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.theme_name.campaign_name}</div>
                     </div>
                 )
             },
@@ -270,10 +308,21 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
         {
             name: 'Status',
             selector: row => {
-                if (row.theme_name.is_draft === 0) {
+                if (row.theme_name.draft_status === 0) {
                     return (
                         <div className="m-auto form-check form-switch form-check-success cursor-pointer p-0 m-0" style={{ filter: `drop-shadow(0px 0px 7.5px rgba(40, 199, 111, ${row.theme_name.is_active ? "0.5" : "0"}))` }}>
                             <input onChange={() => {
+                                // if (userPermission?.currentPlan?.plan === "Forever Free") {
+                                //     const activeCampaign = allCampaigns.filter((curElem) => curElem?.theme_name?.is_active === 1)
+                                //     console.log(activeCampaign, "activeCampaign")
+                                //     if (activeCampaign.length > 0) {
+                                //         Swal.fire({
+                                //             title: "Upgrade your plan"
+                                //             // icon: "info"
+                                //         })
+                                //         return
+                                //     }
+                                // }
                                 setCurrDetails(row.theme_name)
                                 const getUrl = new URL(`${SuperLeadzBaseURL}/api/v1/get/active-template/`)
                                 const form_data = new FormData()
@@ -289,6 +338,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                                     // data.data.response.forEach(row => {
                                     //     newArr.push(row.theme_name.
                                     // })
+                                    setActivatedTheme(row.theme_name)
                                     if ((data.data.response.length === 0) || (data.data.response.length > 0 && activeThemes.includes(row.theme_name.id))) {
                                         setModal1(true)
                                     } else {
@@ -319,14 +369,14 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
         },
         {
             name: 'Start Date',
-            selector: row => <span className='cursor-pointer'>{moment(row.theme_name.start_date).format("DD-MM-YYYY")}</span>,
+            selector: row => <span className='cursor-pointer'>{defaultFormatDate(row.theme_name.start_date, userPermission?.user_settings?.date_format)}</span>,
             dataType: 'offer_code',
             type: 'date',
             isEnable: true
         },
         {
             name: 'End Date',
-            selector: row => <span className='cursor-pointer'>{row.theme_name.end_date ? moment(row.theme_name.end_date).format("DD-MM-YYYY") : "perpetual"}</span>,
+            selector: row => <span className='cursor-pointer'>{Boolean(row.theme_name.end_date) ? defaultFormatDate(row.theme_name.end_date, userPermission?.user_settings?.date_format) : "Perpetual"}</span>,
             type: 'date',
             isEnable: true
         },
@@ -360,8 +410,8 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                             <DropdownItem onClick={() => {
                                 setSelectedThemeNo(row.theme_name.default_id)
                                 setEditTheme(row.theme_name)
-                                localStorage.setItem("is_draft", row.theme_name.is_draft)
-                                navigate(`/merchant/SuperLeadz/new_customization/${row.theme_name.id}`, { state: row.theme_name })
+                                localStorage.setItem("is_draft", row.theme_name.draft_status)
+                                navigate(`/merchant/SuperLeadz/new_customization/${row.theme_name.id}?status=${activeThemes.includes(row.theme_name.id)}`, { state: row.theme_name })
                             }} className='w-100'>
                                 <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
                                     <Edit2 stroke='#ff9f43' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Edit</span>
@@ -389,10 +439,10 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
         return <CampaignWiseData campaignData={data.data} />
     }
 
-    const deleteContent = <button onClick={() => {
+    const deleteContent = checkedThemes.length > 0 && <button onClick={() => {
         setDeleteMode("multiple")
         setDeleteModal(!deleteModal)
-    }} className="btn btn-danger d-block">Deleting {checkedThemes.length} items</button>
+    }} className="btn btn-danger d-block">Deleting {checkedThemes.length} item/s</button>
 
     return (
         <>
@@ -420,6 +470,9 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                         border: 1px solid #efefef;
                         background-color: #ffffff;
                     }
+                    // .swal2-styled.swal2-confirm {
+                    //     background: #006aff !important
+                    // }
                 `}
             </style>
 
@@ -444,9 +497,10 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                                 deleteContent={deleteContent}
                                 viewType={viewType}
                                 create={create}
-                                createLink={"/merchant/SuperLeadz/Themes/"}
+                                createLink={"/merchant/superleadz/templates"}
                                 createText={"Create Campaign"}
                                 setViewType={setViewType}
+                                toggledClearRows={toggledClearRows}
                                 viewContent={
                                     allCampaigns.length > 0 ? <Row>
                                         {
@@ -459,7 +513,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                                                             <div className='d-flex justify-content-between'>
                                                                 <div>
                                                                     <h4 className='text-start fw-bolder text-black ps-2'>{curElem?.theme_name?.campaign_name}</h4>
-                                                                    <p className='text-start  ps-2'> Created at : {moment(curElem?.theme_name.start_date).format("DD-MM-YYYY")}</p>
+                                                                    <p className='text-start  ps-2'> Created at : {defaultFormatDate(curElem?.theme_name.start_date, userPermission?.user_settings?.date_format)}</p>
                                                                 </div>
 
                                                                 <div className="d-flex justify-cotent-center align-items-center gap-1">
@@ -477,6 +531,17 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
 
                                                                             <div className="m-auto form-check form-switch form-check-success cursor-pointer p-0 m-0" style={{ filter: `drop-shadow(0px 0px 7.5px rgba(40, 199, 111, ${curElem?.theme_name.is_active ? "0.5" : "0"}))` }}>
                                                                                 <input onChange={() => {
+                                                                                    // if (userPermission?.currentPlan?.plan === "Forever Free") {
+                                                                                    //     const activeCampaign = allCampaigns.filter((curElem) => curElem?.theme_name?.is_active === 1)
+                                                                                    //     console.log(activeCampaign, "activeCampaign")
+                                                                                    //     if (activeCampaign.length > 0) {
+                                                                                    //         Swal.fire({
+                                                                                    //             title: "Upgrade your plan"
+                                                                                    //             // icon: "info"
+                                                                                    //         })
+                                                                                    //         return
+                                                                                    //     }
+                                                                                    // }
                                                                                     setCurrDetails(curElem?.theme_name)
                                                                                     const getUrl = new URL(`${SuperLeadzBaseURL}/api/v1/get/active-template/`)
                                                                                     const form_data = new FormData()
@@ -513,11 +578,11 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
 
                                                                 <GridCard title="Impressions" data={curElem[`${condition}pop_up_view`]} info={`Number of times pop-up was shown.`} />
 
-                                                                <GridCard title="Leads" data={curElem?.total_leads} info={`Number of leads (total)`} />
+                                                                <GridCard title="Leads" data={curElem[`${condition}total_leads`]} info={`Total instances of visitors submitting their contact information through a SuperLeadz pop-up`} />
 
-                                                                <GridCard title="Conversion %" data={`${curElem?.conversion_rate}%`} info={`Number of leads (total) / Number of redemptions`} />
+                                                                <GridCard title="Conversion %" data={`${Number(curElem[`${condition}conversion_rate`]).toFixed(2)}%`} info={`Number of leads (total) / Number of redemptions`} />
 
-                                                                <GridCard title="CTR" data={`${(curElem?.clicks && curElem[`${condition}pop_up_view`]) ? Number(curElem[`${condition}clicks`] / curElem[`${condition}pop_up_view`] * 100).toFixed(2) : 0}%`} info={`Number of clicks / Number of impressions * 100`} />
+                                                                <GridCard title="CTR" data={`${(curElem?.clicks && curElem[`${condition}pop_up_view`]) ? Number(curElem[`${condition}clicks`] / curElem[`${condition}pop_up_view`] * 100).toFixed(2) : 0}%`} info={`The percentage of clicks relative to the total number of impressions`} />
 
                                                                 <Col md="6" className='d-none'>
                                                                     <GridCard title="Conversions" data={curElem?.conversion} info={`Number of redemptions.`} />
@@ -580,17 +645,49 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                     </Card>
                 </Col>
             </Row>
+            <Modal isOpen={afterModal} toggle={() => setAfterModal(!afterModal)} className='position-relative popup-cust'>
+                <ModalBody>
+                    <span className="position-absolute top-0 end-0" style={{ cursor: 'pointer', padding: "0.25rem" }} onClick={() => setAfterModal(!afterModal)}>
+                        <X size={17.5} />
+                    </span>
+                        Your campaign is live!
+                    <div className="text-end mt-2 d-flex justify-content-end align-items-center gap-1">
+                        <button onClick={() => {
+                            setAfterModal(!afterModal)
+                        }} className={`btn btn-${activeThemes.includes(currDetails.id) ? 'outline-primary' : 'primary'} text-capitalize`}>OK</button>
+                        <Link className={`btn btn-${activeThemes.includes(currDetails.id) ? 'outline-primary' : 'primary'} text-capitalize`} to={`/merchant/SuperLeadz/preview/${activatedTheme.id}`} state={activatedTheme}>View Pop-Up</Link>
+                    </div>
+                </ModalBody>
+            </Modal>
+            <Modal isOpen={deactivateModal} toggle={() => setDeactivateModel(!deactivateModal)} className='position-relative popup-cust' >
+                <ModalBody>
+                    <span className="position-absolute top-0 end-0" style={{ cursor: 'pointer', padding: "0.25rem" }} onClick={() => setDeactivateModel(!deactivateModal)}>
+                        <X size={17.5} />
+                    </span>
+                        Your campaign has been deactivated.
+                    <div className="text-end mt-2 d-flex justify-content-end align-items-center gap-1">
+                        <button onClick={() => {
+                            setDeactivateModel(!deactivateModal)
+                        }} className={`btn btn-${activeThemes.includes(currDetails.id) ? 'outline-primary' : 'primary'} text-capitalize`}>OK</button>
+                    </div>
+                </ModalBody>
+            </Modal>
             {/* {checkedThemes.length > 0 && } */}
             <Modal isOpen={modal1} toggle={() => setModal1(!modal1)} className='position-relative popup-cust' >
                 <ModalBody>
                     <span className="position-absolute top-0 end-0" style={{ cursor: 'pointer', padding: "0.25rem" }} onClick={() => setModal1(!modal1)}>
                         <X size={17.5} />
                     </span>
-                    Do you want to {activeThemes.includes(currDetails.id) && 'de'}activate this theme?
-                    <div className="text-end"><button onClick={() => {
-                        setModal1(!modal1)
-                        sendConfirmation()
-                    }} className={`btn btn-${activeThemes.includes(currDetails.id) ? 'outline-primary' : 'primary'} text-capitalize`}>{activeThemes.includes(currDetails.id) && 'de'}activate</button></div>
+                    Are you sure you want to {activeThemes.includes(currDetails.id) && 'de'}activate this campaign?
+                    <div className="text-end mt-2 d-flex justify-content-end align-items-center gap-1">
+                        <button onClick={() => {
+                            setModal1(!modal1)
+                        }} className={`btn btn-${activeThemes.includes(currDetails.id) ? 'outline-primary' : 'primary'} text-capitalize`}>No</button>
+                        <button onClick={() => {
+                            setModal1(!modal1)
+                            sendConfirmation()
+                        }} className={`btn btn-${activeThemes.includes(currDetails.id) ? 'outline-primary' : 'primary'} text-capitalize`}>Yes</button>
+                    </div>
                 </ModalBody>
             </Modal>
             <Modal isOpen={conflictModal} onClick={() => setConflictModal(!conflictModal)} toggle={() => setConflictModal(!conflictModal)}>
@@ -609,7 +706,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                     <span className="position-absolute top-0 end-0" style={{ cursor: 'pointer', padding: "0.25rem" }} onClick={() => setDeleteModal(!deleteModal)}>
                         <X size={17.5} />
                     </span>
-                    Are you sure you want to delete {deleteMode === "single" ? "this theme" : "these themes"}?
+                    Are you sure you want to delete {deleteMode === "single" ? "this campaign" : checkedThemes.length === 1 ? "this campaign" : "these campaigns"}?
                     <div className="mt-2 d-flex gap-3 justify-content-end align-items-center">
                         <button className="btn btn-outline-primary" onClick={() => deleteThemes()}>Delete</button>
                     </div>

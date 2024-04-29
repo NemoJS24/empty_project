@@ -195,6 +195,8 @@ const Vehicle = () => {
                                 isLoading={isLoading}
                                 getData={getData}
                                 count={tableData?.recordsTotal}
+                                exportUrl={`${crmURL}/vehicle/cust_all_vehicle/`}
+                                isExport={true}
                                 // selectableRows={true}
                                 // setSelectedRows={setSelected}
                                 // selectedRows={selected}

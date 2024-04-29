@@ -220,6 +220,9 @@ const Customers = () => {
                 isLoading={isLoading}
                 getData={getData}
                 count={tableData?.recordsTotal}
+                exportUrl={`${crmURL}/servicing/servicing_dashboard/?type=today`}
+                isExport={true}
+                date={false}
                 // selectableRows={true}
                 // setSelectedRows={setSelected}
                 // selectedRows={selected}

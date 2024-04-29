@@ -2,10 +2,19 @@ import toast from "react-hot-toast"
 import $ from "jquery"
 import { PermissionProvider } from "../../Helper/Context"
 import { useContext } from "react"
-import { SuperLeadzBaseURL, baseURL } from "../../assets/auth/jwtService"
+import { SuperLeadzBaseURL, affiliateURL } from "../../assets/auth/jwtService"
+import moment from "moment/moment"
+import ReactGA from "react-ga4"
 
-export const imageValidation = (e) => {
-    const maxSizeKB = 100 //Size in KB
+export const useAnalyticsPageViewTracker = (curTitle, path) => {
+    ReactGA.initialize('G-4NRGB5EKCP') //xircls
+    //ReactGA.initialize('G-0K44CMK09X') //demo
+    console.log("hitting Google", {curTitle, path})
+    ReactGA.send({ page: path, title: curTitle })
+}
+
+export const imageValidation = (e, size = 100) => {
+    const maxSizeKB = size //Size in KB
     const maxSize = maxSizeKB * 1024 //File size is returned in Bytes
     const file_name = e.target.files[0].name.split('.').slice(0, -1).join('.')
 
@@ -80,8 +89,19 @@ export const timelineName = {
         is_outlet_created: "/merchant/campaign/outlet_profiling/",
         is_offer_created: "/merchant/SuperLeadz/create_offers/",
         is_offer_synced: "/merchant/SuperLeadz/offers/",
-        is_campaign_started: "/merchant/SuperLeadz/Themes/",
+        is_campaign_started: "/merchant/superleadz/templates",
         is_campaign_completed: "/merchant/campaign/"
+    },
+    flash_accounts: {
+        is_plan_purchased: "/merchant/Flash_Accounts/joinus/",
+        is_campaign_started: "/merchant/Flash_Accounts/all_campaigns/"
+    },
+    whatsapp: {
+        is_business: "/merchant/whatsapp/business_creation/",
+        // is_business: "/merchant/whatsapp/is_business/",
+        is_project: "/merchant/whatsapp/is_business/",
+        is_fb_verified: "/merchant/whatsapp/EmbeddedSignup/",
+        is_template: "/merchant/whatsapp/is_template/"
     }
 }
 
@@ -187,7 +207,7 @@ export function validForm(validator, value) {
 
 //     val = val.substr(0, 1).toUpperCase() + val.substr(1)
 //     $this.val(val)
-// });
+// })
 
 export function getCurrentOutlet() {
     const { userPermission } = useContext(PermissionProvider)
@@ -205,7 +225,9 @@ export const dashboardURL = {
     product_review: "/merchant/product-review/",
     oh_my_customer: "/merchant/oh-my-customer/",
     otp_verification: "/merchant/apps/",
-    crm: "/merchant/customers/"
+    crm: "/merchant/customers/",
+    whatsapp:"/merchant/whatsapp/",
+    email: "/merchant/email/"
 }
 
 export function generateRandomString() {
@@ -260,7 +282,7 @@ export const affiliateTracking = (aft_no) => {
             form_data.append("ip_address", resp?.ip_address)
             form_data.append("link", location.pathname)
 
-            fetch(`${baseURL}/affiliate/create_affiliate_click/`, {
+            fetch(`${affiliateURL}/affiliate/record/create_affiliate_click/`, {
                 method: "POST",
                 body: form_data
             })
@@ -270,10 +292,72 @@ export const affiliateTracking = (aft_no) => {
                 .catch((error) => {
                     console.log(error)
                 })
-
         })
         .catch((error) => {
             console.log(error)
         })
+}
+
+
+export function defaultFormatDate(date, type) {
+    if (!date) return ''
+    if (date === '') return ''
+    let formatDate
+    try {
+        formatDate = moment(date).format(Boolean(type) ? type : "DD-MM-YYYY")
+    } catch (_) {
+        formatDate = ''
+    }
+    return (formatDate)
+}
+
+
+export const defaultFormatNumber = (number, type) => {
+    try {
+        return new Intl.NumberFormat(type).format(number)
+    } catch (error) {
+        console.log(error)
+        return number
+    }
 
 }
+
+
+export function lightOrDark(color) {
+
+    // Variables for red, green, blue values
+    let r, g, b
+
+    // Check the format of the color, HEX or RGB?
+    if (color.match(/^rgb/)) {
+
+        // If RGB --> store the red, green, blue values in separate variables
+        color = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/)
+
+        r = color[1]
+        g = color[2]
+        b = color[3]
+    } else {
+
+        // If hex --> Convert it to RGB: http://gist.github.com/983661
+        color = +(`${"0x"}${color.slice(1).replace(color.length < 5 && /./g, '$&$&')}`)
+
+        r = color >> 16
+        g = color >> (8 & 255)
+        b = color & 255
+    }
+
+    // HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html
+    const hsp = Math.sqrt((0.299 * (r * r)) + (0.587 * (g * g)) + (0.114 * (b * b)))
+
+    // Using the HSP value, determine whether the color is light or dark
+    if (hsp > 127.5) {
+
+        return 'light'
+    } else {
+
+        return 'dark'
+    }
+}
+
+export const allFonts = `https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Acme&family=Caveat:wght@400;500;600&family=Dancing+Script:wght@400;500;600;700&family=Kalam:wght@300;400;700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lexend:wght@100;200;300;400;500;600;700;800;900&family=Lilita+One&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Oswald:wght@200;300;400;500;600;700&family=Pacifico&family=Play:wght@400;700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Satisfy&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Lora:ital,wght@0,400..700;1,400..700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300..700&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Manrope:wght@200..800&family=Heebo:wght@100..900&family=Annapurna+SIL:wght@400;700&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Mukta:wght@200;300;400;500;600;700;800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Nanum+Gothic&family=Noto+Sans+SC:wght@100..900&family=Inconsolata:wght@200..900&family=Hind+Siliguri:wght@300;400;500;600;700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Arimo:ital,wght@0,400..700;1,400..700&family=Jacquarda+Bastarda+9&family=Archivo:ital,wght@0,100..900;1,100..900&family=Bebas+Neue&family=Dosis:wght@200..800&family=Abel&display=swap`

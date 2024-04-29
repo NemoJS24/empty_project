@@ -111,8 +111,10 @@ const Apps = () => {
         console.log(resp)
         // setApiLoader(false)
         if (name === "other") {
-          navigate("/merchant/customers/")
+          // navigate("/merchant/apps/")
+          navigate(dashboardURL[data?.selectApp])
           setUserPermission({ ...userPermission, appName: data?.selectApp, installedApps: [...resp?.data?.install_app] })
+
         } else {
           window.location.href = resp?.data?.data
         }
@@ -122,6 +124,9 @@ const Apps = () => {
         console.log(error)
         setApiLoader(false)
 
+      })
+      .finally(() => {
+        setApiLoader(false)
       })
 
   }
@@ -186,11 +191,17 @@ const Apps = () => {
 
       <Modal
         isOpen={editModal}
-        toggle={() => setEditModal(!editModal)}
+        toggle={() => {
+          setEditModal(!editModal)
+          setData({...data, selectApp: ''})
+        }}
         className='modal-dialog-centered'
         size='lg'
       >
-        <ModalHeader toggle={() => setEditModal(!editModal)}>Select Platform</ModalHeader>
+        <ModalHeader toggle={() => {
+          setEditModal(!editModal)
+          setData({...data, selectApp: ''})
+        }}>Select Platform</ModalHeader>
         <ModalBody>
           <div className="row">
             {

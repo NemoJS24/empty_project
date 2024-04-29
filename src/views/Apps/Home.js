@@ -89,13 +89,13 @@ function Home() {
       {/* <p className='h5 '>Your Store Insights</p> */}
       <Row>
         <div className='col-4'>
-          <CardCom icon={<Users size='27px' />} title={'Visitors'} data={'0'} />
+          <CardCom id={"VisitorsHome"} icon={<Users size='27px' />} title={'Visitors'} data={'0'} />
         </div>
         <div className='col-4'>
-          <CardCom icon={<BarChart2 size='27px' />} title={'Customers'} data={'0'} />
+          <CardCom id={"CustomersHome"} icon={<BarChart2 size='27px' />} title={'Customers'} data={'0'} />
         </div>
         <div className='col-4'>
-          <CardCom icon={<RefreshCw size='27px' />} title={'Revenue'} data={'0'} />
+          <CardCom id={"RevenueHome"} icon={<RefreshCw size='27px' />} title={'Revenue'} data={'0'} />
         </div>
       </Row>
       {/* <p className='h5 '>SuperLeadz</p> */}

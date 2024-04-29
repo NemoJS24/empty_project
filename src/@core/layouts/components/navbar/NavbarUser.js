@@ -43,6 +43,8 @@ const NavbarUser = ({disableName}) => {
         currencySymbol: merchantCurrency[0]?.currency?.symbol ? merchantCurrency[0]?.currency?.symbol : "₹"
       }
 
+      console.log(updatedPermission, "updatedPermission")
+
       setUserPermission((curElem) => ({
         ...curElem,
         ...updatedPermission

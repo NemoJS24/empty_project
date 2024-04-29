@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Card, CardBody, Col, Input, Row } from 'reactstrap'
+import { Button, Card, CardBody, Col, Input, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap'
 import ComTable from '../Components/DataTable/ComTable'
 import { SuperLeadzBaseURL, getReq } from '../../assets/auth/jwtService'
 import moment from 'moment/moment'
@@ -7,6 +7,7 @@ import { getCurrentOutlet } from '../Validator'
 import Spinner from '../Components/DataTable/Spinner'
 import { Link, useNavigate } from 'react-router-dom'
 import { PermissionProvider } from '../../Helper/Context'
+import toast from 'react-hot-toast'
 
 const FlashAccountsBilling = () => {
 
@@ -14,6 +15,7 @@ const FlashAccountsBilling = () => {
     const [searchValue, setSearchValue] = useState('')
     const [filteredData, setFilteredData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const [cancel, setCancel] = useState(false)
     const [chargesLoader, setChargesLoader] = useState(true)
     const [toLoadCampaign, setToLoadCampaign] = useState(false)
     const { userPermission } = useContext(PermissionProvider)
@@ -108,6 +110,32 @@ const FlashAccountsBilling = () => {
         getData()
         planData()
     }, [])
+
+    const cancelTrial = () => {
+        setChargesLoader(true)
+        setToLoadCampaign(false)
+        const form_data = new FormData()
+        form_data.append('shop', outletData[0]?.web_url)
+        form_data.append('app', 'flash_accounts')
+
+        fetch(`${SuperLeadzBaseURL}/api/v1/cancel_billing/`, {
+            method: "POST",
+            body: form_data
+        })
+        .then((data) => data.json())
+        .then((resp) => {
+            console.log(resp)
+            planData()
+            toast.success('Plan Cancelled')
+        })
+        .catch((error) => {
+            console.log(error)
+            toast.error('Something went wrong')
+        })
+        .finally(() => {
+            setCancel(!cancel)
+        })
+    }
 
 
     // ** Function to handle filter
@@ -212,7 +240,7 @@ const FlashAccountsBilling = () => {
                 </CardBody>
             </Card> */}
             <Row>
-                <Col md="6" className='offset-md-3'>
+                <Col md="8" className='offset-md-2'>
                     <Card>
                         <CardBody>
                             {
@@ -225,20 +253,26 @@ const FlashAccountsBilling = () => {
                                     </div>
                                 </> : <>
                                     <div className="normal-card">
-                                        <div className='d-flex justify-content-between align-items-center flex-grow-1 w-100 mb-2'>
-                                            {/* <img width={"25px"} src="https://static.vecteezy.com/system/resources/previews/000/512/317/non_2x/vector-wallet`-glyph-black-icon.jpg" alt="" /> */}
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-clipboard"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
-                                            <button onClick={() => {
-                                                navigate("/merchant/Flash_Accounts/joinus/", {state: billing?.price})
-                                            }} className='btn btn-sm btn-success text-white'>Upgrade</button>
+                                        <div className='d-flex justify-content-end align-items-center flex-grow-1 w-100 mb-2 gap-1'>
+                                            <div>
+                                                <button onClick={() => setCancel(!cancel)} className='btn btn-sm btn-danger text-white'>Cancel</button>
+
+                                            </div>
+                                            <div>
+                                                {/* <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-clipboard"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg> */}
+                                                <button onClick={() => {
+                                                    navigate("/merchant/Flash_Accounts/joinus/", {state: billing?.mainData[0]?.plan_id})
+                                                }} className='btn btn-sm btn-success text-white'>Upgrade</button>
+
+                                            </div>
                                         </div>
                                         {
                                             chargesLoader ? <div className='d-flex justify-content-center align-items-center'><Spinner width='45px' /></div> : <div className="d-flex justify-content-between align-items-center w-100">
-                                                <h4 style={{ borderBottom: '0px dotted lightgray', fontSize: '18px', position: "relative", cursor: 'pointer' }}>{<p style={{color:""}}>Your Current PLan is <span style={{color:"#48a441", textTransform: 'capitalize'}}>{billing?.mainData[0]?.plan_id}</span></p>}<span className='position-absolute cursor-pointer' title={`Plan that you have subscribed to`} style={{ top: '-8px', right: '-16px' }}></span></h4>
-                                                {/* <div className='d-flex gap-3 align-items-center'>
-                                                    <p className='position-relative' style={{ fontSize: `0.85rem`, borderBottom: '0.5px dotted lightgray;', cursor: 'pointer' }} onClick={() => navigate('/leads')}>{"Pop-ups - "}</p>
+                                                <h4 style={{ borderBottom: '0px dotted lightgray', fontSize: '18px', position: "relative", cursor: 'pointer' }}>{<p style={{color:""}}>Your Current Plan is <span style={{color:"#48a441", textTransform: 'capitalize'}}>{billing?.mainData[0]?.plan_id}</span></p>}<span className='position-absolute cursor-pointer' title={`Plan that you have subscribed to`} style={{ top: '-8px', right: '-16px' }}></span></h4>
+                                                <div className='d-flex gap-3 align-items-center'>
+                                                    <p className='position-relative m-0' style={{ fontSize: `0.85rem`, borderBottom: '0.5px dotted lightgray;', cursor: 'pointer' }}>{"Transactions - "}</p>
                                                     <h5 style={{ fontSize: `3rem`, cursor:"default"}}>{`${billing?.usage_count}/${billing?.usage_charge}`}</h5>
-                                                </div> */}
+                                                </div>
                                             </div>
                                         }
                                         
@@ -250,7 +284,7 @@ const FlashAccountsBilling = () => {
                     </Card>
                 </Col>
             </Row>
-            <Card>
+            <Card className='d-none'>
                 <CardBody>
                     <ComTable
                         content={defferContent}
@@ -265,6 +299,24 @@ const FlashAccountsBilling = () => {
                     />
                 </CardBody>
             </Card>
+
+            <Modal
+                isOpen={cancel}
+                toggle={() => setCancel(!cancel)}
+                className='modal-dialog-centered'
+            >
+                <ModalHeader toggle={() => setCancel(!cancel)}>Are you sure you want cancel the Plan</ModalHeader>
+                <ModalBody>
+                </ModalBody>
+                <ModalFooter>
+                    <Button outline onClick={() => setCancel(!cancel)}>
+                        No
+                    </Button>
+                    <Button color='primary' onClick={() => cancelTrial()}>
+                        Yes
+                    </Button>
+                </ModalFooter>
+            </Modal>
         </>
     )
 }

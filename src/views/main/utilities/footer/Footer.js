@@ -10,6 +10,7 @@ import usa from './img/usa.png'
 import { Link } from "react-router-dom"
 import toast from "react-hot-toast"
 import { aboutList, productList } from "../navbar/Navbar"
+// import { useAnalyticsEventTracker } from "../../../Validator"
 
 const Footer = () => {
 
@@ -26,9 +27,9 @@ const Footer = () => {
                 <Col md="10" xs="10" lg="11" xl="11">
                     <div className=' d-flex flex-wrap justify-content-between'  >
                         <div  >
-                            <img className='mb-1' src={logo} alt="logo" width={200} style={{ marginTop: "-30px" }} />
-                            <h5>The World's First Decentralized Collaborative <br /> Marketing Network.</h5>
-
+                            <Link to='/'><img className='mb-1' src={logo} alt="logo" width={200} style={{ marginTop: "-30px" }} /></Link>
+                            <h5>An end-to-end martech stack.</h5>
+                            {/* <a className="" onClick={() => useAnalyticsEventTracker()}>Click</a> */}
 
                             <div className='d-flex justify-content-start align-items-center mt-2 '>
                                 <a href="/" className=''>
@@ -50,7 +51,7 @@ const Footer = () => {
                             <ul className=' list-unstyled'>
                                 {
                                     productList.map((data, index) => (
-                                        <li className=' ' style={{ marginTop: "7px" }} key={index}><Link to={data.link} > {data.title} </Link></li>
+                                        <li className=' ' style={{ marginTop: "7px" }} key={index}><Link className="text-black" to={data.link} > {data.title} </Link></li>
                                     ))
                                 }
 
@@ -62,33 +63,33 @@ const Footer = () => {
                             <ul className=' list-unstyled'>
                                 {
                                     aboutList.map((data, index) => (
-                                        <li className=' ' style={{ marginTop: "7px" }} key={index}><Link to={data.link} > {data.title} </Link></li>
+                                        <li className=' ' style={{ marginTop: "7px" }} key={index}><Link className="text-black" to={data.link} > {data.title} </Link></li>
                                     ))
                                 }
                             </ul>
                         </div>
                         <div className="p-0 mt-3 mt-lg-0" >
-                            <h5 className='text-black fw-bolder mb-' style={{fontSize:"17px"}}><Link to='/partners' >Partners </Link></h5>
-                            <div className="d-none">
+                            <h5 className='text-black fw-bolder mb-' style={{fontSize:"17px"}}><Link className="text-black" to='/partners' >Partners </Link></h5>
+                            <div>
                                 <ul className=' list-unstyled'>
-                                    <li className=' ' style={{ marginTop: "7px" }} ><Link to="/affiliate/login" >  Login </Link></li>
-                                    <li className=' ' style={{ marginTop: "7px" }} ><Link to="/affiliate/signup" >  Signup </Link></li>
+                                    <li className=' ' style={{ marginTop: "7px" }} ><a className="text-black" target="_blank" href="https://affiliate.xircls.com/affiliate/login" >  Login </a></li>
+                                    <li className=' ' style={{ marginTop: "7px" }} ><a className="text-black" target="_blank" href="https://affiliate.xircls.com/affiliate/signup" >  Signup </a></li>
                                 </ul>
 
                             </div>
 
-                            <h5 className='text-black fw-bolder mb-1' style={{fontSize:"17px"}}><Link to='/blog' >Blog </Link></h5>
-                            <h5 className='text-black fw-bolder mb-1' style={{fontSize:"17px"}}><a target="_blank" href='https://hr.xircls.com/careers/' >Careers </a></h5>
+                            <h5 className='text-black fw-bolder mb-1' style={{fontSize:"17px"}}><Link className="text-black" to='/blog' >Blog </Link></h5>
+                            <h5 className='text-black fw-bolder mb-1' style={{fontSize:"17px"}}><a className="text-black" target="_blank" href='https://hr.xircls.com/careers/' >Careers </a></h5>
                         </div>
                         <div className="p-0 mt-3 mt-lg-0" >
                             <h5 className='text-black fw-bolder mb-'style={{fontSize:"17px"}} >Contact Us</h5>
                             <ul className=' list-unstyled'>
-                                <li className='mb-1 '><Link to='/contact-us' > Leave us a message <GoLinkExternal style={{ marginLeft: "5px" }} /> </Link></li>
+                                <li className='mb-1 '><Link className="text-black" to='/contact-us' > Leave us a message <GoLinkExternal style={{ marginLeft: "5px" }} /> </Link></li>
                                 <li className='mb-1 cursor-pointer user-select-none' onClick={() => copyText("num1")} ><img className='me-1' src={india} alt="" width={20} /> <span id="num1"> +91 9969 333 666 </span></li>
                                  {/* <a href="https://wa.me/message/LGXSSWWGV7UGP1" >contact to sahil</a> */}
                                 <li className='mb-1 cursor-pointer user-select-none' onClick={() => copyText("num2")}> <img className='me-1' src={usa} alt="" width={20} /> <span id="num2">+1 (936) 333 6363 </span></li>
                                 <li className='mb-1'><img className='me-1' src={mail} alt="" width={20} />
-                                    <a href="mailto:info@xircls.com?subject = Feedback&body = Message">info@xircls.com</a></li>
+                                    <a className="text-black" href="mailto:info@xircls.com?subject = Feedback&body = Message">info@xircls.com</a></li>
 
                             </ul>
 
@@ -97,8 +98,8 @@ const Footer = () => {
                     </div>
                     <div className='mt-3  text-center'>
                         <ul className=' d-inline-flex flex-wrap gap-3 list-unstyled'>
-                            <li className='text-black '> <Link to="/terms-of-use/" >Terms of Use </Link></li>
-                            <li className='text-black '> <Link to="/privacy-policy/" > Privacy policy </Link></li>
+                            <li className='text-black '> <Link className="text-black" to="/terms-of-use/" >Terms of Use </Link></li>
+                            <li className='text-black '> <Link className="text-black" to="/privacy-policy/" > Privacy policy </Link></li>
                         </ul>
                         <h6 className='text-secondary'>Copyright © 2022 All Rights Reserved. AltissAdvance Tech Private Limited</h6>
                     </div>

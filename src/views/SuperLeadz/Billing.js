@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Card, CardBody, Col, Input, Row } from 'reactstrap'
 import ComTable from '../Components/DataTable/ComTable'
 import { SuperLeadzBaseURL, getReq } from '../../assets/auth/jwtService'
 import moment from 'moment/moment'
-import { getCurrentOutlet } from '../Validator'
+import { defaultFormatDate, getCurrentOutlet } from '../Validator'
 import Spinner from '../Components/DataTable/Spinner'
 import { Link, useNavigate } from 'react-router-dom'
 import CardCom from '../Components/SuperLeadz/CardCom'
 import { Copy, DollarSign, Eye, Info } from 'react-feather'
+import { PermissionProvider } from '../../Helper/Context'
 
 const SuperLeadzBilling = () => {
+
+    const { userPermission } = useContext(PermissionProvider)
 
     const [tableData, setTableData] = useState([])
     const [searchValue, setSearchValue] = useState('')
@@ -69,7 +72,7 @@ const SuperLeadzBilling = () => {
             const setData = {
                 usage_charge: updatedDate[0]?.billing_usage_apply_after,
                 usage_count: updatedDate[0]?.usage_count,
-                daysLeft: json?.created_at ? moment(new Date()).diff(moment(json?.created_at), 'days') : 0,
+                daysLeft: json?.created_at ? defaultFormatDate(moment(new Date()).diff(moment(json?.created_at), 'days'), userPermission?.user_settings?.date_format) : 0,
                 trial_days: json?.trial_days,
                 price: json?.price,
                 mainData: data?.data
@@ -137,7 +140,7 @@ const SuperLeadzBilling = () => {
                 let date
                 try {
                     // data = JSON.parse(row.plan_details_json)
-                    date = moment(row?.payment_date).format('YYYY-MM-DD, hh:mm')
+                    date = defaultFormatDate(row?.payment_date, userPermission?.user_settings?.date_format)
                 } catch (error) {
                     // data = {}
                     date = ''
@@ -217,8 +220,12 @@ const SuperLeadzBilling = () => {
                                 <DollarSign size="27px" />
                             </div>
                             <div className="d-flex justify-content-between align-items-baseline">
-                                <p className="mb-0 h5 card-text position-relative cursor-default p-0">
+                                {/* <p className="mb-0 h5 card-text position-relative cursor-default p-0">
                                     Current Plan
+                                </p> */}
+                                <p style={{ borderBottom: '0px dotted lightgray', whiteSpace: 'nowrap', paddingRight: '10px' }} className='m-0 h5 position-relative cursor-default'>
+                                    Current Plan
+                                    <span className='position-absolute' title={"The plan you are currently subscribed to"} style={{ top: '-10px', right: '-4px', cursor: 'pointer' }}><Info size={12} /></span>
                                 </p>
                                 <h3 className='m-0'>
                                     {billing?.mainData[0]?.plan_id}
@@ -234,12 +241,16 @@ const SuperLeadzBilling = () => {
                             <div className='icon d-flex justify-content-between align-items-center mb-1'>
                                 <Eye sixeze="27px" />
                                 <button onClick={() => {
-                                    navigate("/merchant/SuperLeadz/joinus/", {state: billing?.price})
+                                    navigate("/merchant/SuperLeadz/joinus/", {state: billing?.mainData[0]?.plan_id})
                                 }} className='btn btn-sm btn-success text-white'>Upgrade</button>
                             </div>
                             <div className="d-flex justify-content-between align-items-baseline">
-                                <p className="mb-0 h5 card-text position-relative cursor-default p-0">
+                                {/* <p className="mb-0 h5 card-text position-relative cursor-default p-0">
                                     Visits
+                                </p> */}
+                                <p style={{ borderBottom: '0px dotted lightgray', whiteSpace: 'nowrap', paddingRight: '10px' }} className='m-0 h5 position-relative cursor-default'>
+                                    Remaining Visits
+                                    <span className='position-absolute' title={"Visits remaining in your plan’s usage limit"} style={{ top: '-10px', right: '-4px', cursor: 'pointer' }}><Info size={12} /></span>
                                 </p>
                                 <h3 className='m-0'>
                                     {billing?.usage_count}/{billing?.usage_charge}
@@ -266,7 +277,7 @@ const SuperLeadzBilling = () => {
                                             {/* <img width={"25px"} src="https://static.vecteezy.com/system/resources/previews/000/512/317/non_2x/vector-wallet`-glyph-black-icon.jpg" alt="" /> */}
                                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-clipboard"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
                                             <button onClick={() => {
-                                                navigate("/merchant/SuperLeadz/joinus/", {state: billing?.price})
+                                                navigate("/merchant/SuperLeadz/joinus/", {state: billing?.mainData[0]?.plan_id})
                                             }} className='btn btn-sm btn-success text-white'>Upgrade</button>
                                         </div>
                                         {

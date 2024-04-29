@@ -20,7 +20,7 @@ import { getToken } from '../../../../assets/auth/auth'
 export const productList = [
   {
     title: "SuperLeadz",
-    desc: "Lead Generation  ",
+    desc: "Lead Generation Pop-ups ",
     logo: <img src={SuperLeadzLogo} alt='SuperLeadz_logo' />,
     link: "/products/superleadz/"
   },
@@ -69,7 +69,7 @@ export const aboutList = [
 
 ]
 
-const Navbar = ({ position }) => {
+const Navbar = ({ position, hideMenu }) => {
   const { pathname } = useLocation()
   const [ShowProducts, setShowProducts] = useState(false)
   const [ShowCompany, setShowCompany] = useState(false)
@@ -162,7 +162,8 @@ const Navbar = ({ position }) => {
             <img src={logo} alt="logo" className='mx-2 nav_logo_img' />
           </Link>
 
-          <div className={`toggleMenu py-2 ${toggleMenu ? "toggleMenuUp" : "toggleMenuDown"}`} >
+          {/* {!hideMenu && ( */}
+          <div style={{ visibility: hideMenu ? "hidden" : "visible" }} className={`toggleMenu py-2 ${toggleMenu ? "toggleMenuUp" : "toggleMenuDown"}`} >
             <ul className=' list-unstyled d-inline-flex gap-5 pt-1'>
 
               <li className='productLi ItemsList' onClick={() => mouseClick("products")} onMouseEnter={() => mouseEnter("products")} onMouseLeave={() => mouseLeave("products")}>
@@ -189,9 +190,9 @@ const Navbar = ({ position }) => {
                   </ul>
                 </div>
               </li>
-              <Link to='/partners' className='navTitle fs-4 text-dark text-center' > <li ><p>Partners</p></li></Link>
+              <Link to='/partners' className='navTitle fs-4 text-dark text-center'> <li ><p>Partners</p></li></Link>
               {/* <Link to='/developers' className='fs-4 text-dark text-center'> <li ><p>Developers</p></li></Link> */}
-              <Link to='/blog' className='navTitle fs-4 text-dark text-center' > <li ><p>Blog</p></li></Link>
+              <Link to='/blog' className='navTitle fs-4 text-dark text-center'> <li ><p>Blog</p></li></Link>
 
               <li className='aboutLi ItemsList' onClick={() => mouseClick("company")} onMouseEnter={() => mouseEnter("company")} onMouseLeave={() => mouseLeave("company")}>
                 <p className='navTitle text-dark fs-4 '>Company <IoIosArrowDown color="#9e9e9eff" className={ShowCompany ? "rotate-180" : ""} /></p>
@@ -220,14 +221,15 @@ const Navbar = ({ position }) => {
 
             </ul>
             <div className='navBtn gap-1'>
-              <Link  to='/merchant/signup' className=' btn  btn-lg main-btn-blue-gra  fs-3 fw-lig cust-font'>Signup Free</Link>
+              <Link to='/merchant/signup' className=' btn  btn-lg main-btn-blue-gra  fs-3 fw-lig cust-font'>Signup Free</Link>
 
               <a onClick={() => checkLogin()} className=' btn btn-lg main-btn-dark fs-3 fw-lig cust-font'>Login</a>
             </div>
           </div>
-          <div className='menuBtn' onClick={() => { setToggleMenu(!toggleMenu); setShowProducts(false); setShowCompany(false) }}>
+          <div style={{ visibility: hideMenu ? "hidden" : "visible" }} className='menuBtn' onClick={() => { setToggleMenu(!toggleMenu); setShowProducts(false); setShowCompany(false) }}>
             <AiOutlineMenu size={25} />
           </div>
+          {/* )} */}
         </nav>
       </div>
     </div>

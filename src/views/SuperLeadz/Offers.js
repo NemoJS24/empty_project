@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Card, CardBody, Col, Input } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import ComTableAdvance from '../Components/DataTable/ComTableAdvance'
 import ComTable from '../Components/DataTable/ComTable'
-import { getCurrentOutlet } from '../Validator'
+import { defaultFormatDate, getCurrentOutlet } from '../Validator'
 import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
-import moment from 'moment/moment'
+import { PermissionProvider } from '../../Helper/Context'
+// import moment from 'moment/moment'
 
 export default function SuperLeadzOffers() {
+
+
+    const { userPermission } = useContext(PermissionProvider)
 
     const [searchValue, setSearchValue] = useState('')
     const [filteredData, setFilteredData] = useState([])
@@ -30,6 +34,11 @@ export default function SuperLeadzOffers() {
         .then((resp) => resp.json())
         .then((data) => {
             console.log(data)
+            if (data.error) {
+                setTableData([])
+                setIsLoading(false)
+                return
+            }
             // data?.status?.map(ele => {
             //     console.log(ele)
             //     // console.log(JSON.parse(ele.offer_json))
@@ -104,7 +113,7 @@ export default function SuperLeadzOffers() {
         },
         {
             name: 'Date',
-            selector: row => moment(row.created_at).format('ddd, D MMM YYYY')
+            selector: row => defaultFormatDate(row.created_at, userPermission?.user_settings?.date_format)
             // new Date(row.created_at).toUTCString().replace("GMT", "")
         },
         {

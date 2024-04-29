@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Container, Card, CardBody, Row, Col } from "reactstrap"
 // import "../CustomerProfile.css"
-import { Twitter, Facebook, Instagram } from "react-feather"
+import { Twitter, Facebook, Instagram, Trash, Trash2 } from "react-feather"
 import Select from "react-select"
 import toast from "react-hot-toast"
 import { getReq, postReq } from "../../../../assets/auth/jwtService"
@@ -313,346 +313,364 @@ const CustomerBasicCompanyInfo = ({ allData, setFilteredData, filteredData }) =>
     </style>
   )
 
+  const getCompanyForm = (form, i, type) => {
+    return (
+      <>
+        <Row>
+          <Col md={12} className="mt-2">
+            <h4 className="mb-0">Company Details</h4>
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label
+              htmlFor="company-name"
+              className="form-label"
+              style={{ margin: "0px" }}
+            >
+              Company Name
+            </label>
+            <Select
+              isDisabled={type === "parent"}
+              options={options}
+              closeMenuOnSelect={true}
+              components={{ Menu: CustomSelectComponent }}
+              placeholder="Select Company"
+              onChange={(e) => {
+                selectCompany(e, form.id ?? form.formId, i)
+              }}
+              value={options?.filter((curElem) => Number(curElem?.value) === Number(form?.id))}
+            />
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="company-industry">Industry</label>
+            <input
+              placeholder="Industry"
+              type="text"
+              id="company-industry"
+              name="industry"
+              className="form-control"
+              value={form.industry ?? ""}
+              onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              disabled
+            />
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="company-gst-no">GST Number</label>
+            <input
+              placeholder="GST Number"
+              type="text"
+              id="company-gst-no"
+              name="gst"
+              className="form-control"
+              value={form.company_gst ?? ""}
+              onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              disabled
+            />
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="company-1-phone">Company Phone</label>
+            <input
+              placeholder="Company Phone"
+              type="text"
+              pattern="[789][0-9]{9}"
+              maxLength={10}
+              id="company-1-phone"
+              name="company_phone"
+              className="form-control"
+              value={form.company_phone ?? ""}
+              // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              onChange={(e) => {
+                if (!isNaN(e.target.value)) {
+                  handleInputChange2(e, form.id ?? form.formId)
+                  console.log("this is a number")
+                }
+              }}
+              disabled
+            />
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="company-email">Company Email</label>
+            <input
+              placeholder="Company Email"
+              type="text"
+              id="company-email"
+              name="company_email"
+              className="form-control"
+              value={form.company_email ?? ""}
+              onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              disabled
+            />
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="company-website">Company Website</label>
+            <input
+              placeholder="Company Website"
+              type="text"
+              id="company-website"
+              name="company_website"
+              className="form-control"
+              value={form.company_website ?? ""}
+              onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              disabled
+            />
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="company-pancard">Company PAN</label>
+            <input
+              placeholder="Company PAN"
+              type="text"
+              id="company-pancard"
+              name="company_panCard"
+              className="form-control"
+              value={form.company_pancard ?? ""}
+              onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              disabled
+            />
+          </Col>
+          <Col md={6} lg={4} className="mt-2 d-none">
+            <label htmlFor="address-2-relation">Relation</label>
+            <Select
+              placeholder="Relation"
+              id="address-2-relation"
+              options={relationOptions}
+              closeMenuOnSelect={true}
+              value={relationOptions?.find(option => option.value === formData?.shipping_relation)}
+              defaultValue={relationOptions?.find(option => option.value === 'business')}
+              onChange={(e) => handleInputChange(e, 'shipping_relation', i)}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12} className="mt-5">
+            <div className="d-flex justify-content-between">
+              <h4 className="mb-0">Company Address</h4>
+              <div className="d-none justify-content-around w-50">
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault1"
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexRadioDefault1"
+                  >
+                    Same as Billing Address
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault2"
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexRadioDefault2"
+                  >
+                    Same as shipping Address
+                  </label>
+                </div>
+              </div>
+            </div>
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="company-name">
+              Flat and/or Building/House Details
+            </label>
+            <input
+              placeholder="Flat and/or Building/House Details"
+              type="text"
+              id="company-name"
+              name="address_line1"
+              className="form-control"
+              value={form.address_line1 ?? ""}
+              onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              disabled
+            />
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="company-industry">Street, Lane or Road</label>
+            <input
+              placeholder="Street, Lane or Road"
+              type="text"
+              id="company-industry"
+              name="street"
+              className="form-control"
+              value={form.street ?? ""}
+              onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              disabled
+            />
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="company-area">
+              Enter Area, Locality or Suburb e.g. Bandra
+            </label>
+            <input
+              placeholder="Enter Area, Locality or Suburb e.g. Bandra"
+              type="text"
+              id="company-area"
+              name="area_building"
+              className="form-control"
+              value={form.area_building ?? ""}
+              onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              disabled
+            />
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="company-landmark">Landmark</label>
+            <input
+              placeholder="Landmark"
+              type="text"
+              id="company-landmark"
+              name="landmark"
+              className="form-control"
+              value={form.landmark ?? ""}
+              onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              disabled
+            />
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="company-city">City</label>
+            <input
+              placeholder="City"
+              type="text"
+              id="company-city"
+              name="city"
+              className="form-control"
+              value={form.city ?? ""}
+              onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              disabled
+            />
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="company-state">State</label>
+            <input
+              placeholder="State"
+              type="text"
+              id="company-state"
+              name="state"
+              className="form-control"
+              value={form.state ?? ""}
+              onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              disabled
+            />
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="company-pincard">Pincode</label>
+            <input
+              placeholder="Pincode"
+              type="text"
+              id="company-pincard"
+              name="pincode"
+              className="form-control"
+              value={form.pincode ?? ""}
+              // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+              onChange={(e) => {
+                if (!isNaN(e.target.value)) {
+                  handleInputChange2(e, form.id ?? form.formId)
+                  console.log("this is a number")
+                }
+              }}
+              disabled
+            />
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="address-2-country">Country</label>
+            <Select
+              isMulti={false}
+              options={country}
+              inputId="aria-example-input"
+              closeMenuOnSelect={true}
+              name="country"
+              placeholder="Select Country"
+              onChange={(e) => selectCountry(e, form.id ?? form.formId)}
+              isDisabled={true}
+              value={country?.filter((curElem) => curElem?.value === form.country)}
+            // value={country.find((item) => String(form?.country) === String(item.value))}
+            // value={country.filter(option => String(data?.country) === String(option.value))}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12} className="mt-2">
+            <h4 className="mb-0">Social Presence</h4>
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="personalDetails-twitter">Twitter</label>
+            <div className="input-group mb-3">
+              <span className="input-group-text">
+                <Twitter size={24} />
+              </span>
+              <input
+                type="text"
+                id="personalDetails-twitter"
+                className="form-control"
+                aria-label=""
+                name="company_twitter"
+                value={form.company_twitter ?? ""}
+                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
+              />
+            </div>
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="personalDetails-facebook">Facebook</label>
+            <div className="input-group mb-3">
+              <span className="input-group-text">
+                <Facebook size={24} />
+              </span>
+              <input
+                type="text"
+                id="personalDetails-facebook"
+                className="form-control"
+                aria-label=""
+                name="company_fb"
+                value={form.company_fb ?? ""}
+                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
+              />
+            </div>
+          </Col>
+          <Col md={6} lg={4} className="mt-2">
+            <label htmlFor="personalDetails-instagram">Instagram</label>
+            <div className="input-group mb-3">
+              <span className="input-group-text">
+                <Instagram size={24} />
+              </span>
+              <input
+                type="text"
+                id="personalDetails-instagram"
+                className="form-control"
+                aria-label=""
+                name="insta"
+                value={form.insta ?? ""}
+                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
+                disabled
+              />
+            </div>
+          </Col>
+        </Row>
+      </>
+    )
+  }
 
   const CompanyForm = (
     <>
       {filteredData.map((form, i) => (
-        <div key={i}>
-          <Row>
-            <Col md={12} className="mt-2">
-              <h4 className="mb-0">Company Details</h4>
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label
-                htmlFor="company-name"
-                className="form-label"
-                style={{ margin: "0px" }}
-              >
-                Company Name
-              </label>
-              <Select
-                options={options}
-                closeMenuOnSelect={true}
-                components={{ Menu: CustomSelectComponent }}
-                placeholder="Select Company"
-                onChange={(e) => {
-                  selectCompany(e, form.id ?? form.formId, i)
-                }}
-                value={options?.filter((curElem) => Number(curElem?.value) === Number(form?.id))}
-              />
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="company-industry">Industry</label>
-              <input
-                placeholder="Industry"
-                type="text"
-                id="company-industry"
-                name="industry"
-                className="form-control"
-                value={form.industry ?? ""}
-                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                disabled
-              />
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="company-gst-no">GST Number</label>
-              <input
-                placeholder="GST Number"
-                type="text"
-                id="company-gst-no"
-                name="gst"
-                className="form-control"
-                value={form.company_gst ?? ""}
-                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                disabled
-              />
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="company-1-phone">Company Phone</label>
-              <input
-                placeholder="Company Phone"
-                type="text"
-                pattern="[789][0-9]{9}"
-                maxLength={10}
-                id="company-1-phone"
-                name="company_phone"
-                className="form-control"
-                value={form.company_phone ?? ""}
-                // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                onChange={(e) => {
-                  if (!isNaN(e.target.value)) {
-                    handleInputChange2(e, form.id ?? form.formId)
-                    console.log("this is a number")
-                  }
-                }}
-                disabled
-              />
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="company-email">Company Email</label>
-              <input
-                placeholder="Company Email"
-                type="text"
-                id="company-email"
-                name="company_email"
-                className="form-control"
-                value={form.company_email ?? ""}
-                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                disabled
-              />
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="company-website">Company Website</label>
-              <input
-                placeholder="Company Website"
-                type="text"
-                id="company-website"
-                name="company_website"
-                className="form-control"
-                value={form.company_website ?? ""}
-                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                disabled
-              />
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="company-pancard">Company PAN</label>
-              <input
-                placeholder="Company PAN"
-                type="text"
-                id="company-pancard"
-                name="company_panCard"
-                className="form-control"
-                value={form.company_pancard ?? ""}
-                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                disabled
-              />
-            </Col>
-            <Col md={6} lg={4} className="mt-2 d-none">
-              <label htmlFor="address-2-relation">Relation</label>
-              <Select
-                placeholder="Relation"
-                id="address-2-relation"
-                options={relationOptions}
-                closeMenuOnSelect={true}
-                value={relationOptions?.find(option => option.value === formData?.shipping_relation)}
-                defaultValue={relationOptions?.find(option => option.value === 'business')}
-                onChange={(e) => handleInputChange(e, 'shipping_relation', i)}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col md={12} className="mt-5">
-              <div className="d-flex justify-content-between">
-                <h4 className="mb-0">Company Address</h4>
-                <div className="d-none justify-content-around w-50">
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault1"
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexRadioDefault1"
-                    >
-                      Same as Billing Address
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault2"
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexRadioDefault2"
-                    >
-                      Same as shipping Address
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="company-name">
-                Flat and/or Building/House Details
-              </label>
-              <input
-                placeholder="Flat and/or Building/House Details"
-                type="text"
-                id="company-name"
-                name="address_line1"
-                className="form-control"
-                value={form.address_line1 ?? ""}
-                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                disabled
-              />
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="company-industry">Street, Lane or Road</label>
-              <input
-                placeholder="Street, Lane or Road"
-                type="text"
-                id="company-industry"
-                name="street"
-                className="form-control"
-                value={form.street ?? ""}
-                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                disabled
-              />
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="company-area">
-                Enter Area, Locality or Suburb e.g. Bandra
-              </label>
-              <input
-                placeholder="Enter Area, Locality or Suburb e.g. Bandra"
-                type="text"
-                id="company-area"
-                name="area_building"
-                className="form-control"
-                value={form.area_building ?? ""}
-                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                disabled
-              />
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="company-landmark">Landmark</label>
-              <input
-                placeholder="Landmark"
-                type="text"
-                id="company-landmark"
-                name="landmark"
-                className="form-control"
-                value={form.landmark ?? ""}
-                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                disabled
-              />
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="company-city">City</label>
-              <input
-                placeholder="City"
-                type="text"
-                id="company-city"
-                name="city"
-                className="form-control"
-                value={form.city ?? ""}
-                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                disabled
-              />
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="company-state">State</label>
-              <input
-                placeholder="State"
-                type="text"
-                id="company-state"
-                name="state"
-                className="form-control"
-                value={form.state ?? ""}
-                onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                disabled
-              />
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="company-pincard">Pincode</label>
-              <input
-                placeholder="Pincode"
-                type="text"
-                id="company-pincard"
-                name="pincode"
-                className="form-control"
-                value={form.pincode ?? ""}
-                // onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                onChange={(e) => {
-                  if (!isNaN(e.target.value)) {
-                    handleInputChange2(e, form.id ?? form.formId)
-                    console.log("this is a number")
-                  }
-                }}
-                disabled
-              />
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="address-2-country">Country</label>
-              <Select
-                isMulti={false}
-                options={country}
-                inputId="aria-example-input"
-                closeMenuOnSelect={true}
-                name="country"
-                placeholder="Select Country"
-                onChange={(e) => selectCountry(e, form.id ?? form.formId)}
-                isDisabled={true}
-                value={country?.filter((curElem) => curElem?.value === form.country)}
-              // value={country.find((item) => String(form?.country) === String(item.value))}
-              // value={country.filter(option => String(data?.country) === String(option.value))}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col md={12} className="mt-2">
-              <h4 className="mb-0">Social Presence</h4>
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="personalDetails-twitter">Twitter</label>
-              <div className="input-group mb-3">
-                <span className="input-group-text">
-                  <Twitter size={24} />
-                </span>
-                <input
-                  type="text"
-                  id="personalDetails-twitter"
-                  className="form-control"
-                  aria-label=""
-                  name="company_twitter"
-                  value={form.company_twitter ?? ""}
-                  onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                  disabled
-                />
-              </div>
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="personalDetails-facebook">Facebook</label>
-              <div className="input-group mb-3">
-                <span className="input-group-text">
-                  <Facebook size={24} />
-                </span>
-                <input
-                  type="text"
-                  id="personalDetails-facebook"
-                  className="form-control"
-                  aria-label=""
-                  name="company_fb"
-                  value={form.company_fb ?? ""}
-                  onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                  disabled
-                />
-              </div>
-            </Col>
-            <Col md={6} lg={4} className="mt-2">
-              <label htmlFor="personalDetails-instagram">Instagram</label>
-              <div className="input-group mb-3">
-                <span className="input-group-text">
-                  <Instagram size={24} />
-                </span>
-                <input
-                  type="text"
-                  id="personalDetails-instagram"
-                  className="form-control"
-                  aria-label=""
-                  name="insta"
-                  value={form.insta ?? ""}
-                  onChange={(e) => handleInputChange2(e, form.id ?? form.formId)}
-                  disabled
-                />
-              </div>
-            </Col>
-          </Row>
+        <div className="position-relative" key={i}>
+          <span 
+          onClick={() => {
+            const newArr = filteredData.filter(($) => $.id !== form.id)
+            setFilteredData(newArr)
+          }} 
+          className="position-absolute top-0 end-0 p-1 cursor-pointer">
+            <Trash2 size={15} color="red" />
+          </span>
+          {getCompanyForm(form, i, "main")}
+          {form?.parent_id ? getCompanyForm(form?.parent_id, i, "parent") : ""}
+          <hr />
         </div>
       ))}
     </>

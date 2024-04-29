@@ -45,6 +45,11 @@ import Skin_type_form from '../../views/XirclsFrontend/test/Skin_type_form'
 import FlashAccount from '../../views/main/products/flash/FlashAccount'
 import FaqFlash from '../../views/main/products/flash/FaqFlash'
 import Flash_Pricing from '../../views/main/products/flash/Flash_Pricing'
+import FlashAccount_Features from '../../views/main/products/flash/FlashAccount_Features'
+import SuperLeadzLandingPage from '../../views/main/LandingPage/SuperLeadzLandingPage'
+import EmailLists from '../../views/main/LandingPage/EmailLists'
+import SuperLeadzOneClickRedemption from '../../views/main/products/superLeadz/SuperLeadz/SuperLeadzOneClickRedemption'
+import SuperLeadzLeadGen from '../../views/main/products/superLeadz/SuperLeadz/SuperLeadzLeadGen'
 
 const Homes_Routes = [
 
@@ -55,7 +60,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "An end-to-end martech stack for every step of the buyer journey."
+    title: "An end-to-end martech stack for every step of the buyer journey.",
+    trackingTitle: "Home"
   },
   {
     path: '/partners',
@@ -64,7 +70,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Partners - Grow your business"
+    title: "Partners - Grow your business",
+    trackingTitle: "Partners"
   },
   {
     path: '/partners/faq',
@@ -73,7 +80,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Partners FAQ: Grow your business"
+    title: "Partners FAQ: Grow your business",
+    trackingTitle: "FAQ"
   },
 
   {
@@ -83,7 +91,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "SuperLeadz - Lead generation, nurturing and conversion"
+    title: "SuperLeadz - Pop-ups for lead generation, nurturing and conversion",
+    trackingTitle: "SuperLeadz"
   },
 
   {
@@ -94,7 +103,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Features - Lead generation, nurturing and conversion"
+    title: "SuperLeadz Features - Pop-ups for lead generation, nurturing and conversion",
+    trackingTitle: "SuperLeadz Features"
   },
   {
     // path: '/products/superleadz/lead-generation-nurturing-and-conversion/pricing',
@@ -104,7 +114,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Pricing - Lead generation, nurturing and conversion"
+    title: "SuperLeadz Pricing - Pop-ups for lead generation, nurturing and conversion",
+    trackingTitle: "SuperLeadz Pricing"
   },
   {
     // path: '/products/superleadz/lead-generation-nurturing-and-conversion/faqs',
@@ -114,7 +125,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "FAQ - Lead generation, nurturing and conversion"
+    title: "SuperLeadz FAQ - Pop-ups for lead generation, nurturing and conversion",
+    trackingTitle: "SuperLeadz FAQ"
   },
   {
     // path: '/products/sniper/',
@@ -124,7 +136,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: " Sniper - Customer acquisition"
+    title: " Sniper - Customer acquisition",
+    trackingTitle: "Sniper"
   },
   {
     path: '/products/infiniti/',
@@ -134,8 +147,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Infiniti - Customer acquisition and loyalty"
-
+    title: "Infiniti - Customer acquisition and loyalty",
+    trackingTitle: "Infiniti"
   },
   {
     // path: '/products/semperfi/',
@@ -145,7 +158,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Semper Fi - Customer loyalty"
+    title: "Semper Fi - Customer loyalty",
+    trackingTitle: "Semper-Fi"
   },
   {
     path: '/products/flash-accounts/',
@@ -154,25 +168,38 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Semper Fi - Customer loyalty"
+    title: "Flash Accounts",
+    trackingTitle: "Flash Accounts"
   },
   {
-    path: '/products/flash-accounts/faq',
+    path: '/products/flash-accounts/faq/',
     element: <FaqFlash />,
     meta: {
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Semper Fi - Customer loyalty"
+    title: "Flash Accounts - FAQ",
+    trackingTitle: "Flash Accounts FAQ"
   },
   {
-    path: '/products/flash-accounts/pricing',
+    path: '/products/flash-accounts/pricing/',
     element: <Flash_Pricing />,
     meta: {
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Semper Fi - Customer loyalty"
+    title: "Flash Accounts - Pricing",
+    trackingTitle: "Flash Accounts Pricing"
+  },
+  {
+    path: '/products/flash-accounts/features/',
+    element: <FlashAccount_Features />,
+    meta: {
+      layout: "homeLayout",
+      publicRoute: true
+    },
+    title: "Flash Accounts - Features",
+    trackingTitle: "Flash Accounts Features"
   },
   {
     path: '/contact-us/:type',
@@ -180,7 +207,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Contact Us"
   },
   {
     path: '/contact-us',
@@ -189,7 +217,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Contact us"
+    title: "Contact us",
+    trackingTitle: "Contact Us"
   },
   {
     path: '/about-us/why-XIRCLS',
@@ -198,7 +227,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Why XIRCLS - Democratizing Martech for Sustainable Growth."
+    title: "Why XIRCLS - Democratizing Martech for Sustainable Growth.",
+    trackingTitle: "Why Xircls"
   },
   {
     path: '/about-us/why-collaborative-marketing/',
@@ -207,7 +237,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Why Collaborative Marketing - Because Life is Collaboration, Not Competition."
+    title: "Why Collaborative Marketing - Because Life is Collaboration, Not Competition.",
+    trackingTitle: "Why Collaborative Marketing"
   },
   {
     path: '/about-us/vision-&-mission-statement/',
@@ -216,16 +247,17 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Vision & Mission - To Empower Businesses, Globally"
+    title: "Vision & Mission - To Empower Businesses, Globally",
+    trackingTitle: "Vission & mission statement"
   },
 
   // {
-  //   path: '/team',
-  //   element: <Team />,
-  //   meta: {
-  //     layout: "homeLayout",
-      // publicRoute: true
-  //   },
+  // path: '/team',
+  // element: <Team />,
+  // meta: {
+  // layout: "homeLayout",
+  // publicRoute: true
+  // },
   // title: false
   // },
   {
@@ -235,15 +267,16 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Blog: News, opinions and perspectives"
+    title: "Blog: News, opinions and perspectives",
+    trackingTitle: "Blog"
   },
   // {
-  //   path: '/blog/:blogTitle',
-  //   element: <BlogDetails />,
-  //   meta: {
-  //     layout: "homeLayout",
-  //     publicRoute: true
-  //   }
+  // path: '/blog/:blogTitle',
+  // element: <BlogDetails />,
+  // meta: {
+  // layout: "homeLayout",
+  // publicRoute: true
+  // }
   // },
   {
     path: '/blog/Conflict-Torture-or-Tool/',
@@ -251,7 +284,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Conflict Torture or Tool"
   },
   {
     path: '/blog/Collaborative-Marketing-and-the-Future-of-ZeroParty-Data/',
@@ -259,7 +293,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Collaborative Marketing and the Future of ZeroParty Data"
   },
   {
     path: '/blog/Why-Companies-Need-to-Move-From-Diversity-To-Inclusion/',
@@ -267,7 +302,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Why Companies Need to Move From Diversity To Inclusion"
   },
   {
     path: '/blog/Target-Audience-Are-Companies-At-War-With-Their-Customers/',
@@ -275,7 +311,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Target Audience Are Companies At War With Their Customers"
   },
   {
     path: '/blog/Current-Online-Marketing-Practices-Are-Making-You-Pay-More/',
@@ -283,7 +320,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Current Online Marketing Practices Are Making You Pay More"
   },
   {
     path: '/blog/Are-Bargain-Hunters-Killing-Your-Business/',
@@ -291,7 +329,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Are Bargain Hunters Killing Your Business"
   },
   {
     path: '/blog/Mind-Games-Why-We-Buy-What-We-Buy/',
@@ -299,7 +338,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Mind Games Why We Buy What We Buy"
   },
   {
     path: '/blog/Are-Influencers-Worth-The-Price-Tag/',
@@ -307,7 +347,9 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Are Influencers Worth The Price Tag"
+
   },
   {
     path: '/blog/The-Harsh-Truth-About-Customer-Loyalty-Programs/',
@@ -315,7 +357,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog The Harsh Truth About Customer Loyalty Programs"
   },
   {
     path: '/blog/Playing-With-Power-The-Danger-Of-Monopolies/',
@@ -323,7 +366,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Playing With Power The Danger Of Monopolies"
   },
   {
     path: '/blog/The-Devils-Currency-Our-Lives-For-Auction/',
@@ -331,15 +375,16 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog The Devils Currency Our Lives For Auction"
   },
   // {
-  //   path: '/blog/author/:blogger',
-  //   element: <Blogger />,
-  //   meta: {
-  //     layout: "homeLayout",
-  //     publicRoute: true
-  //   }
+  // path: '/blog/author/:blogger',
+  // element: <Blogger />,
+  // meta: {
+  // layout: "homeLayout",
+  // publicRoute: true
+  // }
   // },
   {
     path: '/blog/author/Darina_Litvina/',
@@ -347,7 +392,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Author Darina Litvina"
   },
   {
     path: '/blog/author/Ian_White/',
@@ -355,7 +401,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Author Ian White"
   },
   {
     path: '/blog/author/Shakercha_Bradshaw/',
@@ -363,7 +410,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Author Shakercha Bradshaw"
   },
   {
     path: '/blog/author/Adriana_Marcela_Torrenegra/',
@@ -371,7 +419,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Author Adriana Marcela Torrenegra"
   },
   {
     path: '/blog/author/Lauren_Deah/',
@@ -379,7 +428,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Author Lauren Deah"
   },
   {
     path: '/blog/author/Kwanele_Ngobese/',
@@ -387,7 +437,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Author Kwanele Ngobese"
   },
   {
     path: '/blog/author/Allie_Hinds/',
@@ -395,7 +446,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Author Allie Hinds"
   },
   {
     path: '/blog/author/Peyton-Sweeney/',
@@ -403,7 +455,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Author Peyton Sweeney"
   },
   {
     path: '/blog/author/Dineo-Magakwa/',
@@ -411,7 +464,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Author Dineo Magakwa"
   },
   {
     path: '/blog/author/Lauren_Deah/',
@@ -419,7 +473,8 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Author Lauren Deah"
   },
   {
     path: '/blog/author/Allie_Hinds/',
@@ -427,16 +482,17 @@ const Homes_Routes = [
     meta: {
       layout: "homeLayout",
       publicRoute: true
-    }
+    },
+    trackingTitle: "Blog Author Lauren Deah"
   },
   // {
-  //   path: '/developers',
-  //   element: <Developer />,
-  //   meta: {
-  //     layout: "homeLayout",
-      // publicRoute: true
-  //   },
-  //   title: false
+  // path: '/developers',
+  // element: <Developer />,
+  // meta: {
+  // layout: "homeLayout",
+  // publicRoute: true
+  // },
+  // title: false
   // },
   {
     path: '/merchant/login',
@@ -445,7 +501,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Merchant Login"
+    title: "Merchant Login",
+    trackingTitle: "Merchant Login"
   },
   {
     path: '/merchant/password_reset',
@@ -454,7 +511,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Password reset"
+    title: "Password reset",
+    trackingTitle: "Password reset"
   },
   {
     path: '/merchant/signup',
@@ -463,7 +521,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Merchant Signup"
+    title: "Merchant Signup",
+    trackingTitle: "Merchant Signup"
   },
   {
     path: '/affiliate/login',
@@ -472,7 +531,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Affiliate Login"
+    title: "Affiliate Login",
+    trackingTitle: "Affiliate Login"
   },
   {
     path: '/affiliate/signup',
@@ -481,7 +541,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Affiliate Signup"
+    title: "Affiliate Signup",
+    trackingTitle: "Affiliate Signup"
   },
   {
     path: '/terms-of-use/',
@@ -490,7 +551,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Terms of Use"
+    title: "Terms of Use",
+    trackingTitle: "Terms of Use"
   },
   {
     path: '/privacy-policy/',
@@ -499,7 +561,8 @@ const Homes_Routes = [
       layout: "homeLayout",
       publicRoute: true
     },
-    title: "Privacy Policy"
+    title: "Privacy Policy",
+    trackingTitle: "Privacy Policy"
   },
   {
     path: '/merchant/home/',
@@ -529,7 +592,7 @@ const Homes_Routes = [
     path: '/:flow/signup/',
     element: <FlowSignUp />,
     meta: {
-      layout: "custom",
+      layout: "homeLayout",
       publicRoute: true
     }
   },
@@ -564,6 +627,36 @@ const Homes_Routes = [
       layout: "NewBlank",
       publicRoute: true
     }
+  },
+  {
+    path: '/products/superleadz/build-email-lists-verified-leads',
+    element: <EmailLists />,
+    meta: {
+      layout: "homeLayout",
+      publicRoute: true
+    },
+    title: "SuperLeadz - Build email lists of verified leads",
+    trackingTitle: "SuperLeadz - Build email lists of verified leads"
+  },
+  {
+    path: "/products/superleadz/one-click-offer-redemption/",
+    element: <SuperLeadzOneClickRedemption />,
+    meta: {
+      layout: "homeLayout",
+      publicRoute: true
+    },
+    title: "SuperLeadz - One-click Offer Redemption",
+    trackingTitle: "SuperLeadz - One-click Offer Redemption"
+  },
+  {
+    path: "/products/superleadz/dual-verification-qualified-lead-generation/",
+    element: <SuperLeadzLeadGen />,
+    meta: {
+      layout: "homeLayout",
+      publicRoute: true
+    },
+    title: "SuperLeadz - Dual Verification Process",
+    trackingTitle: "SuperLeadz - Dual Verification Process"
   }
 ]
 

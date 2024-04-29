@@ -1,7 +1,8 @@
 import { lazy } from 'react'
 import ThankYouPage from '@src/views/CRM/Customers/ThankYouPage'
-import AddVehicle from '../../views/CRM/Vehicle/AddVehicle'
-const ViewCustomer = lazy(() => import('../../views/CRM/ViewCustomer/ViewCustomer'))
+import AddVehicle from '@src/views/CRM/Vehicle/AddVehicle'
+import AddVehicleVariant from '@src/views/CRM/Vehicle/AddVehicleVariant'
+const ViewCustomer = lazy(() => import('@src/views/CRM/ViewCustomer/ViewCustomer'))
 const AddBusiness = lazy(() => import('@src/views/CRM/Business/AddBusiness'))
 const CustomerType = lazy(() => import('@src/views/CRM/Customers/CustomerType'))
 const AddInsurance = lazy(() => import('@src/views/CRM/Insurance/AddInsurance'))
@@ -29,13 +30,20 @@ const Customers = lazy(() => import('@src/views/Leads/Customers'))
 // const CustomerBasicIdProof = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBasic/CustomerBasicIdProof'))
 // const CustomerBasicPersonal = lazy(() => import('@src/views/CRM/Customers/CustomerProfileBasic/CustomerBasicPersonal'))
 const AddCustomerForm = lazy(() => import('@src/views/CRM/Customers/AddCustomerForm'))
-const Finance = lazy(() => import('../../views/Leads/Finance'))
-// const Service = lazy(() => import('../../views/Leads/Service'))
-// const Customer = lazy(() => import('../../views/Leads/Customers'))
-const Insurance = lazy(() => import('../../views/Leads/Insurance'))
-import AddCall from '../../views/CRM/Call/AddCall'
-import Vehicle from '../../views/Leads/Vehicle'
-import CrossLeads from '../../views/Leads/CrossLeads'
+const Finance = lazy(() => import('@src/views/Leads/Finance'))
+// const Service = lazy(() => import('@src/views/Leads/Service'))
+// const Customer = lazy(() => import('@src/views/Leads/Customers'))
+const Insurance = lazy(() => import('@src/views/Leads/Insurance'))
+import AddCall from '@src/views/CRM/Call/AddCall'
+import Vehicle from '@src/views/Leads/Vehicle'
+import UsedCar from '@src/views/Leads/Usedcar'
+import CrossLeads from '@src/views/Leads/CrossLeads'
+import LeadsMain from '@src/views/CRM/Leads/LeadsMain'
+import LeadsSetting from '@src/views/CRM/Leads/LeadsSetting'
+import Leads_dashboard from '@src/views/Leads/Leads_Dashboard'
+import LeadsProfile from '@src/views/CRM/ViewLead/LeadsProfile'
+import LeadAddInteraction from '@src/views/CRM/ViewLead/Components/AddInteraction'
+import  BuyerSeller from '@src/views/CRM/BuyerSeller/Buyerseller'
 
 const appName = "crm"
 const Customers_Routes = [
@@ -220,6 +228,15 @@ const Customers_Routes = [
     }
   },
   {
+    path: '/merchant/customers/usedcar/',
+    element: <UsedCar />,
+    app: appName,
+    permission: {
+      route_type: "usedcar",
+      action: "read"
+    }
+  },
+  {
     path: '/merchant/customers/cross_leads',
     element: <CrossLeads />,
     app: appName,
@@ -255,11 +272,29 @@ const Customers_Routes = [
       action: "create"
     }
   },
+  {
+    path: '/merchant/customers/buyerseller/',
+    element: <BuyerSeller />,
+    app: appName,
+    permission: {
+      route_type: "usedcar",
+      action: "create"
+    }
+  },
+  {
+    path: '/merchant/customers/buyerseller/:id',
+    element: <BuyerSeller />,
+    app: appName,
+    permission: {
+      route_type: "usedcar",
+      action: "update"
+    }
+  },
   // --------------------------------
-  // {
-  //   path: '/merchant/customers/finance/',
-  //   element: <Finance />
-  // },
+  {
+    path: '/merchant/customers/add-vehicle-variant/',
+    element: <AddVehicleVariant />
+  },
   // {
   //   path: '/merchant/customers/service/',
   //   element: <Service />
@@ -357,6 +392,34 @@ const Customers_Routes = [
   {
     path: '/merchant/customers/add_call/:id',
     element: <AddCall />
+  },
+  {
+    path: '/merchant/customers/leads/',
+    element: <Leads_dashboard />
+  },
+  {
+    path: '/merchant/customers/add_lead',
+    element: <LeadsMain />
+  },
+  {
+    path: '/merchant/customer/leads_settings',
+    element: <LeadsSetting />
+  },
+  {
+    path: '/merchant/customers/lead/edit_lead/:id',
+    element: <LeadsMain />
+  },
+  {
+    path: '/merchant/customers/view_lead/:id',
+    element: <LeadsProfile />
+  },
+  {
+    path: '/merchant/customers/Add-Call-lead/:id',
+    element: <LeadAddInteraction />
+  },
+  {
+    path: '/merchant/customers/buyerseller',
+    element: <BuyerSeller />
   }
 ]
 

@@ -1,6 +1,7 @@
 import React, { Suspense, useContext, useEffect, useState } from 'react'
 import { Crosshair, Edit, Image, Monitor, PlusCircle, Smartphone, Square, Tag, Target, Type, X, Trash2, XCircle, Columns, Disc, Trash, Percent, MoreVertical, ArrowLeft, Home, CheckSquare, Mail, RotateCcw, RotateCw, Check, ChevronRight, Plus } from 'react-feather'
 import { AccordionBody, AccordionHeader, AccordionItem, Card, Container, DropdownItem, DropdownMenu, DropdownToggle, Modal, ModalBody, Row, UncontrolledAccordion, UncontrolledDropdown, Col, ModalHeader, UncontrolledButtonDropdown, CardBody, ModalFooter, Button, Input } from 'reactstrap'
+import { BiSolidOffer } from "react-icons/bi"
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import pixels from "../../assets/images/superLeadz/pixels.png"
 import PickerDefault from '../Components/Date-picker/NormalDatePicker'
@@ -29,13 +30,17 @@ import ReturnOfferHtml, { defaultOfferStyles } from '../NewCustomizationFlow/Ret
 import slPrevBg from "../../assets/images/vector/slPrevBg.png"
 import FrontBaseLoader from '../Components/Loader/Loader'
 import RenderPreview from "./RenderPreview"
-import "./Customization.css"
 import { CheckBox, RadioInput, SelectInput } from './campaignView/components'
 import RenderPreviewCopy from './RenderPreview copy'
 import VerifyYourEmailQuick from '../Outlet/VerifyYourEmailQuick'
 import VerifyYourEmail from '../Outlet/VerifyYourEmail'
 import ComTable from '../Components/DataTable/ComTable'
 import { TbReplace } from "react-icons/tb"
+import "./Customization.css"
+import { FaCrown } from "react-icons/fa"
+import { MdOutlineRefresh } from "react-icons/md"
+import { Reload } from 'tabler-icons-react'
+import { RenderTemplateUI } from '../Whatsapp/SmallFunction'
 
 
 export const fontStyles = [
@@ -85,6 +90,8 @@ const convertToSeconds = ({ time, type }) => {
         return time * 3600
     } else if (type === "minutes") {
         return time * 60
+    } else if (type === "days") {
+        return time * 86400
     } else {
         return time
     }
@@ -103,51 +110,64 @@ const CustomizationParent = () => {
     // themeLoc variable has the transferred from the AllCampaigns page 
     const themeLoc = useLocation()
 
+    console.log({ themeLoc })
+
     const { EditThemeId } = useParams()
 
     const defaultIsMobile = new URLSearchParams(themeLoc.search)
-
+    console.log(defaultIsMobile, "defaultIsMobile")
     // const dateFormat = "%Y-%m-%d %H:%M:%S"
 
     // status variable shows whether the user has monile view or desktop view selected while visiting the page
     // const status = (defaultIsMobile.get('isMobile') !== "false" && defaultIsMobile.get('isMobile') !== undefined && defaultIsMobile.get('isMobile') !== null && defaultIsMobile.get('isMobile') !== false)
 
     const [isMobile, setIsMobile] = useState(defaultIsMobile.get('isMobile') !== "false" && defaultIsMobile.get('isMobile') !== undefined && defaultIsMobile.get('isMobile') !== null && defaultIsMobile.get('isMobile') !== false)
-
+    const [whatsAppTemplate, setWhatsAppTemplate] = useState([])
     // const [isDragging, setIsDragging] = useState(false)
 
     // const [suggestions, setSuggestions] = useState([])
 
     const mobileCondition = isMobile ? "mobile_" : ""
     const mobileConditionRev = !isMobile ? "mobile_" : ""
-
+    const [selectedTemID, setSelectedTemID] = useState("")
     const { allThemes, selectedThemeId } = useContext(ThemesProvider)
 
     const allPreviews = [...allThemes]
 
     console.log("finalObj: ", localStorage.getItem("defaultThemeId"))
 
+    const defObj = themeLoc?.state?.custom_theme ? JSON.parse(themeLoc?.state?.custom_theme) : Boolean(localStorage.getItem("defaultTheme")) ? JSON.parse(localStorage.getItem("defaultTheme")) : Boolean(localStorage.getItem("defaultThemeId")) ? allPreviews[allPreviews.findIndex($ => $?.theme_id === parseFloat(localStorage.getItem("defaultThemeId")))]?.object : selectedThemeId !== "" ? { ...allPreviews[allPreviews?.findIndex($ => $?.theme_id === selectedThemeId)]?.object, campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") } : defaultObj
+
     const navigate = useNavigate()
     const [mousePos, setMousePos] = useState({})
-    const [finalObj, setFinalObj] = useState(themeLoc?.state?.custom_theme ? JSON.parse(themeLoc?.state?.custom_theme) : Boolean(localStorage.getItem("defaultTheme")) ? JSON.parse(localStorage.getItem("defaultTheme")) : Boolean(localStorage.getItem("defaultThemeId")) ? allPreviews[allPreviews.findIndex($ => $?.theme_id === parseFloat(localStorage.getItem("defaultThemeId")))]?.object : selectedThemeId !== "" ? { ...allPreviews[allPreviews?.findIndex($ => $?.theme_id === selectedThemeId)]?.object, campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") } : defaultObj)
+    const [finalObj, setFinalObj] = useState(defObj)
     const [past, setPast] = useState([])
     const [future, setFuture] = useState([])
-    const [themeName, setThemeName] = useState(themeLoc?.state?.custom_theme ? finalObj?.theme_name : `Campaign-${generateRandomString()}`)
-    const [defColors, setDefColors] = useState(finalObj.defaultThemeColors || {})
+    const [themeName, setThemeName] = useState(themeLoc?.state?.custom_theme ? defObj?.theme_name : `Campaign-${generateRandomString()}`)
+    const [defColors, setDefColors] = useState(defObj.defaultThemeColors || {})
     const [textValue, setTextValue] = useState("")
     const [senderName, setSenderName] = useState("")
     const [currColor, setCurrColor] = useState("primary")
     const [nameEdit, setNameEdit] = useState(true)
-    const [currPage, setCurrPage] = useState(finalObj?.[`${mobileCondition}pages`][0]?.id)
+    const [currPage, setCurrPage] = useState(defObj?.[`${mobileCondition}pages`][0]?.id)
     const [draggedInputType, setDraggedInputType] = useState("none")
-
+    const [whatsAppTem, setWhatsappTem] = useState([])
     const pageCondition = currPage === "button" ? "button" : "main"
-
+    // const [whatsappJson, setWhatsappJson] = useState({
+    //     template: "",
+    //     delay: ""
+    // })
     const outletData = getCurrentOutlet()
     const visibleOnOptions = [
         { value: 'scroll', label: 'Scroll' },
         { value: 'delay', label: 'Delay' },
         { value: 'button_click', label: 'Button Click' }
+    ]
+
+    const deplayTime = [
+        { label: "Minutes", value: "minutes" },
+        { label: "Hours", value: "hours" },
+        { label: "Days", value: "days" }
     ]
 
     const pagesSelection = [
@@ -188,6 +208,8 @@ const CustomizationParent = () => {
         selectedType: "navMenuStyles"
     })
 
+    const [connectedList, setConnectedList] = useState([])
+
     const [openPage, setOpenPage] = useState(true)
 
     const [gotDragOver, setGotDragOver] = useState({ cur: false, curElem: false, subElem: false })
@@ -209,7 +231,7 @@ const CustomizationParent = () => {
     const [bgModal5, setBgModal5] = useState(false)
     const [customColorModal, setCustomColorModal] = useState(false)
     const [customColorModal2, setCustomColorModal2] = useState(false)
-
+    const [singleTemplate, setSingleTemplate] = useState([])
     const [outletSenderId, setOutletSenderId] = useState("")
     const [placeholder, setPlaceholder] = useState([])
 
@@ -259,9 +281,9 @@ const CustomizationParent = () => {
     const [dropImage, setDropImage] = useState(false)
     const [rearr, setRearr] = useState(0)
     const [isColDragging, setIsColDragging] = useState(false)
-    const [deleteCols, setDeleteCols] = useState(["center", "right"])
-
-    console.log({ dropImage, imageType, finalObj })
+    const [deleteCols, setDeleteCols] = useState([])
+    const [isColRes, setIsColRes] = useState(false)
+    const [resizeMouse, setResizeMouse] = useState({ initial: null, move: { cur: null, col1: null, col2: null, curElem: {} } })
     // const [textValue, setTextValue] = useState("")
     // const [senderName, setSenderName] = useState("")
     // const [apiLoader, setApiLoader] = useState(false)
@@ -319,8 +341,8 @@ const CustomizationParent = () => {
         const data = JSON.stringify(finalObj)
         const newObj = { ...newState }
         const clonedFinalObj = JSON.parse(data)
-        setFinalObj({ ...newObj })
-        const delay = 200
+        setFinalObj((prev) => ({ ...prev, ...newObj }))
+        const delay = 1000
         const request = setTimeout(() => {
             if (data !== JSON.stringify(newState)) {
                 setPast([...past, { ...clonedFinalObj }])
@@ -334,6 +356,8 @@ const CustomizationParent = () => {
             clearTimeout(request)
         }
     }
+
+    // console.log(past, future, "ppppppp")
 
     const undo = () => {
         if (past.length === 0) return
@@ -504,9 +528,39 @@ const CustomizationParent = () => {
                 const getId = `${currPage}-${gotDragOver?.cur}-parent-grandparent`
                 setMousePos({ ...mousePos, y: e.clientY, x: e.clientX })
                 const elem = document.getElementById(getId)
-                const { y, height } = elem?.getBoundingClientRect()
+                let y, height
+                if (Boolean(elem?.getBoundingClientRect())) {
+                    y = elem?.getBoundingClientRect().y
+                    height = elem?.getBoundingClientRect().height
+                }
 
-                if (mousePos.y - (y + (height / 2)) < 0) {
+                if (updatedColWise.length === 0) {
+                    updatedColWise[0] = {
+                        id: updatedColWise?.length + 1,
+                        col: 1,
+                        style: elementStyles?.block,
+                        elements: [
+                            {
+                                positionType: 'left',
+                                style: elementStyles?.col,
+                                element: [{ ...commonObj, type: "", id: updatedColWise?.length }]
+                            }
+                        ]
+                    }
+
+                    mobile_updatedColWise[0] = {
+                        id: mobile_updatedColWise?.length + 1,
+                        col: 1,
+                        style: elementStyles?.block,
+                        elements: [
+                            {
+                                positionType: 'left',
+                                style: elementStyles?.col,
+                                element: [{ ...commonObj, type: "", id: mobile_updatedColWise?.length }]
+                            }
+                        ]
+                    }
+                } else if (mousePos.y - (y + (height / 2)) < 0) {
                     updatedColWise.splice(gotDragOver?.cur, 0, {
                         id: updatedColWise?.length + 1,
                         col: 1,
@@ -624,12 +678,13 @@ const CustomizationParent = () => {
             const newObj = { ...finalObj }
             const pageIndex = newObj?.pages?.findIndex($ => $.id === currPage)
             const mobile_pageIndex = newObj?.mobile_pages?.findIndex($ => $.id === currPage)
+            const defaultStyles = transferedData === "input" ? { ...elementStyles?.[transferedData], fontFamily: finalObj?.fontFamilies?.secondary } : elementStyles?.[transferedData]
             const updatedColWise = currPage === "button" ? newObj?.button?.map((col, index) => {
                 if (index === id) {
                     const updatedElements = col?.elements?.map((ele) => {
                         if (ele?.positionType === position) {
                             const dupArray = [...ele?.element]
-                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles?.[transferedData] }
+                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: defaultStyles }
                             return {
                                 ...ele,
                                 element: [...dupArray]
@@ -649,7 +704,7 @@ const CustomizationParent = () => {
                     const updatedElements = col?.elements?.map((ele) => {
                         if (ele?.positionType === position) {
                             const dupArray = [...ele?.element]
-                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles?.[transferedData] }
+                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: defaultStyles }
                             return {
                                 ...ele,
                                 element: [...dupArray]
@@ -670,7 +725,7 @@ const CustomizationParent = () => {
                     const updatedElements = col?.elements?.map((ele) => {
                         if (ele?.positionType === position) {
                             const dupArray = [...ele?.element]
-                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles?.[transferedData] }
+                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: defaultStyles }
                             return {
                                 ...ele,
                                 element: [...dupArray]
@@ -690,7 +745,7 @@ const CustomizationParent = () => {
                     const updatedElements = col?.elements?.map((ele) => {
                         if (ele?.positionType === position) {
                             const dupArray = [...ele?.element]
-                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles?.[transferedData] }
+                            dupArray[j] = dataTransfered?.includes("rearrange") ? { ...colWise[dragStartIndex?.cur]?.elements[colWise[dragStartIndex?.cur]?.elements?.findIndex($ => $?.positionType === dragStartIndex?.curElem)]?.element[dragStartIndex?.subElem] } : { ...commonObj, ...ele?.elements, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: defaultStyles }
                             return {
                                 ...ele,
                                 element: [...dupArray]
@@ -776,12 +831,12 @@ const CustomizationParent = () => {
                 elements = [
                     {
                         positionType: 'left',
-                        style: { ...newRow[0]?.style },
+                        style: { ...newRow[0]?.style, width: "50%" },
                         element: [...newRow[0]?.element]
                     },
                     {
                         positionType: 'right',
-                        style: { ...newRow[1]?.style },
+                        style: { ...newRow[1]?.style, width: "50%" },
                         element: [...newRow[1]?.element]
                     }
                 ]
@@ -869,7 +924,7 @@ const CustomizationParent = () => {
             newObj.mobile_pages[newObj?.mobile_pages?.findIndex($ => $?.id === currPage)].values = mobile_dupArray
         }
         updatePresent({ ...newObj })
-        setDeleteCols(["center", "right"])
+        // setDeleteCols(["center", "right"])
         // setcolWise([...colWise])
     }
 
@@ -1038,7 +1093,6 @@ const CustomizationParent = () => {
 
     const replaceColumns = (e, { cur, mainCol, repCol }) => {
         e.stopPropagation()
-        console.log({ cur, mainCol, repCol })
         const newObj = { ...finalObj }
         const dupArray = currPage === "button" ? newObj?.button : newObj?.pages[newObj?.pages?.findIndex($ => $?.id === currPage)].values
         const mobile_dupArray = currPage === "button" ? newObj?.mobile_button : newObj?.mobile_pages[newObj?.mobile_pages?.findIndex($ => $?.id === currPage)].values
@@ -1104,6 +1158,9 @@ const CustomizationParent = () => {
                 { value: 'redirect', label: 'Redirect' },
                 { value: 'call', label: 'Call' },
                 { value: 'close', label: 'Close' },
+                { value: 'save_redirect', label: 'Save & Redirect' },
+                { value: 'save_call', label: 'Save & Call' },
+                { value: 'save_close', label: 'Save & Close' },
                 { value: 'sendOTP', label: 'Send OTP' },
                 { value: 'verify', label: 'Verify OTP' }
             ]
@@ -1451,13 +1508,22 @@ const CustomizationParent = () => {
             const imgHeight = colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.height
             styles = (
                 <>
-                    <UncontrolledAccordion defaultOpen={['1']} stayOpen>
+                    <UncontrolledAccordion defaultOpen={['1', '2']} stayOpen>
                         <AccordionItem>
                             <AccordionHeader className='acc-header' targetId='1' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
                                 <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}>Border and Shadow</p>
                             </AccordionHeader>
                             <AccordionBody accordionId='1'>
                                 <BorderChange pageCondition={pageCondition} getMDToggle={getMDToggle} styles={values} setStyles={setValues} />
+                            </AccordionBody>
+                        </AccordionItem>
+                        <AccordionItem>
+                            <AccordionHeader className='acc-header' targetId='2' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
+                                {getMDToggle({ label: `Opacity: ${Boolean(values?.opacity) ? values?.opacity : "100%"}`, value: "opacity" })}
+                                <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}></p>
+                            </AccordionHeader>
+                            <AccordionBody accordionId='2'>
+                                <input type='range' className='w-100' value={Boolean(values?.opacity) ? parseFloat(values?.opacity) : 100} min={0} max={100} onChange={e => setValues({ ...values, opacity: `${e.target.value}%` })} />
                             </AccordionBody>
                         </AccordionItem>
                     </UncontrolledAccordion>
@@ -1549,7 +1615,9 @@ const CustomizationParent = () => {
                                     </div>
                                     <div className='p-0 mb-1 align-items-center'>
                                         {getMDToggle({ label: `Alignment`, value: `margin` })}
-                                        <Select value={alignOptions?.filter(item => item?.value === colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin)} onChange={e => {
+                                        <Select value={alignOptions?.filter(item => {
+                                            return ((colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin && colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin !== "") ? item?.value === colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.margin : "left")
+                                        })} onChange={e => {
                                             arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].style.margin = e.value
                                             arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandAlignment = false
                                             setcolWise([...arr])
@@ -1631,7 +1699,7 @@ const CustomizationParent = () => {
                         {/* Column Count Starts */}
                         <h6 style={{ marginLeft: "7px", marginTop: "10px" }}>Column Count</h6>
                         <div className='d-flex justify-content-around align-items-center'>
-                            {colWise[indexes?.cur].elements.length === 1 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("1", { left: "100%", right: "0%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            {colWise[indexes?.cur].elements.length === 1 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("1", { left: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <rect
                                         x={2}
@@ -1646,7 +1714,9 @@ const CustomizationParent = () => {
                                 </svg>
                             </button> : (
                                 <UncontrolledDropdown className='more-options-dropdown'>
-                                    <DropdownToggle className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
+                                    <DropdownToggle onClick={() => {
+                                        setDeleteCols(colWise[indexes?.cur].elements.length === 2 ? ["right"] : ["center", "right"])
+                                    }} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <rect
                                                 x={2}
@@ -1694,7 +1764,7 @@ const CustomizationParent = () => {
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
                             )}
-                            {colWise[indexes?.cur].elements.length <= 2 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("2", { left: "100%", right: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            {colWise[indexes?.cur].elements.length <= 2 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <g strokeWidth={3} stroke="#727272">
                                         <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1703,7 +1773,9 @@ const CustomizationParent = () => {
                                 </svg>
                             </button> : (
                                 <UncontrolledDropdown className='more-options-dropdown'>
-                                    <DropdownToggle className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
+                                    <DropdownToggle onClick={() => {
+                                        setDeleteCols(["right"])
+                                    }} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1729,7 +1801,7 @@ const CustomizationParent = () => {
                                                 if (deleteCols.length < colWise[indexes.cur].elements.length - 2) {
                                                     toast.error(`Select at least ${colWise[indexes.cur].elements.length - 2} columns`)
                                                 } else {
-                                                    changeColumn("2", { left: "100%", right: "100%" }, true)
+                                                    changeColumn("2", { left: "50%", right: "50%" }, true)
                                                 }
                                             }} className='flex-grow-1 text-center'>
                                                 Remove Columns
@@ -1741,7 +1813,7 @@ const CustomizationParent = () => {
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
                             )}
-                            <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("3", { left: "100%", center: "100%", right: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("3", { left: `${100 / 3}%`, center: `${100 / 3}%`, right: `${100 / 3}%` }, false)} style={{ aspectRatio: "1", width: "50px" }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <g strokeWidth={3} stroke="#727272">
                                         <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1826,7 +1898,7 @@ const CustomizationParent = () => {
                             <div>
                                 <h6 style={{ marginLeft: "7px", marginTop: "20px" }}>Column Split</h6>
                                 <div className='d-flex justify-content-around align-items-center'>
-                                    <button onClick={() => changeColumn("3", { left: `100%`, center: `100%`, right: `100%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button onClick={() => changeColumn("3", { left: `${100 / 3}%`, center: `${100 / 3}%`, right: `${100 / 3}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -2020,7 +2092,7 @@ const CustomizationParent = () => {
                                 <div className='p-0 mx-0 my-1'>
                                     <div className='p-0 mb-2 justify-content-start align-items-center'>
                                         {getMDToggle({ label: `Select Font: `, value: `fontFamily` })}
-                                        <Select className='w-100' name="" onChange={e => {
+                                        <Select value={fontStyles?.filter($ => $?.value === values?.fontFamily)} className='w-100' name="" onChange={e => {
                                             setValues({ ...values, fontFamily: e.value })
                                         }} id="" options={fontStyles} styles={{
                                             option: (provided, state) => {
@@ -2039,7 +2111,10 @@ const CustomizationParent = () => {
                                 <div className='p-0 mx-0 my-1'>
                                     <div className='p-0 mb-2 justify-content-start align-items-center'>
                                         {getMDToggle({ label: `Width Type: `, value: `widthType` })}
-                                        <Select className='w-100' name="" onChange={e => {
+                                        <Select value={[
+                                            { value: '100%', label: '100%' },
+                                            { value: 'custom', label: 'Custom' }
+                                        ].filter($ => $?.value === values?.widthType)} className='w-100' name="" onChange={e => {
                                             if (e.value === "100%") {
                                                 setValues({ ...values, widthType: e.value, width: e.value, minHeight: "0px", padding: "10px" })
                                             } else if (e.value === "custom") {
@@ -2202,7 +2277,7 @@ const CustomizationParent = () => {
                         {colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.isRequired && <div className='my-1'>
                             <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Error message:</span>
                             <div className="d-flex p-0 justify-content-between align-items-center gap-2">
-                                <input checked={colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.isRequiredText} onChange={e => {
+                                <input value={colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.isRequiredText} onChange={e => {
                                     arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isRequiredText = e.target.value
                                     setcolWise([...arr])
                                 }} defaultValue={"Please fill this field"} type="text" name='title' min="0" max="300" className='form-control' />
@@ -2795,7 +2870,7 @@ const CustomizationParent = () => {
         } else if (selectedType === "display_when") {
             return (
                 <div className='py-1 px-2 mt-1'>
-                    <h4 className='mb-2'>When to display</h4>
+                    <h4 className='mb-2'>Display Conditions</h4>
                     <div className="form-check mb-2">
                         <input checked={finalObj?.rules?.display_when === "immediately"} onChange={updateRules} type="radio" name='display_when' id='immediately' value={"immediately"} className="form-check-input cursor-pointer" /><label className="cursor-pointer" style={{ fontSize: "13px" }} htmlFor="immediately">Immediately</label>
                     </div>
@@ -2806,13 +2881,13 @@ const CustomizationParent = () => {
                         <input checked={finalObj?.rules?.display_when === "button_click"} onChange={updateRules} type="radio" name='display_when' id='button_click' value={"button_click"} className="form-check-input cursor-pointer" /><label htmlFor="button_click" className="cursor-pointer" style={{ fontSize: "13px" }}>On Button Click</label>
                     </div>
                     <div className="form-check mb-2">
-                        <input checked={finalObj?.rules?.display_when === "any_condition_met"} onChange={updateRules} type="radio" name='display_when' id='any_condition_met' value={"any_condition_met"} className="form-check-input cursor-pointer" /><label htmlFor="any_condition_met" className="cursor-pointer" style={{ fontSize: "13px" }}>When any Condition is met</label>
+                        <input checked={finalObj?.rules?.display_when === "any_condition_met"} onChange={updateRules} type="radio" name='display_when' id='any_condition_met' value={"any_condition_met"} className="form-check-input cursor-pointer" /><label htmlFor="any_condition_met" className="cursor-pointer" style={{ fontSize: "13px" }}>Other Conditions</label>
                     </div>
 
                     {
                         finalObj?.rules?.display_when === "any_condition_met" ? <>
                             <div className="form-check form-switch mb-1">
-                                <input onChange={updateRules} checked={finalObj?.rules?.spent_on_page} type="checkbox" role='switch' id='spent_on_page' name={"spent_on_page"} className="form-check-input cursor-pointer" /><label htmlFor="spent_on_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Spend on the Page</label>
+                                <input onChange={updateRules} checked={finalObj?.rules?.spent_on_page} type="checkbox" role='switch' id='spent_on_page' name={"spent_on_page"} className="form-check-input cursor-pointer" /><label htmlFor="spent_on_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Time spent on page</label>
                             </div>
                             {finalObj?.rules?.spent_on_page && (  //condition here
                                 <div className="d-flex gap-1 mb-2">
@@ -2832,7 +2907,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.spent_on_website} onChange={updateRules} type="checkbox" role='switch' id='spent_on_website' name={"spent_on_website"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="spent_on_website" className="cursor-pointer" style={{ fontSize: "13px" }}>Spend on the Website</label>
+                                <label htmlFor="spent_on_website" className="cursor-pointer" style={{ fontSize: "13px" }}>Time spent on website</label>
                             </div>
                             {finalObj?.rules?.spent_on_website && (  //condition here  
                                 <div className="d-flex gap-1 mb-2">
@@ -2852,7 +2927,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.read_page_by} onChange={updateRules} type="checkbox" role='switch' id='read_page_by' name={"read_page_by"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="read_page_by" className="cursor-pointer" style={{ fontSize: "13px" }}>Read the page by</label>
+                                <label htmlFor="read_page_by" className="cursor-pointer" style={{ fontSize: "13px" }}>Page scroll percentage</label>
                             </div>
                             {finalObj?.rules?.read_page_by && (  //condition here
                                 <div className="d-flex gap-1 mb-2 justify-content-start align-items-center">
@@ -2865,7 +2940,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.visited} onChange={updateRules} type="checkbox" role='switch' id='visited' name={"visited"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="visited" className="cursor-pointer" style={{ fontSize: "13px" }}>Visited</label>
+                                <label htmlFor="visited" className="cursor-pointer" style={{ fontSize: "13px" }}>Number of page visits</label>
                             </div>
                             {finalObj?.rules?.visited && (  //condition here
                                 <div className="d-flex gap-1 mb-2 justify-content-start align-items-center">
@@ -2874,7 +2949,7 @@ const CustomizationParent = () => {
                             )}
                             <div className="form-check form-switch mb-1">
                                 <input checked={finalObj?.rules?.not_active_page} onChange={updateRules} type="checkbox" role='switch' id='not_active_page' name={"not_active_page"} className="form-check-input cursor-pointer" />
-                                <label htmlFor="not_active_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Not active on the page</label>
+                                <label htmlFor="not_active_page" className="cursor-pointer" style={{ fontSize: "13px" }}>Page inactivity period</label>
                             </div>
                             {finalObj?.rules?.not_active_page && (  //condition here
                                 <div className="d-flex gap-1 mb-2">
@@ -2903,10 +2978,13 @@ const CustomizationParent = () => {
         } else if (selectedType === "stop_display_when") {
             return (
                 <div className='py-1 px-2 mt-1'>
-                    <h4 className='mb-2'>When to Stop displaying</h4>
-
+                    <h4 className='mb-2'>Display Conclusion</h4>
+                    <p>Stop displaying pop-up after:</p>
                     <div className="form-check form-switch mb-1">
-                        <input checked={finalObj?.rules?.stop_display_pages} onChange={updateRules} type="checkbox" role='switch' id='stop_display_pages' name={"stop_display_pages"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_pages" className="cursor-pointer" style={{ fontSize: "13px" }}>After visiting {finalObj?.rules?.stop_display_pages_value} page(s)</label>
+                        <input checked={finalObj?.rules?.stop_display_pages} onChange={updateRules} type="checkbox" role='switch' id='stop_display_pages' name={"stop_display_pages"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_pages" className="cursor-pointer" style={{ fontSize: "13px" }}>
+                            {/* After visiting {finalObj?.rules?.stop_display_pages_value} page(s) */}
+                            Page visit/s
+                        </label>
                     </div>
                     {finalObj?.rules?.stop_display_pages && (  //condition here
                         <div className="d-flex gap-1 mb-1">
@@ -2918,7 +2996,10 @@ const CustomizationParent = () => {
                         </div>
                     )}
                     <div className="form-check form-switch mb-1">
-                        <input checked={finalObj?.rules?.stop_display_after_closing} onChange={updateRules} type="checkbox" role='switch' id='stop_display_after_closing' name={"stop_display_after_closing"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_after_closing" className="cursor-pointer" style={{ fontSize: "13px" }}>After closing {finalObj?.rules?.stop_display_after_closing_value} time(s)</label>
+                        <input checked={finalObj?.rules?.stop_display_after_closing} onChange={updateRules} type="checkbox" role='switch' id='stop_display_after_closing' name={"stop_display_after_closing"} className="form-check-input cursor-pointer" /><label htmlFor="stop_display_after_closing" className="cursor-pointer" style={{ fontSize: "13px" }}>
+                            {/* After closing {finalObj?.rules?.stop_display_after_closing_value} time(s) */}
+                            Page closure/s
+                        </label>
                     </div>
                     {finalObj?.rules?.stop_display_after_closing && (  //condition here
                         <div className="d-flex gap-1 justify-content-start align-items-center mb-1">
@@ -2935,26 +3016,32 @@ const CustomizationParent = () => {
         } else if (selectedType === "on_pages") {
             return (
                 <div className='py-1 px-2 mt-1'>
-                    <h4 className='mb-2'>Visible on</h4>
+                    <h4 className='mb-2'>Display Location</h4>
                     <div className="row">
                         {pagesSelection?.map((ele, key) => {
-                            return (
-                                <div key={key} className="col-md-4 d-flex gap-2 align-items-start">
-                                    <input
-                                        checked={finalObj?.behaviour?.PAGES?.includes(ele?.value)}
-                                        className="d-none" value={ele?.value} onChange={addPage} type='checkbox' id={`page-${key}`} />
-                                    <label style={{ cursor: 'pointer' }} htmlFor={`page-${key}`} className="mb-2 text-capitalize d-flex flex-column align-items-center w-100 position-relative">
-                                        <div className="position-relative w-50 d-flex justify-content-center align-items-center">
-                                            <div className="position-absolute w-100" style={{ inset: "0px", outline: finalObj?.behaviour?.PAGES?.includes(ele.value) ? `1.5px solid rgba(0,0,0,1)` : `0px solid rgba(0,0,0,0)`, aspectRatio: "1", scale: finalObj?.behaviour?.PAGES?.includes(ele.value) ? "1.15" : "1.25", zIndex: "99999999", backgroundColor: `rgba(255,255,255,${finalObj?.behaviour?.PAGES?.includes(ele.value) ? "0" : "0.5"})`, transition: "0.3s ease-in-out" }}></div>
-                                            <img width="100%" style={{ transition: '0.25s ease' }}
-                                                className={`mb-2`} src={`${xircls_url}/plugin_other_images/icons/${ele.value === "custom_page" || ele.value === "custom_source" ? "all_pages" : ele.value}.png`}
-                                                alt='no img' />
-                                        </div>
-                                        <span className={`${finalObj?.behaviour?.PAGES?.includes(ele.value) ? "text-black" : ""} fw-bolder`} style={{ fontSize: '75%', textAlign: "center" }}>{ele?.label}</span>
-                                    </label>
-                                </div>
-                            )
+                            if (ele.value !== "custom_source") {
+                                return (
+                                    <div key={key} className="col-md-4 d-flex gap-2 align-items-start">
+                                        <input
+                                            checked={finalObj?.behaviour?.PAGES?.includes(ele?.value)}
+                                            className="d-none"
+                                            value={ele?.value}
+                                            onChange={addPage}
+                                            type='checkbox'
+                                            id={`page-${key}`}
+                                        />
+                                        <label style={{ cursor: 'pointer' }} htmlFor={`page-${key}`} className="mb-2 text-capitalize d-flex flex-column align-items-center w-100 position-relative">
+                                            <div className="position-relative w-50 d-flex justify-content-center align-items-center">
+                                                <div className="position-absolute w-100" style={{ inset: "0px", outline: finalObj?.behaviour?.PAGES?.includes(ele.value) ? `1.5px solid rgba(0,0,0,1)` : `0px solid rgba(0,0,0,0)`, aspectRatio: "1", scale: finalObj?.behaviour?.PAGES?.includes(ele.value) ? "1.15" : "1.25", zIndex: "99999999", backgroundColor: `rgba(255,255,255,${finalObj?.behaviour?.PAGES?.includes(ele.value) ? "0" : "0.5"})`, transition: "0.3s ease-in-out" }}></div>
+                                                <img width="100%" style={{ transition: '0.25s ease' }} className={`mb-2`} src={`${xircls_url}/plugin_other_images/icons/${ele.value === "custom_page" || ele.value === "custom_source" ? "all_pages" : ele.value}.png`} alt='no img' />
+                                            </div>
+                                            <span className={`${finalObj?.behaviour?.PAGES?.includes(ele.value) ? "text-black" : ""} fw-bolder`} style={{ fontSize: '75%', textAlign: "center" }}>{ele?.label}</span>
+                                        </label>
+                                    </div>
+                                )
+                            }
                         })}
+
                     </div>
 
                     {finalObj?.behaviour?.PAGES?.includes("custom_page") && <div className="row mt-2">
@@ -2967,7 +3054,7 @@ const CustomizationParent = () => {
                                             const newObj = { ...finalObj }
                                             newObj.behaviour.CUSTOM_PAGE_LINK[key] = e.target.value
                                             updatePresent(newObj)
-                                        }} value={ele} className='form-control' type="text" placeholder={`www.url-example${key + 1}.com`} />{finalObj.behaviour.CUSTOM_PAGE_LINK.length > 1 && <span onClick={() => {
+                                        }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj.behaviour.CUSTOM_PAGE_LINK.length > 1 && <span onClick={() => {
                                             const newObj = { ...finalObj }
                                             newObj?.behaviour?.CUSTOM_PAGE_LINK?.splice(key, 1)
                                             updatePresent(newObj)
@@ -2985,7 +3072,7 @@ const CustomizationParent = () => {
                         </div>}
                     </div>}
 
-                    {finalObj?.behaviour?.PAGES?.includes("custom_source") && (
+                    {/* {finalObj?.behaviour?.PAGES?.includes("custom_source") && (
                         <div className="row mt-2">
                             <label htmlFor="" className='mb-1' style={{ fontSize: "12px" }}>Source:</label>
                             <Select
@@ -3009,7 +3096,7 @@ const CustomizationParent = () => {
                             />
                         </div>
                     )
-                    }
+                    } */}
                 </div>
             )
         } else {
@@ -3203,6 +3290,7 @@ const CustomizationParent = () => {
                                                     {(!subElem?.type || subElem?.type === "") && <span>No element</span>}
                                                     {subElem?.type === 'text' && <Type size={16} color='#727272' />}
                                                     {subElem?.type === 'button' && <Disc size={16} color='#727272' />}
+                                                    {subElem?.type === 'offer' && <BiSolidOffer size={16} color='#727272' />}
                                                     {subElem?.type === 'input' && <img style={{ filter: "grayscale(100%)" }} src='https://cdn-app.optimonk.com/img/StructureInput.61ed2888.svg' alt='' />}
                                                     {subElem?.type === 'image' && (subElem.src === "" ? <Image width={16} color='#727272' /> : <div style={{ width: 16, aspectRatio: "1", backgroundImage: `url(${subElem.src})`, backgroundSize: "contain", backgroundPosition: "center center", backgroundRepeat: "no-repeat" }} />)}
                                                     {<span className={`${subElem.type !== "text" ? "text-capitalize" : ""}`} style={{ fontSize: "0.75rem" }}>{getSideText(subElem)}</span>}
@@ -3292,19 +3380,15 @@ const CustomizationParent = () => {
         const y = dragOverData?.y
         const height = dragOverData?.height
 
-        console.log("newObj ColDrop", transferedData)
         if ((transferedData !== "" && !transferedData.includes("col"))) {
             const arrCheck = dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element
             if (arrCheck.length <= 1 && (!arrCheck[0]?.type || arrCheck[0]?.type === "")) {
-                console.log({ arrCheck: "1" })
                 dupArray[cur].elements[dupArray[cur].elements.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }]
                 mobile_dupArray[cur].elements[mobile_dupArray[cur].elements.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }]
             } else if ((mousePos.y - (y + (height / 2)) > 0)) {
-                console.log({ arrCheck: "2" })
                 dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element?.push({ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
                 mobile_dupArray[cur]?.elements[mobile_dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element?.push({ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] })
             } else {
-                console.log({ arrCheck: "3" })
                 dupArray[cur].elements[dupArray[cur].elements?.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }, ...dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element]
                 mobile_dupArray[cur].elements[mobile_dupArray[cur].elements?.findIndex($ => $?.positionType === curElem)].element = [{ ...commonObj, type: transferedData, inputType: inputTypeCondition, placeholder: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, labelText: inputTypeList[inputTypeList?.findIndex($ => $.value === inputTypeCondition)]?.label, style: elementStyles[transferedData] }, ...dupArray[cur]?.elements[dupArray[cur]?.elements?.findIndex($ => $?.positionType === curElem)]?.element]
             }
@@ -3328,7 +3412,6 @@ const CustomizationParent = () => {
             handleLayoutDrop(e, cur)
         }
 
-        console.log({ cur, curElem, dupArray, mobile_dupArray, inputTypeCondition, y, height })
     }
 
     const handleElementDrop = (e, cur, curElem, subElem) => {
@@ -3340,7 +3423,6 @@ const CustomizationParent = () => {
         const dragOverData = document.getElementById(`${currPage}-${dragOverIndex.cur}-${dragOverIndex.curElem}-${dragOverIndex.subElem}`)?.getBoundingClientRect()
         const y = dragOverData?.y
         const height = dragOverData?.height
-        console.log("newObj ElementDrop", { transferedData })
         if ((transferedData !== "" && !transferedData.includes("col"))) {
             let dupArray
             let mobile_dupArray
@@ -3448,6 +3530,27 @@ const CustomizationParent = () => {
         // }
     }
 
+    const saveWhatsAppTemplate = async (id) => {
+        console.log(id, ">>>>>>>>>> id")
+        const form_data = new FormData()
+        form_data.append("superleadz_template", id)
+        const secondsConverted = await convertToSeconds({ time: Number(finalObj?.whatsapp?.time), type: finalObj?.whatsapp?.timeType })
+        console.log(secondsConverted, "secondsConverted")
+        const json_data = {
+            template: finalObj?.whatsapp?.template,
+            delay: secondsConverted
+        }
+        form_data.append("json_data", JSON.stringify(json_data))
+
+        postReq("saveWhatsappTem", form_data)
+            .then((resp) => {
+                console.log(resp)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
     const sendData = (e, actionType) => {
         e.preventDefault()
         setApiLoader(true)
@@ -3478,6 +3581,7 @@ const CustomizationParent = () => {
             toast.error("Enter a theme name")
             setApiLoader(false)
         } else if (isOfferDraggable && phoneIsOfferDraggable && finalObj.selectedOffers.length === 0) {
+            setApiLoader(false)
             toast.error("Add some offers to your Theme!")
         } else if (includesInput?.length > 0) {
             setApiLoader(false)
@@ -3520,23 +3624,93 @@ const CustomizationParent = () => {
             axios({
                 method: "POST", url: `${SuperLeadzBaseURL}/api/v1/form_builder_template/`, data: form_data
             }).then((data) => {
-                setApiLoader(false)
+
                 if (data?.data?.exist) {
+                    setApiLoader(false)
                     toast.error("Campaign name already exist")
                 } else {
+
                     localStorage.removeItem("draftId")
                     setThemeId(data?.data.theme_id)
-                    toast.success("Successfully saved")
-                    if (actionType === "Save & Close") {
-                        navigate('/merchant/SuperLeadz/all_campaigns/')
-                    } else if (actionType === "Save & Preview") {
-                        navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) } })
+                    toast.success(<div style={{ fontSize: '14px' }}><span className='pb-1'>Your campaign is ready to go live!</span>  <br /><span>Toggle the status to activate the campaign.</span> </div>)
+
+                    saveWhatsAppTemplate(data?.data.theme_id)
+
+
+                    if (defaultIsMobile.get("status") === "true") {
+                        const getUrl = new URL(`${SuperLeadzBaseURL}/api/v1/get/active-template/`)
+                        const form_data = new FormData()
+                        form_data.append("shop", outletData[0]?.web_url)
+                        form_data.append("app", "superleadz")
+                        form_data.append('theme_id', data?.data.theme_id)
+                        form_data.append('campaign_name', themeName)
+                        axios({
+                            method: "POST",
+                            url: getUrl,
+                            data: form_data
+                        })
+                            .then((resp) => {
+                                console.log(resp)
+                                if (resp.data.response.length === 0) {
+                                    const form_data = new FormData()
+                                    form_data.append("shop", outletData[0]?.web_url)
+                                    form_data.append("app", "superleadz")
+                                    form_data.append('theme_id', data?.data.theme_id)
+                                    form_data.append('campaign_name', themeName)
+                                    form_data.append('is_active', 1)
+                                    axios(`${SuperLeadzBaseURL}/api/v1/get/change-theme-status/`, {
+                                        method: 'POST',
+                                        data: form_data
+                                    })
+                                        .then(() => {
+                                            if (actionType === "Save & Close") {
+                                                navigate('/merchant/SuperLeadz/all_campaigns/')
+                                            } else if (actionType === "Save & Preview") {
+                                                navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) } })
+                                            }
+                                            setApiLoader(false)
+                                        })
+                                        .catch(err => {
+                                            console.log(err)
+                                            toast.error("Somthing went wrong!")
+                                        })
+                                        .finally(() => {
+                                            setApiLoader(false)
+                                        })
+
+                                } else {
+                                    if (actionType === "Save & Close") {
+                                        navigate('/merchant/SuperLeadz/all_campaigns/')
+                                    } else if (actionType === "Save & Preview") {
+                                        navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) } })
+                                    }
+                                    setApiLoader(false)
+                                }
+
+                            })
+                            .catch((error) => {
+                                console.log(error)
+                                toast.error("Somthing went wrong!")
+                            })
+                            .finally(() => {
+                                setApiLoader(false)
+                            })
+                    } else {
+                        setApiLoader(false)
+                        if (actionType === "Save & Close") {
+                            navigate('/merchant/SuperLeadz/all_campaigns/')
+                        } else if (actionType === "Save & Preview") {
+                            navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) } })
+                        }
                     }
                 }
             }).catch((error) => {
                 setApiLoader(false)
                 console.log({ error })
             })
+                .finally(() => {
+                    setApiLoader(false)
+                })
         }
     }
 
@@ -3986,6 +4160,12 @@ const CustomizationParent = () => {
     }, [defColors, currColor])
 
     useEffect(() => {
+        if (finalObj.whatsapp?.template) {
+            setSingleTemplate(whatsAppTemplate?.filter((curElem) => String(curElem?.id) === String(finalObj.whatsapp?.template)))
+        }
+    }, [finalObj.whatsapp?.template])
+
+    useEffect(() => {
         localStorage.setItem("draftId", themeId)
     }, [themeId])
 
@@ -4046,6 +4226,34 @@ const CustomizationParent = () => {
         }
     }
 
+    const integratedList = () => {
+        getReq("integration", `?app_name=${userPermission?.appName}`)
+            .then((resp) => {
+                setConnectedList(resp?.data?.connected_app_list?.map((curElem) => curElem?.integrated_app?.slug))
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+
+        getReq("getTemplates")
+            .then((resp) => {
+                console.log(resp, "ppppppp")
+                setWhatsAppTemplate(resp?.data?.data)
+                const activeTemplate = resp?.data?.data?.map((curElem) => {
+                    if (resp?.data?.active_id.includes(curElem?.id)) {
+                        return { label: curElem?.name, value: curElem?.id }
+                    } else {
+                        return null
+                    }
+                }).filter(elem => elem !== null)
+                // console.log(activeTemplate, "ppppppp")
+                setWhatsappTem(activeTemplate)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
     useEffect(() => {
         getEmailSettings()
         addEvents()
@@ -4055,6 +4263,7 @@ const CustomizationParent = () => {
         getOffers()
         refreshOfferDraggable()
         getPlan()
+        // const newObj = {...finalObj}
         // generateSuggestion()
         const campaignStartDate = finalObj?.campaignStartDate === "" ? moment(new Date()).format("YYYY-MM-DD HH:mm:ss") : Array.isArray(finalObj?.campaignStartDate) ? moment(finalObj?.campaignStartDate[0]).format("YYYY-MM-DD HH:mm:ss") : finalObj?.campaignStartDate
         const campaignEndDate = !finalObj?.campaignHasEndDate ? "" : finalObj?.campaignEndDate === "" ? moment(new Date()).format("YYYY-MM-DD HH:mm:ss") : Array.isArray(finalObj?.campaignEndDate) ? moment(finalObj?.campaignEndDate[0]).format("YYYY-MM-DD HH:mm:ss") : finalObj?.campaignEndDate
@@ -4083,6 +4292,44 @@ const CustomizationParent = () => {
             setValues(currPage === "button" ? { ...finalObj?.[`${mobileCondition}button`][indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style } : { ...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style })
         }
 
+        document.addEventListener("mouseup", () => {
+            setIsColRes(false)
+            setResizeMouse({ ...resizeMouse, initial: null })
+        })
+
+        document.addEventListener("mousemove", (e) => {
+            // console.log("mousemove", {checker, isColRes})
+            if (isColRes) {
+                const row = document.getElementById(`${currPage}-${resizeMouse?.move?.cur}-sizeable`)
+
+                const rowSize = row?.getBoundingClientRect()
+
+                const colWidth3 = (resizeMouse?.move?.ignoreColWidth / rowSize?.width) * 100
+
+                const colWidthCalc = ((resizeMouse?.move?.colWidth - (resizeMouse.initial - e.clientX)) / rowSize?.width) * 100
+                const colWidth1 = colWidthCalc <= 5 ? 5 : colWidthCalc >= 95 - colWidth3 ? 95 - colWidth3 : colWidthCalc
+                const colWidth2 = 100 - colWidth3 - colWidth1
+
+                const moveObj = { ...finalObj }
+
+                const dupArr = currPage === "button" ? moveObj.button : moveObj.pages[moveObj.pages.findIndex($ => $.id === currPage)].values
+                console.log("co-ordinates onMouseMove", e, e.clientX - resizeMouse?.initial, resizeMouse?.initial, e.clientX, { rowSize, colWidth1, colWidth2, calcWidth: e.clientX - resizeMouse?.initial, resizeMouse })
+
+                dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col1].style.width = `${colWidth1}%`
+                dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col2].style.width = `${colWidth2}%`
+
+                if (currPage === "button") {
+                    moveObj.button = dupArr
+                } else {
+                    moveObj.pages[moveObj.pages.findIndex($ => $.id === currPage)].values = dupArr
+                }
+
+                updatePresent({ ...moveObj })
+            }
+        })
+
+        integratedList()
+
         // if (status) {
         //     document.getElementById("phone").click()
         // } else if (defaultIsMobile.get('isMobile') === 'false') {
@@ -4098,7 +4345,41 @@ const CustomizationParent = () => {
 
     return (
         <Suspense fallback={null}>
-            <div className='position-relative' id='customization-container'>
+            <div className='position-relative' id='customization-container'
+                onMouseUp={() => {
+                    setIsColRes(false)
+                    setResizeMouse({ ...resizeMouse, initial: null })
+                }}
+                onMouseMove={(e) => {
+                    // console.log("mousemove", {checker, isColRes})
+                    if (isColRes) {
+                        const row = document.getElementById(`${currPage}-${resizeMouse?.move?.cur}-sizeable`)
+
+                        const rowSize = row?.getBoundingClientRect()
+
+                        const colWidth3 = (resizeMouse?.move?.ignoreColWidth / rowSize?.width) * 100
+
+                        const colWidthCalc = ((resizeMouse?.move?.colWidth - (resizeMouse.initial - e.clientX)) / rowSize?.width) * 100
+                        const colWidth1 = colWidthCalc <= 5 ? 5 : colWidthCalc >= 95 - colWidth3 ? 95 - colWidth3 : colWidthCalc
+                        const colWidth2 = 100 - colWidth3 - colWidth1
+
+                        const newObj = { ...finalObj }
+
+                        const dupArr = currPage === "button" ? newObj.button : newObj.pages[newObj.pages.findIndex($ => $.id === currPage)].values
+                        console.log("co-ordinates onMouseMove", e, e.clientX - resizeMouse?.initial, resizeMouse?.initial, e.clientX, { rowSize, colWidth1, colWidth2, calcWidth: e.clientX - resizeMouse?.initial, resizeMouse })
+
+                        dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col1].style.width = `${colWidth1}%`
+                        dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col2].style.width = `${colWidth2}%`
+
+                        if (currPage === "button") {
+                            newObj.button = dupArr
+                        } else {
+                            newObj.pages[newObj.pages.findIndex($ => $.id === currPage)].values = dupArr
+                        }
+
+                        updatePresent({ ...newObj })
+                    }
+                }}>
                 {
                     apiLoader ? <FrontBaseLoader /> : ''
                 }
@@ -4144,9 +4425,9 @@ const CustomizationParent = () => {
                             <button disabled={currPage === "button"} onClick={() => {
                                 setCurrPage(currPage === finalObj.pages[finalObj.pages.length - 1].id ? "button" : finalObj.pages[currPageIndex + 1].id)
                             }} className="btn custom-btn-outline">Next</button>
-                            <button onClick={(e) => sendData(e, "Save & Preview")} id='saveBtn' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Preview</button>
-                            <button onClick={(e) => sendData(e, "Save")} id='saveBtn' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Save</button>
-                            <button onClick={(e) => sendData(e, "Save & Close")} id='saveBtn' className="btn btn-primary-main" style={{ whiteSpace: 'nowrap' }}>Save & Close</button>
+                            <button onClick={(e) => sendData(e, "Save & Preview")} id='saveBtn1' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Preview</button>
+                            <button onClick={(e) => sendData(e, "Save")} id='saveBtn2' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Save</button>
+                            <button onClick={(e) => sendData(e, "Save & Close")} id='saveBtn3' className="btn btn-primary-main" style={{ whiteSpace: 'nowrap' }}>Save & Close</button>
                         </div>
                     </Row>
                 </Container>
@@ -4235,6 +4516,17 @@ const CustomizationParent = () => {
                             </button>
                             <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Email</span>
                         </div>
+
+                        {
+                            <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "whatsapp" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => {
+                                setSideNav("whatsapp")
+                            }}>
+                                <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
+                                    <Mail size={15} />
+                                </button>
+                                <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Whatsapp</span>
+                            </div>
+                        }
                     </div>
                     {/* Sidebar */}
 
@@ -4247,7 +4539,7 @@ const CustomizationParent = () => {
                             </span>
                             <div className="overflow-x-hidden h-100 position-relative hideScroll">
                                 <div className='w-100' style={{ height: "100%", overflowY: "auto" }}>
-                                    <div style={{ width: `${sectionWidths.drawerWidth}px`, transform: `translateX(${(sideNav !== "" && sideNav !== "rules") ? "0px" : `-${sectionWidths.drawerWidth}px`})`, transition: "0.3s ease-in-out", position: "absolute", inset: "0px 0px 0px auto" }}>
+                                    <div id="1212" style={{ width: `100%`, transform: `translateX(${(sideNav !== "" && sideNav !== "rules") ? "0px" : `-${sectionWidths.drawerWidth}px`})`, transition: "0.3s ease-in-out", position: "absolute", inset: "0px 0px 0px auto" }}>
                                         {/* Theme Section */}
                                         {sideNav === "theme" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%" }}>
                                             <UncontrolledAccordion stayOpen defaultOpen={["1"]}>
@@ -4446,22 +4738,204 @@ const CustomizationParent = () => {
                                                         </div>
                                                         <p className='m-0 fw-bolder text-black text-uppercase' style={{ padding: "0.5rem 0px", fontSize: "0.75rem" }}>Size</p>
                                                         <div className='p-0 mx-0 my-1'>
-                                                            <div className='mb-1'>
-                                                                <span className='fw-bolder text-black text-capitalize' style={{ fontSize: "0.7rem" }}>{isMobile ? "Max Width" : "Width"}: {currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`][isMobile ? "maxWidth" : "width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"]}</span>
+                                                            {/* <div className='mb-1'>
+                                                                <span className='fw-bolder text-black text-capitalize' style={{ fontSize: "0.7rem" }}>{isMobile && currPage !== "button" ? "Max Width" : "Width"}: {currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]["width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"]}</span>
                                                                 <div className="d-flex p-0 justify-content-between align-items-center gap-2">
                                                                     <input type='range'
                                                                         value={parseFloat(currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]["width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"])}
                                                                         className='w-100' onChange={e => {
-                                                                            currPage === "button" ? updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}button`]: { ...finalObj?.backgroundStyles[`${mobileCondition}button`], [e.target.name]: `${e.target.value}${isMobile ? "%" : "px"}` } } }) : updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: { ...finalObj?.backgroundStyles[`${mobileCondition}main`], [e.target.name]: `${e.target.value}${isMobile ? "%" : "px"}` } } })
-                                                                        }} name={currPage === "button" ? "width" : isMobile ? "maxWidth" : "width"} min="0" max={isMobile ? "100" : "800"} />
+                                                                            currPage === "button" ? updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}button`]: { ...finalObj?.backgroundStyles[`${mobileCondition}button`], [e.target.name]: `${e.target.value}px` } } }) : updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: { ...finalObj?.backgroundStyles[`${mobileCondition}main`], [e.target.name]: `${e.target.value}${isMobile ? "%" : "px"}` } } })
+                                                                        }} name={currPage === "button" ? "width" : isMobile ? "maxWidth" : "width"} min="0" max={isMobile && currPage !== "button" ? "100" : "1920"} />
+                                                                </div>
+                                                            </div> */}
+                                                            <div className='mb-1'>
+
+                                                                <div className=" p-0 align-items-center gap-2">
+                                                                    <div className='d-flex justify-content-between'>
+                                                                        <span className='fw-bolder text-black text-capitalize' style={{ fontSize: "0.7rem" }}>
+                                                                            {isMobile && currPage !== "button" ? "Max Width" : "Width"}:
+                                                                            {currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]["width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"]}
+                                                                        </span>
+                                                                        <div className='d-flex justify-content-between'>
+                                                                            <label className="form-check-label ms-1 fw-bolder text-black text-capitalize" style={{ fontSize: "0.7rem" }} htmlFor="widthCheck">
+                                                                                Max Width
+                                                                            </label>
+
+
+                                                                            <input
+                                                                                style={{ marginBottom: '5px' }}
+                                                                                className="form-check-input ms-1"
+                                                                                type="checkbox"
+                                                                                value=""
+                                                                                id="widthCheck"
+                                                                                onChange={(e) => {
+                                                                                    const isChecked = e.target.checked
+                                                                                    const newWidth = isChecked ? '1920px' : `${finalObj?.backgroundStyles[`${mobileCondition}${currPage === "button" ? "button" : "main"}`]?.width}px`
+
+                                                                                    if (currPage === "button") {
+                                                                                        updatePresent({
+                                                                                            ...finalObj,
+                                                                                            backgroundStyles: {
+                                                                                                ...finalObj?.backgroundStyles,
+                                                                                                [`${mobileCondition}button`]: {
+                                                                                                    ...finalObj?.backgroundStyles[`${mobileCondition}button`],
+                                                                                                    width: newWidth
+                                                                                                }
+                                                                                            }
+                                                                                        })
+                                                                                    } else {
+                                                                                        updatePresent({
+                                                                                            ...finalObj,
+                                                                                            backgroundStyles: {
+                                                                                                ...finalObj.backgroundStyles,
+                                                                                                [`${mobileCondition}main`]: {
+                                                                                                    ...finalObj?.backgroundStyles[`${mobileCondition}main`],
+                                                                                                    [isMobile ? "maxWidth" : "width"]: newWidth
+                                                                                                }
+                                                                                            }
+                                                                                        })
+                                                                                    }
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    <input
+                                                                        type='range'
+                                                                        value={parseFloat(
+                                                                            currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]["width"] : finalObj?.backgroundStyles[`${mobileCondition}main`]?.[isMobile ? "maxWidth" : "width"]
+                                                                        )}
+                                                                        className='w-100'
+                                                                        onChange={(e) => {
+                                                                            const newWidth = `${e.target.value}${currPage === "button" ? "px" : isMobile ? "%" : "px"}`
+
+                                                                            if (currPage === "button") {
+                                                                                updatePresent({
+                                                                                    ...finalObj,
+                                                                                    backgroundStyles: {
+                                                                                        ...finalObj?.backgroundStyles,
+                                                                                        [`${mobileCondition}button`]: {
+                                                                                            ...finalObj?.backgroundStyles[`${mobileCondition}button`],
+                                                                                            width: newWidth
+                                                                                        }
+                                                                                    }
+                                                                                })
+                                                                            } else {
+                                                                                updatePresent({
+                                                                                    ...finalObj,
+                                                                                    backgroundStyles: {
+                                                                                        ...finalObj.backgroundStyles,
+                                                                                        [`${mobileCondition}main`]: {
+                                                                                            ...finalObj?.backgroundStyles[`${mobileCondition}main`],
+                                                                                            [isMobile ? "maxWidth" : "width"]: newWidth
+                                                                                        }
+                                                                                    }
+                                                                                })
+                                                                            }
+                                                                        }}
+                                                                        name={currPage === "button" ? "width" : isMobile ? "maxWidth" : "width"}
+                                                                        min="0"
+                                                                        max={isMobile && currPage !== "button" ? "100" : "1920"}
+                                                                    />
                                                                 </div>
                                                             </div>
-                                                            <div className=''>
-                                                                <span className='fw-bolder text-black' style={{ fontSize: "0.7rem" }}>Min-Height: {finalObj?.backgroundStyles[`${mobileCondition}main`]?.minHeight}</span>
+                                                            {/* <div className=''>
+                                                                <span className='fw-bolder text-black' style={{ fontSize: "0.7rem" }}>Min-Height: {finalObj?.backgroundStyles[`${mobileCondition}${pageCondition}`]?.minHeight}</span>
                                                                 <div className="d-flex p-0 justify-content-between align-items-center gap-2">
                                                                     <input type='range' value={parseFloat(currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]?.minHeight : finalObj?.backgroundStyles[`${mobileCondition}main`]?.minHeight)} onChange={e => {
                                                                         currPage === "button" ? updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}button`]: { ...finalObj?.backgroundStyles[`${mobileCondition}button`], minHeight: `${e.target.value}px` } } }) : updatePresent({ ...finalObj, backgroundStyles: { ...finalObj.backgroundStyles, [`${mobileCondition}main`]: { ...finalObj?.backgroundStyles[`${mobileCondition}main`], minHeight: `${e.target.value}px` } } })
-                                                                    }} className='w-100' name="height" min="0" max="800" />
+                                                                    }} className='w-100' name="height" min="0" max="1080" />
+                                                                </div>
+                                                            </div> */}
+
+                                                            {/* Updated (with errors) */}
+                                                            <div className='align-item-center'>
+                                                                <div className='d-flex justify-content-between'>
+                                                                    <span className='fw-bolder text-black' style={{ fontSize: "0.7rem" }}>
+                                                                        Height: {finalObj?.backgroundStyles[`${mobileCondition}${pageCondition}`]?.height}
+                                                                    </span>
+                                                                    <div className='d-flex justify-content-between'>
+                                                                        <label className="form-check-label ms-1 fw-bolder text-black text-capitalize" style={{ fontSize: "0.7rem" }} htmlFor="flexCheckDefault">
+                                                                            Max Height
+                                                                        </label>
+                                                                        <input
+                                                                            style={{ marginBottom: '5px' }}
+                                                                            className="form-check-input ms-1"
+                                                                            type="checkbox"
+                                                                            value=""
+                                                                            id="flexCheckDefault"
+                                                                            onChange={(e) => {
+                                                                                const isChecked = e.target.checked
+                                                                                const newHeight = isChecked ? '1080px' : `${finalObj?.backgroundStyles[`${mobileCondition}${pageCondition}`]?.height}px`
+                                                                                const newMaxHeight = isChecked ? '90vh' : 'unset'
+                                                                                if (currPage === "button") {
+                                                                                    updatePresent({
+                                                                                        ...finalObj,
+                                                                                        backgroundStyles: {
+                                                                                            ...finalObj?.backgroundStyles,
+                                                                                            [`${mobileCondition}button`]: {
+                                                                                                ...finalObj?.backgroundStyles[`${mobileCondition}button`],
+                                                                                                height: newHeight,
+                                                                                                maxHeight: newMaxHeight
+                                                                                            }
+                                                                                        }
+                                                                                    })
+                                                                                } else {
+                                                                                    updatePresent({
+                                                                                        ...finalObj,
+                                                                                        backgroundStyles: {
+                                                                                            ...finalObj.backgroundStyles,
+                                                                                            [`${mobileCondition}main`]: {
+                                                                                                ...finalObj?.backgroundStyles[`${mobileCondition}main`],
+                                                                                                height: newHeight,
+                                                                                                maxHeight: newMaxHeight
+                                                                                            }
+                                                                                        }
+                                                                                    })
+                                                                                }
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="d-flex p-0 justify-content-between align-items-center gap-2">
+                                                                    <input
+                                                                        type='range'
+                                                                        value={parseFloat(currPage === "button" ? finalObj?.backgroundStyles[`${mobileCondition}button`]?.height : finalObj?.backgroundStyles[`${mobileCondition}main`]?.height)}
+                                                                        onChange={(e) => {
+                                                                            const newHeight = `${e.target.value}px`
+                                                                            const newMaxHeight = '90vh'
+
+                                                                            if (currPage === "button") {
+                                                                                updatePresent({
+                                                                                    ...finalObj,
+                                                                                    backgroundStyles: {
+                                                                                        ...finalObj?.backgroundStyles,
+                                                                                        [`${mobileCondition}button`]: {
+                                                                                            ...finalObj?.backgroundStyles[`${mobileCondition}button`],
+                                                                                            height: newHeight,
+                                                                                            maxHeight: newMaxHeight
+                                                                                        }
+                                                                                    }
+                                                                                })
+                                                                            } else {
+                                                                                updatePresent({
+                                                                                    ...finalObj,
+                                                                                    backgroundStyles: {
+                                                                                        ...finalObj.backgroundStyles,
+                                                                                        [`${mobileCondition}main`]: {
+                                                                                            ...finalObj?.backgroundStyles[`${mobileCondition}main`],
+                                                                                            height: newHeight,
+                                                                                            maxHeight: newMaxHeight
+                                                                                        }
+                                                                                    }
+                                                                                })
+                                                                            }
+                                                                        }}
+                                                                        className='w-100'
+                                                                        name="height"
+                                                                        min="0"
+                                                                        max="1080"
+                                                                    />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -4489,7 +4963,7 @@ const CustomizationParent = () => {
                                         </div>}
                                         {/* Theme Section */}
                                         {/* Audience Section */}
-                                        {sideNav === "audience" && <div style={{ transition: "0.3s ease-in-out", overflow: "hidden", width: "100%" }}>
+                                        {sideNav === "audience" && <div style={{ transition: "0.3s ease-in-out", overflowY: "auto", height: "100vh", width: "100%" }}>
                                             <UncontrolledAccordion defaultOpen={["1"]} stayOpen>
                                                 <AccordionItem className='bg-white border-bottom'>
                                                     <AccordionHeader className='acc-header border-bottom' targetId='1'>
@@ -4500,23 +4974,74 @@ const CustomizationParent = () => {
                                                             <div className="form-check mb-1">
                                                                 <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "ALL_VISITORS"} onChange={e => {
                                                                     updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
-                                                                }} id='all' value={"ALL_VISITORS"} className="form-check-input cursor-pointer" /><label className="cursor-pointer" style={{ fontSize: "13px" }} htmlFor="all">All Visitors</label>
+                                                                }} id='all' value={"ALL_VISITORS"} className="form-check-input cursor-pointer" />
+                                                                <label className="cursor-pointer" style={{ fontSize: "13px" }} htmlFor="all">All Visitors</label>
                                                             </div>
-                                                            <div className="form-check mb-1">
-                                                                <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "FIRST_VISITORS"} onChange={e => {
-                                                                    updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
-                                                                }} id='first' value={"FIRST_VISITORS"} className="form-check-input cursor-pointer" /><label htmlFor="first" className="cursor-pointer" style={{ fontSize: "13px" }}>First-Time Visitors</label>
+
+                                                            {
+                                                                userPermission?.currentPlan?.plan !== "Forever Free" ? <>
+                                                                    <div className="form-check mb-1">
+                                                                        <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "FIRST_VISITORS"} onChange={e => {
+                                                                            updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
+                                                                        }} id='first' value={"FIRST_VISITORS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="first" className="cursor-pointer" style={{ fontSize: "13px" }}>First-Time Visitors</label>
+                                                                    </div>
+                                                                    <div className="form-check mb-1">
+                                                                        <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "RETURNING_VISITORS"} onChange={e => {
+                                                                            updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
+                                                                        }} id='return' value={"RETURNING_VISITORS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="return" className="cursor-pointer" style={{ fontSize: "13px" }}>Returning Shoppers</label>
+                                                                    </div>
+                                                                    <div className="form-check mb-1">
+                                                                        <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "REGISTERED_USERS"} onChange={e => {
+                                                                            updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
+                                                                        }} id='registered' value={"REGISTERED_USERS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="registered" className="cursor-pointer" style={{ fontSize: "13px" }}>Registered Users</label>
+                                                                    </div>
+                                                                </> : <>
+                                                                    <div className="form-check mb-1">
+                                                                        <input disabled type="radio" name='visitor_settings' id='first' value={"FIRST_VISITORS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="first" className="cursor-pointer planCardUpgrade" style={{ fontSize: "13px" }}>First-Time Visitors</label>
+                                                                        <Link style={{ color: "#6e6b7b" }} to='/merchant/SuperLeadz/joinus/' className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</Link>
+                                                                    </div>
+                                                                    <div className="form-check mb-1">
+                                                                        <input disabled type="radio" name='visitor_settings' id='return' value={"RETURNING_VISITORS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="return" className="cursor-pointer planCardUpgrade" style={{ fontSize: "13px" }}>Returning Shoppers</label>
+                                                                        <Link style={{ color: "#6e6b7b" }} to='/merchant/SuperLeadz/joinus/' className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</Link>
+                                                                    </div>
+                                                                    <div className="form-check mb-1">
+                                                                        <input disabled type="radio" name='visitor_settings' id='registered' value={"REGISTERED_USERS"} className="form-check-input cursor-pointer" />
+                                                                        <label htmlFor="registered" className="cursor-pointer planCardUpgrade" style={{ fontSize: "13px" }}>Registered Users</label>
+                                                                        <Link style={{ color: "#6e6b7b" }} to='/merchant/SuperLeadz/joinus/' className='upgrade_plan d-flex justify-content-start align-items-center'><FaCrown className='shadow' color='#ffd700' size={14} /> Upgrade your plan</Link>
+                                                                    </div>
+                                                                </>
+                                                            }
+                                                            <div className='py-1 px-2 mt-1'>
+                                                                    <div className="row mt-2">
+                                                                        <p className='m-0 fw-bolder text-black text-uppercase' style={{ fontSize: "0.75rem" }}>Source:</p>
+                                                                        {/* <label htmlFor="" className='mb-1' style={{ fontSize: "12px" }}>Source:</label> */}
+                                                                        <Select
+                                                                            isMulti={true}
+                                                                            options={sourceList}
+                                                                            inputId="aria-example-input"
+                                                                            closeMenuOnSelect={false}
+                                                                            name="source"
+                                                                            placeholder="Add Source"
+                                                                            value={sourceList?.filter(option => finalObj?.behaviour?.SOURCE_PAGE_LINK?.includes(option.value))}
+                                                                            onChange={(options) => {
+                                                                                const option_list = options.map((cur) => {
+                                                                                    return cur.value
+                                                                                })
+                                                                                updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, SOURCE_PAGE_LINK: option_list } })
+                                                                                console.log(finalObj?.behaviour?.PAGES?.includes("custom_source"), 'jyguyuyuyg')
+                                                                                // const newObj = { ...finalObj }
+                                                                                // newObj.behaviour.SOURCE_PAGE_LINK = [...finalObj.behaviour.CUSTOM_PAGE_LINK, ""]
+                                                                                // updatePresent(newObj)
+                                                                            }}
+                                                                        />
+                                                                    </div>
                                                             </div>
-                                                            <div className="form-check mb-1">
-                                                                <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "RETURNING_VISITORS"} onChange={e => {
-                                                                    updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
-                                                                }} id='return' value={"RETURNING_VISITORS"} className="form-check-input cursor-pointer" /><label htmlFor="return" className="cursor-pointer" style={{ fontSize: "13px" }}>Returning Shoppers</label>
-                                                            </div>
-                                                            <div className="form-check mb-1">
-                                                                <input type="radio" name='visitor_settings' checked={finalObj?.behaviour?.visitor_settings === "REGISTERED_USERS"} onChange={e => {
-                                                                    updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, visitor_settings: e.target.value } })
-                                                                }} id='registered' value={"REGISTERED_USERS"} className="form-check-input cursor-pointer" /><label htmlFor="registered" className="cursor-pointer" style={{ fontSize: "13px" }}>Registered Users</label>
-                                                            </div>
+
                                                         </div>
                                                     </AccordionBody>
                                                 </AccordionItem>
@@ -4654,41 +5179,6 @@ const CustomizationParent = () => {
                                                                         />
                                                                     </g>
                                                                 </svg>
-                                                            ) : currPage !== "button" ? (
-                                                                <svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    viewBox="0 0 184.45 367.2"
-                                                                    style={{ width: "75px" }}
-                                                                    property="globalStyle.overlay.mobilePosition"
-                                                                >
-                                                                    <g id="mobile-position">
-                                                                        <rect x="11.76" y="239.71" width="162.2" height="116.24" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "BC" } })} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231f20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "BC" ? "#464646" : "#ffffff"} />
-                                                                        <rect x="11.99" y="124.46" width="162.2" height="116.24" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "MC" } })} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231f20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "MC" ? "#464646" : "#ffffff"} />
-                                                                        <rect x="11.61" y="9.2" width="162.2" height="116.24" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "TC" } })} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231f20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "TC" ? "#464646" : "#ffffff"} />
-                                                                    </g>
-                                                                    <path
-                                                                        fill="#58595b"
-                                                                        d="M182.49,26.65A26.65,26.65,0,0,0,155.84,0H28.61A26.65,26.65,0,0,0,2,26.65v313.9A26.65,26.65,0,0,0,28.61,367.2H155.84a26.65,26.65,0,0,0,26.65-26.65ZM178.4,340.29a22.82,22.82,0,0,1-22.82,22.82H28.36A22.82,22.82,0,0,1,5.54,340.29V26.4A22.82,22.82,0,0,1,28.36,3.58H155.58A22.82,22.82,0,0,1,178.4,26.4Z"
-                                                                    />
-                                                                    <path
-                                                                        d="M2,48.47H1.72A1.72,1.72,0,0,0,0,50.19V60.65a1.71,1.71,0,0,0,1.72,1.71H2"
-                                                                    />
-                                                                    <path
-                                                                        d="M182.49,126.27h0a2,2,0,0,0,2-2V85.48a2,2,0,0,0-2-2h0"
-                                                                    />
-                                                                    <path
-                                                                        d="M2,75.21H2a2,2,0,0,0-2,2V99.25a2,2,0,0,0,2,2H2"
-                                                                    />
-                                                                    <path
-                                                                        d="M2,108.58H2a2,2,0,0,0-2,2v22.08a2,2,0,0,0,2,2H2"
-                                                                    />
-                                                                    <path
-                                                                        fill="#231f20"
-                                                                        d="M178.4,26.4A22.82,22.82,0,0,0,155.58,3.58H28.36A22.82,22.82,0,0,0,5.54,26.4V340.29a22.82,22.82,0,0,0,22.82,22.82H155.58a22.82,22.82,0,0,0,22.82-22.82ZM113.31,12.54a2.24,2.24,0,1,1-2.24-2.23A2.24,2.24,0,0,1,113.31,12.54ZM82.88,11.25h19.94a1.4,1.4,0,0,1,1.54,1.28,1.4,1.4,0,0,1-1.54,1.28H82.88a1.4,1.4,0,0,1-1.54-1.28A1.4,1.4,0,0,1,82.88,11.25Zm89.89,328.42c0,8.93-7.48,15.77-16.41,15.77H29a15.53,15.53,0,0,1-15.81-15.77V26A16,16,0,0,1,29,9.72H43.74c3.11,0,4.26,0,4.45,4,.2,4.1,3,6.33,6.82,7.53a14,14,0,0,0,4.1.27H126.4a14.07,14.07,0,0,0,4.11-.17c3.81-1.2,6.62-3.63,6.82-7.72s1.33-3.87,4.45-3.87h14.58A16.5,16.5,0,0,1,172.77,26Z"
-                                                                    />
-                                                                    <circle cx="111.07" cy="12.54" r="2.24" />
-                                                                    <path d="M82.88,13.81h19.94a1.4,1.4,0,0,0,1.54-1.28,1.4,1.4,0,0,0-1.54-1.28H82.88a1.4,1.4,0,0,0-1.54,1.28A1.4,1.4,0,0,0,82.88,13.81Z" />
-                                                                </svg>
                                                             ) : (
                                                                 <svg style={{ width: "75px" }} viewBox="0 0 185 368" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                     <g clip-path="url(#clip0_0_1)">
@@ -4696,7 +5186,7 @@ const CustomizationParent = () => {
                                                                         <path d="M120 258H66V356H120V258Z" stroke="#231F20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "BC" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "BC" } })} />
                                                                         <path d="M66 258H12V356H66V258Z" stroke="#231F20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "BL" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "BL" } })} />
                                                                         <path d="M174 108H120V258H174V108Z" stroke="#231F20" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "MR" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "MR" } })} />
-                                                                        <path d="M120 108H66V258H120V108Z" stroke="#231F20" fill={"#cccccc"} style={{ cursor: "pointer", transition: "0.3s ease" }} />
+                                                                        <path d="M120 108H66V258H120V108Z" stroke="#231F20" fill={currPage === "button" ? "#cccccc" : finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "MC" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: currPage === "button" ? finalObj?.positions?.[`${mobileCondition}${pageCondition}`] : "MC" } })} />
                                                                         <path d="M66 108H12V258H66V108Z" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "ML" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231F20" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "ML" } })} />
                                                                         <path d="M174 9H120V108H174V9Z" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "TR" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231F20" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "TR" } })} />
                                                                         <path d="M120 9H66V108H120V9Z" fill={finalObj?.positions?.[`${mobileCondition}${pageCondition}`] === "TC" ? "#464646" : "white"} style={{ cursor: "pointer", transition: "0.3s ease" }} stroke="#231F20" onClick={() => updatePresent({ ...finalObj, positions: { ...finalObj?.positions, [`${mobileCondition}${pageCondition}`]: "TC" } })} />
@@ -5333,7 +5823,9 @@ const CustomizationParent = () => {
                                             <UncontrolledAccordion defaultOpen={['1']} stayOpen>
                                                 <AccordionItem className='bg-white border-bottom'>
                                                     <AccordionHeader className='acc-header border-bottom' targetId='1'>
-                                                        <p className='m-0 fw-bolder text-black text-uppercase' style={{ fontSize: "0.75rem" }}>Add Offers</p>
+                                                        <div className='d-flex w-100 justify-content-between me-1'><p className='m-0 fw-bolder text-black text-uppercase' style={{ fontSize: "0.75rem" }}>Add Offers</p>
+                                                            <MdOutlineRefresh style={{ display: 'none' }} size='20px' /></div>
+
                                                     </AccordionHeader>
                                                     <AccordionBody accordionId='1'>
                                                         {(gotOffers && Array.isArray(allOffers)) ? allOffers?.map((ele, key) => {
@@ -5365,7 +5857,7 @@ const CustomizationParent = () => {
                                                                                         <span style={{ fontSize: "13px" }}>Summary: <br /> <span className=' text-black'> {ele?.Summary} </span></span>
                                                                                     </div>
                                                                                     <div>
-                                                                                        <p style={{ fontSize: "13px" }} className='mt-1'>Validity: <br /><span className=' text-black'>{ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format("YYYY-MM-DD HH:mm:ss") : "Never ending"}</span></p>
+                                                                                        <p style={{ fontSize: "13px" }} className='mt-1'>Validity: <br /><span className=' text-black'>{ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format("YYYY-MM-DD HH:mm:ss") : "Perpetual"}</span></p>
                                                                                     </div>
                                                                                 </div>
                                                                             </CardBody>
@@ -5421,7 +5913,7 @@ const CustomizationParent = () => {
                                                             <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Email From</label>
                                                             <div className="d-flex justify-content-center align-items-center" style={{ border: '1px solid #d8d6de', borderRadius: '0.357rem', gap: '5px' }}>
                                                                 {/* <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Email Template</label> */}
-                                                                <input type="text" value={outletSenderId ? outletSenderId : "no_reply@xircls.com"} className="form-control" style={{ width: '250px', border: 'none' }} disabled />
+                                                                <input type="text" value={outletSenderId ? outletSenderId : "no_reply@xircls.com"} className="form-control" style={{ width: '100%', border: 'none' }} disabled />
                                                                 <a style={{ marginRight: '5px' }} onClick={() => setChangeSenderEmail(!changeSenderEmail)}>
                                                                     <Edit size={'18px'} />
                                                                 </a>
@@ -5433,8 +5925,10 @@ const CustomizationParent = () => {
                                                             <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Email Template</label>
 
                                                             <Select onChange={(e) => {
+                                                                setSelectedTemID(e.value)
                                                                 const form_data = new FormData()
                                                                 form_data.append("id", e.value)
+                                                                form_data.append("app", userPermission?.appName)
                                                                 fetch(`${SuperLeadzBaseURL}/api/v1/get_single_camp_details/`, {
                                                                     method: "POST",
                                                                     body: form_data
@@ -5442,8 +5936,7 @@ const CustomizationParent = () => {
                                                                     .then((data) => data.json())
                                                                     .then((resp) => {
                                                                         if (resp.data) {
-                                                                            setFinalObj({ ...finalObj, email_settings: { ...resp.data } })
-
+                                                                            updatePresent({ ...finalObj, email_settings: { ...resp.data } })
                                                                         }
                                                                     })
                                                                     .catch((error) => {
@@ -5454,7 +5947,7 @@ const CustomizationParent = () => {
 
                                                         <div className="py-1">
                                                             <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subject</label>
-                                                            <input value={finalObj?.email_settings?.subject} onChange={(e) => setFinalObj({ ...finalObj, email_settings: { ...finalObj.email_settings, subject: e.target.value } })} name="subject" type="text" className="form-control" id="subject" placeholder="Subject" />
+                                                            <input value={finalObj?.email_settings?.subject} onChange={(e) => updatePresent({ ...finalObj, email_settings: { ...finalObj.email_settings, subject: e.target.value } })} name="subject" type="text" className="form-control" id="subject" placeholder="Subject" />
                                                         </div>
 
                                                         <div className="py-1">
@@ -5509,6 +6002,86 @@ const CustomizationParent = () => {
                                                 </AccordionItem>
                                             </UncontrolledAccordion>
                                         </div>}
+
+                                        {sideNav === "whatsapp" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%", height: '100%' }}>
+                                            <UncontrolledAccordion stayOpen defaultOpen={["1"]}>
+                                                <AccordionItem>
+                                                    <AccordionHeader className='acc-header border-top' targetId='1' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
+                                                        <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">
+                                                            Whatsapp
+
+                                                        </label>
+                                                    </AccordionHeader>
+                                                    <AccordionBody accordionId='1'>
+                                                        <div className='d-flex justify-content-end align-items-center'>
+                                                            <a style={{ zIndex: "9999" }} onClick={() => integratedList()}>
+                                                                <Reload size={'20px'} />
+                                                            </a>
+                                                        </div>
+                                                        {
+                                                            connectedList.includes("whatsapp") ? (
+                                                                <>
+                                                                    <div className='py-1 pt-0'>
+                                                                        <Row className='match-height'>
+                                                                            <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Delay</label>
+                                                                            <Col md="6">
+                                                                                <div className='h-100'>
+                                                                                    <input type="text"
+                                                                                        className='form-control h-100'
+                                                                                        value={finalObj?.whatsapp?.time}
+                                                                                        onChange={(e) => {
+                                                                                            if (!isNaN(e.target.value)) {
+                                                                                                updatePresent({ ...finalObj, whatsapp: { ...finalObj.whatsapp, time: e.target.value } })
+                                                                                            }
+                                                                                        }}
+                                                                                    />
+                                                                                </div>
+                                                                            </Col>
+                                                                            <Col md="6">
+                                                                                <div>
+                                                                                    <Select
+                                                                                        options={deplayTime}
+                                                                                        value={deplayTime?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.timeType))}
+                                                                                        // onChange={(e) => setWhatsappJson({...whatsappJson, delay: e.value})}
+                                                                                        onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj.whatsapp, timeType: e.value } })}
+                                                                                    />
+                                                                                </div>
+                                                                            </Col>
+                                                                        </Row>
+                                                                    </div>
+                                                                    <div className='py-1'>
+                                                                        <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Templates</label>
+
+                                                                        <Select
+                                                                            options={whatsAppTem}
+                                                                            value={whatsAppTem?.filter((curElem) => String(curElem?.value) === String(finalObj.whatsapp?.template))}
+                                                                            // onChange={(e) => setWhatsappJson({...whatsappJson, template: e.value})}
+                                                                            onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj.whatsapp, template: e.value } })}
+
+                                                                        />
+                                                                    </div>
+                                                                    {
+                                                                        singleTemplate.length > 0 && (
+                                                                            <>
+                                                                                <div className='py-1'>
+                                                                                    <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Preview</label>
+                                                                                    <RenderTemplateUI SingleTemplate={singleTemplate[0]} />
+                                                                                </div>
+                                                                            </>
+                                                                        )
+                                                                    }
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <h5 className='my-1'> <a href="/merchant/integration/" target='_blank'>Click here</a> to Integrate</h5>
+
+                                                                </>
+                                                            )
+                                                        }
+                                                    </AccordionBody>
+                                                </AccordionItem>
+                                            </UncontrolledAccordion>
+                                        </div>}
                                         {/* Criteria section */}
                                     </div>
                                 </div>
@@ -5517,7 +6090,7 @@ const CustomizationParent = () => {
                         {/* Section Drawer */}
                         {/* Theme Preview */}
                         <div className="d-flex flex-column align-items-center bg-light-secondary flex-grow-1" style={{ width: sideNav === "rules" ? "auto" : `calc(100vw - ${sideNav !== "" ? sectionWidths.editSection : "0"}px - ${sectionWidths.drawerWidth}px - ${sectionWidths.sidebar}px)`, transition: "0.3s ease-in-out" }}>
-                            {returnRender({ outletData, slPrevBg, bgsettings: finalObj?.overlayStyles, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition: finalObj?.positions?.[`${mobileCondition}${pageCondition}`], bgStyles: finalObj?.backgroundStyles?.[`${mobileCondition}main`], crossStyle: finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise: currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values], setcolWise, dragStartIndex, setDragStartIndex, dragOverIndex, setDragOverIndex, isMobile, setIsMobile, finalObj, setFinalObj: updatePresent, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles: finalObj?.backgroundStyles[`${mobileCondition}button`], offerTheme: finalObj?.offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, setRearr, isColDragging, setIsColDragging })}
+                            {returnRender({ outletData, slPrevBg, bgsettings: finalObj?.overlayStyles, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition: finalObj?.positions?.[`${mobileCondition}${pageCondition}`], bgStyles: finalObj?.backgroundStyles?.[`${mobileCondition}main`], crossStyle: finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise: currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values], setcolWise, dragStartIndex, setDragStartIndex, dragOverIndex, setDragOverIndex, isMobile, setIsMobile, finalObj, setFinalObj: updatePresent, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles: finalObj?.backgroundStyles[`${mobileCondition}button`], offerTheme: finalObj?.offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, setRearr, isColDragging, setIsColDragging, isColRes, setIsColRes, resizeMouse, setResizeMouse, selectedTemID })}
                         </div>
                         {/* Theme Preview */}
                         {/* Edit Section */}
@@ -5567,11 +6140,16 @@ const CustomizationParent = () => {
                                     Your Images
                                 </button>
                                 <button onClick={() => setImageTab("product")} className={`${imageTab === "product" ? "btn-primary-main" : ""} btn w-50`}>
-                                    Product Images
+                                    Product Gallery
                                 </button>
                             </div>
                             {imageTab !== "product" && <div className="p-1 pt-0 d-flex justify-content-center border-bottom">
                                 <label htmlFor='uploadImg' className="btn btn-dark">Upload an Image <input onChange={e => {
+                                    const k = 1024
+                                    if (e.target.files[0].size > 100 * k) {
+                                        toast.error("File size too large. Upload size must be upto 100kb")
+                                        return
+                                    }
                                     setImgLoading(true)
                                     const form_data = new FormData()
                                     form_data.append("shop", outletData[0]?.web_url)

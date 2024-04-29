@@ -41,7 +41,6 @@ const appName = "superleadz"
 const SuperLeads_Routes = [
   {
     path: '/merchant/:appName/joinus/',
-    app: appName,
     element: <JoinUs />
   },
   {
@@ -110,7 +109,6 @@ const SuperLeads_Routes = [
   },
   {
     path: '/merchant/support/',
-    app: appName,
     element: <SuperLeadzSupport />
   },
   {
@@ -155,7 +153,7 @@ const SuperLeads_Routes = [
     }
   }, 
   {
-    path: '/merchant/SuperLeadz/Themes/',
+    path: '/merchant/superleadz/templates',
     app: appName,
     element: <Themes />
   },
@@ -200,7 +198,6 @@ const SuperLeads_Routes = [
   },
   {
     path: '/merchant/create_support/',
-    app: appName,
     element: <CreateSupportTicket />
   },
   {

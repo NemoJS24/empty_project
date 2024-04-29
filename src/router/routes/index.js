@@ -36,6 +36,8 @@ import Homes_Routes from './Home'
 import HomeLayout from '../../@core/layouts/HomeLayout'
 import Accounts_Routes from './Accounts'
 import NewBlankLayout from '../../@core/layouts/NewBlankLayout'
+import { WhatsAppRoutes } from './WhatsAppRoutes'
+import { EmailRoutes } from './Email'
 
 
 const getLayout = {
@@ -94,7 +96,9 @@ const Routes = [
   ...Profile_Routes,
   ...ProductReview_Routes,
   ...OhMyCustomer_Routes,
-  ...Accounts_Routes
+  ...Accounts_Routes,
+  ...WhatsAppRoutes,
+  ...EmailRoutes
 ]
 // if (app_name && Routess[app_name]) {
 //   Routes = [

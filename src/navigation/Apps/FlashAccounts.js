@@ -50,11 +50,11 @@ export const flashAccountsNavigation = [
         title: 'Billing',
         icon: <BiDollar size={16} />,
         navLink: '/merchant/Flash_Accounts/billing/'
-    },
-    {
-        id: 'support',
-        title: 'Support',
-        icon: <AiFillPhone size={16} />,
-        navLink: '/merchant/support/'
     }
+    // {
+    //     id: 'support',
+    //     title: 'Support',
+    //     icon: <AiFillPhone size={16} />,
+    //     navLink: '/merchant/support/'
+    // }
 ]

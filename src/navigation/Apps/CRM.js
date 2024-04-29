@@ -3,7 +3,9 @@
 // import { AiFillPhone, AiOutlineSmile } from "react-icons/ai"
 import { GoShieldCheck, GoTools } from "react-icons/go"
 import { DefaultNav } from "./DefualtNav"
-import { PiMoneyThin, PiShareNetworkThin } from "react-icons/pi"
+import { PiMoneyThin, PiShareNetworkThin, PiUsersThree } from "react-icons/pi"
+// import { LiaHandshake } from "react-icons/lia"
+import { IoPricetagOutline } from "react-icons/io5"
 import { RiCarLine } from "react-icons/ri"
 import { ownUrl } from "../../views/Validator"
 
@@ -11,6 +13,18 @@ export const CRMNavigation = [
     ...DefaultNav,
     {
         header: 'CRM'
+    },
+    {
+        id: 'leads',
+        title: 'Leads',
+        icon: <PiUsersThree style={{ marginRight: '18px' }} />,
+        navLink: '/merchant/customers/leads/'
+    },
+    {
+        id: 'cross_leads',
+        title: 'Cross Leads',
+        icon: <PiShareNetworkThin style={{ marginRight: '18px' }} />,
+        navLink: '/merchant/customers/cross_leads'
     },
     {
         id: 'customers',
@@ -43,10 +57,15 @@ export const CRMNavigation = [
         navLink: '/merchant/customers/vehicle/'
     },
     {
-        id: 'cross_leads',
-        title: 'Cross Leads',
-        icon: <PiShareNetworkThin style={{ marginRight: '18px' }} />,
-        navLink: '/merchant/customers/cross_leads'
+        id: 'usedcar',
+        title: 'Used Car',
+        icon: <IoPricetagOutline style={{ marginRight: '18px' }} />,
+        navLink: '/merchant/customers/usedcar/'
     }
-
+    // {
+    //     id: 'buyer-seller',
+    //     title: 'Buyer & Seller',
+    //     icon: <LiaHandshake style={{ marginRight: '18px' }} />,
+    //     navLink: '/merchant/customers/buyerseller/'
+    // }
 ]

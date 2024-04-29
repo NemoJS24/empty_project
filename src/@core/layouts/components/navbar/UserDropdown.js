@@ -11,8 +11,8 @@ import { User, Settings, HelpCircle, Power, Award, Box, Circle, Briefcase } from
 import { UncontrolledDropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap'
 
 // ** Default Avatar Image
-import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg'
-import { useContext } from 'react'
+// import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg'
+import { useContext, useEffect, useState } from 'react'
 // import { getReq } from '../../../../assets/auth/jwtService'
 import { removeToken } from '../../../../assets/auth/auth'
 import { PermissionProvider } from '../../../../Helper/Context'
@@ -23,6 +23,11 @@ const UserDropdown = () => {
   const navigate = useNavigate()
   // const [outletData, setOutletData] = useState([])
   const { userPermission } = useContext(PermissionProvider)
+  const [data, setData] = useState({
+    accDetails: {},
+    firstName: "",
+    lastName: ""
+  })
 
   // const removePermision = () => {
   //   setUserPermission({
@@ -34,24 +39,43 @@ const UserDropdown = () => {
   //   })
   // }
 
+  const getData = () => {
+    getReq('accDetails')
+      .then((res) => {
+        console.log(res)
+        const updatedData = {
+          accDetails: res?.data?.data?.merchant_profile,
+          firstName: res?.data?.data?.merchant_profile?.first_name,
+          lastName: res?.data?.data?.merchant_profile?.last_name
+        }
+        setData((pre) => ({
+          ...pre,
+          ...updatedData
+        }))
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   // console.log(userPermission, "userPermission")
   const LogOut = (e) => {
     e.preventDefault()
     getReq("logoutEntry")
-    .then((data) => {
-      console.log(data)
-      // removePermision()
-      removeToken()
-      Cookies.remove('superUser')
-      navigate("/merchant/login/")
-    })
-    .catch((err) => {
-      console.log(err)
-      // removePermision()
-      removeToken()
-      Cookies.remove('superUser')
-      navigate("/merchant/login/")
-    })
+      .then((data) => {
+        console.log(data)
+        // removePermision()
+        removeToken()
+        Cookies.remove('superUser')
+        navigate("/merchant/login/")
+      })
+      .catch((err) => {
+        console.log(err)
+        // removePermision()
+        removeToken()
+        Cookies.remove('superUser')
+        navigate("/merchant/login/")
+      })
   }
 
   // const getData = () => {
@@ -65,26 +89,31 @@ const UserDropdown = () => {
   //   })
   // }
 
-  // useEffect(() => {
-  //   getData()
-  // }, [])
-  
+  useEffect(() => {
+    getData()
+  }, [])
+
   return (
     <UncontrolledDropdown tag='li' className='dropdown-user nav-item'>
       <DropdownToggle href='/' tag='a' className='nav-link dropdown-user-link' onClick={e => e.preventDefault()}>
         <div className='user-nav d-sm-flex d-none'>
-          <span className='user-name fw-bold text-capitalize' style={{whiteSpace: 'nowrap'}}>
+          <span className='user-name fw-bold text-capitalize' style={{ whiteSpace: 'nowrap' }}>
             {userPermission?.logged_in_user?.user_first_name}
           </span>
-          {<span className='user-status' style={{whiteSpace: 'nowrap'}}>{userPermission?.logged_in_user?.user_role}</span>}
+          {<span className='user-status' style={{ whiteSpace: 'nowrap' }}>{userPermission?.logged_in_user?.user_role}</span>}
         </div>
-        <Avatar img={defaultAvatar} imgHeight='40' imgWidth='40' status='online' />
+        {/* <Avatar img={defaultAvatar} imgHeight='40' imgWidth='40' status='online' /> */}
+        <span className='d-flex justify-content-center align-items-center' style={{ width: '40px', height: '40px', borderRadius: '6000px', fontSize: "100%", color: "white", backgroundColor: "#7367f0" }}>{data.firstName[0]}{data.lastName[0]}</span>
       </DropdownToggle>
       <DropdownMenu end>
         <DropdownItem tag={Link} to='/merchant/admin_view/'>
+          <Settings size={14} className='me-75' />
+          <span className='align-middle'>Global Settings</span>
+        </DropdownItem>
+        {/* <DropdownItem tag={Link} to='/merchant/admin_view/'>
           <User size={14} className='me-75' />
           <span className='align-middle'>Profile</span>
-        </DropdownItem>
+        </DropdownItem> */}
         <DropdownItem tag={Link} to='/merchant/company/profile/'>
           <Award size={14} className='me-75' />
           <span className='align-middle'>Company</span>
@@ -102,14 +131,14 @@ const UserDropdown = () => {
           <span className='align-middle'>User</span>
         </DropdownItem>
         <DropdownItem divider />
-        <DropdownItem tag={Link} to='/merchant/admin_view/'>
+        {/* <DropdownItem tag={Link} to='/merchant/admin_view/'>
           <Settings size={14} className='me-75' />
           <span className='align-middle'>Settings</span>
-        </DropdownItem>
-        <DropdownItem tag={Link} to='/merchant/faqs/'>
+        </DropdownItem> */}
+        {/* <DropdownItem tag={Link} to='/merchant/faqs/'>
           <HelpCircle size={14} className='me-75' />
           <span className='align-middle'>FAQ</span>
-        </DropdownItem>
+        </DropdownItem> */}
         <DropdownItem to="/" tag={Link} onClick={(e) => LogOut(e)}>
           <Power size={14} className='me-75' />
           <span className='align-middle'>Logout</span>

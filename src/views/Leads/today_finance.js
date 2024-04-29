@@ -108,7 +108,7 @@ const Customers = () => {
       name: "Disburse Date",
       minWidth: "200px",
       selector: (row) => row?.finance_loan_disbursement_date ? row?.finance_loan_disbursement_date : "-",
-      type: 'text',
+      type: 'date',
       isEnable: true
     },
     {
@@ -161,7 +161,7 @@ const Customers = () => {
       selector: (row) => (
         <div className="d-flex ms-1 justify-content-center align-items-center text-center gap-1">
           {/* <Link to={`/merchant/customers/view_customer/${row?.xircls_customer_id}`}><Eye size={15} /></Link> */}
-          <Link to={`/merchant/customers/edit_finance/${row?.finance_customer_id}?type=edit`}> <Edit3 size={15} /></Link>
+          <Link to={`/merchant/customers/edit_finance/${row?.finance_id}?type=edit`}> <Edit3 size={15} /></Link>
         </div>
       )
     }
@@ -253,6 +253,9 @@ const Customers = () => {
                 isLoading={isLoading}
                 getData={getData}
                 count={tableData?.recordsTotal}
+                exportUrl={`${crmURL}/finance/finance_dashboard/`}
+                isExport={true}
+                date={false}
                 // selectableRows={true}
                 // setSelectedRows={setSelected}
                 // selectedRows={selected}

@@ -48,7 +48,8 @@ const CrossLeads = () => {
             minWidth: "200px",
             selector: (row) => row?.created_at ? moment(row.created_at).format("YYYY-MM-DD") : "-",
             type: 'date',
-            isEnable: true
+            isEnable: true,
+            isShow: true
         },
         {
             name: "Customer Name",
@@ -57,7 +58,8 @@ const CrossLeads = () => {
                 <Link to={`/merchant/customers/view_customer/${row?.xircls_customer_id}`}>{row?.customer_name}</Link>
             ),
             type: 'text',
-            isEnable: false
+            isEnable: false,
+            isShow: true
         },
         // {
         //     name: "Customer Group",
@@ -73,67 +75,89 @@ const CrossLeads = () => {
             maxWidth: "180px",
             selector: (row) => row?.phone_no ?? '-',
             type: 'text',
+            isShow: true
         },
         {
             name: "Email",
             maxWidth: "300px",
             selector: (row) => row?.email ?? '-',
             type: 'email',
+            isShow: true
         },
         {
             name: "Location",
             maxWidth: "180px",
             selector: (row) => row?.location ?? '-',
             type: 'text',
-            isEnable: true
+            isEnable: true,
+            isShow: true
         },
         {
-            name: "Is Finanace",
+            name: "Is Finance",
             maxWidth: "120px",
             selector: (row) => (
                 row?.is_finance === true ? (
-                    <div>True</div>
-                ) : <div>False</div>
+                    <div>Yes</div>
+                ) : <div>No</div>
             ),
             type: 'select',
             options: [
                 { label: "No Filter", value: '' },
-                { label: "True", value: 'true' },
-                { label: "False", value: 'false' }
+                { label: "Yes", value: 'true' },
+                { label: "No", value: 'false' }
             ],
-            isEnable: true
+            isEnable: true,
+            isShow: true
         },
         {
             name: "Is Insurance",
             maxWidth: "120px",
             selector: (row) => (
                 row?.is_insurance === true ? (
-                    <div>True</div>
-                ) : <div>False</div>
+                    <div>Yes</div>
+                ) : <div>No</div>
             ),
             type: 'select',
             options: [
                 { label: "No Filter", value: '' },
-                { label: "True", value: 'true' },
-                { label: "False", value: 'false' }
+                { label: "Yes", value: 'true' },
+                { label: "No", value: 'false' }
             ],
-            isEnable: true
+            isEnable: true,
+            isShow: true
         },
         {
             name: "Is Servicing",
             maxWidth: "120px",
             selector: (row) => (
                 row?.is_servicing === true ? (
-                    <div>True</div>
-                ) : <div>False</div>
+                    <div>Yes</div>
+                ) : <div>No</div>
             ),
             type: 'select',
             options: [
                 { label: "No Filter", value: '' },
-                { label: "True", value: 'true' },
-                { label: "False", value: 'false' }
+                { label: "Yes", value: 'true' },
+                { label: "No", value: 'false' }
             ],
-            isEnable: true
+            isEnable: true,
+            isShow: true
+        },
+        {
+            name: "EMI Start Date",
+            minWidth: "200px",
+            selector: () => "-",
+            type: 'date',
+            isEnable: true,
+            isShow: false
+        },
+        {
+            name: "EMI End Date",
+            minWidth: "200px",
+            selector: () => "-",
+            type: 'date',
+            isEnable: true,
+            isShow: false
         },
         {
             name: "Created By",
@@ -142,7 +166,8 @@ const CrossLeads = () => {
               <h6>{row?.member__member_name ? row?.member__member_name : row?.super_user_name}</h6>
               <p className="m-0">{row?.member__email ? row?.member__email : row?.super_user_email}</p>
             </div>,
-            type: 'text'
+            type: 'text',
+            isShow: true
         },
         {
             name: "Action",
@@ -152,7 +177,8 @@ const CrossLeads = () => {
                     <Link to={`/merchant/customers/view_customer/${row?.xircls_customer_id}`}><Eye size={15} /></Link>
                     <Link to={`/merchant/customers/edit_customer/${row?.id}?type=edit`}> <Edit3 size={15} /></Link>
                 </div>
-            )
+            ),
+            isShow: true
         }
     ]
 
@@ -172,10 +198,13 @@ const CrossLeads = () => {
                             <AdvanceServerSide
                                 tableName="Cross Leads"
                                 tableCol={columns}
+                                dynamicCol={columns.filter(column => column.isShow)}
                                 data={tableData?.customers_obj}
                                 isLoading={isLoading}
                                 getData={getData}
                                 count={tableData?.recordsTotal}
+                                // exportUrl={`${crmURL}/customers/cross_leads/`}
+                                // isExport={true}
                                 // selectableRows={true}
                                 // setSelectedRows={setSelected}
                                 // selectedRows={selected}

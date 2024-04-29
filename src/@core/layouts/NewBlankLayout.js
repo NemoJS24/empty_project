@@ -10,6 +10,8 @@ import { useSkin } from '@hooks/useSkin'
 // ** Third Party Components
 import classnames from 'classnames'
 import Navbar_CodeSkin from '../../views/XirclsFrontend/test/Navbar_CodeSkin'
+import { baseURL } from '../../assets/auth/jwtService'
+import axios from 'axios'
 // import Navbar from '../../views/main/utilities/navbar/Navbar'
 // import Navbar_CodeSkin from '../../views/test/Navbar_CodeSkin'
 // const Header = lazy(() => import('../../views/XirclsFrontend/base/Header'))
@@ -27,6 +29,23 @@ const NewBlankLayout = () => {
   useEffect(() => {
     setIsMounted(true)
     const list = ['/new_signup/new_mode/', 'select-outlet', '/select_product/', '/outlet_details/', '/create_offers/', '/new_signup/', "/new_login/", "/plan_pricing/1/", "/merchant/SuperLeadz/intro/", "/merchant/SuperLeadz/TheAudience/", "/merchant/SuperLeadz/Editbutton/", '/merchant/SuperLeadz/Thebutton/', '/merchant/SuperLeadz/discount/', '/merchant/SuperLeadz/joinus/']
+    axios({
+      method: "GET",
+      url: `${baseURL}/merchant/all_apps/`
+    })
+    .then((data) => {
+      console.log("all_apps", data)
+      data.data.forEach(element => {
+        list.push(`/${element.slug}/signup`)
+        list.push(`/${element.slug}/signup`)
+      })
+    })
+    .catch((err) => {
+      console.log("all_apps", err)
+    })
+
+    console.log({list})
+    
     if (list.includes(pathname)) {
       setisDifferent(true)
       // console.log(true)

@@ -1,10 +1,13 @@
 import axios from "axios"
 import { getToken, removeToken, setToken } from "./auth"
 import jwtDecode from "jwt-decode"
+import toast from "react-hot-toast"
+import { Navigate } from "react-router-dom"
 
 // export const baseURL = "https://api.demo.xircls.in"
 // export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
 // export const crmURL = "https://crm.demo.xircls.in"
+// export const affiliateURL = "https://api.demo.affiliate.xircls.com"
 
 // const URLs = {
 //     baseURL,
@@ -16,12 +19,20 @@ import jwtDecode from "jwt-decode"
 export const baseURL = "https://api.xircls.com"
 export const SuperLeadzBaseURL = "https://apps.xircls.com"
 export const crmURL = "https://crm.xircls.com"
+export const affiliateURL = "https://api.affiliate.xircls.com"
 
 export const configUrl = {
 
     login: "/merchant/login/",
     signup: "/merchant/signup/",
     refresh: "/api/token/refresh/",
+    generalPost:"/utility/api/v1/user_utility_settings_post/",
+
+    // affilate
+    signupAffiliate:'/affiliate/affiliate_signup/',
+    loginAffiliate:'/affiliate/affiliate_login/',
+    admin_withdrawn_transactions: "/affiliate/admin_withdrawn_trans",
+    admin_withdrawn_request: "/affiliate/admin_withdrawn_req/",
     //Infiniti
     addPartners: "/merchant/xircls/make-a-xircls/",
     remarketing: "/merchant/campaign_setting/action_email_remarketing/",
@@ -161,7 +172,94 @@ export const configUrl = {
     saveUser: "/member/member_permission/",
     memebersDetails: "/member/members_details/",
     getAllCustomer: "/customers/get_customers/",
-    cross_leads: "/customers/cross_leads/"
+    cross_leads: "/customers/cross_leads/",
+    add_leads: '/customers/merchant/add_leads/',
+    leads_get:'/customers/merchant/leads_get/',
+    leads_stage_get:'/customers/merchant/leads_stage_get/',
+    leads_stage_table:'/customers/merchant/leads_stage_table/',
+    leadstable_get_view:'/customers/merchant/leadstable_get_view/',
+    lead_stage_add:'/customers/merchant/leads_stage_add/',
+    edit_automotivetransaction:'/vehicle/edit_automotivetransaction/',
+    automotivetransaction:'/vehicle/automotivetransaction/',
+    check_customer_details:'/vehicle/check_customer_details/',
+    used_car_dashboard:'/vehicle/used_cust_all_vehicle/',
+
+    // crm leads profile
+    add_variant: `/vehicle/add_variant/`,
+
+    // affiliate
+
+    affiliate_person_all: "/affiliate/admin/affiliate_person_all/",
+    affiliate_commission: "/affiliate/admin/admin_affiliate_commission_view/",
+    signupAffiliate: '/affiliate/affiliate_signup/',
+    loginAffiliate: '/affiliate/affiliate_login/',
+    admin_withdrawn_transactions: "/affiliate/admin/admin_withdrawn_trans",
+    admin_withdrawn_request: "/affiliate/admin/admin_withdrawn_req/",
+    affiliate_active: "/affiliate/admin/affiliate_activate/",
+
+    // whatsapp
+
+    whatsapp_dashboard_view: "talk/dashboard_view/",
+    getTemplates: "talk/getTemplates/",
+    project_get: "talk/project_get/",
+    getTemplateById: "talk/getTemplateById/",
+    createTemplate: "talk/createTemplate/",
+    sendMessage: "talk/sendMessage/",
+    embeddedSignup: "talk/embeddedSignup/",
+    import_customer: "talk/import_customer/",
+    fbVerification: "talk/fbVerification/",
+    projectCreation: "talk/projectCreation/",
+    editTemplate: "talk/editTemplate/",
+    Business_view: "talk/whatsapp/business_view/",
+    add_group: "talk/add_group/",
+    group_base_details: "talk/group_base_details/",
+    group_contact: "talk/group_contact/",
+    contact_details: "talk/contact_details/",
+    group_delete: "talk/group_delete/",
+    contact_delete: "talk/contact_delete/",
+    bulk_message: "talk/bulk_message/",
+    get_group_contact: "talk/get_group_contact/",
+    inactiveTemplate: "talk/inactiveTemplate/",
+    group_details: "talk/group_details/",
+    get_catalog: "talk/get_catalog/",
+    catalog_details: "talk/catalog_details/",
+    send_catalog: "talk/send_catalog/",
+    template_active: "talk/template_active/",
+    template_view: "talk/template_view/",
+    messagelog_view: "talk/messagelog_view/",
+    integration: "integration-hub/integration_get_details/",
+    integrationPlug: "integration-hub/integration_connect/",
+    saveWhatsappTem: "integration-hub/event_flow/",
+    test: "merchant/update_field",
+    active_refeeral_offer: "/referral/referralpoints/",
+    referral_dashboard: "referral/dashboard/",
+    
+    // Email
+    email_details: "/mail/contact_details/",
+    import_email: "/mail/import_customer/",
+    email_group_base_details: "/mail/group_base_details/",
+    email_add_group: "/mail/add_group/",
+    email_delete: "/mail/contact_delete/",
+    email_group_delete: "/mail/group_delete/",
+    email_group_contact: "/mail/group_contact/",
+    email_group_details: "/mail/group_details/",
+    add_contacts: "/mail/add_contact/",
+    get_email_group_contact: "/mail/get_group_contact/",
+    bulk_send_mail: "/mail/bulk_send_mail/",
+    email_schedule_details: "/mail/email_schedule_details/",
+    template_placeholder: "/mail/template_placeholder/",
+    group_import_customerEmail: "/mail/group_import_customer/",
+    template_details: "/mail/template_details/",
+    email_tracking_detail: "/mail/email_tracking_detail/",
+    email_template_details: "/mail/email_template_details/",
+    email_dashboard_view: "/mail/email_dashboard_view/",
+    email_check: "/mail/mail_check/",
+    email_campaign_details: "/mail/email_campaign_details/",
+
+    
+    mail_info: "/mail/mail_info/",
+    update_status: "/mail/update_status/",
+    delete_mail: "/mail/delete_mail/"
 }
 
 const axiosInstance = axios.create({
@@ -199,8 +297,10 @@ axiosInstance.interceptors.request.use(
                     //     refresh: refreshToken
                     // })
                     removeToken()
-                    window.alert('session expired')
-                    window.location.replace('/merchant/login/')
+                    // window.alert('session expired')
+                    // window.location.replace('/merchant/login/')
+                    toast.error("Session expired. Please login")
+                    return <Navigate to={'/merchant/login/'} replace={true} />
                 }
                 const newAccessToken = await refreshTokenPromise
                 isRefreshing = false
@@ -217,8 +317,10 @@ axiosInstance.interceptors.request.use(
                 } else {
                     // Refresh token is also expired, remove token and redirect to login page
                     removeToken()
-                    window.alert('session expired')
-                    window.location.replace('/merchant/login/')
+                    // window.alert('session expired')
+                    // window.location.replace('/merchant/login/')
+                    toast.error("Session expired. Please login")
+                    return <Navigate to={'/merchant/login/'} replace={true} />
                 }
             } else {
                 config.headers['Authorization'] = `Bearer ${accessToken}`
@@ -243,15 +345,14 @@ axiosInstance.interceptors.response.use(
     (error) => {
         if (error.response && Number(error.response.status) === 401) {
             removeToken()
-            window.alert('session expired')
-            window.location.replace('/merchant/login/')
-            return error.response
+            toast.error("Session expired. Please login")
+            return <Navigate to={'/merchant/login/'} replace={true} />
         }
         return Promise.reject(error)
     }
 )
 
-export const postReq = (path, data, customBaseURL = baseURL, config) => {
+export const postReq = (path, data, customBaseURL = baseURL, config, exportURL) => {
     console.log(customBaseURL, "domian")
     // if (customBaseURL) {
     axiosInstance.defaults.baseURL = customBaseURL
@@ -261,13 +362,15 @@ export const postReq = (path, data, customBaseURL = baseURL, config) => {
     const time = new Date().getTime()
     if (path === 'login' || path === "signup") {
         return axios.post(`${baseURL}${configUrl[`${path}`]}?time=${time}`, data)
+    } else if (path === "export") {
+        return axiosInstance.post(`${exportURL}`, data)
     } else {
         return axiosInstance.post(`${configUrl[path]}?time=${time}`, data, config ? config : null)
     }
 }
 
 export const putReq = (path, data, customBaseURL = baseURL, config) => {
-    console.log(customBaseURL, "domian")
+    // console.log(customBaseURL, "domian")
     // if (customBaseURL) {
     axiosInstance.defaults.baseURL = customBaseURL
     // }

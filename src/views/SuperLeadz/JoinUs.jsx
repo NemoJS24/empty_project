@@ -20,16 +20,23 @@ const JoinUs = () => {
     const [isLoading, setIsLoading] = useState(true)
     const location = useLocation()
     const navigate = useNavigate()
-    const { userPermission } = useContext(PermissionProvider)
+    const { userPermission, setUserPermission } = useContext(PermissionProvider)
     const { appName } = useParams()
 
     console.log(appName, "appName")
-    const [selectedPlan, setSelectedPlan] = useState("grow plan")
+    const [selectedPlan, setSelectedPlan] = useState(location.state ? location.state : "grow plan")
     // console.log(activeCard)
     const outletData = getCurrentOutlet()
     const callPlans = (id, data) => {
+
+        if (data.plan_name === "Custom Pricing") {
+            navigate("/merchant/support/")
+            return
+        }
         // e.preventDefault()
+        console.log(data?.parent_plan_name)
         if (data?.parent_plan_name === "free") {
+            const planName = data?.plan_name
             const url = new URL(`${SuperLeadzBaseURL}/api/v1/free_plan_shopify/`)
             const form = {
                 app: appName?.toLowerCase(),
@@ -46,9 +53,14 @@ const JoinUs = () => {
                 data: formData,
                 url
             })
-            .then((data) => {
-                console.log(data)
-                toast.success("Free plan purchased")
+            .then((resp) => {
+                console.log(resp)
+                if (data.plan_name === "Custom Pricing") {
+                    toast.success("Custom plan activated")
+                } else {
+                    toast.success("Forever Free plan activated")
+
+                }
                 const form_data = new FormData()
                 form_data.append('app', appName?.toLowerCase())
                 const shop = userPermission?.multipleDomain.filter((cur) => cur.api_key === userPermission?.apiKey)
@@ -56,7 +68,12 @@ const JoinUs = () => {
                 postReq('planSubscription', form_data)
                 .then((resp) => {
                     console.log(resp)
-                    navigate("/merchant/SuperLeadz/billing/")
+                    if (appName.toLocaleLowerCase() === "superleadz") {
+                        navigate("/merchant/SuperLeadz/billing/")
+                    } else {
+                        navigate("/merchant/Flash_Accounts/billing/")
+                    }
+                    setUserPermission({...userPermission, currentPlan: {...userPermission?.currentPlan, plan: planName}})
                 })
                 .catch((error) => {
                     console.log(error)
@@ -145,14 +162,14 @@ const JoinUs = () => {
                 <Col md='12'>
                     <Card>
                         <CardBody>
-                            <div className="d-flex justify-content-end align-items-center">
+                            <div className="d-none justify-content-end align-items-center">
                                 <a className="btn btn-outline-primary" onClick={() => {
-                                  navigate(`/merchant/${appName}/joinus/`)
+                                  navigate(`/merchant/${appName}/joinus/`, {replace: true})
                                 }}>Show All Plans</a>
                             </div>
                             <div className="textContent text-center pt-3">
                                 <h2 className="pb-1" style={{ fontSize: '2rem' }}>Choose a Plan</h2>
-                                <p> Commit to a lifetime of effortless lead capture & conversion. <br /> Scale as you grow. We promise you'll make more than you pay us (or we'll cut you a check, really).</p>
+                                <p> Start for free and upgrade when you want to. Cancel anytime. No hidden fees.</p>
 
                             </div>
                             <Row className="mb-2">
@@ -161,16 +178,35 @@ const JoinUs = () => {
                                         {
                                             isLoading ? <div className="d-flex justify-content-center align-items-center">
                                                 <Spinner size={'40px'} />
-                                            </div> : planData?.map((cur) => {
-                                                let details
-                                                try {
-                                                    details = JSON.parse(cur?.details)
-                                                } catch (error) {
-                                                    details = cur?.details
-                                                }
-                                                return <PricingCard data={cur} id={cur.id} title={cur.plan_name} price={cur.app_price} planTitle={cur.plan_name} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} callPlans={callPlans} btnCondition={Number(location?.state) <= Number(cur.app_price)} features={details ? details : []} popular={false} />
+                                            </div> : (
+                                                <>
+                                                    {
+                                                        planData?.map((cur) => {
+                                                            let details
+                                                            try {
+                                                                details = JSON.parse(cur?.details)
+                                                            } catch (error) {
+                                                                details = cur?.details
+                                                            }
+                                                            return cur.plan_name !== "Custom Pricing" ? <PricingCard data={cur} id={cur.id} title={cur.plan_name} price={cur.app_price} planTitle={cur.plan_name} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} callPlans={callPlans} btnCondition={String(location?.state).toLowerCase() === String(cur.plan_name).toLowerCase()} features={details ? details : []} popular={false} /> : ''
+            
+                                                        })
+                                                    }
 
-                                            })
+                                                    {
+                                                        planData?.map((cur) => {
+                                                            let details
+                                                            try {
+                                                                details = JSON.parse(cur?.details)
+                                                            } catch (error) {
+                                                                details = cur?.details
+                                                            }
+                                                            return cur.plan_name === "Custom Pricing" ? <PricingCard data={cur} id={cur.id} title={cur.plan_name} price={cur.app_price} planTitle={cur.plan_name} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} callPlans={callPlans} btnCondition={String(location?.state).toLowerCase() === String(cur.plan_name).toLowerCase()} features={details ? details : []} popular={false} /> : ''
+            
+                                                        })
+                                                    }
+                                                </>
+                                            ) 
                                         }
 
                                     </div>

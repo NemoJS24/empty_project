@@ -26,7 +26,7 @@ const SuperLeadzSupport = () => {
         //     method: "POST",
         //     body: form_data
         // })
-        getReq('createSupportTicket')
+        getReq('createSupportTicket', `?shop_name=${outletData[0]?.web_url}&app_name=${userPermission?.appName}`)
         .then((data) => {
             // console.log(data, "data")
             setTableData(data.data)
@@ -40,6 +40,14 @@ const SuperLeadzSupport = () => {
 
     useEffect(() => {
         getData()
+        // const form_data = new FormData()
+        getReq('test')
+        .then((resp) => {
+            console.log(resp)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }, [])
 
     const handleFilter = e => {

@@ -13,6 +13,8 @@ import Navbar from '@src/views/main/utilities/navbar/Navbar'
 import { Container } from 'reactstrap'
 import SubNavbar from '@src/views/main/utilities/navbar/SubNavbar'
 import Homes_Routes from '../../router/routes/Home'
+import axios from 'axios'
+import { baseURL } from '../../assets/auth/jwtService'
 
 const HomeLayout = () => {
   // ** States
@@ -20,6 +22,7 @@ const HomeLayout = () => {
   const [isDifferent, setisDifferent] = useState(false)
   const [SecondNavbar, setSecondNavbar] = useState(false)
   const [BackbtnFlag, setBackbtnFlag] = useState(false)
+  const [visibleMenu, setVisibleMenu] = useState(true)
 
   const { pathname } = useLocation()
   // ** Hooks
@@ -28,7 +31,7 @@ const HomeLayout = () => {
   // console.log(pathname)
 
   const NavbarFun = () => {
-    const list = ['/partners', '/partners/faq', '/products/superleadz/', '/products/superleadz/features/', '/products/superleadz/pricing', '/products/superleadz/faq', '/products/flash-accounts/', '/products/flash-accounts/faq', '/products/flash-accounts/pricing']
+    const list = ['/partners/', '/partners', '/partners/faq/', '/partners/faq', '/products/superleadz/', '/products/superleadz', '/products/superleadz/features/', '/products/superleadz/features', '/products/superleadz/pricing/', '/products/superleadz/pricing', '/products/superleadz/faq/', '/products/superleadz/faq', '/products/flash-accounts/', '/products/flash-accounts', '/products/flash-accounts/faq/', '/products/flash-accounts/faq', '/products/flash-accounts/pricing/', '/products/flash-accounts/pricing', '/products/superleadz/build-email-lists-verified-leads', '/products/superleadz/one-click-offer-redemption/', '/products/superleadz/dual-verification-qualified-lead-generation/']
     if (list.includes(pathname)) {
       setisDifferent(true)
       if (pathname.includes("partners")) {
@@ -90,6 +93,36 @@ const HomeLayout = () => {
 
   }, [pathname])
 
+  useEffect(() => {
+    const list = []
+    axios({
+      method: "GET",
+      url: `${baseURL}/merchant/all_apps/`
+    })
+      .then((data) => {
+        // console.log("all_apps hahaha", data)
+        data.data.forEach(element => {
+          list.push(`/${element.slug.toLowerCase()}/signup/`)
+          list.push(`/${element.slug.toLowerCase()}/signup`)
+          // console.log({ list })
+        })
+      })
+      .catch((err) => {
+        console.log("all_apps", err)
+      })
+      .finally(() => {
+        if (!list.includes(pathname)) {
+          setisDifferent(true)
+          // console.log(true)
+          setVisibleMenu(false)
+        } else {
+          setisDifferent(false)
+          // console.log(false)
+          setVisibleMenu(true)
+        }
+      })
+  }, [])
+
   if (!isMounted) {
     return null
   }
@@ -107,13 +140,13 @@ const HomeLayout = () => {
             <div className='content-body customeHomeDiv'>
               <Container fluid="lg" className='border p-0 overflow-hidden'>
                 {
-                  isDifferent ? <Navbar position={'notFixed'} /> : <Navbar />
+                  isDifferent ? <Navbar position={'notFixed'} /> : <Navbar hideMenu={visibleMenu} />
                 }
                 {
                   isDifferent && SecondNavbar && <SubNavbar navTitle={SecondNavbar} />
                 }
 
-                  <Outlet />
+                <Outlet />
 
                 {/* <Footer /> */}
               </Container>

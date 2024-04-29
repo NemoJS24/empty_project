@@ -15,9 +15,10 @@ import { ImDisplay } from 'react-icons/im'
 import { PermissionProvider } from '../../Helper/Context'
 import toast from 'react-hot-toast'
 import BasicEditor from '../Components/Editor/BaseEditor'
+import { GiHorizontalFlip } from "react-icons/gi"
 
 const RenderPreview = (props) => {
-    const { outletData, slPrevBg, bgsettings, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition, bgStyles, crossStyle, values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise, setcolWise, setDragStartIndex, setDragOverIndex, isMobile, finalObj, setFinalObj, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles, offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, isColDragging } = props
+    const { outletData, slPrevBg, bgsettings, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition, bgStyles, crossStyle, values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise, setcolWise, setDragStartIndex, setDragOverIndex, isMobile, finalObj, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles, offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, isColDragging, isColRes, setIsColRes, resizeMouse, setResizeMouse, selectedTemID } = props
     const [editorBar, setEditorBar] = useState(true)
     const { userPermission } = useContext(PermissionProvider)
     const setDragEnter = (e, { position, id }) => {
@@ -71,6 +72,12 @@ const RenderPreview = (props) => {
         finalObj.rules.visited,
         finalObj.rules.not_active_page
     ])
+
+    useEffect(() => {
+        const pageContainer = document.getElementById("customization-container")
+        isColRes ? pageContainer.classList.add("cursor-h-resize") : pageContainer.classList.remove("cursor-h-resize")
+    }, [isColRes])
+
     return (
         sideNav === "rules" ? (
             <>
@@ -164,23 +171,31 @@ const RenderPreview = (props) => {
                             <p>Set specific rules for this campaign</p>
                         </div>
                         <div className="col-md-10 offset-md-1">
-                            <Card className={`${currPosition?.selectedType === "display_frequency" ? "card_active" : ""}`} style={{ boxShadow: `rgba(100, 100, 111, 0.2) 0px 7px 29px 0px`, cursor: 'pointer' }}
-                                onClick={() => setCurrPosition({ ...currPosition, selectedType: "display_frequency" })}
+                            <Card className={`${currPosition?.selectedType === "on_pages" ? "card_active" : ""}`} style={{ boxShadow: `rgba(100, 100, 111, 0.2) 0px 7px 29px 0px`, cursor: 'pointer' }}
+                                onClick={() => setCurrPosition({ ...currPosition, selectedType: "on_pages" })}
                             >
                                 <CardBody>
                                     <div className='d-flex justify-content-between align-items-center'>
                                         <div className="d-flex justify-content-start align-items-center gap-1">
                                             <div className="icon" style={{ padding: '10px', backgroundColor: '#f4f4f4', borderRadius: '7px' }}>
-                                                <ImDisplay size="18px" />
+                                                <Airplay size="18px" />
                                             </div>
-                                            <h5 className='m-0'>Display Frequency</h5>
+                                            <h5 className='m-0'>Display Location</h5>
                                         </div>
                                         <div>
                                             {
-                                                finalObj?.rules?.display_frequency ? <List>
-                                                    <div className='list'><li style={{ fontSize: "14px", fontWeight: "500" }}>{capitalizeFirstLetter(finalObj.rules.display_frequency.replace(/_/g, ' '))}</li></div>
-                                                </List> : ""
+                                                finalObj?.behaviour?.PAGES ? finalObj.behaviour.PAGES.map((page, index) => (
+                                                    index === 0 ? <>
+                                                        <div className='list'><li style={{ fontSize: "14px", fontWeight: "500" }} key={index}>{capitalizeFirstLetter(page.replace(/_/g, ' '))}</li></div>
+                                                        {index > -1 && (
+                                                            <div className='d-flex justify-content-end '>
+                                                                <span className=' text-primary'>View all</span>
+                                                            </div>
+                                                        )}
+                                                    </> : ''
+                                                )) : ""
                                             }
+
                                         </div>
                                     </div>
                                 </CardBody>
@@ -194,7 +209,7 @@ const RenderPreview = (props) => {
                                             <div className="icon" style={{ padding: '10px', backgroundColor: '#f4f4f4', borderRadius: '7px' }}>
                                                 <ImDisplay size="18px" />
                                             </div>
-                                            <h5 className='m-0'>When to display</h5>
+                                            <h5 className='m-0'>Display Conditions</h5>
                                         </div>
                                         <div>
                                             {
@@ -220,6 +235,27 @@ const RenderPreview = (props) => {
                                     </div>
                                 </CardBody>
                             </Card>
+                            <Card className={`${currPosition?.selectedType === "display_frequency" ? "card_active" : ""}`} style={{ boxShadow: `rgba(100, 100, 111, 0.2) 0px 7px 29px 0px`, cursor: 'pointer' }}
+                                onClick={() => setCurrPosition({ ...currPosition, selectedType: "display_frequency" })}
+                            >
+                                <CardBody>
+                                    <div className='d-flex justify-content-between align-items-center'>
+                                        <div className="d-flex justify-content-start align-items-center gap-1">
+                                            <div className="icon" style={{ padding: '10px', backgroundColor: '#f4f4f4', borderRadius: '7px' }}>
+                                                <ImDisplay size="18px" />
+                                            </div>
+                                            <h5 className='m-0'>Display Frequency</h5>
+                                        </div>
+                                        <div>
+                                            {
+                                                finalObj?.rules?.display_frequency ? <List>
+                                                    <div className='list'><li style={{ fontSize: "14px", fontWeight: "500" }}>{capitalizeFirstLetter(finalObj.rules.display_frequency.replace(/_/g, ' '))}</li></div>
+                                                </List> : ""
+                                            }
+                                        </div>
+                                    </div>
+                                </CardBody>
+                            </Card>
                             <Card className={`${currPosition?.selectedType === "stop_display_when" ? "card_active" : ""}`} style={{ boxShadow: `rgba(100, 100, 111, 0.2) 0px 7px 29px 0px`, cursor: 'pointer' }}
                                 onClick={() => setCurrPosition({ ...currPosition, selectedType: "stop_display_when" })}
                             >
@@ -229,7 +265,7 @@ const RenderPreview = (props) => {
                                             <div className="icon" style={{ padding: '10px', backgroundColor: '#f4f4f4', borderRadius: '7px' }}>
                                                 <StopCircle size="18px" />
                                             </div>
-                                            <h5 className='m-0'>When to Stop displaying</h5>
+                                            <h5 className='m-0'>Display Conclusion</h5>
                                         </div>
                                         <div>
                                             {
@@ -244,35 +280,6 @@ const RenderPreview = (props) => {
                                                     </> : ''
                                                 ))
                                             }
-                                        </div>
-                                    </div>
-                                </CardBody>
-                            </Card>
-                            <Card className={`${currPosition?.selectedType === "on_pages" ? "card_active" : ""}`} style={{ boxShadow: `rgba(100, 100, 111, 0.2) 0px 7px 29px 0px`, cursor: 'pointer' }}
-                                onClick={() => setCurrPosition({ ...currPosition, selectedType: "on_pages" })}
-                            >
-                                <CardBody>
-                                    <div className='d-flex justify-content-between align-items-center'>
-                                        <div className="d-flex justify-content-start align-items-center gap-1">
-                                            <div className="icon" style={{ padding: '10px', backgroundColor: '#f4f4f4', borderRadius: '7px' }}>
-                                                <Airplay size="18px" />
-                                            </div>
-                                            <h5 className='m-0'>On Pages</h5>
-                                        </div>
-                                        <div>
-                                            {
-                                                finalObj?.behaviour?.PAGES ? finalObj.behaviour.PAGES.map((page, index) => (
-                                                    index === 0 ? <>
-                                                        <div className='list'><li style={{ fontSize: "14px", fontWeight: "500" }} key={index}>{capitalizeFirstLetter(page.replace(/_/g, ' '))}</li></div>
-                                                        {index > -1 && (
-                                                            <div className='d-flex justify-content-end '>
-                                                                <span className=' text-primary'>View all</span>
-                                                            </div>
-                                                        )}
-                                                    </> : ''
-                                                )) : ""
-                                            }
-
                                         </div>
                                     </div>
                                 </CardBody>
@@ -301,7 +308,7 @@ const RenderPreview = (props) => {
                                             <div >
                                                 <div id="emailTemplateId"></div>
                                                 <BasicEditor elementId={`emailTemplateId`}
-                                                    style={{ width: '100%' }} key={finalObj?.email_settings?.editorState}
+                                                    style={{ width: '100%' }} key={selectedTemID}
                                                     // hideToolbar={editorBar}
                                                     editorState={finalObj?.email_settings?.editorState}
                                                     htmlContent={finalObj?.email_settings?.htmlContent}
@@ -311,7 +318,7 @@ const RenderPreview = (props) => {
                                                         //     htmlContent: html
                                                         // }
 
-                                                        setFinalObj({ ...finalObj, email_settings: { ...finalObj.email_settings, editorState: ediorState, htmlContent: html } })
+                                                        updatePresent({ ...finalObj, email_settings: { ...finalObj.email_settings, editorState: ediorState, htmlContent: html } })
 
                                                     }}
                                                 />
@@ -347,7 +354,7 @@ const RenderPreview = (props) => {
                                 <div id='preview_section' style={{ width: "100%", height: "100%", position: "relative", overflowY: "auto", display: "flex", justifyContent: popPosition?.includes("L") ? "start" : popPosition?.includes("C") ? "center" : "end", alignItems: popPosition?.includes("T") ? "start" : popPosition?.includes("M") ? "center" : "end", flexGrow: "1" }}>
                                     <div style={currPage === "button" ? { position: "relative", width: btnStyles?.width, maxWidth: btnStyles?.maxWidth, maxHeight: "100%", minHeight: btnStyles?.minHeight, marginTop: btnStyles?.marginTop, marginRight: btnStyles?.marginRight, marginBottom: btnStyles?.marginBottom, marginLeft: btnStyles?.marginLeft, borderRadius: btnStyles?.borderRadius } : { position: "relative", width: bgStyles?.width, maxWidth: bgStyles?.maxWidth, maxHeight: "100%", minHeight: bgStyles?.minHeight, marginTop: bgStyles?.marginTop, marginRight: bgStyles?.marginRight, marginBottom: bgStyles?.marginBottom, marginLeft: bgStyles?.marginLeft, borderRadius: bgStyles?.borderRadius }}>
                                         {currPage !== "button" &&
-                                            <div id="cross_btn_cont" tabindex="0" style={{ position: "absolute", inset: "0px 0px auto auto", zIndex: "2", backgroundColor: crossStyle?.backgroundColor, borderRadius: crossStyle?.borderRadius, padding: `3px`, marginBottom: crossStyle?.marginBottom, transform: `translate(${crossStyle?.translateX}, ${crossStyle?.translateY})` }}>
+                                            <div id="cross_btn_cont" tabindex="0" style={{ position: "absolute", inset: "0px 0px auto auto", zIndex: "2", backgroundColor: crossStyle?.backgroundColor, borderRadius: crossStyle?.borderRadius, marginBottom: crossStyle?.marginBottom, transform: `translate(${crossStyle?.translateX}, ${crossStyle?.translateY})` }}>
                                                 <div id="cross_btn_box" className={`${currPosition?.selectedType === "close" ? "cross_btn_box_border" : ""}`}>
                                                     <X size={crossStyle?.width} height={crossStyle?.height} color={crossStyle?.color}
                                                         onClick={(e) => {
@@ -381,10 +388,10 @@ const RenderPreview = (props) => {
                                                 setCurrPosition({ ...currPosition, selectedType: "brand" })
                                             }}>Powered by <span onClick={e => {
                                                 e.stopPropagation()
-                                                navigate("/")
+                                                navigate("/products/SuperLeadz/")
                                             }} className="text-decoration-underline">XIRCLS</span></span></div>}
                                             {/* render layout Here */}
-                                            {colWise.length > 0 ? colWise?.map((cur, key) => {
+                                            {colWise?.map((cur, key) => {
                                                 return <div style={{ ...cur?.style, display: "flex", justifyContent: "center", alignItems: "center", position: "relative", zIndex: cur === indexes.cur ? "2" : "0" }} key={key}
                                                     onClick={(e) => {
                                                         e.stopPropagation()
@@ -413,7 +420,7 @@ const RenderPreview = (props) => {
                                                         setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
                                                     }}
                                                     id={`${currPage}-${key}-parent-grandparent`}
-                                                    className={`${isEqual({ cur: key, curElem: "parent", subElem: "grandparent" }, { ...indexes }) ? "active-elem" : ""}`}
+                                                    className={`${isEqual({ cur: key, curElem: "parent", subElem: "grandparent" }, { ...indexes }) ? "active-elem" : ""} ${isColRes ? "prevent-select" : ""}`}
                                                 >
                                                     {isEqual({ cur: key, curElem: "parent", subElem: "grandparent" }, { ...gotDragOver }) && (
                                                         <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
@@ -466,10 +473,39 @@ const RenderPreview = (props) => {
                                                     {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: "parent", subElem: "grandparent" }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
                                                     <div style={{ display: "flex", flexDirection: currPage === "button" ? "row" : isMobile ? "column" : "row", justifyContent: "center", alignItems: "stretch", position: "relative", width: "100%" }}
                                                     >
+                                                        <div id={`${currPage}-${key}-sizeable`} className="d-flex w-100 h-100 position-absolute" style={{ pointerEvents: isColRes ? "all" : "none" }}>
+                                                            {!isMobile && cur?.elements?.map((curElem, i, elements) => {
+                                                                if (i < cur?.elements?.length - 1) {
+                                                                    return (
+                                                                        <div key={`${key}-${i}-sizeable`} style={{ width: curElem?.style?.width, height: "100%", zIndex: "2", position: "relative" }}>
+                                                                            <div className="w-100 h-100 position-relative">
+                                                                                <span onMouseDown={e => {
+                                                                                    e.stopPropagation()
+                                                                                    setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                    setIndexes({ cur: key, curElem: curElem.positionType, subElem: "parent" })
+                                                                                    setIsColRes(true)
+                                                                                    const colDetails = document.getElementById(`${currPage}-${key}-${curElem?.positionType}-parent`)
+                                                                                    const colWidth = colDetails.getBoundingClientRect().width
+                                                                                    console.log("onMouseDown", curElem?.style)
+
+                                                                                    const ignoreCol = elements.length < 3 ? "none" : curElem?.positionType === "left" ? "right" : "left"
+
+                                                                                    const ignoreColWidth = ignoreCol === "none" ? 0 : document.getElementById(`${currPage}-${key}-${ignoreCol}-parent`).getBoundingClientRect().width
+
+                                                                                    setResizeMouse({ ...resizeMouse, initial: e.clientX, move: { cur: key, col1: i, col2: i + 1, curElem, colWidth, ignoreCol, ignoreColWidth } })
+                                                                                }} onMouseOver={e => e.stopPropagation()} style={{ position: "absolute", top: "0px", right: "0px", transform: "translate(50%, 0%)", width: "5px", pointerEvents: 'all' }} className="h-100 cursor-h-resize">
+                                                                                    {/* <GiHorizontalFlip size={25} /> */}
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    )
+                                                                }
+                                                            })}
+                                                        </div>
                                                         {
                                                             cur?.elements?.map((curElem, i) => {
                                                                 return (
-                                                                    <div style={{ ...curElem?.style, position: "relative", width: currPage === "button" ? curElem?.style?.width : isMobile ? "100%" : curElem?.style?.width, zIndex: (cur === indexes.cur) && (curElem.positionType === indexes.curElem) ? "2" : "0" }} onClick={(e) => {
+                                                                    <div style={{ ...curElem?.style, position: "relative", width: currPage === "button" ? curElem?.style?.width : isMobile ? "100%" : curElem?.style?.width, zIndex: (cur === indexes.cur) && (curElem.positionType === indexes.curElem) ? "2" : "0", pointerEvents: !isColRes ? "all" : "none" }} onClick={(e) => {
                                                                         e.stopPropagation()
                                                                         // setActiveRow("none")
                                                                         makActive(e, cur, curElem, curElem?.positionType, key, i, "parent")
@@ -504,7 +540,6 @@ const RenderPreview = (props) => {
                                                                         }}
                                                                         id={`${currPage}-${key}-${curElem.positionType}-parent`}
                                                                         className={`${isEqual({ cur: key, curElem: curElem.positionType, subElem: "parent" }, { ...indexes }) ? "active-elem" : ""}`}>
-
                                                                         {/* {isEqual({ cur: key, curElem: curElem.positionType, subElem: "parent" }, { ...gotDragOver }) && (
                                                                                 <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
                                                                             )} */}
@@ -932,7 +967,26 @@ const RenderPreview = (props) => {
                                                                                             {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
                                                                                             <div style={{ ...subElem?.style, display: "inline-flex", justifyContent: "center", alignItems: "center", fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} >
                                                                                                 <span onDragStart={e => e.stopPropagation()} id={`textField-${key}-${curElem?.positionType}-${j}`} style={{ display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems }}>
-                                                                                                    <Editor fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
+                                                                                                    <Editor
+                                                                                                        customElemnt={(
+                                                                                                            <UncontrolledButtonDropdown>
+                                                                                                                <DropdownToggle color='dark' style={{ padding: "0.5rem" }}
+                                                                                                                    className='hide-after-dropdown rounded'>
+                                                                                                                    {(subElem.isSameText || !isMobile) && <Monitor size={subElem.isSameText ? "12px" : "15px"} />}{(subElem.isSameText || isMobile) && <Smartphone size={subElem.isSameText ? "12px" : "15px"} />}
+                                                                                                                </DropdownToggle>
+                                                                                                                <DropdownMenu end>
+                                                                                                                    <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: false, key, i, j })} className={`w-100 ${!subElem?.isSameText && !isMobile ? "activeDrop" : ""}`}>
+                                                                                                                        Desktop View Only
+                                                                                                                    </DropdownItem>
+                                                                                                                    <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: true, key, i, j })} className={`w-100 ${!subElem?.isSameText && isMobile ? "activeDrop" : ""}`}>
+                                                                                                                        Mobile View Only
+                                                                                                                    </DropdownItem>
+                                                                                                                    <DropdownItem onClick={e => updateTextRes({ e, arrCondition: true, mobCondition: isMobile, key, i, j })} className={`w-100 ${subElem?.isSameText ? "activeDrop" : ""}`}>
+                                                                                                                        Desktop and Mobile View
+                                                                                                                    </DropdownItem>
+                                                                                                                </DropdownMenu>
+                                                                                                            </UncontrolledButtonDropdown>
+                                                                                                        )} fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
                                                                                                         key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${rearr}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
                                                                                                         onChange={(content, editorState) => {
                                                                                                             if (!isEqual(content, subElem?.editorState)) {
@@ -1015,7 +1069,7 @@ const RenderPreview = (props) => {
                                                                                             {!isColDragging && isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...gotDragOver }) && (
                                                                                                 <span style={{ position: "absolute", top: indicatorPosition === "top" ? "0px" : "100%", width: "100%", border: "1px solid #727272" }}></span>
                                                                                             )}
-                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span
+                                                                                            {isEqual({ cur: key, curElem: curElem.positionType, subElem: j }, { ...mouseEnterIndex }) && <span className="d-flex"
                                                                                                 onMouseOver={(e) => {
                                                                                                     e.stopPropagation()
                                                                                                     setMouseEnterIndex({ ...mouseEnterIndex })
@@ -1023,8 +1077,8 @@ const RenderPreview = (props) => {
                                                                                                 onMouseLeave={(e) => {
                                                                                                     e.stopPropagation()
                                                                                                     setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
-                                                                                                }} className="d-flex w-100" style={{ backgroundColor: "#727272", position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
-                                                                                                <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
+                                                                                                }} style={{ backgroundColor: "#727272", position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
+                                                                                                <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }} onClick={(e) => {
                                                                                                     e.stopPropagation()
                                                                                                     if (colWise.length <= 1) {
                                                                                                         setCurrPosition({ ...currPosition, selectedType: "main" })
@@ -1060,19 +1114,38 @@ const RenderPreview = (props) => {
                                                                                                 }} />
                                                                                                 {subElem?.hasLabel && <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />}
                                                                                                 {/* <Copy color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }}
-                                                                                                                                onClick={(e) => {
-                                                                                                                                    e.stopPropagation()
-                                                                                                                                    setCurrPosition({ ...currPosition, selectedType: "block" })
-                                                                                                                                    setIndexes({ cur: key, curElem: curElem.positionType, subElem: j + 1 })
-                                                                                                                                    const arr = [...colWise]
-                                                                                                                                    arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 0, subElem)
-                                                                                                                                    setValues(subElem?.style)
-                                                                                                                                    setcolWise([...arr])
-                                                                                                                                }} /> */}
+                                                                                                        onClick={(e) => {
+                                                                                                            e.stopPropagation()
+                                                                                                            setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                            setIndexes({ cur: key, curElem: curElem.positionType, subElem: j + 1 })
+                                                                                                            const arr = [...colWise]
+                                                                                                            arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 0, subElem)
+                                                                                                            setValues(subElem?.style)
+                                                                                                            setcolWise([...arr])
+                                                                                                        }} /> */}
                                                                                             </span>}
                                                                                             {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
                                                                                             <div style={{ width: subElem?.style?.width, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily, display: "flex", flexDirection: "column", gap: subElem?.style?.elemGap ? subElem?.style?.elemGap : "0px" }}>
-                                                                                                {subElem?.hasLabel && (<Editor fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
+                                                                                                {subElem?.hasLabel && (<Editor
+                                                                                                    customElemnt={(
+                                                                                                        <UncontrolledButtonDropdown>
+                                                                                                            <DropdownToggle color='dark' style={{ padding: "0.5rem" }}
+                                                                                                                className='hide-after-dropdown rounded'>
+                                                                                                                {(subElem.isSameText || !isMobile) && <Monitor size={subElem.isSameText ? "12px" : "15px"} />}{(subElem.isSameText || isMobile) && <Smartphone size={subElem.isSameText ? "12px" : "15px"} />}
+                                                                                                            </DropdownToggle>
+                                                                                                            <DropdownMenu end>
+                                                                                                                <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: false, key, i, j })} className={`w-100 ${!subElem?.isSameText && !isMobile ? "activeDrop" : ""}`}>
+                                                                                                                    Desktop View Only
+                                                                                                                </DropdownItem>
+                                                                                                                <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: true, key, i, j })} className={`w-100 ${!subElem?.isSameText && isMobile ? "activeDrop" : ""}`}>
+                                                                                                                    Mobile View Only
+                                                                                                                </DropdownItem>
+                                                                                                                <DropdownItem onClick={e => updateTextRes({ e, arrCondition: true, mobCondition: isMobile, key, i, j })} className={`w-100 ${subElem?.isSameText ? "activeDrop" : ""}`}>
+                                                                                                                    Desktop and Mobile View
+                                                                                                                </DropdownItem>
+                                                                                                            </DropdownMenu>
+                                                                                                        </UncontrolledButtonDropdown>
+                                                                                                    )} fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
                                                                                                     key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${rearr}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} style={{ width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })}
                                                                                                     onChange={(content, editorState) => {
                                                                                                         if (!isEqual(content, subElem?.editorState)) {
@@ -1353,7 +1426,26 @@ const RenderPreview = (props) => {
                                                                                             </span>}
                                                                                             {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
                                                                                             <input type="checkbox" id={`tnc-${currPage}-${key}-${curElem.positionType}-${j}`} />
-                                                                                            <Editor fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
+                                                                                            <Editor
+                                                                                                customElemnt={(
+                                                                                                    <UncontrolledButtonDropdown>
+                                                                                                        <DropdownToggle color='dark' style={{ padding: "0.5rem" }}
+                                                                                                            className='hide-after-dropdown rounded'>
+                                                                                                            {(subElem.isSameText || !isMobile) && <Monitor size={subElem.isSameText ? "12px" : "15px"} />}{(subElem.isSameText || isMobile) && <Smartphone size={subElem.isSameText ? "12px" : "15px"} />}
+                                                                                                        </DropdownToggle>
+                                                                                                        <DropdownMenu end>
+                                                                                                            <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: false, key, i, j })} className={`w-100 ${!subElem?.isSameText && !isMobile ? "activeDrop" : ""}`}>
+                                                                                                                Desktop View Only
+                                                                                                            </DropdownItem>
+                                                                                                            <DropdownItem onClick={e => updateTextRes({ e, arrCondition: false, mobCondition: true, key, i, j })} className={`w-100 ${!subElem?.isSameText && isMobile ? "activeDrop" : ""}`}>
+                                                                                                                Mobile View Only
+                                                                                                            </DropdownItem>
+                                                                                                            <DropdownItem onClick={e => updateTextRes({ e, arrCondition: true, mobCondition: isMobile, key, i, j })} className={`w-100 ${subElem?.isSameText ? "activeDrop" : ""}`}>
+                                                                                                                Desktop and Mobile View
+                                                                                                            </DropdownItem>
+                                                                                                        </DropdownMenu>
+                                                                                                    </UncontrolledButtonDropdown>
+                                                                                                )} fontColor={subElem.style.isInitialColor ? finalObj?.defaultThemeColors[subElem.style.initialColor] : ""} fontFamilies={subElem.isInitialFont ? finalObj?.fontFamilies[subElem.textType] : ""} elementId={`${currPage}-${key}-${curElem?.positionType}-${j}`}
                                                                                                 key={`${currPage}-${key}-${curElem?.positionType}-${j}-${isMobile}-${rearr}`} id={`${currPage}-${key}-${curElem?.positionType}-${j}`} style={{ width: "100%", position: "relative", display: "flex", justifyContent: subElem?.style?.justifyContent, alignItems: subElem?.style?.alignItems, fontFamily: subElem?.isInitialFont ? finalObj?.fontFamilies?.[subElem.textType] : subElem?.style?.fontFamily }} openToolbar={openToolbar} setOpenToolbar={setOpenToolbar} showToolbar={openToolbar && isEqual({ ...indexes }, { cur: key, curElem: curElem.positionType, subElem: j })} onChange={(content, editorState) => {
                                                                                                     if (!isEqual(content, subElem?.editorState)) {
                                                                                                         const newObj = { ...finalObj }
@@ -1406,27 +1498,7 @@ const RenderPreview = (props) => {
                                                         }
                                                     </div>
                                                 </div>
-                                            }) : (
-                                                <div onDragOver={(e) => {
-                                                    handleDragOver(e)
-                                                }}
-                                                    onDrop={(e) => {
-                                                        e.stopPropagation()
-                                                        const transferType = e.dataTransfer.getData("type")
-                                                        setGotDragOver({ cur: false, curElem: false, subElem: false })
-                                                        if (transferType !== "") {
-                                                            handleLayoutDrop(e, cur)
-                                                            setIndexes(transferType.includes("col") ? { cur: colWise.length, curElem: "parent", subElem: "grandparent" } : { cur: colWise.length, curElem: "left", subElem: 0 })
-                                                            setCurrPosition({ ...currPosition, id: colWise.length, selectedType: transferType.includes("col") ? "block" : transferType })
-                                                            setValues(elementStyles[transferType.includes("col") ? "block" : transferType])
-                                                        }
-                                                    }} className='' style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}
-                                                // onClick={(e) => makActive(e, cur)}
-                                                >
-                                                    <Download size={10} style={{ color: 'grey' }} />
-                                                    {/* <p style={{ margin: '0px', fontSize: '10px', color: 'grey' }}>Drop an element here</p> */}
-                                                </div>
-                                            )}
+                                            })}
                                         </div>
                                     </div>
                                 </div>
@@ -1478,7 +1550,7 @@ const RenderPreview = (props) => {
                                                                 }
                                                                 setIndexes(({ cur: 0, curElem: "left", subElem: "grandparent" }))
                                                                 setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
-                                                                setFinalObj({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: bgStyles } })
+                                                                updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: bgStyles } })
                                                             }
                                                         }} className={`overflow-hidden rounded position-relative bg-light-secondary ${currPage === ele.id && openPage ? "border-dark" : ""} ${ele.id === "user_verification" && !finalObj.verificationEnabled ? "opacity-25" : currPage !== ele.id && openPage ? "opacity-50" : ""} m-auto`} style={{ width: '150px', height: openPage ? "84px" : "0px", transition: "0.3s ease-in-out", boxShadow: `0px 0px ${currPage === ele.id && openPage ? "20px" : "0px"} rgba(0,0,0,0.75)` }}>
                                                             <div className={`overflow-hidden d-flex justify-content-center align-items-center w-100 h-100`}>
@@ -1601,7 +1673,7 @@ const RenderPreview = (props) => {
                                                                             setSideNav("add-elements")
                                                                             setIndexes(({ cur: 0, curElem: "left", subElem: "grandparent" }))
                                                                             setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
-                                                                            setFinalObj({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: bgStyles } })
+                                                                            updatePresent({ ...finalObj, backgroundStyles: { ...finalObj?.backgroundStyles, [`${mobileCondition}main`]: bgStyles } })
                                                                         }
                                                                     }} className={`text-center m-0 fw-bold ${currPage === ele?.id ? "text-white" : "dark"} ${ele?.id === "user_verification" && !finalObj?.verificationEnabled ? "opacity-50" : ""}`} style={{ fontSize: "12px", padding: "0.5rem" }}>{ele?.pageName}</p>
                                                                     {(renamePage === ele?.id) && <div className="position-absolute d-flex align-items-center bg-white rounded renameTab z-1" style={{ padding: "0.25rem", gap: "0.25rem", width: "300px" }}>
@@ -1611,7 +1683,7 @@ const RenderPreview = (props) => {
                                                                             const newObj = { ...finalObj }
                                                                             newObj.pages[pageIndex].pageName = pageName
                                                                             newObj.mobile_pages[pageIndex].pageName = pageName
-                                                                            setFinalObj({ ...newObj })
+                                                                            updatePresent({ ...newObj })
                                                                             setRenamePage("")
                                                                         }} color="#727272" size={"25px"} />
                                                                         <X onClick={() => setRenamePage("")} color="#727272" size={"25px"} />
@@ -1622,7 +1694,7 @@ const RenderPreview = (props) => {
                                                                         setCurrPage(finalObj?.[`${mobileCondition}pages`][0]?.id)
                                                                         setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
                                                                     }
-                                                                    setFinalObj({ ...finalObj, verificationEnabled: e.target.checked })
+                                                                    updatePresent({ ...finalObj, verificationEnabled: e.target.checked })
                                                                 }} style={{ width: "30px", height: "15px" }} type="checkbox" className="form-check-input m-0 cursor-pointer" />}
                                                             </div>
                                                             <UncontrolledButtonDropdown className='more-options-dropdown'>
@@ -1654,7 +1726,7 @@ const RenderPreview = (props) => {
                                                                         const duplicatedMobilePage = { ...mobilePage, id: `Page${newObj?.mobile_pages.length + 1}`, pageName: `Page ${newObj?.mobile_pages.length + 1}` }
                                                                         newObj?.pages?.splice(pageCurrentIndex + 1, 0, duplicatedPage)
                                                                         newObj?.mobile_pages?.splice(mobilePageCurrentIndex + 1, 0, duplicatedMobilePage)
-                                                                        setFinalObj({ ...newObj })
+                                                                        updatePresent({ ...newObj })
                                                                     }}>
                                                                         <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
                                                                             <Copy stroke='green' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Duplicate</span>
@@ -1669,7 +1741,7 @@ const RenderPreview = (props) => {
                                                                             setCurrPage(pageArray[0]?.id)
                                                                         }
                                                                         toast.success(<div className="d-flex gap-1 align-items-center">Page removed! <button onClick={undo} className="btn-primary btn">Undo</button></div>)
-                                                                        setFinalObj({ ...finalObj, pages: pageArray, mobile_pages: mobilePageArray })
+                                                                        updatePresent({ ...finalObj, pages: pageArray, mobile_pages: mobilePageArray })
                                                                     }} className='w-100'>
                                                                         <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
                                                                             <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Delete</span>
@@ -1685,11 +1757,11 @@ const RenderPreview = (props) => {
                                                                             setCurrPage(pageArray[0]?.id)
                                                                         }
                                                                         toast.success(<div className="d-flex gap-1 align-items-center">Page removed! <button onClick={undo} className="btn-primary btn">Undo</button></div>)
-                                                                        setFinalObj({ ...finalObj, pages: pageArray, mobile_pages: mobilePageArray })
+                                                                        updatePresent({ ...finalObj, pages: pageArray, mobile_pages: mobilePageArray })
                                                                     }} className='w-100'>
-                                                                        <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                                                        {/* <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
                                                                             <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Delete</span>
-                                                                        </div>
+                                                                        </div> */}
                                                                     </DropdownItem>}
                                                                 </DropdownMenu>
                                                             </UncontrolledButtonDropdown>
@@ -1830,7 +1902,7 @@ const RenderPreview = (props) => {
                                                                                                                                                     <div>
                                                                                                                                                         <div style={{ paddingTop: '0.5rem' }}>
                                                                                                                                                             <span style={{ color: 'black', textTransform: 'uppercase', fontWeight: '500', fontSize: '0.65rem' }}>
-                                                                                                                                                                valid until: {ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format('L') : "Never ending"}
+                                                                                                                                                                valid until: {ele?.ValidityPeriod?.end ? moment(ele?.ValidityPeriod?.end).format('L') : "Perpetual"}
                                                                                                                                                             </span>
                                                                                                                                                         </div>
                                                                                                                                                     </div>
@@ -1939,14 +2011,14 @@ const RenderPreview = (props) => {
                                                                     setCurrPage(finalObj?.[`${mobileCondition}pages`][0]?.id)
                                                                     setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
                                                                 }
-                                                                setFinalObj({ ...finalObj, teaserEnabled: e.target.checked })
+                                                                updatePresent({ ...finalObj, teaserEnabled: e.target.checked })
                                                             }} style={{ width: "30px", height: "15px" }} type="checkbox" className="form-check-input m-0 cursor-pointer" />
                                                         </div>
                                                     </div>
                                                 </SwiperSlide>
                                                 <SwiperSlide>
                                                     <div onClick={() => {
-                                                        setFinalObj({ ...finalObj, [`pages`]: [...finalObj?.[`pages`], { pageName: `Page${finalObj[`pages`]?.length + 1}`, id: `Page${finalObj[`pages`]?.length + 1}`, values: [] }], [`mobile_pages`]: [...finalObj?.[`mobile_pages`], { pageName: `Page${finalObj[`mobile_pages`]?.length + 1}`, id: `Page${finalObj[`mobile_pages`]?.length + 1}`, values: [] }] })
+                                                        updatePresent({ ...finalObj, [`pages`]: [...finalObj?.[`pages`], { pageName: `Page${finalObj[`pages`]?.length + 1}`, id: `Page${finalObj[`pages`]?.length + 1}`, values: [] }], [`mobile_pages`]: [...finalObj?.[`mobile_pages`], { pageName: `Page${finalObj[`mobile_pages`]?.length + 1}`, id: `Page${finalObj[`mobile_pages`]?.length + 1}`, values: [] }] })
                                                         setCurrPage(`Page${finalObj[`${mobileCondition}pages`]?.length + 1}`)
                                                         setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
                                                     }} className="cursor-pointer pt-1">

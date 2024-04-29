@@ -1,31 +1,44 @@
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import { Col, Row, Card, CardBody, Badge } from 'reactstrap'
 // import { Link } from 'react-router-dom'
 import StatsCard from './components/StatsCard'
-import instagram from '../../assets/images/referral/instagram.svg'
-import facebook from '../../assets/images/referral/square-facebook.svg'
-import X from '../../assets/images/referral/x-twitter.svg'
-import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
-import axios from 'axios'
+// import instagram from '../../assets/images/referral/instagram.svg'
+// import facebook from '../../assets/images/referral/square-facebook.svg'
+// import X from '../../assets/images/referral/x-twitter.svg'
+import { SuperLeadzBaseURL, getReq } from '../../assets/auth/jwtService'
+// import axios from 'axios'
 import { getCurrentOutlet } from '../Validator'
 import RefferedTable from './components/RefferedTable'
+import CardCom from '../Components/SuperLeadz/CardCom'
 // import DataTableWithButtons from '../tables/data-tables/basic/TableMultilingual'
 // import StatsCard from '../ui-element/Static'
+import { Eye, Menu, User, Award, DollarSign, BarChart2, Instagram, Facebook, Hash } from 'react-feather'
+import { FaXTwitter } from "react-icons/fa6"
+import { MdAdsClick } from "react-icons/md"
 
 const Dashboard = () => {
     const outletData = getCurrentOutlet()
     const [stats, SetStats] = useState()
-    
+
+    // const getData = () => {
+
+    //     axios.get(`${SuperLeadzBaseURL}/referral/dashboard/?shop=${outletData[0]?.web_url}`)
+    //         .then((resp) => {
+    //             console.log(resp)
+    //             SetStats(resp.data)
+    //         })
+    //         .catch((error) => {
+    //             console.log(error)
+    //             // setIsLoading(false)
+    //         })
+    // }
     const getData = () => {
-        
-        axios.get(`${SuperLeadzBaseURL}/referral/dashboard/?shop=${outletData[0]?.web_url}`)
+        getReq("referral_dashboard", `?shop=${outletData[0]?.web_url}`, SuperLeadzBaseURL)
         .then((resp) => {
-            console.log(resp)
             SetStats(resp.data)
         })
-        .catch((error) => {
-            console.log(error)
-            // setIsLoading(false)
+        .catch((err) => {
+            console.log(err)
         })
     }
     useEffect(() => {
@@ -35,77 +48,47 @@ const Dashboard = () => {
 
     return (
         <>
-            <Card>
-                <CardBody>
-                    <Row className='mb-2'>
-                        <Col><h4 className='fw-medium'>Referral Stats </h4></Col>
-                    </Row>
-                    <Row className='mb-1'>
-                        <Col>
-                            <Row><h6 className='fw-medium'>Total Views</h6></Row>
-                            <Row><h2 className='fw-medium'>{stats?.total_views || 0}</h2></Row>
-                        </Col>
-                        <Col>
-                            <Row><h6 className='fw-medium'>Advocate Signups</h6></Row>
-                            <Row><h2 className='fw-medium'>{stats?.advocate_signups || 0}</h2></Row>
-                        </Col>
-                        <Col>
-                            <Row><h6 className='fw-medium'>Total Referrals</h6></Row>
-                            <Row><h2 className='fw-medium'>{stats?.total_referrals || 0}</h2></Row>
-                        </Col>
-                        <Col>
-                            <Row><h6 className='fw-medium'>Total Redemptions</h6></Row>
-                            <Row><h2 className='fw-medium'>{stats?.total_redemptions || 0}</h2></Row>
-                        </Col>
-                    </Row>
-                </CardBody>
-            </Card>
-            <Card>
-                <CardBody>
-                    <Row className='mb-2'>
-                        <Col><h4 className='fw-medium'>Revenue Stats </h4></Col>
-                    </Row>
-                    <Row className='mb-1'>
-                        <Col>
-                            <Row><h6 className='fw-medium'>Total Revenue</h6></Row>
-                            <Row><h2 className='fw-medium'>{stats?.revenue || 0}</h2></Row>
-                        </Col>
-                        <Col>
-                            <Row><h6 className='fw-medium'>Advocate Discounts Uses</h6></Row>
-                            <Row><h2 className='fw-medium'>{stats?.advocate_discount_users || 0}</h2></Row>
-                        </Col>
-                        <Col>
-                            <Row><h6 className='fw-medium'>Total Earnings</h6></Row>
-                            <Row><h2 className='fw-medium'>{stats?.total_earnings || 0}</h2></Row>
-                        </Col>
-                    </Row>
-                </CardBody>
-            </Card>
-            <Card>
-                <CardBody>
-                    <Row className='mb-2'>
-                        <Col><h4 className='fw-medium'>Revenue Growth </h4></Col>
-                    </Row>
-                    <Row className='mb-1 ml-auto'>
-                        90 days
-                    </Row>
-                    <Row className='mb-1'>
-                        $12,000
-                    </Row>
-                </CardBody>
-            </Card>
-            <Card>
-                <CardBody>
-                    <Row className='mb-2'>
-                        <Col><h4 className='fw-medium'>Shares</h4></Col>
-                    </Row>
-                    <Row className='mb-2'><h2 className='fw-medium'>{stats?.total_clicks || 0} Total Clicks</h2></Row>
-                    <Row>
-                        <Col md={6}><div class="d-flex justify-content-between align-items-center border border-black mb-2" style={{padding: "0.5rem"}}><img src={instagram} alt='instagram' width={"25px"} /><div>{stats?.instagram_clicks || 0}</div></div></Col>
-                        <Col md={6}><div class="d-flex justify-content-between align-items-center border border-black mb-2" style={{padding: "0.5rem"}}><img src={facebook} alt='facebook' width={"25px"} /><div>{stats?.facebook_clicks || 0}</div></div></Col>
-                        <Col md={6}><div class="d-flex justify-content-between align-items-center border border-black mb-2" style={{padding: "0.5rem"}}><img src={X} alt='X' width={"25px"} /><div>{stats?.twitter_clicks || 0}</div></div></Col>
-                    </Row>
 
+            <Card>
+                <CardBody>
+
+                    <Row className='match-height'>
+                        <Col md={6}>
+                            <CardCom icon={<Eye width={'27px'} />} title='Total views' data={stats?.total_views ?? 0} />
+                        </Col>
+                        <Col md={6}>
+                            <CardCom icon={<Hash width={'27px'} />} title='Advocate Signups' data={stats?.advocate_signups ?? 0} />
+                        </Col>
+                        <Col md={6}>
+                            <CardCom icon={<User width={'27px'} />} title='Total Referrals' data={stats?.total_referrals ?? 0} />
+                        </Col>
+                        <Col md={6}>
+                            <CardCom icon={<Award width={'27px'} />} title='Total Redemptions' data={stats?.total_redemptions ?? 0} />
+                        </Col>
+                        <Col md={6}>
+                            <CardCom icon={<DollarSign width={'27px'} />} title='Total Revenue' data={stats?.revenue ?? 0} />
+                        </Col>
+                        <Col md={6}>
+                            <CardCom icon={<BarChart2 width={'27px'} />} title='Advocate Discounts Uses' data={stats?.advocate_discount_users ?? 0} />
+                        </Col>
+                        <Col md={6}>
+                            <CardCom icon={<DollarSign width={'27px'} />} title='Total Earnings' data={stats?.total_earnings ?? 0} />
+                        </Col>
+
+                        <Col md={6}>
+                            <CardCom icon={<MdAdsClick width={'27px'} className='fs-2' />} title='Total Clicks' data={stats?.total_clicks ?? 0} />
+
+                        </Col>
+                        <Col md={6}>
+                            <CardCom icon={<Instagram width={'27px'} />} title='Instagram' data={stats?.instagram_clicks ?? 0} />
+                        </Col>
+                        <Col md={6}>
+                            <CardCom icon={<Facebook width={'27px'} />} title='Facebook' data={stats?.facebook_clicks ?? 0} />
+                        </Col>
+                        <Col md={6}>
+                            <CardCom icon={<FaXTwitter width={'27px'} className='fs-3' />} title='Twitter' data={stats?.twitter_clicks ?? 0} />
+                        </Col>
+                    </Row>
                 </CardBody>
             </Card>
 

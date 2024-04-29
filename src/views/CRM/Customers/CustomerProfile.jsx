@@ -50,8 +50,8 @@ export default function CustomerProfile() {
         setFilteredData(resp.data.success[0]?.associated_accounts)
         setFormData(prefData => ({
           ...prefData,
-          cust_first_name: name[0],
-          cust_last_name: name[1],
+          cust_first_name: name[0] ? name[0] : "",
+          cust_last_name: name[1] ? name[1] : "",
           cust_dob: datePart ? datePart : ""
         }))
       })
@@ -76,8 +76,8 @@ export default function CustomerProfile() {
     // console.log(e)
     if (addressType === undefined) {
       let { name, value, type, checked } = e.target
-      if (name.includes('.')) {
-        const [parent, child] = name.split('.')
+      if (name?.includes('.')) {
+        const [parent, child] = name?.split('.')
         setFormData(prevFormData => ({
           ...prevFormData,
           [parent]: {
@@ -179,7 +179,7 @@ export default function CustomerProfile() {
       //   }
       // })
       .then((resp) => {
-        if (resp.status === 409) {
+        if (resp?.status === 409) {
           throw new Error('Customer already exists')
         }
         console.log("Response:", resp)
@@ -192,7 +192,11 @@ export default function CustomerProfile() {
       })
       .catch((error) => {
         console.error("Error:", error)
-        toast.error('Failed to save customer')
+        if (error.message === 'Customer already exists') {
+          toast.error('Customer already exists')
+        } else {
+          toast.error('Failed to save customer')
+        }
       })
   }
 

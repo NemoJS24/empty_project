@@ -245,7 +245,7 @@ const Campaign = () => {
                             advanceFilter={true}
                             getData={getAllThemes}
                             create={true}
-                            createLink={"/merchant/Flash_Accounts/settings/"}
+                            createLink={"/merchant/Flash_Accounts/Themes/"}
                             createText={"Create Campaign"}
                             selectableRows={true}
                             selectedRows={checkedThemes}

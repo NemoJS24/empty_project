@@ -7,6 +7,8 @@ import { Info, Monitor, Smartphone } from 'react-feather'
 
 const CampaignWiseData = ({campaignData}) => {
 
+    console.log({campaignData})
+
     // const [isLoading, setIsLoading] = useState(true)
     const [displayType, setDisplayType] = useState("")
     console.log(displayType, "displayType")
@@ -90,9 +92,13 @@ const CampaignWiseData = ({campaignData}) => {
                                     <DropdownToggle color='dark' style={{ padding: "0.5rem" }} className='hide-after-dropdown rounded'>
                                         {
                                             displayType === "DESKTOP" ? (
-                                                <Monitor size={"18px"} />
+                                                <div>
+                                                    <Monitor size={"18px"} />
+                                                </div>
                                             ) : displayType === "MOBILE" ? (
-                                                <Smartphone size={"18px"} />
+                                                <div>
+                                                    <Smartphone size={"18px"} />
+                                                </div>
                                             ) : (
                                                 <div className="d-flex align-items-center gap-2">
                                                     <Monitor size={"18px"} /><Smartphone size={"18px"} />
@@ -104,15 +110,15 @@ const CampaignWiseData = ({campaignData}) => {
                                         <DropdownItem onClick={() => {
                                             setDisplayType("DESKTOP")
                                         }} className={`w-100`}>
-                                            Desktop View Only
+                                            Performance on desktop devices only
                                         </DropdownItem>
                                         <DropdownItem onClick={() => {
                                             setDisplayType("MOBILE")
                                         }} className={`w-100`}>
-                                            Mobile View Only
+                                            Performance on mobile devices only
                                         </DropdownItem>
                                         <DropdownItem onClick={() => setDisplayType("")} className={`w-100`}>
-                                            Desktop and Mobile View
+                                            Overall campaign performance
                                         </DropdownItem>
                                     </DropdownMenu>
                                 </UncontrolledButtonDropdown>
@@ -124,31 +130,31 @@ const CampaignWiseData = ({campaignData}) => {
                             <RenderData title="Impressions" data={campaignData[`${condition}pop_up_view`]} info={`Number of times pop-up was shown.`} />
                         </Col>
                         <Col md="3">
-                            <RenderData title="Conversions" data={campaignData?.conversion} info={`Number of redemptions.`} />
+                            <RenderData title="Conversions" data={campaignData[`${condition}conversion`]} info={`Number of redemptions.`} />
                         </Col>
                         <Col md="3">
-                            <RenderData title="Conversion %" data={`${campaignData?.conversion_rate}%`} info={`Number of leads (total) / Number of redemptions`} />
+                            <RenderData title="Conversion %" data={`${Number(campaignData[`${condition}conversion_rate`]).toFixed(2)}%`} info={`(Number of redemptions / Total number of leads) * 100`} />
                         </Col>
                         <Col md="3">
-                            <RenderData title="Engaged" data={campaignData[`${condition}clicks`]} info={`Number of clicks in the pop-up`} />
+                            <RenderData title="Engagements" data={campaignData[`${condition}clicks`]} info={`Total pop-up button clicks (includes OTP request and Redeem clicks)`} />
                         </Col>
                         <Col md="3">
-                            <RenderData title="CTR" data={`${(campaignData?.clicks && campaignData[`${condition}pop_up_view`]) ? Number(campaignData[`${condition}clicks`] / campaignData[`${condition}pop_up_view`] * 100).toFixed(2) : 0}%`} info={`Number of clicks / Number of impressions * 100`} />
+                            <RenderData title="CTR" data={`${(campaignData?.clicks && campaignData[`${condition}pop_up_view`]) ? Number(campaignData[`${condition}clicks`] / campaignData[`${condition}pop_up_view`] * 100).toFixed(2) : 0}%`} info={`The percentage of clicks relative to the total number of impressions`} />
                         </Col>
                         <Col md="3">
-                            <RenderData title="Revenue" data={campaignData?.Revenue} info={`Redemption amount`} />
+                            <RenderData title="Campaign Revenue" data={`${localStorage.getItem("userPermission") ? JSON.parse(localStorage.getItem("userPermission")).currencySymbol : ""}${campaignData[`${condition}Revenue`]}`} info={`Total earnings from all transactions directly attributable to that campaign`} />
                         </Col>
                         <Col md="3">
                             <RenderData title="Immediately closed" data={campaignData[`${condition}immediate_closed`] ? campaignData[`${condition}immediate_closed`] : 0} info={`Pop-up closed within 2 second`} />
                         </Col>
                         <Col md="3">
-                            <RenderData title="Leads" data={campaignData?.total_leads} info={`Number of leads (total)`} />
+                            <RenderData title="Leads" data={campaignData[`${condition}total_leads`]} info={`Total instances of visitors submitting their contact information through a SuperLeadz pop-up`} />
                         </Col>
                         <Col md="3">
-                            <RenderData title="Offers sent" data={campaignData?.offer_sent} info={`Number of offers displayed`} />
+                            <RenderData title="Offers Given" data={campaignData[`${condition}offer_sent`]} info={`Total number of offers given to visitors/leads within the pop-up`} />
                         </Col>
                         <Col md="3">
-                            <RenderData title="Redirected" data={campaignData[`${condition}offer_clicked`]} info={`Number of times they were redirected after clicking to redeem offer`} />
+                            <RenderData title="Offer Button Redirects" data={campaignData[`${condition}offer_clicked`]} info={`Total number of page redirects from offer CTA button`} />
                         </Col>
                     </Row>
                 </CardBody>

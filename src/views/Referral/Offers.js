@@ -5,6 +5,8 @@ import { Card, CardBody, Col, Row } from 'reactstrap'
 import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
 import { getCurrentOutlet } from '../Validator'
 import { useLocation } from 'react-router-dom'
+import Flatpickr from 'react-flatpickr'
+import moment from 'moment'
 // import offers from "./data.json"
 
 // import apiData from "@src/@core/auth/api/api.json"
@@ -22,13 +24,15 @@ const ReferralOffers = () => {
     referree_value: 1,
     referree_type: "PERCENTAGE",
     referree_minimum: 1,
-    status: false
+    status: true,
+    referrer_end_date: "",
+    referree_end_date: ""
   })
 
   // const [status, setStatus] = useState('active')
   const offerLoc = useLocation()
 
-  console.log({ offerLoc })
+  console.log({ offerFields, offerLoc })
 
   const handleSubmit = () => {
 
@@ -44,16 +48,7 @@ const ReferralOffers = () => {
       Object.entries(offerFields).map(([key, value]) => {
         form_data.append(key, value)
       })
-      // form_data.append('referrer_type', offerFields.referrer_type)
-      // form_data.append('referrer_minimum', offerFields.referrer_minimum)
-
-      // form_data.append('referree_value', offerFields.referree_value)
-      // form_data.append('referree_type', offerFields.referree_type)
-      // form_data.append('referree_minimum', offerFields.referree_minimum)
-
-      // const statusActive = document.getElementById('statusactive').checked
-      // form_data.append('status', statusActive)
-
+     
       form_data.append('action', offerLoc.state ? "EDIT" : "CREATE")
 
       form_data.append("shop", outletData[0]?.web_url)
@@ -112,8 +107,8 @@ const ReferralOffers = () => {
             console.log(data.data.data)
             const filtered = data.data.data.filter(item => item.id === offerLoc.state)
             console.log({filtered})
-            const { referrer_value, referrer_type, referrer_minimum, referree_value, referree_type, referree_minimum, is_active } = filtered[0]
-            setOfferFields({ referrer_value, referrer_type: referrer_type === "PE" ? "PERCENTAGE" : "VALUE", referrer_minimum, referree_value, referree_type: referree_type === "PE" ? "PERCENTAGE" : "VALUE", referree_minimum, status: is_active })
+            const { referrer_value, referrer_type, referrer_minimum, referrer_end_date, referree_value, referree_type, referree_minimum, referree_end_date, is_active } = filtered[0]
+            setOfferFields({ referrer_value, referrer_type: referrer_type === "PE" ? "PERCENTAGE" : "VALUE", referrer_minimum, referrer_end_date, referree_value, referree_type: referree_type === "PE" ? "PERCENTAGE" : "VALUE", referree_minimum, referree_end_date, status: is_active })
           } else {
             toast.error("There was an error fetching your data")
           }
@@ -124,68 +119,74 @@ const ReferralOffers = () => {
 
   return (
     <>
-      <Card>
-        <CardBody>
-          <h4 className=' fw-bolder'>Points {">"} {offerLoc.state ? "Edit" : "Create"}</h4>
-        </CardBody>
-      </Card>
+        <Row>
 
-      <Row>
-
-        <Col md={6} className='p-0'>
-          <Card style={{ overflow: 'hidden' }} className='mb-3 ms-2'>
+        <Col xs={12}  className='p-0'>
+          <Card style={{ overflow: 'hidden' }} className='mb-3 '>
             <CardBody>
               <div className='d-flex flex-column justify-items-center align-items-baseline'>
                 <h3 className='ms-1'>Referrer Offer</h3>
                 <p>{errorMsg1}</p>
               </div>
               <form className="d-flex flex-wrap row mx-1">
-                <div className="col-lg-4 col-md-6 col-sm-12 mb-2">
+                <div className="col-lg-3 col-md-6 col-sm-12 mb-2">
                   <h5 >Value</h5>
                   <input type="number" className="form-control" min={1} value={offerFields.referrer_value} onChange={(e) => setOfferFields({ ...offerFields, referrer_value: e.target.value })} />
                 </div>
-                <div className="col-lg-4 col-md-6 col-sm-12 mb-2">
+                <div className="col-lg-3 col-md-6 col-sm-12 mb-2">
                   <h5>Offer Type</h5>
                   <div className="d-flex align-items-center">
-                    <select value={offerFields.referrer_type} className="form-select m-0" onChange={(e) => setOfferFields({ ...offerFields, referrer_type: e.target.value })}>
+                    <select value={offerFields.referrer_type} className="form-control  m-0" onChange={(e) => setOfferFields({ ...offerFields, referrer_type: e.target.value })}>
                       <option value='PERCENTAGE'>Percentage</option>
                       <option value='VALUE'>Value</option>
                     </select>
                   </div>
                 </div>
-                <div className="col-lg-4 col-md-6 col-sm-12 mb-2">
+                <div className="col-lg-3 col-md-6 col-sm-12 mb-2">
                   <h5 >Minimum</h5>
                   <input type="number" className="form-control" min={1} value={offerFields.referrer_minimum} onChange={(e) => setOfferFields({ ...offerFields, referrer_minimum: e.target.value })} />
+                </div>
+                <div className="col-lg-3 col-md-6 col-sm-12 mb-2">
+                  <h5 >End Date</h5>
+                  <Flatpickr options={{
+                    minDate: "today"
+                  }} className='form-control' value={offerFields?.referrer_end_date} onChange={(date) => setOfferFields({ ...offerFields, referrer_end_date: moment(date[0]).format('YYYY-MM-DD') })} id='default-picker' placeholder='End Date' />
                 </div>
               </form>
             </CardBody>
           </Card>
         </Col>
 
-        <Col md={6} className='p-0'>
-          <Card style={{ overflow: 'hidden' }} className='mb-3 ms-2'>
+        <Col xs={12} className='p-0'>
+          <Card style={{ overflow: 'hidden' }} className='mb-3'>
             <CardBody>
               <div className='d-flex flex-column justify-items-center align-items-baseline'>
                 <h3 className='ms-1'>Referree Offer</h3>
                 <p>{errorMsg2}</p>
               </div>
               <form className="d-flex flex-wrap row mx-1">
-                <div className="col-lg-4 col-md-6 col-sm-12 mb-2">
+                <div className="col-lg-3 col-md-6 col-sm-12 mb-2">
                   <h5 >Value</h5>
                   <input type="number" className="form-control" min={1} value={offerFields.referree_value} onChange={(e) => setOfferFields({ ...offerFields, referree_value: e.target.value })} />
                 </div>
-                <div className="col-lg-4 col-md-6 col-sm-12 mb-2">
+                <div className="col-lg-3 col-md-6 col-sm-12 mb-2">
                   <h5>Offer Type</h5>
                   <div className="d-flex align-items-center">
-                    <select value={offerFields.referree_type} className="form-select m-0" onChange={(e) => setOfferFields({ ...offerFields, referree_type: e.target.value })}>
+                    <select value={offerFields.referree_type} className="form-control m-0" onChange={(e) => setOfferFields({ ...offerFields, referree_type: e.target.value })}>
                       <option value='PERCENTAGE'>Percentage</option>
                       <option value='VALUE'>Value</option>
                     </select>
                   </div>
                 </div>
-                <div className="col-lg-4 col-md-6 col-sm-12 mb-2">
+                <div className="col-lg-3 col-md-6 col-sm-12 mb-2">
                   <h5 >Minimum</h5>
                   <input type="number" className="form-control" min={1} value={offerFields.referree_minimum} onChange={(e) => setOfferFields({ ...offerFields, referree_minimum: e.target.value })} />
+                </div>
+                <div className="col-lg-3 col-md-6 col-sm-12 mb-2">
+                  <h5 >End Date</h5>
+                  <Flatpickr options={{
+                    minDate: "today"
+                  }} className='form-control' value={offerFields?.referree_end_date} onChange={(date) => setOfferFields({ ...offerFields, referree_end_date: moment(date[0]).format('YYYY-MM-DD') })} id='default-picker' placeholder='End Date' />
                 </div>
               </form>
             </CardBody>
@@ -194,7 +195,7 @@ const ReferralOffers = () => {
         </Col>
       </Row>
 
-      <Card style={{ maxWidth: "300px" }}>
+      {/* <Card style={{ maxWidth: "300px" }}>
         <CardBody>
           <h3 className='mb-1'>Status</h3>
           <div className=' d-flex gap-2'>
@@ -208,7 +209,7 @@ const ReferralOffers = () => {
             </div>
           </div>
         </CardBody>
-      </Card>
+      </Card> */}
 
       <div className="mb-2">
         <div className="d-flex justify-content-end">
@@ -220,5 +221,3 @@ const ReferralOffers = () => {
 }
 
 export default ReferralOffers
-
-// https://api.xircles.in/referral/referralpoints/
