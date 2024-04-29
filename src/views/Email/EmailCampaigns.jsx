@@ -76,7 +76,7 @@ const EmailCampaigns = ({ custom = false, name = "All Campaigns", draft = true, 
             isEnable: true
         },
         {
-            name: 'Created Date',
+            name: 'Created On',
             selector: row => <span className='cursor-pointer'>{`${defaultFormatDate(row.template_created_at, userPermission?.user_settings?.date_format)}, ${moment(row.template_created_at).format('HH:mm:ss')}`}</span>,
             dataType: 'offer_code',
             type: 'date',
@@ -142,6 +142,9 @@ const EmailCampaigns = ({ custom = false, name = "All Campaigns", draft = true, 
                     </Col>
                     <Col md="4">
                         <RenderData title="Read" data={data.data.template_template_read ?? 0} />
+                    </Col>
+                    <Col md="4">
+                        <RenderData title="Clicks" data={data.data.template_template_click ?? 0} />
                     </Col>
                     <Col md="4">
                         <RenderData title="Failed" data={data.data.template_template_failed ?? 0} />

@@ -129,6 +129,13 @@ export default function SentEmailReports() {
       isEnable: true
     },
     {
+      name: 'Clicks',
+      minWidth: '100px',
+      selector: row => row?.template_template_click ?? '', // Assuming 'category' is the property in your data for the category
+      type: 'text',
+      isEnable: true
+    },
+    {
       name: 'Failed',
       minWidth: '100px',
       selector: row => row?.template_template_failed ?? '', // Assuming 'category' is the property in your data for the category

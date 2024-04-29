@@ -140,6 +140,15 @@ export default function EmailTemplateReport() {
       isEnable: true
     },
     {
+      name: 'Clicks',
+      minWidth: '150px',
+      // selector: row => row?.messagelog_timestamp_read ?? '', // Assuming 'name' is the property in your data for the name
+      selector: row => row.email_instance_template_click && row.email_instance_template_click, // Assuming 'name' is the property in your data for the name
+      dataType: 'date',
+      type: 'date',
+      isEnable: false
+    },
+    {
       name: 'Failed',
       minWidth: '150px',
       // selector: row => row?.messagelog_timestamp_failed ?? '', // Assuming 'name' is the property in your data for the name

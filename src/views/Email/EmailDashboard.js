@@ -55,7 +55,7 @@ const EmailDashboard = () => {
                 </div>
                 <div className='col-md-6 cursor-default'>
                     <Link to="/merchant/Email/reports/emailReport" >
-                        <CardCom icon={<Clock width={'27px'} />} title="Schedule Emails" data={useDashboardData?.total_sent ?? 0} />
+                        <CardCom icon={<Clock width={'27px'} />} title="Scheduled Emails" data={useDashboardData?.total_sent ?? 0} />
                     </Link>
                 </div>
 
@@ -67,7 +67,7 @@ const EmailDashboard = () => {
 
                 <div className='col-md-6 cursor-pointer'>
                     <Link to="/merchant/Email/import" >
-                        <CardCom icon={<UserPlus width={'27px'} />} title="Total Emails" data={useDashboardData?.total_contact ?? 0} />
+                        <CardCom icon={<UserPlus width={'27px'} />} title="Total Contacts" data={useDashboardData?.total_contact ?? 0} />
                     </Link>
 
                 </div>

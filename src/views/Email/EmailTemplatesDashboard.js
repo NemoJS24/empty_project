@@ -29,7 +29,7 @@ export default function EmailTemplatesDashboard() {
     <div style={{ paddingBottom: "100px" }}>
       <Card>
         <CardBody className='d-flex justify-content-between align-items-center '>
-          <h4 className="m-0">Explore Templates</h4>
+          <h4 className="m-0">Templates</h4>
           <div onClick={toggle} className="btn btn-primary" >Create Template</div>
         </CardBody>
       </Card>
