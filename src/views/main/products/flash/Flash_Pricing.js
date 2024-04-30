@@ -28,8 +28,8 @@ export default function Flash_Pricing() {
         {/* <SubNavbar navTitle={'superLeadz'} /> */}
 
         <Row className=' justify-content-center '>
-          <Col md="11" lg="11" xl="9">
-            <h1 className='display-1 text-center main-heading fw-bolder mt-0'>Thoughtfully priced to help you  thrive and expand.</h1>
+          <Col md="11" lg="11" xl="9" className='mt-md-2 mt-sm-2'>
+            <h1 className='display-1 text-center main-heading fw-bolder mt-5'>Thoughtfully priced to help you  thrive and expand.</h1>
           </Col>
         </Row>
 

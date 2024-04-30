@@ -43,7 +43,7 @@ export default function TemplateDashboard() {
 
    const [msgHeader, setMsgHeader] = useState('')
    const [oldHeaderPara, setoldHeaderPara] = useState([])
-
+   const params = new URLSearchParams(location.search)
 
    const toggle = () => setModal(!modal)
 
@@ -402,7 +402,7 @@ export default function TemplateDashboard() {
                                                             </div>
                                                          </div>
                                                          {/* <button className='btn btn-primary px-3 send-btn' onClick={() => getCurrentTemplate(SingleTemplate.id, 'modal2')} >Start Campaign <Send id="send-icon" size={16} style={{ marginLeft: "5px" }} /></button> */}
-                                                         <Link to={`/merchant/whatsapp/campaign/${SingleTemplate.id}`} className='btn btn-primary px-3 send-btn' >Start Campaign <Send id="send-icon" size={16} style={{ marginLeft: "5px" }} /></Link>
+                                                         <Link to={params.get('campagin_type') === "broadcast" ? `/merchant/whatsapp/campaign/${SingleTemplate.id}` : `/merchant/whatsapp/create-campaign/${params.get('campagin_type')}/${SingleTemplate.id}`} className='btn btn-primary px-3 send-btn' >Use Template <Send id="send-icon" size={16} style={{ marginLeft: "5px" }} /></Link>
                                                       </>
                                                    }
                                                    {

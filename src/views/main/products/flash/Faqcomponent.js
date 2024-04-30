@@ -2,7 +2,7 @@ import React from 'react'
 import FaqComponent from '@src/views/main/components/Faq/FaqComponent'
 import Footer from '@src/views/main/utilities/footer/Footer'
 
-export default function FaqFlash() {
+export default function Faqcomponent() {
     // faq data
     const faqData = [
         {
@@ -65,9 +65,8 @@ export default function FaqFlash() {
             {/* <Navbar position={'notFixed'} /> */}
             {/* <SubNavbar navTitle={'partners'} /> */}
 
-            <div className='mt160'>
-
-                <FaqComponent data={faqData} name='partner' theme="theme-white" />
+            <div className=''>
+                <FaqComponent data={faqData} name='partner' theme="theme-black" />
             </div>
 
             <hr className='mt100' />

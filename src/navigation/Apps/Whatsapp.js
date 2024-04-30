@@ -13,19 +13,6 @@ export const WhatsappNavigation = [
         navLink: '/merchant/whatsapp/'
     },
     {
-        id: 'message',
-        title: 'Templates',
-        icon: <Circle size={16} />,
-        navLink: '/merchant/whatsapp/message/'
-    },
-    
-    // {
-    //     id: 'createTemplate',
-    //     title: 'Create Template',
-    //     icon: <Circle size={16} />,
-    //     navLink: '/merchant/whatsapp/is_template/'
-    // },
-    {
         id: 'Contacts',
         title: 'Contacts',
         icon: <Circle size={16} />,
@@ -36,6 +23,18 @@ export const WhatsappNavigation = [
         title: 'Groups',
         icon: <Circle size={16} />,
         navLink: '/merchant/whatsapp/groups/'
+    },
+    {
+        id: 'message',
+        title: 'Templates',
+        icon: <Circle size={16} />,
+        navLink: '/merchant/whatsapp/message/'
+    },
+    {
+        id: 'campaigns',
+        title: 'Campaigns',
+        icon: <Circle size={16} />,
+        navLink: '/merchant/whatsapp/campaigns'
     },
     {
         id: 'Catalogue',

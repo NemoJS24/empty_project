@@ -16,6 +16,9 @@ import GroupSend from "../../views/Whatsapp/Tables/GroupSend"
 import Catalogue from "../../views/Whatsapp/catalog/Catalogue"
 import StartCampaign from "../../views/Whatsapp/Templates/TemplateDashboard/pages/StartCampaign"
 import LiveChat from "../../views/Whatsapp/liveChat/LiveChat"
+import Campaigns from "../../views/Whatsapp/Campaigns"
+import { CampaignType } from "../../views/Whatsapp/CampaignType"
+import CreateCampaign from "../../views/Whatsapp/CreateCampaign"
 // import ProjectTable from "../../views/Whatsapp/Templates/ProjectTable"
 
 export const WhatsAppRoutes = [
@@ -94,5 +97,17 @@ export const WhatsAppRoutes = [
     {
         path: '/merchant/whatsapp/LiveChat',
         element: <LiveChat />
+    },
+    {
+        path: '/merchant/whatsapp/campaigns',
+        element: <Campaigns />
+    },
+    {
+        path: '/merchant/whatsapp/create-campaign/type/',
+        element: <CampaignType />
+    },
+    {
+        path: '/merchant/whatsapp/create-campaign/:campaign_type/:temp_id/',
+        element: <CreateCampaign />
     }
 ]

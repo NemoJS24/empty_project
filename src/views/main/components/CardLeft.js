@@ -2,24 +2,24 @@ import React from 'react'
 
 export default function CardLeft({ icon, title, desc, imgSrc }) {
     return (
-        <div className='mt-2 mt-md-3 p-0 '>
+        <div className='mt-2 mt-md-3 p-2'>
 
             <style>
                 {`
-                .img{
-                    margin-bottom:13px !important;
-                }
-                .title{
-                    margin-bottom:10px !important;
-                }
-                @media only screen and (max-width: 600px) {
-                    .title{
-                        margin-bottom:0px !important;
-                    }
                     .img{
-                        margin-bottom:5px !important;
+                        margin-bottom:13px !important;
                     }
-                  }
+                    .title{
+                        margin-bottom:10px !important;
+                    }
+                    @media only screen and (max-width: 600px) {
+                        .title{
+                            margin-bottom:0px !important;
+                        }
+                        .img{
+                            margin-bottom:5px !important;
+                        }
+                    }
                 `}
             </style>
             <div className='img fs-1 text-dark '>

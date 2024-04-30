@@ -259,7 +259,10 @@ export const configUrl = {
     
     mail_info: "/mail/mail_info/",
     update_status: "/mail/update_status/",
-    delete_mail: "/mail/delete_mail/"
+    delete_mail: "/mail/delete_mail/",
+    whatsapp_create_campaign: "/talk/create_campaign/",
+    whatsapp_view_campaign: "/talk/view_campaign/",
+    change_campaign_status: "/talk/change_campaign_status/"
 }
 
 const axiosInstance = axios.create({
