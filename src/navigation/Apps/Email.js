@@ -25,12 +25,12 @@ export const EmailNavigation = [
         icon: <AiOutlineHighlight />,
         navLink: '/merchant/Email/templates'
     },
-    {
-        id: 'campaign',
-        title: 'Campaign',
-        icon: <AiOutlineBars />,
-        navLink: '/merchant/Email/campaign'
-    },
+    // {
+    //     id: 'campaign',
+    //     title: 'Campaign',
+    //     icon: <AiOutlineBars />,
+    //     navLink: '/merchant/Email/campaign'
+    // },
     {
         id: 'Email',
         title: 'Contacts',

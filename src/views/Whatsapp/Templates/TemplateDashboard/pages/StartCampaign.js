@@ -118,14 +118,10 @@ export default function StartCampaign() {
 
   if (usePage === 1) {
     return (<>
-      <Link to='/merchant/whatsapp/message/' className='btn btn-primary btn-sm mb-1' ><ChevronLeft size={15} /> Back</Link>
-
       <Card>
         <CardBody className=''>
           <div className='border-bottom py-1 d-flex justify-content-between  align-items-center '>
             <h3 className="m-0 ">Select Groups</h3>
-            <button onClick={() => setPage(2)} className={`btn  btn-primary ${useSelectedGroups.length === 0 ? 'opacity-0' : 'opacity-100'}`}>Next </button>
-
           </div>
           <Row className='mt-2 gy-2'>
             {
@@ -167,12 +163,15 @@ export default function StartCampaign() {
           {/* <Link to="/merchant/whatsapp/is_template/" className="btn btn-primary " >Create Template</Link> */}
         </CardBody>
       </Card>
+      <div class="d-flex justify-content-between">
+      <Link to='/merchant/whatsapp/message/' className='btn btn-primary btn' > Back</Link>
+      <button onClick={() => setPage(2)} className={`btn  btn-primary ${useSelectedGroups.length === 0 ? 'opacity-0' : 'opacity-100'}`}>Next </button>
+      </div>
     </>
     )
   }
   if (usePage === 2) {
     return (<>
-      <button onClick={() => setPage(1)} className='btn btn-primary btn-sm mb-1' ><ChevronLeft size={15} /> Back</button>
       {
         useLoader && <FrontBaseLoader />
       }
@@ -180,7 +179,6 @@ export default function StartCampaign() {
         <CardBody className=''>
           <div className='border-bottom py-1 d-flex justify-content-between  align-items-center '>
             <h3 className="m-0 ">Select Contacts</h3>
-            <button onClick={sendTemplateBulk} className={`btn btn-primary px-3 ${useSelectedContacts.length === 0 ? 'opacity-0' : 'opacity-100'}`}>Send Templates  <Send id="send-icon" size={16} style={{ marginLeft: "5px" }} /></button>
 
           </div>
           <div className='mt-3'>
@@ -200,6 +198,10 @@ export default function StartCampaign() {
           {/* <Link to="/merchant/whatsapp/is_template/" className="btn btn-primary " >Create Template</Link> */}
         </CardBody>
       </Card>
+      <div class="d-flex justify-content-between">
+      <button onClick={() => setPage(1)} className='btn btn-primary btn' > Back</button>
+      <button onClick={sendTemplateBulk} className={`btn btn-primary px-3 ${useSelectedContacts.length === 0 ? 'opacity-0' : 'opacity-100'}`}>Send Templates  <Send id="send-icon" size={16} style={{ marginLeft: "5px" }} /></button>
+      </div>
     </>
     )
   }

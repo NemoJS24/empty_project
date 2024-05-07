@@ -1,4 +1,4 @@
-import { Circle } from "react-feather"
+import { Circle, MessageSquare } from "react-feather"
 import { DefaultNav } from "./DefualtNav"
 
 export const WhatsappNavigation = [
@@ -13,19 +13,6 @@ export const WhatsappNavigation = [
         navLink: '/merchant/whatsapp/'
     },
     {
-        id: 'message',
-        title: 'Templates',
-        icon: <Circle size={16} />,
-        navLink: '/merchant/whatsapp/message/'
-    },
-    
-    // {
-    //     id: 'createTemplate',
-    //     title: 'Create Template',
-    //     icon: <Circle size={16} />,
-    //     navLink: '/merchant/whatsapp/is_template/'
-    // },
-    {
         id: 'Contacts',
         title: 'Contacts',
         icon: <Circle size={16} />,
@@ -38,11 +25,29 @@ export const WhatsappNavigation = [
         navLink: '/merchant/whatsapp/groups/'
     },
     {
-        id: 'Catalogue',
-        title: 'Catalogue',
+        id: 'message',
+        title: 'Templates',
         icon: <Circle size={16} />,
-        navLink: '/merchant/whatsapp/Catalogue/'
+        navLink: '/merchant/whatsapp/message/'
     },
+    {
+        id: 'campaigns',
+        title: 'Campaigns',
+        icon: <Circle size={16} />,
+        navLink: '/merchant/whatsapp/campaigns'
+    },
+    {
+        id: 'LiveChat',
+        title: 'LiveChat',
+        icon: <MessageSquare size={16} />,
+        navLink: '/merchant/whatsapp/LiveChat'
+    },
+    // {
+    //     id: 'Catalogue',
+    //     title: 'Catalogue',
+    //     icon: <Circle size={16} />,
+    //     navLink: '/merchant/whatsapp/Catalogue/'
+    // },
     // {
     //     id: 'businessCreation',
     //     title: 'Business Creation',

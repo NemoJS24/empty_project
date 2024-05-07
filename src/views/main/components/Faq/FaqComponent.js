@@ -30,7 +30,6 @@ export default function FaqComponent({ data, theme }) {
 
                     <Container fluid="sm">
                         <UncontrolledAccordion
-                            stayOpen
                             defaultOpen={['999']}
                         >
                             {

@@ -178,7 +178,6 @@ export const updateHeaderDisplayedMessage = (inputString, defData) => {
  }
 //  whatsapp template ui
 export const RenderTemplateUI = ({SingleTemplate}) => {
-   console.log(SingleTemplate, "SingleTemplate")
   return (
      <CardBody className="border-0 p-2  pe-5 hideScroll rounded-2 " style={{ backgroundImage: `url(${wp_back})`, gap: "5px", whiteSpace: 'pre-wrap', height: "400px", overflowY: "auto", scrollbarWidth: "0" }}>
 
@@ -257,6 +256,100 @@ export const RenderTemplateUI = ({SingleTemplate}) => {
                           if (data.type === "QUICK_REPLY") {
                              return (
                                 <div className="border-top  bg-white rounded-bottom-3   d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
+                                   <CornerDownLeft size={17} /><h6 className='m-0 text-primary' > {data.text}</h6>
+                                </div>
+                             )
+                          }
+                       })
+                    }
+                 })
+              }
+
+           </div>
+        </div>
+
+     </CardBody>
+  )
+}
+export const RenderLiveTemplateUI = ({SingleTemplate}) => {
+  return (
+     <CardBody className="border-0  rounded-2 " style={{ whiteSpace: 'pre-wrap'}}>
+
+        <div className="border-1 rounded-2 mb-0 " style={{ maxWidth: "400px" }} >
+           <div className='p-0' >
+              {
+
+                 SingleTemplate.components.map((data) => {
+                    if (data.format === "TEXT") {
+                       return (
+                          <div className='p-1 pb-0'  >
+                             <h6 className='fs-4 text-black bolder mb-1' dangerouslySetInnerHTML={{ __html: updateHeaderDisplayedMessage(data.text, data) }}></h6>
+
+                             {/* <h6 className='fs-4 text-black bolder mb-1 '>{data.text}</h6> */}
+                          </div>
+                       )
+                    }
+                    if (data.format === "IMAGE") {
+                       return (
+                          <div className='p-1'  >
+                             <img className='rounded-3 img-fluid border-0 rounded w-100 object-fit-cover ' src={data?.example?.header_handle[0] ?? ""} alt="" />
+                          </div>
+                       )
+                    }
+                    if (data.format === "VIDEO") {
+                       return (
+                          <div className='p-1'  >
+                             <video className='rounded-3  object-fit-cover w-100' controls autoPlay mute style={{ height: "170px" }}>
+                                <source
+                                   src={data.example?.header_handle[0] ?? ""}
+                                   type="video/mp4"
+                                />
+                                Video not supported.
+                             </video>
+                          </div>
+                       )
+                    }
+                    if (data.format === "DOCUMENT") {
+                       return (
+                          <div className='border-bottom  d-flex justify-content-center  align-items-center py-3' style={{ height: "50px" }}>
+                             <FileText size={30} color='#000' />
+                          </div>
+                       )
+                    }
+                    if (data.type === "BODY") {
+                       return (
+                          <div className='p-1 pe-2' >
+                             <p className='fs-6' dangerouslySetInnerHTML={{ __html: updateDisplayedMessage(data.text, data) }}></p>
+
+                          </div>
+                       )
+                    }
+                    if (data.type === "FOOTER") {
+                       return (
+                          <div className=' ps-1 pe-2 pt-0' >
+                             <p className='text-secondary font-small-3 mt-0'>{data.text} </p>
+                          </div>
+                       )
+                    }
+                    if (data.type === "BUTTONS") {
+                       return data.buttons.map((data) => {
+                          if (data.type === "URL") {
+                             return (
+                                <div className="border-top  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
+                                   <ExternalLink size={17} /><h6 className='m-0 text-primary' >{data.text}</h6>
+                                </div>
+                             )
+                          }
+                          if (data.type === "PHONE_NUMBER") {
+                             return (
+                                <div className="border-top  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
+                                   <Phone size={17} /><h6 className='m-0 text-primary' >{data.text}</h6>
+                                </div>
+                             )
+                          }
+                          if (data.type === "QUICK_REPLY") {
+                             return (
+                                <div className="border-top  rounded-bottom-3   d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
                                    <CornerDownLeft size={17} /><h6 className='m-0 text-primary' > {data.text}</h6>
                                 </div>
                              )

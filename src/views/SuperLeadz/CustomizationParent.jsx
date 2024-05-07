@@ -37,10 +37,11 @@ import VerifyYourEmail from '../Outlet/VerifyYourEmail'
 import ComTable from '../Components/DataTable/ComTable'
 import { TbReplace } from "react-icons/tb"
 import "./Customization.css"
-import { FaCrown } from "react-icons/fa"
+import { FaCrown, FaWhatsapp } from "react-icons/fa"
 import { MdOutlineRefresh } from "react-icons/md"
 import { Reload } from 'tabler-icons-react'
 import { RenderTemplateUI } from '../Whatsapp/SmallFunction'
+import { FaListCheck } from "react-icons/fa6"
 
 
 export const fontStyles = [
@@ -4504,7 +4505,7 @@ const CustomizationParent = () => {
                             setSideNav(sideNav === "rules" ? "" : "rules")
                         }}>
                             <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
-                                <Mail size={15} />
+                                <FaListCheck size={15} />
                             </button>
                             <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Rules</span>
                         </div>
@@ -4522,7 +4523,7 @@ const CustomizationParent = () => {
                                 setSideNav("whatsapp")
                             }}>
                                 <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
-                                    <Mail size={15} />
+                                    <FaWhatsapp size={15} />
                                 </button>
                                 <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Whatsapp</span>
                             </div>

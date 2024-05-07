@@ -112,12 +112,12 @@ export default function ProjectTable() {
                     setModal(false)
                     getData()
                 } else {
-                    toast.error("Project name exist. Try again")
+                    toast.error("Only one project can be created.")
                 }
             })
             .catch((error) => {
                 if (error.response && error.response.status === 500) {
-                    toast.error('Internal Server Error')
+                    toast.error('Please add Business Details first.')
                 } else {
                     console.log(error)
                 }

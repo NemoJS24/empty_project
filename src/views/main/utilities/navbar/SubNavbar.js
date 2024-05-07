@@ -16,7 +16,7 @@ export default function SubNavbar({ navTitle }) {
         AllLinks = [{ title: 'Overview', link: '/partners' }, { title: 'FAQ', link: '/partners/faq' }]
         break
       case 'flash-accounts':
-        AllLinks = [{ title: 'Overview', link: '/products/flash-accounts/' }, { title: 'Features', link: '/products/superleadz/features/' }, { title: 'Pricing', link: '/products/flash-accounts/pricing' }, { title: 'FAQ', link: '/products/flash-accounts/faq' }]
+        AllLinks = [{ title: 'Overview', link: '/products/flash-accounts/' }, { title: 'Features', link: '/products/flash-accounts/features/' }, { title: 'Pricing', link: '/products/flash-accounts/pricing' }, { title: 'FAQ', link: '/products/flash-accounts/faq' }]
         break
       default:
         AllLinks = [{ title: 'Overview', link: '/' }]

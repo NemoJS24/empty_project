@@ -6,6 +6,7 @@ import ComTable from '../Components/DataTable/ComTable'
 import { defaultFormatDate, getCurrentOutlet } from '../Validator'
 import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
 import { PermissionProvider } from '../../Helper/Context'
+import { Info } from 'react-feather'
 // import moment from 'moment/moment'
 
 export default function SuperLeadzOffers() {
@@ -122,7 +123,11 @@ export default function SuperLeadzOffers() {
             dataType: 'offer_code'
         },
         {
-            name: 'Status',
+            name: 
+            <p style={{ borderBottom: '0px dotted lightgray', whiteSpace: 'nowrap', paddingRight: '10px' }} className='m-0 h5 position-relative cursor-default'>
+                Status                                    
+                <span className='position-absolute' title={"To activate or deactivate offer/s, please access your Shopify dashboard."} style={{ top: '-10px', right: '-4px', cursor: 'pointer' }}><Info size={12} /></span>
+            </p>,
             cell: row => {
                 // const status = row.is_active ? 'Active' : 'Inactive'
                 // const statusBgColor = row.is_active ? '#dcf6e8' : '#fbe3e4'

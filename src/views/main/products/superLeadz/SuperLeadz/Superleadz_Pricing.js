@@ -73,7 +73,7 @@ export default function Superleadz_Pricing() {
             {
               pricingData.map((data) => (
                 <Col md="5" lg="3" className='  '>
-                  <Price_Card data={data} isFeature='true' />
+                  <Price_Card data={data} isFeature='true' url ='https://apps.shopify.com/superleadz-by-xircls' />
                 </Col>
               ))
             }

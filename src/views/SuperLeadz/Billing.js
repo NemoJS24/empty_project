@@ -241,7 +241,7 @@ const SuperLeadzBilling = () => {
                             <div className='icon d-flex justify-content-between align-items-center mb-1'>
                                 <Eye sixeze="27px" />
                                 <button onClick={() => {
-                                    navigate("/merchant/SuperLeadz/joinus/", {state: billing?.mainData[0]?.plan_id})
+                                    navigate("/merchant/SuperLeadz/joinus/", {state: {plan_id: billing?.mainData[0]?.plan_id, main: billing?.mainData}})
                                 }} className='btn btn-sm btn-success text-white'>Upgrade</button>
                             </div>
                             <div className="d-flex justify-content-between align-items-baseline">

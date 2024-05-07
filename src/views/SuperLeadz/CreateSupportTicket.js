@@ -364,8 +364,8 @@ const CreateSupportTicket = ({ isQuick = false, setBug, data }) => {
                                                         inputId="aria-example-input"
                                                         closeMenuOnSelect={true}
                                                         name="issue"
-                                                        noOptionsMessage={() => "Issues"}
-                                                        placeholder="Issues"
+                                                        noOptionsMessage={() => "Issue"}
+                                                        placeholder="Issue"
                                                         value={issuesList?.filter(option => supportData.issue === option.value)}
                                                         onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                                     />
@@ -376,7 +376,7 @@ const CreateSupportTicket = ({ isQuick = false, setBug, data }) => {
 
                                             <Col md="3" className='mb-1'>
                                                 <div className="form-group">
-                                                    <label htmlFor="">Sub Issues:</label>
+                                                    <label htmlFor="">Sub-Issue:</label>
                                                     <Select
                                                         isMulti = {false}
                                                         options={subIssues}
@@ -384,7 +384,7 @@ const CreateSupportTicket = ({ isQuick = false, setBug, data }) => {
                                                         closeMenuOnSelect={true}
                                                         name="subIssue"
                                                         noOptionsMessage={() => "Sub Issues"}
-                                                        placeholder="Sub Issues"
+                                                        placeholder="Sub-Issue"
                                                         value={subIssues?.filter(option => supportData.subIssue === option.value)}
                                                         onChange={(value, actionMeta) => handleChange(value, actionMeta, false)}
                                                     />

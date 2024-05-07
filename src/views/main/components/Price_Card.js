@@ -4,7 +4,7 @@ import { GoDotFill } from "react-icons/go"
 import { Link } from 'react-router-dom'
 import { FiArrowUpRight } from 'react-icons/fi'
 
-export default function Price_Card({ data, isFeature }) {
+export default function Price_Card({ data, url, isFeature }) {
     return (
         <Card className='shadow-none border'>
             <CardBody className='position-relative d-flex flex-column  justify-content-between ' >
@@ -37,7 +37,7 @@ export default function Price_Card({ data, isFeature }) {
                     </div>
                 </div>
 
-                <a className='mt-3 w-100  btn border-black fs-3  main-btn-dark fw-lig ' style={{ padding: "6px" }} target='_blank' href='https://apps.shopify.com/superleadz-by-xircls'>{data.button}</a>
+                <a className='mt-3 w-100  btn border-black fs-3  main-btn-dark fw-lig ' style={{ padding: "6px" }} target='_blank' href={url}>{data.button}</a>
             </CardBody>
         </Card>
     )
