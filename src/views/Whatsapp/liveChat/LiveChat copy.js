@@ -36,7 +36,6 @@ const LiveChat = () => {
   const [useInputMessage, setInputMessage] = useState('')
   const [users, setUsers] = useState([])
   const [useContactPage, setContactPage] = useState(1)
-  const [useContactCounter, setContactCounter] = useState(1)
   const [filterText, setFilterText] = useState('')
   const [useProjectNo, setProjectNo] = useState('')
   const [dynamicColumnValue, setDynamicColumnValue] = useState(0)
@@ -108,16 +107,13 @@ const LiveChat = () => {
     } else if (type === "files" && storeMedia?.media?.type === "image/jpeg") {
       form_data.append("file", storeMedia.media)
       form_data.append("type", "image")
-      form_data.append("caption", mediaText)
     } else if (type === "files" && storeMedia?.media?.type === "video/mp4") {
       form_data.append("file", storeMedia.media)
       form_data.append("type", "video")
-      form_data.append("caption", mediaText)
     } else if (type === "files" && storeMedia?.media?.type === "application/pdf") {
       form_data.append("file", storeMedia.media)
       form_data.append("filename", storeMedia?.media?.name)
       form_data.append("type", "document")
-      form_data.append("caption", mediaText)
     }
     console.log("storeMedia", storeMedia)
     setStoreMedia({})
@@ -225,8 +221,8 @@ const LiveChat = () => {
         // setUsers(res.data?.messages)
         console.log("213", users)
         console.log("214", res.data?.messages)
-        setUsers(prev => [...prev, ...res.data?.messages])
 
+        setUsers(prev => [...prev, ...res.data?.messages])
         // setProjectNo(res.data?.project_no)
 
       }).catch((err) => {
@@ -240,23 +236,6 @@ const LiveChat = () => {
   //   getAllContacts()
   // }, [useContactPage])
 
-  useEffect(() => {
-    const getAllContacts = () => {
-      const form_data = new FormData()
-      form_data.append("page", 1)
-      form_data.append("size", 10)
-      form_data.append("searchValue", filterText)
-      setContactCounter(prev => prev + 1)
-      postReq("contact_relation", form_data)
-        .then((res) => {
-          setUsers(res.data?.messages)
-        }).catch((err) => {
-          // console.log(err)
-        })
-      }
-    getAllContacts()
-  }, [filterText])
-  
   useEffect(() => {
     webSocketConnectionContacts()
     getAllContacts()
@@ -548,7 +527,7 @@ const LiveChat = () => {
                 <div className='flex-column'>
                   {users.map((ContactData, index) => (
                     <div
-                      key={ContactData.messages_reciever}
+                      key={index}
                       style={{ background: selectedDiv === index ? '#f0f2f5' : '#ffff' }}
                       onClick={() => {
                         handleDivClick(index)
@@ -692,8 +671,42 @@ const LiveChat = () => {
                     return (
 
                       <>
-                        {messageJson &&
+                        {messageJson?.text?.body && (
                           <div key={index} className={`message`} style={{
+                            display: 'flex',
+                            align,
+                            backgroundColor,
+                            flexDirection: 'column',
+                            margin: '10px',
+                            padding: '5px',
+                            borderRadius: '8px',
+                            justifyContent: 'center',
+                            alignSelf: align,
+                            maxWidth: "fit-content"
+                          }}>
+                            <div className='  ' style={{ maxWidth: "500px" }}>
+                              <div className="message-info ps-1 pe-3">
+                                {messageJson?.text?.body}
+                              </div>
+
+                              <div className='d-flex justify-content-end align-items-center ' style={{ gap: "5px", paddingRight: "5px" }}>
+                                <span className='font-small-3 '>
+                                  {messageData?.messages_timestamp_sent && moment(messageData?.messages_timestamp_sent).format("hh:mm")}
+                                </span>
+                                <span className={currentTab?.messages_sender === messageData?.messages_sender ? '' : 'd-none'}>
+                                  {/* <LiaCheckDoubleSolid color='#006aff' /> */}
+                                  {/* {messageData?.messages_timestamp_sent && !messageData?.messages_timestamp_delivered && <LiaCheckSolid color='#7c7c7c' /> }
+                                {messageData?.messages_timestamp_delivered && <LiaCheckDoubleSolid color={messageData?.messages_timestamp_read ? '#006aff' : '#7c7c7c' } /> }
+                                {messageData?.messages_timestamp_failed && <MdErrorOutline color='red' /> } */}
+
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {/* image */}
+                        {messageJson?.image?.link && (
+                          <div key={index} className={`message  border-success`} style={{
                             display: 'flex',
                             align,
                             backgroundColor,
@@ -706,93 +719,105 @@ const LiveChat = () => {
                             maxWidth: "fit-content",
                             maxWidth: "400px"
                           }}>
-                            <div className='  '>
-                              {/* text */}
+                            <div className='  ' >
                               {
-                                messageJson?.text?.body && <div className="message-info ps-1 pe-3">
-                                  {messageJson?.text?.body}
-                                </div>
-                              }
-                              {/* image */}
-                              {
-                                messageJson?.image?.link && <div>
+                                messageJson?.image?.link && <span className={`d-flex justify-content-${align} border-danger `}>
                                   <img src={messageJson?.image?.link} alt="" style={{ width: "100%" }} />
-                                 
-                                 <h5 className='mt-1 ms-1'>
-                                  {messageJson?.image?.caption}
-                                  </h5> 
-
-                                </div>
+                                </span>
                               }
-                              {/* video */}
+
+                            </div>
+                          </div>
+                        )}
+                        {/* video */}
+                        {messageJson?.video?.link && (
+                          <div key={index} className={`message`} style={{
+                            display: 'flex',
+                            align,
+                            flexDirection: 'column',
+                            margin: '10px',
+                            padding: '5px',
+                            borderRadius: '8px',
+                            justifyContent: 'center',
+                            alignSelf: align,
+                            maxWidth: "fit-content"
+                          }}>
+                            <div className='  ' style={{ maxWidth: "500px" }}>
                               {
                                 messageJson?.video?.link && <div className=''>
-                                  <video className='rounded-3  object-fit-cover w-100' controls mute style={{ width: "100%" }} >
+                                  <video className='rounded-3  object-fit-cover w-100' controls mute style={{ width: "70%" }} >
                                     <source
                                       src={messageJson?.video?.link ?? ""}
                                       type="video/mp4"
                                     />
                                     Video not supported.
                                   </video>
-                                  <h5 className='mt-1 ms-1'>
-                                  {messageJson?.video?.caption}
-                                  </h5> 
                                 </div>
                               }
-                              {/* aduio */}
-                              {
-                                messageJson?.audio?.link && <div className='' style={{minWidth:"300px"}}>
-                                  <audio className='rounded-3  object-fit-cover w-100' controls   >
-                                    <source
-                                      src={messageJson?.audio?.link ?? ""}
-                                      type="audio/ogg"
-                                    />
-                                    audio not supported.
-                                  </audio>
-                                  <h5 className='mt-1 ms-1'>
-                                  {messageJson?.audio?.caption}
-                                  </h5> 
-                                </div>
-                              }
-                              {/* document */}
+
+                            </div>
+                          </div>
+                        )}
+
+                        {/* pdf */}
+                        {messageJson?.document?.link && (
+                          <div key={index} className={`message`} style={{
+                            display: 'flex',
+                            align,
+                            backgroundColor,
+                            flexDirection: 'column',
+                            margin: '10px',
+                            padding: '5px',
+                            borderRadius: '8px',
+                            justifyContent: 'center',
+                            alignSelf: align,
+                            maxWidth: "fit-content",
+                            minWidth: "200px"
+                          }}>
+                            <div className='  ' style={{ maxWidth: "500px" }}>
                               {
                                 messageJson?.document?.link && <div className=''>
-                                  <div className='  d-flex justify-content-start  align-items-center  px-2 gap-1' style={{ height: "50px" }}>
+                                  <div className='border-bottom  d-flex justify-content-start  align-items-center py-3 px-2 gap-1' style={{ height: "50px" }}>
                                     <FileText size={30} color='#000' />
                                     <div>{messageJson?.document?.filename ?? ''}</div>
                                     <a href={messageJson?.document?.link} target="_blank">
                                       <LuEye size={20} color='#a9abab' />
                                     </a>
                                   </div>
-                                  <h5 className='mt-1 ms-1'>
-                                  {messageJson?.document?.caption}
-                                  </h5> 
                                 </div>
                               }
-                              {/* template */}
-                              {
-                                messageJson?.name && <div className=''>
-                                  <RenderLiveTemplateUI SingleTemplate={messageJson} />
 
-                                </div>
-                              }
-                              {/* time and tick */}
-                              <div className='d-flex justify-content-end align-items-center mt-1' style={{ gap: "5px", paddingRight: "5px" }}>
+                            </div>
+                          </div>
+                        )}
+
+                        {/*template render  */}
+                        {messageJson?.name && (
+                          <div key={index} className={`message`} style={{
+                            display: 'flex',
+                            align,
+                            backgroundColor,
+                            flexDirection: 'column',
+                            margin: '10px',
+                            justifyContent: 'center',
+                            alignSelf: 'end',
+                            maxWidth: "fit-content"
+                          }}>
+                            <div className='d-flex flex-column justify-content-end' style={{ maxWidth: "500px" }}>
+                              <RenderLiveTemplateUI SingleTemplate={messageJson} />
+                              <div className='d-flex justify-content-end align-items-center ' style={{ gap: "5px", paddingRight: "5px" }}>
                                 <span className='font-small-3 '>
-                                  {messageData?.messages_timestamp_sent && moment(messageData?.messages_timestamp_sent).format("hh:mm")}
+                                  {/* {messageData?.messages_timestamp_sent && moment(messageData?.messages_timestamp_sent).format("hh:mm")} */}
                                 </span>
-
-                                <span className={currentTab?.messages_sender === messageData?.messages_sender ? '' : 'd-none'}>
+                                <span>
                                   {/* <LiaCheckDoubleSolid color='#006aff' /> */}
-                                  {/* {messageData?.messages_timestamp_sent && !messageData?.messages_timestamp_delivered && <LiaCheckSolid color='#7c7c7c' /> }
-                                {messageData?.messages_timestamp_delivered && <LiaCheckDoubleSolid color={messageData?.messages_timestamp_read ? '#006aff' : '#7c7c7c' } /> }
-                                {messageData?.messages_timestamp_failed && <MdErrorOutline color='red' /> } */}
+                                  {/* {messageData?.messages_timestamp_sent && <LiaCheckSolid color='#7c7c7c' /> } */}
 
                                 </span>
                               </div>
                             </div>
                           </div>
-                        }
+                        )}
 
                       </>
                     )
