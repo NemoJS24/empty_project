@@ -1,32 +1,34 @@
 /* eslint-disable no-unused-vars */
 import moment from 'moment/moment'
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { Card, CardBody, Col, Row } from 'reactstrap'
-import { PermissionProvider } from '../../Helper/Context'
-import { SuperLeadzBaseURL, getReq, postReq } from '../../assets/auth/jwtService'
+// import { PermissionProvider } from '../../Helper/Context'
+import { postReq } from '../../assets/auth/jwtService'
 // import { getCurrentOutlet } from '../Validator'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
-import { Edit, Info } from 'react-feather'
-import { defaultFormatDate, getCurrentOutlet } from '../Validator'
+import { Edit, Info, Trash } from 'react-feather'
+import { getCurrentOutlet } from '../Validator'
 // import pixels from "../../assets/images/superLeadz/pixels.png"
 import AdvanceServerSide from '../Components/DataTable/AdvanceServerSide'
 import Swal from 'sweetalert2'
 import toast from 'react-hot-toast'
+import { Link } from 'react-router-dom'
 
 const Campaigns = ({ custom = false, name = "All Campaigns", draft = true, create = true }) => {
-    const { userPermission } = useContext(PermissionProvider)
+    // const { userPermission } = useContext(PermissionProvider)
 
     const [count, setCount] = useState(30)
     const [useTableData, setTableData] = useState([])
     const [modal, setModal] = useState(false)
     const toggle = () => setModal(!modal)
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const outletData = getCurrentOutlet()
 
     const [deleteModal, setDeleteModal] = useState(false)
     const [checkedThemes, setCheckedThemes] = useState([])
 
     const getAllThemes = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
+        setIsLoading(true)
         const form_data = new FormData()
         Object.entries(advanceSearchValue).map(([key, value]) => value && form_data.append(key, value))
         form_data.append("page", currentPage + 1)
@@ -42,6 +44,9 @@ const Campaigns = ({ custom = false, name = "All Campaigns", draft = true, creat
             // Handle errors here
             console.error('Error:', error)
             // toast.error(error.response.data.error)
+        })
+        .finally(() => {
+            setIsLoading(false)
         })
     }
 
@@ -88,6 +93,36 @@ const Campaigns = ({ custom = false, name = "All Campaigns", draft = true, creat
             }
         })
 
+    }
+
+    const deleteCampaign = (id) => {
+        console.log(id)
+        // const form_data = new FormData()
+        // form_data.append('action', "DELETE")
+        // form_data.append('id', id)
+        // postReq('change_campaign_status', form_data)
+        // then((resp) => {
+        //     console.log(resp)
+        // })
+        // .catch((error) => {
+        //     console.log(error)
+        // })
+    }
+
+    const confirmDelete = (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this campagin",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#7367f0",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                deleteCampaign(id)
+            }
+        })
     }
 
     const columns = [
@@ -139,16 +174,15 @@ const Campaigns = ({ custom = false, name = "All Campaigns", draft = true, creat
             name: 'Actions',
             minWidth: '10%',
             cell: (row) => {
-                return (<div className='d-flex gap-'>
-                    {
-                        row.status === "completed" ? <button className='btn' onClick={toggle} ><Edit size={18} /></button> : <button className='btn' onClick={toggle} ><Edit size={18} /></button>
-                    }
-
-                    {/* <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"  />
-                    </div> */}
-
-                </div>
+                return (
+                    <>
+                        <div className='d-flex justify-content-start align-items-center gap-1'>
+                            <Link to={`/merchant/whatsapp/create-campaign/${row?.whatsapp_campaign_type}/${row?.whatsapp_template_id}/${row?.whatsapp_id}`}><Edit size={18} /></Link>
+                            <a className='text-danger d-none' onClick={() => confirmDelete(row?.whatsapp_id)}>
+                                <Trash size={18} />
+                            </a>
+                        </div>
+                    </>
                 )
             },
             isEnable: true

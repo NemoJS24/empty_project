@@ -682,7 +682,7 @@ const Setting = ({ isAdmin = false }) => {
                         <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase`}>Form</span>
                     </div>
 
-                    <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideHeaderNav === "email" ? "text-black active-item" : ""} d-none`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => setSideHeaderNav("email")}>
+                    <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideHeaderNav === "email" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => setSideHeaderNav("email")}>
                         <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
                             <Mail size="15px" />
                         </button>
@@ -1623,14 +1623,24 @@ const Setting = ({ isAdmin = false }) => {
                                                         .then((data) => data.json())
                                                         .then((resp) => {
                                                             if (resp.data) {
-                                                                setCurrObj({ ...currObj, email_settings: { ...resp.data } })
+                                                                const updatedData = {
+                                                                    email_settings: {...resp.data},
+                                                                    selected_email_id: e.value
+                                                                }
+                                                                setCurrObj((preData) => ({
+                                                                    ...preData,
+                                                                    ...updatedData
+                                                                }))
                                                                 setEditorId(e.value)
                                                             }
                                                         })
                                                         .catch((error) => {
                                                             console.log(error)
                                                         })
-                                                }} options={emailTemplate} />
+                                                }} 
+                                                options={emailTemplate} 
+                                                value={emailTemplate?.filter((option) => String(option.value) === String(prevData?.page_1?.selected_email_id))} 
+                                                />
                                             </div>
 
                                             <div className="py-1">

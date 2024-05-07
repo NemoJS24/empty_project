@@ -73,7 +73,7 @@ const Billing = () => {
     <div className="card">
       <div className="card-body">
         <div className="row">
-          <p style={{fontSize: '1.125', fontWeight: '500'}}>Current Plan</p>
+          <p style={{fontSize: '1.125', fontWeight: '500'}}>Plan Name</p>
           <div className="col-6">            
               <div className="d-flex flex-column justify-content-between align-items-start">
                 <div className="v-card-item mb-1">

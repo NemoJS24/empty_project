@@ -11,7 +11,6 @@ import { IoMdArrowRoundForward, IoMdCheckmark } from "react-icons/io"
 import { IoBulbOutline } from "react-icons/io5"
 import { RiUserVoiceLine, RiSpam2Line } from "react-icons/ri"
 import { PiSignatureThin } from "react-icons/pi"
-import featureVideo from "../superLeadz/features/img/featureVideo.gif"
 import optimization from "./imgs/optimization.png"
 import SpamRisk from "./imgs/Spam-risk.png"
 import brand from "./imgs/brand.png"
@@ -72,7 +71,7 @@ export default function FlashAccount_Features() {
                             </h1>
                             <h1 className='text-black fw-bold mt-1'>Post-purchase account creation.</h1>
                             <div className='d-block mt-2' >
-                                <Link to='/merchant/signup' className=' btn  main-btn-blue fs-4 fw-bolder  '>Launch Now</Link>
+                                <a target='_blank' href='https://apps.shopify.com/flash-accounts-by-xircls' className=' btn  main-btn-blue fs-4 fw-bolder  '>Launch Now</a>
                             </div>
                             <Row className='justify-content-start mt-2'>
                                 <Col md="6" className='  '>
@@ -89,7 +88,7 @@ export default function FlashAccount_Features() {
                         </Col>
                         <Col md="6" className='overflow-hidden  p-0 m-0  d-flex justify-content-center align-items-center '>
 
-                            <img className=' rounded-2 border' src={featureVideo} alt="" style={{ width: "440px" }} />
+                            {/* <img className=' rounded-2 border' src={featureVideo} alt="" style={{ width: "440px" }} /> */}
                         </Col>
 
                     </Row>
@@ -159,7 +158,7 @@ export default function FlashAccount_Features() {
             <Row className="justify-content-center mt180 px-2">
                 <Col lg="12" xl="10">
                     {Data2.map((item, index) => (
-                        <div key={index} className="mt-5 d-flex flex-column justify-content-center ">
+                        <div key={index} className="mt-5 d-flex flex-column justify-content-center">
                             <h1 className="main-heading display-4 fw-bolder text-center mt-0 pb-1">
                                 {item.title}
                             </h1>
@@ -171,18 +170,18 @@ export default function FlashAccount_Features() {
                                             <div key={headingIndex}>{heading}</div>
                                         ))
                                     ) : (
-                                        <div className=" d-flex justify-content-center gap-5">
-                                            <div className="d-flex text-black match-height text-start fs-3 ">
+                                        <div className=" d-flex justify-content-center " >
+                                            <div className="d-flex text-black match-height text-start fs-3 " style={{gap:'50px'}}>
                                                 <div className="ms-1">
-                                                    <div className="fw-bolder ms-1"><IoMdCheckmark />{item.h1}</div>
-                                                    <div className="fw-bolder ms-1"><IoMdCheckmark />{item.h2}</div>
+                                                    <div className="fw-bolder ms-1 mb-1"><IoMdCheckmark style={{marginRight: '10px'}} />{item.h1}</div>
+                                                    <div className="fw-bolder ms-1 mb-1"><IoMdCheckmark style={{marginRight: '10px'}} />{item.h2}</div>
                                                 </div>
                                                 <div className="ms-1">
-                                                    <div className="fw-bolder ms-1"><IoMdCheckmark />{item.h3}</div>
-                                                    <div className="fw-bolder ms-1"><IoMdCheckmark />{item.h4}</div>
+                                                    <div className="fw-bolder ms-1 mb-1"><IoMdCheckmark style={{marginRight: '10px'}} />{item.h3}</div>
+                                                    <div className="fw-bolder ms-1 mb-1"><IoMdCheckmark style={{marginRight: '10px'}} />{item.h4}</div>
                                                 </div>
                                                 <div className="ms-1">
-                                                    <div className="fw-bolder ms-1"><IoMdCheckmark />{item.h5}</div>
+                                                    <div className="fw-bolder ms-1 mb-1"><IoMdCheckmark style={{marginRight: '10px'}} />{item.h5}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -203,9 +202,9 @@ export default function FlashAccount_Features() {
                     </h1>
                     <Row className='justify-content-center match-height flex-row-reverse'>
                         <Col md="6" className=' p-0  rounded-2  d-flex justify-content-center  align-items-end align-items-md-center  '>
-                            <img src={brand} alt="" srcSet="" width={350} />
+                            <img src={brand} alt="" srcSet="" width={200} />
                         </Col>
-                        <Col md="6" className='text-end'>
+                        <Col md="6" className='text-end' style={{display: 'flex', justifyContent: 'center'}}>
                             <div>
                                 <h1 className='display-6 main-heading fw-bolder '>Signature Branding.</h1>
                                 <h3 className='fs-3 fw-bold text-black '>All emails to your customers go in your brand name and through your brand’s
@@ -215,9 +214,9 @@ export default function FlashAccount_Features() {
                     </Row>
                     <Row className='justify-content-center mt-5 pt-5 match-height '>
                         <Col md="6" className=' p-0 rounded-2  d-flex justify-content-center  align-items-start align-items-md-center  '>
-                            <img src={SpamRisk} alt="" srcSet="" width={350} />
+                            <img src={SpamRisk} alt="" srcSet="" width={200} />
                         </Col>
-                        <Col md="6" className='d-flex flex-column  gap-3 ps-2  '>
+                        <Col md="6" className='text-left ' style={{display: 'flex', justifyContent: 'center'}}>
                             <div>
                                 <h1 className='display-6 main-heading fw-bolder'>Reduced Spam Risks.</h1>
                                 <h3 className='fs-3 fw-bold text-black '>Email authentication through DNS minimizes the chances of your valuable

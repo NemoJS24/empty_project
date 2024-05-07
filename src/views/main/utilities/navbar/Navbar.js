@@ -15,6 +15,7 @@ import infiniti from "@src/assets/images/website-slide/FrontBase/infinity.png"
 import gift from "@src/assets/images/website-slide/FrontBase/gift.png"
 import workgroup from "@src/assets/images/website-slide/FrontBase/workgroup.png"
 import { getToken } from '../../../../assets/auth/auth'
+import { IoFlashOutline } from "react-icons/io5"
 
 
 export const productList = [
@@ -23,6 +24,12 @@ export const productList = [
     desc: "Lead Generation Pop-ups ",
     logo: <img src={SuperLeadzLogo} alt='SuperLeadz_logo' />,
     link: "/products/superleadz/"
+  },
+  {
+    title: "Flash Accounts",
+    desc: "Post-purchase Account Creation",
+    logo: <IoFlashOutline size={20} color='' className='text-dark' />,
+    link: "/products/flash-accounts/"
   },
   {
     title: "Infiniti",
@@ -42,7 +49,6 @@ export const productList = [
     logo: <TfiTarget size={20} color='' className='text-dark' />,
     link: "/products/sniper/"
   }
-
 ]
 
 export const aboutList = [

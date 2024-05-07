@@ -1,4 +1,4 @@
-import { Circle } from "react-feather"
+import { Circle, MessageSquare } from "react-feather"
 import { DefaultNav } from "./DefualtNav"
 
 export const WhatsappNavigation = [
@@ -37,11 +37,17 @@ export const WhatsappNavigation = [
         navLink: '/merchant/whatsapp/campaigns'
     },
     {
-        id: 'Catalogue',
-        title: 'Catalogue',
-        icon: <Circle size={16} />,
-        navLink: '/merchant/whatsapp/Catalogue/'
+        id: 'LiveChat',
+        title: 'LiveChat',
+        icon: <MessageSquare size={16} />,
+        navLink: '/merchant/whatsapp/LiveChat'
     },
+    // {
+    //     id: 'Catalogue',
+    //     title: 'Catalogue',
+    //     icon: <Circle size={16} />,
+    //     navLink: '/merchant/whatsapp/Catalogue/'
+    // },
     // {
     //     id: 'businessCreation',
     //     title: 'Business Creation',

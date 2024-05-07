@@ -7,23 +7,37 @@ export default function Flash_Pricing() {
   const pricingData = [
     {
       head: "Free",
-      value: "0",
-      subValue: "$00.00/year",
+      value: "Free",
+      subValue: "",
       button: "Get Started",
-      items: ["Upto 10 accounts & emails per month"]
+      items: ["All Features", "Up to 100 transactions"]
+    },
+    {
+      head: "Lite",
+      value: "$7.49",
+      subValue: "$80.99/year (save 10%)",
+      button: "Buy Now",
+      items: ["All Features", "Up to 1,000 transactions"]
     },
     {
       head: "Grow",
-      value: "10",
+      value: "14.99",
       subValue: "$80.99/year (save 10%)",
       button: "Buy Now",
-      items: ["Unlimited accounts & emails"]
+      items: ["All Features", "Up to 2,500 transactions"]
+    },
+    {
+      head: "Pro",
+      value: "$49.99",
+      subValue: "$80.99/year (save 10%)",
+      button: "Buy Now",
+      items: ["All Features", "Up to 10,000 transactions"]
     }
 
   ]
 
   return (
-    <div style={{ background: "#fff" }} className=' p-0 px-3 px-md-0 '>
+    <div style={{ background: "#fff" }} className=' p-0 px-3 px-md-0 mt160 '>
         {/* <Navbar position={'notFixed'} /> */}
         {/* <SubNavbar navTitle={'superLeadz'} /> */}
 
@@ -40,7 +54,7 @@ export default function Flash_Pricing() {
               {
                 pricingData.map((data) => (
                   <Col md="5" lg="3" className='  '>
-                    <Price_Card data={data}  />
+                    <Price_Card data={data}  url ='https://apps.shopify.com/flash-accounts-by-xircls'/>
                   </Col>
                 ))
               }

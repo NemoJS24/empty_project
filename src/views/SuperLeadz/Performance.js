@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from "react"
 import ComTable from "../Components/DataTable/ComTable"
 import CardCom from "../Components/SuperLeadz/CardCom"
-import { Col, Input } from "reactstrap"
+import { Card, CardBody, Col, Input } from "reactstrap"
 import moment from "moment/moment"
 import { defaultFormatDate, getCurrentOutlet } from "../Validator"
 import { SuperLeadzBaseURL, baseURL } from "../../assets/auth/jwtService"
 import Spinner from "../Components/DataTable/Spinner"
 import { PermissionProvider } from "../../Helper/Context"
+import { Info } from "react-feather"
 
 export default function SuperLeadzPerformance() {
     const { userPermission } = useContext(PermissionProvider)
@@ -45,25 +46,25 @@ export default function SuperLeadzPerformance() {
             method: "POST",
             body: form_data
         })
-        .then((resp) => resp.json())
-        .then((data) => {
-            console.log(data)
-            const subArray = new Array()
-            const refArray = new Array()
-            data?.cust_hour_wise_visit?.map(ele => {
-                if (!refArray.includes(ele.visit_date)) {
-                    subArray.push({ date: ele.visit_date, data: [{ x: ele.hour, y: ele.cust_visit }] })
-                    refArray.push(ele.visit_date)
-                } else {
-                    subArray[refArray.indexOf(ele.visit_date)].data.push({ x: ele.hour, y: ele.cust_visit })
-                }
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log(data)
+                const subArray = new Array()
+                const refArray = new Array()
+                data?.cust_hour_wise_visit?.map(ele => {
+                    if (!refArray.includes(ele.visit_date)) {
+                        subArray.push({ date: ele.visit_date, data: [{ x: ele.hour, y: ele.cust_visit }] })
+                        refArray.push(ele.visit_date)
+                    } else {
+                        subArray[refArray.indexOf(ele.visit_date)].data.push({ x: ele.hour, y: ele.cust_visit })
+                    }
+                })
+                // setHeatMapData(subArray)
+                console.log("arrays", subArray, refArray)
             })
-            // setHeatMapData(subArray)
-            console.log("arrays", subArray, refArray)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     useEffect(() => {
@@ -79,26 +80,26 @@ export default function SuperLeadzPerformance() {
             method: "POST",
             body: form_data
         })
-        .then((resp) => resp.json())
-        .then((data) => {
-            const useableData = data.data.codeDiscountNodes.nodes
-            console.log(data)
-            setTableData(useableData)
-            setIsLoading(false)
+            .then((resp) => resp.json())
+            .then((data) => {
+                const useableData = data.data.codeDiscountNodes.nodes
+                console.log(data)
+                setTableData(useableData)
+                setIsLoading(false)
 
-            // let calcRed = 0
-            // let calcRev = 0
-            // useableData.map((ele) => {
-            //     calcRed = calcRed + (ele?.codeDiscount?.asyncUsageCount ? Number(ele?.codeDiscount?.asyncUsageCount) : 0)
-            //     calcRev = calcRev + (ele?.codeDiscount?.totalSales?.amount ? Number(ele?.codeDiscount?.totalSales?.amount) : 0)
-            // })
-            // setRedemption(calcRed)
-            // setRevenue(calcRev)
-        })
-        .catch((error) => {
-            console.log(error)
-            setIsLoading(false)
-        })
+                // let calcRed = 0
+                // let calcRev = 0
+                // useableData.map((ele) => {
+                //     calcRed = calcRed + (ele?.codeDiscount?.asyncUsageCount ? Number(ele?.codeDiscount?.asyncUsageCount) : 0)
+                //     calcRev = calcRev + (ele?.codeDiscount?.totalSales?.amount ? Number(ele?.codeDiscount?.totalSales?.amount) : 0)
+                // })
+                // setRedemption(calcRed)
+                // setRevenue(calcRev)
+            })
+            .catch((error) => {
+                console.log(error)
+                setIsLoading(false)
+            })
     }
 
     const getData = () => {
@@ -110,35 +111,35 @@ export default function SuperLeadzPerformance() {
             method: "POST",
             body: form_data
         })
-        .then((data) => data.json())
-        .then((resp) => {
-            console.log(resp, "pppp")
-            const updateData = {
-                activeOffers: resp?.active_offers,
-                redemption: resp?.redemptions,
-                revenue: resp?.revenue,
-                isOfferData: true
-            }
+            .then((data) => data.json())
+            .then((resp) => {
+                console.log(resp, "pppp")
+                const updateData = {
+                    activeOffers: resp?.active_offers,
+                    redemption: resp?.redemptions,
+                    revenue: resp?.revenue,
+                    isOfferData: true
+                }
 
-            setOfferData((preData) => ({
-                ...preData,
-                ...updateData
-            }))
-        })
-        .catch((error) => {
-            console.log(error)
-            const updateData = {
-                activeOffers: "",
-                redemption: "",
-                revenue: "",
-                isOfferData: true
-            }
+                setOfferData((preData) => ({
+                    ...preData,
+                    ...updateData
+                }))
+            })
+            .catch((error) => {
+                console.log(error)
+                const updateData = {
+                    activeOffers: "",
+                    redemption: "",
+                    revenue: "",
+                    isOfferData: true
+                }
 
-            setOfferData((preData) => ({
-                ...preData,
-                ...updateData
-            }))
-        })
+                setOfferData((preData) => ({
+                    ...preData,
+                    ...updateData
+                }))
+            })
 
     }
 
@@ -157,18 +158,18 @@ export default function SuperLeadzPerformance() {
         if (value.length) {
             updatedData = tableData.filter((item) => {
                 const startsWith =
-                item?.codeDiscount?.title?.toString().toLowerCase().startsWith(value.toLowerCase()) ||
-                item?.codeDiscount?.asyncUsageCount?.toString().toLowerCase().startsWith(value.toLowerCase())
-      
+                    item?.codeDiscount?.title?.toString().toLowerCase().startsWith(value.toLowerCase()) ||
+                    item?.codeDiscount?.asyncUsageCount?.toString().toLowerCase().startsWith(value.toLowerCase())
+
                 const includes =
                     item?.codeDiscount?.title?.toString().toLowerCase().includes(value.toLowerCase()) ||
                     item?.codeDiscount?.asyncUsageCount?.toString().toLowerCase().includes(value.toLowerCase())
 
-                    if (startsWith) {
-                        return startsWith
-                    } else if (!startsWith && includes) {
-                        return includes
-                    } else return null
+                if (startsWith) {
+                    return startsWith
+                } else if (!startsWith && includes) {
+                    return includes
+                } else return null
             })
 
             setFilteredData(updatedData)
@@ -177,19 +178,19 @@ export default function SuperLeadzPerformance() {
     }
     const defferContent = <>
         <Col className='d-flex align-items-center justify-content-center' md='4' sm='12'>
-        <h4 className='m-0'>Offer Performance</h4>
+            <h4 className='m-0'>Offer Performance</h4>
         </Col>
         <Col className='d-flex align-items-center justify-content-end' md='4' sm='12'>
-        <Input
-            className='dataTable-filter form-control ms-1'
-            style={{ width: `180px`, height: `2.714rem` }}
-            type='text'
-            bsSize='sm'
-            id='search-input-1'
-            placeholder='Search...'
-            value={searchValue}
-            onChange={handleFilter}
-        />
+            <Input
+                className='dataTable-filter form-control ms-1'
+                style={{ width: `180px`, height: `2.714rem` }}
+                type='text'
+                bsSize='sm'
+                id='search-input-1'
+                placeholder='Search...'
+                value={searchValue}
+                onChange={handleFilter}
+            />
         </Col>
     </>
     const columns = [
@@ -205,7 +206,7 @@ export default function SuperLeadzPerformance() {
             selector: (row) => row.codeDiscount.title
         },
         {
-            name: "Redemptions",
+            name: "Redemption",
             selector: (row) => row.codeDiscount.asyncUsageCount
         },
         // {
@@ -216,7 +217,12 @@ export default function SuperLeadzPerformance() {
         //     }
         // },
         {
-            name: "Status",
+            name: <>
+                <p style={{ borderBottom: '0px dotted lightgray', whiteSpace: 'nowrap', paddingRight: '10px' }} className='m-0 h5 position-relative cursor-default'>
+                    Status
+                    <span className='position-absolute' title={"To activate or deactivate offer/s, please access your Shopify dashboard."} style={{ top: '-10px', right: '-4px', cursor: 'pointer' }}><Info size={12} /></span>
+                </p>
+            </>,
             selector: (row) => {
                 return (
                     <>
@@ -254,9 +260,13 @@ export default function SuperLeadzPerformance() {
             }
         }
     ]
-
     return (
         <>
+            <Card>
+                <CardBody className='d-flex justify-content-between align-items-center'>
+                    <h4 className='mb-0'>Cumulative Offer Report</h4>
+                </CardBody>
+            </Card>
             <div className="row match-height">
                 <div className="col-4">
                     <CardCom

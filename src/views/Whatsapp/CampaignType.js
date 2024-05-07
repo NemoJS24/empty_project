@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ownUrl } from '../Validator'
 
 export const CampaignType = () => {
 
@@ -7,23 +8,23 @@ export const CampaignType = () => {
 
   const campaignTypeCard = [
     {
-      img: 'https://cdn.icon-icons.com/icons2/1875/PNG/512/broadcast_120187.png',
+      img: `${ownUrl}/images/dashboard/broadcast_campaign.png`,
       description: "Send messages to multiple contacts simultaneously.",
       name: 'Broadcast',
       slug: 'broadcast'
     },
     {
-      img: 'https://cdn.icon-icons.com/icons2/1875/PNG/512/broadcast_120187.png',
+      img: `${ownUrl}/images/dashboard/message_campaign.png`,
       description: "Trigger predefined messages for specific customer actions or events.",
       name: 'Automated Message',
       slug: 'automated-message'
-    },
-    {
-      img: 'https://cdn.icon-icons.com/icons2/1875/PNG/512/broadcast_120187.png',
-      description: "Design automated messaging paths for targeted engagement.",
-      name: 'Automated Journeys',
-      slug: 'automated-journey'
     }
+    // {
+    //   img: `${ownUrl}/images/dashboard/journey_campaign.png`,
+    //   description: "Design automated messaging paths for targeted engagement.",
+    //   name: 'Automated Journeys',
+    //   slug: 'automated-journey'
+    // }
   ]
 
   const navigate = useNavigate()

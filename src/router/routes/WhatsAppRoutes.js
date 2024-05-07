@@ -109,5 +109,9 @@ export const WhatsAppRoutes = [
     {
         path: '/merchant/whatsapp/create-campaign/:campaign_type/:temp_id/',
         element: <CreateCampaign />
+    },
+    {
+        path: '/merchant/whatsapp/create-campaign/:campaign_type/:temp_id/:campaign_id',
+        element: <CreateCampaign />
     }
 ]

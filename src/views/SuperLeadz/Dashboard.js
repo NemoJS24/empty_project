@@ -731,7 +731,7 @@ function SuperLeadzDashboard() {
                 </div>
 
                 <div className='col-md-6 cursor-pointer'>
-                    <CardCom id={"LeadsConvertedSuperLeadz"} icon={<SiConvertio size={'25px'} />} title="Leads Converted" data={!isLoading ? performanceData.leadConverted : <Spinner size={'25px'} />} info={`Total unique leads that successfully converted to paying customers`}/>
+                    <CardCom id={"LeadsConvertedSuperLeadz"} icon={<SiConvertio size={'25px'} />} title="Leads Converted" data={!isLoading ? performanceData.leadConverted : <Spinner size={'25px'} />} info={`Total leads that successfully converted to paying customers`}/>
                 </div>
 
                 <div className='col-md-6 cursor-default'>

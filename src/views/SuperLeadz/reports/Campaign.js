@@ -199,7 +199,7 @@ const Campaign = () => {
         <>
             <Card>
                 <CardBody className='d-flex justify-content-between align-items-center'>
-                    <h4 className='mb-0'>Campaign Reports</h4>
+                    <h4 className='mb-0'>Cumulative Campaign Report</h4>
                     <div className='d-flex gap-1'>
                         <select className='form-control' style={{ width: '120px' }} onChange={(e) => setSetFilterType(e.target.value)}>
                             {

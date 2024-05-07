@@ -115,7 +115,7 @@ export default function TemplateDashboard() {
          .catch(error => {
             // Handle errors here
             console.error('Error:', error)
-            toast.error("Server error")
+            toast.error("Please complete the onboarding process to create a template")
          })
          .finally(() => {
             setLoader(false)
@@ -402,7 +402,7 @@ export default function TemplateDashboard() {
                                                             </div>
                                                          </div>
                                                          {/* <button className='btn btn-primary px-3 send-btn' onClick={() => getCurrentTemplate(SingleTemplate.id, 'modal2')} >Start Campaign <Send id="send-icon" size={16} style={{ marginLeft: "5px" }} /></button> */}
-                                                         <Link to={params.get('campagin_type') === "broadcast" ? `/merchant/whatsapp/campaign/${SingleTemplate.id}` : `/merchant/whatsapp/create-campaign/${params.get('campagin_type')}/${SingleTemplate.id}`} className='btn btn-primary px-3 send-btn' >Use Template <Send id="send-icon" size={16} style={{ marginLeft: "5px" }} /></Link>
+                                                         <Link to={params.get('campagin_type') ? params.get('campagin_type') === "broadcast" ? `/merchant/whatsapp/campaign/${SingleTemplate.id}` : `/merchant/whatsapp/create-campaign/${params.get('campagin_type')}/${SingleTemplate.id}` : `/merchant/whatsapp/campaign/${SingleTemplate.id}`} className='btn btn-primary px-3 send-btn' >Use Template <Send id="send-icon" size={16} style={{ marginLeft: "5px" }} /></Link>
                                                       </>
                                                    }
                                                    {

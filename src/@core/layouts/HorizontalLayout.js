@@ -228,7 +228,7 @@ const HorizontalLayout = props => {
           <span style={{fontWeight: '400', fontSize: '12px'}}>Report a bug or leave your feedback and we'll get working on it!</span>
         </ModalHeader>
         <ModalBody>
-          <CreateSupportTicket isQuick={true} setBug={setBug} data={{priority: "High", issue: 23, subIssue: 24}} />
+          <CreateSupportTicket isQuick={true} setBug={setBug} data={{priority: "High", issue: 21, subIssue: 27}} />
         </ModalBody>
       </Modal>
 

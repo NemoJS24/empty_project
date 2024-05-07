@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import { FaArrowTrendDown } from 'react-icons/fa6'
-import { Col, Container, Row } from 'reactstrap'
+import { CardBody, Card, Col, Container, Row } from 'reactstrap'
 import CardLeft from '@src/views/main/components/CardLeft'
+import FaqComponent from '@src/views/main/components/Faq/FaqComponent'
 
 // imgs
 import fromImg from './imgs/form.png'
@@ -16,8 +17,13 @@ import discImg from './imgs/Data-driven.png'
 import discImg2 from './imgs/Personalized-engagement.png'
 import discImg3 from './imgs/Brand-advocacy.png'
 import Footer from '../../utilities/footer/Footer'
-import FaqFlash from './FaqFlash'
+import FaqFlash, { faqData } from './FaqFlash'
 import Faqcomponent from './Faqcomponent'
+import Purpose from './imgs/Purpose.png'
+import Strategy from './imgs/Strategy.png'
+import Tone from './imgs/Tone.png'
+import { Link } from 'react-router-dom'
+import { IoMdArrowRoundForward } from 'react-icons/io'
 export default function FlashAccount() {
 
 
@@ -29,7 +35,7 @@ export default function FlashAccount() {
             desc: "Signed-up customers who receive strong after-sales support and personalized offers are more likely to buy again."
         },
         {
-            imgSrc: personalImg,    
+            imgSrc: personalImg,
             title: "First step to loyalty",
             desc: "Regular communication fosters a deeper bond with your brand among registered users."
         },
@@ -52,8 +58,9 @@ export default function FlashAccount() {
             imgSrc: discImg3,
             title: "Brand advocacy",
             desc: "By encouraging registered customers to refer friends, leave reviews etc., you cultivate brand ambassadors who help expand customer reach."
-        }   
+        }
     ]
+
     return (
         <div >
             <div fluid='sm' className='mt190' >
@@ -64,7 +71,7 @@ export default function FlashAccount() {
                                 <div className='  text-md-start '>
                                     <h3 className='fs-3 fw-bolder  text-dark '>ACCOUNT CREATION</h3>
                                     <h1 className='display-1 lh-83 text-start main-heading fw-bolder'>
-                                    Convert Guest Customers into Registered Users.
+                                        Convert Guest Customers into Registered Users.
                                     </h1>
 
                                     <h1 className=' text-black  mt-1' >Effortlessly build your customer base with
@@ -72,7 +79,7 @@ export default function FlashAccount() {
                                         a discreet account creation prompt on your store's Thank You page.
                                     </h1>
                                     <div className=' d-flex  justify-content-start align-items-center gap-1  mt-2' >
-                                        <h3 className=' btn  main-btn-blue fs-3 fw-lig '>Dummy button</h3>
+                                    <a target='_blank' href='https://apps.shopify.com/flash-accounts-by-xircls' className='btn  main-btn-blue fs-3'>Install on Shopify</a>
                                         {/* <Link to="/contact-us" className="fs-3 text-primary"> Schedule a demo<BsArrowRight /></Link> */}
                                     </div>
                                 </div>
@@ -81,9 +88,10 @@ export default function FlashAccount() {
                                 <img src={gif1} alt='...' style={{
                                     width: '680px',
                                     height: '90%',
+                                    display: 'none',
                                     '@media (max-width: 600px)': {
-                                    width: '50%',
-                                    height: 'auto'
+                                        width: '50%',
+                                        height: 'auto'
                                     }
                                 }} />
 
@@ -91,27 +99,6 @@ export default function FlashAccount() {
                         </Row>
                     </Col>
                 </Row>
-            </div>
-            <div className='mt240'>
-                <h1 className=' text-center display-2 lh-83 text-start main-heading fw-bolder'>
-                Stop Losing Valuable First-Visit Buyers.
-                </h1>
-                {/* <Row className='justify-content-center px-2 pt-3 pb-3 gap-2' >
-                    <Col xs="10" md="5" className='text-center  rounded  ' >
-                        <h1 className=' fs- text-black px-2 pt-0 pb-2' >Encouraging sign-ups isn't just a transactional step; it's an investment in the
-                            long-term success of your business.</h1>
-                    </Col>
-                    <Col xs="10" md="5" className='text-center  rounded  ' >
-
-                        <h1 className=' fs- text-black px-2 pt-0 pb-2' >A growing community of engaged users creates a foundation that withstands
-                            market changes and positions your brand for sustained growth.</h1>
-                    </Col>
-
-                </Row> */}
-                 <h1 className='text-center' style={{paddingRight:"18%", paddingLeft:"18%"}}>
-                Shoppers who buy on their first visit already display significant trust and interest that can grow into long-term loyalty, especially when they're in your customer database.
-                </h1>
-            </div>
 
             <Row className=" justify-content-center mt180 ">
                 <Col lg="10" xs="10">
@@ -152,7 +139,7 @@ export default function FlashAccount() {
                     </Row>
                 </Col>
             </Row>
-            
+
             <div className='mt180'>
                 <h1 className=' text-center display-2 lh-83 text-start main-heading fw-bolder'>
                     Future-proof your revenue growth.
@@ -169,90 +156,90 @@ export default function FlashAccount() {
                     </Col>
 
                 </Row>
-               
             </div>
 
-            <div className='section5 d-flex justify-content-center align-items-center flex-wrap mt180'  style={{ background: "#f2f2f2" }}>
-                    <Row className=' justify-content-center'>
-                        <Col md='10' className='  d-flex justify-content-center flex-column align-items-center p-5' >
-                            <div className=' text-center text-sm-start ' >
-                                <h3 className='display-3  main-heading fw-bolder ' >Ready-Made Strategies & Brand Voice Selection</h3>
-                                <Row className="   justify-content-center mt-3">
-                                    <Col lg='6' className=" P">
-                                        <h3 className='display-5 fw-bolder text-black ' > Don't know where to start? </h3>
-                                    </Col>
-                                    <Col lg='6' className=" ">
-                                        <h3 className='display-6 fw-lig text-black ' >We have you covered. Benefit from ready-made
-                                            strategies to enhance user engagement and select a brand voice that
-                                            resonates with your audience.</h3>
-                                    </Col>
-                                </Row>
+            <div className='section5 d-flex justify-content-center align-items-center flex-wrap mt180' style={{ background: "#f2f2f2" }}>
+                <Row className=' justify-content-center' style={{position: 'relative'}}>
+                    <Col md='10' className='  d-flex justify-content-center flex-column align-items-center p-5' >
+                        <div className=' text-center text-sm-start ' >
+                            <h3 className='display-3  main-heading fw-bolder ' >Ready-Made Strategies & Brand Voice Selection</h3>
+                            <Row className="   justify-content-center mt-3">
+                                <Col lg='6' className=" P">
+                                    <h3 className='display-5 fw-bolder text-black ' > Don't know where to start? </h3>
+                                </Col>
+                                <Col lg='6' className=" ">
+                                    <h3 className='display-6 fw-lig text-black ' >We have you covered. Benefit from ready-made
+                                        strategies to enhance user engagement and select a brand voice that
+                                        resonates with your audience.</h3>
+                                </Col>
+                            </Row>
 
-                            </div>
+                        </div>
+                        <a href='https://apps.shopify.com/flash-accounts-by-xircls' target='_blank' className='m-0 fs-4 fw-bolder p-0 text-primary' style={{position: 'absolute', bottom: '20px', right: '40px'}}>
+                            Try for Free &nbsp;
+                            <IoMdArrowRoundForward />
+                        </a>
+                    </Col>
+                </Row>
+            </div>
+            <div className='mt180'>
+                <Card style={{ border: '0px' }}>
+                    <CardBody>
+                        <Row className='d-flex justify-content-center pt-3 pb-3 ' >
+                            <h1 className=' text-center display-2 lh-83 text-start main-heading fw-bolder'>
+                                Diverse strategies for every kind of customer.
+                            </h1>
+                            <h1 className=' fs- text-black px-2 pt-0 pb-2 text-center'>Personalized for your brand identity.</h1>
+                            <Col xs="10" md="3" className='text-center pt-1 rounded' >
+                                <img src={Purpose} className=' rounded-4 shadow' alt="" width={300} />
+                            </Col>
+                            <Col xs="10" md="3" className='text-center pt-1 rounded' >
+                                <img src={Strategy} className=' rounded-4 shadow' alt="" width={300} />
+                            </Col>
+                            <Col xs="10" md="3" className='text-center pt-1 rounded' >
+                                <img src={Tone} className=' rounded-4 shadow' alt="" width={300} />
+                            </Col>
+                        </Row>
+                    </CardBody>
+                </Card>
 
-                        </Col>
-                    </Row>
             </div>
             <div className='mt180'>
                 <h1 className=' text-center display-2 lh-83 text-start main-heading fw-bolder'>
-                Diverse strategies for every kind of customer.
+                    Stop Losing Valuable First-Visit Buyers.
                 </h1>
-                <Row className='justify-content-center px-2 pt-3 pb-3 gap-2' >
-                    <h1 className=' fs- text-black px-2 pt-0 pb-2 text-center'>Personalized for your brand identity.</h1>
+                {/* <Row className='justify-content-center px-2 pt-3 pb-3 gap-2' >
                     <Col xs="10" md="5" className='text-center  rounded  ' >
-                        <h1 className="text-black fw-bolder fs- text-center">Strategies</h1>
-                        <ul className='mt-3'>
-                            <li><h1 className=' fs- text-black px-2 pt-0 pb-2' >Newsletter Subscription</h1></li>
-                            <li><h1 className=' fs- text-black px-2 pt-0 pb-2' >VIP Membership</h1></li>
-                            <li><h1 className=' fs- text-black px-2 pt-0 pb-2' >Birthday Incentives</h1></li>
-                            <li><h1 className=' fs- text-black px-2 pt-0 pb-2' >Birthday Incentives</h1></li>
-                            <h1 className=' fs- text-black px-2 pt-0 pb-2 float-end mt-5 bottom-0' >more...</h1>
-                        </ul>
+                        <h1 className=' fs- text-black px-2 pt-0 pb-2' >Encouraging sign-ups isn't just a transactional step; it's an investment in the
+                            long-term success of your business.</h1>
                     </Col>
                     <Col xs="10" md="5" className='text-center  rounded  ' >
-                        <h1 className="text-black fw-bolder fs- text-center">Brand Voice</h1>
-                        <ul className='mt-3'>
-                            <li><h1 className=' fs- text-black px-2 pt-0 pb-2' >Direct</h1></li>
-                            <li><h1 className=' fs- text-black px-2 pt-0 pb-2' >Casual/Chatty</h1></li>
-                            <li><h1 className=' fs- text-black px-2 pt-0 pb-2' >Sophisticated</h1></li>
-                            <li><h1 className=' fs- text-black px-2 pt-0 pb-2' >Urgent</h1></li>
-                            <li><h1 className=' fs- text-black px-2 pt-0 pb-2' >Prescriptive</h1></li>
-                            <h1 className=' fs- text-black px-2 pt-0 pb-2 float-end ' >more...</h1>
-                        </ul>
+
+                        <h1 className=' fs- text-black px-2 pt-0 pb-2' >A growing community of engaged users creates a foundation that withstands
+                            market changes and positions your brand for sustained growth.</h1>
                     </Col>
 
-                </Row>
-                
-               
+                </Row> */}
+                <h1 className='text-center' style={{ paddingRight: "18%", paddingLeft: "18%" }}>
+                    Shoppers who buy on their first visit already display significant trust and interest that can grow into long-term loyalty, especially when they're in your customer database.
+                </h1>
             </div>
-            <div style={{backgroundColor:"#000"}} className="py-3">
-                <Faqcomponent />
+            </div>
+            <Container fluid='sm' className='mt180' style={{ background: '#fff', borderBottom: '20px solid #fff' }}>
+                    <Row className='mt180 justify-content-center'>
+                        <Col xs="11" md="11" className='text-center' >
+                            <div className='' style={{ background: '#fff' }}>
+                                <h1 className='text-center display-2 lh-83 text-start main-heading fw-bolder '>Go live in minutes</h1>
+                                <Link to='/merchant/signup' className=' btn main-btn-blue fs-4 mt-1 mb-1 fw-lig'>Get started for free</Link>
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
+            <div className='pt-3 mt180'>
+                <FaqComponent data={faqData} name='partner' theme="theme-black" />
             </div>
 
-            {/* <Row className="justify-content-center mt180 align-items-center    " >
-                <Col lg='11' xs='10'>
-                    <Container fluid='sm' className='p-0 border rounded-2 py-3'>
-
-                        <Row className="   align-items-center justify-content-center">
-                            <Col lg='5' className="d-flex align-items-start justify-content-center ">
-                                <img src={demoImg} alt="" srcSet="" width={350} />
-                            </Col>
-                            <Col lg='7' className=" ">
-                                <h1 className="display-3 main-heading  fw-bolder ">
-                                    Second Shot Sign-ups
-                                </h1>
-                                <h2 className="text-black fs-2 fw-lig mt-1">
-                                    A second shot at guest customers who bounce off without engaging with the
-                                    Flash Accounts widget on the Thank You page. Email reminder scheduling and
-                                    engagement tracking.</h2>
-
-                            </Col>
-                        </Row>
-                    </Container>
-                </Col>
-
-            </Row> */}
-            <hr className='mt100' />
+            {/* <hr className='mt100' /> */}
             <Footer />
 
         </div>
