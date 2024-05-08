@@ -3,7 +3,7 @@ import moment from 'moment'
 import { useEffect, useRef, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Modal from 'react-bootstrap/Modal'
-import { ChevronLeft, ChevronRight, File, FileText, Image, Plus, Send, Sliders, Video } from 'react-feather'
+import { ChevronLeft, ChevronRight, File, FileText, Image, Plus, Send, Sliders, Users, Video } from 'react-feather'
 import { BsReply } from 'react-icons/bs'
 import { FaEllipsisV, FaSearch, FaSortAmountDown } from "react-icons/fa"
 import { HiOutlineTemplate } from "react-icons/hi"
@@ -30,6 +30,8 @@ const LiveChat = () => {
   const [useMessageData, setMessageData] = useState([])
   const [useMessageCounter, setMessageCounter] = useState(0)
   const [useProfileDetails, setProfileDetails] = useState("")
+  const [useSortBy, setSortBy] = useState("")
+
   // console.log("useProfileDetails", useProfileDetails)
 
   const [selectedDiv, setSelectedDiv] = useState(0)
@@ -216,18 +218,35 @@ const LiveChat = () => {
 
   // get all contacts
   const getAllContacts = () => {
+    console.log("contacts load =============")
     const form_data = new FormData()
     form_data.append("page", useContactPage)
     form_data.append("size", 10)
-    form_data.append("searchValue", '')
+    form_data.append("searchValue", filterText)
+    form_data.append("type", useSortBy)
     postReq("contact_relation", form_data)
       .then((res) => {
         // setUsers(res.data?.messages)
         console.log("213", users)
         console.log("214", res.data?.messages)
+        // setUsers(res.data?.messages)
         setUsers(prev => [...prev, ...res.data?.messages])
+        // setContactCounter(prev => prev + 1)
 
-        // setProjectNo(res.data?.project_no)
+      }).catch((err) => {
+        // console.log(err)
+      })
+  }
+  const filterAllContacts = (sortby) => {
+    console.log("contacts sortby =============", sortby)
+    const form_data = new FormData()
+    form_data.append("page", 1)
+    form_data.append("size", 10)
+    form_data.append("searchValue", filterText)
+    form_data.append("type", sortby)
+    postReq("contact_relation", form_data)
+      .then((res) => {
+        setUsers(res.data?.messages)
 
       }).catch((err) => {
         // console.log(err)
@@ -240,27 +259,51 @@ const LiveChat = () => {
   //   getAllContacts()
   // }, [useContactPage])
 
+  // useEffect(() => {
+  //   console.log("useeffrct runnnnnn")
+
+  //     const form_data = new FormData()
+  //     form_data.append("page", 1)
+  //     form_data.append("size", 10)
+  //     form_data.append("searchValue", filterText)
+  //     postReq("contact_relation", form_data)
+  //     .then((res) => {
+  //       setUsers(res.data?.messages)
+  //       setContactCounter(prev => prev + 1)
+  //       }).catch((err) => {
+  //         // console.log(err)
+  //       })
+
+  // }, [filterText])
+
   useEffect(() => {
-    const getAllContacts = () => {
-      const form_data = new FormData()
-      form_data.append("page", 1)
-      form_data.append("size", 10)
-      form_data.append("searchValue", filterText)
-      setContactCounter(prev => prev + 1)
-      postReq("contact_relation", form_data)
-        .then((res) => {
-          setUsers(res.data?.messages)
-        }).catch((err) => {
-          // console.log(err)
-        })
-      }
-    getAllContacts()
-  }, [filterText])
-  
-  useEffect(() => {
+    console.log("================== run contacts main useeffect")
     webSocketConnectionContacts()
     getAllContacts()
   }, [useContactPage])
+
+  // useEffect(() => {
+  //   console.log("================== run contacts textfilter && useSortBy")
+  //   const form_data = new FormData()
+  //   form_data.append("page", useContactPage)
+  //   form_data.append("size", 10)
+  //   form_data.append("searchValue", filterText)
+  //   form_data.append("type", useSortBy)
+  //   postReq("contact_relation", form_data)
+  //     .then((res) => {
+  //       // setUsers(res.data?.messages)
+  //       console.log("213", users)
+  //       console.log("214", res.data?.messages)
+  //       setUsers(res.data?.messages)
+  //       // setUsers(prev => [...prev, ...res.data?.messages])
+  //       setContactCounter(prev => prev + 1)
+
+  //       // setProjectNo(res.data?.project_no)
+
+  //     }).catch((err) => {
+  //       // console.log(err)
+  //     })
+  // }, [filterText, useSortBy])
 
   useEffect(() => { // when select number
     getAllMessages()
@@ -464,10 +507,11 @@ const LiveChat = () => {
               </div>
               <div className='m-1 d-flex justify-content-center align-items-center ' style={{ borderRadius: "5px" }}>
                 <InputGroup >
-                  <InputGroupText color='transparent' style={{ border: "0", background: "#f0f2f5" }}>
+                  <InputGroupText className='opacity-0' color='transparent' style={{ border: "0", background: "#f0f2f5" }}>
                     <IoMdSearch className=' fs-3 ' />
                   </InputGroupText>
-                  <Input type='text' value={filterText} onChange={(e) => setFilterText(e.target.value)} placeholder='Search... ' style={{ border: "0", background: "#f0f2f5" }} />
+                  <h5 className='mt-1'>Live Chats</h5>
+                  <Input className='opacity-0' type='text' value={filterText} onChange={(e) => setFilterText(e.target.value)} placeholder='Search... ' style={{ border: "0", background: "#f0f2f5" }} />
 
                   <div className='px-1 d-flex justify-content-center position-relative align-items-center '>
                     <button className='btn p-0' onClick={() => setSortShow(!useSortShow)} >
@@ -479,6 +523,21 @@ const LiveChat = () => {
                         <div className='' style={{ padding: "5px 10px" }}>Sort by :</div>
                         <hr className="m-0" />
                         <div>
+                          {/* <div className='mt-1'>List by</div> */}
+                          <div class="form-check mt-1">
+                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="sort_all" onClick={() => { filterAllContacts(""); setSortBy(""); setSortShow(false) }} />
+                            <label className="form-check-label " for="sort_all" >
+                              All Messages
+                            </label>
+                          </div>
+                          <div className="form-check mt-1">
+                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="sort_unread" onClick={() => { filterAllContacts("unread"); setSortBy("unread"); setSortShow(false) }} />
+                            <label className="form-check-label" for="sort_unread">
+                              Unread Messages
+                            </label>
+                          </div>
+                        </div>
+                        {/* <div>
                           <div className='mt-1'>Recency</div>
                           <div class="form-check mt-1">
                             <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
@@ -492,8 +551,8 @@ const LiveChat = () => {
                               Oldest First
                             </label>
                           </div>
-                        </div>
-                        <div>
+                        </div> */}
+                        {/* <div>
                           <div className='mt-1'>Priority</div>
                           <div class="form-check mt-1">
                             <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" />
@@ -507,7 +566,9 @@ const LiveChat = () => {
                               Low First
                             </label>
                           </div>
-                        </div>
+                        </div> */}
+                        <hr />
+                        {/* <div className='border p-1  py-0 text-center rounded-4' onClick={getAllContacts}>Search</div> */}
                       </div> : ""
                     }
 
@@ -515,7 +576,7 @@ const LiveChat = () => {
                 </InputGroup>
               </div>
               {/* scrioller */}
-              <div className='d-flex p-1'>
+              <div className='d-none p-1'>
                 <div className='d-flex justify-content-center align-items-center cursor-pointer' onClick={() => scrollLeft("left")}>
                   <ChevronLeft />
                 </div>
@@ -546,59 +607,70 @@ const LiveChat = () => {
               <div className='hideScroll border ' style={{ maxHeight: "calc(100vh - 350px)", overflow: "scroll" }}>
 
                 <div className='flex-column'>
-                  {users.map((ContactData, index) => (
-                    <div
-                      key={ContactData.messages_reciever}
-                      style={{ background: selectedDiv === index ? '#f0f2f5' : '#ffff' }}
-                      onClick={() => {
-                        handleDivClick(index)
-                        setCurrentTab(ContactData)
-                        webSocketConnection(index)
-                        setProfileDetails(ContactData)
-                      }}
-                    >
-                      <div>
-                        <div className="mx-1 border-bottom cursor-pointer" style={{ minHeight: "75px", padding: "15px 10px" }} >
-                          <Row className=" h-100" >
-                            <Col md="2" className=' d-flex align-items-center justify-content-center flex-column '>
-                              <div className="rounded-circle d-flex align-items-center justify-content-center text-success" style={{ width: '40px', height: '40px', background: "rgb(40 199 111 / 20%)" }}>
-                                {/* <p className='fs-3 fw-bolder text-success mb-0'>R</p> */}
-                                {/* <p className='fs-3 fw-bolder text-success mb-0'>{ContactData?.messages_reciever}</p> */}
-                                {useProfileDetails?.messages_display_name?.slice(0, 1)}
-                              </div>
+                  {users.map((ContactData, index) => {
 
-                            </Col>
-                            <Col md="10" className=' ' style={{ gap: "5px" }}>
-                              <div className='d-flex gap-2'>
-                                <h5 className='mb-0 p-0 fw-bolder'>{ContactData?.messages_display_name ?? ContactData?.messages_reciever}</h5>
-                                <div>
-                                  {
-                                    ContactData?.messages_count > 0 &&
-                                    <div className='border-success rounded-5 d-flex justify-content-center align-items-center' style={{ width: "20px", height: "20px", background: "rgb(40 199 111 / 20%)" }}>
-                                      <p className='text-success m-0 font-small-3 '>{ContactData?.messages_count}</p>
-                                    </div>
-                                  }
+                    let lastMsgData = {}
+                    try {
+                      lastMsgData = JSON.parse(ContactData?.messages_last_message)
+                    } catch (error) {
+                      console.log(error)
+                    }
+
+                    return (
+                      <div
+                        key={ContactData.messages_reciever}
+                        style={{ background: selectedDiv === index ? '#f0f2f5' : '#ffff' }}
+                        onClick={() => {
+                          handleDivClick(index)
+                          setCurrentTab(ContactData)
+                          webSocketConnection(index)
+                          setProfileDetails(ContactData)
+                        }}
+                      >
+                        <div>
+                          <div className="mx-1 border-bottom cursor-pointer" style={{ minHeight: "75px", padding: "15px 10px" }} >
+                            <Row className=" h-100" >
+                              <Col md="2" className=' d-flex align-items-center justify-content-center flex-column '>
+                                <div className="rounded-circle d-flex align-items-center justify-content-center text-success" style={{ width: '40px', height: '40px', background: "rgb(40 199 111 / 20%)" }}>
+                                  {/* <p className='fs-3 fw-bolder text-success mb-0'>R</p> */}
+                                  {/* <p className='fs-3 fw-bolder text-success mb-0'>{ContactData?.messages_reciever}</p> */}
+                                  {ContactData?.messages_display_name?.slice(0, 1) ?? <Users size={15} />}
                                 </div>
 
-                              </div>
-                              <div className='d-flex'>
-                                {/* <span><LuCheckCheck size={15} color='#4FB6EC' className='' style={{ marginRight: "5px" }} /></span> */}
-                                {/* <p className='m-0 p-0'>{ContactData?.messages_last_message}</p> */}
-                              </div>
-                              <div className='font-small-2 d-flex ' style={{ gap: "8px", marginTop: "5px" }}>
+                              </Col>
+                              <Col md="10" className=' ' style={{ gap: "5px" }}>
+                                <div className='d-flex gap-2'>
+                                  <h5 className='mb-0 p-0 fw-bolder'>{ContactData?.messages_display_name ?? ContactData?.messages_reciever}</h5>
+                                  <div>
+                                    {
+                                      ContactData?.messages_count > 0 &&
+                                      <div className='border-success rounded-5 d-flex justify-content-center align-items-center' style={{ width: "20px", height: "20px", background: "rgb(40 199 111 / 20%)" }}>
+                                        <p className='text-success m-0 font-small-3 '>{ContactData?.messages_count}</p>
+                                      </div>
+                                    }
+                                  </div>
 
-                                {/* <span >{ContactData?.flag}</span> */}
-                                {/* <span ><Globe size={10} /> Return & Refund</span> */}
-                                {/* <span ><CiShoppingTag size={10} />MQL</span> */}
-                              </div>
-                            </Col>
+                                </div>
+                                <div className='d-flex'>
+                                  {/* <span><LuCheckCheck size={15} color='#4FB6EC' className='' style={{ marginRight: "5px" }} /></span> */}
 
-                          </Row>
+                                  <p className='m-0 p-0'>{lastMsgData?.text?.body?.slice(0, 20)} {lastMsgData?.text?.body?.length > 20 && <span>...</span>}</p>
+                                </div>
+                                <div className='font-small-2 d-flex ' style={{ gap: "8px", marginTop: "5px" }}>
+
+                                  {/* <span >{ContactData?.flag}</span> */}
+                                  {/* <span ><Globe size={10} /> Return & Refund</span> */}
+                                  {/* <span ><CiShoppingTag size={10} />MQL</span> */}
+                                </div>
+                              </Col>
+
+                            </Row>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                  <div className='btn border rounded-2 ms-3 mt-1 pb-2' onClick={() => setContactPage(prev => prev + 1)}>load more</div>
+                    )
+                  })}
+                  <div className='btn border rounded-2 ms-4 mt-1 pb-2' onClick={() => { setContactPage(prev => prev + 1) }}>load more</div>
                 </div>
               </div>
             </Col>
@@ -674,10 +746,14 @@ const LiveChat = () => {
                   {useMessageData.map((messageData, index) => {
                     // console.log("WEB SOCKET MESSAGE", messageData?.messages_context)
                     let messageJson = {}
-                    // console.log("messageData", messageData)
+                    let replyJson = {}
+                    console.log("messageData =====================", index)
                     try {
                       messageJson = JSON.parse(messageData?.messages_context)
+                      replyJson = JSON.parse(messageData?.messages_reply_context)
                       // console.log("637", messageJson?.image?.link)
+                      console.log("755 0", replyJson?.components[0]?.text)
+                      console.log("755 1", replyJson?.components[1]?.text)
                     } catch (error) {
                       // console.log(JSON.parse(messageData)?.messages_context)
                       console.log(error)
@@ -706,6 +782,22 @@ const LiveChat = () => {
                             maxWidth: "fit-content",
                             maxWidth: "400px"
                           }}>
+                            {
+                              (replyJson?.name) && <div className='border border-bottom-3 rounded-2 pe-2 mb-1'>
+                                <p className='font-small-3 mb-0'>{replyJson?.name}</p>
+                              </div>
+                            }
+                            {/* {
+                              (replyJson?.components[0]?.text || replyJson?.components[1]?.text) && <div className='border border-bottom-3 rounded-2 pe-2 mb-1'>
+                                <p className='font-small-3 mb-0'>...</p>
+                              </div>
+                            } */}
+                            {
+                              replyJson?.text?.body && <div className='border border-bottom-3 rounded-2 pe-2 mb-1'>
+                                <p className='font-small-3 mb-0'>{replyJson?.text?.body?.slice(0, 15)}...</p>
+                              </div>
+                            }
+
                             <div className='  '>
                               {/* text */}
                               {
@@ -717,10 +809,10 @@ const LiveChat = () => {
                               {
                                 messageJson?.image?.link && <div>
                                   <img src={messageJson?.image?.link} alt="" style={{ width: "100%" }} />
-                                 
-                                 <h5 className='mt-1 ms-1'>
-                                  {messageJson?.image?.caption}
-                                  </h5> 
+
+                                  <h5 className='mt-1 ms-1'>
+                                    {messageJson?.image?.caption}
+                                  </h5>
 
                                 </div>
                               }
@@ -735,13 +827,13 @@ const LiveChat = () => {
                                     Video not supported.
                                   </video>
                                   <h5 className='mt-1 ms-1'>
-                                  {messageJson?.video?.caption}
-                                  </h5> 
+                                    {messageJson?.video?.caption}
+                                  </h5>
                                 </div>
                               }
                               {/* aduio */}
                               {
-                                messageJson?.audio?.link && <div className='' style={{minWidth:"300px"}}>
+                                messageJson?.audio?.link && <div className='' style={{ minWidth: "300px" }}>
                                   <audio className='rounded-3  object-fit-cover w-100' controls   >
                                     <source
                                       src={messageJson?.audio?.link ?? ""}
@@ -750,8 +842,8 @@ const LiveChat = () => {
                                     audio not supported.
                                   </audio>
                                   <h5 className='mt-1 ms-1'>
-                                  {messageJson?.audio?.caption}
-                                  </h5> 
+                                    {messageJson?.audio?.caption}
+                                  </h5>
                                 </div>
                               }
                               {/* document */}
@@ -765,8 +857,8 @@ const LiveChat = () => {
                                     </a>
                                   </div>
                                   <h5 className='mt-1 ms-1'>
-                                  {messageJson?.document?.caption}
-                                  </h5> 
+                                    {messageJson?.document?.caption}
+                                  </h5>
                                 </div>
                               }
                               {/* template */}
@@ -781,13 +873,10 @@ const LiveChat = () => {
                                 <span className='font-small-3 '>
                                   {messageData?.messages_timestamp_sent && moment(messageData?.messages_timestamp_sent).format("hh:mm")}
                                 </span>
-
                                 <span className={currentTab?.messages_sender === messageData?.messages_sender ? '' : 'd-none'}>
-                                  {/* <LiaCheckDoubleSolid color='#006aff' /> */}
-                                  {/* {messageData?.messages_timestamp_sent && !messageData?.messages_timestamp_delivered && <LiaCheckSolid color='#7c7c7c' /> }
-                                {messageData?.messages_timestamp_delivered && <LiaCheckDoubleSolid color={messageData?.messages_timestamp_read ? '#006aff' : '#7c7c7c' } /> }
-                                {messageData?.messages_timestamp_failed && <MdErrorOutline color='red' /> } */}
-
+                                  {
+                                    messageData?.messages_timestamp_read ? <LiaCheckDoubleSolid size={18} color='#006aff' /> : messageData?.messages_timestamp_delivered ? <LiaCheckDoubleSolid size={18} color='#7c7c7c' /> : messageData?.messages_timestamp_sent ? <LiaCheckDoubleSolid size={18} color='#7c7c7c' /> : ''
+                                  }
                                 </span>
                               </div>
                             </div>
@@ -902,9 +991,9 @@ const LiveChat = () => {
                 {/* <div className='btn' onClick={() => setTemplateModal(true)}>
                   <HiOutlineTemplate size={20} />
                 </div> */}
-                {/* <div className='btn' onClick={() => setReplyModal(true)}>
+                <div className='btn' onClick={() => setReplyModal(true)}>
                   <BsReply size={20} />
-                </div> */}
+                </div>
 
                 <textarea
                   type="text"
@@ -1024,7 +1113,7 @@ const LiveChat = () => {
                     <div className='reply-container' style={{ maxHeight: "300px", overflow: "auto" }}>
                       {QuickReplayList.map((item, index) => {
                         return <div key={index} style={{ cursor: "pointer" }}
-                          onClick={() => setSelectedDescription(item)}>
+                          onClick={() => { setSelectedDescription(item); setInputMessage(item.description) }}>
                           <div className='p-1 fw-bolder '>
                             {item.title}
                           </div>
@@ -1046,7 +1135,7 @@ const LiveChat = () => {
               </Modal.Body>
               <Modal.Footer>
 
-                <Button className='btn btn-primary ' onClick={() => setReplyModal(false)}>Cancel</Button>
+                <Button className='btn btn-primary ' onClick={() => { setInputMessage(""); setReplyModal(false) }}>Cancel</Button>
                 {selectedDescription.description && <>
                   <Button
                     className='btn btn-primary '
@@ -1062,8 +1151,8 @@ const LiveChat = () => {
                         // ...prevMessages,
                         // { text: selectedDescription.description, sender: 'user', timeStamp: currentMessageTime() }
                         // ])
-                        setInputMessage(selectedDescription.description)
 
+                        sendMessages('text')
                         setReplyModal(false)
                       }}>Send</Button>
                 </>}
