@@ -8,7 +8,7 @@ import { SuperLeadzBaseURL } from '../../assets/auth/jwtService'
 import { Copy, Edit2, Layout, MoreVertical, Trash, X } from 'react-feather'
 import moment from 'moment/moment'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Campaign = () => {
 
@@ -44,23 +44,23 @@ const Campaign = () => {
             method: "POST",
             body: form_data
         })
-        .then((resp) => resp.json())
-        .then((data) => {
-            console.log(data)
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log(data)
 
-            setAllCampaigns(data?.grid_view_data)
-            setIsLoading(false)
-            setCount(data?.total_count)
-            // const newArr = []
-            // data.is_active.forEach(ele => {
-            //     newArr.push(Number(ele))
-            // })
-            // setActiveThemes([...newArr])
-        }).catch((err) => {
-            console.log(err)
-            toast.error("Data could not be loaded")
-            setIsLoading(false)
-        })
+                setAllCampaigns(data?.grid_view_data)
+                setIsLoading(false)
+                setCount(data?.total_count)
+                // const newArr = []
+                // data.is_active.forEach(ele => {
+                //     newArr.push(Number(ele))
+                // })
+                // setActiveThemes([...newArr])
+            }).catch((err) => {
+                console.log(err)
+                toast.error("Data could not be loaded")
+                setIsLoading(false)
+            })
     }
 
     const deleteContent = <button onClick={() => {
@@ -73,7 +73,7 @@ const Campaign = () => {
         const form_data = new FormData()
 
         if (deleteMode === "single") {
-        form_data.append("theme_id", currDetails.id)
+            form_data.append("theme_id", currDetails.id)
         } else {
             checkedThemes?.map((curElem) => {
                 console.log(curElem, "curElem")
@@ -85,15 +85,15 @@ const Campaign = () => {
             method: "POST",
             data: form_data
         })
-        .then((data) => {
-            console.log({ data })
-            toast.success(data.data.message)
-            setCheckedThemes([])
-            getAllThemes()
-        })
-        .catch((error) => {
-            console.log("Error while deleting theme", error)
-        })
+            .then((data) => {
+                console.log({ data })
+                toast.success(data.data.message)
+                setCheckedThemes([])
+                getAllThemes()
+            })
+            .catch((error) => {
+                console.log("Error while deleting theme", error)
+            })
     }
 
     const columns = [
@@ -101,7 +101,11 @@ const Campaign = () => {
             name: 'Campaign',
             selector: row => {
                 return (
-                    <>{row?.theme_name?.campaign_name}</>
+                    <>
+                        <Link to={`/merchant/Flash_Accounts/settings/${row.theme_name.id}`}>
+                            {row?.theme_name?.campaign_name}
+                        </Link>
+                    </>
                 )
             },
             type: "text",
@@ -111,32 +115,32 @@ const Campaign = () => {
             name: 'Status',
             selector: row => {
                 // if (row.theme_name.is_draft === 0) {
-                    return (
-                        <div className="m-auto form-check form-switch form-check-success cursor-pointer p-0 m-0" style={{ filter: `drop-shadow(0px 0px 7.5px rgba(40, 199, 111, ${row.theme_name.is_active ? "0.5" : "0"}))` }}>
-                            <input onChange={(e) => {
-                                // setCurrDetails(row.theme_name)
-                                const getUrl = new URL(`${SuperLeadzBaseURL}/api/v1/activate-theme/`)
-                                const form_data = new FormData()
-                                form_data.append("shop", outletData[0]?.web_url)
-                                form_data.append("app", userPermission?.appName)
-                                form_data.append('theme_id', row.theme_name.id)
-                                form_data.append('is_active', e.target.checked ? "1" : "0")
-                                axios({
-                                    method: "POST",
-                                    url: getUrl,
-                                    data: form_data
-                                }).then((data) => {
-                                    console.log(data)
-                                    toast.success("Campaign activated")
-                                    getAllThemes()
-                                }).catch((err) => {
-                                    console.log({ err })
-                                    toast.error("Something went wrong!")
-                                    e.target.checked = !e.target.checked
-                                })
-                            }} type='checkbox' defaultChecked={row?.theme_name?.active_status === 1} className='form-check-input cursor-pointer m-0' />
-                        </div>
-                    )
+                return (
+                    <div className="m-auto form-check form-switch form-check-success cursor-pointer p-0 m-0" style={{ filter: `drop-shadow(0px 0px 7.5px rgba(40, 199, 111, ${row.theme_name.is_active ? "0.5" : "0"}))` }}>
+                        <input onChange={(e) => {
+                            // setCurrDetails(row.theme_name)
+                            const getUrl = new URL(`${SuperLeadzBaseURL}/api/v1/activate-theme/`)
+                            const form_data = new FormData()
+                            form_data.append("shop", outletData[0]?.web_url)
+                            form_data.append("app", userPermission?.appName)
+                            form_data.append('theme_id', row.theme_name.id)
+                            form_data.append('is_active', e.target.checked ? "1" : "0")
+                            axios({
+                                method: "POST",
+                                url: getUrl,
+                                data: form_data
+                            }).then((data) => {
+                                console.log(data)
+                                toast.success("Campaign activated")
+                                getAllThemes()
+                            }).catch((err) => {
+                                console.log({ err })
+                                toast.error("Something went wrong!")
+                                e.target.checked = !e.target.checked
+                            })
+                        }} type='checkbox' defaultChecked={row?.theme_name?.active_status === 1} className='form-check-input cursor-pointer m-0' />
+                    </div>
+                )
                 // } else {
                 //     return (
                 //         <div className='text-warning m-auto'>Draft</div>
@@ -237,7 +241,7 @@ const Campaign = () => {
                 <Card>
                     <CardBody>
                         <AdvanceServerSide
-                            tableName={"Campaign Details"}
+                            tableName={"All Campaigns"}
                             tableCol={columns}
                             data={allCampaigns}
                             isLoading={isLoading}
@@ -261,7 +265,7 @@ const Campaign = () => {
                     <span className="position-absolute top-0 end-0" style={{ cursor: 'pointer', padding: "0.25rem" }} onClick={() => setDeleteModal(!deleteModal)}>
                         <X size={17.5} />
                     </span>
-                        Are you sure you want to delete this theme 
+                    Are you sure you want to delete this theme
                     <div className="mt-2 d-flex gap-3 justify-content-end align-items-center">
                         <button className="btn btn-outline-primary" onClick={() => deleteCampagin()}>Delete</button>
                     </div>

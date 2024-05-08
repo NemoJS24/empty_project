@@ -62,7 +62,7 @@ const ThankYouPage = () => {
             width: '90px'
         },
         {
-            name: 'Created at',
+            name: 'Created On',
             minWidth: '200px',
             selector: row => row.email_id
         },

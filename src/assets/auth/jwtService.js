@@ -8,6 +8,7 @@ import { Navigate } from "react-router-dom"
 // export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
 // export const crmURL = "https://crm.demo.xircls.in"
 // export const affiliateURL = "https://api.demo.affiliate.xircls.com"
+// export const SocketBaseURL = "wss://api.demo.xircls.in"
 
 // const URLs = {
 //     baseURL,
@@ -238,6 +239,7 @@ export const configUrl = {
     test: "merchant/update_field",
     active_refeeral_offer: "/referral/referralpoints/",
     referral_dashboard: "referral/dashboard/",
+    group_import_customer: "/talk/group_import_customer/",
     
     // Email
     email_details: "/mail/contact_details/",

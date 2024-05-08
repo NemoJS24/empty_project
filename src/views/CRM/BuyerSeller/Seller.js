@@ -262,7 +262,8 @@ const Buyer = ({ allData }) => {
         const checkForm = validForm(addFormvalueToCheck, check.addForm)  // Use addFormvalueToCheck for validation
         console.log(checkForm, "dd")
         if (checkForm) {
-            postData()
+            // postData()
+            postNewCustomerData()
         }
     }
 

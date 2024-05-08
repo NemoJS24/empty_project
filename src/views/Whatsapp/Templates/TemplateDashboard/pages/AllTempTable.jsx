@@ -24,7 +24,7 @@ export default function AllTempTable() {
     const columns = [
 
         {
-            name: 'Created At',
+            name: 'Created On',
             minWidth: '200px',
             selector: row => convertTimestampToDateString(row?.quality_score.date),
             isEnable: true

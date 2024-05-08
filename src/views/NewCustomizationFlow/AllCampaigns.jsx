@@ -513,7 +513,7 @@ const AllCampaigns = ({ custom = false, name = "All Campaigns", draft = true, cr
                                                             <div className='d-flex justify-content-between'>
                                                                 <div>
                                                                     <h4 className='text-start fw-bolder text-black ps-2'>{curElem?.theme_name?.campaign_name}</h4>
-                                                                    <p className='text-start  ps-2'> Created at : {defaultFormatDate(curElem?.theme_name.start_date, userPermission?.user_settings?.date_format)}</p>
+                                                                    <p className='text-start  ps-2'> Created On : {defaultFormatDate(curElem?.theme_name.start_date, userPermission?.user_settings?.date_format)}</p>
                                                                 </div>
 
                                                                 <div className="d-flex justify-cotent-center align-items-center gap-1">

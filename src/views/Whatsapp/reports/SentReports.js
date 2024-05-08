@@ -10,6 +10,7 @@ import { Link, useParams } from 'react-router-dom'
 import moment from 'moment'
 import { defaultFormatDate } from '../../Validator'
 import { PermissionProvider } from '../../../Helper/Context'
+import LineChart from '../components/charts/LineChart'
 export default function SentReports() {
   const { templateId } = useParams()
   const [useLoader, setLoader] = useState(false)
@@ -92,7 +93,7 @@ export default function SentReports() {
 
   const columns = [
     {
-      name: 'Created at',
+      name: 'Created On',
       minWidth: '150px',
       // selector: row => `${moment(row.messagelog_created_at).format('HH:mm:ss')}, ${moment(row.messagelog_created_at).format('DD MMM YYYY')}`, // Assuming 'name' is the property in your data for the name
       selector: row => `${defaultFormatDate(row.messagelog_created_at, userPermission?.user_settings?.date_format)}, ${moment(row.messagelog_created_at).format('HH:mm:ss')}`,
@@ -191,6 +192,11 @@ export default function SentReports() {
             advanceFilter={true}
           />
 
+        </CardBody>
+      </Card>
+      <Card className='d-none'>
+        <CardBody>
+          <LineChart />
         </CardBody>
       </Card>
 
