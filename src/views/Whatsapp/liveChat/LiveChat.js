@@ -339,10 +339,32 @@ const LiveChat = () => {
     chatContScroll.scrollTop = chatContScroll.scrollHeight
   }
 const uptContactWebsocket = (newData) => {
-  console.log("191 old", users)
-  console.log("191 user", newData)
+  // console.log("191 old", users)
+  // console.log("191 user", newData)
+  // console.log("344", JSON.parse(newData).data)
+  const uptData = {
+    ...JSON.parse(JSON.parse(newData).data),
+    messages_reciever : JSON.parse(JSON.parse(newData).data).messages_receiver
+  }
+  console.log("uptData", uptData)
+  
+
+//   setUsers(prevList  => [ 
+//     uptData, prevList.map((elm) => {
+//     console.log("uptData?.messages_reciever", uptData?.messages_reciever)
+//     console.log("elm ====", elm)
+//     return elm?.messages_reciever !== uptData?.messages_reciever
+//   })
+// ])
+setUsers(prevList => [
+  uptData,
+  ...prevList.filter(elm => elm?.messages_reciever !== uptData?.messages_reciever)
+])
+  // getAllContacts()
+  // setUsers()
 
 }
+console.log("350 ======", users)
   return (
     <>
       <style>{`
@@ -603,6 +625,8 @@ const uptContactWebsocket = (newData) => {
                   {users.map((ContactData, index) => {
 
                     let lastMsgData = {}
+                    // console.log("601 =========", ContactData)
+                    console.log("601 =========", ContactData?.messages_reciever)
                     try {
                       lastMsgData = JSON.parse(ContactData?.messages_last_message)
                     } catch (error) {
