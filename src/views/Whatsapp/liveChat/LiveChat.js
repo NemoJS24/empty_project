@@ -37,6 +37,7 @@ const LiveChat = () => {
   const [selectedDiv, setSelectedDiv] = useState(0)
   const [useInputMessage, setInputMessage] = useState('')
   const [users, setUsers] = useState([])
+  const [useUsersData, setUsersData] = useState([])
   const [useContactPage, setContactPage] = useState(1)
   const [useContactCounter, setContactCounter] = useState(1)
   const [filterText, setFilterText] = useState('')
@@ -167,38 +168,40 @@ const LiveChat = () => {
     }
   }
 
-  const webSocketConnectionContacts = (index) => {
-
+  const webSocketConnectionContacts = (projectNo) => {
+   
     try {
       // Close existing WebSocket connection if there's any
       if (useContactWs && useContactWs.readyState === WebSocket.OPEN) {
         useContactWs.close()
-        console.info('Previous WebSocket connection closed CONTACT')
+        console.info('Previous WebSocket connection closed CONTACT', projectNo)
       }
-
+  
       // Create new WebSocket connection
-      const newWs = new WebSocket(`${SocketBaseURL}/ws/relation/?unique_id=${useProjectNo}`)
-      setContactWs(newWs)
-
-      newWs.onopen = () => {
+      const contWS = new WebSocket(`${SocketBaseURL}/ws/relation/?unique_id=${projectNo}`)
+      setContactWs(contWS)
+  
+      contWS.onopen = () => {
         console.info('WebSocket connected CONTACT')
       }
-
-      newWs.onmessage = (event) => {
-        console.log("New message CONTACT:", event.data)
-        // setUserCounter(prevCounter => prevCounter + 1)
-
-        // console.log("169", users)
+  
+      contWS.onmessage = (event) => {
+        console.log("Received message from CONTACT SOCKET:", JSON.parse(event.data))
+        // Process the received message here
+        // eslint-disable-next-line no-use-before-define
+        uptContactWebsocket(event?.data)
+       
+        // getAllContacts()
       }
-
-      newWs.onclose = () => {
+  
+      contWS.onclose = () => {
         console.info('WebSocket disconnected CONTACT')
       }
-
     } catch (error) {
       console.error('Error establishing WebSocket connection: CONTACT', error)
     }
   }
+  
 
   const getAllMessages = () => {
     const form_data = new FormData()
@@ -232,7 +235,7 @@ const LiveChat = () => {
         // setUsers(res.data?.messages)
         setUsers(prev => [...prev, ...res.data?.messages])
         // setContactCounter(prev => prev + 1)
-
+        webSocketConnectionContacts(res?.data?.project_no)
       }).catch((err) => {
         // console.log(err)
       })
@@ -259,26 +262,9 @@ const LiveChat = () => {
   //   getAllContacts()
   // }, [useContactPage])
 
-  // useEffect(() => {
-  //   console.log("useeffrct runnnnnn")
-
-  //     const form_data = new FormData()
-  //     form_data.append("page", 1)
-  //     form_data.append("size", 10)
-  //     form_data.append("searchValue", filterText)
-  //     postReq("contact_relation", form_data)
-  //     .then((res) => {
-  //       setUsers(res.data?.messages)
-  //       setContactCounter(prev => prev + 1)
-  //       }).catch((err) => {
-  //         // console.log(err)
-  //       })
-
-  // }, [filterText])
-
   useEffect(() => {
-    console.log("================== run contacts main useeffect")
-    webSocketConnectionContacts()
+    // console.log("================== run contacts main useeffect")
+    
     getAllContacts()
   }, [useContactPage])
 
@@ -352,7 +338,11 @@ const LiveChat = () => {
     const chatContScroll = document.getElementById("chatContScroll")
     chatContScroll.scrollTop = chatContScroll.scrollHeight
   }
+const uptContactWebsocket = (newData) => {
+  console.log("191 old", users)
+  console.log("191 user", newData)
 
+}
   return (
     <>
       <style>{`
@@ -510,7 +500,10 @@ const LiveChat = () => {
                   <InputGroupText className='opacity-0' color='transparent' style={{ border: "0", background: "#f0f2f5" }}>
                     <IoMdSearch className=' fs-3 ' />
                   </InputGroupText>
-                  <h5 className='mt-1'>Live Chats</h5>
+                  <div>
+                  <h5 className='mt-1 mb-0'>Live Chats</h5>
+{/* <p>{206}</p> */}
+                  </div>
                   <Input className='opacity-0' type='text' value={filterText} onChange={(e) => setFilterText(e.target.value)} placeholder='Search... ' style={{ border: "0", background: "#f0f2f5" }} />
 
                   <div className='px-1 d-flex justify-content-center position-relative align-items-center '>
@@ -752,8 +745,8 @@ const LiveChat = () => {
                       messageJson = JSON.parse(messageData?.messages_context)
                       replyJson = JSON.parse(messageData?.messages_reply_context)
                       // console.log("637", messageJson?.image?.link)
-                      console.log("755 0", replyJson?.components[0]?.text)
-                      console.log("755 1", replyJson?.components[1]?.text)
+                      // console.log("755 0", replyJson?.components[0]?.text)
+                      // console.log("755 1", replyJson?.components[1]?.text)
                     } catch (error) {
                       // console.log(JSON.parse(messageData)?.messages_context)
                       console.log(error)
@@ -792,6 +785,7 @@ const LiveChat = () => {
                                 <p className='font-small-3 mb-0'>...</p>
                               </div>
                             } */}
+                           
                             {
                               replyJson?.text?.body && <div className='border border-bottom-3 rounded-2 pe-2 mb-1'>
                                 <p className='font-small-3 mb-0'>{replyJson?.text?.body?.slice(0, 15)}...</p>
@@ -799,7 +793,13 @@ const LiveChat = () => {
                             }
 
                             <div className='  '>
+                              
                               {/* text */}
+                              {
+                                messageJson?.button?.text && <div className="message-info ps-1 pe-3">
+                                  {messageJson?.button?.text}
+                                </div>
+                              }
                               {
                                 messageJson?.text?.body && <div className="message-info ps-1 pe-3">
                                   {messageJson?.text?.body}
