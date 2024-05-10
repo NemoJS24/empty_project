@@ -633,7 +633,13 @@ const Buyer = ({ allData }) => {
     return (
         <>
             {InnerStyles}
-
+            <Offcanvas show={isHidden} onHide={() => handleClose('customer')} placement="end">
+                <Offcanvas.Header closeButton>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                    {AddCustomerForm}
+                </Offcanvas.Body>
+            </Offcanvas>
             {
                 !isLoading ? (
                     <Container fluid className="px-0 py-1">

@@ -393,6 +393,7 @@ export default function TemplateDashboard() {
                                                  
                                                    {
                                                       SingleTemplate.status === "APPROVED" && isActive && <>
+                                                      <div className='d-flex gap-1 align-items-center'>
                                                          <div class="dropdown">
                                                             <button class="dropbtn"> <CiMenuKebab /> </button>
                                                             <div class="dropdown-content cursor-pointer">
@@ -401,6 +402,9 @@ export default function TemplateDashboard() {
                                                                <div className='items text-danger ' onClick={() => toggleActive(SingleTemplate.id, false)} >Deactivate</div>
                                                             </div>
                                                          </div>
+                                                         <p className='m-0 p-0'>{SingleTemplate.name}</p>
+
+                                                      </div>
                                                          {/* <button className='btn btn-primary px-3 send-btn' onClick={() => getCurrentTemplate(SingleTemplate.id, 'modal2')} >Start Campaign <Send id="send-icon" size={16} style={{ marginLeft: "5px" }} /></button> */}
                                                          <Link to={params.get('campagin_type') ? params.get('campagin_type') === "broadcast" ? `/merchant/whatsapp/campaign/${SingleTemplate.id}` : `/merchant/whatsapp/create-campaign/${params.get('campagin_type')}/${SingleTemplate.id}` : `/merchant/whatsapp/campaign/${SingleTemplate.id}`} className='btn btn-primary px-3 send-btn' >Use Template <Send id="send-icon" size={16} style={{ marginLeft: "5px" }} /></Link>
                                                       </>
