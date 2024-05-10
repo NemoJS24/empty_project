@@ -117,7 +117,7 @@ export default function TemplateReports() {
     {
       name: 'Sent',
       minWidth: '100px',
-      selector: row => row?.template_template_read ?? '', // Assuming 'category' is the property in your data for the category
+      selector: row => row?.template_template_sent ?? '', // Assuming 'category' is the property in your data for the category
       type: 'text',
       isEnable: true
     },
