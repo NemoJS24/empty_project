@@ -145,10 +145,10 @@ export const QuickReplayList = [
 
 // functions
 export const getBoldStr = (str) => {
-  str = str.replace(/\*(\b.*?)\b\*/g, (_, p1) => `<strong>${p1}</strong>`)
+   str = str.replace(/\*(\b.*?)\b\*/g, (_, p1) => `<strong>${p1}</strong>`)
     .replace(/\~(\b.*?)\b\~/g, (_, p1) => `<del>${p1}</del>`)
     .replace(/(?<=\s|^)(_.*?_)(?=\s|$)/g, (_, p1) => `<em>${p1.slice(1, -1)}</em>`)
-
+    .replace(/\b((?:https?:\/\/|www\.)\S+)\b/g, '<a href="$1" target="_blank" style="color: blue; text-decoration:underline">$1</a>')
   return str
 }
 
@@ -241,9 +241,9 @@ export const RenderTemplateUI = ({SingleTemplate}) => {
                        return data.buttons.map((data) => {
                           if (data.type === "URL") {
                              return (
-                                <div className="border-top  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
+                                <a href={data?.url} target="_blank" className="border-top  d-flex text-primary justify-content-center  align-items-center text-decoration-none " style={{ padding: "10px", gap: "8px" }} >
                                    <ExternalLink size={17} /><h6 className='m-0 text-primary' >{data.text}</h6>
-                                </div>
+                                </a>
                              )
                           }
                           if (data.type === "PHONE_NUMBER") {
@@ -335,9 +335,9 @@ export const RenderLiveTemplateUI = ({SingleTemplate}) => {
                        return data.buttons.map((data) => {
                           if (data.type === "URL") {
                              return (
-                                <div className="border-top  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
-                                   <ExternalLink size={17} /><h6 className='m-0 text-primary' >{data.text}</h6>
-                                </div>
+                              <a href={data?.url} target="_blank" className="border-top  d-flex text-primary justify-content-center  align-items-center text-decoration-none " style={{ padding: "10px", gap: "8px" }} >
+                              <ExternalLink size={17} /><h6 className='m-0 text-primary' >{data.text}</h6>
+                           </a>
                              )
                           }
                           if (data.type === "PHONE_NUMBER") {

@@ -3,7 +3,7 @@ import moment from 'moment'
 import { useEffect, useRef, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Modal from 'react-bootstrap/Modal'
-import { ChevronLeft, ChevronRight, File, FileText, Image, Plus, Send, Sliders, Users, Video } from 'react-feather'
+import { ChevronLeft, ChevronRight, File, FileText, Headphones, Image, Plus, Send, Sliders, Users, Video } from 'react-feather'
 import { BsReply } from 'react-icons/bs'
 import { FaEllipsisV, FaSearch, FaSortAmountDown } from "react-icons/fa"
 import { HiOutlineTemplate } from "react-icons/hi"
@@ -26,7 +26,10 @@ import { SocketBaseURL, postReq } from '../../../assets/auth/jwtService'
 import XIRCLS_LOGO from '../../../assets/images/logo/XIRCLS_LOGO.png'
 import { QuickReplayList, RenderLiveTemplateUI, templateCatgList } from '../SmallFunction'
 import back from '../imgs/WhatsAppBack.png'
+import FrontBaseLoader from '../../Components/Loader/Loader'
 const LiveChat = () => {
+
+  const [useIsLoading, setIsLoading] = useState(true)
   const [useMessageData, setMessageData] = useState([])
   const [useMessageCounter, setMessageCounter] = useState(0)
   const [useProfileDetails, setProfileDetails] = useState("")
@@ -57,6 +60,7 @@ const LiveChat = () => {
   const [useSortShow, setSortShow] = useState(false)
   const [filterDropdown, setFilterDropdown] = useState(false)
   const [useActiveTab, setActiveTab] = useState(0)
+
   const [currentTab, setCurrentTab] = useState({})
   const [allSourceChecked, setAllSourceChecked] = useState(false)
   const [ws, setWs] = useState('')
@@ -69,6 +73,28 @@ const LiveChat = () => {
     Instagram: false,
     Facebook: false
   })
+  const ActiveTabList = [
+    {
+      title: "All Chats",
+      id: "",
+      isActive: false
+    },
+    {
+      title: "Live Chats",
+      id: "live",
+      isActive: false
+    },
+    {
+      title: "unread Chats",
+      id: "unread",
+      isActive: false
+    },
+    {
+      title: "History",
+      id: "history",
+      isActive: false
+    }
+  ]
   // Function to handle changes in the "All Source" checkbox
   const handleAllSourceChange = (event) => {
     const isChecked = event.target.checked
@@ -169,31 +195,31 @@ const LiveChat = () => {
   }
 
   const webSocketConnectionContacts = (projectNo) => {
-   
+
     try {
       // Close existing WebSocket connection if there's any
       if (useContactWs && useContactWs.readyState === WebSocket.OPEN) {
         useContactWs.close()
         console.info('Previous WebSocket connection closed CONTACT', projectNo)
       }
-  
+
       // Create new WebSocket connection
       const contWS = new WebSocket(`${SocketBaseURL}/ws/relation/?unique_id=${projectNo}`)
       setContactWs(contWS)
-  
+
       contWS.onopen = () => {
         console.info('WebSocket connected CONTACT')
       }
-  
+
       contWS.onmessage = (event) => {
         console.log("Received message from CONTACT SOCKET:", JSON.parse(event.data))
         // Process the received message here
         // eslint-disable-next-line no-use-before-define
         uptContactWebsocket(event?.data)
-       
+
         // getAllContacts()
       }
-  
+
       contWS.onclose = () => {
         console.info('WebSocket disconnected CONTACT')
       }
@@ -201,7 +227,7 @@ const LiveChat = () => {
       console.error('Error establishing WebSocket connection: CONTACT', error)
     }
   }
-  
+
 
   const getAllMessages = () => {
     const form_data = new FormData()
@@ -227,6 +253,7 @@ const LiveChat = () => {
     form_data.append("size", 10)
     form_data.append("searchValue", filterText)
     form_data.append("type", useSortBy)
+    setIsLoading(true)
     postReq("contact_relation", form_data)
       .then((res) => {
         // setUsers(res.data?.messages)
@@ -238,7 +265,7 @@ const LiveChat = () => {
         webSocketConnectionContacts(res?.data?.project_no)
       }).catch((err) => {
         // console.log(err)
-      })
+      }).finally(() => setIsLoading(false))
   }
   const filterAllContacts = (sortby) => {
     console.log("contacts sortby =============", sortby)
@@ -247,13 +274,14 @@ const LiveChat = () => {
     form_data.append("size", 10)
     form_data.append("searchValue", filterText)
     form_data.append("type", sortby)
+    setIsLoading(true)
     postReq("contact_relation", form_data)
       .then((res) => {
         setUsers(res.data?.messages)
 
       }).catch((err) => {
         // console.log(err)
-      })
+      }).finally(() => setIsLoading(false))
   }
 
 
@@ -264,7 +292,7 @@ const LiveChat = () => {
 
   useEffect(() => {
     // console.log("================== run contacts main useeffect")
-    
+
     getAllContacts()
   }, [useContactPage])
 
@@ -338,33 +366,25 @@ const LiveChat = () => {
     const chatContScroll = document.getElementById("chatContScroll")
     chatContScroll.scrollTop = chatContScroll.scrollHeight
   }
-const uptContactWebsocket = (newData) => {
-  // console.log("191 old", users)
-  // console.log("191 user", newData)
-  // console.log("344", JSON.parse(newData).data)
-  const uptData = {
-    ...JSON.parse(JSON.parse(newData).data),
-    messages_reciever : JSON.parse(JSON.parse(newData).data).messages_receiver
+  const uptContactWebsocket = (newData) => {
+    // console.log("191 old", users)
+    // console.log("191 user", newData)
+    // console.log("344", JSON.parse(newData).data)
+    const uptData = {
+      ...JSON.parse(JSON.parse(newData).data),
+      messages_reciever: JSON.parse(JSON.parse(newData).data).messages_receiver
+    }
+    console.log("uptData", uptData)
+
+    setUsers(prevList => [
+      uptData,
+      ...prevList.filter(elm => elm?.messages_reciever !== uptData?.messages_reciever)
+    ])
+    // getAllContacts()
+    // setUsers()
+
   }
-  console.log("uptData", uptData)
-  
-
-//   setUsers(prevList  => [ 
-//     uptData, prevList.map((elm) => {
-//     console.log("uptData?.messages_reciever", uptData?.messages_reciever)
-//     console.log("elm ====", elm)
-//     return elm?.messages_reciever !== uptData?.messages_reciever
-//   })
-// ])
-setUsers(prevList => [
-  uptData,
-  ...prevList.filter(elm => elm?.messages_reciever !== uptData?.messages_reciever)
-])
-  // getAllContacts()
-  // setUsers()
-
-}
-console.log("350 ======", users)
+  console.log("350 ======", users)
   return (
     <>
       <style>{`
@@ -433,7 +453,9 @@ console.log("350 ======", users)
         animation: scale-up-bl 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
         }
  `}</style>
-
+      {
+        useIsLoading && <FrontBaseLoader />
+      }
 
       <Container className='d-flex flex-column flex-grow-1 '>
 
@@ -523,8 +545,8 @@ console.log("350 ======", users)
                     <IoMdSearch className=' fs-3 ' />
                   </InputGroupText>
                   <div>
-                  <h5 className='mt-1 mb-0'>Live Chats</h5>
-{/* <p>{206}</p> */}
+                    <h5 className='mt-1 mb-0'>Live Chats</h5>
+                    {/* <p>{206}</p> */}
                   </div>
                   <Input className='opacity-0' type='text' value={filterText} onChange={(e) => setFilterText(e.target.value)} placeholder='Search... ' style={{ border: "0", background: "#f0f2f5" }} />
 
@@ -539,18 +561,16 @@ console.log("350 ======", users)
                         <hr className="m-0" />
                         <div>
                           {/* <div className='mt-1'>List by</div> */}
-                          <div class="form-check mt-1">
-                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="sort_all" onClick={() => { filterAllContacts(""); setSortBy(""); setSortShow(false) }} />
-                            <label className="form-check-label " for="sort_all" >
-                              All Messages
-                            </label>
-                          </div>
-                          <div className="form-check mt-1">
-                            <input className="form-check-input" type="radio" name="flexRadioDefault" id="sort_unread" onClick={() => { filterAllContacts("unread"); setSortBy("unread"); setSortShow(false) }} />
-                            <label className="form-check-label" for="sort_unread">
-                              Unread Messages
-                            </label>
-                          </div>
+                          {ActiveTabList.map((data, index) => (
+                            <div class="form-check mt-1">
+                              <input className="form-check-input" type="radio" name="flexRadioDefault" id={`sort_${data.id}`} checked={useSortBy === data.id} onClick={() => { filterAllContacts(data.id); setSortBy(data.id); setSortShow(false) }} />
+                              <label className="form-check-label " for={`sort_${data.id}`} >
+                                {data.title}
+                              </label>
+                            </div>
+                          ))}
+
+
                         </div>
                         {/* <div>
                           <div className='mt-1'>Recency</div>
@@ -596,15 +616,14 @@ console.log("350 ======", users)
                   <ChevronLeft />
                 </div>
                 <div className='d-flex overflow-x-scroll hideScroll gap-1' style={{ width: "fit-content", scrollBehavior: "smooth" }} ref={containerRef}>
-                  {[1].map((data, index) => (
-                    <div className='cursor-pointer' style={{ padding: "10px 5px 5px 5px", minWidth: "125px" }} key={data} onClick={() => setActiveTab(index)}>
+                  {ActiveTabList.map((data, index) => (
+                    <div className='cursor-pointer' style={{ padding: "10px 5px 5px 5px", width: "125px" }} key={data} onClick={() => { setActiveTab(index); filterAllContacts(data.id) }}>
                       <div className='d-flex justify-content-start align-items-center gap-1'>
-                        <h6 className='m-0'>Live Chat</h6>
+                        <h6 className='m-0'>{data.title}</h6>
                         {/* <div className='border-success rounded-5 d-flex justify-content-center align-items-center' style={{ width: "17px", height: "17px", background: "rgb(40 199 111 / 20%)" }}>
                           <p className='text-success m-0 font-small-3 '>3</p>
                         </div> */}
                       </div>
-                      {/* <p className='fst-italic font-small-3 mb-0'>206 chats</p> */}
                       {
                         useActiveTab === (index) && <hr className='w-75 m-0' style={{ background: "#000", height: "2px" }} />
                       }
@@ -636,7 +655,7 @@ console.log("350 ======", users)
                     return (
                       <div
                         key={ContactData.messages_reciever}
-                        style={{ background: selectedDiv === index ? '#f0f2f5' : '#ffff' }}
+                        style={{ background: ContactData.messages_reciever === currentTab.messages_reciever ? '#f0f2f5' : '#ffff' }}
                         onClick={() => {
                           handleDivClick(index)
                           setCurrentTab(ContactData)
@@ -649,29 +668,32 @@ console.log("350 ======", users)
                             <Row className=" h-100" >
                               <Col md="2" className=' d-flex align-items-center justify-content-center flex-column '>
                                 <div className="rounded-circle d-flex align-items-center justify-content-center text-success" style={{ width: '40px', height: '40px', background: "rgb(40 199 111 / 20%)" }}>
-                                  {/* <p className='fs-3 fw-bolder text-success mb-0'>R</p> */}
-                                  {/* <p className='fs-3 fw-bolder text-success mb-0'>{ContactData?.messages_reciever}</p> */}
                                   {ContactData?.messages_display_name?.slice(0, 1) ?? <Users size={15} />}
                                 </div>
-
                               </Col>
                               <Col md="10" className=' ' style={{ gap: "5px" }}>
-                                <div className='d-flex gap-2'>
+                                <div className='d-flex justify-content-between '>
                                   <h5 className='mb-0 p-0 fw-bolder'>{ContactData?.messages_display_name ?? ContactData?.messages_reciever}</h5>
-                                  <div>
-                                    {
-                                      ContactData?.messages_count > 0 &&
-                                      <div className='border-success rounded-5 d-flex justify-content-center align-items-center' style={{ width: "20px", height: "20px", background: "rgb(40 199 111 / 20%)" }}>
-                                        <p className='text-success m-0 font-small-3 '>{ContactData?.messages_count}</p>
-                                      </div>
-                                    }
+                                  <div className='font-small-3 '>
+                                    {ContactData?.messages_last_message_timestamp_sent && moment(ContactData?.messages_last_message_timestamp_sent).format("hh:mm")}
                                   </div>
-
                                 </div>
-                                <div className='d-flex'>
-                                  {/* <span><LuCheckCheck size={15} color='#4FB6EC' className='' style={{ marginRight: "5px" }} /></span> */}
 
+                                <div className='position-relative '>
                                   <p className='m-0 p-0'>{lastMsgData?.text?.body?.slice(0, 20)} {lastMsgData?.text?.body?.length > 20 && <span>...</span>}</p>
+                                  <p className='m-0 p-0'>{lastMsgData?.name?.slice(0, 20)} {lastMsgData?.name?.length > 20 && <span>...</span>}</p>
+                                  <p className='m-0 p-0'>{lastMsgData?.type === "image" && <Image size={15} />} </p>
+                                  <p className='m-0 p-0'>{lastMsgData?.type === "video" && <Video size={15} />} </p>
+                                  <p className='m-0 p-0'>{lastMsgData?.type === "audio" && <Headphones size={15} />} </p>
+                                  <p className='m-0 p-0'>{lastMsgData?.type === "document" && <File size={15} />} </p>
+
+                                  {/* counter */}
+                                  {
+                                    ContactData?.messages_count > 0 &&
+                                    <div className='border-success rounded-5 d-flex justify-content-center align-items-center position-absolute end-0 top-0 ' style={{ width: "20px", height: "20px", background: "rgb(40 199 111 / 20%)" }}>
+                                      <p className='text-success m-0 font-small-3 '>{ContactData?.messages_count}</p>
+                                    </div>
+                                  }
                                 </div>
                                 <div className='font-small-2 d-flex ' style={{ gap: "8px", marginTop: "5px" }}>
 
@@ -687,7 +709,9 @@ console.log("350 ======", users)
                       </div>
                     )
                   })}
-                  <div className='btn border rounded-2 ms-4 mt-1 pb-2' onClick={() => { setContactPage(prev => prev + 1) }}>load more</div>
+                  <div className='w-100 ' >
+                    <div className='px-2 text-center py-1 text-primary cursor-pointer' onClick={() => { setContactPage(prev => prev + 1) }}>Load More...</div>
+                  </div>
                 </div>
               </div>
             </Col>
@@ -809,7 +833,7 @@ console.log("350 ======", users)
                                 <p className='font-small-3 mb-0'>...</p>
                               </div>
                             } */}
-                           
+
                             {
                               replyJson?.text?.body && <div className='border border-bottom-3 rounded-2 pe-2 mb-1'>
                                 <p className='font-small-3 mb-0'>{replyJson?.text?.body?.slice(0, 15)}...</p>
@@ -817,7 +841,7 @@ console.log("350 ======", users)
                             }
 
                             <div className='  '>
-                              
+
                               {/* text */}
                               {
                                 messageJson?.button?.text && <div className="message-info ps-1 pe-3">
@@ -1036,13 +1060,12 @@ console.log("350 ======", users)
                   style={{ borderRadius: "50px", resize: "none" }}
                 />
                 {/* {users.map((index) => ( */}
-                {/* <div className='btn btn-primary send-btn d-flex justify-content-center gap-1 align-items-center ' onClick={sendMessages}>
-                  <p className='m-0'>Send</p> <Send id="send-icon" size={16} />
-                </div> */}
-                <div className='d-flex align-items-center justify-content-center ' onClick={() => sendMessages('text')} style={{ width: "50px", height: "50px", minWidth: "50px", minHeight: "50px", maxWidth: "50px", maxHeight: "50px", background: '#00a884', borderRadius: "50%", cursor: "pointer" }} >
-                  <IoMdSend className='fs-3' style={{ color: 'white' }} />
-                </div>
-
+                {
+                  currentTab?.messages_reciever && <div className='d-flex align-items-center justify-content-center ' onClick={() => sendMessages('text')} style={{ width: "50px", height: "50px", minWidth: "50px", minHeight: "50px", maxWidth: "50px", maxHeight: "50px", background: '#00a884', borderRadius: "50%", cursor: "pointer" }} >
+                    <IoMdSend className='fs-3' style={{ color: 'white' }} />
+                  </div>
+                }
+            
               </div>}
 
             </Col>
