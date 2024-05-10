@@ -638,7 +638,7 @@ const LiveChat = () => {
               </div>
 
               {/*contacts list */}
-              <div className='hideScroll border ' style={{ maxHeight: "calc(100vh - 350px)", overflow: "scroll" }}>
+              <div className='hideScroll  ' style={{ maxHeight: "calc(100vh - 240px)", overflow: "scroll" }}>
 
                 <div className='flex-column'>
                   {users.map((ContactData, index) => {
