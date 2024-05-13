@@ -43,7 +43,7 @@ const Vehicle = () => {
 
     const columns = [
         {
-            name: "Created At",
+            name: "Created On",
             minWidth: "240px",
             selector: (row) => row?.vehicle_created_at ? moment(row?.vehicle_created_at).format("YYYY-MM-DD") : '',
             type: 'date'

@@ -329,15 +329,29 @@ const AddServicing = () => {
         const form_data = new FormData()
         form_data.append("id", (id && isCustomer) ? id : formData?.mainForm?.xircls_customer_id)
         // "SHIVAM KALE"
-        getReq(`fetch_vehicle_number`, `/?id=${(id && isCustomer) ? id : formData?.mainForm?.xircls_customer_id}`, crmURL)
+        getReq(`fetch_vehicle_details`, `?id=${(id && isCustomer) ? id : formData?.mainForm?.xircls_customer_id}`, crmURL)
             .then((resp) => {
                 console.log("Response: selectCustomer", resp)
-                const vehicleOptions = resp.data.car_variant
-                    .map((vehicle) => ({
-                        value: vehicle.id,
-                        label: vehicle.registration_number
-                    }))
-                setVehicleOptions(vehicleOptions)
+
+                const productOptions = resp?.data?.car_variant.map(item => {
+                    const value = item[0]
+                    const slug = item[4]
+                    const label = item.slice(1).filter(Boolean).join(' -- ')
+                    return {
+                        value,
+                        label,
+                        slug
+                    }
+                })
+                setVehicleOptions(productOptions)
+                // const vehicleOptions = resp.data.car_variant
+                //     .map((vehicle) => ({
+                //         value: vehicle.id,
+                //         label: vehicle.vehicle_number
+                //     }))
+
+                    
+                // setVehicleOptions(vehicleOptions)
             })
             .catch((error) => {
                 console.error("Error:", error)
@@ -789,7 +803,7 @@ const AddServicing = () => {
                                 <p id="xircls_customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
                             </Col>
                             <Col md={6} className="mt-2">
-                                <label
+                                {/* <label
                                     htmlFor="vehicle-name"
                                     className="form-label"
                                     style={{ margin: "0px" }}
@@ -809,6 +823,22 @@ const AddServicing = () => {
                                         const e = { target: { name: "vehicle", value: event.value } }
                                         handleInputChange(e, "mainForm")
                                     }}
+                                /> */}
+                                <label htmlFor="product-name" className="" style={{ margin: '0px' }}>
+                                    Product Name
+                                </label>
+                                <Select
+                                    placeholder='Select Product Name'
+                                    id="product-name"
+                                    options={vehicleOptions}
+                                    name="insurance_product_name"
+                                    value={vehicleOptions?.filter(option => Number(option.value) === Number(formData.mainForm?.vehicle))}
+                                    onChange={(event) => {
+                                        const e = { target: { name: "vehicle", value: event.value } }
+                                        handleInputChange(e, "mainForm")
+                                    }}
+                                    // onChange={e => handleInputChange(e, 'insurance_product_name')}
+                                    closeMenuOnSelect={true}
                                 />
                                 <p id="vehicle_val" className="text-danger m-0 p-0 vaildMessage"></p>
                             </Col>

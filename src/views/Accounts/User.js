@@ -92,7 +92,7 @@ const User = () => {
 
     const columns = [
         {
-            name: "Created at",
+            name: "Created On",
             minWidth: "240px",
             selector: (row) => moment(row?.created_at).format("YYYY-MM-DD, h:mm:ss"),
             type: 'text'

@@ -59,7 +59,7 @@ const Customers = () => {
 
   const columns = [
     {
-      name: "Created At",
+      name: "Created On",
       minWidth: "240px",
       selector: (row) => row?.customer_details_created_at ? moment(row?.customer_details_created_at).format("YYYY-MM-DD") : '',
       type: 'date'

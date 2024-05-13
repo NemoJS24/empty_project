@@ -52,7 +52,7 @@ const Customers = () => {
 
   const columns = [
     {
-      name: "Created At",
+      name: "Created On",
       minWidth: "200px",
       selector: (row) => row?.insurance_created_at ? moment(row.insurance_created_at).format("YYYY-MM-DD") : "-",
       type: 'date',

@@ -3,7 +3,7 @@ import moment from 'moment'
 import { useEffect, useRef, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Modal from 'react-bootstrap/Modal'
-import { ChevronLeft, ChevronRight, File, FileText, Headphones, Image, Plus, Send, Sliders, Users, Video } from 'react-feather'
+import { ChevronLeft, ChevronRight, File, FileText, Image, Plus, Send, Sliders, Video } from 'react-feather'
 import { BsReply } from 'react-icons/bs'
 import { FaEllipsisV, FaSearch, FaSortAmountDown } from "react-icons/fa"
 import { HiOutlineTemplate } from "react-icons/hi"
@@ -26,23 +26,16 @@ import { SocketBaseURL, postReq } from '../../../assets/auth/jwtService'
 import XIRCLS_LOGO from '../../../assets/images/logo/XIRCLS_LOGO.png'
 import { QuickReplayList, RenderLiveTemplateUI, templateCatgList } from '../SmallFunction'
 import back from '../imgs/WhatsAppBack.png'
-import FrontBaseLoader from '../../Components/Loader/Loader'
 const LiveChat = () => {
-
-  const [useIsLoading, setIsLoading] = useState(true)
   const [useMessageData, setMessageData] = useState([])
   const [useMessageCounter, setMessageCounter] = useState(0)
   const [useProfileDetails, setProfileDetails] = useState("")
-  const [useSortBy, setSortBy] = useState("")
-
   // console.log("useProfileDetails", useProfileDetails)
 
   const [selectedDiv, setSelectedDiv] = useState(0)
   const [useInputMessage, setInputMessage] = useState('')
   const [users, setUsers] = useState([])
-  const [useUsersData, setUsersData] = useState([])
   const [useContactPage, setContactPage] = useState(1)
-  const [useContactCounter, setContactCounter] = useState(1)
   const [filterText, setFilterText] = useState('')
   const [useProjectNo, setProjectNo] = useState('')
   const [dynamicColumnValue, setDynamicColumnValue] = useState(0)
@@ -60,7 +53,6 @@ const LiveChat = () => {
   const [useSortShow, setSortShow] = useState(false)
   const [filterDropdown, setFilterDropdown] = useState(false)
   const [useActiveTab, setActiveTab] = useState(0)
-
   const [currentTab, setCurrentTab] = useState({})
   const [allSourceChecked, setAllSourceChecked] = useState(false)
   const [ws, setWs] = useState('')
@@ -73,28 +65,6 @@ const LiveChat = () => {
     Instagram: false,
     Facebook: false
   })
-  const ActiveTabList = [
-    {
-      title: "All Chats",
-      id: "",
-      isActive: false
-    },
-    {
-      title: "Live Chats",
-      id: "live",
-      isActive: false
-    },
-    {
-      title: "unread Chats",
-      id: "unread",
-      isActive: false
-    },
-    {
-      title: "History",
-      id: "history",
-      isActive: false
-    }
-  ]
   // Function to handle changes in the "All Source" checkbox
   const handleAllSourceChange = (event) => {
     const isChecked = event.target.checked
@@ -137,16 +107,13 @@ const LiveChat = () => {
     } else if (type === "files" && storeMedia?.media?.type === "image/jpeg") {
       form_data.append("file", storeMedia.media)
       form_data.append("type", "image")
-      form_data.append("caption", mediaText)
     } else if (type === "files" && storeMedia?.media?.type === "video/mp4") {
       form_data.append("file", storeMedia.media)
       form_data.append("type", "video")
-      form_data.append("caption", mediaText)
     } else if (type === "files" && storeMedia?.media?.type === "application/pdf") {
       form_data.append("file", storeMedia.media)
       form_data.append("filename", storeMedia?.media?.name)
       form_data.append("type", "document")
-      form_data.append("caption", mediaText)
     }
     console.log("storeMedia", storeMedia)
     setStoreMedia({})
@@ -194,40 +161,38 @@ const LiveChat = () => {
     }
   }
 
-  const webSocketConnectionContacts = (projectNo) => {
+  const webSocketConnectionContacts = (index) => {
 
     try {
       // Close existing WebSocket connection if there's any
       if (useContactWs && useContactWs.readyState === WebSocket.OPEN) {
         useContactWs.close()
-        console.info('Previous WebSocket connection closed CONTACT', projectNo)
+        console.info('Previous WebSocket connection closed CONTACT')
       }
 
       // Create new WebSocket connection
-      const contWS = new WebSocket(`${SocketBaseURL}/ws/relation/?unique_id=${projectNo}`)
-      setContactWs(contWS)
+      const newWs = new WebSocket(`${SocketBaseURL}/ws/relation/?unique_id=${useProjectNo}`)
+      setContactWs(newWs)
 
-      contWS.onopen = () => {
+      newWs.onopen = () => {
         console.info('WebSocket connected CONTACT')
       }
 
-      contWS.onmessage = (event) => {
-        console.log("Received message from CONTACT SOCKET:", JSON.parse(event.data))
-        // Process the received message here
-        // eslint-disable-next-line no-use-before-define
-        uptContactWebsocket(event?.data)
+      newWs.onmessage = (event) => {
+        console.log("New message CONTACT:", event.data)
+        // setUserCounter(prevCounter => prevCounter + 1)
 
-        // getAllContacts()
+        // console.log("169", users)
       }
 
-      contWS.onclose = () => {
+      newWs.onclose = () => {
         console.info('WebSocket disconnected CONTACT')
       }
+
     } catch (error) {
       console.error('Error establishing WebSocket connection: CONTACT', error)
     }
   }
-
 
   const getAllMessages = () => {
     const form_data = new FormData()
@@ -247,41 +212,22 @@ const LiveChat = () => {
 
   // get all contacts
   const getAllContacts = () => {
-    console.log("contacts load =============")
     const form_data = new FormData()
     form_data.append("page", useContactPage)
     form_data.append("size", 10)
-    form_data.append("searchValue", filterText)
-    form_data.append("type", useSortBy)
-    setIsLoading(true)
+    form_data.append("searchValue", '')
     postReq("contact_relation", form_data)
       .then((res) => {
         // setUsers(res.data?.messages)
         console.log("213", users)
         console.log("214", res.data?.messages)
-        // setUsers(res.data?.messages)
+
         setUsers(prev => [...prev, ...res.data?.messages])
-        // setContactCounter(prev => prev + 1)
-        webSocketConnectionContacts(res?.data?.project_no)
-      }).catch((err) => {
-        // console.log(err)
-      }).finally(() => setIsLoading(false))
-  }
-  const filterAllContacts = (sortby) => {
-    console.log("contacts sortby =============", sortby)
-    const form_data = new FormData()
-    form_data.append("page", 1)
-    form_data.append("size", 10)
-    form_data.append("searchValue", filterText)
-    form_data.append("type", sortby)
-    setIsLoading(true)
-    postReq("contact_relation", form_data)
-      .then((res) => {
-        setUsers(res.data?.messages)
+        // setProjectNo(res.data?.project_no)
 
       }).catch((err) => {
         // console.log(err)
-      }).finally(() => setIsLoading(false))
+      })
   }
 
 
@@ -291,33 +237,9 @@ const LiveChat = () => {
   // }, [useContactPage])
 
   useEffect(() => {
-    // console.log("================== run contacts main useeffect")
-
+    webSocketConnectionContacts()
     getAllContacts()
   }, [useContactPage])
-
-  // useEffect(() => {
-  //   console.log("================== run contacts textfilter && useSortBy")
-  //   const form_data = new FormData()
-  //   form_data.append("page", useContactPage)
-  //   form_data.append("size", 10)
-  //   form_data.append("searchValue", filterText)
-  //   form_data.append("type", useSortBy)
-  //   postReq("contact_relation", form_data)
-  //     .then((res) => {
-  //       // setUsers(res.data?.messages)
-  //       console.log("213", users)
-  //       console.log("214", res.data?.messages)
-  //       setUsers(res.data?.messages)
-  //       // setUsers(prev => [...prev, ...res.data?.messages])
-  //       setContactCounter(prev => prev + 1)
-
-  //       // setProjectNo(res.data?.project_no)
-
-  //     }).catch((err) => {
-  //       // console.log(err)
-  //     })
-  // }, [filterText, useSortBy])
 
   useEffect(() => { // when select number
     getAllMessages()
@@ -366,25 +288,7 @@ const LiveChat = () => {
     const chatContScroll = document.getElementById("chatContScroll")
     chatContScroll.scrollTop = chatContScroll.scrollHeight
   }
-  const uptContactWebsocket = (newData) => {
-    // console.log("191 old", users)
-    // console.log("191 user", newData)
-    // console.log("344", JSON.parse(newData).data)
-    const uptData = {
-      ...JSON.parse(JSON.parse(newData).data),
-      messages_reciever: JSON.parse(JSON.parse(newData).data).messages_receiver
-    }
-    console.log("uptData", uptData)
 
-    setUsers(prevList => [
-      uptData,
-      ...prevList.filter(elm => elm?.messages_reciever !== uptData?.messages_reciever)
-    ])
-    // getAllContacts()
-    // setUsers()
-
-  }
-  console.log("350 ======", users)
   return (
     <>
       <style>{`
@@ -453,9 +357,7 @@ const LiveChat = () => {
         animation: scale-up-bl 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
         }
  `}</style>
-      {
-        useIsLoading && <FrontBaseLoader />
-      }
+
 
       <Container className='d-flex flex-column flex-grow-1 '>
 
@@ -541,14 +443,10 @@ const LiveChat = () => {
               </div>
               <div className='m-1 d-flex justify-content-center align-items-center ' style={{ borderRadius: "5px" }}>
                 <InputGroup >
-                  <InputGroupText className='opacity-0' color='transparent' style={{ border: "0", background: "#f0f2f5" }}>
+                  <InputGroupText color='transparent' style={{ border: "0", background: "#f0f2f5" }}>
                     <IoMdSearch className=' fs-3 ' />
                   </InputGroupText>
-                  <div>
-                    <h5 className='mt-1 mb-0'>Live Chats</h5>
-                    {/* <p>{206}</p> */}
-                  </div>
-                  <Input className='opacity-0' type='text' value={filterText} onChange={(e) => setFilterText(e.target.value)} placeholder='Search... ' style={{ border: "0", background: "#f0f2f5" }} />
+                  <Input type='text' value={filterText} onChange={(e) => setFilterText(e.target.value)} placeholder='Search... ' style={{ border: "0", background: "#f0f2f5" }} />
 
                   <div className='px-1 d-flex justify-content-center position-relative align-items-center '>
                     <button className='btn p-0' onClick={() => setSortShow(!useSortShow)} >
@@ -560,19 +458,6 @@ const LiveChat = () => {
                         <div className='' style={{ padding: "5px 10px" }}>Sort by :</div>
                         <hr className="m-0" />
                         <div>
-                          {/* <div className='mt-1'>List by</div> */}
-                          {ActiveTabList.map((data, index) => (
-                            <div class="form-check mt-1">
-                              <input className="form-check-input" type="radio" name="flexRadioDefault" id={`sort_${data.id}`} checked={useSortBy === data.id} onClick={() => { filterAllContacts(data.id); setSortBy(data.id); setSortShow(false) }} />
-                              <label className="form-check-label " for={`sort_${data.id}`} >
-                                {data.title}
-                              </label>
-                            </div>
-                          ))}
-
-
-                        </div>
-                        {/* <div>
                           <div className='mt-1'>Recency</div>
                           <div class="form-check mt-1">
                             <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
@@ -586,8 +471,8 @@ const LiveChat = () => {
                               Oldest First
                             </label>
                           </div>
-                        </div> */}
-                        {/* <div>
+                        </div>
+                        <div>
                           <div className='mt-1'>Priority</div>
                           <div class="form-check mt-1">
                             <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" />
@@ -601,9 +486,7 @@ const LiveChat = () => {
                               Low First
                             </label>
                           </div>
-                        </div> */}
-                        <hr />
-                        {/* <div className='border p-1  py-0 text-center rounded-4' onClick={getAllContacts}>Search</div> */}
+                        </div>
                       </div> : ""
                     }
 
@@ -611,19 +494,20 @@ const LiveChat = () => {
                 </InputGroup>
               </div>
               {/* scrioller */}
-              <div className='d-none p-1'>
+              <div className='d-flex p-1'>
                 <div className='d-flex justify-content-center align-items-center cursor-pointer' onClick={() => scrollLeft("left")}>
                   <ChevronLeft />
                 </div>
                 <div className='d-flex overflow-x-scroll hideScroll gap-1' style={{ width: "fit-content", scrollBehavior: "smooth" }} ref={containerRef}>
-                  {ActiveTabList.map((data, index) => (
-                    <div className='cursor-pointer' style={{ padding: "10px 5px 5px 5px", width: "125px" }} key={data} onClick={() => { setActiveTab(index); filterAllContacts(data.id) }}>
+                  {[1].map((data, index) => (
+                    <div className='cursor-pointer' style={{ padding: "10px 5px 5px 5px", minWidth: "125px" }} key={data} onClick={() => setActiveTab(index)}>
                       <div className='d-flex justify-content-start align-items-center gap-1'>
-                        <h6 className='m-0'>{data.title}</h6>
+                        <h6 className='m-0'>Live Chat</h6>
                         {/* <div className='border-success rounded-5 d-flex justify-content-center align-items-center' style={{ width: "17px", height: "17px", background: "rgb(40 199 111 / 20%)" }}>
                           <p className='text-success m-0 font-small-3 '>3</p>
                         </div> */}
                       </div>
+                      {/* <p className='fst-italic font-small-3 mb-0'>206 chats</p> */}
                       {
                         useActiveTab === (index) && <hr className='w-75 m-0' style={{ background: "#000", height: "2px" }} />
                       }
@@ -638,80 +522,62 @@ const LiveChat = () => {
               </div>
 
               {/*contacts list */}
-              <div className='hideScroll  ' style={{ maxHeight: "calc(100vh - 240px)", overflow: "scroll" }}>
+              <div className='hideScroll border ' style={{ maxHeight: "calc(100vh - 350px)", overflow: "scroll" }}>
 
                 <div className='flex-column'>
-                  {users.map((ContactData, index) => {
+                  {users.map((ContactData, index) => (
+                    <div
+                      key={index}
+                      style={{ background: selectedDiv === index ? '#f0f2f5' : '#ffff' }}
+                      onClick={() => {
+                        handleDivClick(index)
+                        setCurrentTab(ContactData)
+                        webSocketConnection(index)
+                        setProfileDetails(ContactData)
+                      }}
+                    >
+                      <div>
+                        <div className="mx-1 border-bottom cursor-pointer" style={{ minHeight: "75px", padding: "15px 10px" }} >
+                          <Row className=" h-100" >
+                            <Col md="2" className=' d-flex align-items-center justify-content-center flex-column '>
+                              <div className="rounded-circle d-flex align-items-center justify-content-center text-success" style={{ width: '40px', height: '40px', background: "rgb(40 199 111 / 20%)" }}>
+                                {/* <p className='fs-3 fw-bolder text-success mb-0'>R</p> */}
+                                {/* <p className='fs-3 fw-bolder text-success mb-0'>{ContactData?.messages_reciever}</p> */}
+                                {useProfileDetails?.messages_display_name?.slice(0, 1)}
+                              </div>
 
-                    let lastMsgData = {}
-                    // console.log("601 =========", ContactData)
-                    console.log("601 =========", ContactData?.messages_reciever)
-                    try {
-                      lastMsgData = JSON.parse(ContactData?.messages_last_message)
-                    } catch (error) {
-                      console.log(error)
-                    }
-
-                    return (
-                      <div
-                        key={ContactData.messages_reciever}
-                        style={{ background: ContactData.messages_reciever === currentTab.messages_reciever ? '#f0f2f5' : '#ffff' }}
-                        onClick={() => {
-                          handleDivClick(index)
-                          setCurrentTab(ContactData)
-                          webSocketConnection(index)
-                          setProfileDetails(ContactData)
-                        }}
-                      >
-                        <div>
-                          <div className="mx-1 border-bottom cursor-pointer" style={{ minHeight: "75px", padding: "15px 10px" }} >
-                            <Row className=" h-100" >
-                              <Col md="2" className=' d-flex align-items-center justify-content-center flex-column '>
-                                <div className="rounded-circle d-flex align-items-center justify-content-center text-success" style={{ width: '40px', height: '40px', background: "rgb(40 199 111 / 20%)" }}>
-                                  {ContactData?.messages_display_name?.slice(0, 1) ?? <Users size={15} />}
-                                </div>
-                              </Col>
-                              <Col md="10" className=' ' style={{ gap: "5px" }}>
-                                <div className='d-flex justify-content-between '>
-                                  <h5 className='mb-0 p-0 fw-bolder'>{ContactData?.messages_display_name ?? ContactData?.messages_reciever}</h5>
-                                  <div className='font-small-3 '>
-                                    {ContactData?.messages_last_message_timestamp_sent && moment(ContactData?.messages_last_message_timestamp_sent).format("hh:mm")}
-                                  </div>
-                                </div>
-
-                                <div className='position-relative '>
-                                  <p className='m-0 p-0'>{lastMsgData?.text?.body?.slice(0, 20)} {lastMsgData?.text?.body?.length > 20 && <span>...</span>}</p>
-                                  <p className='m-0 p-0'>{lastMsgData?.name?.slice(0, 20)} {lastMsgData?.name?.length > 20 && <span>...</span>}</p>
-                                  <p className='m-0 p-0'>{lastMsgData?.type === "image" && <Image size={15} />} </p>
-                                  <p className='m-0 p-0'>{lastMsgData?.type === "video" && <Video size={15} />} </p>
-                                  <p className='m-0 p-0'>{lastMsgData?.type === "audio" && <Headphones size={15} />} </p>
-                                  <p className='m-0 p-0'>{lastMsgData?.type === "document" && <File size={15} />} </p>
-
-                                  {/* counter */}
+                            </Col>
+                            <Col md="10" className=' ' style={{ gap: "5px" }}>
+                              <div className='d-flex gap-2'>
+                                <h5 className='mb-0 p-0 fw-bolder'>{ContactData?.messages_display_name ?? ContactData?.messages_reciever}</h5>
+                                <div>
                                   {
                                     ContactData?.messages_count > 0 &&
-                                    <div className='border-success rounded-5 d-flex justify-content-center align-items-center position-absolute end-0 top-0 ' style={{ width: "20px", height: "20px", background: "rgb(40 199 111 / 20%)" }}>
+                                    <div className='border-success rounded-5 d-flex justify-content-center align-items-center' style={{ width: "20px", height: "20px", background: "rgb(40 199 111 / 20%)" }}>
                                       <p className='text-success m-0 font-small-3 '>{ContactData?.messages_count}</p>
                                     </div>
                                   }
                                 </div>
-                                <div className='font-small-2 d-flex ' style={{ gap: "8px", marginTop: "5px" }}>
 
-                                  {/* <span >{ContactData?.flag}</span> */}
-                                  {/* <span ><Globe size={10} /> Return & Refund</span> */}
-                                  {/* <span ><CiShoppingTag size={10} />MQL</span> */}
-                                </div>
-                              </Col>
+                              </div>
+                              <div className='d-flex'>
+                                {/* <span><LuCheckCheck size={15} color='#4FB6EC' className='' style={{ marginRight: "5px" }} /></span> */}
+                                {/* <p className='m-0 p-0'>{ContactData?.messages_last_message}</p> */}
+                              </div>
+                              <div className='font-small-2 d-flex ' style={{ gap: "8px", marginTop: "5px" }}>
 
-                            </Row>
-                          </div>
+                                {/* <span >{ContactData?.flag}</span> */}
+                                {/* <span ><Globe size={10} /> Return & Refund</span> */}
+                                {/* <span ><CiShoppingTag size={10} />MQL</span> */}
+                              </div>
+                            </Col>
+
+                          </Row>
                         </div>
                       </div>
-                    )
-                  })}
-                  <div className='w-100 ' >
-                    <div className='px-2 text-center py-1 text-primary cursor-pointer' onClick={() => { setContactPage(prev => prev + 1) }}>Load More...</div>
-                  </div>
+                    </div>
+                  ))}
+                  <div className='btn border rounded-2 ms-3 mt-1 pb-2' onClick={() => setContactPage(prev => prev + 1)}>load more</div>
                 </div>
               </div>
             </Col>
@@ -787,14 +653,10 @@ const LiveChat = () => {
                   {useMessageData.map((messageData, index) => {
                     // console.log("WEB SOCKET MESSAGE", messageData?.messages_context)
                     let messageJson = {}
-                    let replyJson = {}
-                    console.log("messageData =====================", index)
+                    // console.log("messageData", messageData)
                     try {
                       messageJson = JSON.parse(messageData?.messages_context)
-                      replyJson = JSON.parse(messageData?.messages_reply_context)
                       // console.log("637", messageJson?.image?.link)
-                      // console.log("755 0", replyJson?.components[0]?.text)
-                      // console.log("755 1", replyJson?.components[1]?.text)
                     } catch (error) {
                       // console.log(JSON.parse(messageData)?.messages_context)
                       console.log(error)
@@ -809,8 +671,42 @@ const LiveChat = () => {
                     return (
 
                       <>
-                        {messageJson &&
+                        {messageJson?.text?.body && (
                           <div key={index} className={`message`} style={{
+                            display: 'flex',
+                            align,
+                            backgroundColor,
+                            flexDirection: 'column',
+                            margin: '10px',
+                            padding: '5px',
+                            borderRadius: '8px',
+                            justifyContent: 'center',
+                            alignSelf: align,
+                            maxWidth: "fit-content"
+                          }}>
+                            <div className='  ' style={{ maxWidth: "500px" }}>
+                              <div className="message-info ps-1 pe-3">
+                                {messageJson?.text?.body}
+                              </div>
+
+                              <div className='d-flex justify-content-end align-items-center ' style={{ gap: "5px", paddingRight: "5px" }}>
+                                <span className='font-small-3 '>
+                                  {messageData?.messages_timestamp_sent && moment(messageData?.messages_timestamp_sent).format("hh:mm")}
+                                </span>
+                                <span className={currentTab?.messages_sender === messageData?.messages_sender ? '' : 'd-none'}>
+                                  {/* <LiaCheckDoubleSolid color='#006aff' /> */}
+                                  {/* {messageData?.messages_timestamp_sent && !messageData?.messages_timestamp_delivered && <LiaCheckSolid color='#7c7c7c' /> }
+                                {messageData?.messages_timestamp_delivered && <LiaCheckDoubleSolid color={messageData?.messages_timestamp_read ? '#006aff' : '#7c7c7c' } /> }
+                                {messageData?.messages_timestamp_failed && <MdErrorOutline color='red' /> } */}
+
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {/* image */}
+                        {messageJson?.image?.link && (
+                          <div key={index} className={`message  border-success`} style={{
                             display: 'flex',
                             align,
                             backgroundColor,
@@ -823,113 +719,105 @@ const LiveChat = () => {
                             maxWidth: "fit-content",
                             maxWidth: "400px"
                           }}>
-                            {
-                              (replyJson?.name) && <div className='border border-bottom-3 rounded-2 pe-2 mb-1'>
-                                <p className='font-small-3 mb-0'>{replyJson?.name}</p>
-                              </div>
-                            }
-                            {/* {
-                              (replyJson?.components[0]?.text || replyJson?.components[1]?.text) && <div className='border border-bottom-3 rounded-2 pe-2 mb-1'>
-                                <p className='font-small-3 mb-0'>...</p>
-                              </div>
-                            } */}
-
-                            {
-                              replyJson?.text?.body && <div className='border border-bottom-3 rounded-2 pe-2 mb-1'>
-                                <p className='font-small-3 mb-0'>{replyJson?.text?.body?.slice(0, 15)}...</p>
-                              </div>
-                            }
-
-                            <div className='  '>
-
-                              {/* text */}
+                            <div className='  ' >
                               {
-                                messageJson?.button?.text && <div className="message-info ps-1 pe-3">
-                                  {messageJson?.button?.text}
-                                </div>
-                              }
-                              {
-                                messageJson?.text?.body && <div className="message-info ps-1 pe-3">
-                                  {messageJson?.text?.body}
-                                </div>
-                              }
-                              {/* image */}
-                              {
-                                messageJson?.image?.link && <div>
+                                messageJson?.image?.link && <span className={`d-flex justify-content-${align} border-danger `}>
                                   <img src={messageJson?.image?.link} alt="" style={{ width: "100%" }} />
-
-                                  <h5 className='mt-1 ms-1'>
-                                    {messageJson?.image?.caption}
-                                  </h5>
-
-                                </div>
+                                </span>
                               }
-                              {/* video */}
+
+                            </div>
+                          </div>
+                        )}
+                        {/* video */}
+                        {messageJson?.video?.link && (
+                          <div key={index} className={`message`} style={{
+                            display: 'flex',
+                            align,
+                            flexDirection: 'column',
+                            margin: '10px',
+                            padding: '5px',
+                            borderRadius: '8px',
+                            justifyContent: 'center',
+                            alignSelf: align,
+                            maxWidth: "fit-content"
+                          }}>
+                            <div className='  ' style={{ maxWidth: "500px" }}>
                               {
                                 messageJson?.video?.link && <div className=''>
-                                  <video className='rounded-3  object-fit-cover w-100' controls mute style={{ width: "100%" }} >
+                                  <video className='rounded-3  object-fit-cover w-100' controls mute style={{ width: "70%" }} >
                                     <source
                                       src={messageJson?.video?.link ?? ""}
                                       type="video/mp4"
                                     />
                                     Video not supported.
                                   </video>
-                                  <h5 className='mt-1 ms-1'>
-                                    {messageJson?.video?.caption}
-                                  </h5>
                                 </div>
                               }
-                              {/* aduio */}
-                              {
-                                messageJson?.audio?.link && <div className='' style={{ minWidth: "300px" }}>
-                                  <audio className='rounded-3  object-fit-cover w-100' controls   >
-                                    <source
-                                      src={messageJson?.audio?.link ?? ""}
-                                      type="audio/ogg"
-                                    />
-                                    audio not supported.
-                                  </audio>
-                                  <h5 className='mt-1 ms-1'>
-                                    {messageJson?.audio?.caption}
-                                  </h5>
-                                </div>
-                              }
-                              {/* document */}
+
+                            </div>
+                          </div>
+                        )}
+
+                        {/* pdf */}
+                        {messageJson?.document?.link && (
+                          <div key={index} className={`message`} style={{
+                            display: 'flex',
+                            align,
+                            backgroundColor,
+                            flexDirection: 'column',
+                            margin: '10px',
+                            padding: '5px',
+                            borderRadius: '8px',
+                            justifyContent: 'center',
+                            alignSelf: align,
+                            maxWidth: "fit-content",
+                            minWidth: "200px"
+                          }}>
+                            <div className='  ' style={{ maxWidth: "500px" }}>
                               {
                                 messageJson?.document?.link && <div className=''>
-                                  <div className='  d-flex justify-content-start  align-items-center  px-2 gap-1' style={{ height: "50px" }}>
+                                  <div className='border-bottom  d-flex justify-content-start  align-items-center py-3 px-2 gap-1' style={{ height: "50px" }}>
                                     <FileText size={30} color='#000' />
                                     <div>{messageJson?.document?.filename ?? ''}</div>
                                     <a href={messageJson?.document?.link} target="_blank">
                                       <LuEye size={20} color='#a9abab' />
                                     </a>
                                   </div>
-                                  <h5 className='mt-1 ms-1'>
-                                    {messageJson?.document?.caption}
-                                  </h5>
                                 </div>
                               }
-                              {/* template */}
-                              {
-                                messageJson?.name && <div className=''>
-                                  <RenderLiveTemplateUI SingleTemplate={messageJson} />
 
-                                </div>
-                              }
-                              {/* time and tick */}
-                              <div className='d-flex justify-content-end align-items-center mt-1' style={{ gap: "5px", paddingRight: "5px" }}>
+                            </div>
+                          </div>
+                        )}
+
+                        {/*template render  */}
+                        {messageJson?.name && (
+                          <div key={index} className={`message`} style={{
+                            display: 'flex',
+                            align,
+                            backgroundColor,
+                            flexDirection: 'column',
+                            margin: '10px',
+                            justifyContent: 'center',
+                            alignSelf: 'end',
+                            maxWidth: "fit-content"
+                          }}>
+                            <div className='d-flex flex-column justify-content-end' style={{ maxWidth: "500px" }}>
+                              <RenderLiveTemplateUI SingleTemplate={messageJson} />
+                              <div className='d-flex justify-content-end align-items-center ' style={{ gap: "5px", paddingRight: "5px" }}>
                                 <span className='font-small-3 '>
-                                  {messageData?.messages_timestamp_sent && moment(messageData?.messages_timestamp_sent).format("hh:mm")}
+                                  {/* {messageData?.messages_timestamp_sent && moment(messageData?.messages_timestamp_sent).format("hh:mm")} */}
                                 </span>
-                                <span className={currentTab?.messages_sender === messageData?.messages_sender ? '' : 'd-none'}>
-                                  {
-                                    messageData?.messages_timestamp_read ? <LiaCheckDoubleSolid size={18} color='#006aff' /> : messageData?.messages_timestamp_delivered ? <LiaCheckDoubleSolid size={18} color='#7c7c7c' /> : messageData?.messages_timestamp_sent ? <LiaCheckDoubleSolid size={18} color='#7c7c7c' /> : ''
-                                  }
+                                <span>
+                                  {/* <LiaCheckDoubleSolid color='#006aff' /> */}
+                                  {/* {messageData?.messages_timestamp_sent && <LiaCheckSolid color='#7c7c7c' /> } */}
+
                                 </span>
                               </div>
                             </div>
                           </div>
-                        }
+                        )}
 
                       </>
                     )
@@ -1039,9 +927,9 @@ const LiveChat = () => {
                 {/* <div className='btn' onClick={() => setTemplateModal(true)}>
                   <HiOutlineTemplate size={20} />
                 </div> */}
-                <div className='btn' onClick={() => setReplyModal(true)}>
+                {/* <div className='btn' onClick={() => setReplyModal(true)}>
                   <BsReply size={20} />
-                </div>
+                </div> */}
 
                 <textarea
                   type="text"
@@ -1060,12 +948,13 @@ const LiveChat = () => {
                   style={{ borderRadius: "50px", resize: "none" }}
                 />
                 {/* {users.map((index) => ( */}
-                {
-                  currentTab?.messages_reciever && <div className='d-flex align-items-center justify-content-center ' onClick={() => sendMessages('text')} style={{ width: "50px", height: "50px", minWidth: "50px", minHeight: "50px", maxWidth: "50px", maxHeight: "50px", background: '#00a884', borderRadius: "50%", cursor: "pointer" }} >
-                    <IoMdSend className='fs-3' style={{ color: 'white' }} />
-                  </div>
-                }
-            
+                {/* <div className='btn btn-primary send-btn d-flex justify-content-center gap-1 align-items-center ' onClick={sendMessages}>
+                  <p className='m-0'>Send</p> <Send id="send-icon" size={16} />
+                </div> */}
+                <div className='d-flex align-items-center justify-content-center ' onClick={() => sendMessages('text')} style={{ width: "50px", height: "50px", minWidth: "50px", minHeight: "50px", maxWidth: "50px", maxHeight: "50px", background: '#00a884', borderRadius: "50%", cursor: "pointer" }} >
+                  <IoMdSend className='fs-3' style={{ color: 'white' }} />
+                </div>
+
               </div>}
 
             </Col>
@@ -1160,7 +1049,7 @@ const LiveChat = () => {
                     <div className='reply-container' style={{ maxHeight: "300px", overflow: "auto" }}>
                       {QuickReplayList.map((item, index) => {
                         return <div key={index} style={{ cursor: "pointer" }}
-                          onClick={() => { setSelectedDescription(item); setInputMessage(item.description) }}>
+                          onClick={() => setSelectedDescription(item)}>
                           <div className='p-1 fw-bolder '>
                             {item.title}
                           </div>
@@ -1182,7 +1071,7 @@ const LiveChat = () => {
               </Modal.Body>
               <Modal.Footer>
 
-                <Button className='btn btn-primary ' onClick={() => { setInputMessage(""); setReplyModal(false) }}>Cancel</Button>
+                <Button className='btn btn-primary ' onClick={() => setReplyModal(false)}>Cancel</Button>
                 {selectedDescription.description && <>
                   <Button
                     className='btn btn-primary '
@@ -1198,8 +1087,8 @@ const LiveChat = () => {
                         // ...prevMessages,
                         // { text: selectedDescription.description, sender: 'user', timeStamp: currentMessageTime() }
                         // ])
+                        setInputMessage(selectedDescription.description)
 
-                        sendMessages('text')
                         setReplyModal(false)
                       }}>Send</Button>
                 </>}

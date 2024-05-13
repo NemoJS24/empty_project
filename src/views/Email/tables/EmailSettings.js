@@ -23,12 +23,14 @@ export default function EmailSettings() {
   const hostName = {
     gmail: "smtp.gmail.com",
     outlook: "smtp-mail.outlook.com",
-    hotmail: "smtp.office365.com"
+    hotmail: "smtp.office365.com",
+    aws: "email-smtp.us-east-1.amazonaws.com"
   }
   const hostNameList = [
     { value: hostName.gmail, label: 'Gmail' },
     { value: hostName.outlook, label: 'Outlook' },
     { value: hostName.hotmail, label: 'Hotmail' },
+    { value: hostName.aws, label: 'AWS' },
     { value: '', label: 'Custom' }
   ]
  
@@ -67,6 +69,8 @@ export default function EmailSettings() {
       return { value: hostName.outlook, label:"Outlook" }
     } if (useSenderData.smtp_host === hostName.hotmail) {
       return { value: hostName.hotmail, label:"Hotmail" }
+    } if (useSenderData.smtp_host === hostName.aws) {
+      return { value: hostName.aws, label:"AWS" }
     } else {
       return { value: "Custom", label: "Custom" }
 
@@ -369,7 +373,7 @@ export default function EmailSettings() {
               </div>
             </Col>
             {
-              (useSenderData.smtp_host !== hostName.gmail && useSenderData.smtp_host !== hostName.outlook && useSenderData.smtp_host !== hostName.hotmail) ?
+              (useSenderData.smtp_host !== hostName.gmail && useSenderData.smtp_host !== hostName.outlook && useSenderData.smtp_host !== hostName.hotmail && useSenderData.smtp_host !== hostName.aws) ?
                 <Col md="6">
                   <div className='mt-2'>
                     <h5 className="">Custom Host</h5>

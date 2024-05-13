@@ -11,6 +11,9 @@ import { Card, CardBody, Modal, ModalBody, ModalHeader } from "reactstrap"
 import { ImCheckmark, ImCross } from 'react-icons/im'
 import { Link } from "react-router-dom"
 import toast from "react-hot-toast"
+import twentyfourseven from "../SuperLeadz/assets/2020773.png"
+import { AiOutlineQuestion } from "react-icons/ai"
+import { BiDollar } from "react-icons/bi"
 
 const Dashboard = () => {
   const [data, setData] = useState({
@@ -22,12 +25,12 @@ const Dashboard = () => {
     sms_subscribed: ""
   })
 
-    const copyCode = (id) => {
-        document.getElementById(id).select()
-        document.execCommand('copy')
-        console.log('True')
-        toast.success('Copied!')  
-    }
+  const copyCode = (id) => {
+    document.getElementById(id).select()
+    document.execCommand('copy')
+    console.log('True')
+    toast.success('Copied!')
+  }
 
   const params = new URLSearchParams(location.search)
   const outletData = getCurrentOutlet()
@@ -70,45 +73,45 @@ const Dashboard = () => {
 
   const checkCampaignStatus = () => {
     getReq('campaignData', `?app=${userPermission?.appName}`)
-    .then((resp) => {
-      console.log(resp)
-      const timeLine = resp?.data?.data?.timeline
+      .then((resp) => {
+        console.log(resp)
+        const timeLine = resp?.data?.data?.timeline
 
-      const showingTimeLine = timeLine?.filter((curElem) => curElem?.isShow === 1)
-      const completedTimeLine = timeLine?.filter((curElem) => curElem?.isShow === 1 && curElem?.isComplete === 1)
-      let status
-      
-      if (showingTimeLine.length === completedTimeLine.length) {
-        status = 1
-      } else {
-        status = 0
-      }
+        const showingTimeLine = timeLine?.filter((curElem) => curElem?.isShow === 1)
+        const completedTimeLine = timeLine?.filter((curElem) => curElem?.isShow === 1 && curElem?.isComplete === 1)
+        let status
 
-      const updatedData = {
-        isCampagin: status,
-        campaignLoader: false,
-        timeline: showingTimeLine
-      }
+        if (showingTimeLine.length === completedTimeLine.length) {
+          status = 1
+        } else {
+          status = 0
+        }
 
-      setCampaign((preData) => ({
-        ...preData,
-        ...updatedData
-      }))
+        const updatedData = {
+          isCampagin: status,
+          campaignLoader: false,
+          timeline: showingTimeLine
+        }
+
+        setCampaign((preData) => ({
+          ...preData,
+          ...updatedData
+        }))
         // setIsCampagin(resp?.data?.data?.status)
-    })
-    .catch((error) => {
-      console.log(error)
-      const updatedData = {
-        isCampagin: 0,
-        campaignLoader: false,
-        timeline: []
-      }
+      })
+      .catch((error) => {
+        console.log(error)
+        const updatedData = {
+          isCampagin: 0,
+          campaignLoader: false,
+          timeline: []
+        }
 
-      setCampaign((preData) => ({
-        ...preData,
-        ...updatedData
-      }))
-    })
+        setCampaign((preData) => ({
+          ...preData,
+          ...updatedData
+        }))
+      })
   }
 
   const chargeApi = () => {
@@ -161,61 +164,97 @@ const Dashboard = () => {
             </> : campaign.isCampagin === 0 ? (
               <>
                 <Card>
-                    <CardBody>
-                        
-                      <div className="left_side d-flex justify-content-between align-items-center mb-1">
-                        <div className='bg-primary text-center rounded-right WidthAdjust' style={{ width: "250px", padding: "6px", marginLeft: '-25px' }}>
-                          <h4 className='bb text-white m-0' style={{ fontSize: "16px" }}>Complete these steps</h4>
-                        </div>
+                  <CardBody>
+
+                    <div className="left_side d-flex justify-content-between align-items-center mb-1">
+                      <div className='bg-primary text-center rounded-right WidthAdjust' style={{ width: "250px", padding: "6px", marginLeft: '-25px' }}>
+                        <h4 className='bb text-white m-0' style={{ fontSize: "16px" }}>Complete these steps</h4>
                       </div>
-                      <div className="row justify-content-start align-items-center flex-nowrap overflow-auto">
-                        {
-                            campaign?.timeline?.map((curElem, key) => {
-                              const url = curElem.key === "is_outlet_created" ? `${outletData[0]?.id}/` : ''
-                              const color = curElem.isComplete ? 'success' : 'danger'
-                              return (
-                                <>
-                                  <div key={key} className="boxs aa col-md p-2 d-flex justify-content-center align-item-center">
-                                      {
-                                          color === "success" ? <>
-                                              <ImCheckmark color='#00c900' size={18}/>
-                                          </> : <ImCross color="#dc3545" size={18} />
-                                      }
-                                      <h6 className={`boxPad text-black fw-bolder ${curElem.key === "is_extension_enabled" && userPermission?.appName === "flash_accounts" ? "" : "d-flex align-items-center"}  m-0`}>
-                                          {
-            
-                                              curElem.key === "is_extension_enabled" ? (
-                                                  color === "success" ? curElem.name : <>
-                                                    <div onClick={() => setCampaign({...campaign, addScriptModel: true})} className={`d-flex justify-content-start align-items-start cursor-pointer`} style={{gap: '6px', color: '#007aff'}}>
-                                                      Add Script
-                                                      <span style={{ cursor: 'pointer', display: 'flex' }} title="This script allows the account creation form to swiftly appear on your store's Thank You page."><Info size={'12'} color="#464646" /></span>
-                                                    </div>
-                                                    <span style={{fontSize: '11px', fontWeight: '400'}}>Adding this script is crucial for the account creation form to appear on your store's Thank You page. Once the campaign is live and the script runs, this step is complete.</span>
-                                                  </> 
-                                              ) : (
-                                                  color === "success" ? curElem.name : <Link to={`${timelineName[userPermission?.appName] ? timelineName[userPermission?.appName][curElem.key] : ''}${url}`}>
-                                                      {curElem.name}
-                                                  </Link>
-                                              )
-                                          }
-                                          
-                                      </h6>
-                                  </div>
-                                </>
-                              )
-                          })
-                        }
-                      </div>
-                    </CardBody>
+                    </div>
+                    <div className="row justify-content-start align-items-center flex-nowrap overflow-auto">
+                      {
+                        campaign?.timeline?.map((curElem, key) => {
+                          const url = curElem.key === "is_outlet_created" ? `${outletData[0]?.id}/` : ''
+                          const color = curElem.isComplete ? 'success' : 'danger'
+                          return (
+                            <>
+                              <div key={key} className="boxs aa col-md p-2 d-flex justify-content-center align-item-center">
+                                {
+                                  color === "success" ? <>
+                                    <ImCheckmark color='#00c900' size={18} />
+                                  </> : <ImCross color="#dc3545" size={18} />
+                                }
+                                <h6 className={`boxPad text-black fw-bolder ${curElem.key === "is_extension_enabled" && userPermission?.appName === "flash_accounts" ? "" : "d-flex align-items-center"}  m-0`}>
+                                  {
+
+                                    curElem.key === "is_extension_enabled" ? (
+                                      color === "success" ? curElem.name : <>
+                                        <div onClick={() => setCampaign({ ...campaign, addScriptModel: true })} className={`d-flex justify-content-start align-items-start cursor-pointer`} style={{ gap: '6px', color: '#007aff' }}>
+                                          Add Script
+                                          <span style={{ cursor: 'pointer', display: 'flex' }} title="This script allows the account creation form to swiftly appear on your store's Thank You page."><Info size={'12'} color="#464646" /></span>
+                                        </div>
+                                        <span style={{ fontSize: '11px', fontWeight: '400' }}>Adding this script is crucial for the account creation form to appear on your store's Thank You page. Once the campaign is live and the script runs, this step is complete.</span>
+                                      </>
+                                    ) : (
+                                      color === "success" ? curElem.name : <Link to={`${timelineName[userPermission?.appName] ? timelineName[userPermission?.appName][curElem.key] : ''}${url}`}>
+                                        {curElem.name}
+                                      </Link>
+                                    )
+                                  }
+
+                                </h6>
+                              </div>
+                            </>
+                          )
+                        })
+                      }
+                    </div>
+                  </CardBody>
                 </Card>
               </>
             ) : (
               <>
-                <div className="card">
-                  <div className="card-body d-flex justify-content-between">
-                    <h4 className="m-0">Dashboard</h4>
-                  </div>
+                <div className="col-md-12">
+                  <Card>
+                    <CardBody>
+
+                      <div className='row'>
+                        <div className='col-md-4 d-flex justify-content-start align-items-center'>
+                          <h4 className='m-0'>Dashboard</h4>
+                        </div>
+                        <div className='col-md-4'>
+                          <div className='d-flex justify-content-center align-items-center h-100 gap-1'>
+                            {/* <Link className="btn btn-primary" to="/merchant/SuperLeadz/"> Quick Set-Up</Link> */}
+                            <Link className="btn btn-primary" to="/merchant/Flash_Accounts/Themes/"> Create Campaign</Link>
+                          </div>
+
+                        </div>
+                        <div className='col-md-4'>
+                          <div className="parent d-flex justify-content-end align-items-center gap-1">
+                            <div className="right_side">
+                              <div className="d-flex justify-content-end align-items-start gap-1">
+                                <Link to='/merchant/create_support/' className='shedule_btn btn btn-sm btn-primary btnCustom text-nowrap' title="Support">
+                                  {/* <AiFillPhone size={14} style={{ marginBottom: "2px" }} /> */}
+                                  <img src={twentyfourseven} width={14} alt="24/7" style={{ marginBottom: "2px" }} />
+                                </Link>
+                                <Link to='/merchant/SuperLeadz/faq/' className='shedule_btn btn btn-sm btn-primary btnCustom text-nowrap' title="FAQ">
+                                  <AiOutlineQuestion size={14} style={{ marginBottom: "2px" }} />
+                                  {/* <span className='boxPadbtn' style={{fontSize:"11px"}}>Support</span> */}
+                                </Link>
+                                <Link to='/merchant/Flash_Accounts/billing/' className='shedule_btn btn btn-sm btn-primary btnCustom text-nowrap' title="Billing">
+                                  <BiDollar size={14} style={{ marginBottom: "2px" }} />
+                                  {/* <span className='boxPadbtn' style={{fontSize:"11px"}}>Support</span> */}
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </CardBody>
+                  </Card>
                 </div>
+
               </>
             )
           }
@@ -224,16 +263,16 @@ const Dashboard = () => {
 
       <div className="row match-height">
         <div className="col-md-6">
-          <CardCom id={"TotalFlashAccountsCheckout"} icon={<User width={'27px'} />} title={<>Total Checkouts</>} data={!isLoading ? formatNumberWithCommas(data.total_cust) : <Spinner size={'25px'} /> } />
-          <CardCom id={"TotalFlashAccountsCreatedFlash"} icon={<User width={'27px'} />} title={<>Total Flash Accounts Created</>} data={!isLoading ? formatNumberWithCommas(data.total_non_guests) : <Spinner size={'25px'} /> } />
+          <CardCom id={"TotalFlashAccountsCheckout"} icon={<User width={'27px'} />} title={<>Total Checkouts</>} data={!isLoading ? formatNumberWithCommas(data.total_cust) : <Spinner size={'25px'} />} />
+          <CardCom id={"TotalFlashAccountsCreatedFlash"} icon={<User width={'27px'} />} title={<>Total Flash Accounts Created</>} data={!isLoading ? formatNumberWithCommas(data.total_non_guests) : <Spinner size={'25px'} />} />
           <CardCom id={"GuestConversionRateFlash"} icon={<RefreshCcw width={'27px'} />} title={<>Guest Conversion Rate</>} data={!isLoading ? `${Number(data.conversion_rate).toFixed(2)}%` : <Spinner size={'25px'} />} info={`% of guest checkouts converted at Thank You page`} />
-          <CardCom id={"RevenueGeneratedfromFlash"} icon={<RefreshCcw width={'27px'} />} title={<>Revenue Generated from<br />Flash Accounts Registered Customers</>} data={!isLoading ? formatNumberWithCommas(data.total_revenue) : <Spinner size={'25px'} /> } />
+          <CardCom id={"RevenueGeneratedfromFlash"} icon={<RefreshCcw width={'27px'} />} title={<>Revenue Generated from<br />Flash Accounts Registered Customers</>} data={!isLoading ? formatNumberWithCommas(data.total_revenue) : <Spinner size={'25px'} />} />
         </div>
         <div className="col-md-6">
           <div className="card">
             <div className="card-body d-flex justify-content-center align-items-center">
               {!isLoading ? (
-                <div style={{width: '350px', margin: 'auto'}}>
+                <div style={{ width: '350px', margin: 'auto' }}>
                   <PieChart labels={['Customers', 'Accounts Created', 'Email Subscribed', 'SMS Subscribed']} data={[data?.total_cust, data?.total_non_guests, data?.email_subscribed, data?.sms_subscribed]} />
 
                 </div>
@@ -247,29 +286,29 @@ const Dashboard = () => {
         </div>
       </div>
 
-        <Modal isOpen={campaign?.addScriptModel}>
-            <ModalHeader toggle={() => setCampaign({...campaign, addScriptModel: !campaign?.addScriptModel})}>
-              <div className="d-flex justify-content-start align-items-start" style={{gap: '6px'}}>
-                Add Script
-                <span style={{ cursor: 'pointer', display: 'flex' }} title="This script allows the account creation form to swiftly appear on your store's Thank You page."><Info size={'12'} /></span>
+      <Modal isOpen={campaign?.addScriptModel}>
+        <ModalHeader toggle={() => setCampaign({ ...campaign, addScriptModel: !campaign?.addScriptModel })}>
+          <div className="d-flex justify-content-start align-items-start" style={{ gap: '6px' }}>
+            Add Script
+            <span style={{ cursor: 'pointer', display: 'flex' }} title="This script allows the account creation form to swiftly appear on your store's Thank You page."><Info size={'12'} /></span>
 
-              </div>
-            </ModalHeader>
-            <ModalBody>
-                <div className="d-flex justify-content-start align-items-center pb-2" style={{gap: '8px'}}>
-                    <input
-                        id="code1"
-                        className="form-control"
-                        value={`<script src="https://apps.xircls.com/static/flash_accounts/my_script.js"></script>`}
-                    />
-                    <div className="text-success btn btn-sm btn-outline-secondary" onClick={() => copyCode('code1')}>
-                        <Copy size="18px" />
-                    </div>
-                </div>
-                <p className="">Copy-paste this code into the "Additional Scripts" field in your Shopify store. <a target="_blank" href={`https://${outletData[0]?.web_url}/admin/settings/checkout`}>Take me there</a></p>
+          </div>
+        </ModalHeader>
+        <ModalBody>
+          <div className="d-flex justify-content-start align-items-center pb-2" style={{ gap: '8px' }}>
+            <input
+              id="code1"
+              className="form-control"
+              value={`<script src="https://apps.xircls.com/static/flash_accounts/my_script.js"></script>`}
+            />
+            <div className="text-success btn btn-sm btn-outline-secondary" onClick={() => copyCode('code1')}>
+              <Copy size="18px" />
+            </div>
+          </div>
+          <p className="">Copy-paste this code into the "Additional Scripts" field in your Shopify store. <a target="_blank" href={`https://${outletData[0]?.web_url}/admin/settings/checkout`}>Take me there</a></p>
 
-            </ModalBody>
-        </Modal>
+        </ModalBody>
+      </Modal>
     </>
   )
 }

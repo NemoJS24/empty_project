@@ -86,7 +86,7 @@ const FinanceDetails = () => {
 
     const columns = [
         {
-            name: "Created At",
+            name: "Created On",
             minWidth: "240px",
             selector: (row) => (
                 row?.created_at ? moment(row?.created_at).format("YYYY-MM-DD") : ''

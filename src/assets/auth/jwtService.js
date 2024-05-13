@@ -4,10 +4,11 @@ import jwtDecode from "jwt-decode"
 import toast from "react-hot-toast"
 import { Navigate } from "react-router-dom"
 
-// export const baseURL = "https://api.demo.xircls.in"
-// export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
-// export const crmURL = "https://crm.demo.xircls.in"
-// export const affiliateURL = "https://api.demo.affiliate.xircls.com"
+export const baseURL = "https://api.demo.xircls.in"
+export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
+export const crmURL = "https://crm.demo.xircls.in"
+export const affiliateURL = "https://api.demo.affiliate.xircls.com"
+export const SocketBaseURL = "wss://api.demo.xircls.in"
 
 // const URLs = {
 //     baseURL,
@@ -16,11 +17,11 @@ import { Navigate } from "react-router-dom"
 // }
 
 // Live 
-export const baseURL = "https://api.xircls.com"
-export const SuperLeadzBaseURL = "https://apps.xircls.com"
-export const crmURL = "https://crm.xircls.com"
-export const affiliateURL = "https://api.affiliate.xircls.com"
-export const SocketBaseURL = "wss://api.xircls.com"
+// export const baseURL = "https://api.xircls.com"
+// export const SuperLeadzBaseURL = "https://apps.xircls.com"
+// export const crmURL = "https://crm.xircls.com"
+// export const affiliateURL = "https://api.affiliate.xircls.com"
+// export const SocketBaseURL = "wss://api.xircls.com"
 
 export const configUrl = {
 
@@ -238,6 +239,7 @@ export const configUrl = {
     test: "merchant/update_field",
     active_refeeral_offer: "/referral/referralpoints/",
     referral_dashboard: "referral/dashboard/",
+    group_import_customer: "/talk/group_import_customer/",
     
     // Email
     email_details: "/mail/contact_details/",

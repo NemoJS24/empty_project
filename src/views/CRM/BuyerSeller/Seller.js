@@ -262,7 +262,8 @@ const Buyer = ({ allData }) => {
         const checkForm = validForm(addFormvalueToCheck, check.addForm)  // Use addFormvalueToCheck for validation
         console.log(checkForm, "dd")
         if (checkForm) {
-            postData()
+            // postData()
+            postNewCustomerData()
         }
     }
 
@@ -1110,7 +1111,7 @@ const Buyer = ({ allData }) => {
                             <Col md={6} className="mt-2">
                             {/* <iframe src={`https://crm.xircls.com/static/${formData?.productroc_document}`}></iframe>  */}
                                 <div className='d-flex'><label htmlFor="basicDetails-rot">
-                                    ROC Document
+                                    RC Document
                                 </label> 
                                 {console.log(customer?.vehicle?.roc_document, "============")}
                             {isEdit === true && customer?.vehicle?.roc_document ? (<span className='d-flex'><span className='fs-6'>view </span><a target='_blank' href={`https://crm.xircls.com/static${customer?.vehicle?.roc_document}`}> <Eye size={15}/></a></span>) : (<></>)}

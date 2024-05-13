@@ -60,7 +60,7 @@ export default function ProjectTable() {
             isEnable: true
         },
         {
-            name: 'Created at',
+            name: 'Created On',
             minWidth: '15%',
             selector: row => row.created_at, // Assuming 'category' is the property in your data for the category
             type: 'select',
