@@ -392,7 +392,7 @@ export default function TemplateDashboard() {
 
                                                  
                                                    {
-                                                      SingleTemplate.status === "APPROVED" && isActive && <>
+                                                      SingleTemplate.status === "APPROVED" && isActive && <div className='d-flex flex-column w-100'>
                                                       <div className='d-flex gap-1 align-items-center'>
                                                          <div class="dropdown">
                                                             <button class="dropbtn"> <CiMenuKebab /> </button>
@@ -406,8 +406,11 @@ export default function TemplateDashboard() {
 
                                                       </div>
                                                          {/* <button className='btn btn-primary px-3 send-btn' onClick={() => getCurrentTemplate(SingleTemplate.id, 'modal2')} >Start Campaign <Send id="send-icon" size={16} style={{ marginLeft: "5px" }} /></button> */}
+                                                         <div className='ms-auto'>
+
                                                          <Link to={params.get('campagin_type') ? params.get('campagin_type') === "broadcast" ? `/merchant/whatsapp/campaign/${SingleTemplate.id}` : `/merchant/whatsapp/create-campaign/${params.get('campagin_type')}/${SingleTemplate.id}` : `/merchant/whatsapp/campaign/${SingleTemplate.id}`} className='btn btn-primary px-3 send-btn' >Use Template <Send id="send-icon" size={16} style={{ marginLeft: "5px" }} /></Link>
-                                                      </>
+                                                         </div>
+                                                      </div>
                                                    }
                                                    {
                                                       !isActive && <h6>This template is inactive click here to <span className='text-success cursor-pointer text-decoration-underline' onClick={() => toggleActive(SingleTemplate.id, true)}>Activate</span>. </h6>

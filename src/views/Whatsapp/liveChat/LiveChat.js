@@ -27,9 +27,10 @@ import XIRCLS_LOGO from '../../../assets/images/logo/XIRCLS_LOGO.png'
 import { QuickReplayList, RenderLiveTemplateUI, templateCatgList } from '../SmallFunction'
 import back from '../imgs/WhatsAppBack.png'
 import FrontBaseLoader from '../../Components/Loader/Loader'
+import { identity } from 'lodash'
 const LiveChat = () => {
 
-  const [useIsLoading, setIsLoading] = useState(true)
+  const [useIsLoading, setIsLoading] = useState(false)
   const [useMessageData, setMessageData] = useState([])
   const [useMessageCounter, setMessageCounter] = useState(0)
   const [useProfileDetails, setProfileDetails] = useState("")
@@ -117,7 +118,21 @@ const LiveChat = () => {
       setAllSourceChecked(allChecked)
     }
   }
+// mark msg read
+const markAsRead = (id, msgId, recieverNum) => {
 
+  console.log("99", id)
+  console.log("99", msgId)
+  
+  // return null
+  const form_data = new FormData()
+    form_data.append("messageId", id)
+    form_data.append("unique_id", msgId)
+  postReq("mark_message_read", form_data)
+  .then((resp) => {
+    console.log("msg read", resp)
+  }).catch((err) => { console.log(err) })
+}
 
   const [open, setOpen] = useState('1')
   const toggle = (id) => {
@@ -166,7 +181,7 @@ const LiveChat = () => {
       // Close existing WebSocket connection if there's any
       if (ws && ws.readyState === WebSocket.OPEN) {
         ws.close()
-        console.info('Previous WebSocket connection closed')
+        console.info('Previous WebSocket chats connection closed')
       }
 
       // Create new WebSocket connection
@@ -174,19 +189,23 @@ const LiveChat = () => {
       setWs(newWs)
 
       newWs.onopen = () => {
-        console.info('WebSocket connected')
+        console.info('WebSocket chats connected', users?.[index]?.messages_unique_id)
       }
 
       newWs.onmessage = (event) => {
         console.log("New message:", event.data)
         setMessageData(prevMessageData => [JSON.parse(event.data), ...prevMessageData])
         setMessageCounter(prevCounter => prevCounter + 1)
+        const old = JSON.parse(event.data)
+        console.log("old", old)
+       
+        markAsRead(JSON.parse(old.messages_context).id, old.unique_id)
         // eslint-disable-next-line no-use-before-define
         scrollToBottom()
       }
 
       newWs.onclose = () => {
-        console.info('WebSocket disconnected')
+        console.info('WebSocket chats disconnected', users?.[index]?.messages_unique_id)
       }
 
     } catch (error) {
@@ -238,6 +257,10 @@ const LiveChat = () => {
       .then((resp) => {
 
         setMessageData(resp?.data?.messages)
+        // console.log("260", resp?.data?.messages.slice(0, 1)[0].messages_message_id, useProfileDetails.messages_unique_id)
+        markAsRead(resp?.data?.messages.slice(0, 1)[0].messages_message_id, useProfileDetails.messages_unique_id)
+        
+        // markAsRead(resp?.data?.messages.slice(0, 1)[0].messages_message_id)
       }).catch((err) => { console.log(err) })
   }
 
@@ -253,7 +276,6 @@ const LiveChat = () => {
     form_data.append("size", 10)
     form_data.append("searchValue", filterText)
     form_data.append("type", useSortBy)
-    setIsLoading(true)
     postReq("contact_relation", form_data)
       .then((res) => {
         // setUsers(res.data?.messages)
@@ -265,7 +287,7 @@ const LiveChat = () => {
         webSocketConnectionContacts(res?.data?.project_no)
       }).catch((err) => {
         // console.log(err)
-      }).finally(() => setIsLoading(false))
+      })
   }
   const filterAllContacts = (sortby) => {
     console.log("contacts sortby =============", sortby)
@@ -296,35 +318,17 @@ const LiveChat = () => {
     getAllContacts()
   }, [useContactPage])
 
-  // useEffect(() => {
-  //   console.log("================== run contacts textfilter && useSortBy")
-  //   const form_data = new FormData()
-  //   form_data.append("page", useContactPage)
-  //   form_data.append("size", 10)
-  //   form_data.append("searchValue", filterText)
-  //   form_data.append("type", useSortBy)
-  //   postReq("contact_relation", form_data)
-  //     .then((res) => {
-  //       // setUsers(res.data?.messages)
-  //       console.log("213", users)
-  //       console.log("214", res.data?.messages)
-  //       setUsers(res.data?.messages)
-  //       // setUsers(prev => [...prev, ...res.data?.messages])
-  //       setContactCounter(prev => prev + 1)
-
-  //       // setProjectNo(res.data?.project_no)
-
-  //     }).catch((err) => {
-  //       // console.log(err)
-  //     })
-  // }, [filterText, useSortBy])
-
+  const msgCountUpt = () => {
+    console.log("999", currentTab.messages_reciever)
+    console.log("999", users)
+      }
   useEffect(() => { // when select number
     getAllMessages()
     // eslint-disable-next-line no-use-before-define
     scrollToBottom()
+    msgCountUpt()
   }, [currentTab])
-
+  
   const [selectedCategory, setSelectedCategory] = useState(null)
   const form_data = new FormData()
 
@@ -384,6 +388,7 @@ const LiveChat = () => {
     // setUsers()
 
   }
+  
   console.log("350 ======", users)
   return (
     <>
@@ -645,7 +650,7 @@ const LiveChat = () => {
 
                     let lastMsgData = {}
                     // console.log("601 =========", ContactData)
-                    console.log("601 =========", ContactData?.messages_reciever)
+                    // console.log("601 =========", ContactData?.messages_reciever)
                     try {
                       lastMsgData = JSON.parse(ContactData?.messages_last_message)
                     } catch (error) {
@@ -661,6 +666,8 @@ const LiveChat = () => {
                           setCurrentTab(ContactData)
                           webSocketConnection(index)
                           setProfileDetails(ContactData)
+                          // console.log("ContactData", ContactData)
+
                         }}
                       >
                         <div>
@@ -689,7 +696,7 @@ const LiveChat = () => {
 
                                   {/* counter */}
                                   {
-                                    ContactData?.messages_count > 0 &&
+                                 (ContactData.messages_reciever !== currentTab.messages_reciever &&  ContactData?.messages_count > 0) &&
                                     <div className='border-success rounded-5 d-flex justify-content-center align-items-center position-absolute end-0 top-0 ' style={{ width: "20px", height: "20px", background: "rgb(40 199 111 / 20%)" }}>
                                       <p className='text-success m-0 font-small-3 '>{ContactData?.messages_count}</p>
                                     </div>
@@ -788,7 +795,7 @@ const LiveChat = () => {
                     // console.log("WEB SOCKET MESSAGE", messageData?.messages_context)
                     let messageJson = {}
                     let replyJson = {}
-                    console.log("messageData =====================", index)
+                    // console.log("messageData =====================", index)
                     try {
                       messageJson = JSON.parse(messageData?.messages_context)
                       replyJson = JSON.parse(messageData?.messages_reply_context)

@@ -241,6 +241,8 @@ export const configUrl = {
     active_refeeral_offer: "/referral/referralpoints/",
     referral_dashboard: "referral/dashboard/",
     group_import_customer: "/talk/group_import_customer/",
+    mark_message_read: "/talk/mark_message_read/",
+
     // Email
     email_details: "/mail/contact_details/",
     import_email: "/mail/import_customer/",
