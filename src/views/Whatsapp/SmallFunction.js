@@ -145,8 +145,7 @@ export const QuickReplayList = [
 
 // functions
 export const getBoldStr = (str) => {
-   str = str.replace(/\*(\b.*?)\b\*/g, (_, p1) => `<strong>${p1}</strong>`)
-    .replace(/\~(\b.*?)\b\~/g, (_, p1) => `<del>${p1}</del>`)
+   str = str.replace(/\*(.*?)\*/g, (_, p1) => `<strong>${p1}</strong>`)
     .replace(/(?<=\s|^)(_.*?_)(?=\s|$)/g, (_, p1) => `<em>${p1.slice(1, -1)}</em>`)
     .replace(/\b((?:https?:\/\/|www\.)\S+)\b/g, '<a href="$1" target="_blank" style="color: blue; text-decoration:underline">$1</a>')
   return str
