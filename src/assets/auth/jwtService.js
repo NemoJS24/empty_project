@@ -4,11 +4,11 @@ import jwtDecode from "jwt-decode"
 import toast from "react-hot-toast"
 import { Navigate } from "react-router-dom"
 
-export const baseURL = "https://api.demo.xircls.in"
-export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
-export const crmURL = "https://crm.demo.xircls.in"
-export const affiliateURL = "https://api.demo.affiliate.xircls.com"
-export const SocketBaseURL = "wss://api.demo.xircls.in"
+// export const baseURL = "https://api.demo.xircls.in"
+// export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
+// export const crmURL = "https://crm.demo.xircls.in"
+// export const affiliateURL = "https://api.demo.affiliate.xircls.com"
+// export const SocketBaseURL = "wss://api.demo.xircls.in"
 
 // const URLs = {
 //     baseURL,
@@ -16,12 +16,12 @@ export const SocketBaseURL = "wss://api.demo.xircls.in"
 //     crmURL
 // }
 
-// Live 
-// export const baseURL = "https://api.xircls.com"
-// export const SuperLeadzBaseURL = "https://apps.xircls.com"
-// export const crmURL = "https://crm.xircls.com"
-// export const affiliateURL = "https://api.affiliate.xircls.com"
-// export const SocketBaseURL = "wss://api.xircls.com"
+// // Live 
+export const baseURL = "https://api.xircls.com"
+export const SuperLeadzBaseURL = "https://apps.xircls.com"
+export const crmURL = "https://crm.xircls.com"
+export const affiliateURL = "https://api.affiliate.xircls.com"
+export const SocketBaseURL = "wss://api.xircls.com"
 
 export const configUrl = {
 
@@ -174,6 +174,7 @@ export const configUrl = {
     saveUser: "/member/member_permission/",
     memebersDetails: "/member/members_details/",
     getAllCustomer: "/customers/get_customers/",
+    getAllCustomerNew: "/customers/get_customer_options/",
     cross_leads: "/customers/cross_leads/",
     add_leads: '/customers/merchant/add_leads/',
     leads_get:'/customers/merchant/leads_get/',
@@ -240,7 +241,6 @@ export const configUrl = {
     active_refeeral_offer: "/referral/referralpoints/",
     referral_dashboard: "referral/dashboard/",
     group_import_customer: "/talk/group_import_customer/",
-    
     // Email
     email_details: "/mail/contact_details/",
     import_email: "/mail/import_customer/",
@@ -262,8 +262,6 @@ export const configUrl = {
     email_dashboard_view: "/mail/email_dashboard_view/",
     email_check: "/mail/mail_check/",
     email_campaign_details: "/mail/email_campaign_details/",
-
-    
     mail_info: "/mail/mail_info/",
     update_status: "/mail/update_status/",
     delete_mail: "/mail/delete_mail/",
