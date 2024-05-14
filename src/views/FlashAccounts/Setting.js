@@ -18,8 +18,7 @@ import 'swiper/modules/navigation/navigation.min.css'
 import 'swiper/modules/autoplay/autoplay.min.css'
 import "./Form.css"
 import BasicEditor from "../Components/Editor/BaseEditor"
-import { useNavigate } from "react-router"
-import { Link, useParams, useLocation } from "react-router-dom"
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom"
 import PickerDefault from "../Components/Date-picker/NormalDatePicker"
 import ComTable from "../Components/DataTable/ComTable"
 import moment from "moment"

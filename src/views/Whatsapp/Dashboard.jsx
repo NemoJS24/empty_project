@@ -11,7 +11,7 @@ import { SiConvertio } from 'react-icons/si'
 import { BiDollar } from 'react-icons/bi'
 import { getCurrentOutlet } from '../Validator'
 import { getReq } from '../../assets/auth/jwtService'
-import WhatsappCampaign from './WhatsappCampaign'
+import WhatsappCampaign from './Campaign/WhatsappCampaign'
 
 const Dashboard = () => {
     const { userPermission } = useContext(PermissionProvider)
