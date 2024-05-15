@@ -186,7 +186,7 @@ export const configUrl = {
     automotivetransaction:'/vehicle/automotivetransaction/',
     check_customer_details:'/vehicle/check_customer_details/',
     used_car_dashboard:'/vehicle/used_cust_all_vehicle/',
-
+    campagin_view: "/talk/campaign_view_data/",
     // crm leads profile
     add_variant: `/vehicle/add_variant/`,
 

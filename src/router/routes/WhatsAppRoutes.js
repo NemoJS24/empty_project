@@ -92,7 +92,11 @@ export const WhatsAppRoutes = [
         element: <TemplateReports />
     },
     {
-        path: '/merchant/whatsapp/reports/template/:templateId',
+        path: '/merchant/whatsapp/reports/template/:templateId/:campaign_id',
+        element: <SentReports />
+    },
+    {
+        path: '/merchant/whatsapp/reports/template/:templateId/',
         element: <SentReports />
     },
     {

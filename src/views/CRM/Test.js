@@ -10,7 +10,6 @@ export const MenuList = ({ options, maxHeight, getValue }) => {
     const totalHeight = height * Math.min(options.length, numVisibleOptions)
     const [value] = getValue()
     const initialOffset = options.findIndex(option => option?.value === value?.value) * height
-
     return (
       <List
         height={totalHeight}
