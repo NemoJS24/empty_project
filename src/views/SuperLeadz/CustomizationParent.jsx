@@ -3076,7 +3076,10 @@ const CustomizationParent = () => {
                     {finalObj?.behaviour?.PAGES?.includes("collections_page") && (
                         <>
                             <div className="row mt-2">
-                                <label htmlFor="" style={{ fontSize: "12px" }}>Collections:</label>
+                                <label style={{display: "flex", justifyContent: 'between', alignItems: 'center', gap: '4px', fontSize: '12px'}}>
+                                    Collections:
+                                    <a className='text-primary' onClick={() => updatePresent({...finalObj, behaviour: {...finalObj.behaviour, collections: collectionList?.map((cur) => cur?.value)}})}>Select All</a>
+                                </label>
                                 <Select
                                     isMulti={true}
                                     options={collectionList}
@@ -3086,6 +3089,7 @@ const CustomizationParent = () => {
                                     placeholder="Add Collection/s"
                                     value={collectionList?.filter((option) => finalObj?.behaviour?.collections?.includes(option.value))}
                                     onChange={(options) => {
+                                        console.log(options, "pppppppppp")
                                         const option_list = options.map((cur) => {
                                             return cur.value
                                         })
