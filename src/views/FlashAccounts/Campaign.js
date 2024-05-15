@@ -265,7 +265,7 @@ const Campaign = () => {
                     <span className="position-absolute top-0 end-0" style={{ cursor: 'pointer', padding: "0.25rem" }} onClick={() => setDeleteModal(!deleteModal)}>
                         <X size={17.5} />
                     </span>
-                    Are you sure you want to delete this theme
+                    Are you sure you want to delete this campaign?
                     <div className="mt-2 d-flex gap-3 justify-content-end align-items-center">
                         <button className="btn btn-outline-primary" onClick={() => deleteCampagin()}>Delete</button>
                     </div>

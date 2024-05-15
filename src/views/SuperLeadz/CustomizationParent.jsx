@@ -5018,29 +5018,29 @@ const CustomizationParent = () => {
                                                                 </>
                                                             }
                                                             <div className='py-1 px-2 mt-1'>
-                                                                    <div className="row mt-2">
-                                                                        <p className='m-0 fw-bolder text-black text-uppercase' style={{ fontSize: "0.75rem" }}>Source:</p>
-                                                                        {/* <label htmlFor="" className='mb-1' style={{ fontSize: "12px" }}>Source:</label> */}
-                                                                        <Select
-                                                                            isMulti={true}
-                                                                            options={sourceList}
-                                                                            inputId="aria-example-input"
-                                                                            closeMenuOnSelect={false}
-                                                                            name="source"
-                                                                            placeholder="Add Source"
-                                                                            value={sourceList?.filter(option => finalObj?.behaviour?.SOURCE_PAGE_LINK?.includes(option.value))}
-                                                                            onChange={(options) => {
-                                                                                const option_list = options.map((cur) => {
-                                                                                    return cur.value
-                                                                                })
-                                                                                updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, SOURCE_PAGE_LINK: option_list } })
-                                                                                console.log(finalObj?.behaviour?.PAGES?.includes("custom_source"), 'jyguyuyuyg')
-                                                                                // const newObj = { ...finalObj }
-                                                                                // newObj.behaviour.SOURCE_PAGE_LINK = [...finalObj.behaviour.CUSTOM_PAGE_LINK, ""]
-                                                                                // updatePresent(newObj)
-                                                                            }}
-                                                                        />
-                                                                    </div>
+                                                                <div className="row mt-2">
+                                                                    <p className='m-0 fw-bolder text-black text-uppercase' style={{ fontSize: "0.75rem" }}>Source:</p>
+                                                                    {/* <label htmlFor="" className='mb-1' style={{ fontSize: "12px" }}>Source:</label> */}
+                                                                    <Select
+                                                                        isMulti={true}
+                                                                        options={sourceList}
+                                                                        inputId="aria-example-input"
+                                                                        closeMenuOnSelect={false}
+                                                                        name="source"
+                                                                        placeholder="Add Source"
+                                                                        value={sourceList?.filter(option => finalObj?.behaviour?.SOURCE_PAGE_LINK?.includes(option.value))}
+                                                                        onChange={(options) => {
+                                                                            const option_list = options.map((cur) => {
+                                                                                return cur.value
+                                                                            })
+                                                                            updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, SOURCE_PAGE_LINK: option_list } })
+                                                                            console.log(finalObj?.behaviour?.PAGES?.includes("custom_source"), 'jyguyuyuyg')
+                                                                            // const newObj = { ...finalObj }
+                                                                            // newObj.behaviour.SOURCE_PAGE_LINK = [...finalObj.behaviour.CUSTOM_PAGE_LINK, ""]
+                                                                            // updatePresent(newObj)
+                                                                        }}
+                                                                    />
+                                                                </div>
                                                             </div>
 
                                                         </div>

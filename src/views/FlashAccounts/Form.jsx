@@ -95,9 +95,9 @@ const Form = () => {
       opt_in_email: "",
       opt_in_sms: "",
       opt_in_both: "",
-      label_text_email: "Subscribe to email",
-      label_text_sms: "Subscribe to sms",
-      label_text_both: "Subscribe",
+      label_text_email: "I consent to receiving email marketing communication",
+      label_text_sms: "I consent to receiving SMS marketing communication",
+      label_text_both: "I consent to receiving email & SMS marketing communication",
       email_check: true,
       sms_check: true,
       both_check: true,
@@ -284,8 +284,8 @@ const Form = () => {
                         }} />
                       </Col>
                       <Col md={12} style={{marginBottom: "1.25rem" }}>
-                        <label style={{ fontSize: "13px", marginBottom: '6px' }} htmlFor="sub_heading" className="form-control-label">Sub-heading</label>
-                        <textarea onChange={handleDataChange} value={prevData?.[currPage]?.sub_heading} name="sub_heading" className="form-control" id="sub_heading" placeholder="Sub-heading" />
+                        <label style={{ fontSize: "13px", marginBottom: '6px' }} htmlFor="sub_heading" className="form-control-label">subheading</label>
+                        <textarea onChange={handleDataChange} value={prevData?.[currPage]?.sub_heading} name="sub_heading" className="form-control" id="sub_heading" placeholder="subheading" />
                       </Col>
                       <Col md={4} style={{marginBottom: "1.25rem" }}>
                         <label style={{ fontSize: "13px", marginBottom: '6px' }} htmlFor="secondary_font" className="form-control-label">Secondary Font</label>
@@ -299,7 +299,7 @@ const Form = () => {
                         }} />
                       </Col>
                       <Col md={4} style={{marginBottom: "1.25rem" }}>
-                        <label style={{ fontSize: "13px", marginBottom: '6px' }} htmlFor="sub_heading_color" className="form-control-label">Sub-heading Color</label>
+                        <label style={{ fontSize: "13px", marginBottom: '6px' }} htmlFor="sub_heading_color" className="form-control-label">subheading Color</label>
                         <UncontrolledDropdown className="w-100 p-0" direction="start">
                           <DropdownToggle style={{ fontSize: "10px" }} className="rounded w-100 p-0">
                             <div style={{ backgroundColor: "#ffffff", padding: "0.525rem" }} className="rounded form-control d-flex align-items-center gap-1">
@@ -376,7 +376,7 @@ const Form = () => {
                                 opt_in_email: e.target.checked ? e.target.value : ""
                               }
                               setPrevData({...prevData, page_1: {...prevData.page_1, ...updatedData } })
-                            }} name="opt_in_email" value={"email"} className="form-check-input" /><label htmlFor="opt_in_email" className="form-check-label">Email Opt-in</label>
+                            }} name="opt_in_email" value={"email"} className="form-check-input" /><label htmlFor="opt_in_email" className="form-check-label">Via Email</label>
                           </div>
                           <div className="form-check cursor-pointer">
                             <input type="checkbox" checked={prevData?.[`page_1`]?.opt_in_sms === "sms"} id="opt_in_sms" onChange={(e) => {
@@ -385,7 +385,7 @@ const Form = () => {
                                 opt_in_sms: e.target.checked ? e.target.value : ""
                               }
                               setPrevData({...prevData, page_1: {...prevData.page_1, ...updatedData } })
-                            }} name="opt_in_sms" value={"sms"} className="form-check-input" /><label htmlFor="opt_in_sms" className="form-check-label">SMS Opt-in</label>
+                            }} name="opt_in_sms" value={"sms"} className="form-check-input" /><label htmlFor="opt_in_sms" className="form-check-label">Via SMS</label>
                           </div>
                           <div className="form-check cursor-pointer">
                             <input type="checkbox" checked={prevData?.[`page_1`]?.opt_in_both === "both"} id="opt_in_both" onChange={(e) => {
@@ -397,7 +397,7 @@ const Form = () => {
                               }
                               setPrevData({...prevData, page_1: {...prevData.page_1, ...updatedData } })
                             }} name="opt_in_both" value={"both"} className="form-check-input" />
-                            <label htmlFor="opt_in_both" className="form-check-label">Opt-in for marketing communication</label>
+                            <label htmlFor="opt_in_both" className="form-check-label">Both</label>
                           </div>
                         </div>
                       </Col>}
@@ -425,7 +425,7 @@ const Form = () => {
                             <>
                               <Col md={6} style={{marginBottom: "1.25rem"}}>
                                 <div className="d-flex justify-content-start gap-1 align-items-center" style={{marginBottom: '6px'}}>
-                                  <label style={{ fontSize: "13px" }} htmlFor="label_text">Sms Text</label>
+                                  <label style={{ fontSize: "13px" }} htmlFor="label_text">SMS Text</label>
                                   <div className="d-flex align-items-center justify-content-between gap-1 form-check form-check-success m-0 p-0">
                                     {/* <label style={{ fontSize: "10px" }} className="form-check-label m-0 p-0">Toggle</label> */}
                                     <input checked={prevData?.page_1?.sms_check} type='checkbox' className='form-check-input m-0 p-0' name="sms_check" onChange={(e) => setPrevData({...prevData, page_1: {...prevData?.page_1, sms_check: e.target.checked}})} />
@@ -443,7 +443,7 @@ const Form = () => {
                             <>
                               <Col md={6} style={{marginBottom: "1.25rem"}}>
                                 <div className="d-flex justify-content-start gap-1 align-items-center" style={{marginBottom: '6px'}}>
-                                  <label style={{ fontSize: "13px" }} htmlFor="label_text">Opt-in for marketing communication</label>
+                                  <label style={{ fontSize: "13px" }} htmlFor="label_text">Both</label>
                                   <div className="d-flex align-items-center justify-content-between gap-1 form-check form-check-success m-0 p-0">
                                     {/* <label style={{ fontSize: "10px" }} className="form-check-label m-0 p-0">Toggle</label> */}
                                     <input checked={prevData?.page_1?.both_check} type='checkbox' className='form-check-input m-0 p-0' name="both_check" onChange={(e) => setPrevData({...prevData, page_1: {...prevData?.page_1, both_check: e.target.checked}})} />
