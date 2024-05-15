@@ -20,14 +20,16 @@ import {
   AccordionItem,
   Button,
   Container,
+  Tooltip,
   Input, InputGroup, InputGroupText
 } from 'reactstrap'
 import { SocketBaseURL, postReq } from '../../../assets/auth/jwtService'
 import XIRCLS_LOGO from '../../../assets/images/logo/XIRCLS_LOGO.png'
-import { QuickReplayList, RenderLiveTemplateUI, templateCatgList } from '../SmallFunction'
+import { QuickReplayList, RenderLiveTemplateUI, getBoldStr, templateCatgList, timeLiveFormatter } from '../SmallFunction'
 import back from '../imgs/WhatsAppBack.png'
 import FrontBaseLoader from '../../Components/Loader/Loader'
 import { identity } from 'lodash'
+import StaticPage1 from './StaticPage'
 const LiveChat = () => {
 
   const [useIsLoading, setIsLoading] = useState(false)
@@ -96,6 +98,7 @@ const LiveChat = () => {
       isActive: false
     }
   ]
+
   // Function to handle changes in the "All Source" checkbox
   const handleAllSourceChange = (event) => {
     const isChecked = event.target.checked
@@ -118,21 +121,21 @@ const LiveChat = () => {
       setAllSourceChecked(allChecked)
     }
   }
-// mark msg read
-const markAsRead = (id, msgId, recieverNum) => {
+  // mark msg read
+  const markAsRead = (id, msgId, recieverNum) => {
 
-  console.log("99", id)
-  console.log("99", msgId)
-  
-  // return null
-  const form_data = new FormData()
+    console.log("99", id)
+    console.log("99", msgId)
+
+    // return null
+    const form_data = new FormData()
     form_data.append("messageId", id)
     form_data.append("unique_id", msgId)
-  postReq("mark_message_read", form_data)
-  .then((resp) => {
-    console.log("msg read", resp)
-  }).catch((err) => { console.log(err) })
-}
+    postReq("mark_message_read", form_data)
+      .then((resp) => {
+        console.log("msg read", resp)
+      }).catch((err) => { console.log(err) })
+  }
 
   const [open, setOpen] = useState('1')
   const toggle = (id) => {
@@ -198,7 +201,7 @@ const markAsRead = (id, msgId, recieverNum) => {
         setMessageCounter(prevCounter => prevCounter + 1)
         const old = JSON.parse(event.data)
         console.log("old", old)
-       
+
         markAsRead(JSON.parse(old.messages_context).id, old.unique_id)
         // eslint-disable-next-line no-use-before-define
         scrollToBottom()
@@ -259,7 +262,7 @@ const markAsRead = (id, msgId, recieverNum) => {
         setMessageData(resp?.data?.messages)
         // console.log("260", resp?.data?.messages.slice(0, 1)[0].messages_message_id, useProfileDetails.messages_unique_id)
         markAsRead(resp?.data?.messages.slice(0, 1)[0].messages_message_id, useProfileDetails.messages_unique_id)
-        
+
         // markAsRead(resp?.data?.messages.slice(0, 1)[0].messages_message_id)
       }).catch((err) => { console.log(err) })
   }
@@ -321,14 +324,14 @@ const markAsRead = (id, msgId, recieverNum) => {
   const msgCountUpt = () => {
     console.log("999", currentTab.messages_reciever)
     console.log("999", users)
-      }
+  }
   useEffect(() => { // when select number
     getAllMessages()
     // eslint-disable-next-line no-use-before-define
     scrollToBottom()
     msgCountUpt()
   }, [currentTab])
-  
+
   const [selectedCategory, setSelectedCategory] = useState(null)
   const form_data = new FormData()
 
@@ -367,8 +370,13 @@ const markAsRead = (id, msgId, recieverNum) => {
   }
   const scrollToBottom = () => {
     console.log("scroll hit")
-    const chatContScroll = document.getElementById("chatContScroll")
-    chatContScroll.scrollTop = chatContScroll.scrollHeight
+    try {
+
+      const chatContScroll = document.getElementById("chatContScroll")
+      chatContScroll.scrollTop = chatContScroll.scrollHeight
+    } catch (error) {
+      console.log(error)
+    }
   }
   const uptContactWebsocket = (newData) => {
     // console.log("191 old", users)
@@ -388,7 +396,7 @@ const markAsRead = (id, msgId, recieverNum) => {
     // setUsers()
 
   }
-  
+
   console.log("350 ======", users)
   return (
     <>
@@ -457,6 +465,19 @@ const markAsRead = (id, msgId, recieverNum) => {
         -webkit-animation: scale-up-bl 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
         animation: scale-up-bl 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
         }
+     
+        .timestamp-btn {
+          background:none ;
+          border:none;
+          outline:none;
+        }
+        .timestamp-box {
+          display: none;
+        }
+        
+        .timestamp-btn:focus .timestamp-box {
+          display: block;
+        }
  `}</style>
       {
         useIsLoading && <FrontBaseLoader />
@@ -476,9 +497,9 @@ const markAsRead = (id, msgId, recieverNum) => {
                   </div>
                 </div>
 
-                <div className='d-flex gap-1'>
+                <div className='d-flex gap-1 '>
                   <MdOutlineLibraryAdd size={20} />
-                  <Sliders size={20} onClick={() => setFilterDropdown(!filterDropdown)} cursor="pointer" />
+                  {/* <Sliders size={20} onClick={() => setFilterDropdown(!filterDropdown)} cursor="pointer" /> */}
                   {
                     filterDropdown === true ? <div className='border p-1 rounded-2 my-5 position-absolute mt-4 ' style={{ minWidth: "200px", background: '#fff', zIndex: "999", marginRight: "100px" }}>
                       <Accordion open={open} toggle={toggle}>
@@ -696,7 +717,7 @@ const markAsRead = (id, msgId, recieverNum) => {
 
                                   {/* counter */}
                                   {
-                                 (ContactData.messages_reciever !== currentTab.messages_reciever &&  ContactData?.messages_count > 0) &&
+                                    (ContactData.messages_reciever !== currentTab.messages_reciever && ContactData?.messages_count > 0) &&
                                     <div className='border-success rounded-5 d-flex justify-content-center align-items-center position-absolute end-0 top-0 ' style={{ width: "20px", height: "20px", background: "rgb(40 199 111 / 20%)" }}>
                                       <p className='text-success m-0 font-small-3 '>{ContactData?.messages_count}</p>
                                     </div>
@@ -724,359 +745,382 @@ const markAsRead = (id, msgId, recieverNum) => {
             </Col>
 
             {/* Main Chat Container */}
-
-            <Col className=' px-0 d-flex flex-column justify-content-between ' style={{ backgroundImage: `url(${back})`, height: '100%' }}>
-              {/* Header */}
-              <div className="d-flex justify-content-between align-items-center" style={{ background: '#f0f2f5' }} >
-                <div className="d-flex align-items-center ps-1 cursor-pointer w-100 " style={{ background: '#f0f2f5', height: "65px" }} onClick={() => setDynamicColumnValue(3)}>
-                  <div className="rounded-circle overflow-hidden d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px', background: "#00a884" }}>
-                    {/* <p className='fs-3 fw-bolder text-white mb-0'>{useProfileDetails?.firstName[0]}</p> */}
-                    <p className='fs-3 fw-bolder text-white mb-0'>{useProfileDetails?.messages_display_name?.slice(0, 1)}</p>
-                  </div>
-                  <div className='d-flex justify-content-center align-items-center gap-1 ms-1'>
-                    <div className=''>
-
-                      <h4 className='mb-0 p-0 fw-bolder'>{useProfileDetails?.messages_display_name}</h4>
-                      <h6 className='mb-0 p-0 fw-bolder'>{useProfileDetails?.messages_reciever}</h6>
+            {currentTab?.messages_reciever &&
+              <Col className=' px-0 d-flex flex-column justify-content-between ' style={{ backgroundImage: `url(${back})`, height: '100%' }}>
+                {/* Header */}
+                <div className=" d-flex justify-content-between align-items-center" style={{ background: '#f0f2f5' }} >
+                  <div className="d-flex align-items-center ps-1 cursor-pointer w-100 " style={{ background: '#f0f2f5', height: "65px" }} onClick={() => setDynamicColumnValue(3)}>
+                    <div className="rounded-circle overflow-hidden d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px', background: "#00a884" }}>
+                      {/* <p className='fs-3 fw-bolder text-white mb-0'>{useProfileDetails?.firstName[0]}</p> */}
+                      <p className='fs-3 fw-bolder text-white mb-0'>{useProfileDetails?.messages_display_name?.slice(0, 1)}</p>
                     </div>
-                    {
-                      useProfileDetails?.contactType && <h6 className='text-primary font-small-3 mb-0'> - {useProfileDetails?.contactType}</h6>
-                    }
+                    <div className='d-flex justify-content-center align-items-center gap-1 ms-1'>
+                      <div className=''>
 
+                        <h4 className='mb-0 p-0 fw-bolder'>{useProfileDetails?.messages_display_name}</h4>
+                        <h6 className='mb-0 p-0 fw-bolder'>{useProfileDetails?.messages_reciever}</h6>
+                      </div>
+                      {
+                        useProfileDetails?.contactType && <h6 className='text-primary font-small-3 mb-0'> - {useProfileDetails?.contactType}</h6>
+                      }
+
+                    </div>
+                    <h4 className='pt-1' style={{ fontWeight: '500', lineHeight: '1.2em', marginLeft: '15px' }}>
+                      {/* {useProfileDetails?.firstName}<br /> */}
+                      {/* <span className='fs-6'>{subtext}</span> */}
+                    </h4>
                   </div>
-                  <h4 className='pt-1' style={{ fontWeight: '500', lineHeight: '1.2em', marginLeft: '15px' }}>
-                    {/* {useProfileDetails?.firstName}<br /> */}
-                    {/* <span className='fs-6'>{subtext}</span> */}
-                  </h4>
-                </div>
-                <div className="d-flex align-items-center gap-2">
-                  <FaSearch onClick={() => {
-                    setSearch(true)
-                    setDynamicColumnValue(3)
-                  }} />
+                  <div className="d-flex align-items-center gap-2">
+                    <FaSearch onClick={() => {
+                      setSearch(true)
+                      setDynamicColumnValue(3)
+                    }} />
 
-                  <div className='position-relative' >
-                    <Button onClick={() => setDropdownOpen(!dropdownOpen)} color='' className='bg-transparent '>
-                      <FaEllipsisV />
-                    </Button>
-                    <div className={`${dropdownOpen ? "" : "d-none"}`}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        setDropdownOpen(false)
-                      }}
-                      style={{ width: '100vw', height: '100vh', position: 'fixed', top: '0', right: '0' }}></div>
-                    {dropdownOpen && <div className='position-absolute p-1' style={{ minWidth: "150px", background: "white", right: "10px", top: "60px", borderRadius: "10px", textAlign: "center", cursor: "pointer", zIndex: '10' }}>
-                      <Row className='d-flex flex-column gap-1' >
-                        <Col >
-                          <p className='mb-0' onClick={() => {
-                            setDynamicColumnValue(3)
-                            setDropdownOpen(false)
-                          }}>Contact Info</p>
-                        </Col>
-                      </Row>
-                    </div>}
+                    <div className='position-relative' >
+                      <Button onClick={() => setDropdownOpen(!dropdownOpen)} color='' className='bg-transparent '>
+                        <FaEllipsisV />
+                      </Button>
+                      <div className={`${dropdownOpen ? "" : "d-none"}`}
+                        onClick={(e) => {
+                          // e.stopPropagation()
+                          setDropdownOpen(false)
+                        }}
+                        style={{ width: '100vw', height: '100vh', position: 'fixed', top: '0', right: '0' }}></div>
+                      {dropdownOpen && <div className='position-absolute p-1' style={{ minWidth: "150px", background: "white", right: "10px", top: "60px", borderRadius: "10px", textAlign: "center", cursor: "pointer", zIndex: '10' }}>
+                        <Row className='d-flex flex-column gap-1' >
+                          <Col >
+                            <p className='mb-0' onClick={() => {
+                              setDynamicColumnValue(3)
+                              setDropdownOpen(false)
+                            }}>Contact Info</p>
+                          </Col>
+                        </Row>
+                      </div>}
+                    </div>
                   </div>
                 </div>
-              </div>
-              {/* Chat Container */}
-              {/* Chat content */}
+                {/* Chat Container */}
+                {/* Chat content */}
 
-              <div className='chat-container d-flex flex-column position-relative ' >
+                <div className='chat-container d-flex flex-column position-relative ' >
 
-                {!imagePreview ? <div
-                  key={useMessageData}
-                  ref={chatContainerRef}
-                  id='chatContScroll'
-                  style={{ overflowY: "auto", height: '100%' }}
-                  className={` d-flex flex-column-reverse  hideScroll`}
-                >
+                  {!imagePreview ? <div
+                    key={useMessageData}
+                    ref={chatContainerRef}
+                    id='chatContScroll'
+                    style={{ overflowY: "auto", height: '100%' }}
+                    className={` d-flex flex-column-reverse  hideScroll`}
+                  >
 
-                  {useMessageData.map((messageData, index) => {
-                    // console.log("WEB SOCKET MESSAGE", messageData?.messages_context)
-                    let messageJson = {}
-                    let replyJson = {}
-                    // console.log("messageData =====================", index)
-                    try {
-                      messageJson = JSON.parse(messageData?.messages_context)
-                      replyJson = JSON.parse(messageData?.messages_reply_context)
-                      // console.log("637", messageJson?.image?.link)
-                      // console.log("755 0", replyJson?.components[0]?.text)
-                      // console.log("755 1", replyJson?.components[1]?.text)
-                    } catch (error) {
-                      // console.log(JSON.parse(messageData)?.messages_context)
-                      console.log(error)
-                      // const old = JSON.parse(messageData)
-                      // messageJson = JSON.parse(old.messages_context)
+                    {useMessageData.map((messageData, index) => {
+                      // console.log("WEB SOCKET MESSAGE", messageData?.messages_context)
+                      let messageJson = {}
+                      let replyJson = {}
+                      // console.log("messageData =====================", index)
+                      try {
+                        messageJson = JSON.parse(messageData?.messages_context)
+                        replyJson = JSON.parse(messageData?.messages_reply_context)
+                        // console.log("637", messageJson?.image?.link)
+                        // console.log("755 0", replyJson?.components[0]?.text)
+                        // console.log("755 1", replyJson?.components[1]?.text)
+                      } catch (error) {
+                        // console.log(JSON.parse(messageData)?.messages_context)
+                        console.log(error)
+                        // const old = JSON.parse(messageData)
+                        // messageJson = JSON.parse(old.messages_context)
+                        // console.log(messageJson?.text?.body)
+                      }
+
+                      const backgroundColor = currentTab?.messages_sender === messageData?.messages_sender ? '#d4f2c2' : '#F2F3F4'
+                      const align = currentTab?.messages_sender === messageData?.messages_sender ? 'end' : 'start'
                       // console.log(messageJson?.text?.body)
-                    }
+                      return (
 
-                    const backgroundColor = currentTab?.messages_sender === messageData?.messages_sender ? '#d4f2c2' : '#F2F3F4'
-                    const align = currentTab?.messages_sender === messageData?.messages_sender ? 'end' : 'start'
-                    // console.log(messageJson?.text?.body)
-                    return (
-
-                      <>
-                        {messageJson &&
-                          <div key={index} className={`message`} style={{
-                            display: 'flex',
-                            align,
-                            backgroundColor,
-                            flexDirection: 'column',
-                            margin: '10px',
-                            padding: '5px',
-                            borderRadius: '8px',
-                            justifyContent: 'center',
-                            alignSelf: align,
-                            maxWidth: "fit-content",
-                            maxWidth: "400px"
-                          }}>
-                            {
-                              (replyJson?.name) && <div className='border border-bottom-3 rounded-2 pe-2 mb-1'>
-                                <p className='font-small-3 mb-0'>{replyJson?.name}</p>
-                              </div>
-                            }
-                            {/* {
+                        <>
+                          {messageJson &&
+                            <div key={index} className={`message-box ${currentTab?.messages_sender === messageData?.messages_sender ? 'live_message_box-right' : 'live_message_box-left'}`} style={{
+                              display: 'flex',
+                              align,
+                              backgroundColor,
+                              flexDirection: 'column',
+                              margin: '5px 10px',
+                              padding: '5px',
+                              borderRadius: '8px',
+                              justifyContent: 'center',
+                              alignSelf: align,
+                              maxWidth: "fit-content",
+                              maxWidth: "600px",
+                              minWidth: "150px",
+                              wordWrap:"break-word",
+                              position:"relative"
+                            }}>
+                            
+                              {
+                                (replyJson?.name) && <div className='border border-bottom-3 rounded-2 pe-2 mb-1'>
+                                  <p className='font-small-3 mb-0'>{replyJson?.name}</p>
+                                </div>
+                              }
+                              {/* {
                               (replyJson?.components[0]?.text || replyJson?.components[1]?.text) && <div className='border border-bottom-3 rounded-2 pe-2 mb-1'>
                                 <p className='font-small-3 mb-0'>...</p>
                               </div>
                             } */}
 
-                            {
-                              replyJson?.text?.body && <div className='border border-bottom-3 rounded-2 pe-2 mb-1'>
-                                <p className='font-small-3 mb-0'>{replyJson?.text?.body?.slice(0, 15)}...</p>
-                              </div>
-                            }
+                              {
+                                replyJson?.text?.body && <div className='border border-bottom-3 rounded-2 pe-2 mb-1'>
+                                  <p className='font-small-3 mb-0'>{replyJson?.text?.body?.slice(0, 15)}...</p>
+                                </div>
+                              }
 
-                            <div className='  '>
+                              <div className='  ' style={{whiteSpace:"pre-wrap"}}>
 
-                              {/* text */}
-                              {
-                                messageJson?.button?.text && <div className="message-info ps-1 pe-3">
-                                  {messageJson?.button?.text}
-                                </div>
-                              }
-                              {
-                                messageJson?.text?.body && <div className="message-info ps-1 pe-3">
-                                  {messageJson?.text?.body}
-                                </div>
-                              }
-                              {/* image */}
-                              {
-                                messageJson?.image?.link && <div>
-                                  <img src={messageJson?.image?.link} alt="" style={{ width: "100%" }} />
-
-                                  <h5 className='mt-1 ms-1'>
-                                    {messageJson?.image?.caption}
-                                  </h5>
-
-                                </div>
-                              }
-                              {/* video */}
-                              {
-                                messageJson?.video?.link && <div className=''>
-                                  <video className='rounded-3  object-fit-cover w-100' controls mute style={{ width: "100%" }} >
-                                    <source
-                                      src={messageJson?.video?.link ?? ""}
-                                      type="video/mp4"
-                                    />
-                                    Video not supported.
-                                  </video>
-                                  <h5 className='mt-1 ms-1'>
-                                    {messageJson?.video?.caption}
-                                  </h5>
-                                </div>
-                              }
-                              {/* aduio */}
-                              {
-                                messageJson?.audio?.link && <div className='' style={{ minWidth: "300px" }}>
-                                  <audio className='rounded-3  object-fit-cover w-100' controls   >
-                                    <source
-                                      src={messageJson?.audio?.link ?? ""}
-                                      type="audio/ogg"
-                                    />
-                                    audio not supported.
-                                  </audio>
-                                  <h5 className='mt-1 ms-1'>
-                                    {messageJson?.audio?.caption}
-                                  </h5>
-                                </div>
-                              }
-                              {/* document */}
-                              {
-                                messageJson?.document?.link && <div className=''>
-                                  <div className='  d-flex justify-content-start  align-items-center  px-2 gap-1' style={{ height: "50px" }}>
-                                    <FileText size={30} color='#000' />
-                                    <div>{messageJson?.document?.filename ?? ''}</div>
-                                    <a href={messageJson?.document?.link} target="_blank">
-                                      <LuEye size={20} color='#a9abab' />
-                                    </a>
+                                {/* text */}
+                                {
+                                  messageJson?.button?.text && <div className="message-info ps-1 pe-3">
+                                    {messageJson?.button?.text}
                                   </div>
-                                  <h5 className='mt-1 ms-1'>
-                                    {messageJson?.document?.caption}
-                                  </h5>
-                                </div>
-                              }
-                              {/* template */}
-                              {
-                                messageJson?.name && <div className=''>
-                                  <RenderLiveTemplateUI SingleTemplate={messageJson} />
+                                }
+                                {
+                                  messageJson?.text?.body && <div className="message-info ps-1 pe-3" dangerouslySetInnerHTML={{ __html: getBoldStr(messageJson?.text?.body) }}>
+                                  </div>
+                                }
+                                {/* image */}
+                                {
+                                  messageJson?.image?.link && <div>
+                                    <img src={messageJson?.image?.link} alt="" style={{ width: "100%" }} />
 
-                                </div>
-                              }
-                              {/* time and tick */}
-                              <div className='d-flex justify-content-end align-items-center mt-1' style={{ gap: "5px", paddingRight: "5px" }}>
-                                <span className='font-small-3 '>
-                                  {messageData?.messages_timestamp_sent && moment(messageData?.messages_timestamp_sent).format("hh:mm")}
-                                </span>
-                                <span className={currentTab?.messages_sender === messageData?.messages_sender ? '' : 'd-none'}>
+                                    <h5 className='mt-1 ms-1'>
+                                      {messageJson?.image?.caption}
+                                    </h5>
+
+                                  </div>
+                                }
+                                {/* video */}
+                                {
+                                  messageJson?.video?.link && <div className=''>
+                                    <video className='rounded-3  object-fit-cover w-100' controls mute style={{ width: "100%" }} >
+                                      <source
+                                        src={messageJson?.video?.link ?? ""}
+                                        type="video/mp4"
+                                      />
+                                      Video not supported.
+                                    </video>
+                                    <h5 className='mt-1 ms-1'>
+                                      {messageJson?.video?.caption}
+                                    </h5>
+                                  </div>
+                                }
+                                {/* aduio */}
+                                {
+                                  messageJson?.audio?.link && <div className='' style={{ minWidth: "300px" }}>
+                                    <audio className='rounded-3  object-fit-cover w-100' controls   >
+                                      <source
+                                        src={messageJson?.audio?.link ?? ""}
+                                        type="audio/ogg"
+                                      />
+                                      audio not supported.
+                                    </audio>
+                                    <h5 className='mt-1 ms-1'>
+                                      {messageJson?.audio?.caption}
+                                    </h5>
+                                  </div>
+                                }
+                                {/* document */}
+                                {
+                                  messageJson?.document?.link && <div className=''>
+                                    <div className='  d-flex justify-content-start  align-items-center  px-2 gap-1' style={{ height: "50px" }}>
+                                      <FileText size={30} color='#000' />
+                                      <div>{messageJson?.document?.filename ?? ''}</div>
+                                      <a href={messageJson?.document?.link} target="_blank">
+                                        <LuEye size={20} color='#a9abab' />
+                                      </a>
+                                    </div>
+                                    <h5 className='mt-1 ms-1'>
+                                      {messageJson?.document?.caption}
+                                    </h5>
+                                  </div>
+                                }
+                                {/* template */}
+                                {
+                                  messageJson?.name && <div className=''>
+                                    <RenderLiveTemplateUI SingleTemplate={messageJson} />
+
+                                  </div>
+                                }
+                                {/* time and tick */}
+                                <button className='timestamp-btn position-relative  d-flex justify-content-end align-items-center ms-auto'  style={{ gap: "5px", paddingRight: "5px", marginTop:"-10px" }}>
+                                  <span className='font-small-1 text-secondary'>
+                                    {messageData?.messages_timestamp_sent && timeLiveFormatter(messageData?.messages_timestamp_sent)}
+                                  </span>
+                                  <span className={currentTab?.messages_sender === messageData?.messages_sender ? '' : 'd-none'}>
+                                    {
+                                      messageData?.messages_timestamp_read ? <LiaCheckDoubleSolid size={16} color='#006aff' /> : messageData?.messages_timestamp_delivered ? <LiaCheckDoubleSolid size={16} color='#7c7c7c' /> : messageData?.messages_timestamp_sent ? <LiaCheckDoubleSolid size={16} color='#7c7c7c' /> : ''
+                                    }
+                                  </span>
+
                                   {
-                                    messageData?.messages_timestamp_read ? <LiaCheckDoubleSolid size={18} color='#006aff' /> : messageData?.messages_timestamp_delivered ? <LiaCheckDoubleSolid size={18} color='#7c7c7c' /> : messageData?.messages_timestamp_sent ? <LiaCheckDoubleSolid size={18} color='#7c7c7c' /> : ''
+                                    currentTab?.messages_sender === messageData?.messages_sender && 
+                                    <div className='timestamp-box position-absolute bg-white rounded-2 p-1' style={{width:"150px", top:"24px"}} >
+                                      <ul className='ps-0 pb-0 mb-0 d-flex flex-column ' style={{ listStyleType: "none", gap:"5px" }}>
+                                        
+                                        <li className='d-flex justify-content-between align-items-center '><p className='m-0'>Sent</p> <p className='m-0'>{timeLiveFormatter(messageData?.messages_timestamp_sent)}</p></li>
+                                        <li className='d-flex justify-content-between align-items-center '><p className='m-0'>Delivered</p> <p className='m-0'>{timeLiveFormatter(messageData?.messages_timestamp_delivered)}</p></li>
+                                        <li className='d-flex justify-content-between align-items-center '><p className='m-0'>Read</p> <p className='m-0'>{timeLiveFormatter(messageData?.messages_timestamp_read)}</p></li>
+                                        <li className='d-flex justify-content-between align-items-center '><p className='m-0'>Failed</p> <p className='m-0'>{timeLiveFormatter(messageData?.messages_timestamp_failed)}</p></li>
+                                      </ul>
+                                    </div>
                                   }
-                                </span>
+                                </button>
+
                               </div>
                             </div>
-                          </div>
-                        }
+                          }
 
-                      </>
-                    )
-                  })}
+                        </>
+                      )
+                    })}
 
 
-                </div > : <div className='p-2 d-flex flex-column justify-content-between ' style={{ height: "100%", background: '#e9edef' }}>
-                  <div className=''>
-                    <RxCross2 className='fs-3 '
-                      onClick={() => {
-                        setImagePreview(false)
-                        setStoreMedia({})
-                      }}
+                  </div > : <div className='p-2 d-flex flex-column justify-content-between ' style={{ height: "100%", background: '#e9edef' }}>
+                    <div className=''>
+                      <RxCross2 className='fs-3 '
+                        onClick={() => {
+                          setImagePreview(false)
+                          setStoreMedia({})
+                        }}
 
-                    />
-                  </div>
-                  <div className='d-flex align-items-center justify-content-center '>
-
-                    {/* {console.log(storeMedia.media.type.startsWith('video/') ? 'video' : 'photo')}' */}
-                    {storeMedia?.media?.type.startsWith('video/') && <video controls width="250">
-                      <source src={storeMedia?.media_display} type={storeMedia?.media?.type} />
-                    </video>}
-                    {storeMedia?.media?.type.startsWith('image/') &&
-                      <img src={storeMedia?.media_display} style={{ height: '150px' }} loading='lazy' />}
-                  </div>
-                  <div >
-                    <div className='text-center'>
-                      <input type='text' className='border-0 p-1 w-50' placeholder='type a message' style={{ backgroundColor: '#ffffff', borderRadius: "5px" }} value={mediaText} onChange={(e) => setMediaText(e.target.value)} />
+                      />
                     </div>
-                    <div className='float-end '>
-                      <div className='d-flex align-items-center justify-content-center ' style={{ width: "50px", height: "50px", background: '#00a884', borderRadius: "50%", cursor: "pointer" }} onClick={() => {
-                        setImagePreview(false)
-                        sendMessages("files")
-                      }} >
-                        <IoMdSend className='fs-3' style={{ color: 'white' }} />
+                    <div className='d-flex align-items-center justify-content-center '>
+
+                      {/* {console.log(storeMedia.media.type.startsWith('video/') ? 'video' : 'photo')}' */}
+                      {storeMedia?.media?.type.startsWith('video/') && <video controls width="250">
+                        <source src={storeMedia?.media_display} type={storeMedia?.media?.type} />
+                      </video>}
+                      {storeMedia?.media?.type.startsWith('image/') &&
+                        <img src={storeMedia?.media_display} style={{ height: '150px' }} loading='lazy' />}
+                    </div>
+                    <div >
+                      <div className='text-center'>
+                        <input type='text' className='border-0 p-1 w-50' placeholder='type a message' style={{ backgroundColor: '#ffffff', borderRadius: "5px" }} value={mediaText} onChange={(e) => setMediaText(e.target.value)} />
+                      </div>
+                      <div className='float-end '>
+                        <div className='d-flex align-items-center justify-content-center ' style={{ width: "50px", height: "50px", background: '#00a884', borderRadius: "50%", cursor: "pointer" }} onClick={() => {
+                          setImagePreview(false)
+                          sendMessages("files")
+                        }} >
+                          <IoMdSend className='fs-3' style={{ color: 'white' }} />
+                        </div>
                       </div>
                     </div>
+
                   </div>
 
+                  }
+                  {/* input field */}
+
                 </div>
+                {/*bottom*/}
+                {!imagePreview && <div className=' d-flex align-items-center gap-1 px-1 position-sticky bottom-0 bg-white' style={{ padding: "10px" }} >
 
-                }
-                {/* input field */}
+                  <div className='btn' onClick={() => setToggleMedia(!toggleMedia)}>
+                    <Plus style={{
+                      transform: `rotate(${toggleMedia ? "45deg" : "0deg"})`,
+                      transition: "transform 0.2s ease-in-out"
+                    }} />
+                  </div>
+                  <div className={`${toggleMedia ? '' : 'd-none'}`} onClick={(e) => {
+                    e.stopPropagation()
+                    setToggleMedia(false)
+                  }} style={{ width: '100vw', height: '100vh', position: 'fixed', top: '0', right: '0' }}>
+                  </div>
+                  {/* menu */}
+                  {toggleMedia && <div className='bg-white position-absolute p-1 ' style={{ bottom: '60px', left: "20px", width: "200px", borderRadius: "10px" }} >
+                    <Row className='d-flex flex-column gap-1'>
+                      <Col>
 
-              </div>
-              {/*bottom*/}
-              {!imagePreview && <div className=' d-flex align-items-center gap-1 px-1 position-sticky bottom-0 bg-white' style={{ padding: "10px" }} >
+                        <label onClick={e => e.stopPropagation()} htmlFor="uploadDocButton" className="d-flex gap-1 cursor-pointer">
+                          <File size={17} style={{ color: '#7f66ff' }} /> Documents
+                          <input
+                            type="file"
+                            id='uploadDocButton'
+                            className="d-none"
+                            onChange={handleChange}
+                            name='media'
+                          />
+                        </label>
+                      </Col>
+                      <Col >
+                        <label onClick={e => {
+                          e.stopPropagation()
+                        }} htmlFor="uploadImageButton" className="d-flex gap-1">
+                          <Image size={17} style={{ color: '#007bfc' }} />Photos
+                          <input
+                            name='media'
+                            onChange={handleChange}
+                            type="file"
+                            id='uploadImageButton'
+                            className="d-none" />
+                        </label>
+                      </Col>
+                      <Col >
+                        <label onClick={e => {
+                          e.stopPropagation()
+                        }} htmlFor="uploadImageButton" className="d-flex gap-1">
+                          <Video size={17} style={{ color: '#007bfc' }} />Videos
+                          <input
+                            name='media'
+                            onChange={handleChange}
+                            type="file"
+                            id='uploadImageButton'
+                            className="d-none" />
+                        </label>
+                      </Col>
 
-                <div className='btn' onClick={() => setToggleMedia(!toggleMedia)}>
-                  <Plus style={{
-                    transform: `rotate(${toggleMedia ? "45deg" : "0deg"})`,
-                    transition: "transform 0.2s ease-in-out"
-                  }} />
-                </div>
-                <div className={`${toggleMedia ? '' : 'd-none'}`} onClick={(e) => {
-                  e.stopPropagation()
-                  setToggleMedia(false)
-                }} style={{ width: '100vw', height: '100vh', position: 'fixed', top: '0', right: '0' }}>
-                </div>
-                {/* menu */}
-                {toggleMedia && <div className='bg-white position-absolute p-1 ' style={{ bottom: '60px', left: "20px", width: "200px", borderRadius: "10px" }} >
-                  <Row className='d-flex flex-column gap-1'>
-                    <Col>
-
-                      <label onClick={e => e.stopPropagation()} htmlFor="uploadDocButton" className="d-flex gap-1 cursor-pointer">
-                        <File size={17} style={{ color: '#7f66ff' }} /> Documents
-                        <input
-                          type="file"
-                          id='uploadDocButton'
-                          className="d-none"
-                          onChange={handleChange}
-                          name='media'
-                        />
-                      </label>
-                    </Col>
-                    <Col >
-                      <label onClick={e => {
-                        e.stopPropagation()
-                      }} htmlFor="uploadImageButton" className="d-flex gap-1">
-                        <Image size={17} style={{ color: '#007bfc' }} />Photos
-                        <input
-                          name='media'
-                          onChange={handleChange}
-                          type="file"
-                          id='uploadImageButton'
-                          className="d-none" />
-                      </label>
-                    </Col>
-                    <Col >
-                      <label onClick={e => {
-                        e.stopPropagation()
-                      }} htmlFor="uploadImageButton" className="d-flex gap-1">
-                        <Video size={17} style={{ color: '#007bfc' }} />Videos
-                        <input
-                          name='media'
-                          onChange={handleChange}
-                          type="file"
-                          id='uploadImageButton'
-                          className="d-none" />
-                      </label>
-                    </Col>
-
-                  </Row>
-                </div>}
+                    </Row>
+                  </div>}
 
 
-                {/* <div className='btn' onClick={() => setTemplateModal(true)}>
+                  {/* <div className='btn' onClick={() => setTemplateModal(true)}>
                   <HiOutlineTemplate size={20} />
                 </div> */}
-                <div className='btn' onClick={() => setReplyModal(true)}>
-                  <BsReply size={20} />
-                </div>
-
-                <textarea
-                  type="text"
-                  className="form-control border rounded "
-                  placeholder="Type your message..."
-                  id='message_input'
-                  autoComplete='off'
-                  value={useInputMessage}
-                  rows={1}
-                  // onClick={inputMessageCursorChange}
-                  onChange={(e) => {
-                    // inputMessageCursorChange()
-                    // setNewMessage(e.target.value)
-                    setInputMessage(e.target.value)
-                  }}
-                  style={{ borderRadius: "50px", resize: "none" }}
-                />
-                {/* {users.map((index) => ( */}
-                {
-                  currentTab?.messages_reciever && <div className='d-flex align-items-center justify-content-center ' onClick={() => sendMessages('text')} style={{ width: "50px", height: "50px", minWidth: "50px", minHeight: "50px", maxWidth: "50px", maxHeight: "50px", background: '#00a884', borderRadius: "50%", cursor: "pointer" }} >
-                    <IoMdSend className='fs-3' style={{ color: 'white' }} />
+                  <div className='btn' onClick={() => setReplyModal(true)}>
+                    <BsReply size={20} />
                   </div>
-                }
-            
-              </div>}
 
-            </Col>
+                  <textarea
+                    type="text"
+                    className="form-control border rounded "
+                    placeholder="Type your message..."
+                    id='message_input'
+                    autoComplete='off'
+                    value={useInputMessage}
+                    rows={1}
+                    // onClick={inputMessageCursorChange}
+                    onChange={(e) => {
+                      // inputMessageCursorChange()
+                      // setNewMessage(e.target.value)
+                      setInputMessage(e.target.value)
+                    }}
+                    style={{ borderRadius: "50px", resize: "none" }}
+                  />
+                  {/* {users.map((index) => ( */}
+                  {
+                    currentTab?.messages_reciever && <div className='d-flex align-items-center justify-content-center ' onClick={() => sendMessages('text')} style={{ width: "50px", height: "50px", minWidth: "50px", minHeight: "50px", maxWidth: "50px", maxHeight: "50px", background: '#00a884', borderRadius: "50%", cursor: "pointer" }} >
+                      <IoMdSend className='fs-3' style={{ color: 'white' }} />
+                    </div>
+                  }
 
+                </div>}
+
+              </Col>
+            }
+            {!currentTab?.messages_reciever &&
+              <Col className=' px-0 d-flex flex-column justify-content-between ' style={{ height: '100%' }}>
+                <StaticPage1 />
+              </Col>
+
+            }
             {/* profile details */}
             {dynamicColumnValue === 3 &&
               (search ? (

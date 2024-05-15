@@ -20,6 +20,7 @@ import Campaigns from "../../views/Whatsapp/Campaign/Campaigns"
 import { CampaignType } from "../../views/Whatsapp/Campaign/CampaignType"
 import CreateCampaign from "../../views/Whatsapp/Campaign/CreateCampaign"
 import CampaignReports from "../../views/Whatsapp/Campaign/CampaignReports"
+import ProjectProfile from "../../views/Whatsapp/settings/ProjectProfile"
 // import ProjectTable from "../../views/Whatsapp/Templates/ProjectTable"
 
 export const WhatsAppRoutes = [
@@ -118,5 +119,9 @@ export const WhatsAppRoutes = [
     {
         path: '/merchant/whatsapp/sent_reports/:campaign_id/',
         element: <CampaignReports />
+    },
+    {
+        path: '/merchant/whatsapp/project-profile',
+        element: <ProjectProfile />
     }
 ]
