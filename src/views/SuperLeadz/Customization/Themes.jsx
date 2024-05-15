@@ -20,6 +20,7 @@ const Themes = () => {
     const [phoneView, setPhoneView] = useState(allPreviews.map(() => {
         return false
     }))
+    console.log("allPreviews", allPreviews)
     // const allPreviews = [
     //     {
     //         image: theme3,

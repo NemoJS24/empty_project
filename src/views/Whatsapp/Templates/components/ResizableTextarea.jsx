@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 
-const ResizableTextarea = ({ onChange, initialContent = '', maxLength = 99999999, placeholder = '', minHeight = '70px', name = '' }) => {
+const ResizableTextarea = ({ onChange, initialContent = '', maxLength = 99999999, placeholder = '', minHeight = '70px', name = '', isDisable = false }) => {
   const [content, setContent] = useState(initialContent)
   const textareaRef = useRef()
   const characterCountRef = useRef()
@@ -8,7 +8,7 @@ const ResizableTextarea = ({ onChange, initialContent = '', maxLength = 99999999
   const updateHeight = () => {
     const textarea = textareaRef.current
     textarea.style.height = 'auto'
-    textarea.style.height = `${Math.max(textarea.scrollHeight, parseInt(minHeight, 10))}px`
+    textarea.style.height = `${Math.max(textarea.scrollHeight, parseInt(minHeight, 10)) + 15}px`
   }
 
   const handleChange = (event) => {
@@ -42,6 +42,7 @@ const ResizableTextarea = ({ onChange, initialContent = '', maxLength = 99999999
         wrap="hard"
         maxLength={maxLength}
         name={name}
+        disabled = {isDisable}
       />
       <small
         ref={characterCountRef}

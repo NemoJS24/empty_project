@@ -66,6 +66,12 @@ export const WhatsappNavigation = [
         icon: <Circle size={16} />,
         // icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/crm.png`} width='16px' />,
         children: [
+            // {
+            //     id: 'profile',
+            //     title: 'Project',
+            //     icon: <Circle size={16} />,
+            //     navLink: '/merchant/whatsapp/project-profile/'
+            // },
             {
                 id: 'project',
                 title: 'Project Details',
