@@ -1,6 +1,7 @@
 import { CornerDownLeft, ExternalLink, FileText, Phone } from "react-feather"
 import { CardBody } from "reactstrap"
 import wp_back from './imgs/wp_back.png'
+import moment from "moment"
 
 // whatsapp data
 export const HeaderTypeList = [
@@ -142,12 +143,24 @@ export const QuickReplayList = [
   }
 ]
 
+export const timeLiveFormatter = (time) => {
+   if (!time) {
+      return "--"
+   }
+   try {
+      return moment(time).format("hh:mm")
+      
+   } catch (error) {
+      return "--"
+   }
+}
 
 // functions
 export const getBoldStr = (str) => {
    str = str.replace(/\*(.*?)\*/g, (_, p1) => `<strong>${p1}</strong>`)
+   .replace(/\~(\b.*?)\b\~/g, (_, p1) => `<del>${p1}</del>`)
     .replace(/(?<=\s|^)(_.*?_)(?=\s|$)/g, (_, p1) => `<em>${p1.slice(1, -1)}</em>`)
-    .replace(/\b((?:https?:\/\/|www\.)\S+)\b/g, '<a href="$1" target="_blank" style="color: blue; text-decoration:underline">$1</a>')
+    .replace(/\b((?:https?:\/\/|www\.)\S+)\b/g, '<a href="$1" target="_blank" style="color: #2f74bd; text-decoration:underline">$1</a>')
   return str
 }
 

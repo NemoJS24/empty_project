@@ -175,7 +175,7 @@ const CustomizationParent = () => {
         { value: 'all_pages', label: 'All Pages' },
         { value: 'home_page', label: 'Home Page' },
         { value: 'product_page', label: 'Product Page' },
-        { value: 'product_list_page', label: 'Product List Page' },
+        { value: 'collections_page', label: 'Collection Page' },
         { value: 'cart_page', label: 'Cart Page' },
         { value: 'custom_page', label: 'Custom Pages' },
         { value: 'custom_source', label: 'Source' }
@@ -246,7 +246,7 @@ const CustomizationParent = () => {
 
     const [isOfferDraggable, setIsOfferDraggable] = useState(true)
     const [phoneIsOfferDraggable, setPhoneIsOfferDraggable] = useState(true)
-
+    const [collectionList, setCollectionList] = useState([])
     const [cancelCust, setCancelCust] = useState(false)
     const [verifyYourEmail, setVerifyYourEmail] = useState(false)
     const [changeSenderEmail, setChangeSenderEmail] = useState(false)
@@ -288,7 +288,7 @@ const CustomizationParent = () => {
     // const [textValue, setTextValue] = useState("")
     // const [senderName, setSenderName] = useState("")
     // const [apiLoader, setApiLoader] = useState(false)
-
+    console.log(finalObj, "===finalObj")
     const refreshOfferDraggable = () => {
         const arr = []
         const phoneArr = []
@@ -3073,6 +3073,52 @@ const CustomizationParent = () => {
                         </div>}
                     </div>}
 
+                    {finalObj?.behaviour?.PAGES?.includes("collections_page") && (
+                        <>
+                            <div className="row mt-2">
+                                <label style={{display: "flex", justifyContent: 'between', alignItems: 'center', gap: '4px', fontSize: '12px'}}>
+                                    Collections:
+                                    <a className='text-primary' onClick={() => updatePresent({...finalObj, behaviour: {...finalObj.behaviour, collections: collectionList?.map((cur) => cur?.value)}})}>Select All</a>
+                                </label>
+                                <Select
+                                    isMulti={true}
+                                    options={collectionList}
+                                    inputId="aria-example-input"
+                                    closeMenuOnSelect={true}
+                                    name="customer_collection_list"
+                                    placeholder="Add Collection/s"
+                                    value={collectionList?.filter((option) => finalObj?.behaviour?.collections?.includes(option.value))}
+                                    onChange={(options) => {
+                                        console.log(options, "pppppppppp")
+                                        const option_list = options.map((cur) => {
+                                            return cur.value
+                                        })
+                                        // const newObj = { ...finalObj }
+                                        // newObj.behaviour.COLLECTION_LIST = [...finalObj.behaviour.CUSTOM_PAGE_LINK, value.value]
+                                        updatePresent({...finalObj, behaviour: {...finalObj.behaviour, collections: option_list}})
+                                    }}
+                                />
+                            </div>
+
+                            <div className="row mt-2">
+                                <span className="form-check form-check-success m-0 d-flex justify-content-start align-items-center gap-1">
+                                    <input
+                                        type="checkbox"
+                                        id="all_product_page"
+                                        className="form-check-input m-0"
+                                        name="all_product_page"
+                                        value="all_product_page"
+                                        checked={finalObj?.behaviour?.all_product_page}
+                                        onChange={(e) => {
+                                            updatePresent({...finalObj, behaviour: {...finalObj.behaviour, all_product_page: e.target.checked }})
+                                        }}
+                                    />
+                                    <label htmlFor="all_product_page">All Product Pages</label>
+                                </span>
+                            </div>
+                        </>
+                    )}
+
                     {/* {finalObj?.behaviour?.PAGES?.includes("custom_source") && (
                         <div className="row mt-2">
                             <label htmlFor="" className='mb-1' style={{ fontSize: "12px" }}>Source:</label>
@@ -3618,6 +3664,7 @@ const CustomizationParent = () => {
             form_data.append("is_edit", themeId === 0 ? 0 : 1)
             // form_data.append("source", )
             finalObj?.behaviour?.SOURCE_PAGE_LINK?.map((curElem) => form_data.append("source", `${curElem}_page`))
+            finalObj?.behaviour?.collections?.map((curElem) => form_data.append("collection_id", curElem))
 
             form_data.append("theme_id", themeId)
             form_data.append("is_draft", 0)
@@ -4343,6 +4390,33 @@ const CustomizationParent = () => {
         }
 
     }, [])
+
+    const getCollections = () => {
+        const form_data = new FormData()
+        form_data.append("shop", outletData[0]?.web_url)
+        form_data.append("app_name", "superleadz")
+        fetch(`${SuperLeadzBaseURL}/api/v1/get/get_shopify_collections/`, {
+            method: "POST",
+            body: form_data
+        })
+        .then((resp) => resp.json())
+        .then((data) => {
+            console.log(data)
+            // setCollectionData(data?.response?.custom_collections ? data.response.custom_collections : [])
+            setCollectionList(data.response.custom_collections.map((curElem) => {
+                return { value: curElem.id, label: curElem.title }
+            }))
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
+
+    useEffect(() => {
+        if (finalObj?.behaviour?.PAGES?.includes("collections_page")) {
+            getCollections()
+        }
+    }, [finalObj?.behaviour?.PAGES])
 
     return (
         <Suspense fallback={null}>

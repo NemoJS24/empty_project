@@ -13,6 +13,32 @@
 
   }
 }
+.live_message_box-left{
+
+  &::before {
+
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10px;
+    border: 10px solid transparent;
+    border-top: 10px solid #F2F3F4;
+
+  }
+}
+.live_message_box-right{
+
+  &::before {
+
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -10px;
+    border: 10px solid transparent;
+    border-top: 10px solid #d4f2c2;
+
+  }
+}
 #send-icon {
   transition: all ease .2s;
   transform: rotate(0deg);
