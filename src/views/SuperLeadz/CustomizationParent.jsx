@@ -3064,7 +3064,7 @@ const CustomizationParent = () => {
                                 </div>
                             )
                         })}
-                        {finalObj.behaviour.CUSTOM_PAGE_LINK.length < 6 && <div className="col-12">
+                        {<div className="col-12">
                             <button onClick={() => {
                                 const newObj = { ...finalObj }
                                 newObj.behaviour.CUSTOM_PAGE_LINK = [...finalObj.behaviour.CUSTOM_PAGE_LINK, ""]
@@ -3101,6 +3101,62 @@ const CustomizationParent = () => {
                             </div>
 
                             <div className="row mt-2">
+                                <label htmlFor="" style={{ fontSize: "12px" }}>Include URLs:</label>
+                                {finalObj?.behaviour?.INCLUDES_PAGE_LINK?.map((ele, key) => {
+                                    return (
+                                        <div className="col-12" key={key}>
+                                            <div className="p-0 position-relative d-flex align-items-center mb-1">
+                                                <input style={{ fontSize: "12px" }} onChange={e => {
+                                                    const newObj = { ...finalObj }
+                                                    newObj.behaviour.INCLUDES_PAGE_LINK[key] = e.target.value
+                                                    updatePresent(newObj)
+                                                }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj?.behaviour?.INCLUDES_PAGE_LINK?.length > 1 && <span onClick={() => {
+                                                    const newObj = { ...finalObj }
+                                                    newObj?.behaviour?.INCLUDES_PAGE_LINK?.splice(key, 1)
+                                                    updatePresent(newObj)
+                                                }} className="d-flex justify-content-center alignn-items-center position-absolute end-0 p-1 cursor-pointer"><Trash stroke='red' size={12.5} /></span>}
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                                {<div className="col-12">
+                                    <button onClick={() => {
+                                        const newObj = { ...finalObj }
+                                        newObj.behaviour.INCLUDES_PAGE_LINK = [...finalObj?.behaviour?.INCLUDES_PAGE_LINK, ""]
+                                        updatePresent(newObj)
+                                    }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
+                                </div>}
+                            </div>
+
+                            <div className="row mt-2">
+                                <label htmlFor="" style={{ fontSize: "12px" }}>Exclude URLs:</label>
+                                {finalObj?.behaviour?.EXCLUDE_PAGE_LINK?.map((ele, key) => {
+                                    return (
+                                        <div className="col-12" key={key}>
+                                            <div className="p-0 position-relative d-flex align-items-center mb-1">
+                                                <input style={{ fontSize: "12px" }} onChange={e => {
+                                                    const newObj = { ...finalObj }
+                                                    newObj.behaviour.EXCLUDE_PAGE_LINK[key] = e.target.value
+                                                    updatePresent(newObj)
+                                                }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj?.behaviour?.EXCLUDE_PAGE_LINK?.length > 1 && <span onClick={() => {
+                                                    const newObj = { ...finalObj }
+                                                    newObj?.behaviour?.EXCLUDE_PAGE_LINK?.splice(key, 1)
+                                                    updatePresent(newObj)
+                                                }} className="d-flex justify-content-center alignn-items-center position-absolute end-0 p-1 cursor-pointer"><Trash stroke='red' size={12.5} /></span>}
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                                {<div className="col-12">
+                                    <button onClick={() => {
+                                        const newObj = { ...finalObj }
+                                        newObj.behaviour.EXCLUDE_PAGE_LINK = [...finalObj?.behaviour?.EXCLUDE_PAGE_LINK, ""]
+                                        updatePresent(newObj)
+                                    }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
+                                </div>}
+                            </div>
+
+                            {/* <div className="row mt-2">
                                 <span className="form-check form-check-success m-0 d-flex justify-content-start align-items-center gap-1">
                                     <input
                                         type="checkbox"
@@ -3108,14 +3164,13 @@ const CustomizationParent = () => {
                                         className="form-check-input m-0"
                                         name="all_product_page"
                                         value="all_product_page"
-                                        checked={finalObj?.behaviour?.all_product_page}
-                                        onChange={(e) => {
-                                            updatePresent({...finalObj, behaviour: {...finalObj.behaviour, all_product_page: e.target.checked }})
-                                        }}
+                                        checked={true}
                                     />
                                     <label htmlFor="all_product_page">All Product Pages</label>
                                 </span>
-                            </div>
+                            </div> */}
+
+                            
                         </>
                     )}
 
