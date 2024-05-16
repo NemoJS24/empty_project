@@ -6,19 +6,19 @@ import FrontBaseLoader from '../../Components/Loader/Loader'
 import AdvanceServerSide from '../../Components/DataTable/AdvanceServerSide'
 import toast from 'react-hot-toast'
 import { Eye, Trash, X } from 'react-feather'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import moment from 'moment'
 import { defaultFormatDate } from '../../Validator'
 import { PermissionProvider } from '../../../Helper/Context'
 import LineChart from '../components/charts/LineChart'
 export default function SentReports() {
-  const { templateId } = useParams()
+  const { templateId, campaign_id } = useParams()
   const [useLoader, setLoader] = useState(false)
   const [useisLoading, setisLoading] = useState(false)
   const [useTableData, setTableData] = useState([])
   const [totalData, settotalData] = useState(0)
   const { userPermission } = useContext(PermissionProvider)
-
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     group_name: "",
     group_description: ""
@@ -49,6 +49,10 @@ export default function SentReports() {
     form_data.append("size", currentEntry)
     form_data.append("searchValue", searchValue)
     form_data.append("templateId", templateId)
+    if (campaign_id) {
+      form_data.append("campaign_id", campaign_id)
+
+    }
     setisLoading(true)
     postReq("messagelog_view", form_data)
       .then((resp) => {
@@ -178,7 +182,7 @@ export default function SentReports() {
       {
         useLoader && <FrontBaseLoader />
       }
-      <Link to='/merchant/whatsapp/reports/template' className='btn btn-primary btn-sm mb-1' >Back</Link>
+      <a onClick={() => navigate(-1)} className='btn btn-primary btn-sm mb-1' >Back</a>
       <Card>
         <CardBody>
 

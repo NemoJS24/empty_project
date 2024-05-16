@@ -175,7 +175,7 @@ const CustomizationParent = () => {
         { value: 'all_pages', label: 'All Pages' },
         { value: 'home_page', label: 'Home Page' },
         { value: 'product_page', label: 'Product Page' },
-        { value: 'product_list_page', label: 'Product List Page' },
+        { value: 'collections_page', label: 'Collection Page' },
         { value: 'cart_page', label: 'Cart Page' },
         { value: 'custom_page', label: 'Custom Pages' },
         { value: 'custom_source', label: 'Source' }
@@ -246,7 +246,7 @@ const CustomizationParent = () => {
 
     const [isOfferDraggable, setIsOfferDraggable] = useState(true)
     const [phoneIsOfferDraggable, setPhoneIsOfferDraggable] = useState(true)
-
+    const [collectionList, setCollectionList] = useState([])
     const [cancelCust, setCancelCust] = useState(false)
     const [verifyYourEmail, setVerifyYourEmail] = useState(false)
     const [changeSenderEmail, setChangeSenderEmail] = useState(false)
@@ -288,7 +288,7 @@ const CustomizationParent = () => {
     // const [textValue, setTextValue] = useState("")
     // const [senderName, setSenderName] = useState("")
     // const [apiLoader, setApiLoader] = useState(false)
-
+    console.log(finalObj, "===finalObj")
     const refreshOfferDraggable = () => {
         const arr = []
         const phoneArr = []
@@ -3064,7 +3064,7 @@ const CustomizationParent = () => {
                                 </div>
                             )
                         })}
-                        {finalObj.behaviour.CUSTOM_PAGE_LINK.length < 6 && <div className="col-12">
+                        {<div className="col-12">
                             <button onClick={() => {
                                 const newObj = { ...finalObj }
                                 newObj.behaviour.CUSTOM_PAGE_LINK = [...finalObj.behaviour.CUSTOM_PAGE_LINK, ""]
@@ -3072,6 +3072,107 @@ const CustomizationParent = () => {
                             }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
                         </div>}
                     </div>}
+
+                    {finalObj?.behaviour?.PAGES?.includes("collections_page") && (
+                        <>
+                            <div className="row mt-2">
+                                <label style={{display: "flex", justifyContent: 'between', alignItems: 'center', gap: '4px', fontSize: '12px'}}>
+                                    Collections:
+                                    <a className='text-primary' onClick={() => updatePresent({...finalObj, behaviour: {...finalObj.behaviour, collections: collectionList?.map((cur) => cur?.value)}})}>Select All</a>
+                                </label>
+                                <Select
+                                    isMulti={true}
+                                    options={collectionList}
+                                    inputId="aria-example-input"
+                                    closeMenuOnSelect={true}
+                                    name="customer_collection_list"
+                                    placeholder="Add Collection/s"
+                                    value={collectionList?.filter((option) => finalObj?.behaviour?.collections?.includes(option.value))}
+                                    onChange={(options) => {
+                                        console.log(options, "pppppppppp")
+                                        const option_list = options.map((cur) => {
+                                            return cur.value
+                                        })
+                                        // const newObj = { ...finalObj }
+                                        // newObj.behaviour.COLLECTION_LIST = [...finalObj.behaviour.CUSTOM_PAGE_LINK, value.value]
+                                        updatePresent({...finalObj, behaviour: {...finalObj.behaviour, collections: option_list}})
+                                    }}
+                                />
+                            </div>
+
+                            <div className="row mt-2">
+                                <label htmlFor="" style={{ fontSize: "12px" }}>Include URLs:</label>
+                                {finalObj?.behaviour?.INCLUDES_PAGE_LINK?.map((ele, key) => {
+                                    return (
+                                        <div className="col-12" key={key}>
+                                            <div className="p-0 position-relative d-flex align-items-center mb-1">
+                                                <input style={{ fontSize: "12px" }} onChange={e => {
+                                                    const newObj = { ...finalObj }
+                                                    newObj.behaviour.INCLUDES_PAGE_LINK[key] = e.target.value
+                                                    updatePresent(newObj)
+                                                }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj?.behaviour?.INCLUDES_PAGE_LINK?.length > 1 && <span onClick={() => {
+                                                    const newObj = { ...finalObj }
+                                                    newObj?.behaviour?.INCLUDES_PAGE_LINK?.splice(key, 1)
+                                                    updatePresent(newObj)
+                                                }} className="d-flex justify-content-center alignn-items-center position-absolute end-0 p-1 cursor-pointer"><Trash stroke='red' size={12.5} /></span>}
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                                {<div className="col-12">
+                                    <button onClick={() => {
+                                        const newObj = { ...finalObj }
+                                        newObj.behaviour.INCLUDES_PAGE_LINK = [...finalObj?.behaviour?.INCLUDES_PAGE_LINK, ""]
+                                        updatePresent(newObj)
+                                    }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
+                                </div>}
+                            </div>
+
+                            <div className="row mt-2">
+                                <label htmlFor="" style={{ fontSize: "12px" }}>Exclude URLs:</label>
+                                {finalObj?.behaviour?.EXCLUDE_PAGE_LINK?.map((ele, key) => {
+                                    return (
+                                        <div className="col-12" key={key}>
+                                            <div className="p-0 position-relative d-flex align-items-center mb-1">
+                                                <input style={{ fontSize: "12px" }} onChange={e => {
+                                                    const newObj = { ...finalObj }
+                                                    newObj.behaviour.EXCLUDE_PAGE_LINK[key] = e.target.value
+                                                    updatePresent(newObj)
+                                                }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj?.behaviour?.EXCLUDE_PAGE_LINK?.length > 1 && <span onClick={() => {
+                                                    const newObj = { ...finalObj }
+                                                    newObj?.behaviour?.EXCLUDE_PAGE_LINK?.splice(key, 1)
+                                                    updatePresent(newObj)
+                                                }} className="d-flex justify-content-center alignn-items-center position-absolute end-0 p-1 cursor-pointer"><Trash stroke='red' size={12.5} /></span>}
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                                {<div className="col-12">
+                                    <button onClick={() => {
+                                        const newObj = { ...finalObj }
+                                        newObj.behaviour.EXCLUDE_PAGE_LINK = [...finalObj?.behaviour?.EXCLUDE_PAGE_LINK, ""]
+                                        updatePresent(newObj)
+                                    }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
+                                </div>}
+                            </div>
+
+                            {/* <div className="row mt-2">
+                                <span className="form-check form-check-success m-0 d-flex justify-content-start align-items-center gap-1">
+                                    <input
+                                        type="checkbox"
+                                        id="all_product_page"
+                                        className="form-check-input m-0"
+                                        name="all_product_page"
+                                        value="all_product_page"
+                                        checked={true}
+                                    />
+                                    <label htmlFor="all_product_page">All Product Pages</label>
+                                </span>
+                            </div> */}
+
+                            
+                        </>
+                    )}
 
                     {/* {finalObj?.behaviour?.PAGES?.includes("custom_source") && (
                         <div className="row mt-2">
@@ -3618,6 +3719,7 @@ const CustomizationParent = () => {
             form_data.append("is_edit", themeId === 0 ? 0 : 1)
             // form_data.append("source", )
             finalObj?.behaviour?.SOURCE_PAGE_LINK?.map((curElem) => form_data.append("source", `${curElem}_page`))
+            finalObj?.behaviour?.collections?.map((curElem) => form_data.append("collection_id", curElem))
 
             form_data.append("theme_id", themeId)
             form_data.append("is_draft", 0)
@@ -4344,6 +4446,33 @@ const CustomizationParent = () => {
 
     }, [])
 
+    const getCollections = () => {
+        const form_data = new FormData()
+        form_data.append("shop", outletData[0]?.web_url)
+        form_data.append("app_name", "superleadz")
+        fetch(`${SuperLeadzBaseURL}/api/v1/get/get_shopify_collections/`, {
+            method: "POST",
+            body: form_data
+        })
+        .then((resp) => resp.json())
+        .then((data) => {
+            console.log(data)
+            // setCollectionData(data?.response?.custom_collections ? data.response.custom_collections : [])
+            setCollectionList(data.response.custom_collections.map((curElem) => {
+                return { value: curElem.id, label: curElem.title }
+            }))
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
+
+    useEffect(() => {
+        if (finalObj?.behaviour?.PAGES?.includes("collections_page")) {
+            getCollections()
+        }
+    }, [finalObj?.behaviour?.PAGES])
+
     return (
         <Suspense fallback={null}>
             <div className='position-relative' id='customization-container'
@@ -5018,29 +5147,29 @@ const CustomizationParent = () => {
                                                                 </>
                                                             }
                                                             <div className='py-1 px-2 mt-1'>
-                                                                    <div className="row mt-2">
-                                                                        <p className='m-0 fw-bolder text-black text-uppercase' style={{ fontSize: "0.75rem" }}>Source:</p>
-                                                                        {/* <label htmlFor="" className='mb-1' style={{ fontSize: "12px" }}>Source:</label> */}
-                                                                        <Select
-                                                                            isMulti={true}
-                                                                            options={sourceList}
-                                                                            inputId="aria-example-input"
-                                                                            closeMenuOnSelect={false}
-                                                                            name="source"
-                                                                            placeholder="Add Source"
-                                                                            value={sourceList?.filter(option => finalObj?.behaviour?.SOURCE_PAGE_LINK?.includes(option.value))}
-                                                                            onChange={(options) => {
-                                                                                const option_list = options.map((cur) => {
-                                                                                    return cur.value
-                                                                                })
-                                                                                updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, SOURCE_PAGE_LINK: option_list } })
-                                                                                console.log(finalObj?.behaviour?.PAGES?.includes("custom_source"), 'jyguyuyuyg')
-                                                                                // const newObj = { ...finalObj }
-                                                                                // newObj.behaviour.SOURCE_PAGE_LINK = [...finalObj.behaviour.CUSTOM_PAGE_LINK, ""]
-                                                                                // updatePresent(newObj)
-                                                                            }}
-                                                                        />
-                                                                    </div>
+                                                                <div className="row mt-2">
+                                                                    <p className='m-0 fw-bolder text-black text-uppercase' style={{ fontSize: "0.75rem" }}>Source:</p>
+                                                                    {/* <label htmlFor="" className='mb-1' style={{ fontSize: "12px" }}>Source:</label> */}
+                                                                    <Select
+                                                                        isMulti={true}
+                                                                        options={sourceList}
+                                                                        inputId="aria-example-input"
+                                                                        closeMenuOnSelect={false}
+                                                                        name="source"
+                                                                        placeholder="Add Source"
+                                                                        value={sourceList?.filter(option => finalObj?.behaviour?.SOURCE_PAGE_LINK?.includes(option.value))}
+                                                                        onChange={(options) => {
+                                                                            const option_list = options.map((cur) => {
+                                                                                return cur.value
+                                                                            })
+                                                                            updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, SOURCE_PAGE_LINK: option_list } })
+                                                                            console.log(finalObj?.behaviour?.PAGES?.includes("custom_source"), 'jyguyuyuyg')
+                                                                            // const newObj = { ...finalObj }
+                                                                            // newObj.behaviour.SOURCE_PAGE_LINK = [...finalObj.behaviour.CUSTOM_PAGE_LINK, ""]
+                                                                            // updatePresent(newObj)
+                                                                        }}
+                                                                    />
+                                                                </div>
                                                             </div>
 
                                                         </div>

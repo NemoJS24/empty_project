@@ -99,9 +99,9 @@ const AdminSetting = () => {
         opt_in_email: "",
         opt_in_sms: "",
         opt_in_both: "",
-        label_text_email: "Subscribe to email",
-        label_text_sms: "Subscribe to sms",
-        label_text_both: "Subscribe",
+        label_text_email: "I consent to receiving email marketing communication",
+        label_text_sms: "I consent to receiving SMS marketing communication",
+        label_text_both: "I consent to receiving email & SMS marketing communication",
         email_check: true,
         sms_check: true,
         both_check: true,
@@ -531,15 +531,15 @@ const AdminSetting = () => {
                         </AccordionItem>
                         <AccordionItem>
                           <AccordionHeader className='acc-header border-top' targetId='2' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
-                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub Header</label>
+                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading</label>
                           </AccordionHeader>
                           <AccordionBody accordionId='2'>
                             <div className="py-1">
-                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading</label>
-                              <textarea onChange={handleDataChange} value={prevData?.page_1?.sub_heading} name="sub_heading" className="form-control" id="sub_heading" placeholder="Sub-heading" />
+                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading</label>
+                              <textarea onChange={handleDataChange} value={prevData?.page_1?.sub_heading} name="sub_heading" className="form-control" id="sub_heading" placeholder="Subheading" />
                             </div>
                             <div className="py-1">
-                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading Font</label>
+                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading Font</label>
                               <Select styles={{
                                 option: (provided, state) => {
                                   return ({ ...provided, fontFamily: fontStyles[fontStyles?.findIndex($ => $?.value === state.value)]?.value })
@@ -551,7 +551,7 @@ const AdminSetting = () => {
                             </div>
 
                             <div className="py-1">
-                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading Color</label>
+                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading Color</label>
                               <UncontrolledDropdown className="w-100 p-0" direction="start">
                                 <DropdownToggle style={{ fontSize: "10px" }} className="rounded w-100 p-0">
                                   <div style={{ backgroundColor: "#ffffff", padding: "0.525rem" }} className="rounded form-control d-flex align-items-center gap-1">
@@ -638,15 +638,15 @@ const AdminSetting = () => {
                         </AccordionItem>
                         <AccordionItem>
                           <AccordionHeader className='acc-header border-top' targetId='2' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
-                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub Header</label>
+                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading</label>
                           </AccordionHeader>
                           <AccordionBody accordionId='2'>
                             <div className="py-1">
-                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading</label>
-                              <textarea onChange={handleDataChange} value={prevData?.page_1?.sub_headingAf} name="sub_headingAf" className="form-control" id="sub_headingAf" placeholder="Sub-heading" />
+                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading</label>
+                              <textarea onChange={handleDataChange} value={prevData?.page_1?.sub_headingAf} name="sub_headingAf" className="form-control" id="sub_headingAf" placeholder="Subheading" />
                             </div>
                             <div className="py-1">
-                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading Font</label>
+                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading Font</label>
                               <Select styles={{
                                 option: (provided, state) => {
                                   return ({ ...provided, fontFamily: fontStyles[fontStyles?.findIndex($ => $?.value === state.value)]?.value })
@@ -658,7 +658,7 @@ const AdminSetting = () => {
                             </div>
 
                             <div className="py-1">
-                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading Color</label>
+                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading Color</label>
                               <UncontrolledDropdown className="w-100 p-0" direction="start">
                                 <DropdownToggle style={{ fontSize: "10px" }} className="rounded w-100 p-0">
                                   <div style={{ backgroundColor: "#ffffff", padding: "0.525rem" }} className="rounded form-control d-flex align-items-center gap-1">
@@ -745,15 +745,15 @@ const AdminSetting = () => {
                         </AccordionItem>
                         <AccordionItem>
                           <AccordionHeader className='acc-header border-top' targetId='2' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
-                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub Header</label>
+                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading</label>
                           </AccordionHeader>
                           <AccordionBody accordionId='2'>
                             <div className="py-1">
-                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading</label>
-                              <textarea onChange={handleDataChange2} value={prevData?.page_2?.sub_heading} name="sub_heading" className="form-control" id="sub_heading" placeholder="Sub-heading" />
+                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading</label>
+                              <textarea onChange={handleDataChange2} value={prevData?.page_2?.sub_heading} name="sub_heading" className="form-control" id="sub_heading" placeholder="Subheading" />
                             </div>
                             <div className="py-1">
-                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading Font</label>
+                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading Font</label>
                               <Select styles={{
                                 option: (provided, state) => {
                                   return ({ ...provided, fontFamily: fontStyles[fontStyles?.findIndex($ => $?.value === state.value)]?.value })
@@ -765,7 +765,7 @@ const AdminSetting = () => {
                             </div>
 
                             <div className="py-1">
-                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading Color</label>
+                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading Color</label>
                               <UncontrolledDropdown className="w-100 p-0" direction="start">
                                 <DropdownToggle style={{ fontSize: "10px" }} className="rounded w-100 p-0">
                                   <div style={{ backgroundColor: "#ffffff", padding: "0.525rem" }} className="rounded form-control d-flex align-items-center gap-1">
@@ -801,7 +801,7 @@ const AdminSetting = () => {
                       <UncontrolledAccordion stayOpen defaultOpen={["1"]}>
                         <AccordionItem>
                           <AccordionHeader className='acc-header border-top' targetId='1' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
-                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Email Marketing Settings</label>
+                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Opt-Ins</label>
                           </AccordionHeader>
                           <AccordionBody accordionId='1'>
                             
@@ -811,7 +811,7 @@ const AdminSetting = () => {
                                   <div className="d-flex gap-2 flex-column">
 
                                     <div className="d-flex justify-content-between align-items-center">
-                                      <label htmlFor="opt_in_email" className="form-check-label">Email Opt-in</label>
+                                      <label htmlFor="opt_in_email" className="form-check-label">Via Email</label>
                                       <div className="form-check-success form-switch cursor-pointer">
                                         <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.opt_in_email === "email"} id="opt_in_email" onChange={(e) => {
                                           const updatedData = {
@@ -828,7 +828,7 @@ const AdminSetting = () => {
 
 
                                     <div className="d-flex justify-content-between align-items-center">
-                                      <label htmlFor="opt_in_sms" className="form-check-label">SMS Opt-in</label>
+                                      <label htmlFor="opt_in_sms" className="form-check-label">Via SMS</label>
                                       <div className="form-check-success form-switch cursor-pointer">
                                         <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.opt_in_sms === "sms"} id="opt_in_sms" onChange={(e) => {
                                           const updatedData = {
@@ -844,7 +844,7 @@ const AdminSetting = () => {
                                     </div>
 
                                     <div className="d-flex justify-content-between align-items-center">
-                                      <label htmlFor="opt_in_both" className="form-check-label">Opt-in for marketing communication</label>
+                                      <label htmlFor="opt_in_both" className="form-check-label">Both</label>
                                       <div className="form-check-success form-switch cursor-pointer">
                                         <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.opt_in_both === "both"} id="opt_in_both" onChange={(e) => {
 
@@ -873,7 +873,7 @@ const AdminSetting = () => {
                                             <div className="d-flex justify-content-between align-items-center" style={{ marginBottom: '6px' }}>
                                               <label style={{ fontSize: "0.85rem" }} htmlFor="label_text">Email Text</label>
                                               <div className="d-flex align-items-center justify-content-between gap-1 form-check form-check-success m-0 p-0">
-                                                <label style={{ fontSize: "0.85rem" }} htmlFor="keep_email_check">Keep Selected by Default</label>
+                                                <label style={{ fontSize: "0.85rem" }} htmlFor="keep_email_check">Pre-select by default</label>
                                                 <input id="keep_email_check" checked={prevData?.page_1?.email_check} type='checkbox' className='form-check-input m-0 p-0' name="email_check" onChange={(e) => setCurrObj({ ...currObj, email_check: e.target.checked })} />
                                               </div>
                                             </div>
@@ -888,9 +888,9 @@ const AdminSetting = () => {
                                         <>
                                           <Col md={12} style={{ marginBottom: "1.25rem" }}>
                                             <div className="d-flex justify-content-between align-items-center" style={{ marginBottom: '6px' }}>
-                                              <label style={{ fontSize: "0.85rem" }} htmlFor="label_text">Sms Text</label>
+                                              <label style={{ fontSize: "0.85rem" }} htmlFor="label_text">SMS Text</label>
                                               <div className="d-flex align-items-center justify-content-between gap-1 form-check form-check-success m-0 p-0">
-                                                <label style={{ fontSize: "0.85rem" }} htmlFor="keep_sms_check">Keep Selected by Default</label>
+                                                <label style={{ fontSize: "0.85rem" }} htmlFor="keep_sms_check">Pre-select by default</label>
                                                 <input id="keep_sms_check" checked={prevData?.page_1?.sms_check} type='checkbox' className='form-check-input m-0 p-0' name="sms_check" onChange={(e) => setCurrObj({...currObj, sms_check: e.target.checked})} />
                                               </div>
                                             </div>
@@ -906,9 +906,9 @@ const AdminSetting = () => {
                                         <>
                                           <Col md={12} style={{ marginBottom: "1.25rem" }}>
                                             <div className="d-flex justify-content-between align-items-center" style={{ marginBottom: '6px' }}>
-                                              <label style={{ fontSize: "0.85rem" }} htmlFor="label_text">Opt-in for marketing communication</label>
+                                              <label style={{ fontSize: "0.85rem" }} htmlFor="label_text">Both</label>
                                               <div className="d-flex align-items-center justify-content-between gap-1 form-check form-check-success m-0 p-0">
-                                                <label style={{ fontSize: "0.85rem" }} htmlFor="keep_both_check">Keep Selected by Default</label>
+                                                <label style={{ fontSize: "0.85rem" }} htmlFor="keep_both_check">Pre-select by default</label>
                                                 <input id="keep_both_check" checked={prevData?.page_1?.both_check} type='checkbox' className='form-check-input m-0 p-0' name="both_check" onChange={(e) => setCurrObj({ ...currObj, both_check: e.target.checked })} />
                                               </div>
                                             </div>
@@ -940,7 +940,7 @@ const AdminSetting = () => {
                                   <input onChange={handleDataChange} value={prevData?.["page_1"]?.password} name="password" type="text" className="form-control" id="password" placeholder="Password" />
                                 </div>
                                 <div className="col-md-6">
-                                  <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Placeholder</label>
+                                  <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Placeholder text</label>
                                   <input onChange={handleDataChange} value={prevData?.["page_1"]?.password_placeHolder} name="password_placeHolder" type="text" className="form-control" id="password_placeHolder" placeholder="Password" /></div>
                               </div>
                             </div>
@@ -953,7 +953,7 @@ const AdminSetting = () => {
                                   <input onChange={handleDataChange} value={prevData?.["page_1"]?.confirm_password} name="confirm_password" type="text" className="form-control" id="confirm_password" placeholder="Confirm Password" />
                                 </div>
                                 <div className="col-md-6">
-                                  <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Placeholder</label>
+                                  <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Placeholder text</label>
                                   <input onChange={handleDataChange} value={prevData?.["page_1"]?.confirm_password_placeHolder} name="confirm_password_placeHolder" type="text" className="form-control" id="confirm_password_placeHolder" placeholder="Confirm Password" />
                                 </div>
                               </div>
@@ -964,7 +964,7 @@ const AdminSetting = () => {
                                 <div className="form-check-success form-switch cursor-pointer">
                                   <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.hidePassword} id="hidePassword" onChange={(e) => {
                                     setPrevData({...prevData, page_1: {...prevData?.page_1, hidePassword: e.target.checked}})
-                                  }} name="hidePassword" /><label htmlFor="hidePassword" className="form-check-label ms-1">Show and hide Password icon.</label>
+                                  }} name="hidePassword" /><label htmlFor="hidePassword" className="form-check-label ms-1">Show/Hide password field.</label>
                                 </div>
                               </Col>
                             </div>
@@ -974,7 +974,7 @@ const AdminSetting = () => {
                                 <div className="form-check-success form-switch cursor-pointer">
                                   <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.reEnter} id="reEnter" onChange={(e) => {
                                     setPrevData({...prevData, page_1: {...prevData?.page_1, reEnter: e.target.checked}})
-                                  }} name="reEnter" /><label htmlFor="reEnter" className="form-check-label ms-1">Enter Re-Type password functionality.</label>
+                                  }} name="reEnter" /><label htmlFor="reEnter" className="form-check-label ms-1">Re-Type password field</label>
                                 </div>
                               </Col>  
                             </div>
@@ -1113,7 +1113,7 @@ const AdminSetting = () => {
                           <AccordionBody accordionId='1'>
 
                             <div className="py-1">
-                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Set Password length</label>
+                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Set Password Length (in characters)</label>
                               <input onChange={(e) => {
                                 if (!isNaN(e.target.value)) {
                                   handleDataChange(e)
@@ -1122,7 +1122,7 @@ const AdminSetting = () => {
                             </div>
 
                             <div className="py-1">
-                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Default Form Validation Message. Note {'{{n}}'} is replaced by actual length</label>
+                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Default Password Validation Message. Note {'{{n}}'} is replaced by actual length</label>
                               <input onChange={handleDataChange} value={prevData?.["page_1"]?.validationMessage} name="validationMessage" type="text" className="form-control" id="validationMessage" placeholder="Default Form Validation Message" />
                             </div>
                             
@@ -1132,7 +1132,7 @@ const AdminSetting = () => {
                                   <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.contain} id="contain" onChange={(e) => {
                                     setCurrObj({...currObj, contain: e.target.checked})
                                     // setPrevData({...prevData, page_1: {...prevData?.page_1, contain: e.target.checked}})
-                                  }} name="contain" /><label htmlFor="contain" className="form-check-label ms-1">Must Contain both numeric and alphabetic characters.</label>
+                                  }} name="contain" /><label htmlFor="contain" className="form-check-label ms-1">Password must be alphanumeric i.e. include both numbers and letters.</label>
                                 </div>
                               </Col>
                             </div>
@@ -1156,7 +1156,7 @@ const AdminSetting = () => {
                               <input onChange={handleDataChange} value={prevData?.[currPage]?.button_text} name="button_text" type="text" className="form-control" id="button_text" placeholder="Button Text" />
                             </div>
                             <div className="py-1">
-                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Button Text Color</label>
+                              <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Button Text & Outline Color</label>
                               <UncontrolledDropdown className="w-100 p-0" direction="start">
                                 <DropdownToggle style={{ fontSize: "10px" }} className="rounded w-100 p-0">
                                   <div style={{ backgroundColor: "#ffffff", padding: "0.525rem" }} className="rounded form-control d-flex align-items-center gap-1">
