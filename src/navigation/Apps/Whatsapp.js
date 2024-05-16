@@ -1,4 +1,5 @@
-import { Circle, MessageSquare } from "react-feather"
+import { Circle, Home, MessageSquare, Settings, Users } from "react-feather"
+import { AiOutlineBars, AiOutlineHighlight, AiOutlineUser } from "react-icons/ai"
 import { DefaultNav } from "./DefualtNav"
 
 export const WhatsappNavigation = [
@@ -9,36 +10,36 @@ export const WhatsappNavigation = [
     {
         id: 'dashboard',
         title: 'Dashboard',
-        icon: <Circle size={16} />,
+        icon: <Home size={20} />,
         navLink: '/merchant/whatsapp/'
     },
     {
         id: 'Contacts',
         title: 'Contacts',
-        icon: <Circle size={16} />,
+        icon: <AiOutlineUser size={16} />,
         navLink: '/merchant/whatsapp/whatsapp_contact/'
     },
     {
         id: 'Groups',
         title: 'Groups',
-        icon: <Circle size={16} />,
+        icon: <Users size={16} />,
         navLink: '/merchant/whatsapp/groups/'
     },
     {
-        id: 'message',
+        id: 'Templates',
         title: 'Templates',
-        icon: <Circle size={16} />,
+        icon: <AiOutlineHighlight size={16} />,
         navLink: '/merchant/whatsapp/message/'
     },
     {
         id: 'campaigns',
         title: 'Campaigns',
-        icon: <Circle size={16} />,
+        icon: <AiOutlineBars size={16} />,
         navLink: '/merchant/whatsapp/campaigns'
     },
     {
         id: 'LiveChat',
-        title: 'LiveChat',
+        title: 'Live Chat',
         icon: <MessageSquare size={16} />,
         navLink: '/merchant/whatsapp/LiveChat'
     },
@@ -63,7 +64,7 @@ export const WhatsappNavigation = [
     {
         id: 'setting',
         title: 'Settings',
-        icon: <Circle size={16} />,
+        icon: <Settings size={16} />,
         // icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/crm.png`} width='16px' />,
         children: [
             // {
@@ -71,6 +72,12 @@ export const WhatsappNavigation = [
             //     title: 'Project',
             //     icon: <Circle size={16} />,
             //     navLink: '/merchant/whatsapp/project-profile/'
+            // },
+            // {
+            //     id: 'quickReplay',
+            //     title: 'Quick Replay setting',
+            //     icon: <Circle size={16} />,
+            //     navLink: '/merchant/whatsapp/quick-replays/'
             // },
             {
                 id: 'project',

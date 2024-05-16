@@ -287,7 +287,7 @@ export const RenderLiveTemplateUI = ({SingleTemplate}) => {
   return (
      <CardBody className="border-0  rounded-2 " style={{ whiteSpace: 'pre-wrap'}}>
 
-        <div className="border-1 rounded-2 mb-0 " style={{ maxWidth: "400px" }} >
+        <div className="border-1 rounded-2 mb-0 " style={{ width: "400px" }} >
            <div className='p-0' >
               {
 
