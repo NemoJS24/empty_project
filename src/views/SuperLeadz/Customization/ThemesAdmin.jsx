@@ -57,6 +57,8 @@ const Themes = () => {
     }, [])
 
     const getData = () => {
+
+
         fetch(`${SuperLeadzBaseURL}/api/v1/add_default_theme/?app=${userPermission?.appName}&shop=${outletDetail[0]?.web_url}`)
             .then((data) => data.json())
             .then((resp) => {
@@ -77,12 +79,11 @@ const Themes = () => {
     const filteredData = allThemes?.filter((curElem) => {
         const defaultTheme = JSON.parse(curElem?.default_theme)
         return (
-            filterType?.SuperLeadzPurpose?.some(value => defaultTheme?.SuperLeadzPurpose?.includes(value)) &&
-            filterType?.SuperLeadzStrategy?.some(value => defaultTheme?.SuperLeadzStrategy?.includes(value)) &&
+            filterType?.SuperLeadzPurpose?.some(value => defaultTheme?.SuperLeadzPurpose?.includes(value)) ||
+            filterType?.SuperLeadzStrategy?.some(value => defaultTheme?.SuperLeadzStrategy?.includes(value)) ||
             filterType?.SuperLeadzTone?.some(value => defaultTheme?.SuperLeadzTone?.includes(value))
         )
     })
-    
 
     const [phoneView, setPhoneView] = useState(filteredData.map(() => {
         return false
@@ -253,15 +254,8 @@ const Themes = () => {
                                                 <div className="d-flex justify-content-between align-items-center gap-2 mt-2">
                                                     <h3 className="mt-2 mb-0">{JSON.parse(theme?.default_theme)?.theme_name}</h3>
                                                     <button onClick={() => {
-                                                        if (typeof phoneView[key] === 'undefined') {
-                                                            navigate('/merchant/SuperLeadz/new_customization/?isMobile=false')
-                                                        } else {
-                                                            navigate(`/merchant/SuperLeadz/new_customization/?isMobile=${phoneView[key]}`)
-                                                        }
-
-                                                        // navigate(`/merchant/SuperLeadz/new_customization/?isMobile=${phoneView[key]}`)
+                                                        navigate(`/merchant/SuperLeadz/new_customization/admin`)
                                                         const defaultTheme = JSON.parse(theme?.default_theme)
-                                                        localStorage.setItem("defaultThemeId", theme?.id)
                                                         localStorage.setItem("defaultTheme", JSON.stringify(defaultTheme))
                                                     }} state={{ data: JSON.parse(theme?.default_theme) }} className="btn btn-primary">Use Template</button>
 

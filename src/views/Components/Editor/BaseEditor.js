@@ -169,7 +169,7 @@ export default function BasicEditor({htmlContent, onChange: onChangeText, editor
           ) : null} */}
           {toolbarReady && elementId ? createPortal(
             <div className="editor_here" style={{width: `${100}%`, top: `${(elementIdPosition("top") - 82)}px`, transition: "0.5s ease", zIndex: "99999999" }}>
-          <ToolbarPlugin  elementId={elementId} topPosition={elementIdPosition("top")} widthPosition={100}/>
+          <ToolbarPlugin  elementId={elementId} topPosition={elementIdPosition("top")} widthPosition={25}/>
         </div>
             , document.getElementById(elementId)
           ) : null}
