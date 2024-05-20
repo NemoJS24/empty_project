@@ -14,6 +14,7 @@ import Flatpickr from 'react-flatpickr'
 import moment from 'moment'
 import { useNavigate, useParams } from 'react-router-dom'
 import Spinner from '../../Components/DataTable/Spinner'
+import { VirtualizedSelect } from '../Test'
 // import toast from "react-hot-toast"
 
 const ApplicantForm = ({ allData }) => {
@@ -1012,10 +1013,36 @@ const ApplicantForm = ({ allData }) => {
                                 <h4 className="mb-0">Applicant Details</h4>
                             </Col>
                             <Col md={6} className="mt-2" style={{ zIndex: '9' }}>
-                                <label htmlFor="customer-name" className="form-label" style={{ margin: '0px' }}>
+                                <label htmlFor="customer-name" className="form-label" style={{ margin: '0px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     Customer Name
+                                    <a onClick={() => handleShow("customer")} className='text-primary'>Add New Customer</a>
                                 </label>
-                                <Select
+                                <VirtualizedSelect
+                                    options={customerList}
+                                    value={customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.xircls_customer_id))}
+                                    placeholder='Customer Name'
+                                    isDisabled={isCustomer}
+                                    id="insurance-type"
+                                    closeMenuOnSelect={true}
+                                    name='customer_name'
+                                    onChange={(e) => {
+                                        console.log(e)
+                                        // selectCustomer(e);
+                                        // handleInputChange(e, 'xircls_customer_id')
+                                        const updatedData = {
+                                            customer_name: e.label,
+                                            xircls_customer_id: e.value
+                                        }
+
+                                        setFormData((preData) => ({
+                                            ...preData,
+                                            ...updatedData
+                                        }))
+
+                                        handleAddInputChange({ target: { value: e.value, name: "xircls_customer_id" } }, 'productForm')
+                                    }}
+                                />
+                                {/* <Select
                                     placeholder='Customer Name'
                                     isDisabled={isCustomer}
                                     id="insurance-type"
@@ -1041,7 +1068,7 @@ const ApplicantForm = ({ allData }) => {
                                         handleAddInputChange({ target: { value: e.value, name: "xircls_customer_id" } }, 'productForm')
                                     }}
                                     value={customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.xircls_customer_id))}
-                                />
+                                /> */}
                                 <p id="xircls_customer_id_val" className="text-danger m-0 p-0 vaildMessage"></p>
                             </Col>
                             <Col md={6} className="mt-2">

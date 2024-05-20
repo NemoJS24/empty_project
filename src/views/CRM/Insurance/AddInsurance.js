@@ -14,6 +14,7 @@ import { validForm } from '../../Validator'
 import Flatpickr from 'react-flatpickr'
 import moment from 'moment'
 import Spinner from '../../Components/DataTable/Spinner'
+import { VirtualizedSelect } from '../Test'
 
 const AddInsurance = () => {
     const { id } = useParams()
@@ -788,8 +789,9 @@ const AddInsurance = () => {
                     <h4 className="mb-0">Add Product</h4>
                 </Col>
                 <Col md={12} className="mt-2">
-                    <label htmlFor="customer-name">
+                    <label htmlFor="customer-name" className="form-label" style={{ margin: '0px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         Customer Name
+                        <a onClick={() => handleShow("customer")} className='text-primary'>Add New Customer</a>
                     </label>
                     {/* <input type='text' id='customer-name' name='customer_name' className="form-control"
                         value={formData?.customer_name}
@@ -804,7 +806,7 @@ const AddInsurance = () => {
                         value={customerList?.find($ => Number($.value) === Number(formData?.xircls_customer_id))}
                         isDisabled={true}
                     /> */}
-                    <Select
+                    <VirtualizedSelect
                         placeholder='Customer Name'
                         id="insurance-type"
                         options={customerList}
@@ -812,7 +814,7 @@ const AddInsurance = () => {
                         name='xircls_customer_id'
                         value={customerList?.find($ => Number($.value) === Number(formData?.xircls_customer_id))}
                         // onMenuScrollToBottom={() => getCustomer(currentPage, null, () => { })}
-                        components={{ Menu: CustomSelectComponent }}
+                        // components={{ Menu: CustomSelectComponent }}
                         onChange={(value, actionMeta) => {
                             // selectCustomer(value, actionMeta, false)
                             setFormData(prevData => ({ ...prevData, xircls_customer_id: value.value }))
@@ -1020,10 +1022,11 @@ const AddInsurance = () => {
                                                 <h4 className="mb-0">Applicant Details</h4>
                                             </Col>
                                             <Col md={6} className="mt-2" style={{ zIndex: '9' }}>
-                                                <label htmlFor="customer-name" className="" style={{ margin: '0px' }}>
+                                                <label htmlFor="customer-name" className="form-label" style={{ margin: '0px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                     Customer Name
+                                                    <a onClick={() => handleShow("customer")} className='text-primary'>Add New Customer</a>
                                                 </label>
-                                                <Select
+                                                <VirtualizedSelect
                                                     placeholder='Customer Name'
                                                     id="insurance-type"
                                                     options={customerList}
@@ -1031,7 +1034,7 @@ const AddInsurance = () => {
                                                     name='xircls_customer_id'
                                                     value={customerList?.find($ => Number($.value) === Number(formData?.xircls_customer_id))}
                                                     // onMenuScrollToBottom={() => getCustomer(currentPage, null, () => { })}
-                                                    components={{ Menu: CustomSelectComponent }}
+                                                    // components={{ Menu: CustomSelectComponent }}
                                                     onChange={(value, actionMeta) => {
                                                         // selectCustomer(value, actionMeta, false)
                                                         setFormData(prevData => ({ ...prevData, xircls_customer_id: value.value }))

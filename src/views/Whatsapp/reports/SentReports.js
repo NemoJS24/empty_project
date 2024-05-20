@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from 'react'
 import { Row, Col, Label, Input, Form, Button, Card, CardBody, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap'
-import { getReq, postReq } from '../../../assets/auth/jwtService'
+import { baseURL, getReq, postReq } from '../../../assets/auth/jwtService'
 import FrontBaseLoader from '../../Components/Loader/Loader'
 import AdvanceServerSide from '../../Components/DataTable/AdvanceServerSide'
 import toast from 'react-hot-toast'
@@ -194,6 +194,8 @@ export default function SentReports() {
             getData={getData}
             isLoading={useisLoading}
             advanceFilter={true}
+            exportUrl={`${baseURL}/talk/messagelog_view/`}
+            isExport={true}
           />
 
         </CardBody>
