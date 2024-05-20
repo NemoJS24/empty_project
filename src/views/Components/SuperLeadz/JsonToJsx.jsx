@@ -4,7 +4,8 @@ import ReturnOfferHtml from '../../NewCustomizationFlow/ReturnOfferHtml'
 
 const JsonToJsx = ({ renderObj, isMobile, scale, index = 0 }) => {
     const findObj = renderObj[`${isMobile ? "mobile_" : ""}pages`]
-    // console.log(findObj, "findObj")
+    const crossStyle = renderObj?.crossButtons[`${isMobile ? "mobile_" : ""}main`]
+    console.log(crossStyle, "findObj")
     return (
         <div className='setDefault'>
             <style>{`
@@ -20,15 +21,18 @@ const JsonToJsx = ({ renderObj, isMobile, scale, index = 0 }) => {
                     scale: ${scale ? scale : "1"};
                 }
             `}</style>
-            <div style={{ position: "relative", display:"flex", justifyContent:"center", width: "100%", maxHeight: "100%", marginTop: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`].marginTop, marginRight: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`].marginRight, marginBottom: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`].marginBottom, marginLeft: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`].marginLeft }}>
+            <div style={{ position: "relative", width: findObj?.bgStyles?.width, maxWidth: findObj?.bgStyles?.maxWidth, maxHeight: "100%", minHeight: findObj?.bgStyles?.minHeight, marginTop: findObj?.bgStyles?.marginTop, marginRight: findObj?.bgStyles?.marginRight, marginBottom: findObj?.bgStyles?.marginBottom, marginLeft: findObj?.bgStyles?.marginLeft, borderRadius: findObj?.bgStyles?.borderRadius }}>
                 <div id="dropZoneParent" className="pop-up" style={{ position: 'relative', zIndex: '300', overflow: "visible", ...renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`], backgroundColor: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`]?.backgroundColor, backgroundImage: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`]?.backgroundImage, width: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`].width, maxWidth: "90%", marginTop: "0px", marginRight: "0px", marginBottom: "0px", marginLeft: "0px" }}>
                     {findObj && findObj[index]?.values?.map((cur, key) => {
-                        return <div style={{ ...cur?.style, display: "flex", justifyContent: "center", alignItems: "center", position: "relative" }} key={key}
+                        return <div style={{ ...cur?.style, display: "flex", justifyContent: "center", alignItems: "center" }} key={key}
                         id={`${"main"}-${key}-parent-grandparent`}
                         >
-                        <X size={renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.width} height={renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.height} color={renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.color} style={{ position: "absolute", inset: "0px 0px auto auto", zIndex: "350", backgroundColor: renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.backgroundColor, borderRadius: renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.borderRadius, padding: `3px`, marginBottom: renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.marginBottom, transform: `translateX(${renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.translateX}) translateY(${renderObj?.crossButtons?.[`${isMobile ? "mobile_" : ""}main`]?.translateY})` }} onClick={(e) => {
-                            e.stopPropagation()
-                        }} />
+                            <div id="cross_btn_cont" tabindex="0" style={{ position: "absolute", inset: "0px 0px auto auto", zIndex: "2", backgroundColor: crossStyle?.backgroundColor, borderRadius: crossStyle?.borderRadius, marginBottom: crossStyle?.marginBottom, transform: `translate(${crossStyle?.translateX}, ${crossStyle?.translateY})` }}>
+                                <div id="cross_btn_box">
+                                    <X size={crossStyle?.width} height={crossStyle?.height} color={crossStyle?.color}
+                                    />
+                                </div>
+                            </div>
                             <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", justifyContent: "center", alignItems: "stretch", position: "relative", width: "100%", zIndex: "1" }}
                             >
                                 {

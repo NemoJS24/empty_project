@@ -282,7 +282,7 @@ export const Tone = [
 //     { label: 'Limited Time Offer', value: 'Limited Time Offer', purpose_id: ["4", "5", "6", "7"], id: "7" },
 //     { label: 'Discount for Specific Product', value: 'Discount for Specific Product', purpose_id: ["4", "6", "8"], id: "8" }
 // ]
-
+// 4 5 6
 export const SuperLeadzPurpose = [
     { label: 'Increase brand recall', value: 'Increase brand recall', id: "1" }, // 1
     { label: 'Increase registered users', value: 'Increase registered users', id: "2" },
@@ -293,8 +293,7 @@ export const SuperLeadzPurpose = [
     { label: 'Convert Returning Shoppers Order Value (AOV)', value: 'Convert Returning Shoppers Order Value (AOV)', id: "7" },
     { label: 'Increase AOV', value: 'Increase AOV', id: "8" }
 ]
-
-
+//  3 7 
 export const SuperLeadzStrategy = [
     { label: 'Newsletter Subscription', value: 'Newsletter Subscription', SuperLeadz_purpose_id: ["1", "2", "3"], id: "1" }, // 1
     { label: 'VIP Membership', value: 'VIP Membership', SuperLeadz_purpose_id: ["1", "2", "3", "5", "6", "7"], id: "2" },
@@ -307,6 +306,7 @@ export const SuperLeadzStrategy = [
     { label: 'Discount for Specific Product', value: 'Discount for Specific Product', SuperLeadz_purpose_id: ["4", "6", "8"], id: "9" }
 ]
 
+// 5 6 7
 export const SuperLeadzTone = [
     { label: 'Direct', value: 'Direct', SuperLeadz_strategy_id: ["3", "2", "1"], id: "1" },
     { label: 'Casual/Chatty', value: 'Casual/Chatty', SuperLeadz_strategy_id: ["1", "4", "5"], id: "2" },

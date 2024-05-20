@@ -44,28 +44,31 @@ import { Reload } from 'tabler-icons-react'
 import { TiClipboard } from "react-icons/ti"
 import { GrUserAdmin } from "react-icons/gr"
 import { RenderTemplateUI } from '../Whatsapp/SmallFunction'
+import { FONT_FAMILY_OPTIONS } from '../NewCustomizationFlow/plugins/ToolbarPlugin'
 
 
-export const fontStyles = [
-    { label: "Abril Fatface", value: `Abril Fatface` },
-    { label: "Acme", value: `Acme` },
-    { label: "Caveat", value: `Caveat` },
-    { label: "Dancing Script", value: `Dancing Script` },
-    { label: "Kalam", value: `Kalam` },
-    { label: "Lato", value: `Lato` },
-    { label: "Lexend", value: `Lexend` },
-    { label: "Lilita One", value: `Lilita One` },
-    { label: "Montserrat", value: `Montserrat` },
-    { label: "Noto Sans", value: `Noto Sans` },
-    { label: "Open Sans", value: `Open Sans` },
-    { label: "Oswald", value: `Oswald` },
-    { label: "Pacifico", value: `Pacifico` },
-    { label: "Play", value: `Play` },
-    { label: "Roboto", value: `Roboto` },
-    { label: "Satisfy", value: `Satisfy` },
-    { label: "sans-serif", value: `sans-serif` },
-    { label: "Ubuntu", value: `Ubuntu` }
-]
+// export const fontStyles = [
+//     { label: "Abril Fatface", value: `Abril Fatface` },
+//     { label: "Acme", value: `Acme` },
+//     { label: "Caveat", value: `Caveat` },
+//     { label: "Dancing Script", value: `Dancing Script` },
+//     { label: "Kalam", value: `Kalam` },
+//     { label: "Lato", value: `Lato` },
+//     { label: "Lexend", value: `Lexend` },
+//     { label: "Lilita One", value: `Lilita One` },
+//     { label: "Montserrat", value: `Montserrat` },
+//     { label: "Noto Sans", value: `Noto Sans` },
+//     { label: "Open Sans", value: `Open Sans` },
+//     { label: "Oswald", value: `Oswald` },
+//     { label: "Pacifico", value: `Pacifico` },
+//     { label: "Play", value: `Play` },
+//     { label: "Roboto", value: `Roboto` },
+//     { label: "Satisfy", value: `Satisfy` },
+//     { label: "sans-serif", value: `sans-serif` },
+//     { label: "Ubuntu", value: `Ubuntu` }
+// ]
+
+export const fontStyles = FONT_FAMILY_OPTIONS
 
 const sourceList = [
     { label: "Facebook", value: `facebook` },
@@ -166,6 +169,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
         defObj = defaultObj
         // console.log("error in 5")
     }
+    
 
     // else if (Boolean(localStorage.getItem("defaultTheme"))) {
     //     defObj = JSON.parse(localStorage.getItem("defaultTheme"))
@@ -205,7 +209,6 @@ const CustomizationParent = ({ isAdmin = false }) => {
     const [whatsAppTem, setWhatsappTem] = useState([])
     const pageCondition = currPage === "button" ? "button" : "main"
 
-
     // const [whatsappJson, setWhatsappJson] = useState({
     //     template: "",
     //     delay: ""
@@ -237,7 +240,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
         { value: 'all_pages', label: 'All Pages' },
         { value: 'home_page', label: 'Home Page' },
         { value: 'product_page', label: 'Product Page' },
-        { value: 'product_list_page', label: 'Product List Page' },
+        { value: 'collections_page', label: 'Collection Page' },
         { value: 'cart_page', label: 'Cart Page' },
         { value: 'custom_page', label: 'Custom Pages' },
         { value: 'custom_source', label: 'Source' }
@@ -308,7 +311,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
 
     const [isOfferDraggable, setIsOfferDraggable] = useState(true)
     const [phoneIsOfferDraggable, setPhoneIsOfferDraggable] = useState(true)
-
+    const [collectionList, setCollectionList] = useState([])
     const [cancelCust, setCancelCust] = useState(false)
     const [verifyYourEmail, setVerifyYourEmail] = useState(false)
     const [changeSenderEmail, setChangeSenderEmail] = useState(false)
