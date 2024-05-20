@@ -26,9 +26,9 @@ const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, 
   const [currentEntry, setCurrentEntry] = useState(custom ? 5 : 10)
   const [exportData, setExportData] = useState({
     fileType: "csv",
-    range: "ALL",
+    range: "10",
     selectedData: [],
-    batch: ""
+    batch: "0"
   })
 
   // const [paginater, setPaginater] = useState(0)
@@ -485,7 +485,7 @@ const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, 
                 <div className='row'>
                   <div className='col-md-6'>
                     <label htmlFor="number_of_rows">Number of Rows</label>
-                    <select name='number_of_rows' className='form-control' onChange={(e) => setExportData({ ...exportData, range: e.target.value })}>
+                    <select name='number_of_rows' className='form-control' value={exportData.range} onChange={(e) => setExportData({ ...exportData, range: e.target.value })}>
                       <option value="">Select No. of Rows</option>
                       {
                         exportPageOtp.map(page => <option value={page.value} selected={Number(page.value) === Number(exportData.range)}>{page.label}</option>)
@@ -494,7 +494,7 @@ const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, 
                   </div>
                   <div className='col-md-6'>
                     <label htmlFor="number_of_rows">Batch</label>
-                    <select name='number_of_rows' className='form-control' onChange={(e) => setExportData({ ...exportData, batch: e.target.value })}>
+                    <select name='number_of_rows' value={exportData.batch} className='form-control' onChange={(e) => setExportData({ ...exportData, batch: e.target.value })}>
                       <option value="">Select Batch</option>
                       {
                         count && Number(exportData.range) ? Array(Math.ceil(count / Number(exportData.range))).fill(0).map((_, i) => {

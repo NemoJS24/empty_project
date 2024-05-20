@@ -67,7 +67,7 @@ export const formatNumberWithCommas = (number) => {
     return data
 }
 
-export const pageNo = [{ label: 10, value: 10 }, { label: 25, value: 25 }, { label: 50, value: 50 }, { label: 100, value: 100 }]
+export const pageNo = [{ label: 10, value: 10 }, { label: 25, value: 25 }, { label: 50, value: 50 }, { label: 100, value: 100 }, { label: 500, value: 500 }, { label: 1000, value: 1000 }]
 
 export const timelineName = {
     infiniti: {
@@ -270,6 +270,54 @@ export const Tone = [
     { label: 'Astrological', value: 'Astrological', strategy_id: ["2"], id: "11" },
     { label: 'Privacy-Focused', value: 'Privacy-Focused', strategy_id: ["5"], id: "12" }
 ]
+
+
+// export const SuperLeadzStrategy = [
+//     { label: 'Newsletter Subscription', value: 'Newsletter Subscription', purpose_id: ["1", "2", "3"], id: "1" }, // 1
+//     { label: 'VIP Membership', value: 'VIP Membership', purpose_id: ["1", "2", "3", "5", "6", "7"], id: "2" },
+//     { label: 'Discount for Data', value: 'Discount for Data', purpose_id: ["1", "2", "3", "4"], id: "3" },
+//     { label: 'Returning Shopper Engagement', value: 'Returning Shopper Engagement', purpose_id: ["2", "3", "4", "5", "6", "7"], id: "4" },
+//     { label: 'Discount on Product Collection', value: 'Discount on Product Collection', purpose_id: ["3", "4", "6", "7", "8"], id: "5" },
+//     { label: 'Discount at Exit Intent', value: 'Discount at Exit Intent', purpose_id: ["3", "4", "5", "6", "7"], id: "6" },
+//     { label: 'Limited Time Offer', value: 'Limited Time Offer', purpose_id: ["4", "5", "6", "7"], id: "7" },
+//     { label: 'Discount for Specific Product', value: 'Discount for Specific Product', purpose_id: ["4", "6", "8"], id: "8" }
+// ]
+
+export const SuperLeadzPurpose = [
+    { label: 'Increase brand recall', value: 'Increase brand recall', id: "1" }, // 1
+    { label: 'Increase registered users', value: 'Increase registered users', id: "2" },
+    { label: 'Build High-Quality Email Lists', value: 'Build High-Quality Email Lists', id: "3" },
+    { label: 'Reduce Website Drop-Offs', value: 'Reduce Website Drop-Offs', id: "4" },
+    { label: 'Reduce Cart Abandonments', value: 'Reduce Cart Abandonments', id: "5" },
+    { label: 'Increase Sales', value: 'Increase Sales', id: "6" },
+    { label: 'Convert Returning Shoppers Order Value (AOV)', value: 'Convert Returning Shoppers Order Value (AOV)', id: "7" },
+    { label: 'Increase AOV', value: 'Increase AOV', id: "8" }
+]
+
+
+export const SuperLeadzStrategy = [
+    { label: 'Newsletter Subscription', value: 'Newsletter Subscription', SuperLeadz_purpose_id: ["1", "2", "3"], id: "1" }, // 1
+    { label: 'VIP Membership', value: 'VIP Membership', SuperLeadz_purpose_id: ["1", "2", "3", "5", "6", "7"], id: "2" },
+    { label: 'Discount for Data', value: 'Discount for Data', SuperLeadz_purpose_id: ["1", "2", "3"], id: "3" },
+    { label: 'Returning Shopper Engagement', value: 'Returning Shopper Engagement', SuperLeadz_purpose_id: ["2", "3", "4", "7"], id: "4" },
+    { label: 'Discount at Exit Intent, Returning Shopper Engagement', value: 'Discount at Exit Intent, Returning Shopper Engagement', SuperLeadz_purpose_id: ["3", "4", "5", "6", "7"], id: "5" },
+    { label: 'Discount on Product Collection', value: 'Discount on Product Collection', SuperLeadz_purpose_id: ["3", "4", "6", "7", "8"], id: "6" },
+    { label: 'Discount at Exit Intent', value: 'Discount at Exit Intent', SuperLeadz_purpose_id: ["4", "5", "6"], id: "7" },
+    { label: 'Limited Time Offer', value: 'Limited Time Offer', SuperLeadz_purpose_id: ["4", "5", "6", "7"], id: "8" },
+    { label: 'Discount for Specific Product', value: 'Discount for Specific Product', SuperLeadz_purpose_id: ["4", "6", "8"], id: "9" }
+]
+
+export const SuperLeadzTone = [
+    { label: 'Direct', value: 'Direct', SuperLeadz_strategy_id: ["3", "2", "1"], id: "1" },
+    { label: 'Casual/Chatty', value: 'Casual/Chatty', SuperLeadz_strategy_id: ["1", "4", "5"], id: "2" },
+    { label: 'Urgent', value: 'Urgent', SuperLeadz_strategy_id: ["6", "8"], id: "4" },
+    { label: 'Incentivizing', value: 'Incentivizing', SuperLeadz_strategy_id: ["4", "5", "6", "7", "8", "9"], id: "5" },
+    { label: 'Enticing', value: 'Enticing', SuperLeadz_strategy_id: ["2", "6", "7", "8", "9"], id: "6" },
+    { label: 'Enthusiastic', value: 'Enthusiastic', SuperLeadz_strategy_id: ["7"], id: "7" },
+    { label: 'Warm', value: 'Warm', SuperLeadz_strategy_id: ["1"], id: "9" },
+    { label: 'Complimentary', value: 'Complimentary', SuperLeadz_strategy_id: ["3"], id: "10" }
+]
+
 
 export const affiliateTracking = (aft_no) => {
 

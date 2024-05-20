@@ -271,7 +271,7 @@ export const configUrl = {
     whatsapp_view_campaign: "/talk/view_campaign/",
     change_campaign_status: "/talk/change_campaign_status/",
     get_project_profile: "/talk/get_project_profile/",
-    post_project_profile: "/talk/post_project_profile/"
+    update_profile: "/talk/update_profile/"
 }
 
 const axiosInstance = axios.create({

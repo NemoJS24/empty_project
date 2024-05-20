@@ -14,6 +14,7 @@ import { main } from '@popperjs/core'
 import Flatpickr from 'react-flatpickr'
 import moment from 'moment'
 import Spinner from '../../Components/DataTable/Spinner'
+import { VirtualizedSelect } from '../Test'
 
 const AddServicing = () => {
 
@@ -778,20 +779,17 @@ const AddServicing = () => {
                                 <h4 className="mb-0">{(id && isEdit) ? 'Edit Servicing' : 'Add Servicing'}</h4>
                             </Col>
                             <Col md={6} className="mt-2">
-                                <label
-                                    htmlFor="company-name"
-                                    className="form-label"
-                                    style={{ margin: "0px" }}
-                                >
+                                <label htmlFor="customer-name" className="form-label" style={{ margin: '0px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     Customer Name
+                                    <a onClick={() => handleShow("customer")} className='text-primary'>Add New Customer</a>
                                 </label>
-                                <Select
+                                <VirtualizedSelect
                                     placeholder='Select Customer'
                                     id='company-name'
                                     options={customerList}
                                     closeMenuOnSelect={true}
                                     // onMenuScrollToBottom={() => fetchCustomerData(currentPage, null, () => { })}
-                                    components={{ Menu: CustomSelectComponent }}
+                                    // components={{ Menu: CustomSelectComponent }}
                                     onChange={(event) => {
                                         // selectCustomer()
                                         const e = { target: { name: 'xircls_customer_id', value: event?.value } }

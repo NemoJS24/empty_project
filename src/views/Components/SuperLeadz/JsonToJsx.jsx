@@ -20,7 +20,7 @@ const JsonToJsx = ({ renderObj, isMobile, scale, index = 0 }) => {
                     scale: ${scale ? scale : "1"};
                 }
             `}</style>
-            <div style={{ position: "relative", display:"flex", justifyContent:"center", width: "100%", maxHeight: "100%", minHeight: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`].minHeight, marginTop: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`].marginTop, marginRight: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`].marginRight, marginBottom: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`].marginBottom, marginLeft: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`].marginLeft }}>
+            <div style={{ position: "relative", display:"flex", justifyContent:"center", width: "100%", maxHeight: "100%", marginTop: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`].marginTop, marginRight: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`].marginRight, marginBottom: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`].marginBottom, marginLeft: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`].marginLeft }}>
                 <div id="dropZoneParent" className="pop-up" style={{ position: 'relative', zIndex: '300', overflow: "visible", ...renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`], backgroundColor: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`]?.backgroundColor, backgroundImage: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`]?.backgroundImage, width: renderObj?.backgroundStyles?.[`${isMobile ? "mobile_" : ""}main`].width, maxWidth: "90%", marginTop: "0px", marginRight: "0px", marginBottom: "0px", marginLeft: "0px" }}>
                     {findObj && findObj[index]?.values?.map((cur, key) => {
                         return <div style={{ ...cur?.style, display: "flex", justifyContent: "center", alignItems: "center", position: "relative" }} key={key}
@@ -183,7 +183,7 @@ const JsonToJsx = ({ renderObj, isMobile, scale, index = 0 }) => {
                                                                         renderObj?.selectedOffers?.map((ele, key) => {
                                                                             return (
                                                                                 <>
-                                                                                    <ReturnOfferHtml details={ele} key={key} theme={renderObj?.offerTheme} colors={renderObj?.offerProperties?.colors} />
+                                                                                    <ReturnOfferHtml details={ele} key={key} theme={renderObj?.offerTheme} color={renderObj?.offerProperties?.colors} />
                                                                                 </>
                                                                             )
                                                                         })

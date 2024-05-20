@@ -3,16 +3,15 @@ import moment from 'moment'
 import { useEffect, useRef, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Modal from 'react-bootstrap/Modal'
-import { ChevronLeft, ChevronRight, File, FileText, Headphones, Image, Plus, Send, Sliders, Users, Video } from 'react-feather'
+import { ChevronLeft, ChevronRight, File, FileText, Headphones, Image, Plus, Users, Video } from 'react-feather'
 import { BsReply } from 'react-icons/bs'
 import { FaEllipsisV, FaSearch, FaSortAmountDown } from "react-icons/fa"
-import { HiOutlineTemplate } from "react-icons/hi"
 import { IoMdSearch, IoMdSend } from "react-icons/io"
-import { LiaCheckDoubleSolid, LiaCheckSolid } from "react-icons/lia"
-import { MdOutlineLibraryAdd, MdErrorOutline } from "react-icons/md"
+import { LiaCheckDoubleSolid } from "react-icons/lia"
+import { LuEye } from "react-icons/lu"
+import { MdOutlineLibraryAdd } from "react-icons/md"
 import { RxCross2 } from "react-icons/rx"
 import Select from 'react-select'
-import { LuEye } from "react-icons/lu"
 import {
   Accordion,
   AccordionBody,
@@ -20,18 +19,19 @@ import {
   AccordionItem,
   Button,
   Container,
-  Tooltip,
   Input, InputGroup, InputGroupText
 } from 'reactstrap'
 import { SocketBaseURL, postReq } from '../../../assets/auth/jwtService'
 import XIRCLS_LOGO from '../../../assets/images/logo/XIRCLS_LOGO.png'
+import FrontBaseLoader from '../../Components/Loader/Loader'
 import { QuickReplayList, RenderLiveTemplateUI, getBoldStr, templateCatgList, timeLiveFormatter } from '../SmallFunction'
 import back from '../imgs/WhatsAppBack.png'
-import FrontBaseLoader from '../../Components/Loader/Loader'
-import { identity } from 'lodash'
 import StaticPage1 from './StaticPage'
+import Spinner from '../../Components/DataTable/Spinner'
 const LiveChat = () => {
 
+  const [useLiveContactLoader, setLiveContactLoader] = useState(true)
+  const [useLiveChatLoader, setLiveChatLoader] = useState(true)
   const [useIsLoading, setIsLoading] = useState(false)
   const [useMessageData, setMessageData] = useState([])
   const [useMessageCounter, setMessageCounter] = useState(0)
@@ -256,6 +256,7 @@ const LiveChat = () => {
     form_data.append("page", 1)
     form_data.append("size", 1000)
     form_data.append("selected_no", currentTab.messages_reciever)
+    setLiveChatLoader(true)
     postReq("get_all_message", form_data)
       .then((resp) => {
 
@@ -265,6 +266,7 @@ const LiveChat = () => {
 
         // markAsRead(resp?.data?.messages.slice(0, 1)[0].messages_message_id)
       }).catch((err) => { console.log(err) })
+      .finally(() => setLiveChatLoader(false))
   }
 
   const handleDivClick = (index) => {
@@ -279,6 +281,7 @@ const LiveChat = () => {
     form_data.append("size", 10)
     form_data.append("searchValue", filterText)
     form_data.append("type", useSortBy)
+    setLiveContactLoader(true)
     postReq("contact_relation", form_data)
       .then((res) => {
         // setUsers(res.data?.messages)
@@ -290,7 +293,8 @@ const LiveChat = () => {
         webSocketConnectionContacts(res?.data?.project_no)
       }).catch((err) => {
         // console.log(err)
-      })
+    
+  }).finally(() => setLiveContactLoader(false))
   }
   const filterAllContacts = (sortby) => {
     console.log("contacts sortby =============", sortby)
@@ -737,8 +741,10 @@ const LiveChat = () => {
                       </div>
                     )
                   })}
-                  <div className='w-100 ' >
-                    <div className='px-2 text-center py-1 text-primary cursor-pointer' onClick={() => { setContactPage(prev => prev + 1) }}>Load More...</div>
+                  <div className='w-100 text-center py-1' >
+                    {
+                      useLiveContactLoader ? <Spinner size="40px" /> : <div className='px-2 text-center  text-primary cursor-pointer' onClick={() => { setContactPage(prev => prev + 1) }}>Load More...</div>
+                    }
                   </div>
                 </div>
               </div>
@@ -811,8 +817,11 @@ const LiveChat = () => {
                     style={{ overflowY: "auto", height: '100%' }}
                     className={` d-flex flex-column-reverse  hideScroll`}
                   >
+                    {
+                      useLiveChatLoader && <div className='w-100 text-center'><Spinner size="40px" /></div> 
+                    }
 
-                    {useMessageData.map((messageData, index) => {
+                    {!useLiveChatLoader && useMessageData.map((messageData, index) => {
                       // console.log("WEB SOCKET MESSAGE", messageData?.messages_context)
                       let messageJson = {}
                       let replyJson = {}
@@ -961,12 +970,12 @@ const LiveChat = () => {
                                   {
                                     currentTab?.messages_sender === messageData?.messages_sender && 
                                     <div className='timestamp-box position-absolute bg-white rounded-2 p-1' style={{width:"150px", top:"24px"}} >
-                                      <ul className='ps-0 pb-0 mb-0 d-flex flex-column ' style={{ listStyleType: "none", gap:"5px" }}>
+                                      <ul className='ps-0 pb-0 mb-0 d-flex flex-column ' style={{ listStyleType: "none", gap:"3px" }}>
                                         
-                                        <li className='d-flex justify-content-between align-items-center '><p className='m-0'>Sent</p> <p className='m-0'>{timeLiveFormatter(messageData?.messages_timestamp_sent)}</p></li>
-                                        <li className='d-flex justify-content-between align-items-center '><p className='m-0'>Delivered</p> <p className='m-0'>{timeLiveFormatter(messageData?.messages_timestamp_delivered)}</p></li>
-                                        <li className='d-flex justify-content-between align-items-center '><p className='m-0'>Read</p> <p className='m-0'>{timeLiveFormatter(messageData?.messages_timestamp_read)}</p></li>
-                                        <li className='d-flex justify-content-between align-items-center '><p className='m-0'>Failed</p> <p className='m-0'>{timeLiveFormatter(messageData?.messages_timestamp_failed)}</p></li>
+                                        <li className='d-flex justify-content-between align-items-center '><p className='m-0 font-small-3 text-secondary'>Sent</p> <p className='m-0 font-small-3 text-secondary'>{timeLiveFormatter(messageData?.messages_timestamp_sent)}</p></li>
+                                        <li className='d-flex justify-content-between align-items-center '><p className='m-0 font-small-3 text-secondary'>Delivered</p> <p className='m-0 font-small-3 text-secondary'>{timeLiveFormatter(messageData?.messages_timestamp_delivered)}</p></li>
+                                        <li className='d-flex justify-content-between align-items-center '><p className='m-0 font-small-3 text-secondary'>Read</p> <p className='m-0 font-small-3 text-secondary'>{timeLiveFormatter(messageData?.messages_timestamp_read)}</p></li>
+                                        <li className='d-flex justify-content-between align-items-center '><p className='m-0 font-small-3 text-secondary'>Failed</p> <p className='m-0 font-small-3 text-secondary'>{timeLiveFormatter(messageData?.messages_timestamp_failed)}</p></li>
                                       </ul>
                                     </div>
                                   }

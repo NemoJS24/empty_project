@@ -1082,7 +1082,7 @@ const RenderPreview = (props) => {
                                                                                                     e.stopPropagation()
                                                                                                     if (colWise.length <= 1) {
                                                                                                         setCurrPosition({ ...currPosition, selectedType: "main" })
-                                                                                                        setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                                                                        setIndexes({ cur: -1, curElem: "left", subElem: "grandparent" })
                                                                                                     } else {
                                                                                                         setCurrPosition({ ...currPosition, selectedType: "block" })
                                                                                                         setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
@@ -1703,7 +1703,7 @@ const RenderPreview = (props) => {
                                                                         <MoreVertical size='18' />
                                                                     </span>
                                                                 </DropdownToggle>
-                                                                <DropdownMenu end className='custom_dropMenu' style={{ transform: 'translate(140px, -90px)' }}>
+                                                                <DropdownMenu end className='custom_dropMenu bg-white' style={{ transform: 'translate(140px, -90px)', height: '100vh' }}>
                                                                     <DropdownItem onClick={e => {
                                                                         e.stopPropagation()
                                                                         setRenamePage(ele?.id)
@@ -1713,7 +1713,28 @@ const RenderPreview = (props) => {
                                                                             <Edit3 stroke='blue' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Rename</span>
                                                                         </div>
                                                                     </DropdownItem>
-                                                                    {ele?.id?.includes("Page") && <DropdownItem className='w-100' onClick={() => {
+                                                                    <DropdownItem className='w-100' onClick={() => {
+
+                                                                        function deepCopy(obj) {
+                                                                            if (typeof obj !== 'object' || obj === null) {
+                                                                                return obj // Return primitives and null as is
+                                                                            }
+
+                                                                            const copiedObj = Array.isArray(obj) ? [] : {} // Determine if obj is an array or object
+
+                                                                            for (const key in obj) {
+                                                                                if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                                                                                    // Recursively deep copy nested objects
+                                                                                    copiedObj[key] = deepCopy(obj[key])
+                                                                                }
+                                                                            }
+
+                                                                            return copiedObj
+                                                                        }
+
+                                                                        // Usage example:
+                                                                        // Modify the IDs and page names
+
 
                                                                         const newObj = finalObj
                                                                         const pageCurrentIndex = newObj?.pages?.findIndex(($) => $?.id === ele?.id)
@@ -1721,9 +1742,16 @@ const RenderPreview = (props) => {
 
                                                                         const page = newObj?.pages[pageCurrentIndex]
                                                                         const mobilePage = newObj?.mobile_pages[mobilePageCurrentIndex]
+                                                                        const duplicatedPage = deepCopy(page)
+                                                                        const duplicatedMobilePage = deepCopy(mobilePage)
+                                                                        duplicatedPage.id = `Page${newObj.pages.length + 1}`
+                                                                        duplicatedPage.pageName = `Page ${newObj.pages.length + 1}`
 
-                                                                        const duplicatedPage = { ...page, id: `Page${newObj?.pages.length + 1}`, pageName: `Page ${newObj?.pages.length + 1}` }
-                                                                        const duplicatedMobilePage = { ...mobilePage, id: `Page${newObj?.mobile_pages.length + 1}`, pageName: `Page ${newObj?.mobile_pages.length + 1}` }
+                                                                        duplicatedMobilePage.id = `Page${newObj.mobile_pages.length + 1}`
+                                                                        duplicatedMobilePage.pageName = `Page ${newObj.mobile_pages.length + 1}`
+
+                                                                        // const duplicatedPage = { ...page, id: `Page${newObj?.pages.length + 1}`, pageName: `Page ${newObj?.pages.length + 1}` }
+                                                                        // const duplicatedMobilePage = { ...mobilePage, id: `Page${newObj?.mobile_pages.length + 1}`, pageName: `Page ${newObj?.mobile_pages.length + 1}` }
                                                                         newObj?.pages?.splice(pageCurrentIndex + 1, 0, duplicatedPage)
                                                                         newObj?.mobile_pages?.splice(mobilePageCurrentIndex + 1, 0, duplicatedMobilePage)
                                                                         updatePresent({ ...newObj })
@@ -1731,12 +1759,26 @@ const RenderPreview = (props) => {
                                                                         <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
                                                                             <Copy stroke='green' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Duplicate</span>
                                                                         </div>
-                                                                    </DropdownItem>}
-                                                                    {ele?.id?.includes("Page") && <DropdownItem onClick={() => {
+                                                                    </DropdownItem>
+                                                                    {!ele?.id?.includes("offers") && <DropdownItem onClick={() => {
                                                                         const newObj = { ...finalObj }
 
                                                                         const pageArray = newObj?.pages?.filter($ => $?.id !== ele?.id)
                                                                         const mobilePageArray = newObj?.mobile_pages?.filter($ => $?.id !== ele?.id)
+
+                                                                        if (pageArray.length === 0) {
+                                                                            // Add a new page instead of deleting
+                                                                            updatePresent({
+                                                                                ...finalObj,
+                                                                                pages: [...finalObj?.pages, { pageName: `Page${finalObj.pages.length + 1}`, id: `Page${finalObj.pages.length + 1}`, values: [] }],
+                                                                                mobile_pages: [...finalObj?.mobile_pages, { pageName: `Page${finalObj.mobile_pages.length + 1}`, id: `Page${finalObj.mobile_pages.length + 1}`, values: [] }]
+                                                                            })
+                                                                            setCurrPage(`Page${finalObj[`${mobileCondition}pages`]?.length + 1}`)
+                                                                            setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
+                                                                            return // Exit the function to prevent further execution
+                                                                        }
+
+
                                                                         if (currPage === ele?.id) {
                                                                             setCurrPage(pageArray[0]?.id)
                                                                         }

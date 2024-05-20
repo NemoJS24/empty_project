@@ -1877,6 +1877,8 @@ export const allThemes = [
                 pop_up_load_value: 0,
                 PAGES: ["all_pages"],
                 CUSTOM_PAGE_LINK: [""],
+                INCLUDES_PAGE_LINK: [""],
+                EXCLUDE_PAGE_LINK: [""],
                 SOURCE_PAGE_LINK: [],
                 otp_settings: 1,
                 frequency: 1
@@ -5284,6 +5286,8 @@ export const allThemes = [
                 pop_up_load_value: 0,
                 PAGES: ["all_pages"],
                 CUSTOM_PAGE_LINK: [""],
+                INCLUDES_PAGE_LINK: [""],
+                EXCLUDE_PAGE_LINK: [""],
                 SOURCE_PAGE_LINK: [],
                 otp_settings: 1,
                 frequency: 1
@@ -8203,6 +8207,8 @@ export const allThemes = [
                 pop_up_load_value: 0,
                 PAGES: ["all_pages"],
                 CUSTOM_PAGE_LINK: [""],
+                INCLUDES_PAGE_LINK: [""],
+                EXCLUDE_PAGE_LINK: [""],
                 SOURCE_PAGE_LINK: [],
                 otp_settings: 1,
                 frequency: 1
@@ -11762,6 +11768,8 @@ export const allThemes = [
                 pop_up_load_value: 0,
                 PAGES: ["all_pages"],
                 CUSTOM_PAGE_LINK: [""],
+                INCLUDES_PAGE_LINK: [""],
+                EXCLUDE_PAGE_LINK: [""],
                 SOURCE_PAGE_LINK: [],
                 otp_settings: 1,
                 frequency: 1
@@ -13930,6 +13938,8 @@ export const allThemes = [
                 pop_up_load_value: 0,
                 PAGES: ["all_pages"],
                 CUSTOM_PAGE_LINK: [""],
+                INCLUDES_PAGE_LINK: [""],
+                EXCLUDE_PAGE_LINK: [""],
                 SOURCE_PAGE_LINK: [],
                 otp_settings: 1,
                 frequency: 1
@@ -16980,6 +16990,8 @@ export const allThemes = [
                 pop_up_load_value: 0,
                 PAGES: ["all_pages"],
                 CUSTOM_PAGE_LINK: [""],
+                INCLUDES_PAGE_LINK: [""],
+                EXCLUDE_PAGE_LINK: [""],
                 SOURCE_PAGE_LINK: [],
                 otp_settings: 1,
                 frequency: 1
@@ -19247,6 +19259,8 @@ export const allThemes = [
                 pop_up_load_value: 0,
                 PAGES: ["all_pages"],
                 CUSTOM_PAGE_LINK: [""],
+                INCLUDES_PAGE_LINK: [""],
+                EXCLUDE_PAGE_LINK: [""],
                 SOURCE_PAGE_LINK: [],
                 otp_settings: 1,
                 frequency: 1
@@ -21442,6 +21456,8 @@ export const allThemes = [
                 pop_up_load_value: 0,
                 PAGES: ["all_pages"],
                 CUSTOM_PAGE_LINK: [""],
+                INCLUDES_PAGE_LINK: [""],
+                EXCLUDE_PAGE_LINK: [""],
                 SOURCE_PAGE_LINK: [],
                 otp_settings: 1,
                 frequency: 1
@@ -23745,6 +23761,8 @@ export const allThemes = [
             pop_up_load_value: 0,
             PAGES: ["all_pages"],
             CUSTOM_PAGE_LINK: [""],
+            INCLUDES_PAGE_LINK: [""],
+            EXCLUDE_PAGE_LINK: [""],
             SOURCE_PAGE_LINK: [],
             otp_settings: 1,
             frequency: 1

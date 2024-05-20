@@ -21,6 +21,7 @@ import { CampaignType } from "../../views/Whatsapp/Campaign/CampaignType"
 import CreateCampaign from "../../views/Whatsapp/Campaign/CreateCampaign"
 import CampaignReports from "../../views/Whatsapp/Campaign/CampaignReports"
 import ProjectProfile from "../../views/Whatsapp/settings/ProjectProfile"
+import QuickReplySetting from "../../views/Whatsapp/settings/QuickReplySetting"
 // import ProjectTable from "../../views/Whatsapp/Templates/ProjectTable"
 
 export const WhatsAppRoutes = [
@@ -127,5 +128,9 @@ export const WhatsAppRoutes = [
     {
         path: '/merchant/whatsapp/project-profile',
         element: <ProjectProfile />
+    },
+    {
+        path: '/merchant/whatsapp/quick-replays/',
+        element: <QuickReplySetting />
     }
 ]
