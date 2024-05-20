@@ -478,7 +478,7 @@ const Setting = ({ isAdmin = false }) => {
     }
 
     const handleSaveData = (e, type) => {
-        console.log({prevData})
+        console.log({ prevData })
         e.preventDefault()
         setApiLoader(true)
         const timeout = 300
@@ -572,7 +572,7 @@ const Setting = ({ isAdmin = false }) => {
 
     useEffect(() => {
         if (themeName) {
-            setCurrObj({...currObj, campaign_name: themeName})
+            setCurrObj({ ...currObj, campaign_name: themeName })
         }
     }, [themeName])
 
@@ -649,7 +649,7 @@ const Setting = ({ isAdmin = false }) => {
                             <div className="d-flex justify-content-center align-items-center" style={{ border: '1px solid #d8d6de', borderRadius: '0.357rem', gap: '5px' }}>
                                 <input id='campaignNameInput' type="text" placeholder='Enter theme name' value={themeName} onKeyDown={e => e.key === "Enter" && setNameEdit(!nameEdit)} onChange={e => {
                                     setThemeName(e.target.value)
-                                    
+
                                 }} disabled={nameEdit} className="form-control" style={{ width: '250px', border: 'none' }} />
                                 <a style={{ marginRight: '5px' }} onClick={() => setNameEdit(!nameEdit)}>
                                     {
@@ -786,7 +786,7 @@ const Setting = ({ isAdmin = false }) => {
                             {sideNav === "contentBF" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "450px", transform: `translateX(${sideNav === "contentBF" ? "0px" : "-450px"})`, position: "absolute", inset: "0px" }}>
                                 <UncontrolledAccordion stayOpen defaultOpen={["1"]}>
                                     <AccordionItem>
-                                        <AccordionHeader className='acc-header border-top' targetId='1' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
+                                        <AccordionHeader className='acc-header border-top' targetId='heading' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
                                             <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Header</label>
                                         </AccordionHeader>
                                         <AccordionBody accordionId='1'>
@@ -837,7 +837,7 @@ const Setting = ({ isAdmin = false }) => {
                                         </AccordionBody>
                                     </AccordionItem>
                                     <AccordionItem>
-                                        <AccordionHeader className='acc-header border-top' targetId='2' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
+                                        <AccordionHeader className='acc-header border-top' targetId='subheading' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
                                             <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading</label>
                                         </AccordionHeader>
                                         <AccordionBody accordionId='2'>
@@ -1629,7 +1629,7 @@ const Setting = ({ isAdmin = false }) => {
                                                         .then((resp) => {
                                                             if (resp.data) {
                                                                 const updatedData = {
-                                                                    email_settings: {...resp.data},
+                                                                    email_settings: { ...resp.data },
                                                                     selected_email_id: e.value
                                                                 }
                                                                 setCurrObj((preData) => ({
@@ -1642,9 +1642,9 @@ const Setting = ({ isAdmin = false }) => {
                                                         .catch((error) => {
                                                             console.log(error)
                                                         })
-                                                }} 
-                                                options={emailTemplate} 
-                                                value={emailTemplate?.filter((option) => String(option.value) === String(prevData?.page_1?.selected_email_id))} 
+                                                }}
+                                                    options={emailTemplate}
+                                                    value={emailTemplate?.filter((option) => String(option.value) === String(prevData?.page_1?.selected_email_id))}
                                                 />
                                             </div>
 
@@ -2076,6 +2076,12 @@ const Setting = ({ isAdmin = false }) => {
                                                                     {prevData?.["page_1"]?.button_text}
                                                                 </div>
                                                                 <div
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
+                                                                        setSideHeaderNav("form")
+                                                                        setSideNav("contentAF")
+                                                                    }}
+                                                                    className="cursor-pointer"
                                                                     style={{
                                                                         color: prevData?.["page_1"]?.heading_colorAf,
                                                                         marginTop: "0px",
@@ -2090,6 +2096,12 @@ const Setting = ({ isAdmin = false }) => {
                                                                     {prevData?.["page_1"]?.headingAf}
                                                                 </div>
                                                                 <div
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
+                                                                        setSideHeaderNav("form")
+                                                                        setSideNav("contentAF")
+                                                                    }}
+                                                                    className="cursor-pointer"
                                                                     style={{
                                                                         fontSize: prevData?.["page_1"]?.sub_heading_font_sizeAf,
                                                                         fontWeight: "300",
