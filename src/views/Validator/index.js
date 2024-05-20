@@ -290,7 +290,7 @@ export const SuperLeadzPurpose = [
     { label: 'Reduce Website Drop-Offs', value: 'Reduce Website Drop-Offs', id: "4" },
     { label: 'Reduce Cart Abandonments', value: 'Reduce Cart Abandonments', id: "5" },
     { label: 'Increase Sales', value: 'Increase Sales', id: "6" },
-    { label: 'Convert Returning Shoppers Order Value (AOV)', value: 'Convert Returning Shoppers Order Value (AOV)', id: "7" },
+    { label: 'Convert Returning Shoppers', value: 'Convert Returning Shoppers', id: "7" },
     { label: 'Increase AOV', value: 'Increase AOV', id: "8" }
 ]
 
