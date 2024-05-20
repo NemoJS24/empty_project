@@ -33,6 +33,7 @@ const SuperLeadzBilling = lazy(() => import('../../views/SuperLeadz/Billing'))
 const SuperLeadzFAQ = lazy(() => import('../../views/SuperLeadz/FAQ'))
 const SuperLeadzSupport = lazy(() => import('../../views/SuperLeadz/Support'))
 const Themes = lazy(() => import('../../views/SuperLeadz/Customization/Themes'))
+const ThemesAdmin = lazy(() => import('../../views/SuperLeadz/Customization/ThemesAdmin'))
 const SemperFi = lazy(() => import('../../views/SuperLeadz/SemperFi'))
 const Editor = lazy(() => import('../../views/NewCustomizationFlow/Editor'))
 
@@ -153,9 +154,14 @@ const SuperLeads_Routes = [
     }
   }, 
   {
-    path: '/merchant/superleadz/templates',
+    path: '/merchant/superleadz/templates/',
     app: appName,
     element: <Themes />
+  },
+  {
+    path: "/merchant/superleadz/templates/admin",
+    app: appName,
+    element: <ThemesAdmin />
   },
   {
     path: '/merchant/SuperLeadz/testfmb/',
@@ -182,6 +188,14 @@ const SuperLeads_Routes = [
     path: '/merchant/SuperLeadz/new_customization/:EditThemeId/',
     app: appName,
     element: <CustomizationParent />,
+    meta: {
+      layout: 'fullWidthLayout'
+    }
+  },
+  {
+    path: '/merchant/SuperLeadz/new_customization/admin/',
+    app: appName,
+    element: <CustomizationParent isAdmin={true}/>,
     meta: {
       layout: 'fullWidthLayout'
     }

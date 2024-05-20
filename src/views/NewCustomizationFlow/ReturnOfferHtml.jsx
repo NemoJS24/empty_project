@@ -45,10 +45,10 @@ export const defaultOfferStyles = [
     }
 ]
 
-const ReturnOfferHtml = ({ theme, details, offerProperties }) => {
+const ReturnOfferHtml = ({ theme, details, offerProperties, color }) => {
     const { userPermission } = useContext(PermissionProvider)
 
-    const colors = offerProperties?.colors
+    const colors = offerProperties?.colors ? offerProperties?.colors : color
 
     const offerStyles = [
         {
