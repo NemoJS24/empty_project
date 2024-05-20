@@ -242,6 +242,9 @@ export const configUrl = {
     referral_dashboard: "referral/dashboard/",
     group_import_customer: "/talk/group_import_customer/",
     mark_message_read: "/talk/mark_message_read/",
+    get_project_profile: "/talk/get_project_profile/",
+    update_profile: "/talk/update_profile/",
+    quick_replay: "/talk/quick_replay/",
 
     // Email
     email_details: "/mail/contact_details/",
@@ -269,9 +272,8 @@ export const configUrl = {
     delete_mail: "/mail/delete_mail/",
     whatsapp_create_campaign: "/talk/create_campaign/",
     whatsapp_view_campaign: "/talk/view_campaign/",
-    change_campaign_status: "/talk/change_campaign_status/",
-    get_project_profile: "/talk/get_project_profile/",
-    update_profile: "/talk/update_profile/"
+    change_campaign_status: "/talk/change_campaign_status/"
+    
 }
 
 const axiosInstance = axios.create({

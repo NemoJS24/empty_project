@@ -165,6 +165,11 @@ export const getBoldStr = (str) => {
 }
 
 
+export const convertToEmoji = (codee) => {
+   const codePoints = codee.trim().split(' ').map(cp => parseInt(cp, 16))
+   const emoji = String.fromCodePoint(...codePoints)
+   return emoji
+ }
 // testing
 // depending function for RenderTemplateUI
    // all themes display ui message
@@ -347,22 +352,22 @@ export const RenderLiveTemplateUI = ({SingleTemplate}) => {
                        return data.buttons.map((data) => {
                           if (data.type === "URL") {
                              return (
-                              <a href={data?.url} target="_blank" className="border-top  d-flex text-primary justify-content-center  align-items-center text-decoration-none " style={{ padding: "10px", gap: "8px" }} >
-                              <ExternalLink size={17} /><h6 className='m-0 text-primary' >{data.text}</h6>
+                              <a href={data?.url} target="_blank" className="border-top  d-flex  justify-content-center  align-items-center text-decoration-none " style={{ padding: "10px", gap: "8px", color:"#53bdeb" }} >
+                              <ExternalLink size={17} /><h6 style={{color:"#53bdeb"}} className='m-0 ' >{data.text}</h6>
                            </a>
                              )
                           }
                           if (data.type === "PHONE_NUMBER") {
                              return (
-                                <div className="border-top  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
-                                   <Phone size={17} /><h6 className='m-0 text-primary' >{data.text}</h6>
+                                <div className="border-top  d-flex  justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px", color:"#53bdeb" }} >
+                                   <Phone size={17} /><h6 style={{color:"#53bdeb"}}  className='m-0 ' >{data.text}</h6>
                                 </div>
                              )
                           }
                           if (data.type === "QUICK_REPLY") {
                              return (
-                                <div className="border-top  rounded-bottom-3   d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
-                                   <CornerDownLeft size={17} /><h6 className='m-0 text-primary' > {data.text}</h6>
+                                <div className="border-top  rounded-bottom-3   d-flex  justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px", color:"#53bdeb"}} >
+                                   <CornerDownLeft size={17} /><h6 style={{color:"#53bdeb"}}  className='m-0 ' > {data.text}</h6>
                                 </div>
                              )
                           }
@@ -377,3 +382,6 @@ export const RenderLiveTemplateUI = ({SingleTemplate}) => {
      </CardBody>
   )
 }
+
+// live chat
+

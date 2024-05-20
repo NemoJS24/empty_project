@@ -1,3 +1,17 @@
+@font-face {
+  font-family: whats Thi;
+  src: url("../imgs/helvetica-255/Pragmatica-ExtraLight.ttf");
+}
+@font-face {
+  font-family: whats bol;
+  src: url("../imgs/helvetica-255/helvetica-rounded-bold-5871d05ead8de.otf");
+}
+@font-face {
+  font-family: whats msg bol;
+  src: url("../imgs/sf-pro-display/SFPRODISPLAYREGULAR.OTF");
+}
+
+
 .whatsapp_template_card {
   background-color: rgb(255, 255, 255);
   position: relative;
@@ -10,7 +24,6 @@
     left: -10px;
     border: 10px solid transparent;
     border-top: 10px solid #fff;
-
   }
 }
 .live_message_box-left{
@@ -22,7 +35,8 @@
     top: 0;
     left: -10px;
     border: 10px solid transparent;
-    border-top: 10px solid #F2F3F4;
+    border-top: 10px solid #FFF;
+    box-shadow:"0px 1px 1px 1px rgba(0,0,0,0.1)"
 
   }
 }
@@ -35,7 +49,7 @@
     top: 0;
     right: -10px;
     border: 10px solid transparent;
-    border-top: 10px solid #d4f2c2;
+    border-top: 10px solid #d8ffd4;
 
   }
 }
@@ -95,5 +109,96 @@ $dropdown-shadow: rgba(0, 0, 0, 0.2);
     .dropdown-content {
       display: block;
     }
+  }
+}
+
+
+// live
+.select-grey{
+  background-color: #d7d7db;
+}
+.prime-grey{
+  background-color: #f0f0f5;
+  // font-weight: 600;
+}
+.prime-green{
+  background-color: #ccf6c7;
+  color: green;
+  // font-weight: 600;
+
+}
+.high-green-bg{
+  background-color: #19d46a;
+  color: #fff;
+  font-weight: 600;
+}
+.high-green-text{
+  color: #19d46a;
+  font-weight: 600;
+}
+.live-group-search{
+
+  .group {
+    display: flex;
+    line-height: 28px;
+    align-items: center;
+    position: relative;
+    max-width: 100%;
+  }
+  
+  .input {
+    width: 100%;
+    height: 35px;
+    line-height: 28px;
+    padding: 0 1rem;
+    padding-left: 3.5rem;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    outline: none;
+    background-color: #f3f3f4;
+    color: #0d0c22;
+    transition: 0.3s ease;
+  }
+  
+  .input::placeholder {
+    color: #9e9ea7;
+  }
+  
+  .input:focus,
+  input:hover {
+    outline: none;
+ 
+  }
+  
+  .icon {
+    position: absolute;
+    left: 1rem;
+    fill: #9e9ea7;
+  }
+  
+}
+
+.whats-font{
+  font-family: whats Thi !important;
+  font-weight: 400;
+  letter-spacing: 1px;
+  color: #000;
+}
+.whats-font-bolder{
+  font-family: whats bol !important;
+  font-weight: 400;
+  letter-spacing: 1px;
+  color: #000;
+}
+.whats-live-font-bolder{
+  font-family: whats msg bol !important;
+  font-weight: 400;
+  letter-spacing: 1px;
+  color: #000;
+}
+.wa-black{
+  *{
+
+    color: #000;
   }
 }

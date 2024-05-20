@@ -67,24 +67,24 @@ export const WhatsappNavigation = [
         icon: <Settings size={16} />,
         // icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/crm.png`} width='16px' />,
         children: [
-            // {
-            //     id: 'profile',
-            //     title: 'Project',
-            //     icon: <Circle size={16} />,
-            //     navLink: '/merchant/whatsapp/project-profile/'
-            // },
+            {
+                id: 'profile',
+                title: 'Project',
+                icon: <Circle size={16} />,
+                navLink: '/merchant/whatsapp/project-profile/'
+            },
             // {
             //     id: 'quickReplay',
             //     title: 'Quick Replay setting',
             //     icon: <Circle size={16} />,
             //     navLink: '/merchant/whatsapp/quick-replays/'
             // },
-            {
-                id: 'project',
-                title: 'Project Details',
-                icon: <Circle size={16} />,
-                navLink: '/merchant/whatsapp/is_business/'
-            },
+            // {
+            //     id: 'project',
+            //     title: 'Project Details',
+            //     icon: <Circle size={16} />,
+            //     navLink: '/merchant/whatsapp/is_business/'
+            // },
             {
                 id: 'embedSignUp',
                 title: 'Embedded Signup',

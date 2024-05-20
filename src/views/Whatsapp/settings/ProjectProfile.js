@@ -154,7 +154,7 @@ export default function ProjectProfile() {
               <h5 className='mb-0'>
                 Description
               </h5>
-              <p className='mt-0 font-small-3'>Tell your customers about your company</p>
+              <p className='mt-0 mb-0 font-small-3'>Tell your customers about your company</p>
               <textarea type="text" class="form-control"
                 value={useProfileDetails?.description ?? ''}
                 id=""
