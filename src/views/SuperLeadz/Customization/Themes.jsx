@@ -9,13 +9,13 @@ import { Link, useNavigate } from 'react-router-dom'
 import { getCurrentOutlet, SuperLeadzTone, SuperLeadzPurpose, SuperLeadzStrategy } from '../../Validator'
 import JsonToJsx from '../../Components/SuperLeadz/JsonToJsx'
 import { AiOutlineDesktop, AiOutlineMobile } from 'react-icons/ai'
-import axios from 'axios'
+// import axios from 'axios'
 import Spinner from '@src/views/Components/DataTable/Spinner.js'
 
 const Themes = () => {
 
     const navigate = useNavigate()
-    const outletData = getCurrentOutlet()
+    // const outletData = getCurrentOutlet()
     const [contWidth, setContWidth] = useState(600)
 
     const defaultType = {
@@ -30,15 +30,15 @@ const Themes = () => {
     const outletDetail = getCurrentOutlet()
 
     useEffect(() => {
-        const getUrl = new URL(`${SuperLeadzBaseURL}/api/v1/form_builder_template/?shop=${outletData[0]?.web_url}&app=superleadz`)
-        axios({
-            method: "GET",
-            url: getUrl
-        }).then((data) => {
-            setThemeLength(data?.data?.success?.length)
-        }).catch((err) => {
-            console.log(err)
-        })
+        // const getUrl = new URL(`${SuperLeadzBaseURL}/api/v1/form_builder_template/?shop=${outletData[0]?.web_url}&app=superleadz`)
+        // axios({
+        //     method: "GET",
+        //     url: getUrl
+        // }).then((data) => {
+        //     setThemeLength(data?.data?.success?.length)
+        // }).catch((err) => {
+        //     console.log(err)
+        // })
 
         const innerCard = document.getElementById("themeContainer-0")
 
@@ -251,7 +251,7 @@ const Themes = () => {
                                                     </div>
                                                 </div>
                                                 <div className="d-flex justify-content-between align-items-center gap-2 mt-2">
-                                                    <h3 className="mt-2 mb-0">{JSON.parse(theme?.default_theme)?.theme_name}</h3>
+                                                    <h3 className="mb-0">{JSON.parse(theme?.default_theme)?.theme_name}</h3>
                                                     <button onClick={() => {
                                                         if (typeof phoneView[key] === 'undefined') {
                                                             navigate('/merchant/SuperLeadz/new_customization/?isMobile=false')
