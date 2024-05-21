@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
 import Select, { components } from 'react-select'
 import { FixedSizeList as List } from 'react-window'
