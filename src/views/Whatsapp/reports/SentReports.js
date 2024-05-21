@@ -196,6 +196,7 @@ export default function SentReports() {
             advanceFilter={true}
             exportUrl={`${baseURL}/talk/messagelog_view/`}
             isExport={true}
+            exportAdditionalData={{templateId, campaign_id}}
           />
 
         </CardBody>

@@ -20,7 +20,7 @@ import { postReq } from '../../../assets/auth/jwtService'
 // import { Link } from 'react-router-dom'
 // import { pageNo } from '../../Validator'
 
-const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, data, isLoading, count, isExpand, ExpandableTable, custom, isStyling, selectableRows = false, selectedRows, setSelectedRows, getData, exportUrl, viewAll, isExport, selectedContent, advanceFilter, viewType = "table", setViewType, viewContent, deleteContent, create, createLink, createText, toggledClearRows, customButtonLeft, customButtonRight }) => {
+const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, data, isLoading, count, isExpand, ExpandableTable, custom, isStyling, selectableRows = false, selectedRows, setSelectedRows, getData, exportUrl, viewAll, isExport, selectedContent, advanceFilter, viewType = "table", setViewType, viewContent, deleteContent, create, createLink, createText, toggledClearRows, customButtonLeft, customButtonRight, exportAdditionalData }) => {
   // ** State
   const [currentPage, setCurrentPage] = useState(0)
   const [currentEntry, setCurrentEntry] = useState(custom ? 5 : 10)
@@ -157,6 +157,14 @@ const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, 
     if (exportData.selectedData[0] && exportData.selectedData[1]) {
       form_data.append('start_date', moment(exportData.selectedData[0]).format('YYYY-MM-DD'))
       form_data.append('end_date', moment(exportData.selectedData[1]).format('YYYY-MM-DD'))
+    }
+
+    if (exportAdditionalData) {
+      Object.entries(exportAdditionalData).map(([key, value]) => {
+        if (value) {
+          form_data.append(key, value)
+        }
+      })
     }
 
     // fetch(exportUrl, {
