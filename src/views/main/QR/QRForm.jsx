@@ -51,11 +51,11 @@ const QRForm = () => {
                                     <div className="form">
                                         <p className="editor-paragraph ltr" dir="ltr" style={{ textAlign: 'center' }}>
                                             <strong className="editor-text-bold" style={{ fontFamily: 'Montserrat', fontWeight: 600, fontSize: '21px', lineHeight: 1.25, color: 'rgb(0, 0, 0)' }} data-lexical-text="true">
-                                                Explore out about our Fashion Design
+                                            Learn about Fashion Design & Interior Design courses!
                                             </strong>
                                         </p>
                                         <p className="editor-paragraph ltr" dir="ltr" style={{ textAlign: 'center' }}>
-                                            <strong className="editor-text-bold" style={{ fontFamily: 'Montserrat', fontWeight: 300, fontSize: '17px', color: 'rgb(0, 0, 0)', lineHeight: 1.25 }} data-lexical-text="true">
+                                            <strong className="editor-text-bold" style={{ fontFamily: 'Montserrat', fontWeight: 300, fontSize: '15px', color: 'rgb(0, 0, 0)', lineHeight: 1.25 }} data-lexical-text="true">
                                                 Enquire now and get exciting offers from top brands.
                                             </strong>
                                         </p>
