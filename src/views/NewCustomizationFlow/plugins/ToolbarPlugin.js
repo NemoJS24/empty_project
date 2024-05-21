@@ -588,7 +588,7 @@ function FontDropDown({
         {(style === 'font-family' ? FONT_FAMILY_OPTIONS : style === "line-height" ? LINE_HEIGHT_OPTIONS : style === "font-weight" ? FONT_WEIGHT_OPTIONS : FONT_SIZE_OPTIONS).map(
           (option, key) => (
             <DropdownItem tag={'button'} className={`item ${dropDownActiveClass(value === option?.value)} ${style === 'font-size' ? 'fontsize-item' : ''}`} onClick={() => handleClick(option?.value)} key={key}>
-              <span className="text">{option?.label}</span>
+              <span className="text" style={{fontFamily : option?.value}}>{option?.label}</span>
             </DropdownItem>
             // <button
             //   className={`item ${dropDownActiveClass(value === option)} ${style === 'font-size' ? 'fontsize-item' : ''
