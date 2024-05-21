@@ -50,6 +50,7 @@ import SuperLeadzLandingPage from '../../views/main/LandingPage/SuperLeadzLandin
 import EmailLists from '../../views/main/LandingPage/EmailLists'
 import SuperLeadzOneClickRedemption from '../../views/main/products/superLeadz/SuperLeadz/SuperLeadzOneClickRedemption'
 import SuperLeadzLeadGen from '../../views/main/products/superLeadz/SuperLeadz/SuperLeadzLeadGen'
+import QRForm from '../../views/main/QR/QRForm'
 
 const Homes_Routes = [
 
@@ -657,6 +658,14 @@ const Homes_Routes = [
     },
     title: "SuperLeadz - Dual Verification Process",
     trackingTitle: "SuperLeadz - Dual Verification Process"
+  },
+  {
+    path: "/qr/superleadz/",
+    element: <QRForm />,
+    meta: {
+      layout: "custom",
+      publicRoute: true
+    }
   }
 ]
 
