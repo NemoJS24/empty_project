@@ -39,42 +39,10 @@ export default function QuickReplySetting() {
         setTotal(res?.data?.quick_reply_count ?? 0)
       }).then((err) => {
         console.log(err)
-        toast.error("Something went wrong!")
+        // toast.error("Something went wrong!")
       }).finally(() => setIsLoading(false))
 
   }
-  const FakeData = [
-    {
-      created_at: '2024-05-01',
-      title: 'Apology',
-      message: 'Sorry for the inconvenience caused to you. We are currently working on your request and will update you soon. 😊'
-    },
-    {
-      created_at: '2024-05-02',
-      title: 'Greeting',
-      message: 'Hi. Thanks for visiting us. How can I help you today? 🚀'
-    },
-    {
-      created_at: '2024-05-03',
-      title: 'Not Sure',
-      message: 'That’s a very good question! To be honest, I’m not sure about it myself, but let me find it out for you. 🎉'
-    },
-    {
-      created_at: '2024-05-04',
-      title: 'Apology Follow-up',
-      message: 'I’m very sorry about the situation. I understand that it caused you a lot of trouble. Let me see what I can do about it. 📅'
-    },
-    {
-      created_at: '2024-05-05',
-      title: 'Thanks',
-      message: 'Thank you for visiting us. Have a good day. 🔥'
-    },
-    {
-      created_at: '2024-05-06',
-      title: 'Help',
-      message: 'Is there anything else I can help you with? 🤔'
-    }
-  ]
 
   const columns = [
     {
@@ -104,9 +72,9 @@ export default function QuickReplySetting() {
       cell: (row) => {
         return (<div className='d-flex gap-'>
           {/* <Link to={`/merchant/Email/`} className='btn ' style={{ padding: "5px 10px" }}><Eye size={18} /></Link> */}
-          <button className='btn ' style={{ padding: "5px 10px" }} onClick={() => { setCurrentMsg({ title: row?.quick_reply_title ?? '', message: row.quick_reply_message ?? '' }); setModal(true) }} ><Eye size={18} /></button>
-          <button className='btn ' style={{ padding: "5px 10px" }} onClick={() => { setCurrentMsg({ title: row?.quick_reply_title ?? '', message: row.quick_reply_message ?? '' }); setModal(true) }} ><Edit size={18} /></button>
-          <button className='btn ' style={{ padding: "5px 10px" }} ><Trash size={18} /></button>
+          <button className='btn ' style={{ padding: "5px 10px" }} onClick={() => { setCurrentMsg({ id:row?.quick_reply_id, title: row?.quick_reply_title ?? '', message: row.quick_reply_message ?? '' }); setModal(true) }} ><Eye size={18} /></button>
+          <button className='btn ' style={{ padding: "5px 10px" }} onClick={() => { setCurrentMsg({ id:row?.quick_reply_id, title: row?.quick_reply_title ?? '', message: row.quick_reply_message ?? '' }); setModal(true) }} ><Edit size={18} /></button>
+          <button className='btn ' style={{ padding: "5px 10px" }} onClick={() => handleDelete(row?.quick_reply_id)} ><Trash size={18} /></button>
 
         </div>
         )
@@ -121,7 +89,8 @@ export default function QuickReplySetting() {
   const handleDelete = (id) => {
     deleteReq("quick_replay", `?id=${id}`)
       .then((res) => {
-        toast.success(useCurrentMsg.id ? "Updated!" : "Saved!")
+        toast.success("Deleted!")
+        getData()
       })
       .catch((err) => {
         console.log(err)
@@ -132,12 +101,15 @@ export default function QuickReplySetting() {
   const handleSave = (e) => {
     const newFormData = new FormData()
     e.preventDefault()
+    console.log("useCurrentMsg", useCurrentMsg)
     if (useCurrentMsg.title === '' || useCurrentMsg.message === '') {
       return toast.error("All fields are required!")
     }
     newFormData.append("title", useCurrentMsg.title)
     newFormData.append("message", useCurrentMsg.message)
-    newFormData.append("action", "create")
+    
+    // eslint-disable-next-line no-unused-expressions
+    useCurrentMsg.id ? newFormData.append("id", useCurrentMsg.id) : newFormData.append("action", "create")
     useCurrentMsg.id ? putReq("quick_replay", newFormData) : postReq("quick_replay", newFormData)
       .then((res) => {
         toast.success(useCurrentMsg.id ? "Updated!" : "Saved!")

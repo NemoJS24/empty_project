@@ -2,6 +2,16 @@ import { CornerDownLeft, ExternalLink, FileText, Phone } from "react-feather"
 import { CardBody } from "reactstrap"
 import wp_back from './imgs/wp_back.png'
 import moment from "moment"
+import { BsBroadcast, BsReply } from 'react-icons/bs'
+import { FaEllipsisV, FaSearch, FaInstagram } from "react-icons/fa"
+import { HiOutlineDotsVertical } from "react-icons/hi"
+import { IoMdSearch, IoMdSend } from "react-icons/io"
+import { LiaCheckDoubleSolid } from "react-icons/lia"
+import { LuEye } from "react-icons/lu"
+import { MdOutlineLibraryAdd, MdOutlineQuickreply, MdOutlineHistory, MdHistory} from "react-icons/md"
+import { RiCustomerService2Line } from "react-icons/ri"
+import { RxCross2 } from "react-icons/rx"
+import { IoWarningOutline } from "react-icons/io5"
 
 // whatsapp data
 export const HeaderTypeList = [
@@ -142,6 +152,36 @@ export const QuickReplayList = [
     description: "Start your fitness journey with our workout gear and equipment. Get ready to crush your goals!"
   }
 ]
+export const LeftNavList = [
+   {
+     title: "Support",
+     icons: <RiCustomerService2Line size={20} />,
+     count:201,
+     isActive:false,
+     color: "high-green-bg"
+   },
+   {
+      title: "Missed",
+      icons: <IoWarningOutline size={20} />,
+      count:24,
+      isActive:false,
+      color: "high-red-bg"
+   },
+   {
+     title: "Broadcast",
+     icons: <BsBroadcast size={20} />,
+     count:0,
+     isActive:false,
+     color: ""
+   },
+   {
+     title: "Instagram",
+     icons:  <FaInstagram size={20} />,
+     count:0,
+     isActive:false,
+     color: ""
+   }
+ ]
 
 export const timeLiveFormatter = (time) => {
    if (!time) {

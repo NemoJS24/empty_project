@@ -10,21 +10,20 @@ import { HiOutlineDotsVertical } from "react-icons/hi"
 import { IoMdSearch, IoMdSend } from "react-icons/io"
 import { LiaCheckDoubleSolid } from "react-icons/lia"
 import { LuEye } from "react-icons/lu"
-import { MdOutlineLibraryAdd, MdOutlineQuickreply } from "react-icons/md"
+import { MdOutlineLibraryAdd, MdOutlineQuickreply, MdOutlineHistory, MdHistory } from "react-icons/md"
 import { RiCustomerService2Line } from "react-icons/ri"
 import { RxCross2 } from "react-icons/rx"
 import { SiSocialblade } from "react-icons/si"
 import {
   Button,
   Container,
-  Input, InputGroup, InputGroupText
+  Input, InputGroup, InputGroupText, Tooltip
 } from 'reactstrap'
 import { IoWarningOutline } from "react-icons/io5"
 import { SocketBaseURL, postReq } from '../../../assets/auth/jwtService'
 import Spinner from '../../Components/DataTable/Spinner'
 import FrontBaseLoader from '../../Components/Loader/Loader'
-import { QuickReplayList, RenderLiveTemplateUI, getBoldStr, timeLiveFormatter } from '../SmallFunction'
-import xircls_WA_LOGO from '../imgs/xircls_WA_LOGO.jpeg'
+import { LeftNavList, QuickReplayList, RenderLiveTemplateUI, getBoldStr, timeLiveFormatter } from '../SmallFunction'
 import WA_BG_2 from '../imgs/WA_BG_2.png'
 import StaticPage1 from './StaticPage'
 const LiveChat = () => {
@@ -33,48 +32,42 @@ const LiveChat = () => {
   const [useLiveChatLoader, setLiveChatLoader] = useState(true)
   const [useIsLoading, setIsLoading] = useState(false)
   const [useMessageData, setMessageData] = useState([])
-  const [useMessageCounter, setMessageCounter] = useState(0)
   const [useProfileDetails, setProfileDetails] = useState("")
   const [useSortBy, setSortBy] = useState("live")
 
   // console.log("useProfileDetails", useProfileDetails)
 
-  const [selectedDiv, setSelectedDiv] = useState(0)
   const [useInputMessage, setInputMessage] = useState('')
   const [users, setUsers] = useState([])
-  const [useUsersData, setUsersData] = useState([])
   const [useContactPage, setContactPage] = useState(1)
-  const [useContactCounter, setContactCounter] = useState(1)
-  const [filterText, setFilterText] = useState('')
   const [useProjectNo, setProjectNo] = useState('')
   const [dynamicColumnValue, setDynamicColumnValue] = useState(0)
   const [toggleMedia, setToggleMedia] = useState(false)
   const [storeMedia, setStoreMedia] = useState({})
-  const [searchText, setSearchText] = useState("")
+  const [useSearchContact, setSearchContact] = useState("")
   const [search, setSearch] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [imagePreview, setImagePreview] = useState(false)
   const [mediaText, setMediaText] = useState("")
   const chatContainerRef = useRef(null)
-  const [templateModal, setTemplateModal] = useState(false)
   const [replyModal, setReplyModal] = useState(false)
   const [selectedDescription, setSelectedDescription] = useState('')
-  const [useSortShow, setSortShow] = useState(false)
-  const [filterDropdown, setFilterDropdown] = useState(false)
-  const [useActiveTab, setActiveTab] = useState(0)
+  const [tooltipOpen, setTooltipOpen] = useState({
+    TooltipButton1: false,
+    TooltipButton2: false,
+    TooltipButton3: false,
+    TooltipButton4: false
+  })
 
+  const toggleTooltip = (buttonId) => {
+    setTooltipOpen(prevState => ({
+      ...prevState,
+      [buttonId]: !prevState[buttonId]
+    }))
+  }
   const [currentTab, setCurrentTab] = useState({})
-  const [allSourceChecked, setAllSourceChecked] = useState(false)
   const [ws, setWs] = useState('')
   const [useContactWs, setContactWs] = useState('')
-  const [checkboxes, setCheckboxes] = useState({
-    Website: false,
-    ChatbotApp: false,
-    Chatbot: false,
-    WhatsappService: false,
-    Instagram: false,
-    Facebook: false
-  })
   const ActiveTabList = [
     {
       title: "All",
@@ -98,28 +91,6 @@ const LiveChat = () => {
     }
   ]
 
-  // Function to handle changes in the "All Source" checkbox
-  const handleAllSourceChange = (event) => {
-    const isChecked = event.target.checked
-    setAllSourceChecked(isChecked)
-    const updatedCheckboxes = { ...checkboxes }
-    for (const key in updatedCheckboxes) {
-      updatedCheckboxes[key] = isChecked
-    }
-    setCheckboxes(updatedCheckboxes)
-  }
-
-  // Function to handle changes in other checkboxes
-  const handleCheckboxChange = (event) => {
-    const { id, checked } = event.target
-    setCheckboxes({ ...checkboxes, [id]: checked })
-    if (!checked) {
-      setAllSourceChecked(false)
-    } else {
-      const allChecked = Object.values(checkboxes).every((checkbox) => checkbox)
-      setAllSourceChecked(allChecked)
-    }
-  }
   // mark msg read
   const markAsRead = (id, msgId, recieverNum) => {
 
@@ -134,15 +105,6 @@ const LiveChat = () => {
       .then((resp) => {
         console.log("msg read", resp)
       }).catch((err) => { console.log(err) })
-  }
-
-  const [open, setOpen] = useState('1')
-  const toggle = (id) => {
-    if (open === id) {
-      setOpen()
-    } else {
-      setOpen(id)
-    }
   }
 
   const sendMessages = (type) => {
@@ -197,7 +159,6 @@ const LiveChat = () => {
       newWs.onmessage = (event) => {
         console.log("New message:", event.data)
         setMessageData(prevMessageData => [JSON.parse(event.data), ...prevMessageData])
-        setMessageCounter(prevCounter => prevCounter + 1)
         const old = JSON.parse(event.data)
         console.log("old", old)
 
@@ -268,39 +229,30 @@ const LiveChat = () => {
       .finally(() => setLiveChatLoader(false))
   }
 
-  const handleDivClick = (index) => {
-    setSelectedDiv(index)
-  }
-
   // get all contacts
   const getAllContacts = () => {
     console.log("contacts load =============")
     const form_data = new FormData()
     form_data.append("page", useContactPage)
     form_data.append("size", 20)
-    form_data.append("searchValue", filterText)
+    form_data.append("searchValue", useSearchContact)
     form_data.append("type", useSortBy)
     setLiveContactLoader(true)
     postReq("contact_relation", form_data)
       .then((res) => {
-        // setUsers(res.data?.messages)
         console.log("213", users)
         console.log("214", res.data?.messages)
-        // setUsers(res.data?.messages)
         setUsers(prev => [...prev, ...res.data?.messages])
-        // setContactCounter(prev => prev + 1)
         webSocketConnectionContacts(res?.data?.project_no)
       }).catch((err) => {
-        // console.log(err)
-
       }).finally(() => setLiveContactLoader(false))
   }
   const filterAllContacts = (sortby) => {
     console.log("contacts sortby =============", sortby)
     const form_data = new FormData()
     form_data.append("page", 1)
-    form_data.append("size", 10)
-    form_data.append("searchValue", filterText)
+    form_data.append("size", 20)
+    form_data.append("searchValue", useSearchContact)
     form_data.append("type", sortby)
     setIsLoading(true)
     postReq("contact_relation", form_data)
@@ -311,12 +263,30 @@ const LiveChat = () => {
         // console.log(err)
       }).finally(() => setIsLoading(false))
   }
+  const searchAllContacts = () => {
+    console.log("contacts search =============", useSearchContact)
+    const form_data = new FormData()
+    form_data.append("page", 1)
+    form_data.append("size", 20)
+    form_data.append("searchValue", useSearchContact)
+    form_data.append("type", useSortBy)
+    setIsLoading(true)
+    postReq("contact_relation", form_data)
+      .then((res) => {
+        setUsers(res.data?.messages)
 
+      }).catch((err) => {
+        // console.log(err)
+      }).finally(() => setIsLoading(false))
+  }
 
-  // useeffects
-  // useEffect(() => {
-  //   getAllContacts()
-  // }, [useContactPage])
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      searchAllContacts()
+    }, 500) // Adjust the delay (in milliseconds) as needed
+
+    return () => clearTimeout(delayDebounceFn)
+  }, [useSearchContact])
 
   useEffect(() => {
     // console.log("================== run contacts main useeffect")
@@ -324,18 +294,13 @@ const LiveChat = () => {
     getAllContacts()
   }, [useContactPage])
 
-  const msgCountUpt = () => {
-    console.log("999", currentTab.messages_reciever)
-    console.log("999", users)
-  }
+
   useEffect(() => { // when select number
     getAllMessages()
     // eslint-disable-next-line no-use-before-define
     scrollToBottom()
-    msgCountUpt()
   }, [currentTab])
 
-  const [selectedCategory, setSelectedCategory] = useState(null)
   const form_data = new FormData()
 
   const handleChange = (e) => {
@@ -502,30 +467,62 @@ const LiveChat = () => {
         <Row >
           <Col>
             <div className='p-1 pt-2 h-100 prime-grey' style={{ width: "70px" }}>
-              <div>
-              </div>
-              <div className='d-flex flex-column  align-items-center justify-content-start  ' style={{ gap: "5px" }}>
 
-                <div className=' rounded-circle select-grey position-relative' style={{ padding: "9px" }}>
-                  <RiCustomerService2Line size={20} />
-                  <div className='rounded-pill  high-green-bg font-small-2 position-absolute top-0 end-0' style={{ padding: "2px 6px", marginRight: "-20px" }}>
-                    206
-                  </div>
-                </div>
-                <div className=' rounded-circle ' style={{ padding: "9px" }}>
-                  <IoWarningOutline size={20} />
-                </div>
-                <div className=' rounded-circle ' style={{ padding: "9px" }}>
-                  <BsBroadcast size={20} />
-                </div>
-                <div className=' rounded-circle ' style={{ padding: "9px" }}>
-                  <FaInstagram size={20} />
-                </div>
-                <div className=' rounded-circle ' style={{ padding: "9px" }}>
-                  <SiSocialblade size={20} />
-                </div>
+            <div className='d-flex flex-column align-items-center justify-content-start' style={{ gap: "7px" }}>
+      <div className='rounded-circle position-relative select-grey' id="TooltipButton1" style={{ padding: "9px" }}>
+        <RiCustomerService2Line size={20} />
+        <div className='rounded-pill high-green-bg font-small-2 position-absolute top-0 end-0' style={{ padding: "2px 6px", marginRight: "-20px" }}>
+          206
+        </div>
+        <Tooltip
+          placement="right"
+          isOpen={tooltipOpen.TooltipButton1}
+          target="TooltipButton1"
+          toggle={() => toggleTooltip('TooltipButton1')}
+        >
+          Support
+        </Tooltip>
+      </div>
 
-              </div>
+      <div className='rounded-circle position-relative' id="TooltipButton2" style={{ padding: "9px" }}>
+        <IoWarningOutline size={20} />
+        <div className='rounded-pill high-red-bg font-small-2 position-absolute top-0 end-0' style={{ padding: "2px 6px", marginRight: "-20px" }}>
+          24
+        </div>
+        <Tooltip
+          placement="right"
+          isOpen={tooltipOpen.TooltipButton2}
+          target="TooltipButton2"
+          toggle={() => toggleTooltip('TooltipButton2')}
+        >
+          Missed
+        </Tooltip>
+      </div>
+
+      <div className='rounded-circle' id="TooltipButton3" style={{ padding: "9px" }}>
+        <BsBroadcast size={20} />
+        <Tooltip
+          placement="right"
+          isOpen={tooltipOpen.TooltipButton3}
+          target="TooltipButton3"
+          toggle={() => toggleTooltip('TooltipButton3')}
+        >
+          Broadcast
+        </Tooltip>
+      </div>
+
+      <div className='rounded-circle' id="TooltipButton4" style={{ padding: "9px" }}>
+        <FaInstagram size={20} />
+        <Tooltip
+          placement="right"
+          isOpen={tooltipOpen.TooltipButton4}
+          target="TooltipButton4"
+          toggle={() => toggleTooltip('TooltipButton4')}
+        >
+          Instagram
+        </Tooltip>
+      </div>
+    </div>
             </div>
 
           </Col>
@@ -552,32 +549,21 @@ const LiveChat = () => {
               <div class="live-group-search px-1">
                 <div class="group">
                   <IoMdSearch className='icon' size={20} />
-                  <input className="input" type="search" placeholder="Search" />
+                  <input className="input" type="search" onChange={(e) => setSearchContact(e.target.value)} placeholder="Search..." />
                 </div>
 
               </div>
               <div className='d-flex gap-1 px-1 py-1'>
                 {
                   ActiveTabList.map((elm, index) => (
-                    <div className={`rounded-5 d-flex justify-content-center align-items-center cursor-pointer ${elm?.id === useSortBy ? 'prime-green' : "prime-grey"} `} 
-                    onClick={() => { filterAllContacts(elm.id); setSortBy(elm.id) }}
+                    <div className={`rounded-5 d-flex justify-content-center align-items-center cursor-pointer ${elm?.id === useSortBy ? 'prime-green' : "prime-grey"} `}
+                      onClick={() => { filterAllContacts(elm.id); setSortBy(elm.id) }}
                     >
-                      <p className='m-0 font-small-3 ' style={{ padding: "5px 10px" }}>{elm?.title}</p>
+                      <p className='m-0 font-small-3 whats-live-font-bolder' style={{ padding: "5px 10px" }}>{elm?.title}</p>
                     </div>
                   ))
                 }
 
-                {/* <div className=' rounded-5 d-flex justify-content-center align-items-center prime-grey ' >
-                  <p className='text-secondary m-0 font-small-3 ' style={{ padding: "5px 10px" }}>Unread</p>
-                </div>
-                <div className=' rounded-5 d-flex justify-content-center align-items-center prime-grey ' >
-                  <p className='text-secondary m-0 font-small-3 ' style={{ padding: "5px 10px" }}>Ongoing</p>
-                </div>
-                <div className=' rounded-5 d-flex justify-content-center align-items-center prime-grey ' >
-                  <p className='text-secondary m-0 font-small-3 ' style={{ padding: "5px 10px" }}>Closed</p>
-                </div> */}
-
-                <div></div>
               </div>
             </div>
 
@@ -602,7 +588,6 @@ const LiveChat = () => {
                       className={` w-100 px-1 ${ContactData.messages_reciever === currentTab.messages_reciever ? "prime-grey" : ''}`}
 
                       onClick={() => {
-                        handleDivClick(index)
                         setCurrentTab(ContactData)
                         webSocketConnection(index)
                         setProfileDetails(ContactData)
@@ -620,7 +605,7 @@ const LiveChat = () => {
                           </Col>
                           <Col md="10" className='border-bottom ' style={{ gap: "5px", padding: "10px 0" }}>
                             <div className='d-flex justify-content-between  '>
-                              <h5 className='mb-0 p-0 fw-bolder'>{ContactData?.messages_display_name ?? ContactData?.messages_reciever}</h5>
+                              <h5 className='mb-0 p-0  whats-live-font-bolder'>{ContactData?.messages_display_name ?? ContactData?.messages_reciever}</h5>
                               <div className={`font-small-3  ${ContactData?.messages_count > 0 ? "high-green-text" : ""}`}>
 
                                 {ContactData?.messages_last_message_timestamp_sent && moment(ContactData?.messages_last_message_timestamp_sent).format("HH:mm")}
@@ -953,7 +938,7 @@ const LiveChat = () => {
 
               </div>
               {/*bottom*/}
-              {!imagePreview && <div className=' d-flex align-items-center gap-1 px-1 position-sticky bottom-0 bg-white' style={{ padding: "10px" }} >
+              {!imagePreview && useSortBy !== "history" && <div className=' d-flex align-items-center gap-1 px-1 position-sticky bottom-0 bg-white' style={{ padding: "10px" }} >
 
                 <div className='btn' onClick={() => setToggleMedia(!toggleMedia)}>
                   <Plus style={{
@@ -1044,7 +1029,10 @@ const LiveChat = () => {
                 }
 
               </div>}
-
+              {!imagePreview && useSortBy === "history" && <div className=' d-flex align-items-center flex-column text-center gap-1 px-1 position-sticky bottom-0 bg-white' style={{ padding: "10px" }} >
+                <h5 className='mb-0'>You cannot send message to this user as Whatsapp does not allow a business to send messages after 24 hours of the user's last message</h5>
+                <div className='border  fw-bolder rounded-3 high-green-bg' style={{padding:"10px 15px"}}>Send Template</div>
+                </div>}
             </Col>
           }
           {!currentTab?.messages_reciever &&
@@ -1056,7 +1044,7 @@ const LiveChat = () => {
           {/* profile details */}
           {dynamicColumnValue === 3 &&
             (search ? (
-              <Col md={dynamicColumnValue} style={{ background: '#fff' }} >
+              <Col md={2} style={{ background: '#fff' }} >
                 <div className='d-flex align-items-center gap-1 fs-4' style={{ height: "65px", fontWeight: "bold" }} >
                   <RxCross2
                     onClick={() => {
@@ -1073,7 +1061,7 @@ const LiveChat = () => {
                     <InputGroupText color='transparent' style={{ border: "0" }}>
                       <IoMdSearch className=' fs-3 ' />
                     </InputGroupText>
-                    <input type='text' value={searchText} onChange={(e) => setSearchText(e.target.value)} style={{ border: "0", color: '#8b98a0' }} placeholder='Search...' />
+                    <input type='text' style={{ border: "0", color: '#8b98a0' }} placeholder='Search...' />
                   </InputGroup>
 
                 </div>
@@ -1133,9 +1121,9 @@ const LiveChat = () => {
         centered
       >
         <Modal.Header className='mt-1'>
-          <Modal.Title id="contained-modal-title-vcenter">
+          <h5>
             Quick Replies
-          </Modal.Title>
+          </h5>
         </Modal.Header>
         <Modal.Body >
           <Row >

@@ -132,6 +132,11 @@ $dropdown-shadow: rgba(0, 0, 0, 0.2);
   color: #fff;
   font-weight: 600;
 }
+.high-red-bg{
+  background-color: #ee423f;
+  color: #fff;
+  font-weight: 600;
+}
 .high-green-text{
   color: #19d46a;
   font-weight: 600;
@@ -167,7 +172,6 @@ $dropdown-shadow: rgba(0, 0, 0, 0.2);
   .input:focus,
   input:hover {
     outline: none;
- 
   }
   
   .icon {
@@ -198,7 +202,7 @@ $dropdown-shadow: rgba(0, 0, 0, 0.2);
 }
 .wa-black{
   *{
-
     color: #000;
   }
 }
+

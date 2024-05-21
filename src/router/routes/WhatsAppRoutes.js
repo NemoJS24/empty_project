@@ -104,6 +104,9 @@ export const WhatsAppRoutes = [
     {
         path: '/merchant/whatsapp/LiveChat',
         element: <LiveChat />
+        // meta: {
+        //     layout: "fullWidthLayout"
+        //   }
     },
     {
         path: '/merchant/whatsapp/campaigns',
