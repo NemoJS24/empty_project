@@ -177,7 +177,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
     //     defObj = JSON.parse(localStorage.getItem("defaultTheme"))
     // }
 
-    // console.log("defObj", defObj)
+    console.log("defObj", defObj)
 
     const navigate = useNavigate()
     const [mousePos, setMousePos] = useState({})
@@ -185,7 +185,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
     const [past, setPast] = useState([])
     const [future, setFuture] = useState([])
     const [themeName, setThemeName] = useState(themeLoc.state?.campaign_name ? themeLoc.state?.campaign_name : `Campaign - ${generateRandomString()}`)
-    // console.log("theme_names ", finalObj)
+    console.log("theme_names ", finalObj)
     // const [themeName, setThemeName] = useState(() => {
     //     const generatedTheme = `Campaign-${generateRandomString()}`
     //     const initialTheme = themeLoc?.state?.custom_theme ? defObj?.theme_name : generatedTheme
@@ -2499,7 +2499,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                     </div>
                     <div className='my-1'>
                         {getMDToggle({
-                            label: <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Corner radius {finalObj?.crossButtons[`${pageCondition}`]?.width}</span>,
+                            label: <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Corner radius {finalObj?.crossButtons[`${pageCondition}`]?.borderRadius}</span>,
                             value: `borderRadius`
                         })}
                         <div className=" p-0 justify-content-start align-items-center gap-2">
