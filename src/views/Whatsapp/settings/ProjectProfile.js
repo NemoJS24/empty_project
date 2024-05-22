@@ -78,6 +78,7 @@ export default function ProjectProfile() {
     newFormData.append('address', useProfileDetails.address)
     newFormData.append('email', useProfileDetails.email)
     newFormData.append('websites', useProfileDetails.websites)
+    newFormData.append('description', useProfileDetails.description)
     newFormData.append('profileonly', 0)
     // return null
     setIsLoading(true)
@@ -168,7 +169,7 @@ export default function ProjectProfile() {
               <textarea type="text" class="form-control"
                 value={useProfileDetails?.about ?? ''}
                 id=""
-                onChange={(e) => handleInputChange("description", e.target.value)}
+                onChange={(e) => handleInputChange("about", e.target.value)}
               />
             </div>
 
