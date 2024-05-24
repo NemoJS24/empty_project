@@ -103,10 +103,10 @@ export const WhatsAppRoutes = [
     },
     {
         path: '/merchant/whatsapp/LiveChat',
-        element: <LiveChat />
-        // meta: {
-        //     layout: "fullWidthLayout"
-        //   }
+        element: <LiveChat />,
+        meta: {
+            layout: "fullWidthLayout"
+          }
     },
     {
         path: '/merchant/whatsapp/campaigns',
@@ -133,7 +133,7 @@ export const WhatsAppRoutes = [
         element: <ProjectProfile />
     },
     {
-        path: '/merchant/whatsapp/quick-replays/',
+        path: '/merchant/whatsapp/quick-reply/',
         element: <QuickReplySetting />
     }
 ]

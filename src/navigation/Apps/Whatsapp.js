@@ -74,10 +74,10 @@ export const WhatsappNavigation = [
                 navLink: '/merchant/whatsapp/project-profile/'
             },
             {
-                id: 'quickReplay',
-                title: 'Quick Replay setting',
+                id: 'quickReply',
+                title: 'Quick Reply',
                 icon: <Circle size={16} />,
-                navLink: '/merchant/whatsapp/quick-replays/'
+                navLink: '/merchant/whatsapp/quick-reply/'
             },
             {
                 id: 'project',

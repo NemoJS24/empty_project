@@ -224,8 +224,9 @@ export const timeDateLiveFormatter = (time) => {
       } else if (hoursDifference < 48) {
          return "yesterday"
       } else if (hoursDifference < 72) {
-         return "day before yesterday"
+         return inputTime.format("YYYY-MM-DD")
       } else {
+      
          return inputTime.format("YYYY-MM-DD")
       }
    } catch (error) {
@@ -288,7 +289,7 @@ export const getBoldStr = (str) => {
    str = str.replace(/\*(.*?)\*/g, (_, p1) => `<strong>${p1}</strong>`)
    .replace(/\~(\b.*?)\b\~/g, (_, p1) => `<del>${p1}</del>`)
     .replace(/(?<=\s|^)(_.*?_)(?=\s|$)/g, (_, p1) => `<em>${p1.slice(1, -1)}</em>`)
-    .replace(/\b((?:https?:\/\/|www\.)\S+)\b/g, '<a href="$1" target="_blank" style="color: #2f74bd; text-decoration:underline">$1</a>')
+    .replace(/\b((?:https?:\/\/|www\.)\S+)\b/g, '<a href="$1" target="_blank" style="color: #178c75; text-decoration:underline">$1</a>')
   return str
 }
 
@@ -326,7 +327,7 @@ export const RenderTemplateUI = ({SingleTemplate}) => {
   return (
      <CardBody className="border-0 p-2  pe-5 hideScroll rounded-2 " style={{ backgroundImage: `url(${wp_back})`, gap: "5px", whiteSpace: 'pre-wrap', height: "400px", overflowY: "auto", scrollbarWidth: "0" }}>
 
-        <div className="border-1 rounded-2 mb-0 whatsapp_template_card" style={{ maxWidth: "400px" }} >
+        <div className="border-1 rounded-2 mb-0 whatsapp_template_card" style={{ maxWidth: "350px" }} >
            <div className='p-0' >
               {
 
@@ -480,22 +481,22 @@ export const RenderLiveTemplateUI = ({SingleTemplate}) => {
                        return data.buttons.map((data) => {
                           if (data.type === "URL") {
                              return (
-                              <a href={data?.url} target="_blank" className="border-top  d-flex  justify-content-center  align-items-center text-decoration-none " style={{ padding: "10px", gap: "8px", color:"#53bdeb" }} >
-                              <ExternalLink size={17} /><h6 style={{color:"#53bdeb"}} className='m-0 ' >{data.text}</h6>
+                              <a href={data?.url} target="_blank" className="border-top  d-flex  justify-content-center high-green-text  align-items-center text-decoration-none " style={{ padding: "10px", gap: "8px"}} >
+                              <ExternalLink size={17} /><p  className='m-0 font-small-3 ' >{data.text}</p>
                            </a>
                              )
                           }
                           if (data.type === "PHONE_NUMBER") {
                              return (
-                                <div className="border-top  d-flex  justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px", color:"#53bdeb" }} >
-                                   <Phone size={17} /><h6 style={{color:"#53bdeb"}}  className='m-0 ' >{data.text}</h6>
+                                <div className="border-top  d-flex  justify-content-center high-green-text  align-items-center   " style={{ padding: "10px", gap: "8px"}} >
+                                   <Phone size={17} /><p   className='m-0 font-small-3 ' >{data.text}</p>
                                 </div>
                              )
                           }
                           if (data.type === "QUICK_REPLY") {
                              return (
-                                <div className="border-top  rounded-bottom-3   d-flex  justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px", color:"#53bdeb"}} >
-                                   <CornerDownLeft size={17} /><h6 style={{color:"#53bdeb"}}  className='m-0 ' > {data.text}</h6>
+                                <div className="border-top  rounded-bottom-3   d-flex  justify-content-center high-green-text  align-items-center   " style={{ padding: "10px", gap: "8px"}} >
+                                   <CornerDownLeft size={17} /><p   className='m-0 font-small-3 ' > {data.text}</p>
                                 </div>
                              )
                           }
