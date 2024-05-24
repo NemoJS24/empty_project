@@ -4,10 +4,12 @@
   font-family: whats Thi;
   src: url("../imgs/helvetica-255/Pragmatica-ExtraLight.ttf");
 }
+
 @font-face {
   font-family: whats bol;
   src: url("../imgs/helvetica-255/helvetica-rounded-bold-5871d05ead8de.otf");
 }
+
 @font-face {
   font-family: whats msg bol;
   src: url("../imgs/sf-pro-display/SFPRODISPLAYREGULAR.OTF");
@@ -17,6 +19,7 @@
   font-family: HleNEUE;
   src: url("../imgs/helvetica-neue-5/HelveticaNeueLight.otf");
 }
+
 @font-face {
   font-family: HleNEUEReg;
   src: url("../imgs/helvetica-neue-5/HelveticaNeueRoman.otf");
@@ -37,7 +40,8 @@
     border-top: 10px solid #fff;
   }
 }
-.live_message_box-left{
+
+.live_message_box-left {
 
   &::before {
 
@@ -47,11 +51,12 @@
     left: -10px;
     border: 10px solid transparent;
     border-top: 10px solid #FFF;
-    box-shadow:"0px 1px 1px 1px rgba(0,0,0,0.1)"
+    box-shadow: "0px 1px 1px 1px rgba(0,0,0,0.1)"
 
   }
 }
-.live_message_box-right{
+
+.live_message_box-right {
 
   &::before {
 
@@ -64,6 +69,7 @@
 
   }
 }
+
 #send-icon {
   transition: all ease .2s;
   transform: rotate(0deg);
@@ -123,45 +129,73 @@ $dropdown-shadow: rgba(0, 0, 0, 0.2);
   }
 }
 
+.icon_color {
+  color: #566670 !important;
+  // border: solid 1px red;
+  width: 35px;
+  height: 35px;
+  min-width: 35px;
+  min-height: 35px;
+  max-width: 35px;
+  max-height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: 600;
+cursor: pointer !important;
+  &:hover {
+    background-color: #eaeaea !important;
+  }
+}
 
 // live
-.select-grey{
+.select-grey {
   background-color: #d7d7db;
 }
-.prime-grey-bg{
+
+.prime-grey-bg {
   background-color: #f0f2f5;
-  color: #9e9ea7 !important;
+  // color: #747474 !important;
   // font-weight: 600;
 }
 
-.prime-green{
-  background-color: #ccf6c7;
-  color: green !important;
-  // font-weight: 600;
+.prime-green {
+  background-color: #e7fce3;
+  color: #178c75 !important;
+  font-weight: 600;
+
 }
-.prime-orange{
+
+.prime-orange {
   background-color: #efd9ad;
   color: rgb(190, 138, 6) !important;
 }
-.prime-red{
+
+.prime-red {
   background-color: #efadad;
   color: rgb(190, 6, 6) !important;
 }
-.high-green-bg{
-  background-color: #19d46a;
+
+.high-green-bg {
+  background-color: #1aab65;
   color: #fff;
   font-weight: 600;
 }
-.high-red-bg{
+
+.high-red-bg {
   background-color: #ee423f;
   color: #fff;
   font-weight: 600;
 }
-.high-green-text{
-  color: #19d46a;
+
+.high-green-text {
+  color: #178c75;
   font-weight: 600;
 }
-.live-group-search{
+
+.live-group-search {
 
   .group {
     display: flex;
@@ -170,66 +204,150 @@ $dropdown-shadow: rgba(0, 0, 0, 0.2);
     position: relative;
     max-width: 100%;
   }
-  
+
   .input {
     width: 100%;
     height: 35px;
     line-height: 28px;
     padding: 0 1rem;
     padding-left: 3.5rem;
+    letter-spacing: 1px;
     border: 2px solid transparent;
     border-radius: 8px;
     outline: none;
     background-color: #f0f2f5;
-    color: #0d0c22;
+    color: #3b4a54;
     transition: 0.3s ease;
   }
-  
+
   .input::placeholder {
-    color: #9e9ea7;
+    color: #3b4a54;
+    letter-spacing: 1px;
+
   }
-  
+
   .input:focus,
   input:hover {
     outline: none;
   }
-  
+
   .icon {
     position: absolute;
     left: 1rem;
-    fill: #9e9ea7;
+    fill: #3b4a54;
   }
-  
+
 }
 
-.fs-hel-lig{
+.fs-hel-lig {
   font-family: "HleNEUE" !important;
   // font-weight: 400;
   letter-spacing: 1px;
   color: #000;
 }
-.fs-hel-reg{
-  font-family: "HleNEUEReg" !important;
+
+.fs-hel-reg {
+  // font-family: "HleNEUEReg" !important;
   // font-weight: 400;
   letter-spacing: 1px;
-  color: #000;
-  
+  color: #111b21;
+
 }
+
 // .whats-font-bolder{
 //   font-family: whats bol !important;
 //   font-weight: 400;
 //   letter-spacing: 1px;
 //   color: #000;
 // }
-.whats-live-font-bolder{
-  font-family: "HleNEUE" !important;
+.whats-live-font-bolder {
+  // font-family: "HleNEUE" !important;
   font-weight: 400;
   letter-spacing: 1px;
   color: #000;
 }
-.wa-black{
-  *{
+
+.wa-black {
+  * {
     color: #000;
   }
 }
+
+// new ccss
+
+.whats-bg-grey{
+  background-color: #f0f2f5;
+}
+.whats-bg-grey-hover{
+  &:hover{
+    background-color: #f5f6f6;
+  }
+}
+.whats-text-green-100{
+  color: #3b4a54;
+}
+.messageInput{
+    // height: 35px;
+    padding: 0 1rem;
+    // padding-left: 3.5rem;
+    letter-spacing: 1px;
+    // font-size: 20px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    outline: none;
+    background-color: #ffffff;
+    color: #3b4a54;
+    transition: 0.3s ease;
+}
+
+// scroll
+/*
+ *  STYLE 1
+ */
+
+
+
+//  ::-webkit-scrollbar-track
+//  {
+//    -webkit-box-shadow: inset 0 0 6px rgba(76, 76, 76, 0.3);
+//    border-radius: 10px;
+//    background-color: #F5F5F5;
+//  }
+ 
+//  ::-webkit-scrollbar
+//  {
+//    width: 12px;
+//    background-color: #F5F5F5;
+//  }
+ 
+//  ::-webkit-scrollbar-thumb
+//  {
+//    border-radius: 10px;
+//    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+//    background-color: #555;
+//  }
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+
+  .contactsList{
+    scrollbar-width: thin;
+    scrollbar-color: #a3a3a3 #ffffff;
+  }
+
+  /* Chrome, Edge, and Safari */
+  .contactsList::-webkit-scrollbar {
+    width: 16px;
+  }
+
+  .contactsList::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  .contactsList::-webkit-scrollbar-thumb {
+    background-color: #a3a3a3;
+    border-radius: 50px;
+    border: 3px solid #ffffff;
+  
+  } 
 
