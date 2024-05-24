@@ -11,6 +11,7 @@ import Rules from '../../views/SuperLeadz/campaignView/Rules'
 import Duration from '../../views/SuperLeadz/campaignView/Duration'
 import Campaign from '../../views/SuperLeadz/reports/Campaign'
 import Offers from '../../views/SuperLeadz/reports/Offers'
+import Settings from '../../views/SuperLeadz/Settings'
 const CreateOffers = lazy(() => import('../../views/SuperLeadz/CreateOffers'))
 const EditSupport = lazy(() => import('../../views/SuperLeadz/EditSupport'))
 const LiveUpdates = lazy(() => import('../../views/SuperLeadz/Live'))
@@ -256,6 +257,11 @@ const SuperLeads_Routes = [
     path: '/merchant/SuperLeadz/reports/offers/',
     app: appName,
     element: <SuperLeadzPerformance />
+  },
+  {
+    path: '/merchant/SuperLeadz/settings/',
+    app: appName,
+    element: <Settings />
   }
 ]
 

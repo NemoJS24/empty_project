@@ -285,7 +285,7 @@ export const Tone = [
 // 4 5 6
 export const SuperLeadzPurpose = [
 //     { label: 'Increase brand recall', value: 'Increase brand recall', id: "1" }, // 1
-    { label: 'Increase registered users', value: 'Increase registered users', id: "2" },
+    { label: 'Increase Registered Users', value: 'Increase registered users', id: "2" },
     { label: 'Build High-Quality Email Lists', value: 'Build High-Quality Email Lists', id: "3" },
     { label: 'Reduce Website Drop-Offs', value: 'Reduce Website Drop-Offs', id: "4" },
     { label: 'Reduce Cart Abandonments', value: 'Reduce Cart Abandonments', id: "5" },
@@ -407,5 +407,12 @@ export function lightOrDark(color) {
         return 'dark'
     }
 }
+
+export const deplayTime = [
+    { label: "Seconds", value: "seconds" },
+    { label: "Minutes", value: "minutes" },
+    { label: "Hours", value: "hours" },
+    { label: "Days", value: "days" }
+]
 
 export const allFonts = `https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Acme&family=Caveat:wght@400;500;600&family=Dancing+Script:wght@400;500;600;700&family=Kalam:wght@300;400;700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lexend:wght@100;200;300;400;500;600;700;800;900&family=Lilita+One&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Oswald:wght@200;300;400;500;600;700&family=Pacifico&family=Play:wght@400;700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Satisfy&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Lora:ital,wght@0,400..700;1,400..700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300..700&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Manrope:wght@200..800&family=Heebo:wght@100..900&family=Annapurna+SIL:wght@400;700&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Mukta:wght@200;300;400;500;600;700;800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Nanum+Gothic&family=Noto+Sans+SC:wght@100..900&family=Inconsolata:wght@200..900&family=Hind+Siliguri:wght@300;400;500;600;700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Arimo:ital,wght@0,400..700;1,400..700&family=Jacquarda+Bastarda+9&family=Archivo:ital,wght@0,100..900;1,100..900&family=Bebas+Neue&family=Dosis:wght@200..800&family=Abel&display=swap`
