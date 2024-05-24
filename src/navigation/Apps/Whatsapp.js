@@ -39,7 +39,7 @@ export const WhatsappNavigation = [
     },
     {
         id: 'LiveChat',
-        title: 'Live Chat',
+        title: 'Chats',
         icon: <MessageSquare size={16} />,
         navLink: '/merchant/whatsapp/LiveChat'
     },
@@ -73,18 +73,18 @@ export const WhatsappNavigation = [
                 icon: <Circle size={16} />,
                 navLink: '/merchant/whatsapp/project-profile/'
             },
-            // {
-            //     id: 'quickReplay',
-            //     title: 'Quick Replay setting',
-            //     icon: <Circle size={16} />,
-            //     navLink: '/merchant/whatsapp/quick-replays/'
-            // },
-            // {
-            //     id: 'project',
-            //     title: 'Project Details',
-            //     icon: <Circle size={16} />,
-            //     navLink: '/merchant/whatsapp/is_business/'
-            // },
+            {
+                id: 'quickReplay',
+                title: 'Quick Replay setting',
+                icon: <Circle size={16} />,
+                navLink: '/merchant/whatsapp/quick-replays/'
+            },
+            {
+                id: 'project',
+                title: 'Project Details',
+                icon: <Circle size={16} />,
+                navLink: '/merchant/whatsapp/is_business/'
+            },
             {
                 id: 'embedSignUp',
                 title: 'Embedded Signup',
