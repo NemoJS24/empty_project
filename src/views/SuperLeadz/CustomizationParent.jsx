@@ -162,14 +162,14 @@ const CustomizationParent = ({ isAdmin = false }) => {
         // console.log("error in 3")
     } else if (selectedThemeIds !== "") {
         const index = allPreviews.findIndex($ => $?.id === selectedThemeIds)
-        defObj = { ...allPreviews[index], campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}
+        defObj = { ...allPreviews[index], campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") }
         // console.log("allThemes2", allPreviews[index])
         // console.log("error in 4")
     } else {
         defObj = defaultObj
         // console.log("error in 5")
     }
-    
+
 
     // else if (Boolean(localStorage.getItem("defaultTheme"))) {
     //     defObj = JSON.parse(localStorage.getItem("defaultTheme"))
@@ -1596,8 +1596,8 @@ const CustomizationParent = ({ isAdmin = false }) => {
         } else if (selectedType === "image") {
             const arr = [...colWise]
             const positionIndex = colWise[indexes?.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
-            const imgWidth = colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.width
-            const imgHeight = colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.height
+            // const imgWidth = colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.width
+            // const imgHeight = colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.height
             styles = (
                 <>
                     <UncontrolledAccordion defaultOpen={['1', '2']} stayOpen>
@@ -1671,40 +1671,84 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                         </div>
                                         <img style={{ maxWidth: "100%", maxHeight: "100%" }} src={colWise[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.isBrandLogo ? finalObj?.defaultThemeColors?.brandLogo : colWise[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.src} alt="" />
                                     </div>
-                                    <div className='mb-1'>
-                                        {getMDToggle({
-                                            label: <>Width: <input value={parseFloat(imgWidth)} type='number' className='form-control' style={{ width: "8ch" }} onChange={e => {
-                                                arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandWidth = false
-                                                setcolWise([...arr])
-                                                setValues({ ...values, width: `${parseFloat(e.target.value)}px` })
-                                            }} />px</>,
-                                            value: `width`
-                                        })}
-                                        <div className="p-0 justify-content-start align-items-center gap-2">
-                                            <input value={parseFloat(imgWidth)} onChange={(e) => {
-                                                arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandWidth = false
-                                                setcolWise([...arr])
-                                                setValues({ ...values, width: `${e.target.value}px` })
-                                            }} type='range' className='w-100' name="height" min="20" max="1500" />
+                                    <div className='p-0 mx-0 my-1'>
+                                        <div className='p-0 mb-2 justify-content-start align-items-center'>
+                                            {getMDToggle({ label: `Width Type: `, value: `widthType` })}
+                                            <Select
+                                                value={[
+                                                    { value: '100%', label: '100%' },
+                                                    { value: 'custom', label: 'Custom' }
+                                                ].filter($ => $?.value === values?.widthType)}
+                                                className='w-100'
+                                                onChange={e => {
+                                                    if (e.value === "100%") {
+                                                        setValues({ ...values, widthType: e.value, width: e.value, minHeight: "0px", padding: "10px" })
+                                                    } else if (e.value === "custom") {
+                                                        setValues({ ...values, widthType: e.value, padding: "10px" })
+                                                    }
+                                                }}
+                                                options={[
+                                                    { value: '100%', label: '100%' },
+                                                    { value: 'custom', label: 'Custom' }
+                                                ]}
+                                            />
                                         </div>
+                                        {values?.widthType === "custom" && (
+                                            <div className='mb-2'>
+                                                {getMDToggle({ label: `Width: ${values?.width}`, value: `width` })}
+                                                <div className="d-flex p-0 justify-content-between align-items-center gap-2">
+                                                    <input
+                                                        value={parseFloat(values?.width)}
+                                                        type='range'
+                                                        className='w-100'
+                                                        onChange={e => {
+                                                            setValues({ ...values, width: `${e.target.value}px` })
+                                                        }}
+                                                        name="height"
+                                                        min="20"
+                                                        max="600"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                        {values?.widthType === "custom" && (
+                                            <div className='mb-2'>
+                                                {getMDToggle({ label: `Height: ${values?.minHeight}`, value: `minHeight` })}
+                                                <div className="d-flex p-0 justify-content-between align-items-center gap-2">
+                                                    <input
+                                                        value={parseFloat(values?.minHeight)}
+                                                        type='range'
+                                                        className='w-100'
+                                                        onChange={e => {
+                                                            setValues({ ...values, minHeight: `${e.target.value}px` })
+                                                        }}
+                                                        name="height"
+                                                        min="0"
+                                                        max="600"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                        {colWise[indexes?.cur].elements[positionIndex]?.element[indexes?.subElem]?.hasLabel && (
+                                            <div className='mb-2'>
+                                                {getMDToggle({ label: `Label and Input gap: ${values?.elemGap ? values?.elemGap : "0px"}`, value: `elemGap` })}
+                                                <div className="d-flex p-0 justify-content-between align-items-center gap-2">
+                                                    <input
+                                                        value={parseFloat(values?.elemGap ? values?.elemGap : "0px")}
+                                                        type='range'
+                                                        className='w-100'
+                                                        onChange={e => {
+                                                            setValues({ ...values, elemGap: `${e.target.value}px` })
+                                                        }}
+                                                        name="height"
+                                                        min="0"
+                                                        max="600"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className='mb-1'>
-                                        {getMDToggle({
-                                            label: <>Height: <input value={parseFloat(imgHeight)} type='number' className='form-control' style={{ width: "8ch" }} onChange={e => {
-                                                arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandHeight = false
-                                                setcolWise([...arr])
-                                                setValues({ ...values, height: `${parseFloat(e.target.value)}px` })
-                                            }} />px</>,
-                                            value: `height`
-                                        })}
-                                        <div className="p-0 justify-content-start align-items-center gap-2">
-                                            <input value={parseFloat(imgHeight)} onChange={(e) => {
-                                                arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandHeight = false
-                                                setcolWise([...arr])
-                                                setValues({ ...values, height: `${e.target.value}px` })
-                                            }} type='range' className='w-100' name="height" min="20" max="1500" />
-                                        </div>
-                                    </div>
+
                                     <div className='p-0 mb-1 align-items-center'>
                                         {getMDToggle({ label: `Alignment`, value: `margin` })}
                                         <Select value={alignOptions?.filter(item => {
@@ -1791,7 +1835,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                         {/* Column Count Starts */}
                         <h6 style={{ marginLeft: "7px", marginTop: "10px" }}>Column Count</h6>
                         <div className='d-flex justify-content-around align-items-center'>
-                            {colWise[indexes?.cur].elements.length === 1 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("1", { left: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            {colWise[indexes?.cur]?.elements.length === 1 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("1", { left: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <rect
                                         x={2}
@@ -3167,9 +3211,9 @@ const CustomizationParent = ({ isAdmin = false }) => {
                     {finalObj?.behaviour?.PAGES?.includes("collections_page") && (
                         <>
                             <div className="row mt-2">
-                                <label style={{display: "flex", justifyContent: 'between', alignItems: 'center', gap: '4px', fontSize: '12px'}}>
+                                <label style={{ display: "flex", justifyContent: 'between', alignItems: 'center', gap: '4px', fontSize: '12px' }}>
                                     Collections:
-                                    <a className='text-primary' onClick={() => updatePresent({...finalObj, behaviour: {...finalObj.behaviour, collections: collectionList?.map((cur) => cur?.value)}})}>Select All</a>
+                                    <a className='text-primary' onClick={() => updatePresent({ ...finalObj, behaviour: { ...finalObj.behaviour, collections: collectionList?.map((cur) => cur?.value) } })}>Select All</a>
                                 </label>
                                 <Select
                                     isMulti={true}
@@ -3186,7 +3230,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                         })
                                         // const newObj = { ...finalObj }
                                         // newObj.behaviour.COLLECTION_LIST = [...finalObj.behaviour.CUSTOM_PAGE_LINK, value.value]
-                                        updatePresent({...finalObj, behaviour: {...finalObj.behaviour, collections: option_list}})
+                                        updatePresent({ ...finalObj, behaviour: { ...finalObj.behaviour, collections: option_list } })
                                     }}
                                 />
                             </div>
@@ -3261,7 +3305,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                 </span>
                             </div> */}
 
-                            
+
                         </>
                     )}
 
@@ -4785,17 +4829,17 @@ const CustomizationParent = ({ isAdmin = false }) => {
             method: "POST",
             body: form_data
         })
-        .then((resp) => resp.json())
-        .then((data) => {
-            console.log(data)
-            // setCollectionData(data?.response?.custom_collections ? data.response.custom_collections : [])
-            setCollectionList(data.response.custom_collections.map((curElem) => {
-                return { value: curElem.id, label: curElem.title }
-            }))
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log(data)
+                // setCollectionData(data?.response?.custom_collections ? data.response.custom_collections : [])
+                setCollectionList(data.response.custom_collections.map((curElem) => {
+                    return { value: curElem.id, label: curElem.title }
+                }))
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     useEffect(() => {
@@ -4911,11 +4955,11 @@ const CustomizationParent = ({ isAdmin = false }) => {
                             {/* <a onClick={(e) => sendData(e, "Save & Preview")} id='saveBtn1' className="btn custom-btn-outline" target="_blank" rel="noopener noreferrer" style={{ whiteSpace: 'nowrap' }}>Previews</a>
                             <a href="/merchant/SuperLeadz/preview/19012/" id="previewLink" target="_blank" rel="noopener noreferrer" style={{ display: 'none' }}></a> */}
                             {/* <button onClick={isAdmin ? (e) => handleSaveDataAdmin(e, "Save") : (e) => sendData(e, "Save")} id='saveBtn2' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Save</button> */}
-                             {/* <button onClick={isAdmin ? (e) => handleSaveDataAdmin(e, "Save & Close") : (e) => sendData(e, "Save & Close")} id='saveBtn3' className="btn btn-primary-main" style={{ whiteSpace: 'nowrap' }}>Save & Close</button> */}
+                            {/* <button onClick={isAdmin ? (e) => handleSaveDataAdmin(e, "Save & Close") : (e) => sendData(e, "Save & Close")} id='saveBtn3' className="btn btn-primary-main" style={{ whiteSpace: 'nowrap' }}>Save & Close</button> */}
                             <button onClick={isAdmin ? (e) => handleSaveDataAdmin(e, "Save") : (e) => { localStorage.removeItem("defaultTheme"); sendData(e, "Save") }} id='saveBtn2' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Save</button>
                             <button onClick={isAdmin ? (e) => handleSaveDataAdmin(e, "Save & Close") : (e) => { localStorage.removeItem("defaultTheme"); sendData(e, "Save & Close") }} id='saveBtn3' className="btn btn-primary-main" style={{ whiteSpace: 'nowrap' }}>Save & Close</button>
-                            
-                            </div>
+
+                        </div>
                     </Row>
                 </Container>
                 <div className="d-flex justify-content-center align-items-stretch border position-relative" style={{ height: "calc(100vh - 55px)" }}>
@@ -6913,7 +6957,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                 <button onClick={() => setCancelCust(!cancelCust)} className="btn btn-outline-dark">No</button><button onClick={() => {
                                     cancelAction()
                                     navigate("/merchant/SuperLeadz/all_campaigns/")
-                                     localStorage.removeItem("defaultTheme")
+                                    localStorage.removeItem("defaultTheme")
                                 }} className="btn btn-dark">Yes</button>
                             </div>
                         </Card>

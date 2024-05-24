@@ -1,29 +1,32 @@
+/* eslint-disable multiline-ternary */
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
-import moment from 'moment'
 import { useEffect, useRef, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Modal from 'react-bootstrap/Modal'
 import { File, FileText, Headphones, Image, Plus, Users, Video } from 'react-feather'
-import { BsBroadcast, BsReply } from 'react-icons/bs'
-import { FaEllipsisV, FaSearch, FaInstagram } from "react-icons/fa"
-import { HiOutlineDotsVertical } from "react-icons/hi"
+import { BsBroadcast, BsPinAngle } from 'react-icons/bs'
+import { FaEllipsisV, FaInstagram, FaSearch } from "react-icons/fa"
+import { HiOutlineDotsVertical, HiOutlineTemplate } from "react-icons/hi"
 import { IoMdSearch, IoMdSend } from "react-icons/io"
+import { IoWarningOutline } from "react-icons/io5"
 import { LiaCheckDoubleSolid } from "react-icons/lia"
 import { LuEye } from "react-icons/lu"
-import { MdOutlineLibraryAdd, MdOutlineQuickreply, MdOutlineHistory, MdHistory } from "react-icons/md"
+import { MdOutlineLibraryAdd, MdOutlineQuickreply } from "react-icons/md"
 import { RiCustomerService2Line } from "react-icons/ri"
 import { RxCross2 } from "react-icons/rx"
-import { SiSocialblade } from "react-icons/si"
+import { TbExternalLink } from "react-icons/tb"
+import { Link } from 'react-router-dom'
+import Select from 'react-select'
 import {
   Button,
   Container,
   Input, InputGroup, InputGroupText, Tooltip
 } from 'reactstrap'
-import { IoWarningOutline } from "react-icons/io5"
 import { SocketBaseURL, postReq } from '../../../assets/auth/jwtService'
 import Spinner from '../../Components/DataTable/Spinner'
 import FrontBaseLoader from '../../Components/Loader/Loader'
-import { LeftNavList, QuickReplayList, RenderLiveTemplateUI, getBoldStr, timeLiveFormatter } from '../SmallFunction'
+import { RenderLiveTemplateUI, chatsTagList, getBoldStr, getRemainingTime, timeDateLiveFormatter, timeLiveFormatter } from '../SmallFunction'
 import WA_BG_2 from '../imgs/WA_BG_2.png'
 import StaticPage1 from './StaticPage'
 const LiveChat = () => {
@@ -34,6 +37,9 @@ const LiveChat = () => {
   const [useMessageData, setMessageData] = useState([])
   const [useProfileDetails, setProfileDetails] = useState("")
   const [useSortBy, setSortBy] = useState("live")
+  const [useQuickReplySearch, setQuickReplySearch] = useState("")
+  const [useQuickReplyList, setQuickReplyList] = useState([])
+  const [useRemainingTime, setRemainingTime] = useState('')
 
   // console.log("useProfileDetails", useProfileDetails)
 
@@ -50,13 +56,15 @@ const LiveChat = () => {
   const [imagePreview, setImagePreview] = useState(false)
   const [mediaText, setMediaText] = useState("")
   const chatContainerRef = useRef(null)
-  const [replyModal, setReplyModal] = useState(false)
+  const [useReplyModal, setReplyModal] = useState(false)
+  const [useTemplateModal, setTemplateModal] = useState(false)
   const [selectedDescription, setSelectedDescription] = useState('')
   const [tooltipOpen, setTooltipOpen] = useState({
     TooltipButton1: false,
     TooltipButton2: false,
     TooltipButton3: false,
-    TooltipButton4: false
+    TooltipButton4: false,
+    TooltipButton10: false
   })
 
   const toggleTooltip = (buttonId) => {
@@ -65,7 +73,6 @@ const LiveChat = () => {
       [buttonId]: !prevState[buttonId]
     }))
   }
-  const [currentTab, setCurrentTab] = useState({})
   const [ws, setWs] = useState('')
   const [useContactWs, setContactWs] = useState('')
   const ActiveTabList = [
@@ -75,13 +82,13 @@ const LiveChat = () => {
       isActive: false
     },
     {
-      title: "Unread",
-      id: "unread",
+      title: "Ongoing",
+      id: "live",
       isActive: false
     },
     {
-      title: "Ongoing",
-      id: "live",
+      title: "Unread",
+      id: "unread",
       isActive: false
     },
     {
@@ -94,8 +101,8 @@ const LiveChat = () => {
   // mark msg read
   const markAsRead = (id, msgId, recieverNum) => {
 
-    console.log("99", id)
-    console.log("99", msgId)
+    // console.log("99", id)
+    // console.log("99", msgId)
 
     // return null
     const form_data = new FormData()
@@ -109,11 +116,11 @@ const LiveChat = () => {
 
   const sendMessages = (type) => {
     const form_data = new FormData()
-    form_data.append("reciever", currentTab.messages_reciever)
+    form_data.append("reciever", useProfileDetails.messages_reciever)
     if (type === "text") {
       form_data.append("message_body", useInputMessage)
       form_data.append("type", "text")
-    } else if (type === "files" && storeMedia?.media?.type === "image/jpeg") {
+    } else if (type === "files" && (storeMedia?.media?.type === "image/jpeg" || storeMedia?.media?.type === "image/png")) {
       form_data.append("file", storeMedia.media)
       form_data.append("type", "image")
       form_data.append("caption", mediaText)
@@ -128,6 +135,7 @@ const LiveChat = () => {
       form_data.append("caption", mediaText)
     }
     console.log("storeMedia", storeMedia)
+    console.log("storeMedia", storeMedia?.media?.type)
     setStoreMedia({})
     // return console.log("send is commented")
     postReq("send_live_chat", form_data)
@@ -215,7 +223,7 @@ const LiveChat = () => {
     const form_data = new FormData()
     form_data.append("page", 1)
     form_data.append("size", 1000)
-    form_data.append("selected_no", currentTab.messages_reciever)
+    form_data.append("selected_no", useProfileDetails.messages_reciever)
     setLiveChatLoader(true)
     postReq("get_all_message", form_data)
       .then((resp) => {
@@ -233,15 +241,15 @@ const LiveChat = () => {
   const getAllContacts = () => {
     console.log("contacts load =============")
     const form_data = new FormData()
-    form_data.append("page", useContactPage)
+    form_data.append("page", 1)
     form_data.append("size", 20)
     form_data.append("searchValue", useSearchContact)
     form_data.append("type", useSortBy)
     setLiveContactLoader(true)
     postReq("contact_relation", form_data)
       .then((res) => {
-        console.log("213", users)
-        console.log("214", res.data?.messages)
+        // console.log("213", users)
+        // console.log("214", res.data?.messages)
         setUsers(prev => [...prev, ...res.data?.messages])
         webSocketConnectionContacts(res?.data?.project_no)
       }).catch((err) => {
@@ -299,11 +307,17 @@ const LiveChat = () => {
     getAllMessages()
     // eslint-disable-next-line no-use-before-define
     scrollToBottom()
-  }, [currentTab])
+    // setRemainingTime(useProfileDetails?.messages_servicing_window)
+    setRemainingTime(getRemainingTime(useProfileDetails?.messages_servicing_window ?? 0))
+    const interval = setInterval(() => {
+      setRemainingTime(getRemainingTime(useProfileDetails?.messages_servicing_window ?? 0))
+    }, 60000) // Update every minute
 
-  const form_data = new FormData()
+    return () => clearInterval(interval)
+  }, [useProfileDetails])
 
   const handleChange = (e) => {
+    const form_data = new FormData()
     // console.log(e.target.files[0])
     const name = e.target.name
     const file = e.target.files[0]
@@ -365,7 +379,32 @@ const LiveChat = () => {
 
   }
 
-  console.log("350 ======", users)
+  // get quick replay
+  const getQuickReplay = () => {
+    const form_data = new FormData()
+    form_data.append("page", 1)
+    form_data.append("size", 1000)
+    form_data.append("searchValue", useQuickReplySearch)
+    form_data.append("action", "get")
+    postReq(`quick_replay`, form_data)
+      .then(res => {
+        // Handle the successful res here
+        console.log('res:', res.data)
+        setQuickReplyList(res?.data?.quick_reply ?? [])
+      }).then((err) => {
+        console.log(err)
+        // toast.error("Something went wrong!")
+      })
+  }
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      getQuickReplay()
+    }, 500) // Adjust the delay (in milliseconds) as needed
+
+    return () => clearTimeout(delayDebounceFn)
+  }, [useQuickReplySearch])
+
+  // console.log("350 ======", users)
   return (
     <>
       <style>{`
@@ -461,68 +500,68 @@ const LiveChat = () => {
         useIsLoading && <FrontBaseLoader />
       }
 
-      <Container className='d-flex border whats-font' style={{ width: "100vw ", height: '85vh', marginTop: "-10px" }}>
+      <Container className='d-flex border fs-hel-lig' style={{ width: "100vw ", height: '85vh', marginTop: "-10px" }}>
 
 
         <Row >
           <Col>
-            <div className='p-1 pt-2 h-100 prime-grey' style={{ width: "70px" }}>
+            <div className='p-1 pt-2 h-100 prime-grey-bg' style={{ width: "70px" }}>
 
-            <div className='d-flex flex-column align-items-center justify-content-start' style={{ gap: "7px" }}>
-      <div className='rounded-circle position-relative select-grey' id="TooltipButton1" style={{ padding: "9px" }}>
-        <RiCustomerService2Line size={20} />
-        <div className='rounded-pill high-green-bg font-small-2 position-absolute top-0 end-0' style={{ padding: "2px 6px", marginRight: "-20px" }}>
-          206
-        </div>
-        <Tooltip
-          placement="right"
-          isOpen={tooltipOpen.TooltipButton1}
-          target="TooltipButton1"
-          toggle={() => toggleTooltip('TooltipButton1')}
-        >
-          Support
-        </Tooltip>
-      </div>
+              <div className='d-flex flex-column align-items-center justify-content-start' style={{ gap: "7px" }}>
+                <div className='rounded-circle position-relative select-grey' id="TooltipButton1" style={{ padding: "9px" }}>
+                  <RiCustomerService2Line size={20} />
+                  <div className='rounded-pill high-green-bg font-small-2 position-absolute top-0 end-0' style={{ padding: "2px 6px", marginRight: "-20px" }}>
+                    206
+                  </div>
+                  <Tooltip
+                    placement="right"
+                    isOpen={tooltipOpen.TooltipButton1}
+                    target="TooltipButton1"
+                    toggle={() => toggleTooltip('TooltipButton1')}
+                  >
+                    Support
+                  </Tooltip>
+                </div>
 
-      <div className='rounded-circle position-relative' id="TooltipButton2" style={{ padding: "9px" }}>
-        <IoWarningOutline size={20} />
-        <div className='rounded-pill high-red-bg font-small-2 position-absolute top-0 end-0' style={{ padding: "2px 6px", marginRight: "-20px" }}>
-          24
-        </div>
-        <Tooltip
-          placement="right"
-          isOpen={tooltipOpen.TooltipButton2}
-          target="TooltipButton2"
-          toggle={() => toggleTooltip('TooltipButton2')}
-        >
-          Missed
-        </Tooltip>
-      </div>
+                <div className='rounded-circle position-relative' id="TooltipButton2" style={{ padding: "9px" }}>
+                  <IoWarningOutline size={20} />
+                  <div className='rounded-pill high-red-bg font-small-2 position-absolute top-0 end-0' style={{ padding: "2px 6px", marginRight: "-20px" }}>
+                    24
+                  </div>
+                  <Tooltip
+                    placement="right"
+                    isOpen={tooltipOpen.TooltipButton2}
+                    target="TooltipButton2"
+                    toggle={() => toggleTooltip('TooltipButton2')}
+                  >
+                    Lapsed
+                  </Tooltip>
+                </div>
 
-      <div className='rounded-circle' id="TooltipButton3" style={{ padding: "9px" }}>
-        <BsBroadcast size={20} />
-        <Tooltip
-          placement="right"
-          isOpen={tooltipOpen.TooltipButton3}
-          target="TooltipButton3"
-          toggle={() => toggleTooltip('TooltipButton3')}
-        >
-          Broadcast
-        </Tooltip>
-      </div>
+                <div className='rounded-circle' id="TooltipButton3" style={{ padding: "9px" }}>
+                  <BsBroadcast size={20} />
+                  <Tooltip
+                    placement="right"
+                    isOpen={tooltipOpen.TooltipButton3}
+                    target="TooltipButton3"
+                    toggle={() => toggleTooltip('TooltipButton3')}
+                  >
+                    Broadcast
+                  </Tooltip>
+                </div>
 
-      <div className='rounded-circle' id="TooltipButton4" style={{ padding: "9px" }}>
-        <FaInstagram size={20} />
-        <Tooltip
-          placement="right"
-          isOpen={tooltipOpen.TooltipButton4}
-          target="TooltipButton4"
-          toggle={() => toggleTooltip('TooltipButton4')}
-        >
-          Instagram
-        </Tooltip>
-      </div>
-    </div>
+                <div className='rounded-circle' id="TooltipButton4" style={{ padding: "9px" }}>
+                  <FaInstagram size={20} />
+                  <Tooltip
+                    placement="right"
+                    isOpen={tooltipOpen.TooltipButton4}
+                    target="TooltipButton4"
+                    toggle={() => toggleTooltip('TooltipButton4')}
+                  >
+                    Instagram
+                  </Tooltip>
+                </div>
+              </div>
             </div>
 
           </Col>
@@ -556,10 +595,14 @@ const LiveChat = () => {
               <div className='d-flex gap-1 px-1 py-1'>
                 {
                   ActiveTabList.map((elm, index) => (
-                    <div className={`rounded-5 d-flex justify-content-center align-items-center cursor-pointer ${elm?.id === useSortBy ? 'prime-green' : "prime-grey"} `}
+                    <div className={`rounded-5 d-flex justify-content-center align-items-center cursor-pointer position-relative ${elm?.id === useSortBy ? 'prime-green' : "prime-grey-bg"} `}
                       onClick={() => { filterAllContacts(elm.id); setSortBy(elm.id) }}
                     >
-                      <p className='m-0 font-small-3 whats-live-font-bolder' style={{ padding: "5px 10px" }}>{elm?.title}</p>
+                      {
+                        index === 1 &&
+                        <div className='position-absolute top-0 end-0 d-flex justify-content-center  align-items-center rounded-circle high-green-bg' style={{ width: "18px", height: "18px", marginTop: "-7px", marginRight: "-5px", fontSize: "13px" }}>5</div>
+                      }
+                      <p className='m-0 font-small-3 fw-bolder ' style={{ padding: "5px 10px" }}>{elm?.title} </p>
                     </div>
                   ))
                 }
@@ -585,10 +628,10 @@ const LiveChat = () => {
                   return (
                     <div
                       key={ContactData.messages_reciever}
-                      className={` w-100 px-1 ${ContactData.messages_reciever === currentTab.messages_reciever ? "prime-grey" : ''}`}
+                      className={` w-100 px-1 ${ContactData.messages_reciever === useProfileDetails.messages_reciever ? "prime-grey-bg" : ''}`}
 
                       onClick={() => {
-                        setCurrentTab(ContactData)
+                        // setCurrentTab(ContactData)
                         webSocketConnection(index)
                         setProfileDetails(ContactData)
                         // console.log("ContactData", ContactData)
@@ -599,20 +642,20 @@ const LiveChat = () => {
 
                         <Row className="cursor-pointer h-100 " >
                           <Col md="2" className=' d-flex align-items-center justify-content-center flex-column '>
-                            <div className="rounded-circle d-flex align-items-center justify-content-center prime-grey text-capitalize " style={{ width: '45px', height: '45px', color: "#b9b6b6" }}>
+                            <div className="rounded-circle d-flex align-items-center justify-content-center prime-grey-bg text-capitalize " style={{ width: '45px', height: '45px', color: "#b9b6b6" }}>
                               {ContactData?.messages_display_name?.slice(0, 1) ?? <Users size={15} />}
                             </div>
                           </Col>
-                          <Col md="10" className='border-bottom ' style={{ gap: "5px", padding: "10px 0" }}>
+                          <Col md="10" className='border-bottom d-flex flex-column  justify-content-center ' style={{ minHeight: "60px", padding: "15px 0" }}>
                             <div className='d-flex justify-content-between  '>
-                              <h5 className='mb-0 p-0  whats-live-font-bolder'>{ContactData?.messages_display_name ?? ContactData?.messages_reciever}</h5>
+                              <h5 className='mb-0 p-0  fs-hel-reg'>{ContactData?.messages_display_name ?? ContactData?.messages_reciever}</h5>
                               <div className={`font-small-3  ${ContactData?.messages_count > 0 ? "high-green-text" : ""}`}>
 
-                                {ContactData?.messages_last_message_timestamp_sent && moment(ContactData?.messages_last_message_timestamp_sent).format("HH:mm")}
+                                {ContactData?.messages_last_message_timestamp_sent && timeDateLiveFormatter(ContactData?.messages_last_message_timestamp_sent)}
                               </div>
                             </div>
 
-                            <div className='position-relative '>
+                            <div className='position-relative ' style={{ color: "#404e58" }}>
                               <p className={`m-0 p-0 font-small-3 ${ContactData?.messages_count > 0 ? "fw-bold" : ""}`}>{lastMsgData?.text?.body?.slice(0, 25)} {lastMsgData?.text?.body?.length > 25 && <span>...</span>}</p>
                               <p className='m-0 p-0'>{lastMsgData?.name?.slice(0, 25)} {lastMsgData?.name?.length > 25 && <span>...</span>}</p>
                               <p className='m-0 p-0'>{lastMsgData?.type === "image" && <Image size={15} />} </p>
@@ -622,18 +665,13 @@ const LiveChat = () => {
 
                               {/* counter */}
                               {
-                                (ContactData.messages_reciever !== currentTab.messages_reciever && ContactData?.messages_count > 0) &&
+                                (ContactData.messages_reciever !== useProfileDetails.messages_reciever && ContactData?.messages_count > 0) &&
                                 <div className=' rounded-5 d-flex justify-content-center align-items-center position-absolute end-0 top-0 high-green-bg' style={{ width: "20px", height: "20px" }}>
                                   <p className=' m-0 font-small-3 '>{ContactData?.messages_count}</p>
                                 </div>
                               }
                             </div>
-                            <div className='font-small-2 d-flex ' style={{ gap: "8px", marginTop: "5px" }}>
 
-                              {/* <span >{ContactData?.flag}</span> */}
-                              {/* <span ><Globe size={10} /> Return & Refund</span> */}
-                              {/* <span ><CiShoppingTag size={10} />MQL</span> */}
-                            </div>
                           </Col>
 
                         </Row>
@@ -651,10 +689,10 @@ const LiveChat = () => {
           </Col>
 
           {/* Main Chat Container */}
-          {currentTab?.messages_reciever &&
+          {useProfileDetails?.messages_reciever &&
             <Col className=' px-0 d-flex flex-column justify-content-between ' style={{ backgroundImage: `url(${WA_BG_2})`, height: '100%', backgroundSize: "370px" }}>
               {/* Header */}
-              <div className=" d-flex justify-content-between align-items-center prime-grey" >
+              <div className=" d-flex justify-content-between align-items-center prime-grey-bg" >
                 <div className="d-flex align-items-center ps-1 cursor-pointer w-100 " style={{ height: "65px" }} onClick={() => setDynamicColumnValue(3)}>
                   <div className="rounded-circle overflow-hidden d-flex align-items-center justify-content-center select-grey text-secondary" style={{ width: '40px', height: '40px', color: "#b9b6b6" }}>
                     {/* <p className='fs-3 fw-bolder text-white mb-0'>{useProfileDetails?.firstName[0]}</p> */}
@@ -671,21 +709,54 @@ const LiveChat = () => {
                     }
 
                   </div>
-                  <h4 className='pt-1' style={{ fontWeight: '500', lineHeight: '1.2em', marginLeft: '15px' }}>
-                    {/* {useProfileDetails?.firstName}<br /> */}
-                    {/* <span className='fs-6'>{subtext}</span> */}
-                  </h4>
                 </div>
                 <div className="d-flex align-items-center gap-2">
+                  <div>
+                    <BsPinAngle size={18} />
+                  </div>
+                  <div>
+                    <div id="TooltipButton10" style={{width:"90px"}} className={`rounded-5 d-flex justify-content-center align-items-center cursor-pointer position-relative ${useRemainingTime?.status === 0
+                        ? 'prime-red'
+                        : useRemainingTime?.status === 1
+                          ? 'prime-orange'
+                          : 'prime-green'
+                      }`}>
+                      {/* <p className='m-0 font-small-3 fw-bolder' style={{ padding: "10px 15px" }}>{timeLiveFormatter(useProfileDetails?.messages_servicing_window)}</p> */}
+                      <p className='m-0 font-small-3 fw-bolder' style={{ padding: "10px 15px" }}>{useRemainingTime ? `${useRemainingTime?.hour ?? '00'} : ${useRemainingTime?.minutes ?? '00'}` : '--'}</p>
+                      <Tooltip
+                        placement="bottom"
+                        isOpen={tooltipOpen.TooltipButton10}
+                        target="TooltipButton10"
+                        toggle={() => toggleTooltip('TooltipButton10')}
+                        style={{ minWidth: "150px" }}
+                      >
+                        Chat expires in {useRemainingTime?.hour ?? '00'} hrs {useRemainingTime?.minutes ?? '00'} mins. Once expired, WhatsApp allows only template messages to be sent
+                      </Tooltip>
+                    </div>
+                  </div>
+                  <div style={{ minWidth: "180px" }}>
+
+                    <Select
+                      className=''
+                      style={{
+                        control: (provided) => ({
+                          ...provided,
+                          minWidth: '300px'
+                        })
+                      }}
+                      defaultValue={chatsTagList[0]}
+                      options={chatsTagList}
+                      closeMenuOnSelect={true}
+                    />
+                  </div>
                   <FaSearch onClick={() => {
                     setSearch(true)
                     setDynamicColumnValue(3)
                   }} />
-
-                  <div className='position-relative' >
-                    <Button onClick={() => setDropdownOpen(!dropdownOpen)} color='' className='bg-transparent '>
+                  <div className='position-relative pe-2' >
+                    <div onClick={() => setDropdownOpen(!dropdownOpen)} className='bg-transparent '>
                       <FaEllipsisV />
-                    </Button>
+                    </div>
                     <div className={`${dropdownOpen ? "" : "d-none"}`}
                       onClick={(e) => {
                         // e.stopPropagation()
@@ -708,7 +779,7 @@ const LiveChat = () => {
               {/* Chat Container */}
               {/* Chat content */}
 
-              <div className='chat-container d-flex flex-column position-relative px-4' >
+              <div className='chat-container h-100 d-flex flex-column position-relative px-4' >
 
                 {!imagePreview ? <div
                   key={useMessageData}
@@ -741,14 +812,14 @@ const LiveChat = () => {
 
                     }
 
-                    const backgroundColor = currentTab?.messages_sender === messageData?.messages_sender ? '#d8ffd4' : '#ffff'
-                    const align = currentTab?.messages_sender === messageData?.messages_sender ? 'end' : 'start'
+                    const backgroundColor = useProfileDetails?.messages_sender === messageData?.messages_sender ? '#d8ffd4' : '#ffff'
+                    const align = useProfileDetails?.messages_sender === messageData?.messages_sender ? 'end' : 'start'
                     // console.log(messageJson?.text?.body)
                     return (
 
                       <>
                         {messageJson &&
-                          <div key={index} className={`message-box whats-live-font-bolder ${currentTab?.messages_sender === messageData?.messages_sender ? 'live_message_box-right' : 'live_message_box-left'}`} style={{
+                          <div key={index} className={`message-box  ${useProfileDetails?.messages_sender === messageData?.messages_sender ? 'live_message_box-right' : 'live_message_box-left'}`} style={{
                             display: 'flex',
                             align,
                             backgroundColor,
@@ -797,7 +868,7 @@ const LiveChat = () => {
                               }
                               {/* image */}
                               {
-                                messageJson?.image?.link && <div style={{ maxWidth: "400px" }}>
+                                messageJson?.image?.link && <div style={{ maxWidth: "300px" }}>
                                   <img src={messageJson?.image?.link} alt="" style={{ width: "100%" }} />
 
                                   <h5 className='mt-1 ms-1'>
@@ -808,7 +879,7 @@ const LiveChat = () => {
                               }
                               {/* video */}
                               {
-                                messageJson?.video?.link && <div className='' style={{ maxWidth: "400px" }}>
+                                messageJson?.video?.link && <div className='' style={{ maxWidth: "300px" }}>
                                   <video className='rounded-3  object-fit-cover w-100' controls mute style={{ width: "100%" }} >
                                     <source
                                       src={messageJson?.video?.link ?? ""}
@@ -863,14 +934,14 @@ const LiveChat = () => {
                                 <span className='font-small-1 text-secondary'>
                                   {messageData?.messages_timestamp_sent && timeLiveFormatter(messageData?.messages_timestamp_sent)}
                                 </span>
-                                <span className={currentTab?.messages_sender === messageData?.messages_sender ? '' : 'd-none'}>
+                                <span className={useProfileDetails?.messages_sender === messageData?.messages_sender ? '' : 'd-none'}>
                                   {
                                     messageData?.messages_timestamp_read ? <LiaCheckDoubleSolid size={16} color='#53bdeb' /> : messageData?.messages_timestamp_delivered ? <LiaCheckDoubleSolid size={16} color='#7c7c7c' /> : messageData?.messages_timestamp_sent ? <LiaCheckDoubleSolid size={16} color='#7c7c7c' /> : ''
                                   }
                                 </span>
 
                                 {
-                                  currentTab?.messages_sender === messageData?.messages_sender &&
+                                  useProfileDetails?.messages_sender === messageData?.messages_sender &&
                                   <div className='timestamp-box position-absolute bg-white rounded-2 p-1' style={{ width: "150px", top: "24px" }} >
                                     <ul className='ps-0 pb-0 mb-0 d-flex flex-column ' style={{ listStyleType: "none", gap: "3px" }}>
 
@@ -938,9 +1009,9 @@ const LiveChat = () => {
 
               </div>
               {/*bottom*/}
-              {!imagePreview && useSortBy !== "history" && <div className=' d-flex align-items-center gap-1 px-1 position-sticky bottom-0 bg-white' style={{ padding: "10px" }} >
+              {!imagePreview && useSortBy !== "history" && <div className=' d-flex align-items-center gap-1  px-1 position-sticky bottom-0 bg-white' style={{ padding: "10px" }} >
 
-                <div className='btn' onClick={() => setToggleMedia(!toggleMedia)}>
+                <div className='p-1' onClick={() => setToggleMedia(!toggleMedia)}>
                   <Plus style={{
                     transform: `rotate(${toggleMedia ? "45deg" : "0deg"})`,
                     transition: "transform 0.2s ease-in-out"
@@ -998,10 +1069,13 @@ const LiveChat = () => {
                 </div>}
 
 
-                {/* <div className='btn' onClick={() => setTemplateModal(true)}>
-                  <HiOutlineTemplate size={20} />
+                {/* <div className='p-1'>
+                  <BsEmojiSmile size={20} />
                 </div> */}
-                <div className='btn' onClick={() => setReplyModal(true)}>
+                <div className='p-1' >
+                  <HiOutlineTemplate size={20} onClick={() => setTemplateModal(true)} />
+                </div>
+                <div className='p-1' onClick={() => setReplyModal(true)}>
                   <MdOutlineQuickreply size={20} />
                 </div>
 
@@ -1016,26 +1090,25 @@ const LiveChat = () => {
                   // onClick={inputMessageCursorChange}
                   onChange={(e) => {
                     // inputMessageCursorChange()
-                    // setNewMessage(e.target.value)
                     setInputMessage(e.target.value)
                   }}
                   style={{ borderRadius: "50px", resize: "none" }}
                 />
                 {/* {users.map((index) => ( */}
                 {
-                  currentTab?.messages_reciever && <div className='d-flex align-items-center justify-content-center ' onClick={() => sendMessages('text')} style={{ width: "50px", height: "50px", minWidth: "50px", minHeight: "50px", maxWidth: "50px", maxHeight: "50px", background: '#00a884', borderRadius: "50%", cursor: "pointer" }} >
+                  useProfileDetails?.messages_reciever && <div className='d-flex align-items-center justify-content-center ' onClick={() => sendMessages('text')} style={{ width: "50px", height: "50px", minWidth: "50px", minHeight: "50px", maxWidth: "50px", maxHeight: "50px", background: '#00a884', borderRadius: "50%", cursor: "pointer" }} >
                     <IoMdSend className='fs-3' style={{ color: 'white' }} />
                   </div>
                 }
 
               </div>}
-              {!imagePreview && useSortBy === "history" && <div className=' d-flex align-items-center flex-column text-center gap-1 px-1 position-sticky bottom-0 bg-white' style={{ padding: "10px" }} >
+              {!imagePreview && useSortBy === "history" && <div className=' d-flex align-items-center flex-column text-center gap-1 p-1 position-sticky bottom-0 prime-grey-bg' style={{ padding: "10px" }} >
                 <h5 className='mb-0'>You cannot send message to this user as Whatsapp does not allow a business to send messages after 24 hours of the user's last message</h5>
-                <div className='border  fw-bolder rounded-3 high-green-bg' style={{padding:"10px 15px"}}>Send Template</div>
-                </div>}
+                <div className='cursor-pointer fw-bolder rounded-2 high-green-bg' style={{ padding: "10px 20px" }}>Send Template Message</div>
+              </div>}
             </Col>
           }
-          {!currentTab?.messages_reciever &&
+          {!useProfileDetails?.messages_reciever &&
             <Col className=' px-0 d-flex flex-column justify-content-between ' style={{ height: '100%' }}>
               <StaticPage1 />
             </Col>
@@ -1114,69 +1187,122 @@ const LiveChat = () => {
       {/* modals ------------------------------------------------------------------------------------------------------- */}
       {/* quick reply modal */}
       <Modal
-        show={replyModal}
+        show={useReplyModal}
         onHide={() => setReplyModal(false)}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header className='mt-1'>
-          <h5>
-            Quick Replies
-          </h5>
+        <Modal.Header >
+          <div className='d-flex align-items-center '>
+
+            <h5 className='mb-0'>
+              Quick Replies
+            </h5>
+            <Link to="/merchant/whatsapp/quick-replays/" >
+              <span><TbExternalLink size={19} /></span>
+            </Link>
+          </div>
         </Modal.Header>
         <Modal.Body >
-          <Row >
-            <hr />
+          <Row className='border-top' style={{ minHeight: "300px" }}>
             <Col xs={5}>
-              <Input type='text' placeholder='search' className='mb-1' />
-              <div className='reply-container' style={{ maxHeight: "300px", overflow: "auto" }}>
-                {QuickReplayList.map((item, index) => {
-                  return <div key={index} style={{ cursor: "pointer" }}
-                    onClick={() => { setSelectedDescription(item); setInputMessage(item.description) }}>
+              <Input type='text' className="mt-1 mb-1" placeholder='search' onChange={(e) => setQuickReplySearch(e.target.value)} />
+              <div className='reply-container hideScroll' style={{ maxHeight: "300px", overflow: "auto" }}>
+                {useQuickReplyList.map((item, index) => {
+                  return <div key={index} className='border-bottoms' style={{ cursor: "pointer" }}
+                    onClick={() => { setSelectedDescription(item); setInputMessage(item.quick_reply_message) }}>
                     <div className='p-1 fw-bolder '>
-                      {item.title}
+                      {item.quick_reply_title}
                     </div>
                   </div>
                 })}
+                {
+                  useQuickReplyList?.length <= 0 && <h5 className='text-center'>No Quick Replies</h5>
+                }
               </div>
             </Col>
             <Col xs={7}>
 
-              {selectedDescription ? <div className='ms-1'>
-                <div className="fw-bolder">{selectedDescription.title}</div>
-                <div className='mt-2'>{selectedDescription.description}</div>
+              {selectedDescription ? <div className='ms-1 mt-1'>
+                <div className="fw-bolder">{selectedDescription.quick_reply_title}</div>
+                <div className='mt-2'>{selectedDescription.quick_reply_message}</div>
               </div> : <div className='d-flex align-items-center justify-content-center h-100'>
-                <span className='fw-bolder text-uppercase ' style={{ fontSize: "1.2rem" }}>Please select a reply</span>
+                <h4 className='fw-bolder text-uppercase fs-6 '>Please select a reply</h4>
               </div>}
             </Col>
-            <hr />
+
           </Row>
         </Modal.Body>
         <Modal.Footer>
 
           <Button className='btn btn-primary ' onClick={() => { setInputMessage(""); setReplyModal(false) }}>Cancel</Button>
-          {selectedDescription.description && <>
+          {selectedDescription.quick_reply_message && <>
             <Button
               className='btn btn-primary '
               style={{ width: "auto" }}
               onClick={() => {
-                // setNewMessage(selectedDescription.description)
-                setInputMessage(selectedDescription.description)
+                // setNewMessage(selectedDescription.quick_reply_message)
+                setInputMessage(selectedDescription.quick_reply_message)
                 setReplyModal(false)
               }}>Copy to Editor</Button> <Button
                 className='btn btn-primary'
                 onClick={() => {
-                  // setMessages(prevMessages => [
-                  // ...prevMessages,
-                  // { text: selectedDescription.description, sender: 'user', timeStamp: currentMessageTime() }
-                  // ])
-
                   sendMessages('text')
                   setReplyModal(false)
                 }}>Send</Button>
           </>}
 
+        </Modal.Footer>
+      </Modal>
+
+      {/* template  modal */}
+      <Modal
+        show={useTemplateModal}
+        onHide={() => setTemplateModal(false)}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header >
+          <div className='d-flex align-items-center ' style={{ padding: "8px 0px" }}>
+
+            <h4 className='mb-0 ' style={{ marginRight: "5px" }}>
+              Templates
+            </h4>
+            <Link to="/merchant/whatsapp/quick-replays/" >
+              <span><TbExternalLink size={19} /></span>
+            </Link>
+          </div>
+        </Modal.Header>
+        <Modal.Body className='py-0 border-top'>
+          <div>
+            <Select
+              className=''
+              style={{
+                control: (provided) => ({
+                  ...provided,
+                  minWidth: '300px'
+                })
+              }}
+              defaultValue={chatsTagList[0]}
+              options={chatsTagList}
+              closeMenuOnSelect={true}
+            />
+          </div>
+          <Row className='' style={{ minHeight: "300px" }}>
+            <Col xs={5}>
+
+            </Col>
+            <Col xs={7}>
+
+            </Col>
+
+          </Row>
+        </Modal.Body>
+        <Modal.Footer>
+
+          <Button className='btn btn-primary ' onClick={() => { setTemplateModal(false) }}>Cancel</Button>
         </Modal.Footer>
       </Modal>
     </>

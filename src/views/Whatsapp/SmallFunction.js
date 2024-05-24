@@ -3,6 +3,7 @@ import { CardBody } from "reactstrap"
 import wp_back from './imgs/wp_back.png'
 import moment from "moment"
 import { BsBroadcast, BsReply } from 'react-icons/bs'
+import { GoDotFill } from "react-icons/go"
 import { FaEllipsisV, FaSearch, FaInstagram } from "react-icons/fa"
 import { HiOutlineDotsVertical } from "react-icons/hi"
 import { IoMdSearch, IoMdSend } from "react-icons/io"
@@ -182,19 +183,106 @@ export const LeftNavList = [
      color: ""
    }
  ]
+ export const chatsTagList = [
+   {
+     value: "Open",
+     label:<div className="d-flex gap-1  align-items-center ">  <GoDotFill color="green" size={20} /> <h6 className="mb-0" >Ongoing</h6></div>
+   },
+   {
+      value: "Pending",
+      label:<div className="d-flex gap-1  align-items-center ">  <GoDotFill color="orange" size={20} /> <h6 className="mb-0" >Pending</h6></div>
+    },
+    {
+      value: "Closed",
+      label:<div className="d-flex gap-1  align-items-center ">  <GoDotFill color="red" size={20} /> <h6 className="mb-0" >Closed</h6></div>
+    }
+ ]
 
 export const timeLiveFormatter = (time) => {
    if (!time) {
       return "--"
    }
    try {
-      return moment(time).format("hh:mm")
+      return moment(time).format("HH:mm")
       
    } catch (error) {
       return "--"
    }
 }
+export const timeDateLiveFormatter = (time) => {
+   if (!time) {
+      return "--"
+   }
 
+   try {
+      const inputTime = moment(time)
+      const currentTime = moment()
+      const hoursDifference = currentTime.diff(inputTime, 'hours')
+
+      if (hoursDifference < 24) {
+         return inputTime.format("HH:mm")
+      } else if (hoursDifference < 48) {
+         return "yesterday"
+      } else if (hoursDifference < 72) {
+         return "day before yesterday"
+      } else {
+         return inputTime.format("YYYY-MM-DD")
+      }
+   } catch (error) {
+      return "--"
+   }
+}
+
+export const getRemainingTime = (endTime) => {
+   const now = moment()
+   if (endTime <= 0) {
+      return {
+         hour: '00',
+         minutes: '00',
+         status : 0
+      }
+   }
+   console.log("endTime", endTime)
+   const end = moment(endTime).add(24, 'hours') // Add 24 hours to the end time
+   const diff = moment.duration(end.diff(now))
+
+   if (diff.asMilliseconds() <= 0)  return {
+      hour: '00',
+         minutes: '00',
+         status : 0
+   }
+
+   const hours = Math.floor(diff.asHours())
+   const minutes = diff.minutes()
+
+   let status
+   if (diff.asHours() < 1) {
+      status = 0
+   } else if (diff.asHours() < 3) {
+      status = 1
+   } else {
+      status = 2
+   }
+
+   return {
+      hour: String(hours).padStart(2, '0') ?? 0,
+      minutes: String(minutes).padStart(2, '0') ?? 0,
+      status
+   }
+}
+// export const liveTimeCounter = (inpTime) => {
+//    if (!inpTime) {
+//       return "--"
+//    }
+
+//    try {
+//       const inputTime = moment(inpTime)
+//       const currentTime = moment()
+ 
+//    } catch (error) {
+//       return "--"
+//    }
+// }
 // functions
 export const getBoldStr = (str) => {
    str = str.replace(/\*(.*?)\*/g, (_, p1) => `<strong>${p1}</strong>`)
@@ -332,7 +420,7 @@ export const RenderLiveTemplateUI = ({SingleTemplate}) => {
   return (
      <CardBody className="border-0  rounded-2 " style={{ whiteSpace: 'pre-wrap'}}>
 
-        <div className="border-1 rounded-2 mb-0 " style={{ width: "400px" }} >
+        <div className="border-1 rounded-2 mb-0 " style={{ width: "350px" }} >
            <div className='p-0' >
               {
 
