@@ -285,7 +285,7 @@ export const Tone = [
 // 4 5 6
 export const SuperLeadzPurpose = [
 //     { label: 'Increase brand recall', value: 'Increase brand recall', id: "1" }, // 1
-    { label: 'Increase registered users', value: 'Increase registered users', id: "2" },
+    { label: 'Increase Registered Users', value: 'Increase registered users', id: "2" },
     { label: 'Build High-Quality Email Lists', value: 'Build High-Quality Email Lists', id: "3" },
     { label: 'Reduce Website Drop-Offs', value: 'Reduce Website Drop-Offs', id: "4" },
     { label: 'Reduce Cart Abandonments', value: 'Reduce Cart Abandonments', id: "5" },
