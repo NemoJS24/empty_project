@@ -51,6 +51,8 @@ import EmailLists from '../../views/main/LandingPage/EmailLists'
 import SuperLeadzOneClickRedemption from '../../views/main/products/superLeadz/SuperLeadz/SuperLeadzOneClickRedemption'
 import SuperLeadzLeadGen from '../../views/main/products/superLeadz/SuperLeadz/SuperLeadzLeadGen'
 import QRForm from '../../views/main/QR/QRForm'
+import CodeUserData from '../../views/codeSkin/CodeUserData'
+import CodeUserDetails from '../../views/codeSkin/CodeUserDetails'
 
 const Homes_Routes = [
 
@@ -666,6 +668,14 @@ const Homes_Routes = [
       layout: "custom",
       publicRoute: true
     }
+  },
+  {
+    path: '/codeskin',
+    element: <CodeUserData />
+  },
+  {
+    path: '/codeskin-user/:id',
+    element: <CodeUserDetails />
   }
 ]
 

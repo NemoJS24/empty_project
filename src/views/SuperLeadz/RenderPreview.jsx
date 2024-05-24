@@ -59,7 +59,7 @@ const RenderPreview = (props) => {
     useEffect(() => {
         const rules = Object.keys(finalObj.rules).filter(
             (rule) => finalObj.rules[rule] &&
-                ['spent_on_page', 'spent_on_website', 'read_page_by', 'visited', 'not_active_page'].includes(rule)
+                ['spent_on_page', 'spent_on_website', 'read_page_by', 'visited', 'not_active_page', 'exit_intent'].includes(rule)
         )
 
         const uniqueTrueRules = [...new Set(rules)]
@@ -70,7 +70,8 @@ const RenderPreview = (props) => {
         finalObj.rules.spent_on_website,
         finalObj.rules.read_page_by,
         finalObj.rules.visited,
-        finalObj.rules.not_active_page
+        finalObj.rules.not_active_page,
+        finalObj.rules.exit_intent
     ])
 
     useEffect(() => {

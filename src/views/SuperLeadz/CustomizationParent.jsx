@@ -3103,7 +3103,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                     </div>
                                 </div>
                             )}
-                            <div className="form-check form-switch mb-2 d-none">
+                            <div className="form-check form-switch mb-2">
                                 <input checked={finalObj?.rules?.exit_intent} onChange={updateRules} type="checkbox" role='switch' id='exit_intent' name={"exit_intent"} className="form-check-input cursor-pointer" />
                                 <label htmlFor="exit_intent" className="cursor-pointer" style={{ fontSize: "13px" }}>Exit intent</label>
                             </div>
