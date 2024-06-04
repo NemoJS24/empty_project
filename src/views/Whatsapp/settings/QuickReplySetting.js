@@ -18,6 +18,9 @@ export default function QuickReplySetting() {
   const [useCurrentMsg, setCurrentMsg] = useState({ title: "", message: "" })
   const toggle = () => {
     setModal(!modal)
+    if (!modal) {
+      setCurrentMsg({ title: "", message: "" })
+    }
   }
 
   const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
@@ -113,13 +116,17 @@ export default function QuickReplySetting() {
     useCurrentMsg.id ? putReq("quick_replay", newFormData) : postReq("quick_replay", newFormData)
       .then((res) => {
         toast.success(useCurrentMsg.id ? "Updated!" : "Saved!")
+        getData()
+        setModal(false)
       })
       .catch((err) => {
         console.log(err)
+        toast.error("Something went wrong!")
+
       })
   }
   const customButton2 = () => {
-    return <button className='btn btn-primary' onClick={() => { toggle(); useState({ title: "", message: "" }) }}>New reply</button>
+    return <button className='btn btn-primary' onClick={() => { toggle() }}>New reply</button>
   }
 
   return (
@@ -155,20 +162,20 @@ export default function QuickReplySetting() {
                   <h5 className=''>
                     Title
                   </h5>
-                  <input type="text" class="form-control" value={useCurrentMsg?.title} onChange={(e) => handleInputChange("title", e)} />
+                  <input type="text" class="form-control" placeholder="Title"  value={useCurrentMsg?.title} onChange={(e) => handleInputChange("title", e)} />
                 </div>
                 <div className='mt-1'>
 
                   <h5 className=''>
                     Message
                   </h5>
-                  <textarea type="text" row="10" style={{ height: "150px" }} class="form-control" value={useCurrentMsg?.message} onChange={(e) => handleInputChange("message", e)} />
+                  <textarea type="text" row="10" placeholder="Message" style={{ height: "150px" }} class="form-control" value={useCurrentMsg?.message} onChange={(e) => handleInputChange("message", e)} />
                 </div>
 
               </Col>
-              <Col md="6" className=' d-flex align-items-center p-1' style={{backgroundImage: `url(${WA_BAG})` }}>
+              <Col md="6" className=' d-flex align-items-center p-1 justify-content-end' style={{backgroundImage: `url(${WA_BAG})` }}>
                 <div>
-                  <div className='message-box live_message_box-right position-relative p-1 rounded-1' style={{ background: "#d4f2c2" }}>
+                  <div className='message-box live_message_box-right position-relative p-1 rounded-1' style={{ background: "#d8ffd4" }}>
                   <p dangerouslySetInnerHTML={{ __html: getBoldStr(useCurrentMsg?.message ?? '') }}></p>
                   </div>
                 </div>

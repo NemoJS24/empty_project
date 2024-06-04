@@ -1,19 +1,28 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { FaGear } from "react-icons/fa6"
 import { PiGear } from "react-icons/pi"
-import { Card, CardBody, CardHeader, Button, Row, Col } from "reactstrap"
+import { Card, CardBody, CardHeader, Button, Row, Col, Modal, ModalHeader, ModalBody } from "reactstrap"
 import { Link } from "react-router-dom"
 import { BiUser } from "react-icons/bi"
 import { Edit3, Eye, Trash2 } from "react-feather"
 import AdvanceServerSide from "@src/views/Components/DataTable/AdvanceServerSide.js"
 import { crmURL, getReq, postReq } from "../../assets/auth/jwtService"
+import { IoIosCheckmarkCircleOutline } from 'react-icons/io'
+import { FiUpload } from 'react-icons/fi'
+import toast from 'react-hot-toast'
+import FrontBaseLoader from '../Components/Loader/Loader'
 
 const Leads_dashboard = () => {
    const [tableData, setTableData] = useState([])
    const [isLoading, setIsLoading] = useState(true)
    const [selected, setSelected] = useState([])
    const [leadStageOptions, setLeadStageOptions] = useState([])
+   const [modal2, setModal2] = useState(false)
+   const [fileData, setFileData] = useState({})
+   const fileInputRef = useRef(null)
+   const containerRef = useRef(null)
+   const [useLoader, setLoader] = useState(false)
 
    const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
       setIsLoading(true)
@@ -24,35 +33,114 @@ const Leads_dashboard = () => {
       form_data.append("searchValue", searchValue)
 
       postReq("leadstable_get_view", form_data)
-         .then((resp) => {
-            console.log("sdsadad", resp.data)
-            setTableData(resp.data)
-         })
-         .catch((error) => {
-            console.log(error)
-         })
-         .finally(() => {
-            setIsLoading(false)
-         })
+      .then((resp) => {
+         console.log("sdsadad", resp.data)
+         setTableData(resp.data)
+      })
+      .catch((error) => {
+         console.log(error)
+      })
+      .finally(() => {
+         setIsLoading(false)
+      })
 
    }
 
    const fetchStageOptions = () => {
       getReq('leads_stage_get', '')
-         .then(res => {
-            // console.log(res.data)
-            const leadStageOptions = []
-            res.data.data.forEach((item) => {
-               leadStageOptions.push({
-                  value: item.stage,
-                  label: item.stage
-               })
+      .then(res => {
+         // console.log(res.data)
+         const leadStageOptions = []
+         res.data.data.forEach((item) => {
+            leadStageOptions.push({
+               value: item.stage,
+               label: item.stage
             })
-            setLeadStageOptions(leadStageOptions)
          })
-         .catch((error) => {
-            console.error("Error:", error)
-         })
+         setLeadStageOptions(leadStageOptions)
+      })
+      .catch((error) => {
+         console.error("Error:", error)
+      })
+   }
+
+   const customButton2 = () => {
+      return <div className='d-flex justify-content-end align-items-center gap-1'>
+  
+        <button className='btn btn-primary' onClick={() => setModal2(!modal2)}>Import </button>
+      </div> 
+    }
+
+   const uploadFile = (file) => {
+      const form_data = new FormData()
+      console.log('csvFile', fileData)
+      form_data.append('csvFile', file)
+      // form_data.append('group_list', id)
+      setLoader(true)
+      postReq('import_leads', form_data)
+      .then(res => {
+         console.log(res)
+         if (res.data.success) {
+         toast.success(res.data.message)
+         getData()
+         setModal2(false)
+         } else if (res.data.message) {
+         toast.alert(res.data.message)
+         } else {
+         toast.alert("Something went wrong")
+         }
+      })
+      .catch((error) => {
+         if (error.response && error.response.status === 500) {
+         // Handle 500 error
+         toast.error('Internal Server Error')
+         } else {
+         // Handle other errors
+         console.log(error)
+         }
+
+      }).finally(() => setLoader(false))
+   } 
+  
+   const handleFile = (file) => {
+      console.log('Selected file:', file)
+      if (file) {
+        const isCSV = file.name.toLowerCase().endsWith('.csv')
+        if (isCSV) {
+          console.log('Selected file:', file)
+          setFileData(prev => (file))
+          uploadFile(file)
+        } else {
+          toast.error('Please select a CSV file.')
+          fileInputRef.current.value = ''
+        }
+      }
+   }
+  
+   const handleFileChange = (e) => {
+      const selectedFile = e.target.files[0]
+      console.log('Selected file:', selectedFile)
+      handleFile(selectedFile)
+   }
+  
+   const handleDragOver = (e) => {
+      e.preventDefault()
+      e.dataTransfer.dropEffect = 'copy'
+      containerRef.current.style.cursor = 'alias'
+  
+   }
+  
+   const handleDragLeave = () => {
+      containerRef.current.style.cursor = 'auto'
+   }
+  
+   const handleDrop = (e) => {
+      e.preventDefault()
+      containerRef.current.style.cursor = 'auto'
+      const files = e.dataTransfer.files
+      if (files.length > 0) {
+        handleFile(files[0])
+      }
    }
 
    useEffect(() => {
@@ -182,6 +270,9 @@ const Leads_dashboard = () => {
    ]
 
    return (<>
+      {
+        useLoader && <FrontBaseLoader />
+      }
       <Card>
          <CardHeader>
             <div className="d-flex justify-content-between w-100 align-items-center" >
@@ -246,6 +337,7 @@ const Leads_dashboard = () => {
                         setSelectedRows={setSelected}
                         selectedRows={selected}
                         advanceFilter={true}
+                        customButtonRight={customButton2}
                      />
                   </CardBody>
                </Card>
@@ -255,6 +347,44 @@ const Leads_dashboard = () => {
       {/* <ParkedFunnel_Table /> */}
       {/* <LeadsDetail_Table />
       <Watilist_Table /> */}
+
+      <Modal size='lg' isOpen={modal2} toggle={() => setModal2(!modal2)} >
+          <ModalHeader toggle={() => setModal2(!modal2)}></ModalHeader>
+          <ModalBody>
+            <div className='d-grid align-items-center  pb-3'>
+              <div className='d-flex flex-column justify-content-center align-items-center '>
+                {!(fileData?.name) ? <div className='d-flex flex-column justify-content-center align-items-center '>
+                  <h1 className=' text-center mt-2 fs-2 fw-bolder text-start main-heading'>Upload Your File</h1>
+                  <h5 className='m-0 text-center '>Before uploading, please make sure that your file is in CSV format.</h5>
+                  <div className='rounded-3 d-grid align-content-center mt-2 cursor-pointer' id='drag-container' ref={containerRef} onDragOver={handleDragOver} onDrop={handleDrop} onDragLeave={handleDragLeave} onClick={() => fileInputRef.current.click()} style={{ border: '2px dashed #cecdcd', width: '400px', height: '200px', backgroundColor: '#f3f3f3' }}>
+                    <div className='d-flex justify-content-center'>
+                      <FiUpload scale={6} size={50} />
+                    </div>
+                    <p className='m-0 text-center mt-1 fw-medium cursor-pointer'>Drag and drop or <a>choose you file</a> to start uploading.</p>
+                    <p className='m-0 text-center fw-medium cursor-pointer' >Only .csv format is supported.</p>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      className='d-none'
+                      accept=".csv"
+                      onChange={handleFileChange}
+                    />
+                  </div>
+                  {/* <h5 className='m-0 text-center mt-1 px-3 fs-6 '><a href={`${baseURL}/static/template_document/contact.csv`} className="text-primary cursor-pointer" download>Click here</a>  to download dummy CSV Format file. </h5> */}
+
+                </div> : <>
+                  <h1 className=' text-center mt-2 fs-2 fw-bolder text-start main-heading'>{fileData.name}</h1>
+                  <div className='rounded-3 d-grid align-content-center mt-3 cursor-pointer' style={{ border: '2px dashed #cecdcd', width: '400px', height: '200px' }}>
+                    <div className='d-flex justify-content-center'>
+                      <IoIosCheckmarkCircleOutline size={120} color='green' />
+                    </div>
+                    <h5 className='m-0 text-center mt-1 fw-medium'>{fileData.name}</h5>
+                  </div>
+                </>}
+              </div>
+            </div>
+          </ModalBody>
+      </Modal>
    </>
    )
 }

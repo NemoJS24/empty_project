@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Container, Row, Col, Card, CardBody, Label, Input, Button, CardHeader } from 'reactstrap'
 import userprofile from '../../assets/user_profile.jpg'
 import { User, Flag, Phone, Star, Send, Layout } from 'react-feather'
@@ -11,11 +11,19 @@ import { AiOutlineRise } from "react-icons/ai"
 import { BiPhoneCall } from "react-icons/bi"
 import { IoCalendarClearOutline, IoDocumentTextOutline } from "react-icons/io5"
 import { useNavigate, useParams } from 'react-router-dom'
+import { PermissionProvider } from '../../../../Helper/Context'
+import Select from 'react-select'
+import { getReq, postReq } from '../../../../assets/auth/jwtService'
+import FrontBaseLoader from '../../../Components/Loader/Loader'
 
 const BasicDetails = ({ userData }) => {
 
-    const { id } = useParams()
-    const navigate = useNavigate()
+   const { id } = useParams()
+   const navigate = useNavigate()
+   const { userPermission } = useContext(PermissionProvider)
+   const [departmentList, setDepartmentList] = useState([])
+   const [assignLead, setAssignLead] = useState('')
+   const [isLoading, setIsLoading] = useState(false)
 
    function getCurrentDate() {
       const date = new Date()
@@ -30,8 +38,49 @@ const BasicDetails = ({ userData }) => {
       return formattedDate.replace(',', '')
    }
 
+   const getDepartmentList = () => {
+      getReq("addDepartment")
+      .then((resp) => {
+         console.log(resp)
+         const dept_list = resp?.data?.map((curElem) => {
+            return { label: curElem?.department, value: curElem?.id }
+         })
+
+         setDepartmentList(dept_list)
+      })
+      .catch((error) => {
+         console.log(error)
+      })
+   }
+
+   useEffect(() => {
+      getDepartmentList()
+   }, [])
+
+   const handleAssign = () => {
+      setIsLoading(true)
+      const form_data = new FormData()
+      form_data.append('TYPE', "DEP")
+      form_data.append('id', assignLead)
+      form_data.append('lead_id', id)
+      postReq('assign_lead', form_data)
+      .then((resp) => {
+         console.log(resp)
+      })
+      .catch((error) => {
+         console.log(error)
+      })
+      .finally(() => {
+         setIsLoading(false)
+      })
+   }
+
    return (
       <>
+
+      {
+        isLoading && <FrontBaseLoader />
+      }
          <style>
             {`
                .tab {
@@ -125,6 +174,31 @@ const BasicDetails = ({ userData }) => {
                                  <span className='font-small-3'>Status</span>
                               </div>
                            </Col>
+                           {
+                              userPermission?.logged_in_user?.user_role === "S-Admin" || userPermission?.logged_in_user?.user_role === "Admin" ? (
+                                 <>
+                                    <Col md='4' className='d-flex gap-1 align-items-center'>
+                                       <div className="form-group w-100">
+                                             <Select
+                                             isMulti={false}
+                                             options={departmentList}
+                                             inputId="aria-example-input"
+                                             closeMenuOnSelect={true}
+                                             name="assign_department"
+                                             placeholder="Department"
+                                             value={departmentList?.filter(option => assignLead === option.value)}
+                                             onChange={(value) => {
+                                                setAssignLead(value?.value)
+                                             }}
+                                          />
+                                       </div>
+                                       <div>
+                                          <a className="btn btn-primary" onClick={() => handleAssign()}>Assign</a>
+                                       </div>
+                                    </Col>
+                                 </>
+                              ) : ''
+                           }
                         </Row>
                      </Col>
                   </Row>

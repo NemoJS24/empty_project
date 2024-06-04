@@ -41,7 +41,7 @@ export const WhatsappNavigation = [
         id: 'LiveChat',
         title: 'Chats',
         icon: <MessageSquare size={16} />,
-        navLink: '/merchant/whatsapp/LiveChat'
+        navLink: '/merchant/whatsapp/LiveChat/support'
     },
     // {
     //     id: 'Catalogue',

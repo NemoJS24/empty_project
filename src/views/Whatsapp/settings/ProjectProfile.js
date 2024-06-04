@@ -78,6 +78,7 @@ export default function ProjectProfile() {
     newFormData.append('address', useProfileDetails.address)
     newFormData.append('email', useProfileDetails.email)
     newFormData.append('websites', useProfileDetails.websites)
+    newFormData.append('description', useProfileDetails.description)
     newFormData.append('profileonly', 0)
     // return null
     setIsLoading(true)
@@ -128,7 +129,7 @@ export default function ProjectProfile() {
                 Display Name
               </h6>
               <input type="text" class="form-control"
-                value={useProfileDetails?.wa_display_name ?? "Dummy Name"}
+                value={useProfileDetails?.wa_display_name ?? " ERROR_TO_LOAD"}
                 id=""
                 disabled
               />
@@ -168,7 +169,7 @@ export default function ProjectProfile() {
               <textarea type="text" class="form-control"
                 value={useProfileDetails?.about ?? ''}
                 id=""
-                onChange={(e) => handleInputChange("description", e.target.value)}
+                onChange={(e) => handleInputChange("about", e.target.value)}
               />
             </div>
 
@@ -249,7 +250,7 @@ export default function ProjectProfile() {
                   alt=""
                 />
               </div>
-              <h4 className='mt-2 me-1'>{useProfileDetails?.wa_display_name ?? "Dummy Name"}<span><RiVerifiedBadgeFill color="#13a85d" /></span></h4>
+              <h4 className='mt-2 me-1'>{useProfileDetails?.wa_display_name ?? " ERROR_TO_LOAD"}<span><RiVerifiedBadgeFill color="#13a85d" /></span></h4>
               <h5 className='text-secondary'>{categoryList.find(option => option.value === useProfileDetails.vertical)?.label}</h5>
 
             </div>

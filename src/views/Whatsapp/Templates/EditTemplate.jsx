@@ -2,7 +2,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react'
-import { CornerDownLeft, ExternalLink, FileText, Image, MapPin, Phone, PlayCircle, Plus } from 'react-feather'
+import { Copy, CornerDownLeft, ExternalLink, FileText, Image, MapPin, Phone, PlayCircle, Plus } from 'react-feather'
 import toast from 'react-hot-toast'
 import Select from 'react-select'
 import { Card, CardBody, Col, Container, Input, Label, Row } from 'reactstrap'
@@ -11,35 +11,35 @@ import { selectPhoneList } from '../../../Helper/data'
 import { postReq } from '../../../assets/auth/jwtService'
 import FrontBaseLoader from '../../Components/Loader/Loader'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { HeaderTypeList, getBoldStr, paramatersList } from '../SmallFunction'
+import { CarouselTypeList, HeaderTypeList, getBoldStr, languageList, paramatersList, templateCatgList } from '../SmallFunction'
+import { Pagination, Navigation, Autoplay } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js'
+import { MdDeleteOutline } from "react-icons/md"
+import { index } from 'd3'
 
 export default function EditTemplate() {
   const { templateID } = useParams()
-const navigate = useNavigate()
+  const navigate = useNavigate()
   const [CurrentTemplate, setCurrentTemplate] = useState()
   const [useLoader, setLoader] = useState(false)
+  const [useIsNewTemp, setIsNewTemp] = useState(true)
   const [useLinkType, setLinkType] = useState("custom")
 
   const [BasicTemplateData, setBasicTemplateData] = useState({
     templateName: '',
     templateCategory: '',
     language: '',
-    footer: ''
+    footer: 'Please reply with "STOP" to opt-out'
   })
 
   // headrer
   const [Header, setHeader] = useState({
-    type: '',
+    type: 'Image',
     text: '',
     file: ''
   })
 
   const [Header_Parameters, setHeader_Parameters] = useState([])
-
-
-  const Header_text_change = (e) => {
-    setHeader({ ...Header, text: e.target.value })
-  }
 
   const addHeaderParam = (e) => {
     const uptstr = `${Header.text}{{1}}`
@@ -47,7 +47,6 @@ const navigate = useNavigate()
   }
 
   useEffect(() => {
-    // alert("sdfsdf")
     if (Header.text.includes("{{1}}")) {
       // Update header parameters
       if (Header_Parameters.length !== 1) {
@@ -65,12 +64,12 @@ const navigate = useNavigate()
   const [displayedMessage, setDisplayedMessage] = useState(useMsgBody)
 
   const handleBodyDisplay = (message, parameters) => {
-    let uptDiplayMsg = message.replace(/{{\s*(\d+)\s*}}/g, (_, n) => {
+    let uptDisplayMsg = message.replace(/{{\s*(\d+)\s*}}/g, (_, n) => {
       const replacement = parameters[n - 1] // n starts from 1
       return (replacement === '' || replacement === undefined) ? `{{${n}}}` : `[${replacement}]`
     })
-    uptDiplayMsg = getBoldStr(uptDiplayMsg)
-    setDisplayedMessage(uptDiplayMsg)
+    uptDisplayMsg = getBoldStr(uptDisplayMsg)
+    setDisplayedMessage(uptDisplayMsg)
   }
 
   const handleMsgBodyChange = () => {
@@ -104,15 +103,191 @@ const navigate = useNavigate()
     handleMsgBodyChange()
   }, [useMsgBody])
 
+    // carosulel card ---------------------------
+    const [useCarouselBasic, setCauseCarouselBasic] = useState({
+      mediaType: "IMAGE"
+    })
+    const [useCurrCarouselIndex, setCurrCarouselIndex] = useState(0)
+  
+  
+    const [useCarouselData, setCarouselData] = useState(
+      {
+        type: "CAROUSEL",
+        cards: [
+          {
+            components: [
+              {
+                type: "HEADER",
+                format: "IMAGE",
+                example: {
+                  header_handle: [""]
+                }
+              },
+              {
+                type: "BODY",
+                text: "body 1"
+              },
+              {
+                type: "BUTTONS",
+                buttons: [
+                  {
+                    type: "QUICK_REPLY",
+                    text: ""
+                  },
+                  {
+                    type: "QUICK_REPLY",
+                    text: ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            components: [
+              {
+                type: "HEADER",
+                format: "IMAGE",
+                example: {
+                  header_handle: [""]
+                }
+              },
+              {
+                type: "BODY",
+                text: "body 2"
+              },
+              {
+                type: "BUTTONS",
+                buttons: [
+                  {
+                    type: "QUICK_REPLY",
+                    text: ""
+                  },
+                  {
+                    type: "QUICK_REPLY",
+                    text: ""
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    )
+    const [useCarouselMedia, setCarouselMedia] = useState(['', ''])
+  
+    const addCarousel = () => {
+  
+      setCarouselData(prev => ({ ...prev, cards: [...prev.cards, prev.cards[0]] }))
+      setCarouselMedia(prev => [...prev, ''])
+    }
+    const showCarouselDetails = () => {
+      console.log("useCarouselData", useCarouselData)
+      console.log("useCarouselMedia", useCarouselMedia)
+      console.log("useCurrCarouselIndex", useCurrCarouselIndex)
+    }
+  
+    const addCarBtn = (type) => {
+      // Make a copy of the state
+      let oldData = { ...useCarouselData }
+      let newButton = {}
+      console.log("type", type)
+      if (type === 'QUICK_REPLY') {
+        newButton = {
+          type: 'QUICK_REPLY',
+          text: ""
+        }
+      } else if (type === 'URL') {
+        newButton = {
+          type: 'URL',
+          text: "",
+          url: ""
+        }
+      } else if (type === 'PHONE_NUMBER') {
+        newButton = {
+          type: 'PHONE_NUMBER',
+          code: '',
+          text: "",
+          value: ""
+        }
+      } else {
+        return // No need to proceed further if type is not recognized
+      }
+  
+      // Update the buttons in each component
+      let newData = {
+        ...oldData,
+        cards: oldData.cards.map((card) => ({
+          ...card,
+          components: card.components.map((component) => {
+            if (component.type === "BUTTONS") {
+              return {
+                ...component,
+                buttons: [...component.buttons, newButton]
+              }
+            }
+            return component
+          })
+        }))
+      }
+  
+      // Set the updated data to the state
+      setCarouselData(newData)
+      console.log("newData", newData)
+
+    }
+    const delCarBtn = (index) => {
+      // Make a copy of the state
+      let oldData = { ...useCarouselData }
+    
+      // Iterate over each card's components
+      let newData = {
+        ...oldData,
+        cards: oldData.cards.map((card) => ({
+          ...card,
+          components: card.components.map((component) => {
+            // Check if the component is of type 'BUTTONS'
+            if (component.type === "BUTTONS" && component.buttons && component.buttons.length > index) {
+              // Remove the button at the specified index
+              const updatedButtons = component.buttons.filter((button, i) => i !== index)
+              return {
+                ...component,
+                buttons: updatedButtons
+              }
+            }
+            return component
+          })
+        }))
+      }
+    
+      // Set the updated data to the state
+      setCarouselData(newData)
+    }
+    
+    const carBtnInputChange = (index, field, value) => {
+      // Create a copy of the current state
+      const updatedCarouselData = { ...useCarouselData }
+    
+      // Update the value of the button at the specified index and field
+      updatedCarouselData.cards[useCurrCarouselIndex].components
+        .find(component => component.type === "BUTTONS")
+        .buttons[index][field] = value
+    
+      // Update the state with the modified data
+      setCarouselData(updatedCarouselData)
+    }
+  
+    // carousel xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  
 
   // body xxxxxxxxxxxxxxxxxxx ---------------------
 
 
   const [useInteractive, setInteractive] = useState([])
   const [useButtons, setButtons] = useState({
-    QUICK_REPLY: 3,
-    URL: 2,
-    PHONE_NUMBER: 1
+    QUICK_REPLY: 0,
+    URL: 0,
+    PHONE_NUMBER: 0,
+    COPY_CODE: 0
   })
 
   // interactive change---------------------------------------------------
@@ -138,27 +313,37 @@ const navigate = useNavigate()
         text: "",
         value: ""
       }
+    } else if (type === 'COPY_CODE') {
+      newData = {
+        type: "COPY_CODE",
+        example: "250FF"
+      }
     } else {
       setInteractive([])
-      console.log(oldData)
+      // console.log(oldData)
       return // No need to proceed further if type is not recognized
     }
-    // Determine the priority of each button type
     const priorityMap = {
-      QUICK_REPLY: 1,
-      URL: 2,
-      PHONE_NUMBER: 3
+      COPY_CODE: 1,
+      QUICK_REPLY: 2,
+      URL: 3,
+      PHONE_NUMBER: 4
     }
 
     // Sort the buttons based on their priority
     const updatedData = [...oldData, newData].sort((a, b) => priorityMap[a.type] - priorityMap[b.type])
 
     setInteractive(updatedData)
+    console.log(updatedData)
     // setInteractive([...oldData, newData])
   }
+
   useEffect(() => {
     const count = useInteractive.reduce((acc, elm) => {
       if (elm.type === "QUICK_REPLY") {
+        acc.QUICK_REPLY++
+      } else if (elm.type === "COPY_CODE") {
+        acc.COPY_CODE++
         acc.QUICK_REPLY++
       } else if (elm.type === "URL") {
         acc.URL++
@@ -171,6 +356,7 @@ const navigate = useNavigate()
     }, {
       QUICK_REPLY: 0,
       URL: 0,
+      COPY_CODE: 0,
       PHONE_NUMBER: 0
     })
     setButtons(count)
@@ -226,6 +412,8 @@ const navigate = useNavigate()
 
 
   }
+
+  // load inital data
   useEffect(() => {
 
     const getCurrentTemplate = (templateId) => {
@@ -271,11 +459,11 @@ const navigate = useNavigate()
             language: res.data.language,
             footer
           })
+          setIsNewTemp(false)
         })
         .catch(error => {
           // Handle errors here
           console.error('Error:', error)
-          toast.error("Server error")
         })
         .finally(() => {
 
@@ -298,7 +486,8 @@ const navigate = useNavigate()
     // if (!formValidation()) {
     //   return false
     // }
-    setLoader(true)
+    const formData = new FormData()
+
     const newInteractiveData = useInteractive.map(item => {
       if (item.title === '') {
         return null // Skip items without a title
@@ -323,16 +512,24 @@ const navigate = useNavigate()
           url: "https://rzp.io/i/{{1}}",
           example: [`https://rzp.io/i/link`]
         }
-      } else if (item.type === "QUICK_REPLY") {
+      }  else if (item.type === "QUICK_REPLY") {
         return {
           type: item.type,
           text: item.text
         }
-      } else {
-        // Handle unmatched cases
-        return null
-      }
+      } else if (item.type === "COPY_CODE") {
+        formData.append('coupon_variables', item.value)
+          return {
+            type: "COPY_CODE",
+            example: item.value
+          }
+        } else {
+          // Handle unmatched cases
+          return null
+        }
     }).filter(Boolean) // Remove null entries from the result
+
+    console.log("newInteractiveData", newInteractiveData)
     // return null
     const components = [
       Header.type === 'Document' && {
@@ -375,8 +572,9 @@ const navigate = useNavigate()
         type: 'BODY',
         text: useMsgBody
       },
+      Header.type === 'Carousel'  && useCarouselData,
 
-      BasicTemplateData.footer !== '' && {
+      Header.type !== "Carousel" && BasicTemplateData.footer !== '' && {
         type: 'FOOTER',
         text: BasicTemplateData.footer
       },
@@ -385,29 +583,32 @@ const navigate = useNavigate()
         type: "BUTTONS",
         buttons: newInteractiveData
       }
+      
     ].filter(Boolean)
 
     // const payData = JSON.stringify(payload, null, 2)
-    const formData = new FormData()
 
     formData.append('name', BasicTemplateData.templateName)
-    formData.append('templateId', CurrentTemplate.id)
+    // eslint-disable-next-line no-unused-expressions
+    !useIsNewTemp ? formData.append('templateId', CurrentTemplate.id) : ''
     formData.append('category', BasicTemplateData.templateCategory)
     formData.append('language', BasicTemplateData.language)
     formData.append('components', JSON.stringify(components))
-    formData.append('headerUrl', Header.file)
+    if (Header.type === 'Carousel') {
+      useCarouselMedia.map((file, index) => (
+        formData.append(`headerUrl${index}`, file)
+        ))
+        formData.append(`headerUrlCount`, useCarouselMedia.length)
+    } else {
+      formData.append('headerUrl', Header.file)
+    }
+    
     if (typeof Header.file === 'object' && Header.file !== null) {
       formData.append('headerUrlChange', 1)
     } else {
       formData.append('headerUrlChange', 0)
     }
 
-    // Now you can use formData for your purpose
-
-    // console.log("payload", components)
-    // console.log("useInteractive", useInteractive)
-    // console.log(BasicTemplateData)
-    // console.log(Header.file)
     function changeData(list) {
       const newPara = []
       list.map((elem) => {
@@ -421,20 +622,23 @@ const navigate = useNavigate()
     if (Body_Parameters.length > 0) {
       formData.append('bodyVariableList', JSON.stringify(changeData(Body_Parameters)))
     }
-    postReq("editTemplate", formData)
+    // setLoader(true)
+
+   useIsNewTemp ? postReq("createTemplate", formData) : postReq("editTemplate", formData)
       .then((res) => {
         console.log(res)
         if (res.data.success) {
           // toast.success(res.data.error_msg)
           toast.success("Template has updated!")
-          navigate('/merchant/whatsapp/message/')
+          // navigate('/merchant/whatsapp/message/')
         } else if (!res.data.success) {
           toast.error(res.data.error_msg)
         } else {
           toast.error("Something went wrong!")
         }
         setLoader(false)
-      }).catch((err) => { console.log(err); setLoader(false); toast.error("Something went wrong!") })
+       
+      }).catch((err) => { console.log(err); toast.error("Something went wrong!") })
       .finally(() => {
         setLoader(false)
       })
@@ -449,42 +653,51 @@ const navigate = useNavigate()
   return (
     <Container style={{ marginBottom: "200px" }}>
       {
-        !CurrentTemplate && <FrontBaseLoader />
+        // !CurrentTemplate && <FrontBaseLoader />
       }
       {
         useLoader && <FrontBaseLoader />
       }
       <Link to='/merchant/whatsapp/message' className='btn btn-primary btn-sm mb-1' >Back</Link>
 
-      <Card>
+      {/* <Card>
         <CardBody>
           <h4 className="text-danger">Edit Template Name : {BasicTemplateData.templateName ?? ''} </h4>
         </CardBody>
-      </Card>
+      </Card> */}
 
       <Card className=''>
         <CardBody className=''>
 
           <Row>
             <Col md="6">
-              <div>
+            <div>
                 <h4 className="">Template Category</h4>
-                <input
-                  type="text"
-                  disabled
-                  className="form-control "
-                  value={CurrentTemplate?.category ?? 'none'}
+                <p className="fs-5  text-secondary">Your template should fall under one of these categories.</p>
+                <Select
+                  className=''
+                  isDisabled={!useIsNewTemp}
+                  options={templateCatgList}
+                  value={{label:BasicTemplateData?.templateCategory, value:BasicTemplateData?.templateCategory}}
+                  closeMenuOnSelect={true}
+                  onChange={(e) => setBasicTemplateData({ ...BasicTemplateData, templateCategory: e.value })}
                 />
               </div>
             </Col>
             <Col md="6">
               <div>
                 <h4 className="">Template Language</h4>
-                <input
-                  type="text"
-                  disabled
-                  className="form-control "
-                  value={CurrentTemplate?.language ?? 'none'}
+                <p className="fs-5  text-secondary">Specify the language in which message template is submitted.</p>
+                     <Select
+                  className=''
+                  isDisabled={!useIsNewTemp}
+
+                  options={languageList}
+                  closeMenuOnSelect={true}
+                  value={{value:CurrentTemplate?.language, label:CurrentTemplate?.language}}
+                  onChange={(e) => {
+                    setBasicTemplateData({ ...BasicTemplateData, language: e.value })
+                  }}
                 />
               </div>
             </Col>
@@ -493,12 +706,17 @@ const navigate = useNavigate()
             <Col md="6">
               <div className='mt-3'>
                 <h4 className="">Template Name</h4>
-                <input
-                  type="text"
-                  disabled
-                  className="form-control "
-                  value={CurrentTemplate?.name ?? 'none'}
+                <p className="fs-5  text-secondary">Name can only be in lowercase alphanumeric characters and underscores. Special characters and white-space are not allowed
+                  e.g. - app_verification_code</p>
+                  <input
+                    type="text"
+                    disabled={!useIsNewTemp}
+                    className="form-control"
+                    placeholder="Template name"
+                    value={BasicTemplateData?.templateName.toLowerCase()}
+                    onChange={(e) => setBasicTemplateData({...BasicTemplateData, templateName: e.target.value.toLowerCase()})}
                 />
+
               </div>
 
               <div className='mt-3'>
@@ -530,7 +748,7 @@ const navigate = useNavigate()
                         className="form-control "
                         placeholder='Enter Header text here'
                         maxLength={60}
-                        onChange={Header_text_change}
+                        onChange={(e) => setHeader({ ...Header, text: e.target.value })}
                       />
                       <button className={`btn btn-primary mt-1 ${Header_Parameters.length >= 1 ? 'd-none' : 'd-block'}`} onClick={addHeaderParam}>add parameter</button>
                       <div>
@@ -552,8 +770,8 @@ const navigate = useNavigate()
                   {(Header.type === 'Image' || Header.type === 'Video' || Header.type === 'Document') &&
 
                     <div className='mt-3'>
-                      <h4 className="">{Header.type} Media File</h4>
-                      <p className="fs-5  text-secondary">Choose your media file</p>
+                      <h4 className="">{Header.type} File</h4>
+                      <p className="fs-5  text-secondary">Choose your file</p>
                       <div className='d-flex align-items-center gap-1 mt-1'>
                         <input type="file" className='d-none' name="mediaUrl" id="mediaUrl"
                           onChange={(e) => {
@@ -635,23 +853,105 @@ const navigate = useNavigate()
                   </div>
                 </div>
                 {/* msg body  end---------------------------------------------- */}
-
-
               </div>
 
-              <div className='mt-3'>
-                <h4 className="">Template Footer <span className='text-secondary'>(Optional)</span></h4>
-                <p className="fs-5  text-secondary">Your message content. Upto 60 characters are allowed.</p>
-                <input
-                  type="text"
-                  className="form-control "
-                  placeholder='Enter Footer text here'
-                  maxLength={60}
-                  value={BasicTemplateData.footer ?? ''}
-                  onChange={(e) => setBasicTemplateData({ ...BasicTemplateData, footer: e.target.value })}
+             {/* carsoudal type */}
+
+          { Header.type === 'Carousel' && <div>
+             <div className='mt-3'>
+                <h4 className="mt-1">Carousel Type</h4>
+                <p className="fs-5  text-secondary">Your template type should fall under one of these categories.</p>
+                <Select
+                  className=''
+                  options={CarouselTypeList}
+                  closeMenuOnSelect={true}
+                  defaultValue={{ label: useCarouselBasic.mediaType, value: useCarouselBasic.mediaType }}
+                  onChange={(e) => {
+                    if (e && e.value !== useCarouselBasic.mediaType) {
+                      setCauseCarouselBasic({ ...useCarouselBasic, mediaType: e.value })
+                    }
+                  }}
                 />
               </div>
 
+              <div className='d-flex justify-content-between mt-3'>
+                <h4 className="">Cards ({useCarouselData?.cards?.length})</h4>
+                <button className='btn border' onClick={addCarousel}>
+                  + Add Card
+                </button>
+                <button className='btn-danger border-danger' onClick={showCarouselDetails}>
+                  show detilas
+                </button>
+
+              </div>
+              <div className='mt-2'>
+                <h4 className="">{useCarouselBasic.mediaType}  File</h4>
+                <div className='d-flex align-items-center gap-1'>
+                  <input type="file" className='d-none' name="carouselMediaUrl" id="carouselMediaUrl"
+                    onChange={(e) => {
+                      const selectedFile = e.target.files[0]
+                      if (selectedFile) {
+                        let acceptedTypes
+                        switch (useCarouselBasic.mediaType) {
+                          case 'IMAGE':
+                            acceptedTypes = ['image/png', 'image/jpeg']
+                            break
+                          case 'VIDEO':
+                            acceptedTypes = ['video/mp4']
+                            break
+                          default:
+                            acceptedTypes = []
+                        }
+                        if (acceptedTypes.includes(selectedFile.type)) {
+                          // setHeader({ ...Header, file: selectedFile })
+                          // Clone the existing array
+                          const updatedList = [...useCarouselMedia]
+                          updatedList[useCurrCarouselIndex] = selectedFile
+                          setCarouselMedia(updatedList)
+                          // console.log("list", updatedList)
+                          toast.dismiss()
+                        } else {
+                          toast.error(`Incorrect file type. Only ${acceptedTypes.join(', ')} allowed.`)
+                        }
+                      }
+                    }} />
+                  <label htmlFor="carouselMediaUrl" className='d-flex gap-1 btn btn-secondary rounded-2  justify-content-center  align-items-center  border' style={{ width: "300px", padding: "3px 0" }}><Image /> <p className="m-0">Upload from Media Library</p> </label>
+                </div>
+              </div>
+              <div className='mt-3'>
+                <h4 className="">CardBody {useCurrCarouselIndex + 1} <span className='text-secondary'>(Optional)</span></h4>
+                <input
+                  type="text"
+                  className="form-control "
+                  placeholder='card body'
+                  value={useCarouselData.cards[useCurrCarouselIndex].components.find(component => component.type === "BODY").text}
+                  onChange={(e) => {
+                    const val = e.target.value
+                    setCarouselData(prev => {
+                      const updatedData = { ...prev }
+                      updatedData.cards[useCurrCarouselIndex].components.find(component => component.type === "BODY").text = val
+                      return updatedData
+                    })
+                  }}
+
+                />
+              </div>
+              </div>}
+              {/* footer */}
+              {
+                Header.type !== 'Carousel' && <div className='mt-3'>
+                  <h4 className="">Template Footer <span className='text-secondary'>(Optional)</span></h4>
+                  <p className="fs-5  text-secondary">Your message content. Upto 60 characters are allowed.</p>
+                  <input
+                    type="text"
+                    className="form-control "
+                    placeholder='Enter Footer text here'
+                    maxLength={60}
+                    value={BasicTemplateData.footer}
+                    onChange={(e) => setBasicTemplateData({ ...BasicTemplateData, footer: e.target.value })}
+                  />
+                </div>
+              }
             </Col>
 
             {/* whatsapp ui  -------------------------------------------- */}
@@ -683,7 +983,7 @@ const navigate = useNavigate()
                     {Header.type === "Video" && <div className='border rounded-3 d-flex justify-content-center  align-items-center ' style={{ height: "170px", background: "#bbc7ff" }}>
 
                       {
-                        Header.file === '' ? <PlayCircle size={45} color='#5f66cd' /> : <video className='rounded-3  object-fit-cover w-100' controls autoPlay mute style={{ height: "170px" }}>
+                        Header.file === '' ? <PlayCircle size={45} color='#5f66cd' /> : <video className='rounded-3  object-fit-cover w-100' controls   style={{ height: "170px" }}>
                           <source
                             src={(function () {
                               try {
@@ -714,33 +1014,122 @@ const navigate = useNavigate()
                     </div>
                     {/* footer */}
                     {
-                      BasicTemplateData.footer && <h6 className='text-secondary mt-1'>{BasicTemplateData.footer}</h6>
+                     Header.type !== "Carousel" && BasicTemplateData.footer && <h6 className='text-secondary mt-1'>{BasicTemplateData.footer}</h6>
                     }
                   </CardBody>
+
+                {/* Buttons */}
+
                   {
-                    useInteractive && useInteractive.map((elem) => {
+                    Header.type !== "Carousel" && useInteractive && useInteractive.map((elem) => {
                       if (elem.type === 'PHONE_NUMBER' && elem.text !== '') {
                         return (
-                          <div className="border-top  bg-white  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
+                          <div className="border-top bg-white rounded-bottom-2 d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
                             <Phone size={17} /><h6 className='m-0 text-primary' > {elem.text}</h6>
                           </div>)
                       }
                       if (elem.type === 'URL' && elem.text !== '') {
                         return (
-                          <div className="border-top  bg-white  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
+                          <div className="border-top bg-white rounded-bottom-2 d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
                             <ExternalLink size={17} /><h6 className='m-0 text-primary' > {elem.text}</h6>
                           </div>)
                       }
                       if (elem.type === 'QUICK_REPLY' && elem.text !== '') {
                         return (
-                          <div className="border-top  bg-white  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
+                          <div className="border-top bg-white rounded-bottom-2 d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
                             <CornerDownLeft size={17} /> <h6 className='m-0 text-primary' > {elem.text}</h6>
                           </div>)
                       }
                     })
                   }
                 </Card>
-                {/* Buttons */}
+
+                {/* carousel */}
+                <style>
+                  {
+                    `
+                    .swiper{
+                      width:360px;
+                      border:"solid red 2px"
+                    }
+                    `
+                  }
+                </style>
+                {
+Header.type === "Carousel" &&
+                <Card className='rounded-3 shadow-lg  position-relative mb-0 border-0' style={{ background: "none" }} >
+                  <Swiper
+                    slidesPerView={1}
+                    spaceBetween={5}
+                    navigation={true}
+                    // autoplay={{ delay: 1000 }}
+                    speed={500}
+                    // loop={true}
+                    modules={[Pagination, Navigation, Autoplay]}
+                    initialSlide={0}
+                    width={330}
+                    onSlideChange={(swiper) => setCurrCarouselIndex(swiper.activeIndex)}
+                  >
+                    {
+                      useCarouselData && useCarouselData?.cards.map((currData, key) => {
+                        return (
+                          <SwiperSlide key={key} >
+                            <div className='float-end' style={{ position: "absolute", right: "5px" }}>
+                              <MdDeleteOutline size={16} />
+                            </div>
+                            <div className='p-2 rounded-2 ' style={{ background: "#fff" }}>
+
+                              {useCarouselBasic?.mediaType === "IMAGE" && <div className='border rounded-3 d-flex justify-content-center  align-items-center ' style={{ height: "220px", background: "#ffddb0" }}>
+                                {
+                                  useCarouselMedia[key] === '' ? <Image size={45} color='#faad20' /> : <img
+                                    className='img-fluid border-0 rounded-3 w-100 object-fit-cover'
+                                    style={{ minHeight: "170px", height: "220px" }}
+                                    // src={URL.createObjectURL(Header.file) ?? '' }
+                                    src={useCarouselMedia[key] === '' ? '' : URL.createObjectURL(useCarouselMedia[key])}
+                                    alt=""
+                                  />
+                                }
+                              </div>}
+                              <div className='mt-1'>
+                                <p className='fs-6' dangerouslySetInnerHTML={{ __html: currData?.components?.find(elm => elm.type === "BODY").text }}></p>
+                              </div>
+                            </div>
+
+                            {/* Buttons */}
+                            {
+                              Header.type === "Carousel" && useCarouselData && useCarouselData.cards[useCurrCarouselIndex]?.components?.map((elem) => {
+                                if (elem.type === "BUTTONS") {
+                                  return elem.buttons.map((ele, index) => {
+                                if (ele.type === 'PHONE_NUMBER') {
+                                  return (
+                                    <div className="border-top bg-white rounded-bottom-2  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                                      <Phone size={17} /><h6 className='m-0 text-primary' > {ele.text}</h6>
+                                    </div>)
+                                }
+                                if (ele.type === 'URL') {
+                                  return (
+                                    <div className="border-top bg-white rounded-bottom-2  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                                      <ExternalLink size={17} /><h6 className='m-0 text-primary' > {ele.text}</h6>
+                                    </div>)
+                                }
+                                if (ele.type === 'QUICK_REPLY') {
+                                  return (
+                                    <div className="border-top bg-white rounded-bottom-2  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                                      <CornerDownLeft size={17} /> <h6 className='m-0 text-primary' > {ele.text}</h6>
+                                    </div>)
+                                }
+                              })
+                              }
+                              })
+                            }
+                          </SwiperSlide>
+                        )
+                      })
+                    }
+                  </Swiper>
+                </Card>
+                }
+
               </div>
 
               <p className='mt-4' style={{ width: '400px' }}>Disclaimer: This is just a graphical representation of the message that will be delivered. Actual message will consist of media selected and may appear different.</p>
@@ -757,11 +1146,29 @@ const navigate = useNavigate()
               <div className=''>
 
                 {/* UI Interactive */}
-                <div className='mt-2 px-lg-1'>
+                {Header.type !== "Carousel" &&   <div className='mt-2 px-lg-1'>
                   {useInteractive?.length > 0 &&
                     <div className='gap-1 d-flex flex-column  '>
                       {useInteractive?.map((ele, index) => {
-
+                        if (ele.type === 'COPY_CODE') {
+                          return (
+                            <Row key={index}>
+                              <Col lg="2" className='d-flex justify-content-center  align-items-center '><p className='m-0'>Coupon Code {index + 1} :</p></Col>
+                              <Col lg="4">
+                                <input
+                                  type="text"
+                                  className="form-control "
+                                  placeholder='code eg.XDFGDD'
+                                  maxLength={25}
+                                  value={ele.value}
+                                  onChange={(e) => handleInputChange(index, 'value', e.target.value)}
+                                />
+                              </Col>
+                              <Col lg="1" className=' d-flex  justify-content-center  align-items-center fs-4'>
+                                <div className='cursor-pointer' onClick={() => handleDeleteAction(index, ele.type)}>X</div>
+                              </Col>
+                            </Row>)
+                        }
                         if (ele.type === 'QUICK_REPLY') {
                           return (
                             <Row key={index}>
@@ -899,8 +1306,167 @@ const navigate = useNavigate()
                     <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center  gap-1 ${((useButtons.PHONE_NUMBER - 1) === 0) ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("PHONE_NUMBER")}>
                       <Plus size={18} /> <p className='m-0'>Phone Number</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{1 - useButtons.PHONE_NUMBER}</p></div>
                     </div>
+                    <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center  gap-1 ${((useButtons.COPY_CODE - 1) === 0) ? 'disabled' : ''} ${BasicTemplateData?.templateCategory !== "MARKETING" ? 'disabled ' : ''}`} onClick={() => addInteractiveBtn("COPY_CODE")}>
+                      <Plus size={18} /> <p className='m-0'>Coupon Code</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{1 - useButtons.COPY_CODE}</p></div>
+                    </div>
                   </div>
                 </div>
+}
+                   {/* carousel  input UI    */}
+                   {Header.type === "Carousel" &&
+                  <div className='mt-2 px-lg-1'>
+                  
+                      <div className='gap-1 d-flex flex-column text-danger '>
+                        {useCarouselData.cards[useCurrCarouselIndex]?.components?.map((component, index) => {
+                          console.log("1263", component)
+                          if (component.type === "BUTTONS") {
+                            return component.buttons.map((ele, index) => {
+                              if (ele.type === 'QUICK_REPLY') {
+                                return (
+                                  <Row key={index}>
+                                    <Col lg="2" className='d-flex justify-content-center  align-items-center '><p className='m-0'>Quick Reply {index + 1} :</p></Col>
+
+                                    <Col lg="4">
+                                      <input
+                                        type="text"
+                                        className="form-control "
+                                        placeholder='Button Title'
+                                        maxLength={25}
+                                        value={ele.text}
+                                        onChange={(e) => carBtnInputChange(index, 'text', e.target.value)}
+                                      />
+                                    </Col>
+                                    <Col lg="1" className=' d-flex  justify-content-center  align-items-center fs-4'>
+                                      <div className='cursor-pointer' onClick={() => delCarBtn(index, ele.type)}>X</div>
+                                    </Col>
+                                  </Row>)
+                              }
+                              if (ele.type === 'URL') {
+                                console.log(ele)
+                                return (
+                                  <Row key={index}>
+                                    <Col lg="2" className='d-flex justify-content-center  align-items-center '><p className='m-0'>Call to Action {index + 1} :</p></Col>
+                                    <Col lg="2">
+                                      <input
+                                        type="text"
+                                        className="form-control "
+                                        placeholder='Button Title'
+                                        maxLength={25}
+                                        value={ele.type}
+                                        disabled
+                                      />
+                                    </Col>
+                                    <Col lg="2">
+                                      <Select defaultValue={[{ label: "custom", value: "custom" }]} options={[{ label: "custom", value: "custom" }, { label: "Razorpay", value: "Razorpay" }]}
+                                        onChange={(e) => setLinkType(e.label)}
+                                      />
+                                    </Col>
+                                    <Col lg="2">
+                                      <input
+                                        type="text"
+                                        className="form-control "
+                                        placeholder='Button Title'
+                                        maxLength={25}
+                                        value={ele.text}
+                                        onChange={(e) => carBtnInputChange(index, 'text', e.target.value)}
+                                      />
+                                    </Col>
+                                    <Col >
+                                      {
+                                        useLinkType === "custom" && <input
+                                          type="text"
+                                          className="form-control "
+                                          placeholder='url'
+                                          value={ele.url}
+                                          // value={ele.url}
+                                          onChange={(e) => carBtnInputChange(index, 'url', e.target.value)}
+                                        />}
+                                      {
+                                        useLinkType === "Razorpay" && <input
+                                          type="text"
+                                          className="form-control "
+                                          placeholder='Button Value'
+                                          value="https://rzp.io/i/{{1}}"
+                                          disabled
+                                        // onChange={(e) => carBtnInputChange(index, 'value', e.target.value)}
+                                        />
+                                      }
+
+                                    </Col>
+
+                                    <Col lg="1" className=' d-flex  justify-content-center  align-items-center fs-4'>
+                                      <div className='cursor-pointer' onClick={() => delCarBtn(index, ele.type)}>X</div>
+                                    </Col>
+                                  </Row>
+                                )
+                              }
+                              if (ele.type === 'PHONE_NUMBER') {
+                                return (
+                                  <Row key={index}>
+                                    <Col lg="2" className='d-flex justify-content-center  align-items-center '><p className='m-0'>Call to Action {index + 1} :</p></Col>
+                                    <Col lg="2">
+                                      <input
+                                        type="text"
+                                        className="form-control "
+                                        placeholder='Button Title'
+                                        maxLength={25}
+                                        value={ele.type}
+                                        disabled
+                                      />
+                                    </Col>
+
+                                    <Col lg="3">
+                                      <input
+                                        type="text"
+                                        className="form-control "
+                                        placeholder='Button Title'
+                                        maxLength={25}
+                                        value={ele.text}
+                                        onChange={(e) => carBtnInputChange(index, 'text', e.target.value)}
+                                      />
+                                    </Col>
+
+                                    <Col lg="1">
+                                      <Select options={selectPhoneList}
+                                        onChange={(e) => carBtnInputChange(index, 'code', e.value)}
+                                        closeMenuOnSelect={true} />
+                                    </Col>
+                                    <Col >
+                                      <input
+                                        type="text"
+                                        className="form-control "
+                                        placeholder='Button Value'
+                                        value={ele.value}
+                                        onChange={(e) => carBtnInputChange(index, 'value', e.target.value)}
+                                      />
+                                    </Col>
+
+                                    <Col lg="1" className=' d-flex  justify-content-center  align-items-center fs-4'>
+                                      <div className='cursor-pointer' onClick={() => delCarBtn(index, ele.type)}>X</div>
+                                    </Col>
+                                  </Row>
+                                )
+                              }
+                            })
+                          }
+                        })}
+
+                      </div>
+                    {/* carousel  input button UI    */}
+
+                    <div className='d-flex gap-2 mt-1'>
+                      <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center   gap-1 `} onClick={() => addCarBtn("QUICK_REPLY")} >
+                        <Plus size={18} /> <p className='m-0'>Quick Reply</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">9999</p></div>
+                      </div>
+                      <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center  gap-1 `} onClick={() => addCarBtn("URL")}>
+                        <Plus size={18} /> <p className='m-0'>URL</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">99999</p></div>
+                      </div>
+                      <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center  gap-1 `} onClick={() => addCarBtn("PHONE_NUMBER")}>
+                        <Plus size={18} /> <p className='m-0'>Phone Number</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">999999</p></div>
+                      </div>
+                    </div>
+                  </div>
+                }
               </div>
             </div>
 

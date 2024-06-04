@@ -152,7 +152,7 @@ const {id} = useParams()
                                 if (data.format === "VIDEO") {
                                     return (
                                         <div className='p-1'  >
-                                            <video className='rounded-3  object-fit-cover w-100' controls autoPlay mute style={{ height: "170px" }}>
+                                            <video className='rounded-3  object-fit-cover w-100' controls   style={{ height: "170px" }}>
                                                 <source
                                                     src={data.example.header_handle[0] ?? ""}
                                                     type="video/mp4"
@@ -277,7 +277,7 @@ const {id} = useParams()
                                                    </div>
 
 
-                                                   <button className='btn btn-primary' onClick={() => nagivate(`/merchant/whatsapp/editTemplate/${SingleTemplate.id}`)} >Edit</button>
+                                                   <button className='btn btn-primary' onClick={() => nagivate(`/merchant/whatsapp/template/${SingleTemplate.id}`)} >Edit</button>
                                                    <button className='btn btn-primary' onClick={() => getCurrentTemplate(SingleTemplate.id, 'modal')}>Test</button> */}
                                                                 <button className='btn btn-primary' onClick={ () => sendTemplateBulk(SingleTemplate.id)} >Send This Message</button>
                                                             </div>

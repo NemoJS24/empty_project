@@ -160,7 +160,7 @@ export default function StartCampaign() {
               })
             }
           </Row>
-          {/* <Link to="/merchant/whatsapp/is_template/" className="btn btn-primary " >Create Template</Link> */}
+          {/* <Link to="/merchant/whatsapp/template/new/" className="btn btn-primary " >Create Template</Link> */}
         </CardBody>
       </Card>
       <div class="d-flex justify-content-between">
@@ -195,7 +195,7 @@ export default function StartCampaign() {
               advanceFilter={false}
             />
           </div>
-          {/* <Link to="/merchant/whatsapp/is_template/" className="btn btn-primary " >Create Template</Link> */}
+          {/* <Link to="/merchant/whatsapp/template/new/" className="btn btn-primary " >Create Template</Link> */}
         </CardBody>
       </Card>
       <div class="d-flex justify-content-between">

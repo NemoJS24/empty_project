@@ -9,7 +9,7 @@ import { postReq } from '../../../../../assets/auth/jwtService'
 export default function AllTempTable() {
     const [isLoading, setIsLoading] = useState(true)
     const [tableData, settableData] = useState(null)
-    const [total, settotal] = useState(0)
+    const [total, setTotal] = useState(0)
     function convertTimestampToDateString(timestamp) {
         // Multiply the timestamp by 1000 to convert it to milliseconds
         const milliseconds = timestamp * 1000
@@ -60,6 +60,7 @@ export default function AllTempTable() {
                         <span className='text-success'>{row.status === 'APPROVED' && "APPROVED"}</span>
                         <span className='text-warning'>{row.status === 'PENDING' && "PENDING"}</span>
                         <span className='text-danger'>{row.status === 'REJECTED' && "REJECTED"}</span>
+                        <span className='text-warning'>{row.status === 'DISABLED' && "DISABLED"}</span>
                     </div>
                 )
             },
@@ -93,12 +94,12 @@ export default function AllTempTable() {
         formData.append("searchValue", searchValue)
 
         postReq("getTemplates", formData)
-            .then(data => {
+            .then(res => {
                 // Handle the successful response here
-                console.log('Response:', data)
-                settableData(data.data.data)
+                console.log('Response:', res)
+                settableData(res.data.data)
                 setIsLoading(false)
-                settotal(data.total)
+                setTotal(res.data.total)
             })
             .catch(error => {
                 // Handle errors here

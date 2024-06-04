@@ -1,4 +1,4 @@
-import { Circle, Home } from "react-feather"
+import { Circle, Home, Settings } from "react-feather"
 // import { ownUrl } from "../../views/Validator"
 import { AiFillPhone, AiOutlineBars, AiOutlineClockCircle, AiOutlineHighlight, AiOutlineLineChart, AiOutlinePercentage, AiOutlineQuestion, AiOutlineSmile, AiOutlineStar, AiOutlineUser } from "react-icons/ai"
 import { BiDollar } from "react-icons/bi"
@@ -81,13 +81,13 @@ export const SuperLeadzNavigation = [
     title: 'Integration',
     icon: <Circle size={16} />,
     navLink: '/merchant/integration/'
+  },
+  {
+    id: 'settings',
+    title: 'Settings',
+    icon: <Settings size={16} />,
+    navLink: '/merchant/SuperLeadz/settings/'
   }
-  // {
-  //   id: 'faq',
-  //   title: 'FAQs',
-  //   icon: <AiOutlineQuestion size={16} />,
-  //   navLink: '/merchant/SuperLeadz/faq/'
-  // }
   // {
   //   id: 'integrations',
   //   title: 'Integrations',
