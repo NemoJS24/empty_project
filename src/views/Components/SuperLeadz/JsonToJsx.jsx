@@ -5,7 +5,7 @@ import ReturnOfferHtml from '../../NewCustomizationFlow/ReturnOfferHtml'
 const JsonToJsx = ({ renderObj, isMobile, scale, index = 0 }) => {
     const findObj = renderObj[`${isMobile ? "mobile_" : ""}pages`]
     const crossStyle = renderObj?.crossButtons[`${isMobile ? "mobile_" : ""}main`]
-    console.log(crossStyle, "findObj")
+    // console.log(crossStyle, "findObj")
     return (
         <div className='setDefault'>
             <style>{`
