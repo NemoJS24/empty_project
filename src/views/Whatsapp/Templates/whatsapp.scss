@@ -25,6 +25,10 @@
   src: url("../imgs/helvetica-neue-5/HelveticaNeueRoman.otf");
 }
 
+$breakpoint-sm: 768px;
+$breakpoint-md: 992px;
+$breakpoint-lg: 1200px;
+
 
 .whatsapp_template_card {
   background-color: rgb(255, 255, 255);
@@ -350,4 +354,23 @@ cursor: pointer !important;
     border: 3px solid #ffffff;
   
   } 
+
+// live cbhat coinatienr
+
+.chatsContacts {
+  width: 350px;
+
+  @media screen and (min-width: $breakpoint-sm) {
+    min-width: 350px;
+
+  }
+
+  @media screen and (min-width: $breakpoint-md) {
+    min-width: 350px;
+  }
+
+  @media screen and (min-width: $breakpoint-lg) {
+    min-width: 400px;
+  }
+}
 

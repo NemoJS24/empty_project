@@ -101,7 +101,7 @@ export const timelineName = {
         // is_business: "/merchant/whatsapp/is_business/",
         is_project: "/merchant/whatsapp/is_business/",
         is_fb_verified: "/merchant/whatsapp/EmbeddedSignup/",
-        is_template: "/merchant/whatsapp/is_template/"
+        is_template: "/merchant/whatsapp/template/new/"
     }
 }
 

@@ -45,7 +45,7 @@ export default function ContactsTable() {
         // Handle the successful response here
         console.log('Response:', response.data.contact_details_obj)
         setTableData(response.data.contact_details_obj)
-        setTotalData(response.data.contact_count[0]?.count)
+        setTotalData(response.data.contact_count)
       })
       .catch(error => {
         // Handle errors here

@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Modal from 'react-bootstrap/Modal'
-import { File, FileText, Headphones, Image, Plus, Users, Video } from 'react-feather'
+import { Edit, File, FileText, Headphones, Image, LogIn, Plus, Users, Video } from 'react-feather'
 import { BsBroadcast, BsPinAngle } from 'react-icons/bs'
 import { FaEllipsisV, FaInstagram, FaSearch } from "react-icons/fa"
 import { HiOutlineDotsVertical, HiOutlineTemplate } from "react-icons/hi"
@@ -13,27 +13,31 @@ import { IoWarningOutline, IoExitOutline } from "react-icons/io5"
 import { LiaCheckDoubleSolid, LiaTagSolid } from "react-icons/lia"
 import { LuEye, LuSettings } from "react-icons/lu"
 import { TiPlus } from "react-icons/ti"
-import { MdOutlineLibraryAdd, MdOutlineQuickreply } from "react-icons/md"
+import { MdOutlineLibraryAdd, MdOutlineQuickreply, MdOutlineStickyNote2 } from "react-icons/md"
 import { RiCustomerService2Line, RiRobot2Line } from "react-icons/ri"
 import { RxCross2, RxExit } from "react-icons/rx"
 import { TbExternalLink } from "react-icons/tb"
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Select from 'react-select'
+import CreatableSelect from 'react-select/creatable'
 import {
   Button,
   Card,
+  CardBody,
+  Collapse,
   Container,
   Input, InputGroup, InputGroupText, Tooltip
 } from 'reactstrap'
-import { SocketBaseURL, postReq } from '../../../assets/auth/jwtService'
+
+import { SocketBaseURL, deleteReq, getReq, postReq } from '../../../assets/auth/jwtService'
 import Spinner from '../../Components/DataTable/Spinner'
 import FrontBaseLoader from '../../Components/Loader/Loader'
-import { RenderLiveTemplateUI, RenderTemplateUI, chatsTagList, getBoldStr, getRemainingTime, timeDateLiveFormatter, timeLiveFormatter } from '../SmallFunction'
+import { ActiveTabList, RenderLiveTemplateUI, RenderTemplateUI, chatsTagList, getBoldStr, getRemainingTime, timeDateLiveFormatter, timeLiveFormatter } from '../SmallFunction'
 import WA_BG_2 from '../imgs/WA_BG_2.png'
 import xircls_LOGO from '../imgs/xircls_LOGO.jpg'
 import StaticPage1 from './StaticPage'
 const LiveChat = () => {
-
+  const {defaultPage} = useParams()
   const [useLiveContactLoader, setLiveContactLoader] = useState(true)
   const [useLiveChatLoader, setLiveChatLoader] = useState(true)
   const [useTemplateLoader, setTemplateLoader] = useState(true)
@@ -44,6 +48,10 @@ const LiveChat = () => {
   const [useQuickReplySearch, setQuickReplySearch] = useState("")
   const [useQuickReplyList, setQuickReplyList] = useState([])
   const [useRemainingTime, setRemainingTime] = useState('')
+  const [useNewContact, setNewContact] = useState({
+    contact:"",
+    phone_code:""
+  })
 
   // console.log("useProfileDetails", useProfileDetails)
 
@@ -63,51 +71,139 @@ const LiveChat = () => {
   const [selectedDescription, setSelectedDescription] = useState('')
   const [useTemplatesList, setTemplatesList] = useState([])
   const [useActiveTemplatesList, setActiveTemplatesList] = useState([])
-
+  const [useTagsList, setTagsList] = useState([])
+  const [useTagsCustomer, setTagsCustomer] = useState([])
+  const [useTagsSelect, setTagsSelect] = useState([])
+  const [useNotesList, setNotesList] = useState("")
+const [useDefaultPage, setDefaultPage] = useState("SUPPORT")
 
   // modals
   const [useReplyModal, setReplyModal] = useState(false)
   const [useTemplateModal, setTemplateModal] = useState(false)
   const [useNewContactModal, setNewContactModal] = useState(false)
-  const [tooltipOpen, setTooltipOpen] = useState({
-    TooltipButton1: false,
-    TooltipButton2: false,
-    TooltipButton3: false,
-    TooltipButton4: false,
-    TooltipButton10: false
-  })
 
-  const toggleTooltip = (buttonId) => {
-    setTooltipOpen(prevState => ({
-      ...prevState,
-      [buttonId]: !prevState[buttonId]
-    }))
-  }
   const [ws, setWs] = useState('')
   const [useContactWs, setContactWs] = useState('')
-  const ActiveTabList = [
-    {
-      title: "All",
-      id: "",
-      isActive: false
-    },
-    {
-      title: "Ongoing",
-      id: "live",
-      isActive: false
-    },
-    {
-      title: "Unread",
-      id: "unread",
-      isActive: false
-    },
-    {
-      title: "Closed",
-      id: "history",
-      isActive: false
-    }
-  ]
+  const [useTagsOpen, setTagsOpen] = useState(false)
+  const [useNotesOpen, setNotesOpen] = useState(false)
 
+  const getTagsList = () => {
+    getReq("tags")
+      .then((res) => {
+        console.log(res.data, "tags res")
+        const data = res.data.map((elm) => {
+          return {
+            label: elm.tag,
+            value: elm.id // Note: typically use `value` instead of `key` for react-select
+          }
+        })
+        setTagsList(data)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  const getTagsCustomerFun = (ContactData) => {
+    getReq("customer_tags_notes", `?phone_code=${ContactData?.messages_reciever?.slice(0, 2)}&contact=${ContactData?.messages_reciever?.slice(-10)}`)
+      .then((res) => {
+        console.log(res, "tags res")
+        setTagsCustomer(res?.data?.tags)
+        setNotesList(res?.data?.notes)
+
+      })
+      .catch((err) => {
+        setTagsCustomer([])
+        console.log(err)
+      })
+  }
+
+  useEffect(() => {
+    getTagsList()
+  }, [])
+
+  // tagfs
+  const delAssignTagsFun = (id, useProfileDetails) => {
+    deleteReq("customer_tags_notes", `?tag_id=${id}&phone_code=${useProfileDetails?.messages_reciever?.slice(0, 2)}&contact=${useProfileDetails?.messages_reciever?.slice(-10)}`)
+      .then((resp) => {
+        getTagsCustomerFun(useProfileDetails)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  const assignTagsFun = () => {
+    const formData = new FormData()
+    formData.append("tag_ids", useTagsSelect)
+    formData.append("phone_code", useProfileDetails?.messages_reciever?.slice(0, 2))
+    formData.append("contact", useProfileDetails?.messages_reciever?.slice(-10))
+    postReq("customer_tags_notes", formData)
+      .then(res => {
+        console.log("res", res.data.tags)
+        getTagsCustomerFun(useProfileDetails)
+        setTagsOpen(false)
+      })
+      .catch(error => {
+        console.error('Error:', error)
+      })
+  }
+
+  const handleCustomTag = (inputValue, useProfileDetails) => {
+    const formData = new FormData()
+    formData.append("tag", inputValue)
+    formData.append("phone_code", useProfileDetails?.messages_reciever?.slice(0, 2))
+    formData.append("contact", useProfileDetails?.messages_reciever?.slice(-10))
+    postReq("customer_tags_notes", formData)
+    .then(res => {
+      console.log("res", res.data.tags)
+      getTagsCustomerFun(useProfileDetails)
+      setTagsOpen(false)
+    })
+    .catch(error => {
+      console.error('Error:', error)
+    })
+  }
+
+  // niotes
+
+  const saveNotesFun = () => {
+    const formData = new FormData()
+    formData.append("notes", useNotesList)
+    formData.append("phone_code", useProfileDetails?.messages_reciever?.slice(0, 2))
+    formData.append("contact", useProfileDetails?.messages_reciever?.slice(-10))
+    postReq("customer_tags_notes", formData)
+      .then(res => {
+        console.log("res", res.data.tags)
+        getTagsCustomerFun(useProfileDetails)
+        setNotesOpen(false)
+      })
+      .catch(error => {
+        console.error('Error:', error)
+      })
+  }
+  const delNoteFun = (useProfileDetails) => {
+    deleteReq("customer_tags_notes", `?phone_code=${useProfileDetails?.messages_reciever?.slice(0, 2)}&contact=${useProfileDetails?.messages_reciever?.slice(-10)}`)
+      .then((resp) => {
+        getTagsCustomerFun(useProfileDetails)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  // chat status
+  const contactStatusFun = (e) => {
+    const formData = new FormData()
+    formData.append("messages_unique_id", useProfileDetails?.messages_unique_id)
+    formData.append("chat_status", e.value.toLowerCase())
+    console.log(e)
+    postReq("chat_status", formData)
+      .then(res => {
+        console.log("res", res.data.tags)
+      })
+      .catch(error => {
+        console.error('Error:', error)
+      })
+  }
   // mark msg read
   const markAsRead = (id, msgId, recieverNum) => {
 
@@ -195,7 +291,6 @@ const LiveChat = () => {
   }
 
   const webSocketConnectionContacts = (projectNo) => {
-
     try {
       // Close existing WebSocket connection if there's any
       if (useContactWs && useContactWs.readyState === WebSocket.OPEN) {
@@ -227,7 +322,6 @@ const LiveChat = () => {
       console.error('Error establishing WebSocket connection: CONTACT', error)
     }
   }
-
 
   const getAllMessages = () => {
     const form_data = new FormData()
@@ -317,7 +411,22 @@ const LiveChat = () => {
     getAllMessages()
     // eslint-disable-next-line no-use-before-define
     scrollToBottom()
-    // setRemainingTime(useProfileDetails?.messages_servicing_window)
+    const oldusers = [...users]
+
+    const updatedUsers = oldusers.map((elm) => {
+      if (elm?.messages_reciever === useProfileDetails?.messages_reciever) {
+        return {
+          ...elm,
+          messages_count: 0
+        }
+      } else {
+        return {
+          ...elm
+        }
+      }
+    })
+    setUsers(updatedUsers)
+
     setRemainingTime(getRemainingTime(useProfileDetails?.messages_servicing_window ?? 0))
     const interval = setInterval(() => {
       setRemainingTime(getRemainingTime(useProfileDetails?.messages_servicing_window ?? 0))
@@ -325,6 +434,7 @@ const LiveChat = () => {
 
     return () => clearInterval(interval)
   }, [useProfileDetails])
+
 
   const handleChange = (e) => {
     const form_data = new FormData()
@@ -347,18 +457,7 @@ const LiveChat = () => {
       }
     }
   }
-  const containerRef = useRef(null)
 
-  const scrollLeft = (type) => {
-    if (containerRef.current) {
-      const scrollAmount = containerRef.current.offsetWidth
-      if (type === "left") {
-        containerRef.current.scrollLeft -= scrollAmount
-      } else {
-        containerRef.current.scrollLeft += scrollAmount
-      }
-    }
-  }
 
   const scrollToBottom = () => {
     console.log("scroll hit")
@@ -371,15 +470,14 @@ const LiveChat = () => {
     }
   }
   const uptContactWebsocket = (newData) => {
-    // console.log("191 old", users)
-    // console.log("191 user", newData)
-    // console.log("344", JSON.parse(newData).data)
+
     const uptData = {
       ...JSON.parse(JSON.parse(newData).data),
       messages_reciever: JSON.parse(JSON.parse(newData).data).messages_receiver
     }
+    // console.log("ProfileDetails", ProfileDetails)
     console.log("uptData", uptData)
-
+    // console.log("useProfileDetails", useProfileDetails)
     setUsers(prevList => [
       uptData,
       ...prevList.filter(elm => elm?.messages_reciever !== uptData?.messages_reciever)
@@ -414,29 +512,7 @@ const LiveChat = () => {
     return () => clearTimeout(delayDebounceFn)
   }, [useQuickReplySearch])
 
-  // templates
-  const getTemplatesList = (currentPage = 0, currentEntry = 10, searchValue = "") => {
-    const formData = new FormData()
-
-    formData.append("slug", "customer_data")
-    formData.append("page", currentPage + 1)
-    formData.append("size", currentEntry)
-    formData.append("searchValue", searchValue)
-    setTemplateLoader(true)
-    postReq("getTemplates", formData)
-      .then(data => {
-        setTemplatesList(data.data.data)
-        setActiveTemplatesList(data.data.active_id)
-      })
-      .catch(error => {
-        console.error('Error:', error)
-        // toast.error("Please complete the onboarding process to create a template")
-      })
-      .finally(() => {
-        setTemplateLoader(false)
-      })
-  }
-
+// tooltip
   const TooltipButton = ({ id, tooltipText, children, position = 'right' }) => {
     const [tooltipOpen, setTooltipOpen] = useState(false)
 
@@ -444,6 +520,8 @@ const LiveChat = () => {
       setTooltipOpen(!tooltipOpen)
     }
 
+
+    // send template
     return (
       <div className='rounded-circle' id={id ?? tooltipText} >
         {children}
@@ -458,6 +536,48 @@ const LiveChat = () => {
       </div>
     )
   }
+
+    // templates
+    const getTemplatesList = (currentPage = 0, currentEntry = 10, searchValue = "") => {
+      const formData = new FormData()
+  
+      formData.append("page", currentPage + 1)
+      formData.append("size", currentEntry)
+      formData.append("searchValue", searchValue)
+      setTemplateLoader(true)
+      postReq("getTemplates", formData)
+        .then(data => {
+          setTemplatesList(data.data.data)
+          setActiveTemplatesList(data.data.active_id)
+        })
+        .catch(error => {
+          console.error('Error:', error)
+          // toast.error("Please complete the onboarding process to create a template")
+        })
+        .finally(() => {
+          setTemplateLoader(false)
+        })
+    }
+
+    const sendTemplate = (ContactData, templateID) => {
+      const formData = new FormData()
+      formData.append("contact", ContactData?.messages_reciever?.slice(-10))
+      formData.append("phone_code", ContactData?.messages_reciever?.slice(0, 2))
+      formData.append("template", templateID)
+  
+      setTemplateLoader(true)
+      postReq("contact_to_send_template", formData)
+        .then(data => {
+          console.log(data)
+        })
+        .catch(error => {
+          console.error('Error:', error)
+        })
+        .finally(() => {
+          setTemplateLoader(false)
+        })
+    }
+
   // console.log("350 ======", users)
   return (
     <>
@@ -570,28 +690,29 @@ const LiveChat = () => {
             <div className=' whats-bg-grey border-end d-flex flex-column justify-content-between py-2 pt-1' style={{ minWidth: "60px" }}>
               <div className='d-flex flex-column justify-content-center align-items-center ' style={{ gap: "5px" }}>
 
-                <TooltipButton  tooltipText="Exit">
-                  <Link to="/merchant/whatsapp/" className="icon_color" style={{ transform: "scale(-1)" }} >
+                <TooltipButton tooltipText="Exit">
+                  <Link to="/merchant/whatsapp/" className="icon_color" style={{ transform: "scale(-1)" }}  >
                     <IoExitOutline />
                   </Link>
                 </TooltipButton>
 
-                <TooltipButton  tooltipText="Support">
-                  <div className="icon_color">
+                <TooltipButton tooltipText="Support" >
+                  <div className="icon_color" onClick={() => { filterAllContacts("live"); setDefaultPage("SUPPORT") }}>
                     <RiCustomerService2Line />
                   </div>
                 </TooltipButton>
-                <TooltipButton  tooltipText="Lapsed">
-                  <div className="icon_color" >
+                
+                <TooltipButton tooltipText="Lapsed" >
+                  <div className="icon_color" onClick={() => { filterAllContacts("lapsed"); setDefaultPage("LAPSED") }} >
                     <IoWarningOutline />
                   </div>
                 </TooltipButton>
-                <TooltipButton  tooltipText="Broadcast">
+                <TooltipButton tooltipText="Broadcast">
                   <div className="icon_color">
                     <BsBroadcast />
                   </div>
                 </TooltipButton>
-                <TooltipButton  tooltipText="Bot">
+                <TooltipButton tooltipText="Bot">
                   <div className="icon_color">
                     <RiRobot2Line />
                   </div>
@@ -601,21 +722,21 @@ const LiveChat = () => {
                 {/* <div className="icon_color">
                   <RxExit />
                 </div> */}
-                <TooltipButton  tooltipText="Settings">
-                <div className="icon_color">
-                  <LuSettings />
-                </div>
+                <TooltipButton tooltipText="Settings">
+                  <div className="icon_color">
+                    <LuSettings />
+                  </div>
                 </TooltipButton>
-                <TooltipButton  tooltipText="Profile">
-                <div className='  '>
-                  <img src={xircls_LOGO} className='' width={35} alt="" style={{ mixBlendMode: "darken" }} />
-                </div>
+                <TooltipButton tooltipText="Profile">
+                  <div className='  '>
+                    <img src={xircls_LOGO} className='' width={35} alt="" style={{ mixBlendMode: "darken" }} />
+                  </div>
                 </TooltipButton>
               </div>
             </div>
 
             {/* Sidebar contacts*/}
-            <div sm='4' className='m-0 w-25 bg-white border-end' style={{ maxWidth: "510px", minWidth: "410px" }} >
+            <div sm='4' className=' m-0 chatsContacts bg-white border-end '  >
               <div>
 
                 <div className='d-flex align-items-center justify-content-between  whats-bg-grey px-1' style={{ height: '60px' }}>
@@ -627,17 +748,17 @@ const LiveChat = () => {
                   </h3>
 
                   <div className='d-flex justify-content-center  align-items-center  gap-' style={{ gap: "5px" }}>
-                  <TooltipButton position='top' id="newContact" tooltipText="New Contact">
-                    <div className="icon_color">
-                      <MdOutlineLibraryAdd onClick={() => { setNewContactModal(true) }} />
-                    </div>
-                  </TooltipButton>
+                    <TooltipButton position='top' id="newContact" tooltipText="New Contact">
+                      <div className="icon_color">
+                        <MdOutlineLibraryAdd onClick={() => { setNewContactModal(true) }} />
+                      </div>
+                    </TooltipButton>
 
-                  <TooltipButton position='top' tooltipText="Filter">
-                    <div className="icon_color">
-                      <HiOutlineDotsVertical />
-                    </div>
-                  </TooltipButton>
+                    <TooltipButton position='top' tooltipText="Filter">
+                      <div className="icon_color">
+                        <HiOutlineDotsVertical />
+                      </div>
+                    </TooltipButton>
 
                   </div>
                 </div>
@@ -648,12 +769,11 @@ const LiveChat = () => {
                   </div>
 
                 </div>
-                <div className='d-flex gap-1 px-1' style={{ marginTop: "7px" }}>
+                <div className='d-flex gap-1 px-1 flex-wrap ' style={{ marginTop: "7px" }}>
                   {
-                    ActiveTabList.map((elm, index) => (
+                   useDefaultPage === "SUPPORT" && ActiveTabList.map((elm, index) => (
                       <div className={`rounded-5 d-flex justify-content-center align-items-center cursor-pointer position-relative ${elm?.id === useSortBy ? 'prime-green' : "prime-grey-bg whats-text-green-100"} `}
-                        onClick={() => { filterAllContacts(elm.id); setSortBy(elm.id) }}
-                      >
+                        onClick={() => { filterAllContacts(elm.id); setSortBy(elm.id); setContactPage(1) }}>
                         {
                           index === 1 &&
                           <div className='position-absolute top-0 end-0 d-flex justify-content-center  align-items-center rounded-circle high-green-bg' style={{ width: "20px", height: "20px", marginTop: "-7px", marginRight: "-5px" }}>
@@ -693,6 +813,7 @@ const LiveChat = () => {
                           // setCurrentTab(ContactData)
                           webSocketConnection(index)
                           setProfileDetails(ContactData)
+                          getTagsCustomerFun(ContactData)
                           // console.log("ContactData", ContactData)
 
                         }}
@@ -713,8 +834,8 @@ const LiveChat = () => {
                             </div>
 
                             <div className='position-relative ' style={{ color: "#404e58" }}>
-                              <p className={`m-0 p-0 font-small-3 ${ContactData?.messages_count > 0 && "fw-bolder" }`}>{lastMsgData?.text?.body?.slice(0, 25)} {lastMsgData?.text?.body?.length > 25 && <span>...</span>}</p>
-                              <p className={`m-0 p-0 ${ContactData?.messages_count > 0 && "fw-bolder" }`}>{lastMsgData?.name?.slice(0, 25)} {lastMsgData?.name?.length > 25 && <span>...</span>}</p>
+                              <p className={`m-0 p-0 font-small-3 ${ContactData?.messages_count > 0 && "fw-bolder"}`}>{lastMsgData?.text?.body?.slice(0, 25)} {lastMsgData?.text?.body?.length > 25 && <span>...</span>}</p>
+                              <p className={`m-0 p-0 ${ContactData?.messages_count > 0 && "fw-bolder"}`}>{lastMsgData?.name?.slice(0, 25)} {lastMsgData?.name?.length > 25 && <span>...</span>}</p>
 
                               <p className='m-0 p-0'>{lastMsgData?.type === "image" && <Image size={15} />} </p>
                               <p className='m-0 p-0'>{lastMsgData?.type === "video" && <Video size={15} />} </p>
@@ -723,7 +844,7 @@ const LiveChat = () => {
 
                               {/* counter */}
                               {
-                                (ContactData.messages_reciever !== useProfileDetails.messages_reciever && ContactData?.messages_count > 0) &&
+                                (ContactData?.messages_count > 0) &&
                                 <div className=' rounded-5 d-flex justify-content-center align-items-center position-absolute end-0 top-0 high-green-bg' style={{ width: "20px", height: "20px" }}>
                                   <p className='  font-small-3 ' style={{ margin: "1px 0 0 0" }}>{ContactData?.messages_count}</p>
                                 </div>
@@ -750,7 +871,7 @@ const LiveChat = () => {
               <div className=' px-0 d-flex flex-column justify-content-between ' style={{ backgroundImage: `url(${WA_BG_2})`, height: '100%', width: "100%", backgroundSize: "370px" }}>
                 {/* Header */}
                 <div className=" d-flex justify-content-between align-items-center prime-grey-bg" style={{ minHeight: "60px" }}>
-                  <div className="d-flex align-items-center ps-1 cursor-pointer w-100 " onClick={() => setDynamicColumnValue(3)}>
+                  <div className="d-flex align-items-center ps-1 cursor-pointer w-100 " onClick={() => { setDynamicColumnValue(3) }}>
                     <div className="rounded-circle overflow-hidden d-flex align-items-center justify-content-center select-grey text-secondary" style={{ width: '40px', height: '40px', color: "#b9b6b6" }}>
                       {/* <p className='fs-3 fw-bolder text-white mb-0'>{useProfileDetails?.firstName[0]}</p> */}
                       <p className='fs-3 fw-bolder text-white mb-0'>{useProfileDetails?.messages_display_name?.slice(0, 1)}</p>
@@ -758,7 +879,7 @@ const LiveChat = () => {
                     <div className='d-flex justify-content-center align-items-center gap-1 ms-1'>
                       <div className=''>
 
-                        <h4 className='mb-0 p-0 fw-bolder'>{useProfileDetails?.messages_display_name}</h4>
+                        <h5 className='mb-0 p-0 fw-bolder'>{useProfileDetails?.messages_display_name}</h5>
                         <h6 className='mb-0 p-0 fw-bold'>{useProfileDetails?.messages_reciever}</h6>
                       </div>
                       {
@@ -772,38 +893,33 @@ const LiveChat = () => {
                       <BsPinAngle size={18} />
                     </div>
                     <div>
-                      <div id="TooltipButton10" style={{ width: "90px" }} className={`rounded-5 d-flex justify-content-center align-items-center cursor-pointer position-relative ${useRemainingTime?.status === 0
+                      <div style={{ width: "90px" }} className={`rounded-5 d-flex justify-content-center align-items-center cursor-pointer position-relative ${useRemainingTime?.status <= 1
                         ? 'prime-red'
-                        : useRemainingTime?.status === 1
+                        : useRemainingTime?.status === 2
                           ? 'prime-orange'
                           : 'prime-green'
                         }`}>
                         {/* <p className='m-0 font-small-3 fw-bolder' style={{ padding: "10px 15px" }}>{timeLiveFormatter(useProfileDetails?.messages_servicing_window)}</p> */}
-                        <p className='m-0 font-small-3 fw-bolder' style={{ padding: "10px 15px" }}>{useRemainingTime ? `${useRemainingTime?.hour ?? '00'} : ${useRemainingTime?.minutes ?? '00'}` : '--'}</p>
-                        <Tooltip
-                          placement="bottom"
-                          isOpen={tooltipOpen.TooltipButton10}
-                          target="TooltipButton10"
-                          toggle={() => toggleTooltip('TooltipButton10')}
-                          style={{ minWidth: "150px" }}
-                        >
-                          Chat expires in {useRemainingTime?.hour ?? '00'} hrs {useRemainingTime?.minutes ?? '00'} mins. Once expired, WhatsApp allows only template messages to be sent
-                        </Tooltip>
+                        <TooltipButton position='bottom' id="chatExpire" tooltipText={`${useRemainingTime?.status === 0 ? 'Chat has Expired. Now you can send templates' : `Chat expires in ${useRemainingTime?.hour } hrs ${useRemainingTime?.minutes } mins. Once expired, WhatsApp allows only template messages to be sent.`}`}>
+                         
+                         {
+                          useRemainingTime?.status !== 0 && <p className='m-0 font-small-3 fw-bolder' style={{ padding: "10px 15px" }}>{useRemainingTime ? `${useRemainingTime?.hour } : ${useRemainingTime?.minutes }` : '--'}</p>
+                         }
+                          {
+                          useRemainingTime?.status === 0 && <p className='m-0 font-small-3 fw-bolder' style={{ padding: "10px 15px" }}>Expired</p>
+                         }
+
+                        </TooltipButton>
                       </div>
                     </div>
-                    <div style={{ minWidth: "180px" }}>
+                    <div style={{ minWidth: "120px" }}>
 
                       <Select
                         className=''
-                        style={{
-                          control: (provided) => ({
-                            ...provided,
-                            minWidth: '300px'
-                          })
-                        }}
                         defaultValue={chatsTagList[0]}
                         options={chatsTagList}
                         closeMenuOnSelect={true}
+                        onChange={contactStatusFun}
                       />
                     </div>
                     <div className="icon_color">
@@ -918,6 +1034,11 @@ const LiveChat = () => {
                                 {
                                   messageJson?.button?.text && <div className="message-info ps-1 pe-3">
                                     {messageJson?.button?.text}
+                                  </div>
+                                }
+                                {
+                                  messageJson?.type === "unsupported" && <div className="message-info ps-1 pe-3" >
+                                    Message type is currently not supported.
                                   </div>
                                 }
                                 {
@@ -1067,15 +1188,15 @@ const LiveChat = () => {
 
                 </div>
                 {/*bottom*/}
-                {!imagePreview && useSortBy !== "history" && <div className=' d-flex align-items-center gap-1  px-1 position-sticky bottom-0 whats-bg-grey' style={{ padding: "10px" }} >
-                <TooltipButton  tooltipText="Media" position='top'>
-                  <div className='icon_color' onClick={() => setToggleMedia(!toggleMedia)}>
-                    <Plus style={{
-                      transform: `rotate(${toggleMedia ? "45deg" : "0deg"})`,
-                      transition: "transform 0.2s ease-in-out"
-                    }} />
-                  </div>
-                </TooltipButton>
+                {!imagePreview && useRemainingTime?.status !== 0 && <div className=' d-flex align-items-center gap-1  px-1 position-sticky bottom-0 whats-bg-grey' style={{ padding: "10px" }} >
+                  <TooltipButton tooltipText="Media" position='top'>
+                    <div className='icon_color' onClick={() => setToggleMedia(!toggleMedia)}>
+                      <Plus style={{
+                        transform: `rotate(${toggleMedia ? "45deg" : "0deg"})`,
+                        transition: "transform 0.2s ease-in-out"
+                      }} />
+                    </div>
+                  </TooltipButton>
                   <div className={`${toggleMedia ? '' : 'd-none'}`} onClick={(e) => {
                     e.stopPropagation()
                     setToggleMedia(false)
@@ -1131,16 +1252,21 @@ const LiveChat = () => {
                   {/* <div className='p-1'>
                   <BsEmojiSmile size={20} />
                 </div> */}
-                <TooltipButton  tooltipText="Templates" position='top'>
-                  <div className='icon_color' >
-                    <HiOutlineTemplate onClick={() => { setTemplateModal(true); getTemplatesList() }} />
-                  </div>
-                </TooltipButton>
-                <TooltipButton id="quickReply" tooltipText="Quick Reply" position='top'>
-                  <div className='icon_color' onClick={() => setReplyModal(true)}>
-                    <MdOutlineQuickreply />
-                  </div>
-                </TooltipButton>
+                  <TooltipButton tooltipText="Templates" position='top'>
+                    <div className='icon_color' >
+                      <HiOutlineTemplate onClick={() => { setTemplateModal(true); getTemplatesList() }} />
+                    </div>
+                  </TooltipButton>
+                  <TooltipButton id="quickReply" tooltipText="Quick Reply" position='top'>
+                    <div className='icon_color' onClick={() => setReplyModal(true)}>
+                      <MdOutlineQuickreply />
+                    </div>
+                  </TooltipButton>
+                  <TooltipButton id="pvtNote" tooltipText="Private Note" position='top'>
+                    <div className='icon_color' onClick={() => setReplyModal(true)}>
+                      <MdOutlineStickyNote2 />
+                    </div>
+                  </TooltipButton>
 
                   <textarea
                     type="text"
@@ -1170,9 +1296,9 @@ const LiveChat = () => {
                   }
 
                 </div>}
-                {!imagePreview && useSortBy === "history" && <div className=' d-flex align-items-center flex-column text-center gap-1 p-1 position-sticky bottom-0 prime-grey-bg' style={{ padding: "10px" }} >
+                {!imagePreview && useRemainingTime?.status === 0 && <div className=' d-flex align-items-center flex-column text-center gap-1 p-1 position-sticky bottom-0 prime-grey-bg' style={{ padding: "10px" }} >
                   <h5 className='mb-0'>You cannot send message to this user as Whatsapp does not allow a business to send messages after 24 hours of the user's last message</h5>
-                  <div className='cursor-pointer fw-bolder rounded-2 high-green-bg' style={{ padding: "10px 20px" }}>Send Template Message</div>
+                  <div className='cursor-pointer fw-bolder rounded-2 high-green-bg' style={{ padding: "10px 20px" }} onClick={() => { setTemplateModal(true); getTemplatesList() }}>Send Template Message</div>
                 </div>}
               </div>
             }
@@ -1185,7 +1311,7 @@ const LiveChat = () => {
             {/* profile details */}
             {dynamicColumnValue === 3 &&
               (search ? (
-                <Col sm={2} style={{ background: '#fff' }} >
+                <Col sm={2} className='' style={{ background: '#fff' }} >
                   <div className='d-flex align-items-center gap-1 fs-4' style={{ height: "65px", fontWeight: "bold" }} >
                     <RxCross2
                       onClick={() => {
@@ -1209,45 +1335,105 @@ const LiveChat = () => {
                 </Col>
 
               ) : (
-                <Col sm={dynamicColumnValue} className='bg-white' >
+                <Col className='bg-white chatsContacts '  >
+
                   <div className='d-flex align-items-center gap-1 fs-4 whats-bg-grey' style={{ height: "60px" }}>
                     <RxCross2 onClick={() => setDynamicColumnValue(0)} className='ms-1' />
                     <p className='mb-0'>Contact info</p>
                   </div>
 
-                  <div className='d-flex align-items-center gap-1 p-1 mt-1'>
-                    <div className="rounded-circle d-flex align-items-center justify-content-center " style={{ width: '50px', height: '50px' }}>
-                      <svg viewBox="0 0 212 212" height="50" width="50" preserveAspectRatio="xMidYMid meet" class="" version="1.1" x="0px" y="0px" enable-background="new 0 0 212 212"><title>default-user</title><path fill="#DFE5E7" class="background" d="M106.251,0.5C164.653,0.5,212,47.846,212,106.25S164.653,212,106.25,212C47.846,212,0.5,164.654,0.5,106.25 S47.846,0.5,106.251,0.5z"></path><g><path fill="#FFFFFF" class="primary" d="M173.561,171.615c-0.601-0.915-1.287-1.907-2.065-2.955c-0.777-1.049-1.645-2.155-2.608-3.299 c-0.964-1.144-2.024-2.326-3.184-3.527c-1.741-1.802-3.71-3.646-5.924-5.47c-2.952-2.431-6.339-4.824-10.204-7.026 c-1.877-1.07-3.873-2.092-5.98-3.055c-0.062-0.028-0.118-0.059-0.18-0.087c-9.792-4.44-22.106-7.529-37.416-7.529 s-27.624,3.089-37.416,7.529c-0.338,0.153-0.653,0.318-0.985,0.474c-1.431,0.674-2.806,1.376-4.128,2.101 c-0.716,0.393-1.417,0.792-2.101,1.197c-3.421,2.027-6.475,4.191-9.15,6.395c-2.213,1.823-4.182,3.668-5.924,5.47 c-1.161,1.201-2.22,2.384-3.184,3.527c-0.964,1.144-1.832,2.25-2.609,3.299c-0.778,1.049-1.464,2.04-2.065,2.955 c-0.557,0.848-1.033,1.622-1.447,2.324c-0.033,0.056-0.073,0.119-0.104,0.174c-0.435,0.744-0.79,1.392-1.07,1.926 c-0.559,1.068-0.818,1.678-0.818,1.678v0.398c18.285,17.927,43.322,28.985,70.945,28.985c27.678,0,52.761-11.103,71.055-29.095 v-0.289c0,0-0.619-1.45-1.992-3.778C174.594,173.238,174.117,172.463,173.561,171.615z"></path><path fill="#FFFFFF" class="primary" d="M106.002,125.5c2.645,0,5.212-0.253,7.68-0.737c1.234-0.242,2.443-0.542,3.624-0.896 c1.772-0.532,3.482-1.188,5.12-1.958c2.184-1.027,4.242-2.258,6.15-3.67c2.863-2.119,5.39-4.646,7.509-7.509 c0.706-0.954,1.367-1.945,1.98-2.971c0.919-1.539,1.729-3.155,2.422-4.84c0.462-1.123,0.872-2.277,1.226-3.458 c0.177-0.591,0.341-1.188,0.49-1.792c0.299-1.208,0.542-2.443,0.725-3.701c0.275-1.887,0.417-3.827,0.417-5.811 c0-1.984-0.142-3.925-0.417-5.811c-0.184-1.258-0.426-2.493-0.725-3.701c-0.15-0.604-0.313-1.202-0.49-1.793 c-0.354-1.181-0.764-2.335-1.226-3.458c-0.693-1.685-1.504-3.301-2.422-4.84c-0.613-1.026-1.274-2.017-1.98-2.971 c-2.119-2.863-4.646-5.39-7.509-7.509c-1.909-1.412-3.966-2.643-6.15-3.67c-1.638-0.77-3.348-1.426-5.12-1.958 c-1.181-0.355-2.39-0.655-3.624-0.896c-2.468-0.484-5.035-0.737-7.68-0.737c-21.162,0-37.345,16.183-37.345,37.345 C68.657,109.317,84.84,125.5,106.002,125.5z"></path></g></svg>
+                  <div className=' overflow-y-auto hideScroll' style={{ height: "calc(100vh - 100px)" }}>
+                    <div className='d-flex align-items-center gap-1 p-1 mt-1'>
+                      <div className="rounded-circle d-flex align-items-center justify-content-center " style={{ width: '50px', height: '50px' }}>
+                        <svg viewBox="0 0 212 212" height="50" width="50" preserveAspectRatio="xMidYMid meet" class="" version="1.1" x="0px" y="0px" enable-background="new 0 0 212 212"><title>default-user</title><path fill="#DFE5E7" class="background" d="M106.251,0.5C164.653,0.5,212,47.846,212,106.25S164.653,212,106.25,212C47.846,212,0.5,164.654,0.5,106.25 S47.846,0.5,106.251,0.5z"></path><g><path fill="#FFFFFF" class="primary" d="M173.561,171.615c-0.601-0.915-1.287-1.907-2.065-2.955c-0.777-1.049-1.645-2.155-2.608-3.299 c-0.964-1.144-2.024-2.326-3.184-3.527c-1.741-1.802-3.71-3.646-5.924-5.47c-2.952-2.431-6.339-4.824-10.204-7.026 c-1.877-1.07-3.873-2.092-5.98-3.055c-0.062-0.028-0.118-0.059-0.18-0.087c-9.792-4.44-22.106-7.529-37.416-7.529 s-27.624,3.089-37.416,7.529c-0.338,0.153-0.653,0.318-0.985,0.474c-1.431,0.674-2.806,1.376-4.128,2.101 c-0.716,0.393-1.417,0.792-2.101,1.197c-3.421,2.027-6.475,4.191-9.15,6.395c-2.213,1.823-4.182,3.668-5.924,5.47 c-1.161,1.201-2.22,2.384-3.184,3.527c-0.964,1.144-1.832,2.25-2.609,3.299c-0.778,1.049-1.464,2.04-2.065,2.955 c-0.557,0.848-1.033,1.622-1.447,2.324c-0.033,0.056-0.073,0.119-0.104,0.174c-0.435,0.744-0.79,1.392-1.07,1.926 c-0.559,1.068-0.818,1.678-0.818,1.678v0.398c18.285,17.927,43.322,28.985,70.945,28.985c27.678,0,52.761-11.103,71.055-29.095 v-0.289c0,0-0.619-1.45-1.992-3.778C174.594,173.238,174.117,172.463,173.561,171.615z"></path><path fill="#FFFFFF" class="primary" d="M106.002,125.5c2.645,0,5.212-0.253,7.68-0.737c1.234-0.242,2.443-0.542,3.624-0.896 c1.772-0.532,3.482-1.188,5.12-1.958c2.184-1.027,4.242-2.258,6.15-3.67c2.863-2.119,5.39-4.646,7.509-7.509 c0.706-0.954,1.367-1.945,1.98-2.971c0.919-1.539,1.729-3.155,2.422-4.84c0.462-1.123,0.872-2.277,1.226-3.458 c0.177-0.591,0.341-1.188,0.49-1.792c0.299-1.208,0.542-2.443,0.725-3.701c0.275-1.887,0.417-3.827,0.417-5.811 c0-1.984-0.142-3.925-0.417-5.811c-0.184-1.258-0.426-2.493-0.725-3.701c-0.15-0.604-0.313-1.202-0.49-1.793 c-0.354-1.181-0.764-2.335-1.226-3.458c-0.693-1.685-1.504-3.301-2.422-4.84c-0.613-1.026-1.274-2.017-1.98-2.971 c-2.119-2.863-4.646-5.39-7.509-7.509c-1.909-1.412-3.966-2.643-6.15-3.67c-1.638-0.77-3.348-1.426-5.12-1.958 c-1.181-0.355-2.39-0.655-3.624-0.896c-2.468-0.484-5.035-0.737-7.68-0.737c-21.162,0-37.345,16.183-37.345,37.345 C68.657,109.317,84.84,125.5,106.002,125.5z"></path></g></svg>
+                      </div>
+                      <div className=''>
+                        <h5 className='p-0 fw-bolder' style={{ marginBottom: "8px" }}>{useProfileDetails?.messages_display_name}</h5>
+                        <h6 className='mb-0 p-0 fw-bolder'>{useProfileDetails?.messages_reciever}</h6>
+                      </div>
                     </div>
-                    <div className=''>
-                      <h5 className='p-0 fw-bolder' style={{ marginBottom: "8px" }}>{useProfileDetails?.messages_display_name}</h5>
-                      <h6 className='mb-0 p-0 fw-bolder'>{useProfileDetails?.messages_reciever}</h6>
-                    </div>
-                  </div>
-                  <hr />
+                    <hr />
 
-                  <div className='mt-1 p-1 ' >
-                    <div className='d-flex justify-content-between align-items-center '>
-                      <p className='fs-5 mb-0'>Tags <span className='' ><LiaTagSolid style={{ transform: "scale(-1) rotate(90deg)", marginLeft: "2px" }} /></span> </p>
-                      <button className=' border rounded-2 whats-bg-grey' style={{ padding: "5px 10px" }}><TiPlus color="#3b4a54" size={15} /></button>
-                    </div>
-                    <div className='d-flex gap-1 px-1' style={{ marginTop: "7px" }}>
-                      {
-                        ActiveTabList.map((elm, index) => (
-                          <div className={`rounded-2 d-flex justify-content-center align-items-center cursor-pointer position-relative prime-grey-bg whats-text-green-100  `}>
-                            <p className='m-0  ' style={{ padding: "6px 12px", fontSize: "13px" }}>{elm?.title} </p>
-                          </div>
-                        ))
-                      }
+                    <div className='mt-1 p-1 ' >
+                      <div className='d-flex justify-content-between align-items-center '>
+                        <p className='fs-4 mb-0'>Tags <span className='' ><LiaTagSolid style={{ transform: "scale(-1) rotate(90deg)", marginLeft: "2px" }} /></span> </p>
+                        <button onClick={() => setTagsOpen(!useTagsOpen)} className=' border rounded-2 whats-bg-grey' style={{ padding: "5px 10px" }}><TiPlus color="#3b4a54" size={15} /></button>
+                      </div>
+                      <div className='d-flex gap-1 px-1 flex-wrap ' style={{ marginTop: "7px" }}>
+                        {
+                          useTagsCustomer.map((elm, index) => (
+                            <div className={`rounded-2 d-flex justify-content-center align-items-center  position-relative prime-grey-bg whats-text-green-100`}>
+                              <p className='m-0  ' style={{ padding: "6px 12px", fontSize: "13px" }}>{elm?.tag} </p>
+                              <div className=' position-absolute top-0 end-0 prime-grey-bg rounded-5 cursor-pointer ' onClick={() => delAssignTagsFun(elm?.id, useProfileDetails)} style={{ marginTop: "-5px", marginRight: "-5px" }}><RxCross2 size={12} /></div>
+                            </div>
+                          ))
+                        }
+                        {
+                          useTagsCustomer.length <= 0 && <>No tags</>
+                        }
 
+                      </div>
+                      <div className=''>
+
+                        <Collapse isOpen={useTagsOpen} >
+                          <CardBody>
+                            <CardBody className='border p-1 mt-1'>
+                              <CreatableSelect
+                                className=''
+                                // defaultValue={useTagsList[0]}
+                                options={useTagsList}
+                                closeMenuOnSelect={true}
+                                onCreateOption={(input) => handleCustomTag(input, useProfileDetails)}
+                                onChange={(e) => setTagsSelect(e.value)}
+                              />
+                              <div className='d-flex justify-content-end gap-1 mt-2'>
+                                <div className='text-secondary cursor-pointer' style={{ padding: "2px " }} onClick={() => setTagsOpen(false)}> Cancel</div>
+                                <button className='px-1 border rounded-2  ' onClick={assignTagsFun} style={{ padding: "2px 10px" }}> Save</button>
+                              </div>
+                            </CardBody>
+                          </CardBody>
+                        </Collapse>
+
+                      </div>
                     </div>
-                  </div>
-                  <div className='mt-1 p-1' >
-                    <p className='fs-5'>Notes</p>
-                    <div class="input-group mb-1">
-                      <input type="text" className="form-control" placeholder="Add a Note" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                      <button className="btn btn-outline-secondary" type="button" id="button-addon2">Add</button>
+
+                    <div className='mt-1 p-1 ' >
+                      <div className='d-flex justify-content-between align-items-center '>
+                        <p className='fs-4 mb-0'>Note <span className='' ><LiaTagSolid style={{ transform: "scale(-1) rotate(90deg)", marginLeft: "2px" }} /></span> </p>
+                        <button onClick={() => setNotesOpen(!useNotesOpen)} className=' border rounded-2 whats-bg-grey' style={{ padding: "5px 10px" }}>
+                        { useNotesList ? <Edit color="#3b4a54" size={15} /> : <TiPlus color="#3b4a54" size={15} />
+}
+                          </button>
+
+                      </div>
+
+                      <div className='d-flex flex-column   px-1' style={{ marginTop: "7px", gap: "5px" }}>
+                        { useNotesList && !useNotesOpen &&
+                            <div className={`rounded-2  cursor-pointer  prime-grey-bg whats-text-green-100  position-relative`}>
+                              <p className='m-0  ' style={{ padding: "6px 12px", fontSize: "13px", wordWrap:"break-word" }}>{useNotesList}</p>
+                              <div className=' position-absolute top-0 end-0 prime-grey-bg rounded-5 cursor-pointer ' onClick={() => delNoteFun(useProfileDetails)}  style={{ marginTop: "-5px", marginRight: "-5px" }}><RxCross2 size={12} /></div>
+                            </div>
+                        }
+
+                      </div>
+                      <div className=''>
+
+                        <Collapse isOpen={useNotesOpen} >
+                          <CardBody>
+                            <CardBody className=' p-1 '>
+
+                              <textarea type="text" value={useNotesList} onChange={(e) => setNotesList(e.target.value)} class="form-control" placeholder="notes..." />
+                              <div className='d-flex justify-content-end gap-1 mt-2'>
+                                <div className='text-secondary cursor-pointer' style={{ padding: "2px " }} onClick={(e) => { setNotesOpen(false); setNotesList('') }}> Cancel</div>
+                                <button className='px-1 border rounded-2  ' style={{ padding: "2px 10px" }} onClick={saveNotesFun}> Save</button>
+                              </div>
+                            </CardBody>
+                          </CardBody>
+                        </Collapse>
+
+                      </div>
                     </div>
+
 
                   </div>
                 </Col>))
@@ -1272,7 +1458,7 @@ const LiveChat = () => {
             <h5 className='mb-0'>
               Quick Replies
             </h5>
-            <Link to="/merchant/whatsapp/quick-replays/" >
+            <Link to="/merchant/whatsapp/quick-replys/" >
               <span><TbExternalLink size={19} /></span>
             </Link>
           </div>
@@ -1360,6 +1546,9 @@ const LiveChat = () => {
             {
               useTemplatesList && useTemplatesList.map((SingleTemplate) => {
                 const isActive = useActiveTemplatesList?.includes(SingleTemplate?.id)
+                if (!isActive || SingleTemplate.status !== "APPROVED") {
+                  return null
+                }
                 return (
 
                   <Col md="6" className='d-flex justify-content-center '  >
@@ -1370,35 +1559,17 @@ const LiveChat = () => {
                       <RenderTemplateUI SingleTemplate={SingleTemplate} />
 
                       <div className=''>
-                        <div className='  rounded-3 d-flex justify-content-between align-items-center  '>
-                          <div className='d-flex justify-content-evenly position-absolute top-0 end-0 me-1' style={{ marginTop: "8px", marginRight: "8" }}>
-
-                            {
-                              SingleTemplate.status === "APPROVED" && <div className=' border-0 px-1 bg-success text-white rounded-2 shadow-lg '>Approved</div>
-                            }
-                            {
-                              SingleTemplate.status === "REJECTED" && <div className=' border-0 px-1 bg-danger text-white rounded-2'>Rejected</div>
-                            }
-                            {
-                              SingleTemplate.status === "PENDING" && <div className=' border-0 px-1 bg-warning text-white rounded-2'>Pending</div>
-                            }
-                          </div>
-
-
-                          {
-                            SingleTemplate.status === "APPROVED" && isActive && <div className='d-flex flex-column w-100'>
-                              <div className='d-flex gap-1 align-items-center'>
-                                <p className='m-0 p-0'>{SingleTemplate.name}</p>
-                              </div>
+                        {
+                          SingleTemplate.status === "APPROVED" && isActive && <div className='d-flex flex-column w-100'>
+                            <div className='d-flex gap-1 align-items-center'>
+                              <p className='m-0 p-0'>{SingleTemplate.name}</p>
                             </div>
-                          }
-
-                          <div>
-                            <button className='btn btn-primary'>Send</button>
                           </div>
+                        }
 
+                        <div className='d-flex justify-content-end '>
+                          <button className='btn btn-primary' onClick={() => sendTemplate(useProfileDetails, SingleTemplate?.id)}>Send</button>
                         </div>
-
                       </div>
 
                     </Card>
@@ -1445,7 +1616,7 @@ const LiveChat = () => {
 
           </div>
           <div className='mt-1'>
-            <h5 className="">New Contact</h5>
+            <h5 className="">Contact Number</h5>
             <input
               type="number"
               className="form-control "
@@ -1459,7 +1630,7 @@ const LiveChat = () => {
         <Modal.Footer>
 
           <Button className='btn btn-primary ' onClick={() => { setNewContactModal(false) }}>Cancel</Button>
-          <Button className='btn btn-primary ' onClick={() => { setNewContactModal(false) }}>Start</Button>
+          <Button className='btn btn-primary ' onClick={() => { setNewContactModal(false); setTemplateModal(true) }}>Start</Button>
         </Modal.Footer>
       </Modal>
     </>
