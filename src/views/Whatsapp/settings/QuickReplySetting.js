@@ -173,9 +173,9 @@ export default function QuickReplySetting() {
                 </div>
 
               </Col>
-              <Col md="6" className=' d-flex align-items-center p-1' style={{backgroundImage: `url(${WA_BAG})` }}>
+              <Col md="6" className=' d-flex align-items-center p-1 justify-content-end' style={{backgroundImage: `url(${WA_BAG})` }}>
                 <div>
-                  <div className='message-box live_message_box-right position-relative p-1 rounded-1' style={{ background: "#d4f2c2" }}>
+                  <div className='message-box live_message_box-right position-relative p-1 rounded-1' style={{ background: "#d8ffd4" }}>
                   <p dangerouslySetInnerHTML={{ __html: getBoldStr(useCurrentMsg?.message ?? '') }}></p>
                   </div>
                 </div>

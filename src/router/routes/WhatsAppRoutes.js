@@ -49,12 +49,12 @@ export const WhatsAppRoutes = [
         path: '/merchant/whatsapp/EmbeddedSignup/',
         element: <EmbededSignup />
     },
+    // {
+    //     path: '/merchant/whatsapp/is_template/',
+    //     element: <CreateTemplate />
+    // },
     {
-        path: '/merchant/whatsapp/is_template/',
-        element: <CreateTemplate />
-    },
-    {
-        path: '/merchant/whatsapp/editTemplate/:templateID/',
+        path: '/merchant/whatsapp/template/:templateID/',
         element: <EditTemplate />
     },
     {
@@ -102,7 +102,7 @@ export const WhatsAppRoutes = [
         element: <SentReports />
     },
     {
-        path: '/merchant/whatsapp/LiveChat',
+        path: '/merchant/whatsapp/LiveChat/',
         element: <LiveChat />,
         meta: {
             layout: "fullWidthLayout"

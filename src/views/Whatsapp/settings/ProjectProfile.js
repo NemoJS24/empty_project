@@ -129,7 +129,7 @@ export default function ProjectProfile() {
                 Display Name
               </h6>
               <input type="text" class="form-control"
-                value={useProfileDetails?.wa_display_name ?? "Dummy Name"}
+                value={useProfileDetails?.wa_display_name ?? " ERROR_TO_LOAD"}
                 id=""
                 disabled
               />
@@ -250,7 +250,7 @@ export default function ProjectProfile() {
                   alt=""
                 />
               </div>
-              <h4 className='mt-2 me-1'>{useProfileDetails?.wa_display_name ?? "Dummy Name"}<span><RiVerifiedBadgeFill color="#13a85d" /></span></h4>
+              <h4 className='mt-2 me-1'>{useProfileDetails?.wa_display_name ?? " ERROR_TO_LOAD"}<span><RiVerifiedBadgeFill color="#13a85d" /></span></h4>
               <h5 className='text-secondary'>{categoryList.find(option => option.value === useProfileDetails.vertical)?.label}</h5>
 
             </div>

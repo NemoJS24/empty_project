@@ -7,48 +7,33 @@ import toast from 'react-hot-toast'
 import Select from 'react-select'
 import { Card, CardBody, Col, Container, Input, Label, Row } from 'reactstrap'
 import wp_back from './imgs/wp_back.png'
-import whatsImg from './imgs/whats.png'
 import { selectPhoneList } from '../../../Helper/data'
 import { postReq } from '../../../assets/auth/jwtService'
 import FrontBaseLoader from '../../Components/Loader/Loader'
-import { Link, useNavigate } from 'react-router-dom'
-import { HeaderTypeList, getBoldStr, languageList, paramatersList } from '../SmallFunction'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { HeaderTypeList, getBoldStr, paramatersList } from '../SmallFunction'
 
-export default function CreateTemplate() {
-  const nagivate = useNavigate()
+export default function EditTemplate() {
+  const { templateID } = useParams()
+  const navigate = useNavigate()
+  const [CurrentTemplate, setCurrentTemplate] = useState()
   const [useLoader, setLoader] = useState(false)
-
-  const tempCatgList = [
-    { value: 'UTILITY', label: 'Utility' },
-    { value: 'MARKETING', label: 'Marketing' }
-  ]
+  const [useLinkType, setLinkType] = useState("custom")
 
   const [BasicTemplateData, setBasicTemplateData] = useState({
     templateName: '',
-    isValidName: true,
     templateCategory: '',
-    language: 'en',
-    footer: 'Please reply with "STOP" to opt-out'
+    language: '',
+    footer: ''
   })
 
   // headrer
   const [Header, setHeader] = useState({
-    type: 'Image',
+    type: '',
     text: '',
     file: ''
   })
-  const validName = (e) => {
-    const name = e.target.value
-    console.log(name)
-    const pattern = /[^a-z0-9_]/
-    if (pattern.test(name)) {
-      setBasicTemplateData({ ...BasicTemplateData, templateName: name, isValidName: false })
-    } else {
-      setBasicTemplateData({ ...BasicTemplateData, templateName: name, isValidName: true })
-    }
-  }
 
-  // const [FileName, FileName] = useState()
   const [Header_Parameters, setHeader_Parameters] = useState([])
 
 
@@ -62,6 +47,7 @@ export default function CreateTemplate() {
   }
 
   useEffect(() => {
+    // alert("sdfsdf")
     if (Header.text.includes("{{1}}")) {
       // Update header parameters
       if (Header_Parameters.length !== 1) {
@@ -73,18 +59,18 @@ export default function CreateTemplate() {
 
   }, [Header.text])
 
-
   // body data structure ---------------------
   const [Body_Parameters, setBody_Parameters] = useState([])
-  const [useMsgBody, setMsgBody] = useState("Hello {{1}}, your code will expire in {{2}} mins.")
+  const [useMsgBody, setMsgBody] = useState("Hello {{3}}, your code will expire in {{4}} mins.")
   const [displayedMessage, setDisplayedMessage] = useState(useMsgBody)
+
   const handleBodyDisplay = (message, parameters) => {
-    let uptDisplayMsg = message.replace(/{{\s*(\d+)\s*}}/g, (_, n) => {
+    let uptDiplayMsg = message.replace(/{{\s*(\d+)\s*}}/g, (_, n) => {
       const replacement = parameters[n - 1] // n starts from 1
       return (replacement === '' || replacement === undefined) ? `{{${n}}}` : `[${replacement}]`
     })
-    uptDisplayMsg = getBoldStr(uptDisplayMsg)
-    setDisplayedMessage(uptDisplayMsg)
+    uptDiplayMsg = getBoldStr(uptDiplayMsg)
+    setDisplayedMessage(uptDiplayMsg)
   }
 
   const handleMsgBodyChange = () => {
@@ -96,13 +82,10 @@ export default function CreateTemplate() {
       // Update Body_Parameters and useMsgBody simultaneously
       let newParam = sequence.map((_, i) => Body_Parameters[i] || '')
       let replacedString = str.replace(/{{\s*(\d+)\s*}}/g, () => `{{${sequence.shift()}}}`)
-      // if (Body_Parameters.length < 10) {
 
-      // }
       setBody_Parameters(newParam)
       setMsgBody(replacedString)
       handleBodyDisplay(replacedString, newParam)
-
     } catch (error) {
       console.error(error)
       setBody_Parameters([])
@@ -121,11 +104,11 @@ export default function CreateTemplate() {
     handleMsgBodyChange()
   }, [useMsgBody])
 
+
   // body xxxxxxxxxxxxxxxxxxx ---------------------
 
 
   const [useInteractive, setInteractive] = useState([])
-  const [useLinkType, setLinkType] = useState("custom")
   const [useButtons, setButtons] = useState({
     QUICK_REPLY: 0,
     URL: 0,
@@ -205,12 +188,10 @@ export default function CreateTemplate() {
     console.log(count)
   }, [useInteractive])
 
-
   const handleInputChange = (index, field, value) => {
     let oldData = [...useInteractive]
     oldData[index][field] = value
     setInteractive(oldData)
-    console.log(oldData)
   }
 
   const handleDeleteAction = (index, type) => {
@@ -220,7 +201,7 @@ export default function CreateTemplate() {
 
     // deleted numbers
     const oldBtns = useButtons
-    // console.log(oldData.length)
+    console.log(oldData.length)
     if (oldData.length === 0) {
       setButtons({
         QUICK_REPLY: 3,
@@ -248,65 +229,89 @@ export default function CreateTemplate() {
       language: "Select Template Language"
     }
 
-    if (BasicTemplateData.templateName === '') {
-      toast.error(errorMsg['templateName'])
-      return false
-    }
-    const pattern = /[^a-z0-9_]/
-    if (pattern.test(BasicTemplateData.templateName)) {
-      toast.error("Only lower case alphabets, numbers and underscore is allowed for Template Name")
-      return false
-    }
-    if (BasicTemplateData.templateCategory === '') {
-      toast.error(errorMsg['templateCategory'])
-      return false
-    }
-    if (BasicTemplateData.language === '') {
-      toast.error(errorMsg['language'])
-      return false
-    }
     if (BasicTemplateData.useMsgBody === '') {
       toast.error(errorMsg['useMsgBody'])
       return false
     }
-
     return true
 
 
   }
 
+  // load inital data
+  useEffect(() => {
+
+    const getCurrentTemplate = (templateId) => {
+      const formData = new FormData()
+      formData.append("templateId", templateId)
+      postReq("getTemplateById", formData)
+        .then(res => {
+          console.log('Response:', res.data)
+
+          const formatType = res.data.components[0]
+          setCurrentTemplate(res.data)
+          if (["IMAGE", "VIDEO", "DOCUMENT"].includes(formatType.format)) {
+            setHeader({ ...Header, type: formatType.format.replace(/(\B)[^ ]*/g, match => (match.toLowerCase())).replace(/^[^ ]/g, match => (match.toUpperCase())), file: formatType.example.header_handle[0] })
+          } else if (formatType.format === 'TEXT') {
+            setHeader({ ...Header, type: formatType.format.replace(/(\B)[^ ]*/g, match => (match.toLowerCase())).replace(/^[^ ]/g, match => (match.toUpperCase())), text: formatType.text })
+            if (formatType?.example?.header_text.length > 0) {
+              setHeader_Parameters(formatType?.example?.header_text)
+              // console.log(formatType?.example?.header_text)
+            }
+          } else {
+            setHeader({ ...Header, type: "None" })
+
+          }
+          let footer = ''
+          res.data.components.forEach((elm) => {
+            if (elm.type === "BODY") {
+              setMsgBody(elm.text)
+              setBody_Parameters(elm.example?.body_text[0] ?? [])
+              console.log(elm.example?.body_text[0])
+              handleBodyDisplay(elm.text, elm.example?.body_text[0] ?? [])
+            }
+            if (elm.type === "FOOTER") {
+              footer = elm.text
+            }
+            if (elm.type === "BUTTONS") {
+              setInteractive(elm.buttons)
+            }
+          })
+
+          setBasicTemplateData({
+            templateName: res.data.name,
+            templateCategory: res.data.category,
+            language: res.data.language,
+            footer
+          })
+        })
+        .catch(error => {
+          // Handle errors here
+          console.error('Error:', error)
+          toast.error("Server error")
+        })
+        .finally(() => {
+
+        })
+    }
+    getCurrentTemplate(templateID)
+  }, [])
+  // handle submit
   const handleTemplateSubmit = () => {
-    // console.log("useInteractive", useInteractive)
-    // console.log("useInteractive", useInteractive)
-    // return 
-    if (!formValidation()) {
-      return false
-    }
 
-    let headerParam = true
-    if (Header_Parameters.length > 0) {
-      Header_Parameters.forEach(elm => {
-        if (!elm || elm === '') {
-          headerParam = false
-        }
-      })
-    }
-    if (!headerParam) {
-      return toast.error('Header parameters required!')
-    }
-
-    let bodyParam = true
-    if (Body_Parameters.length > 0) {
-      Body_Parameters.forEach(elm => {
-        if (!elm || elm === '') {
-          bodyParam = false
-        }
-      })
-    }
-    if (!bodyParam) {
-      return toast.error('Body parameters required!')
-    }
-
+    // console.log("------------------------------------------------")
+    // console.log("Body_Parameters :   ", Body_Parameters)
+    // console.log("useMsgBody :  ", useMsgBody)
+    // console.log("Header :  ", Header)
+    // console.log("Header_Parameters :  ", Header_Parameters)
+    // console.log("BasicTemplateData :  ", BasicTemplateData)
+    // console.log("useInteractive :  ", useInteractive)
+    // console.log("useButtons :  ", useButtons)
+    // return null
+    // if (!formValidation()) {
+    //   return false
+    // }
+    setLoader(true)
     const formData = new FormData()
 
     const newInteractiveData = useInteractive.map(item => {
@@ -318,7 +323,7 @@ export default function CreateTemplate() {
         return {
           type: item.type,
           text: item.text,
-          phone_number: item.code.replace(/\+/g, '') + item.value
+          phone_number: item.code?.replace(/\+/g, '') + item.value
         }
       } else if (item.type === "URL" && useLinkType === "custom") {
         return {
@@ -330,25 +335,19 @@ export default function CreateTemplate() {
         return {
           type: item.type,
           text: item.text,
-          url: 'https://rzp.io/i/{{1}}',
+          url: "https://rzp.io/i/{{1}}",
           example: [`https://rzp.io/i/link`]
         }
-      } else if (item.type === "QUICK_REPLY") {
-        return {
-          type: item.type,
-          text: item.text
-        }
       } else if (item.type === "COPY_CODE") {
-      formData.append('coupon_variables', item.value)
-        return {
-          type: "COPY_CODE",
-          example: item.value
+        formData.append('coupon_variables', item.value)
+          return {
+            type: "COPY_CODE",
+            example: item.value
+          }
+        } else {
+          // Handle unmatched cases
+          return null
         }
-      } else {
-        // Handle unmatched cases
-        return null
-      }
-      
     }).filter(Boolean) // Remove null entries from the result
     // return null
     const components = [
@@ -392,10 +391,12 @@ export default function CreateTemplate() {
         type: 'BODY',
         text: useMsgBody
       },
+
       BasicTemplateData.footer !== '' && {
         type: 'FOOTER',
         text: BasicTemplateData.footer
       },
+
       useInteractive.length !== 0 && {
         type: "BUTTONS",
         buttons: newInteractiveData
@@ -405,15 +406,23 @@ export default function CreateTemplate() {
     // const payData = JSON.stringify(payload, null, 2)
 
     formData.append('name', BasicTemplateData.templateName)
+    formData.append('templateId', CurrentTemplate.id)
     formData.append('category', BasicTemplateData.templateCategory)
     formData.append('language', BasicTemplateData.language)
     formData.append('components', JSON.stringify(components))
     formData.append('headerUrl', Header.file)
-    formData.append('file_type', Header.type.toUpperCase())
-    if (Header.type === 'Document') {
-      formData.append('filename', Header.file.name.slice(0, -4))
+    if (typeof Header.file === 'object' && Header.file !== null) {
+      formData.append('headerUrlChange', 1)
+    } else {
+      formData.append('headerUrlChange', 0)
     }
 
+    // Now you can use formData for your purpose
+
+    // console.log("payload", components)
+    // console.log("useInteractive", useInteractive)
+    // console.log(BasicTemplateData)
+    // console.log(Header.file)
     function changeData(list) {
       const newPara = []
       list.map((elem) => {
@@ -427,73 +436,70 @@ export default function CreateTemplate() {
     if (Body_Parameters.length > 0) {
       formData.append('bodyVariableList', JSON.stringify(changeData(Body_Parameters)))
     }
-
-    // console.log('name', BasicTemplateData.templateName)
-    // console.log('category', BasicTemplateData.templateCategory)
-    // console.log('language', BasicTemplateData.language)
-    // console.log('components', JSON.stringify(components))
-    // console.log('headerUrl', Header.file)
-    // console.log('file_type', Header.type.toUpperCase())
-    // return null
-    setLoader(true)
-    postReq("createTemplate", formData)
+    postReq("editTemplate", formData)
       .then((res) => {
-        console.log(res.data)
-        if (res.data.id) {
-          toast.success("Template has been created")
-          nagivate('/merchant/whatsapp/message/')
-        } else if (res.data.message) {
-          toast.error(res.data.message)
-        } else if (res.data.code === 100) {
-          toast.error(res.data.error_user_msg ?? res.data.message)
+        console.log(res)
+        if (res.data.success) {
+          // toast.success(res.data.error_msg)
+          toast.success("Template has updated!")
+          navigate('/merchant/whatsapp/message/')
+        } else if (!res.data.success) {
+          toast.error(res.data.error_msg)
         } else {
           toast.error("Something went wrong!")
         }
         setLoader(false)
       }).catch((err) => { console.log(err); setLoader(false); toast.error("Something went wrong!") })
+      .finally(() => {
+        setLoader(false)
+      })
+
 
   }
+
+  // if (!CurrentTemplate) {
+  //   return <FrontBaseLoader />
+  // }
   // massgae body function olny ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   return (
     <Container style={{ marginBottom: "200px" }}>
       {
-
+        !CurrentTemplate && <FrontBaseLoader />
+      }
+      {
         useLoader && <FrontBaseLoader />
       }
       <Link to='/merchant/whatsapp/message' className='btn btn-primary btn-sm mb-1' >Back</Link>
-      <Card>
-        <CardBody>
-          <h4 className="">New Message </h4>
-        </CardBody>
-      </Card>
 
       <Card>
         <CardBody>
+          <h4 className="text-danger">Edit Template Name : {BasicTemplateData.templateName ?? ''} </h4>
+        </CardBody>
+      </Card>
+
+      <Card className=''>
+        <CardBody className=''>
 
           <Row>
             <Col md="6">
               <div>
                 <h4 className="">Template Category</h4>
-                <p className="fs-5  text-secondary">Your template should fall under one of these categories.</p>
-                <Select
-                  className=''
-                  options={tempCatgList}
-                  closeMenuOnSelect={true}
-                  onChange={(e) => setBasicTemplateData({ ...BasicTemplateData, templateCategory: e.value })}
+                <input
+                  type="text"
+                  disabled
+                  className="form-control "
+                  value={CurrentTemplate?.category ?? 'none'}
                 />
               </div>
             </Col>
             <Col md="6">
               <div>
                 <h4 className="">Template Language</h4>
-                <p className="fs-5  text-secondary">You will need to specify the language in which message template is submitted.</p>
-                <Select
-                  className=''
-                  options={languageList}
-                  closeMenuOnSelect={true}
-                  onChange={(e) => {
-                    setBasicTemplateData({ ...BasicTemplateData, language: e.value })
-                  }}
+                <input
+                  type="text"
+                  disabled
+                  className="form-control "
+                  value={CurrentTemplate?.language ?? 'none'}
                 />
               </div>
             </Col>
@@ -502,17 +508,12 @@ export default function CreateTemplate() {
             <Col md="6">
               <div className='mt-3'>
                 <h4 className="">Template Name</h4>
-                <p className="fs-5  text-secondary">Name can only be in lowercase alphanumeric characters and underscores. Special characters and white-space are not allowed
-                  e.g. - app_verification_code</p>
                 <input
                   type="text"
+                  disabled
                   className="form-control "
-                  placeholder='Template Name'
-                  onChange={(e) => { validName(e) }}
+                  value={CurrentTemplate?.name ?? 'none'}
                 />
-                {
-                  !BasicTemplateData.isValidName && <p className='text-danger'>Invalid Template Name</p>
-                }
               </div>
 
               <div className='mt-3'>
@@ -522,7 +523,7 @@ export default function CreateTemplate() {
                   className=''
                   options={HeaderTypeList}
                   closeMenuOnSelect={true}
-                  defaultValue={{ label: Header.type, value: Header.type }}
+                  value={{ value: Header.type, label: Header.type }}
                   onChange={(e) => {
                     if (e && e.value !== Header.type.value) {
                       setHeader({ ...Header, type: e.value, file: '' })
@@ -549,13 +550,17 @@ export default function CreateTemplate() {
                       <button className={`btn btn-primary mt-1 ${Header_Parameters.length >= 1 ? 'd-none' : 'd-block'}`} onClick={addHeaderParam}>add parameter</button>
                       <div>
                         {
-                          Header_Parameters.map((item) => (
-                            <div className="mt-1">
-                              <Select options={paramatersList}
-                                onChange={(e) => { setHeader_Parameters([e.value]) }}
-                                closeMenuOnSelect={true} />
-                            </div>
-                          ))
+                          Header_Parameters.map((item) => {
+                            console.log(item)
+                            return (
+                              <div className="mt-1">
+                                <Select options={paramatersList}
+                                  value={{ value: item, label: item }}
+                                  onChange={(e) => { setHeader_Parameters([e.value]) }}
+                                  closeMenuOnSelect={true} />
+                              </div>
+                            )
+                          })
                         }
                       </div>
                     </div>}
@@ -590,7 +595,8 @@ export default function CreateTemplate() {
                                 toast.error(`Incorrect file type. Only ${acceptedTypes.join(', ')} allowed.`)
                               }
                             }
-                          }} />
+                          }}
+                        />
                         <label htmlFor="mediaUrl" className='d-flex gap-1 btn btn-secondary rounded-2  justify-content-center  align-items-center  border' style={{ width: "300px", padding: "3px 0" }}><Image /> <p className="m-0">Upload from Media Library</p> </label>
                       </div>
                     </div>}
@@ -611,7 +617,7 @@ export default function CreateTemplate() {
                       rows="5"
                       maxLength={1024}
                     ></textarea>
-                    <button className={`btn btn-primary mt-1 ${Body_Parameters.length > 9 ? 'd-none' : 'd-block'}`} onClick={() => setMsgBody((prev) => `${prev}{{${Body_Parameters.length + 1}}}`)} >Add parameter</button>
+                    <button className='btn btn-primary mt-1' onClick={() => setMsgBody((prev) => `${prev}{{${Body_Parameters.length + 1}}}`)} >Add parameter</button>
                   </div>
                   {/* Sample values for parameters input */}
                   <div className='mt-3'>
@@ -622,6 +628,8 @@ export default function CreateTemplate() {
                     </p>
                     <div className='d-flex flex-column gap-1'>
                       {Body_Parameters?.map((paramData, index) => {
+                        // console.log(paramData)
+                        // console.log(`${index} ==== ${paramData}`)
                         return (
                           <div className='d-flex' key={index + 1}>
                             <div className='w-25 d-flex justify-content-center align-items-center '>
@@ -630,6 +638,7 @@ export default function CreateTemplate() {
                             <div className='w-100'>
                               <Select options={paramatersList}
                                 value={{ value: paramData, label: paramData }}
+                                defaultValue={{ value: paramData, label: paramData }}
                                 onChange={(e) => handleParameterChange(index, e.label)}
                                 closeMenuOnSelect={true} />
 
@@ -653,29 +662,33 @@ export default function CreateTemplate() {
                   className="form-control "
                   placeholder='Enter Footer text here'
                   maxLength={60}
-                  value={BasicTemplateData.footer}
+                  value={BasicTemplateData.footer ?? ''}
                   onChange={(e) => setBasicTemplateData({ ...BasicTemplateData, footer: e.target.value })}
                 />
-
               </div>
 
             </Col>
 
             {/* whatsapp ui  -------------------------------------------- */}
             <Col lg="6" className='d-flex align-items-center flex-column   justify-content-center ' >
-              <div className=' d-flex flex-column  px-2 pe-4 py-5 ' style={{ width: '400px', whiteSpace: 'pre-wrap', gap: "5px", backgroundImage: `url(${wp_back})` }}>
+              <div className=' d-flex flex-column  px-2 pe-4 py-5 ' style={{ width: '420px', whiteSpace: 'pre-wrap', gap: "5px", backgroundImage: `url(${wp_back})` }}>
 
                 <Card className='rounded-3 shadow-lg  position-relative mb-0 whatsapp_template_card' >
                   <CardBody className='p-2'>
-
                     {Header.type === "Image" && <div className='border rounded-3 d-flex justify-content-center  align-items-center ' style={{ minHeight: "170px", background: "#ffddb0" }}>
                       {
                         Header.file === '' ? <Image size={45} color='#faad20' /> : <img
                           className='img-fluid border-0 rounded-3 w-100 object-fit-cover'
                           style={{ minHeight: "170px" }}
-                          // src={URL.createObjectURL(Header.file) ?? '' }
-                          src={Header.file === '' ? '' : URL.createObjectURL(Header.file)}
-
+                          src={(function () {
+                            try {
+                              return URL.createObjectURL(Header.file)
+                            } catch (error) {
+                              // console.error('Error creating object URL:', error)
+                              return Header.file // Fallback to Header.file if there's an error
+                            }
+                          })()}
+                          // src={Header.file === '' ? '' : Header.file}
                           alt=""
                         />
 
@@ -687,7 +700,14 @@ export default function CreateTemplate() {
                       {
                         Header.file === '' ? <PlayCircle size={45} color='#5f66cd' /> : <video className='rounded-3  object-fit-cover w-100' controls   style={{ height: "170px" }}>
                           <source
-                            src={Header.file === '' ? '' : Header?.file?.name ?? ''}
+                            src={(function () {
+                              try {
+                                return URL.createObjectURL(Header.file)
+                              } catch (error) {
+                                console.error('Error creating object URL:', error)
+                                return Header.file // Fallback to Header.file if there's an error
+                              }
+                            })()}
                             type="video/mp4"
                           />
                           Video not supported.
@@ -709,33 +729,33 @@ export default function CreateTemplate() {
                     </div>
                     {/* footer */}
                     {
-                      BasicTemplateData.footer && <p className='text-secondary mt-1 fs-6'>{BasicTemplateData.footer}</p>
+                      BasicTemplateData.footer && <h6 className='text-secondary mt-1'>{BasicTemplateData.footer}</h6>
                     }
                   </CardBody>
                   {
                     useInteractive && useInteractive.map((elem) => {
                       if (elem.type === "COPY_CODE") {
                         return (
-                           <div className="border-top  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
-                              <Copy sze={17} /><h6 className='m-0 text-primary' >Copy offer code</h6>
-                           </div>
+                          <div className="border-top  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
+                            <Copy sze={17} /><h6 className='m-0 text-primary' >Copy offer code</h6>
+                          </div>
                         )
-                     }
+                      }
                       if (elem.type === 'PHONE_NUMBER' && elem.text !== '') {
                         return (
-                          <div className="border-top bg-white  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                          <div className="border-top  bg-white  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
                             <Phone size={17} /><h6 className='m-0 text-primary' > {elem.text}</h6>
                           </div>)
                       }
                       if (elem.type === 'URL' && elem.text !== '') {
                         return (
-                          <div className="border-top bg-white  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                          <div className="border-top  bg-white  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
                             <ExternalLink size={17} /><h6 className='m-0 text-primary' > {elem.text}</h6>
                           </div>)
                       }
                       if (elem.type === 'QUICK_REPLY' && elem.text !== '') {
                         return (
-                          <div className="border-top bg-white  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                          <div className="border-top  bg-white  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
                             <CornerDownLeft size={17} /> <h6 className='m-0 text-primary' > {elem.text}</h6>
                           </div>)
                       }
@@ -763,7 +783,6 @@ export default function CreateTemplate() {
                   {useInteractive?.length > 0 &&
                     <div className='gap-1 d-flex flex-column  '>
                       {useInteractive?.map((ele, index) => {
-
                         if (ele.type === 'COPY_CODE') {
                           return (
                             <Row key={index}>
@@ -804,7 +823,7 @@ export default function CreateTemplate() {
                             </Row>)
                         }
                         if (ele.type === 'URL') {
-                          console.log(ele)
+                          // console.log(ele)
                           return (
                             <Row key={index}>
                               <Col lg="2" className='d-flex justify-content-center  align-items-center '><p className='m-0'>Call to Action {index + 1} :</p></Col>
@@ -840,7 +859,6 @@ export default function CreateTemplate() {
                                     className="form-control "
                                     placeholder='url'
                                     value={ele.url}
-                                    // value={ele.url}
                                     onChange={(e) => handleInputChange(index, 'url', e.target.value)}
                                   />}
                                 {
@@ -866,7 +884,7 @@ export default function CreateTemplate() {
                           return (
                             <Row key={index}>
                               <Col lg="2" className='d-flex justify-content-center  align-items-center '><p className='m-0'>Call to Action {index + 1} :</p></Col>
-                              <Col lg="2">
+                              <Col lg="3">
                                 <input
                                   type="text"
                                   className="form-control "
@@ -887,7 +905,6 @@ export default function CreateTemplate() {
                                   onChange={(e) => handleInputChange(index, 'text', e.target.value)}
                                 />
                               </Col>
-
                               <Col lg="1">
                                 <Select options={selectPhoneList}
                                   onChange={(e) => handleInputChange(index, 'code', e.value)}
@@ -912,7 +929,6 @@ export default function CreateTemplate() {
                       })}
 
                     </div>}
-
                   <div className='d-flex gap-2 mt-1'>
                     <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center   gap-1 ${(useButtons.QUICK_REPLY - 10) === 0 ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("QUICK_REPLY")} >
                       <Plus size={18} /> <p className='m-0'>Quick Reply</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{10 - (useButtons.QUICK_REPLY)}</p></div>

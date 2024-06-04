@@ -245,6 +245,11 @@ export const configUrl = {
     get_project_profile: "/talk/get_project_profile/",
     update_profile: "/talk/update_profile/",
     quick_replay: "/talk/quick_replay/",
+    customer_tags_notes: "/talk/customer_tags_notes/",
+    tags: "/talk/tags/",
+    chat_status: "/talk/chat_status/",
+    opt_settings: "/talk/opt_settings/",
+    contact_to_send_template: "/talk/contact_to_send_template/",
 
     // Email
     email_details: "/mail/contact_details/",

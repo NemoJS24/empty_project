@@ -1,14 +1,15 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Card, CardBody, Col, Container, Input, Label, Row, Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup } from 'reactstrap'
 import whatsapp from './imgs/whatsapp.png'
 import toast from 'react-hot-toast'
 import Select from 'react-select'
-import { Download, FileText, Image } from 'react-feather'
+import { Download, FileText, Image, Trash2 } from 'react-feather'
 import ResizableTextarea from "./components/ResizableTextarea"
 import axios from 'axios'
 import { filter, set } from 'lodash'
+import { getReq, postReq } from '../../../assets/auth/jwtService'
 
 export default function OtpinManage() {
 
@@ -73,6 +74,20 @@ export default function OtpinManage() {
                 setOptOutKeyWords([...optOutKeyWords, ''])
 
             }
+        }
+    }
+
+    const delInputField = (num, id) => {
+        const newArray = [...optOutKeyWords]
+        if (num === 2) {
+            // console.log("len", optInKeyWords.length)
+            if (optInKeyWords.length < 5) {
+                setOptInKeyWords([...optInKeyWords, ''])
+            }
+
+        } else {
+           const newArray = optOutKeyWords.filter((_, index) =>  index !== id)
+           setOptOutKeyWords(newArray)
         }
     }
 
@@ -166,21 +181,29 @@ export default function OtpinManage() {
         )
     }
 
+    useEffect(() => {
+        getReq("opt_settings")
+        .then((resp) => {
+            console.log(resp)
+            setOptOutKeyWords(resp?.data?.keyword_list)
+            // console.log("999", JSON.parse(resp?.data?.keyword_list))
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }, [])
+    
+
     const submitForm = () => {
         const newformData = new FormData()
-        console.log(optOutKeyWords)
-
         const optOutKeyValues = optOutKeyWords.filter(item => item !== "") // Filter out objects with empty values
     
-        console.log(optOutKeyValues)
-
-        // return null
-        // const valuesOnlyaa = ['please', 'me', 'help']
-        // JSON.stringify(valuesOnlyaa)
-        newformData.append('optOutKeyValues', JSON.stringify(optOutKeyValues))
+        newformData.append('keyword_list', optOutKeyValues)
+        // newformData.append('optOutKeyValues', JSON.stringify(optOutKeyValues))
 
 
-        axios.post("https://d794-2405-201-7-88e1-3322-4051-f3b4-58b6.ngrok-free.app/opt/", newformData).then((resp) => {
+        postReq("opt_settings", newformData)
+        .then((resp) => {
             console.log(resp)
         })
         .catch((error) => {
@@ -203,9 +226,11 @@ export default function OtpinManage() {
             <Card>
                 <CardBody>
                     <h4 className="">Opt-in Management</h4>
+                    <p className="fs-5">Setup keywords that user can type to Opt-in & Opt-out from messaging campaign</p>
+
                 </CardBody>
             </Card>
-            <Card>
+            {/* <Card>
                 <CardBody>
                     <h4 className="">Quick Guide</h4>
                     <p className="fs-5">Setup keywords that user can type to Opt-in & Opt-out from messaging campaign</p>
@@ -213,19 +238,7 @@ export default function OtpinManage() {
                         <Link to="/merchant/whatsapp/">How to Create Opt-out/Opt-in User?</Link>
                     </div>
                 </CardBody>
-            </Card>
-            <Card>
-                <CardBody className='d-flex justify-content-between '>
-                    <div >
-                        <h4 className="">API Campaign Opt-out</h4>
-                        <p className="fs-5">Enable this if you don't wish to send api campaign to opted-out contacts</p>
-                    </div>
-                    <div className='form-check form-switch form-check-success mb-1'>
-                        <Input type='checkbox' id='inviteReceived' onChange={() => makeToast("Enable")} />
-                    </div>
-                </CardBody>
-            </Card>
-
+            </Card> */}
             <Card>
                 <CardBody>
                     <Row>
@@ -236,16 +249,17 @@ export default function OtpinManage() {
                                     on which they should be automatically opted-out
                                 </p>
                                 <Row className='d-flex flex-column  gap-1'>
-                                    {optOutKeyWords.map((field, index) => (
-                                        <Col key={index} md="6">
+                                    {optOutKeyWords.map((elm, index) => (
+                                        <Col key={index} md="7" className=' d-flex align-items-center'>
                                             <input
                                                 type="text"
                                                 className="form-control form-control-lg"
                                                 name={`email_${index}`}
-                                                defaultValue={field}
+                                                value={elm}
                                                 placeholder='Enter Keywords'
                                                onChange={(e) => handleKeyWordChange(index, e.target.value)}
                                             />
+                                            <div className='ms-2' onClick={() => delInputField(1, index) }><Trash2 size={20}/> </div>
                                         </Col>
                                     ))}
                                 </Row>

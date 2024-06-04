@@ -1,6 +1,7 @@
+/* eslint-disable multiline-ternary */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react'
-import { Activity, CornerDownLeft, ExternalLink, FileText, Home, List, Phone, RefreshCcw, Send, Star } from 'react-feather'
+import { Activity, Copy, CornerDownLeft, ExternalLink, FileText, Home, List, Phone, RefreshCcw, Send, Star } from 'react-feather'
 import toast from 'react-hot-toast'
 import { BsFire } from "react-icons/bs"
 import { CiCloud, CiMenuKebab } from "react-icons/ci"
@@ -34,6 +35,8 @@ export default function TemplateDashboard() {
    const [CurrentTemplate, setCurrentTemplate] = useState()
    const [HeaderParameterList, setHeaderParameterList] = useState([''])
    const [useButtonLink, setButtonLink] = useState('')
+   const [useCouponCode, setCouponCode] = useState('')
+   const [useSearchValue, setSearchValue] = useState('')
    // const [useButtonLinkPresent, setButtonLinkPresent] = useState()
    const [BodyParameterList, setBodyParameterList] = useState([])
    const [testPhone, settestPhone] = useState('')
@@ -54,6 +57,7 @@ export default function TemplateDashboard() {
       // setoldBodyPara([])
       // setoldHeaderPara([])
       setButtonLink('')
+      setCouponCode('')
    }, [modal])
 
    const submenuList = [
@@ -95,7 +99,7 @@ export default function TemplateDashboard() {
    ]
 
    // get all data
-   const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
+   const getData = (currentPage = 0, currentEntry = 10, advanceSearchValue = {}) => {
       setLoader(true)
       // Create a new FormData object and append the searchValue
       const formData = new FormData()
@@ -104,7 +108,7 @@ export default function TemplateDashboard() {
       formData.append("slug", "customer_data")
       formData.append("page", currentPage + 1)
       formData.append("size", currentEntry)
-      formData.append("searchValue", searchValue)
+      formData.append("searchValue", useSearchValue)
 
       postReq("getTemplates", formData)
          .then(data => {
@@ -121,11 +125,15 @@ export default function TemplateDashboard() {
             setLoader(false)
          })
    }
- 
-   useEffect(() => {
-      getData()
-   }, [])
 
+   useEffect(() => {
+      const delayDebounceFn = setTimeout(() => {
+         getData()
+
+      }, 500) // Adjust the delay (in milliseconds) as needed
+  
+      return () => clearTimeout(delayDebounceFn)
+    }, [useSearchValue])
 
    // modal display ui message
    const updateDisplayedMessage2 = (inputString, apiPara) => {
@@ -207,6 +215,26 @@ export default function TemplateDashboard() {
          })
       }
 
+      // coupon code
+         //  CurrentTemplate.components.map((data) => {
+         //    if (data.type === "BUTTONS") {
+         //       // console.log(data)
+         //       return data.buttons.map((elm) => {
+         //          // console.log(elm)
+         //          if (elm.type === "COPY_CODE") {
+         //             formData.append("coupon_variables", JSON.stringify([
+         //                {
+         //                type: "coupon_code",
+         //                coupon_code: useCouponCode
+         //              }
+         //             ]))
+         //          }
+         //       })
+         //    }
+
+         // })
+
+
       formData.append("language", CurrentTemplate.language)
       formData.append("template_name", CurrentTemplate.name)
       formData.append("template_id", CurrentTemplate.id)
@@ -259,9 +287,9 @@ export default function TemplateDashboard() {
                      setoldBodyPara(elm.example?.body_text[0])
                      updateDisplayedMessage2(elm.text, elm.example?.body_text[0])
                   }
-                
+
                })
-                  setModal(true)
+               setModal(true)
             } else {
                toast.error("Template doest not exist!")
                setModal(false)
@@ -305,12 +333,11 @@ export default function TemplateDashboard() {
                     `
             }
          </style>
-         <Card>
+         {/* <Card>
             <CardBody className='d-flex justify-content-between align-items-center '>
                <h4 className="m-0">Explore Campaigns</h4>
-               <Link to="/merchant/whatsapp/is_template/" className="btn btn-primary " >Create Template</Link>
             </CardBody>
-         </Card>
+         </Card> */}
 
          <Card className='border position-relative '>
             <div className=' px-2 d-flex gap-5 py-1'>
@@ -324,7 +351,11 @@ export default function TemplateDashboard() {
                }
             </div>
             <div className='position-absolute  end-0 me-2 mt-1 d-flex gap-1'>
+               <div class="">
+                  <input type="text" class="form-control" onChange={(e) => setSearchValue(e.target.value)} placeholder="Search..." />
+               </div>
                <button onClick={getData} className='btn btn-primary'><RefreshCcw size={15} /></button>
+               <Link to="/merchant/whatsapp/template/new/" className="btn btn-primary " >Create Template</Link>
             </div>
          </Card>
          {
@@ -361,7 +392,7 @@ export default function TemplateDashboard() {
                            <Row className='match-height align-items-center '>
 
                               {
-                                !AllTemplatesData  && <div className='fs-4 text-center mt-5 fw-bolder'>No Templates Available</div>
+                                 !AllTemplatesData && <div className='fs-4 text-center mt-5 fw-bolder'>No Templates Available</div>
                               }
                               {
                                  AllTemplatesData && AllTemplatesData.map((SingleTemplate) => {
@@ -373,7 +404,7 @@ export default function TemplateDashboard() {
                                              {
                                                 // renderTemp(SingleTemplate)
                                              }
-                                                <RenderTemplateUI SingleTemplate={SingleTemplate}/>
+                                             <RenderTemplateUI SingleTemplate={SingleTemplate} />
 
                                              <div className='mt-1'>
                                                 <div className='  rounded-3 d-flex justify-content-between align-items-center  '>
@@ -388,35 +419,36 @@ export default function TemplateDashboard() {
                                                       {
                                                          SingleTemplate.status === "PENDING" && <div className=' border-0 px-1 bg-warning text-white rounded-2'>Pending</div>
                                                       }
+                                                      {
+                                                         SingleTemplate.status === "DISABLED" && <div className=' border-0 px-1 bg-warning text-white rounded-2'>Disabled</div>
+                                                      }
                                                    </div>
 
-                                                 
+
                                                    {
                                                       SingleTemplate.status === "APPROVED" && isActive && <div className='d-flex flex-column w-100'>
-                                                      <div className='d-flex gap-1 align-items-center'>
-                                                         <div class="dropdown">
-                                                            <button class="dropbtn"> <CiMenuKebab /> </button>
-                                                            <div class="dropdown-content cursor-pointer">
-                                                               <div className='items' onClick={() => getCurrentTemplate(SingleTemplate.id, 'modal')}>Test</div>
-                                                               <div className='items' onClick={() => nagivate(`/merchant/whatsapp/editTemplate/${SingleTemplate.id}`)} >Edit</div>
-                                                               <div className='items text-danger ' onClick={() => toggleActive(SingleTemplate.id, false)} >Deactivate</div>
+                                                         <div className='d-flex gap-1 align-items-center'>
+                                                            <div class="dropdown">
+                                                               <button class="dropbtn"> <CiMenuKebab /> </button>
+                                                               <div class="dropdown-content cursor-pointer">
+                                                                  <div className='items' onClick={() => getCurrentTemplate(SingleTemplate.id, 'modal')}>Test</div>
+                                                                  <div className='items' onClick={() => nagivate(`/merchant/whatsapp/template/${SingleTemplate.id}`)} >Edit</div>
+                                                                  <div className='items text-danger ' onClick={() => toggleActive(SingleTemplate.id, false)} >Deactivate</div>
+                                                               </div>
                                                             </div>
-                                                         </div>
-                                                         <p className='m-0 p-0'>{SingleTemplate.name}</p>
+                                                            <p className='m-0 p-0'>{SingleTemplate.name}</p>
 
-                                                      </div>
+                                                         </div>
                                                          {/* <button className='btn btn-primary px-3 send-btn' onClick={() => getCurrentTemplate(SingleTemplate.id, 'modal2')} >Start Campaign <Send id="send-icon" size={16} style={{ marginLeft: "5px" }} /></button> */}
                                                          <div className='ms-auto'>
 
-                                                         <Link to={params.get('campagin_type') ? params.get('campagin_type') === "broadcast" ? `/merchant/whatsapp/campaign/${SingleTemplate.id}` : `/merchant/whatsapp/create-campaign/${params.get('campagin_type')}/${SingleTemplate.id}` : `/merchant/whatsapp/campaign/${SingleTemplate.id}`} className='btn btn-primary px-3 send-btn' >Use Template <Send id="send-icon" size={16} style={{ marginLeft: "5px" }} /></Link>
+                                                            <Link to={params.get('campagin_type') ? params.get('campagin_type') === "broadcast" ? `/merchant/whatsapp/campaign/${SingleTemplate.id}` : `/merchant/whatsapp/create-campaign/${params.get('campagin_type')}/${SingleTemplate.id}` : `/merchant/whatsapp/campaign/${SingleTemplate.id}`} className='btn btn-primary px-3 send-btn' >Use Template <Send id="send-icon" size={16} style={{ marginLeft: "5px" }} /></Link>
                                                          </div>
                                                       </div>
                                                    }
                                                    {
-                                                      !isActive && <h6>This template is inactive click here to <span className='text-success cursor-pointer text-decoration-underline' onClick={() => toggleActive(SingleTemplate.id, true)}>Activate</span>. </h6>
-                                                   }
-                                                   {
-                                                      SingleTemplate.status !== "APPROVED" && <h6 >This template is not Approved please refresh or <span className='text-danger cursor-pointer text-decoration-underline ' onClick={() => nagivate(`/merchant/whatsapp/editTemplate/${SingleTemplate.id}`)}>edit</span> </h6>
+                                                      SingleTemplate.status !== "APPROVED" ? <h6 >This template is not Approved please refresh or <span className='text-danger cursor-pointer text-decoration-underline ' onClick={() => nagivate(`/merchant/whatsapp/template/${SingleTemplate.id}`)}>edit</span> </h6> :
+                                                         !isActive ? <h6>This template is inactive click here to <span className='text-success cursor-pointer text-decoration-underline' onClick={() => toggleActive(SingleTemplate.id, true)}>Activate</span>. </h6> : ""
                                                    }
                                                 </div>
                                                 {/* <button className='btn text-success px-3' onClick={() => toggleActive(SingleTemplate.id, true)} >Active this Campaign </button> */}
@@ -511,6 +543,32 @@ export default function TemplateDashboard() {
                                        // console.log(data)
                                        return data.buttons.map((elm) => {
                                           // console.log(elm)
+                                          if (elm.type === "COPY_CODE") {
+                                             return (
+                                                <div className='mt-1'>
+                                                   <h4 className=" mt-3 sendMenuHeader">Coupon Code</h4>
+
+                                                   <input
+                                                      type="text"
+                                                      className="form-control "
+                                                      placeholder="SDJFYN"
+                                                      onChange={(e) => setCouponCode(e.target.value)}
+                                                   />
+                                                </div>
+                                             )
+                                          }
+                                       })
+                                    }
+
+                                 })
+                              }
+
+                           {/* {
+                                 CurrentTemplate && CurrentTemplate.components.map((data) => {
+                                    if (data.type === "BUTTONS") {
+                                       // console.log(data)
+                                       return data.buttons.map((elm) => {
+                                          // console.log(elm)
                                           if (elm.example) {
                                              return (
                                                 <div className='mt-1'>
@@ -529,7 +587,8 @@ export default function TemplateDashboard() {
                                     }
 
                                  })
-                              }
+                              } */}
+
                               <div className='mt-1'>
                                  <h4 className=" mt-3 sendMenuHeader">Send to </h4>
 
@@ -572,7 +631,7 @@ export default function TemplateDashboard() {
                                           if (data.format === "VIDEO") {
                                              return (
                                                 <div className='p-1'  >
-                                                   <video className='rounded-3  object-fit-cover w-100' controls autoPlay mute style={{ height: "170px" }}>
+                                                   <video className='rounded-3  object-fit-cover w-100' controls   style={{ height: "170px" }}>
                                                       <source
                                                          src={data.example?.header_handle[0] ?? ""}
                                                          type="video/mp4"
@@ -608,24 +667,31 @@ export default function TemplateDashboard() {
                                           }
                                           if (data.type === "BUTTONS") {
                                              return data.buttons.map((data) => {
+                                                if (data.type === "COPY_CODE") {
+                                                   return (
+                                                      <div className="border-top  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
+                                                         <Copy size={17} /><h6 className='m-0 text-primary' >Copy offer code</h6>
+                                                      </div>
+                                                   )
+                                                }
                                                 if (data.type === "URL") {
                                                    return (
                                                       <div className="border-top  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
-                                                         <ExternalLink size={17} /><h6 className='m-0 text-primary' >{data.text}</h6>
+                                                         <ExternalLink size={17} /><h6 className='m-0 text-primary' >{data?.text ?? ''}</h6>
                                                       </div>
                                                    )
                                                 }
                                                 if (data.type === "PHONE_NUMBER") {
                                                    return (
                                                       <div className="border-top  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
-                                                         <Phone size={17} /><h6 className='m-0 text-primary' >{data.text}</h6>
+                                                         <Phone size={17} /><h6 className='m-0 text-primary' >{data?.text ?? ''}</h6>
                                                       </div>
                                                    )
                                                 }
                                                 if (data.type === "QUICK_REPLY") {
                                                    return (
                                                       <div className="border-top rounded-3 bg-white  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
-                                                         <CornerDownLeft size={17} /><h6 className='m-0 text-primary' > {data.text}</h6>
+                                                         <CornerDownLeft size={17} /><h6 className='m-0 text-primary' > {data?.text ?? ''}</h6>
                                                       </div>
                                                    )
                                                 }
