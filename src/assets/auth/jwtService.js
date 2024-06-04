@@ -245,6 +245,7 @@ export const configUrl = {
     get_project_profile: "/talk/get_project_profile/",
     update_profile: "/talk/update_profile/",
     quick_replay: "/talk/quick_replay/",
+    campaign_details_list: "/talk/campaign_details_list/",
 
     // Email
     email_details: "/mail/contact_details/",
@@ -273,7 +274,9 @@ export const configUrl = {
     whatsapp_create_campaign: "/talk/create_campaign/",
     whatsapp_view_campaign: "/talk/view_campaign/",
     change_campaign_status: "/talk/change_campaign_status/",
-    default_settings: "/api/v1/set_default_settings/"
+    default_settings: "/api/v1/set_default_settings/",
+    import_leads: "/customers/group_import_leads/",
+    assign_lead: "customers/assign_lead/"
     
 }
 

@@ -35,14 +35,45 @@ export const HeaderTypeList = [
 ]
 
 export const paramatersList = [
-  { value: 'FirstName', label: "FirstName" },
-  { value: 'LastName', label: "LastName" },
-  { value: 'customerName', label: "customerName" },
-  { value: 'CompanyName', label: "CompanyName" },
-  { value: 'OrderID', label: "OrderID" },
-  { value: 'ProductName', label: "ProductName" }
+  { value: 'First Name', label: "FirstName" },
+  { value: 'Last Name', label: "LastName" },
+  { value: 'Customer Name', label: "customerName" },
+  { value: 'Phone Number', label: "phone_number" },
+  { value: 'Email Address', label: "email" },
+  { value: 'Order ID', label: "OrderID" },
+  { value: 'Marketing Acceptance Status', label: "marketing_acceptance_status" },
+  { value: 'Cart Token', label: "cart_token" },
+  { value: 'Checkout Id', label: "checkout_id" },
+  { value: 'Order Created At', label: "order_created_at" },
+  { value: 'Payment Currency', label: "currency" },
+  { value: 'Subtotal Price', label: "current_subtotal_price" },
+  { value: 'Additional Fees', label: "current_total_additional_fees_set" },
+  { value: 'Total Discounts', label: "current_total_discounts" }, 
+  { value: 'Total Duties', label: "current_total_duties_set" },
+  { value: 'Total Price', label: "current_total_price" },
+  { value: 'Total Tax', label: "current_total_tax" },
+  { value: 'Discount Codes', label: "discount_codes" },
+  { value: 'Billing Address 1', label: "billing_address_1" },
+  { value: 'Billing Address 2', label: "billing_address_2" },
+  { value: 'Billing Address City', label: "billing_address_city" },
+  { value: 'Billing Address Zip', label: "billing_address_zip" },
+  { value: 'Billing Address Province', label: "billing_address_province" },
+  { value: 'Billing Address Country', label: "billing_address_country" },
+  { value: 'Billing Details First Name', label: "billing_address_customer_first_name" },
+  { value: 'Billing Details Last Name', label: "billing_address_customer_last_name" },
+  { value: 'Billing Details Country Code', label: "billing_address_country_code" },
+  { value: 'Billing Details Phone Number', label: "billing_address_customer_phone" },
+  { value: 'Shipping Address', label: "shipping_address_1" },
+  { value: 'Shipping Address City', label: "shipping_address_city" },
+  { value: 'Shipping Address Zip', label: "shipping_address_zip" },
+  { value: 'Shipping Address Province', label: "shipping_address_province" },
+  { value: 'Shipping Address Country', label: "shipping_address_country" },
+  { value: 'Shipping Details First Name', label: "shipping_address_customer_first_name" },
+  { value: 'Shipping Details Last Name', label: "shipping_address_customer_last_name" },
+  { value: 'Shipping Details Country Code', label: "shipping_address_country_code" },
+  { value: 'Shipping Details Phone Number', label: "shipping_address_customer_phone" },
+  { value: 'Shipping Company', label: "shipping_company" }
 ]
-
 export const languageList = [
   {
     value: "en",

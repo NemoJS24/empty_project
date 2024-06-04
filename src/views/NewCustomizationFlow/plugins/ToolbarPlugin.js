@@ -101,7 +101,10 @@ export const FONT_FAMILY_OPTIONS = [
   { label: "Public Sans", value: "Public Sans" },
   { label: "Rokkitt", value: "Rokkitt" },
   { label: "Saira", value: "Saira" },
-  { label: "Urbanist", value: "Urbanist" }
+  { label: "Urbanist", value: "Urbanist" },
+  { label: "Fanwood Text", value: "Fanwood Text" },
+  { label: "Nunito Sans", value: "Nunito Sans" },
+  { label: "Poppins", value: "Poppins" }
 ]
 
 const FONT_SIZE_OPTIONS = []

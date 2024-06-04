@@ -207,6 +207,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
     const [currPage, setCurrPage] = useState(defObj?.[`${mobileCondition}pages`][0]?.id)
     const [draggedInputType, setDraggedInputType] = useState("none")
     const [whatsAppTem, setWhatsappTem] = useState([])
+    const [campaignTem, setCampaignTem] = useState([])
     const pageCondition = currPage === "button" ? "button" : "main"
 
     // const [whatsappJson, setWhatsappJson] = useState({
@@ -3235,62 +3236,6 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                 />
                             </div>
 
-                            <div className="row mt-2">
-                                <label htmlFor="" style={{ fontSize: "12px" }}>Include URLs:</label>
-                                {finalObj?.behaviour?.INCLUDES_PAGE_LINK?.map((ele, key) => {
-                                    return (
-                                        <div className="col-12" key={key}>
-                                            <div className="p-0 position-relative d-flex align-items-center mb-1">
-                                                <input style={{ fontSize: "12px" }} onChange={e => {
-                                                    const newObj = { ...finalObj }
-                                                    newObj.behaviour.INCLUDES_PAGE_LINK[key] = e.target.value
-                                                    updatePresent(newObj)
-                                                }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj?.behaviour?.INCLUDES_PAGE_LINK?.length > 1 && <span onClick={() => {
-                                                    const newObj = { ...finalObj }
-                                                    newObj?.behaviour?.INCLUDES_PAGE_LINK?.splice(key, 1)
-                                                    updatePresent(newObj)
-                                                }} className="d-flex justify-content-center alignn-items-center position-absolute end-0 p-1 cursor-pointer"><Trash stroke='red' size={12.5} /></span>}
-                                            </div>
-                                        </div>
-                                    )
-                                })}
-                                {<div className="col-12">
-                                    <button onClick={() => {
-                                        const newObj = { ...finalObj }
-                                        newObj.behaviour.INCLUDES_PAGE_LINK = [...finalObj?.behaviour?.INCLUDES_PAGE_LINK, ""]
-                                        updatePresent(newObj)
-                                    }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
-                                </div>}
-                            </div>
-
-                            <div className="row mt-2">
-                                <label htmlFor="" style={{ fontSize: "12px" }}>Exclude URLs:</label>
-                                {finalObj?.behaviour?.EXCLUDE_PAGE_LINK?.map((ele, key) => {
-                                    return (
-                                        <div className="col-12" key={key}>
-                                            <div className="p-0 position-relative d-flex align-items-center mb-1">
-                                                <input style={{ fontSize: "12px" }} onChange={e => {
-                                                    const newObj = { ...finalObj }
-                                                    newObj.behaviour.EXCLUDE_PAGE_LINK[key] = e.target.value
-                                                    updatePresent(newObj)
-                                                }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj?.behaviour?.EXCLUDE_PAGE_LINK?.length > 1 && <span onClick={() => {
-                                                    const newObj = { ...finalObj }
-                                                    newObj?.behaviour?.EXCLUDE_PAGE_LINK?.splice(key, 1)
-                                                    updatePresent(newObj)
-                                                }} className="d-flex justify-content-center alignn-items-center position-absolute end-0 p-1 cursor-pointer"><Trash stroke='red' size={12.5} /></span>}
-                                            </div>
-                                        </div>
-                                    )
-                                })}
-                                {<div className="col-12">
-                                    <button onClick={() => {
-                                        const newObj = { ...finalObj }
-                                        newObj.behaviour.EXCLUDE_PAGE_LINK = [...finalObj?.behaviour?.EXCLUDE_PAGE_LINK, ""]
-                                        updatePresent(newObj)
-                                    }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
-                                </div>}
-                            </div>
-
                             {/* <div className="row mt-2">
                                 <span className="form-check form-check-success m-0 d-flex justify-content-start align-items-center gap-1">
                                     <input
@@ -3308,6 +3253,62 @@ const CustomizationParent = ({ isAdmin = false }) => {
 
                         </>
                     )}
+
+                    <div className="row mt-2">
+                        <label htmlFor="" style={{ fontSize: "12px" }}>Include URLs:</label>
+                        {finalObj?.behaviour?.INCLUDES_PAGE_LINK?.map((ele, key) => {
+                            return (
+                                <div className="col-12" key={key}>
+                                    <div className="p-0 position-relative d-flex align-items-center mb-1">
+                                        <input style={{ fontSize: "12px" }} onChange={e => {
+                                            const newObj = { ...finalObj }
+                                            newObj.behaviour.INCLUDES_PAGE_LINK[key] = e.target.value
+                                            updatePresent(newObj)
+                                        }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj?.behaviour?.INCLUDES_PAGE_LINK?.length > 1 && <span onClick={() => {
+                                            const newObj = { ...finalObj }
+                                            newObj?.behaviour?.INCLUDES_PAGE_LINK?.splice(key, 1)
+                                            updatePresent(newObj)
+                                        }} className="d-flex justify-content-center alignn-items-center position-absolute end-0 p-1 cursor-pointer"><Trash stroke='red' size={12.5} /></span>}
+                                    </div>
+                                </div>
+                            )
+                        })}
+                        {<div className="col-12">
+                            <button onClick={() => {
+                                const newObj = { ...finalObj }
+                                newObj.behaviour.INCLUDES_PAGE_LINK = [...finalObj?.behaviour?.INCLUDES_PAGE_LINK, ""]
+                                updatePresent(newObj)
+                            }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
+                        </div>}
+                    </div>
+
+                    <div className="row mt-2">
+                        <label htmlFor="" style={{ fontSize: "12px" }}>Exclude URLs:</label>
+                        {finalObj?.behaviour?.EXCLUDE_PAGE_LINK?.map((ele, key) => {
+                            return (
+                                <div className="col-12" key={key}>
+                                    <div className="p-0 position-relative d-flex align-items-center mb-1">
+                                        <input style={{ fontSize: "12px" }} onChange={e => {
+                                            const newObj = { ...finalObj }
+                                            newObj.behaviour.EXCLUDE_PAGE_LINK[key] = e.target.value
+                                            updatePresent(newObj)
+                                        }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj?.behaviour?.EXCLUDE_PAGE_LINK?.length > 1 && <span onClick={() => {
+                                            const newObj = { ...finalObj }
+                                            newObj?.behaviour?.EXCLUDE_PAGE_LINK?.splice(key, 1)
+                                            updatePresent(newObj)
+                                        }} className="d-flex justify-content-center alignn-items-center position-absolute end-0 p-1 cursor-pointer"><Trash stroke='red' size={12.5} /></span>}
+                                    </div>
+                                </div>
+                            )
+                        })}
+                        {<div className="col-12">
+                            <button onClick={() => {
+                                const newObj = { ...finalObj }
+                                newObj.behaviour.EXCLUDE_PAGE_LINK = [...finalObj?.behaviour?.EXCLUDE_PAGE_LINK, ""]
+                                updatePresent(newObj)
+                            }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
+                        </div>}
+                    </div>
 
                     {/* {finalObj?.behaviour?.PAGES?.includes("custom_source") && (
                         <div className="row mt-2">
@@ -3772,10 +3773,19 @@ const CustomizationParent = ({ isAdmin = false }) => {
         const form_data = new FormData()
         form_data.append("superleadz_template", id)
         const secondsConverted = await convertToSeconds({ time: Number(finalObj?.whatsapp?.time), type: finalObj?.whatsapp?.timeType })
+        const campaign_secondsConverted = await convertToSeconds({ time: Number(finalObj?.whatsapp?.campaign_time), type: finalObj?.whatsapp?.campaign_timeType })
+        const campaign_two_secondsConverted = await convertToSeconds({ time: Number(finalObj?.whatsapp?.second_campaign_time), type: finalObj?.whatsapp?.second_campaign_timeType })
+
         // console.log(secondsConverted, "secondsConverted")
+        const now = moment(new Date())
+        const scheduledTime = now.add(campaign_secondsConverted, 'seconds')
         const json_data = {
             template: finalObj?.whatsapp?.template,
-            delay: secondsConverted
+            campaign: finalObj?.whatsapp?.campaign,
+            delay: secondsConverted,
+            campagin_delay: campaign_secondsConverted,
+            second_campagin_delay: campaign_two_secondsConverted,
+            timestamp_schedule_str: scheduledTime
         }
         form_data.append("json_data", JSON.stringify(json_data))
 
@@ -3831,6 +3841,12 @@ const CustomizationParent = ({ isAdmin = false }) => {
             form_data.append('shop', outletData[0]?.web_url)
             form_data.append('app', 'superleadz')
             Object.entries(finalObj.behaviour).forEach(([key, value]) => {
+                console.log(key, "========key")
+                // if (finalObj.behaviour?.EXCLUDE_PAGE_LINK.length > 0) {
+                //     concat_val = `exclude${value}`
+                // } else {
+                //     concat_val = value
+                // }
                 if (Array.isArray(value)) {
                     value.forEach(ele => form_data.append(key, ele))
                 } else {
@@ -4700,31 +4716,45 @@ const CustomizationParent = ({ isAdmin = false }) => {
 
     const integratedList = () => {
         getReq("integration", `?app_name=${userPermission?.appName}`)
-            .then((resp) => {
-                setConnectedList(resp?.data?.connected_app_list?.map((curElem) => curElem?.integrated_app?.slug))
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        .then((resp) => {
+            setConnectedList(resp?.data?.connected_app_list?.map((curElem) => curElem?.integrated_app?.slug))
+        })
+        .catch((error) => {
+            console.log(error)
+        })
 
         getReq("getTemplates")
-            .then((resp) => {
-                // console.log(resp, "ppppppp")
-                setWhatsAppTemplate(resp?.data?.data)
-                const activeTemplate = resp?.data?.data?.map((curElem) => {
-                    if (resp?.data?.active_id.includes(curElem?.id)) {
-                        return { label: curElem?.name, value: curElem?.id }
-                    } else {
-                        return null
-                    }
-                }).filter(elem => elem !== null)
-                // console.log(activeTemplate, "ppppppp")
-                setWhatsappTem(activeTemplate)
+        .then((resp) => {
+            // console.log(resp, "ppppppp")
+            setWhatsAppTemplate(resp?.data?.data)
+            const activeTemplate = resp?.data?.data?.map((curElem) => {
+                if (resp?.data?.active_id.includes(curElem?.id)) {
+                    return { label: curElem?.name, value: curElem?.id }
+                } else {
+                    return null
+                }
+            }).filter(elem => elem !== null)
+            // console.log(activeTemplate, "ppppppp")
+            setWhatsappTem(activeTemplate)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+
+        getReq("campaign_details_list")
+        .then((resp) => {
+            console.log(resp, "campaign_details_list")
+            const campaign_list = resp?.data?.data?.map((curElem) => {
+                return { label: curElem?.campaign_name, value: curElem?.id }
             })
-            .catch((error) => {
-                console.log(error)
-            })
+            setCampaignTem(campaign_list)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }
+
+    // console.log(campaignTem)
 
     useEffect(() => {
         getEmailSettings()
@@ -6612,6 +6642,99 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                                                                 <div className='py-1'>
                                                                                     <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Preview</label>
                                                                                     <RenderTemplateUI SingleTemplate={singleTemplate[0]} />
+                                                                                </div>
+                                                                            </>
+                                                                        )
+                                                                    }
+
+                                                                    <div className='py-1'>
+                                                                        <div className="form-check d-flex align-items-center gap-1 mx-0 p-0">
+                                                                            <input id="is_campagin" checked={finalObj?.whatsapp?.is_campaign} type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, is_campaign: e.target.checked } })} />
+                                                                            <label htmlFor='is_campagin' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Send to Abandoned Leads</label>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {
+                                                                        finalObj?.whatsapp?.is_campaign && (
+                                                                            <>
+                                                                                <div className='py-1 pt-0'>
+                                                                                    <Row className='match-height'>
+                                                                                        <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Delay</label>
+                                                                                        <Col md="6">
+                                                                                            <div className='h-100'>
+                                                                                                <input type="text"
+                                                                                                    className='form-control h-100'
+                                                                                                    value={finalObj?.whatsapp?.campaign_time}
+                                                                                                    onChange={(e) => {
+                                                                                                        if (!isNaN(e.target.value)) {
+                                                                                                            updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, campaign_time: e.target.value } })
+                                                                                                        }
+                                                                                                    }}
+                                                                                                />
+                                                                                            </div>
+                                                                                        </Col>
+                                                                                        <Col md="6">
+                                                                                            <div>
+                                                                                                <Select
+                                                                                                    options={deplayTime}
+                                                                                                    value={deplayTime?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.campaign_timeType))}
+                                                                                                    // onChange={(e) => setWhatsappJson({...whatsappJson, delay: e.value})}
+                                                                                                    onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, campaign_timeType: e.value } })}
+                                                                                                />
+                                                                                            </div>
+                                                                                        </Col>
+                                                                                    </Row>
+                                                                                </div>
+                                                                                <div className='py-1'>
+                                                                                    <div className="form-check d-flex align-items-center gap-1 mx-0 p-0">
+                                                                                        <input id="is_second_delay" checked={finalObj?.whatsapp?.is_second_delay} type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, is_second_delay: e.target.checked } })} />
+                                                                                        <label htmlFor='is_second_delay' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Add Second Delay</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                                
+                                                                                {
+                                                                                    finalObj?.whatsapp?.is_second_delay && (
+                                                                                        <>
+                                                                                            <div className='py-1 pt-0'>
+                                                                                                <Row className='match-height'>
+                                                                                                    <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Second Delay</label>
+                                                                                                    <Col md="6">
+                                                                                                        <div className='h-100'>
+                                                                                                            <input type="text"
+                                                                                                                className='form-control h-100'
+                                                                                                                value={finalObj?.whatsapp?.second_campaign_time}
+                                                                                                                onChange={(e) => {
+                                                                                                                    if (!isNaN(e.target.value)) {
+                                                                                                                        updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, second_campaign_time: e.target.value } })
+                                                                                                                    }
+                                                                                                                }}
+                                                                                                            />
+                                                                                                        </div>
+                                                                                                    </Col>
+                                                                                                    <Col md="6">
+                                                                                                        <div>
+                                                                                                            <Select
+                                                                                                                options={deplayTime}
+                                                                                                                value={deplayTime?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.second_campaign_timeType))}
+                                                                                                                // onChange={(e) => setWhatsappJson({...whatsappJson, delay: e.value})}
+                                                                                                                onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, second_campaign_timeType: e.value } })}
+                                                                                                            />
+                                                                                                        </div>
+                                                                                                    </Col>
+                                                                                                </Row>
+                                                                                            </div>
+                                                                                        </>
+                                                                                    )
+                                                                                }
+
+                                                                                <div className='py-1'>
+                                                                                    <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Campaign's</label>
+
+                                                                                    <Select
+                                                                                        options={campaignTem}
+                                                                                        value={campaignTem?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.campaign))}
+                                                                                        onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, campaign: e.value } })}
+                                                                                    />
                                                                                 </div>
                                                                             </>
                                                                         )

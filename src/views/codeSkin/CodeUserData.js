@@ -63,7 +63,7 @@ export default function CodeUserData() {
         {
             name: 'Results',
             minWidth: '200px',
-            selector: row => <Link to={`/codeskin-user/${row.unique_id}`} className='text-primary'>View</Link>,
+            selector: row => <Link to={`/merchant/qrcode/report_detail/${row.unique_id}`} className='text-primary'>View</Link>,
             isEnable: true
         }
 

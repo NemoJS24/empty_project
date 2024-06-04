@@ -662,7 +662,7 @@ const Homes_Routes = [
     trackingTitle: "SuperLeadz - Dual Verification Process"
   },
   {
-    path: "/qr/superleadz/",
+    path: "/qr/:id/",
     element: <QRForm />,
     meta: {
       layout: "custom",
@@ -670,11 +670,11 @@ const Homes_Routes = [
     }
   },
   {
-    path: '/codeskin',
+    path: '/merchant/qrcode/reports/:id',
     element: <CodeUserData />
   },
   {
-    path: '/codeskin-user/:id',
+    path: '/merchant/qrcode/report_detail/:id',
     element: <CodeUserDetails />
   }
 ]
