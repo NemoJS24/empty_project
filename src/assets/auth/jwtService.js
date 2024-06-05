@@ -281,8 +281,8 @@ export const configUrl = {
     change_campaign_status: "/talk/change_campaign_status/",
     default_settings: "/api/v1/set_default_settings/",
     import_leads: "/customers/group_import_leads/",
-    assign_lead: "customers/assign_lead/"
-    
+    assign_lead: "customers/assign_lead/",
+    form_view: "/qr/get_all_data/"
 }
 
 const axiosInstance = axios.create({
