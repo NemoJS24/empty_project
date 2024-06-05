@@ -209,7 +209,7 @@ const EmailCampaigns = ({ custom = false, name = "All Campaigns", draft = true, 
                                 setSelectedRows={setCheckedThemes}
                                 deleteContent={deleteContent}
                                 create={create}
-                                createLink={"/merchant/Email/templates"}
+                                createLink={"/merchant/email/create-campaign/type/"}
                                 createText={"Create Campaign"}
                             />
                         </CardBody>

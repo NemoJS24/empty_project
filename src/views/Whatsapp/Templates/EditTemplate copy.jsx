@@ -442,7 +442,7 @@ export default function EditTemplate() {
         if (res.data.success) {
           // toast.success(res.data.error_msg)
           toast.success("Template has updated!")
-          navigate('/merchant/whatsapp/message/')
+          navigate('/merchant/whatsapp/templates/')
         } else if (!res.data.success) {
           toast.error(res.data.error_msg)
         } else {

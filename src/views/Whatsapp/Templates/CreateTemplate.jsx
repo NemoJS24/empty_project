@@ -441,7 +441,7 @@ export default function CreateTemplate() {
         console.log(res.data)
         if (res.data.id) {
           toast.success("Template has been created")
-          nagivate('/merchant/whatsapp/message/')
+          nagivate('/merchant/whatsapp/templates/')
         } else if (res.data.message) {
           toast.error(res.data.message)
         } else if (res.data.code === 100) {
