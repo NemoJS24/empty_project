@@ -195,7 +195,7 @@ const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, 
 
   // ** Custom Pagination Component
   const CustomPagination = () => {
-    console.log("ppp", data.length, count)
+    // console.log("ppp", data.length, count)
     return (
       <div className="d-flex w-100 align-items-center justify-content-between">
         {

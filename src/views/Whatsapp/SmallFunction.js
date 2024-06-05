@@ -1,5 +1,5 @@
 import { Copy, CornerDownLeft, ExternalLink, FileText, Phone } from "react-feather"
-import { CardBody } from "reactstrap"
+import { Card, CardBody, Tooltip } from "reactstrap"
 import wp_back from './imgs/wp_back.png'
 import moment from "moment"
 import { BsBroadcast, BsReply } from 'react-icons/bs'
@@ -13,6 +13,9 @@ import { MdOutlineLibraryAdd, MdOutlineQuickreply, MdOutlineHistory, MdHistory }
 import { RiCustomerService2Line } from "react-icons/ri"
 import { RxCross2 } from "react-icons/rx"
 import { IoWarningOutline } from "react-icons/io5"
+import { useState } from "react"
+import { Pagination, Navigation, Autoplay } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js'
 
 // whatsapp data
 export const HeaderTypeList = [
@@ -31,62 +34,62 @@ export const HeaderTypeList = [
    {
       value: "Video",
       label: "Video"
-   }
-   // {
-   //    value: "Carousel",
-   //    label: "Carousel"
-   //  }
-]
-export const CarouselTypeList = [
- 
-   {
-     value: "IMAGE",
-     label: "IMAGE"
    },
    {
-     value: "VIDEO",
-     label: "VIDEO"
+      value: "Carousel",
+      label: "Carousel"
    }
- ]
+]
+export const CarouselTypeList = [
+
+   {
+      value: "IMAGE",
+      label: "IMAGE"
+   },
+   {
+      value: "VIDEO",
+      label: "VIDEO"
+   }
+]
 export const paramatersList = [
    { value: 'First Name', label: "FirstName" },
    { value: 'Last Name', label: "LastName" },
    { value: 'Customer Name', label: "customerName" },
    { value: 'Phone Number', label: "phone_number" },
-  { value: 'Email Address', label: "email" },
-  { value: 'Order ID', label: "OrderID" },
-  { value: 'Marketing Acceptance Status', label: "marketing_acceptance_status" },
-  { value: 'Cart Token', label: "cart_token" },
-  { value: 'Checkout Id', label: "checkout_id" },
-  { value: 'Order Created At', label: "order_created_at" },
-  { value: 'Payment Currency', label: "currency" },
-  { value: 'Subtotal Price', label: "current_subtotal_price" },
-  { value: 'Additional Fees', label: "current_total_additional_fees_set" },
-  { value: 'Total Discounts', label: "current_total_discounts" }, 
-  { value: 'Total Duties', label: "current_total_duties_set" },
-  { value: 'Total Price', label: "current_total_price" },
-  { value: 'Total Tax', label: "current_total_tax" },
-  { value: 'Discount Codes', label: "discount_codes" },
-  { value: 'Billing Address 1', label: "billing_address_1" },
-  { value: 'Billing Address 2', label: "billing_address_2" },
-  { value: 'Billing Address City', label: "billing_address_city" },
-  { value: 'Billing Address Zip', label: "billing_address_zip" },
-  { value: 'Billing Address Province', label: "billing_address_province" },
-  { value: 'Billing Address Country', label: "billing_address_country" },
-  { value: 'Billing Details First Name', label: "billing_address_customer_first_name" },
+   { value: 'Email Address', label: "email" },
+   { value: 'Order ID', label: "OrderID" },
+   { value: 'Marketing Acceptance Status', label: "marketing_acceptance_status" },
+   { value: 'Cart Token', label: "cart_token" },
+   { value: 'Checkout Id', label: "checkout_id" },
+   { value: 'Order Created At', label: "order_created_at" },
+   { value: 'Payment Currency', label: "currency" },
+   { value: 'Subtotal Price', label: "current_subtotal_price" },
+   { value: 'Additional Fees', label: "current_total_additional_fees_set" },
+   { value: 'Total Discounts', label: "current_total_discounts" },
+   { value: 'Total Duties', label: "current_total_duties_set" },
+   { value: 'Total Price', label: "current_total_price" },
+   { value: 'Total Tax', label: "current_total_tax" },
+   { value: 'Discount Codes', label: "discount_codes" },
+   { value: 'Billing Address 1', label: "billing_address_1" },
+   { value: 'Billing Address 2', label: "billing_address_2" },
+   { value: 'Billing Address City', label: "billing_address_city" },
+   { value: 'Billing Address Zip', label: "billing_address_zip" },
+   { value: 'Billing Address Province', label: "billing_address_province" },
+   { value: 'Billing Address Country', label: "billing_address_country" },
+   { value: 'Billing Details First Name', label: "billing_address_customer_first_name" },
    { value: 'Billing Details Last Name', label: "billing_address_customer_last_name" },
-  { value: 'Billing Details Country Code', label: "billing_address_country_code" },
-  { value: 'Billing Details Phone Number', label: "billing_address_customer_phone" },
-  { value: 'Shipping Address', label: "shipping_address_1" },
+   { value: 'Billing Details Country Code', label: "billing_address_country_code" },
+   { value: 'Billing Details Phone Number', label: "billing_address_customer_phone" },
+   { value: 'Shipping Address', label: "shipping_address_1" },
    { value: 'Shipping Address City', label: "shipping_address_city" },
-  { value: 'Shipping Address Zip', label: "shipping_address_zip" },
-  { value: 'Shipping Address Province', label: "shipping_address_province" },
-  { value: 'Shipping Address Country', label: "shipping_address_country" },
-  { value: 'Shipping Details First Name', label: "shipping_address_customer_first_name" },
-  { value: 'Shipping Details Last Name', label: "shipping_address_customer_last_name" },
-  { value: 'Shipping Details Country Code', label: "shipping_address_country_code" },
-  { value: 'Shipping Details Phone Number', label: "shipping_address_customer_phone" },
-  { value: 'Shipping Company', label: "shipping_company" }
+   { value: 'Shipping Address Zip', label: "shipping_address_zip" },
+   { value: 'Shipping Address Province', label: "shipping_address_province" },
+   { value: 'Shipping Address Country', label: "shipping_address_country" },
+   { value: 'Shipping Details First Name', label: "shipping_address_customer_first_name" },
+   { value: 'Shipping Details Last Name', label: "shipping_address_customer_last_name" },
+   { value: 'Shipping Details Country Code', label: "shipping_address_country_code" },
+   { value: 'Shipping Details Phone Number', label: "shipping_address_customer_phone" },
+   { value: 'Shipping Company', label: "shipping_company" }
 ]
 export const languageList = [
    {
@@ -245,27 +248,51 @@ export const chatsTagList = [
 
 export const ActiveTabList = [
    {
-     title: "All",
-     id: "",
-     isActive: false
+      title: "All",
+      id: "",
+      isActive: false
    },
    {
-     title: "Ongoing",
-     id: "live",
-     isActive: false
+      title: "Ongoing",
+      id: "live",
+      isActive: false
    },
    {
-     title: "Unread",
-     id: "unread",
-     isActive: false
+      title: "Unread",
+      id: "unread",
+      isActive: false
    },
    {
-     title: "Closed",
-     id: "closed",
-     isActive: false
+      title: "Closed",
+      id: "closed",
+      isActive: false
    }
- ]
+]
 
+//  tooltip
+export const TooltipButton = ({ id, tooltipText, children, position = 'right' }) => {
+   const [tooltipOpen, setTooltipOpen] = useState(false)
+
+   const toggleTooltip = () => {
+      setTooltipOpen(!tooltipOpen)
+   }
+
+
+   // send template
+   return (
+      <div className='rounded-circle' id={id ?? tooltipText} >
+         {children}
+         <Tooltip
+            placement={position}
+            isOpen={tooltipOpen}
+            target={id ?? tooltipText}
+            toggle={toggleTooltip}
+         >
+            {tooltipText}
+         </Tooltip>
+      </div>
+   )
+}
 export const timeLiveFormatter = (time) => {
    if (!time) {
       return "--"
@@ -422,7 +449,7 @@ export const RenderTemplateUI = ({ SingleTemplate }) => {
                      if (data.format === "VIDEO") {
                         return (
                            <div className='p-1'  >
-                              <video className='rounded-3  object-fit-cover w-100' controls   style={{ height: "170px" }}>
+                              <video className='rounded-3  object-fit-cover w-100' controls style={{ height: "170px" }}>
                                  <source
                                     src={data.example?.header_handle[0] ?? ""}
                                     type="video/mp4"
@@ -491,10 +518,13 @@ export const RenderTemplateUI = ({ SingleTemplate }) => {
 
             </div>
          </div>
-
+         {
+            SingleTemplate?.components?.find((elm) => elm.type === "CAROUSEL") && <> <CarouselUI useCarouselData={SingleTemplate?.components?.find((elm) => elm.type === "CAROUSEL")} /> </>
+         }
       </CardBody>
    )
 }
+
 export const RenderLiveTemplateUI = ({ SingleTemplate }) => {
    return (
       <CardBody className="border-0  rounded-2 " style={{ whiteSpace: 'pre-wrap' }}>
@@ -523,7 +553,7 @@ export const RenderLiveTemplateUI = ({ SingleTemplate }) => {
                      if (data.format === "VIDEO") {
                         return (
                            <div className='p-1'  >
-                              <video className='rounded-3  object-fit-cover w-100' controls   style={{ height: "170px" }}>
+                              <video className='rounded-3  object-fit-cover w-100' controls style={{ height: "170px" }}>
                                  <source
                                     src={data.example?.header_handle[0] ?? ""}
                                     type="video/mp4"
@@ -597,5 +627,101 @@ export const RenderLiveTemplateUI = ({ SingleTemplate }) => {
    )
 }
 
+// CAROUSEL
+
+export const CarouselUI = ({ useCarouselData }) => {
+   return (
+      <Card className='rounded-3 shadow-lg p-0 position-relative mb-0 border-0' style={{ background: "none" }} >
+          <style>
+                  {
+                    `
+                    .swiper{
+                      max-width:300px;
+                      border:"solid red 2px";
+                      margin-left:0 !important;
+                      margin-right:auto !important;
+                    }
+                    .swiper-slide{
+                     max-width:300px !important;
+
+                    }
+                    `
+                  }
+                </style>
+         <Swiper
+            slidesPerView={1}
+            spaceBetween={5}
+            navigation={true}
+            // autoplay={{ delay: 1000 }}
+            speed={500}
+            // loop={true}
+            modules={[Pagination, Navigation, Autoplay]}
+            initialSlide={0}
+            maxWidth={330}
+         >
+            {
+               useCarouselData && useCarouselData?.cards.map((currData, key) => {
+                  return (
+                     <SwiperSlide
+            maxWidth={330}
+            key={key} >
+                        <div className='p-1 rounded-2 ' style={{ background: "#fff" }}>
+                           {currData?.components?.find((elm) => elm.format === "IMAGE") && <div className=''  >
+                              <img className='rounded-3 img-fluid border-0 rounded w-100 object-fit-cover ' src={currData?.components?.find((elm) => elm.format === "IMAGE")?.example?.header_handle[0] ?? ''} alt="" />
+                           </div>}
+                          
+                           {/* {useCarouselBasic?.mediaType === "VIDEO" && <div className='border rounded-3 d-flex justify-content-center  align-items-center ' style={{ height: "190px", background: "#bbc7ff" }}>
+
+                    {
+                      useCarouselMedia[key] === '' ? <PlayCircle size={45} color='#5f66cd' /> : <video className='rounded-3  object-fit-cover w-100' controls style={{ height: "190px" }}>
+                        <source
+                          src={useCarouselMedia[key] === '' ? '' : URL.createObjectURL(useCarouselMedia[key])}
+                          type="video/mp4"
+                        />
+                        Video not supported.
+                      </video>
+                    }
+                  </div>} */}
+                           <div className='mt-1'>
+                              <p className='fs-6' dangerouslySetInnerHTML={{ __html: getBoldStr(currData?.components?.find(elm => elm.type === "BODY").text) }}></p>
+
+                           </div>
+                        </div>
+
+                        {/* Buttons */}
+                        {
+                            currData && currData?.components?.map((elem) => {
+                              if (elem.type === "BUTTONS") {
+                                 return elem.buttons.map((ele) => {
+                                    if (ele.type === 'PHONE_NUMBER') {
+                                       return (
+                                          <div className="border-top bg-white rounded-bottom-2  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                                             <Phone size={17} /><h6 className='m-0 text-primary' > {ele.text}</h6>
+                                          </div>)
+                                    }
+                                    if (ele.type === 'URL') {
+                                       return (
+                                          <div className="border-top bg-white rounded-bottom-2  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                                             <ExternalLink size={17} /><h6 className='m-0 text-primary' > {ele.text}</h6>
+                                          </div>)
+                                    }
+                                    if (ele.type === 'QUICK_REPLY') {
+                                       return (
+                                          <div className="border-top bg-white rounded-bottom-2  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                                             <CornerDownLeft size={17} /> <h6 className='m-0 text-primary' > {ele.text}</h6>
+                                          </div>)
+                                    }
+                                 })
+                              }
+                           })
+                        }
+                     </SwiperSlide>
+                  )
+               })
+            }
+         </Swiper>
+      </Card>
+   )
+}
 // live chat
 

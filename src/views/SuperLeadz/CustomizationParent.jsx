@@ -446,7 +446,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
             })
             .catch((error) => {
                 console.log(error)
-                setIsloading(false)
+                setIsLoading(false)
             })
     }
 
@@ -1831,12 +1831,17 @@ const CustomizationParent = ({ isAdmin = false }) => {
                 </>
             )
             general = (
-                <div className={`h-100 d-flex flex-column justify-content-between`}>
+                <div className="h-100 d-flex flex-column justify-content-between">
                     <div>
                         {/* Column Count Starts */}
                         <h6 style={{ marginLeft: "7px", marginTop: "10px" }}>Column Count</h6>
                         <div className='d-flex justify-content-around align-items-center'>
-                            {colWise[indexes?.cur]?.elements.length === 1 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("1", { left: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            {colWise?.[indexes?.cur]?.elements?.length === 1 ? (
+                                <button
+                                    className="btn p-0 d-flex justify-content-center align-items-center"
+                                    onClick={() => changeColumn("1", { left: "100%" }, false)}
+                                    style={{ aspectRatio: "1", width: "50px" }}
+                                >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <rect
                                         x={2}
@@ -1849,11 +1854,17 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                         stroke="#727272"
                                     />
                                 </svg>
-                            </button> : (
+                                </button>
+                            ) : colWise?.[indexes?.cur] ? (
                                 <UncontrolledDropdown className='more-options-dropdown'>
-                                    <DropdownToggle onClick={() => {
-                                        setDeleteCols(colWise[indexes?.cur].elements.length === 2 ? ["right"] : ["center", "right"])
-                                    }} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
+                                    <DropdownToggle
+                                        onClick={() => {
+                                            setDeleteCols(colWise[indexes.cur].elements.length === 2 ? ["right"] : ["center", "right"])
+                                        }}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                        color='transparent'
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <rect
                                                 x={2}
@@ -1869,29 +1880,49 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                     </DropdownToggle>
                                     <DropdownMenu style={{ width: "280px" }} end>
                                         <div className="p-1 d-flex gap-1">
-                                            {colWise[indexes?.cur].elements.map((element, index) => {
-                                                return (
-                                                    <div key={index} className="form-check m-0 p-0 flex-grow-1 d-flex align-items-center" style={{ gap: "0.5rem" }}>
-                                                        <input checked={deleteCols.includes(element.positionType)} name={`deleteCol`} id={`deleteCol-${index}`} type={colWise[indexes?.cur].elements.length === 2 ? "radio" : "checkbox"} onChange={(e) => {
-                                                            if (colWise[indexes?.cur].elements.length === 2) {
+                                            {colWise[indexes.cur].elements.map((element, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="form-check m-0 p-0 flex-grow-1 d-flex align-items-center"
+                                                    style={{ gap: "0.5rem" }}
+                                                >
+                                                    <input
+                                                        checked={deleteCols.includes(element.positionType)}
+                                                        name={`deleteCol`}
+                                                        id={`deleteCol-${index}`}
+                                                        type={colWise[indexes.cur].elements.length === 2 ? "radio" : "checkbox"}
+                                                        onChange={(e) => {
+                                                            if (colWise[indexes.cur].elements.length === 2) {
                                                                 setDeleteCols([element?.positionType])
                                                             } else {
-                                                                e.target.checked ? setDeleteCols((deleteCols.length < colWise[indexes?.cur].elements.length - 1) ? [...deleteCols, element?.positionType] : deleteCols) : setDeleteCols(deleteCols.filter($ => $ !== element.positionType))
+                                                                e.target.checked
+                                                                    ? setDeleteCols(
+                                                                        deleteCols.length < colWise[indexes.cur].elements.length - 1
+                                                                            ? [...deleteCols, element?.positionType]
+                                                                            : deleteCols
+                                                                    )
+                                                                    : setDeleteCols(deleteCols.filter($ => $ !== element.positionType))
                                                             }
-                                                        }} className="form-check-input m-0 p-0" />
-                                                        <label htmlFor={`deleteCol-${index}`} className="form-check-label m-0 p-0 text-capitalize">{element?.positionType}</label>
+                                                        }}
+                                                        className="form-check-input m-0 p-0"
+                                                    />
+                                                    <label htmlFor={`deleteCol-${index}`} className="form-check-label m-0 p-0 text-capitalize">
+                                                        {element?.positionType}
+                                                    </label>
                                                     </div>
-                                                )
-                                            })}
+                                            ))}
                                         </div>
                                         <div className="d-flex align-items-center">
-                                            <DropdownItem onClick={() => {
+                                            <DropdownItem
+                                                onClick={() => {
                                                 if (deleteCols.length < colWise[indexes.cur].elements.length - 1) {
                                                     toast.error(`Select at least ${colWise[indexes.cur].elements.length - 1} columns`)
                                                 } else {
                                                     changeColumn("1", { left: "100%" }, true)
                                                 }
-                                            }} className='flex-grow-1 text-center'>
+                                                }}
+                                                className='flex-grow-1 text-center'
+                                            >
                                                 Remove Columns
                                             </DropdownItem>
                                             <DropdownItem className='flex-grow-1 text-center'>
@@ -1900,19 +1931,28 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                         </div>
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
-                            )}
-                            {colWise[indexes?.cur].elements.length <= 2 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            ) : null}
+                            {colWise?.[indexes?.cur]?.elements?.length <= 2 ? (
+                                <button
+                                    className="btn p-0 d-flex justify-content-center align-items-center"
+                                    onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)}
+                                    style={{ aspectRatio: "1", width: "50px" }}
+                                >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <g strokeWidth={3} stroke="#727272">
                                         <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
                                         <path d="M32 52V2" />
                                     </g>
                                 </svg>
-                            </button> : (
+                                </button>
+                            ) : colWise?.[indexes?.cur] ? (
                                 <UncontrolledDropdown className='more-options-dropdown'>
-                                    <DropdownToggle onClick={() => {
-                                        setDeleteCols(["right"])
-                                    }} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
+                                    <DropdownToggle
+                                        onClick={() => setDeleteCols(["right"])}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                        color='transparent'
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1922,25 +1962,37 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                     </DropdownToggle>
                                     <DropdownMenu style={{ width: "280px" }} end>
                                         <div className="p-1 d-flex gap-1">
-                                            {colWise[indexes?.cur].elements.map((element, index) => {
-                                                return (
-                                                    <div key={index} className="form-check m-0 p-0 flex-grow-1 d-flex align-items-center" style={{ gap: "0.5rem" }}>
-                                                        <input checked={deleteCols.includes(element.positionType)} name={`deleteCol`} id={`deleteCol-${index}`} type={"radio"} onChange={() => {
-                                                            setDeleteCols([element?.positionType])
-                                                        }} className="form-check-input m-0 p-0" />
-                                                        <label htmlFor={`deleteCol-${index}`} className="form-check-label m-0 p-0 text-capitalize">{element?.positionType}</label>
+                                            {colWise[indexes.cur].elements.map((element, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="form-check m-0 p-0 flex-grow-1 d-flex align-items-center"
+                                                    style={{ gap: "0.5rem" }}
+                                                >
+                                                    <input
+                                                        checked={deleteCols.includes(element.positionType)}
+                                                        name={`deleteCol`}
+                                                        id={`deleteCol-${index}`}
+                                                        type={"radio"}
+                                                        onChange={() => setDeleteCols([element?.positionType])}
+                                                        className="form-check-input m-0 p-0"
+                                                    />
+                                                    <label htmlFor={`deleteCol-${index}`} className="form-check-label m-0 p-0 text-capitalize">
+                                                        {element?.positionType}
+                                                    </label>
                                                     </div>
-                                                )
-                                            })}
+                                            ))}
                                         </div>
                                         <div className="d-flex align-items-center">
-                                            <DropdownItem onClick={() => {
+                                            <DropdownItem
+                                                onClick={() => {
                                                 if (deleteCols.length < colWise[indexes.cur].elements.length - 2) {
                                                     toast.error(`Select at least ${colWise[indexes.cur].elements.length - 2} columns`)
                                                 } else {
                                                     changeColumn("2", { left: "50%", right: "50%" }, true)
                                                 }
-                                            }} className='flex-grow-1 text-center'>
+                                                }}
+                                                className='flex-grow-1 text-center'
+                                            >
                                                 Remove Columns
                                             </DropdownItem>
                                             <DropdownItem className='flex-grow-1 text-center'>
@@ -1949,8 +2001,12 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                         </div>
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
-                            )}
-                            <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("3", { left: `${100 / 3}%`, center: `${100 / 3}%`, right: `${100 / 3}%` }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            ) : null}
+                            <button
+                                className="btn p-0 d-flex justify-content-center align-items-center"
+                                onClick={() => changeColumn("3", { left: `${100 / 3}%`, center: `${100 / 3}%`, right: `${100 / 3}%` }, false)}
+                                style={{ aspectRatio: "1", width: "50px" }}
+                            >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <g strokeWidth={3} stroke="#727272">
                                         <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1962,37 +2018,27 @@ const CustomizationParent = ({ isAdmin = false }) => {
                         {/* Column Count Ends*/}
                         {/* Column Split Starts*/}
                         {/* Column Split For 2 Columns Starts*/}
-                        {colWise[indexes.cur]?.elements?.length === 2 && (
+                        {colWise?.[indexes?.cur]?.elements?.length === 2 && (
                             <div>
                                 <h6 style={{ marginLeft: "7px", marginTop: "20px" }}>Column Split</h6>
                                 <div className='d-flex justify-content-around align-items-center'>
-                                    <button onClick={() => changeColumn("2", { left: "25%", right: "75%" }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M16 52 L 16 2"></path>
+                                    <button
+                                        onClick={() => changeColumn("2", { left: "25%", right: "75%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
+                                            <g strokeWidth={3} stroke="#727272">
+                                                <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
+                                                <path d="M17 52V2" />
                                             </g>
                                         </svg>
                                     </button>
-                                    <button onClick={() => changeColumn("2", { left: `${100 / 3}%`, right: `${200 / 3}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M21 52 L 21 2"></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                    <button onClick={() => changeColumn("2", { left: `${(250 * 100) / 600}%`, right: `${(350 * 100) / 600}%` })} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M26 52 L 26 2" ></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div className='d-flex justify-content-around align-items-center'>
-                                    <button onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button
+                                        onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -2000,42 +2046,44 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                             </g>
                                         </svg>
                                     </button>
-                                    <button onClick={() => changeColumn("2", { left: `${(350 * 100) / 600}%`, right: `${(250 * 100) / 600}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M37 52 L 37 2"></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                    <button onClick={() => changeColumn("2", { left: `${200 / 3}%`, right: `${100 / 3}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M42 52 L 42 2" ></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div className='d-flex justify-content-start align-items-center' style={{ marginLeft: "14.5px" }}>
-                                    <button onClick={() => changeColumn("2", { left: "75%", right: "25%" }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M48 52 L 48 2"></path>
+                                    <button
+                                        onClick={() => changeColumn("2", { left: "75%", right: "25%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
+                                            <g strokeWidth={3} stroke="#727272">
+                                                <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
+                                                <path d="M47 52V2" />
                                             </g>
                                         </svg>
                                     </button>
                                 </div>
                             </div>
                         )}
-                        {/* Column Split for 2 Columns Ends */}
-                        {/* Column Split for 3 Columns Starts */}
-                        {colWise[indexes?.cur]?.elements?.length === 3 && (
+                        {/* Column Split For 2 Columns Ends*/}
+                        {/* Column Split For 3 Columns Starts*/}
+                        {colWise?.[indexes?.cur]?.elements?.length === 3 && (
                             <div>
                                 <h6 style={{ marginLeft: "7px", marginTop: "20px" }}>Column Split</h6>
                                 <div className='d-flex justify-content-around align-items-center'>
-                                    <button onClick={() => changeColumn("3", { left: `${100 / 3}%`, center: `${100 / 3}%`, right: `${100 / 3}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button
+                                        onClick={() => changeColumn("3", { left: "25%", center: "25%", right: "50%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
+                                            <g strokeWidth={3} stroke="#727272">
+                                                <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
+                                                <path d="M17 52V2M32 52V2" />
+                                            </g>
+                                        </svg>
+                                    </button>
+                                    <button
+                                        onClick={() => changeColumn("3", { left: "50%", center: "25%", right: "25%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -2043,32 +2091,15 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                             </g>
                                         </svg>
                                     </button>
-                                    <button onClick={() => changeColumn("3", { left: `${100 / 2}%`, center: `${100 / 4}%`, right: `${100 / 4}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button
+                                        onClick={() => changeColumn("3", { left: "25%", center: "50%", right: "25%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent"></rect>
-                                                <path d="M32 52 L 32 2"></path>
-                                                <path d="M48 52 L 48 2"></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                    <button onClick={() => changeColumn("3", { left: `${100 / 4}%`, center: `${100 / 2}%`, right: `${100 / 4}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth={3} stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M16 52 L 16 2" ></path>
-                                                <path d="M48 52 L 48 2" ></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div className='d-flex justify-content-start align-items-center' style={{ marginLeft: "14.5px" }}>
-                                    <button onClick={() => changeColumn("3", { left: `${100 / 4}%`, center: `${100 / 4}%`, right: `${100 / 2}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth={3} stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M16 52 L 16 2" ></path>
-                                                <path d="M32 52 L 32 2" ></path>
+                                                <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
+                                                <path d="M17 52V2M47 52V2" />
                                             </g>
                                         </svg>
                                     </button>
@@ -2451,6 +2482,16 @@ const CustomizationParent = ({ isAdmin = false }) => {
         } else if (selectedType === "close") {
             styles = (
                 <div className='mx-0 my-1 px-1'>
+                    {currPage === "button" &&
+                        <div className='d-flex p-0 mb-1 justify-content-between align-items-center '>
+                            <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Disable X Button</span>
+                            <div className="form-check form-switch form-check-dark m-0 p-0" style={{ transform: 'scale(0.8)' }}>
+                                <input className="form-check-input cursor-pointer" checked={finalObj?.closePopUpOn?.disable} onChange={e => {
+                                    updatePresent({ ...finalObj, closePopUpOn: { ...finalObj?.closePopUpOn, disable: e.target.checked } })
+                                }} type="checkbox" id="flexSwitchCheckChecked"  defaultChecked/>
+                            </div>
+                        </div>}
+                    {<div className={`${(finalObj?.closePopUpOn?.disable === true && currPage === 'button') && "opacity-25"}`} style={{ pointerEvents: finalObj?.closePopUpOn?.disable === true ? "none" : "auto"}}>
                     <div className='d-flex p-0 mb-1 justify-content-between align-items-center '>
                         <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Close when "Esc" is pressed</span>
                         <div className="form-check form-switch form-check-dark m-0 p-0" style={{ transform: 'scale(0.8)' }}>
@@ -2572,6 +2613,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                 }} />
                         </div>
                     </div>
+                    </div>}
                 </div>
             )
             spacing = (
@@ -3579,6 +3621,335 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                                                 <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Delete</span>
                                                             </div>
                                                         </DropdownItem>
+                                                        {/* <DropdownItem
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                if (colWise.length <= 1) {
+                                                                    setCurrPosition({ ...currPosition, selectedType: "main" })
+                                                                    setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                                } else {
+                                                                    setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                    setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
+                                                                }
+                                                                const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
+
+                                                                if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                    if (currPosition.selectedType === "main") {
+                                                                        arr.splice(key, 1)
+                                                                    } else {
+                                                                        arrRev.splice(key, 1)
+                                                                    }
+                                                                } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                    if (currPosition.selectedType === "main") {
+                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                    } else {
+                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                    }
+                                                                } else {
+                                                                    if (currPosition.selectedType === "main") {
+                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                    } else {
+                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                    }
+                                                                }
+
+                                                                const newObj = { ...finalObj }
+                                                                if (currPage === "button") {
+                                                                    newObj[`${mobileCondition}button`] = arr
+                                                                    newObj[`${mobileConditionRev}button`] = arrRev
+                                                                } else {
+                                                                    const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                    const mobile_pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+                                                                    newObj[`${mobileCondition}pages`][pageIndex].values = currPosition.selectedType === "main" ? arr : newObj[`${mobileCondition}pages`][pageIndex].values
+                                                                    newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = currPosition.selectedType === "block" ? arrRev : newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values
+                                                                }
+                                                                updatePresent({ ...newObj })
+                                                            }}
+                                                            className='w-100'
+                                                        >
+                                                            <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                                                <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Deletes</span>
+                                                            </div>
+                                                        </DropdownItem> */}
+                                                        <DropdownItem
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+
+                                                                const newCurrPosition = { ...currPosition }
+                                                                let newIndexes = { ...indexes }
+
+                                                                if (colWise.length <= 1) {
+                                                                    newCurrPosition.selectedType = "main"
+                                                                    newIndexes = { cur: 0, curElem: "left", subElem: "grandparent" }
+                                                                    // console.log("this is delete 1 print 1")
+                                                                } else {
+                                                                    newCurrPosition.selectedType = "block"
+                                                                    newIndexes = { cur: key - 1, curElem: "left", subElem: "grandparent" }
+                                                                    // console.log("this is delete 1 print 2")
+                                                                }
+
+                                                                // Deep clone the arrays for desktop and mobile
+                                                                const cloneDeep = (obj) => JSON.parse(JSON.stringify(obj))
+
+                                                                const desktopArr = currPage === "button"
+                                                                    ? cloneDeep(finalObj?.button)
+                                                                    : cloneDeep(finalObj?.pages?.find($ => $.id === currPage)?.values)
+
+                                                                const mobileArr = currPage === "button"
+                                                                    ? cloneDeep(finalObj?.mobile_button)
+                                                                    : cloneDeep(finalObj?.mobile_pages?.find($ => $.id === currPage)?.values)
+                                                                // Process deletion for a given array
+                                                                const processDeletion = (arr) => {
+                                                                    if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                        arr.splice(key, 1)
+                                                                        // console.log("this is delete 1 print 3")
+                                                                    } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                        // console.log("this is delete 1 print 4")
+                                                                    } else {
+                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                        // console.log("this is delete 1 print 5")
+                                                                    }
+                                                                    return arr
+                                                                }
+
+                                                                // Apply deletion based on the selectedType
+                                                                if (newCurrPosition.selectedType === "main") {
+                                                                    processDeletion(desktopArr)
+                                                                    // console.log("this is delete 1 print 6")
+                                                                } else {
+                                                                    processDeletion(mobileArr)
+                                                                    // console.log("this is delete 1 print 7")
+                                                                }
+
+                                                                // Create a new object for finalObj to ensure immutability
+                                                                const newObj = cloneDeep(finalObj)
+
+                                                                if (currPage === "button") {
+                                                                    newObj[`${mobileCondition}button`] = desktopArr
+                                                                    newObj[`${mobileConditionRev}button`] = mobileArr
+                                                                    // console.log("this is delete 1 print 8")
+                                                                } else {
+                                                                    const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                    const mobilePageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+
+                                                                    if (newCurrPosition.selectedType === "main") {
+                                                                        newObj[`${mobileCondition}pages`][pageIndex].values = desktopArr
+                                                                        // console.log("this is delete 1 print 11")
+                                                                    } else {
+                                                                        newObj[`${mobileConditionRev}pages`][mobilePageIndex].values = mobileArr
+                                                                        // console.log("this is delete 1 print 10")
+                                                                    }
+                                                                    // console.log("this is delete 1 print 9")
+                                                                }
+
+                                                                // Update the state with the new object
+                                                                updatePresent(newObj)
+                                                                setCurrPosition(newCurrPosition)
+                                                                setIndexes(newIndexes)
+                                                            }}
+                                                            className='w-100'
+                                                        >
+                                                            <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                                                <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Delete for Current View</span>
+                                                            </div>
+                                                        </DropdownItem>
+                                                        {/* <DropdownItem
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                toggleModal()
+                                                            }}
+                                                            className="w-100"
+                                                        >
+                                                            <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                                                <Trash stroke="red" size={"15px"} className="cursor-pointer" />{" "}
+                                                                <span className="fw-bold text-black" style={{ fontSize: "0.75rem" }}>
+                                                                    Delete
+                                                                </span>
+                                                            </div>
+                                                        </DropdownItem>
+
+                                                        <Modal isOpen={modalOpen} toggle={toggleModal}>
+                                                            <ModalHeader toggle={toggleModal}>Delete Item</ModalHeader>
+                                                            <ModalBody>
+                                                                Do you want to delete this item on both mobile and desktop, or only on the current page?
+                                                            </ModalBody>
+                                                            <ModalFooter>
+                                                                <Button
+                                                                    color="danger"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
+
+                                                                        const newCurrPosition = { ...currPosition }
+                                                                        let newIndexes = { ...indexes }
+
+                                                                        if (colWise.length <= 1) {
+                                                                            newCurrPosition.selectedType = "main"
+                                                                            newIndexes = { cur: 0, curElem: "left", subElem: "grandparent" }
+                                                                            console.log("this is delete 2 print 1")
+                                                                        } else {
+                                                                            newCurrPosition.selectedType = "block"
+                                                                            newIndexes = { cur: key - 1, curElem: "left", subElem: "grandparent" }
+                                                                            console.log("this is delete 2 print 2")
+                                                                        }
+
+                                                                        // Deep clone the arrays for desktop and mobile
+                                                                        const cloneDeep = (obj) => JSON.parse(JSON.stringify(obj))
+
+                                                                        const desktopArr = currPage === "button"
+                                                                            ? cloneDeep(finalObj?.button)
+                                                                            : cloneDeep(finalObj?.pages?.find($ => $.id === currPage)?.values)
+
+                                                                        const mobileArr = currPage === "button"
+                                                                            ? cloneDeep(finalObj?.mobile_button)
+                                                                            : cloneDeep(finalObj?.mobile_pages?.find($ => $.id === currPage)?.values)
+
+                                                                        // Process deletion for a given array
+                                                                        const processDeletion = (arr) => {
+                                                                            if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                arr.splice(key, 1)
+                                                                                console.log("this is delete 2 print 3")
+                                                                            } else if (curElem?.element?.length && cur?.elements?.length) {
+                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                console.log("this is delete 2 print 4")
+                                                                            } else {
+                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                console.log("this is delete 2 print 5")
+                                                                            }
+                                                                            return arr
+                                                                        }
+
+                                                                        // Apply deletion based on the selectedType
+                                                                        if (newCurrPosition.selectedType === "main") {
+                                                                            processDeletion(desktopArr)
+                                                                            console.log("this is delete 2 print 6")
+                                                                        } else {
+                                                                            processDeletion(mobileArr)
+                                                                            console.log("this is delete 2 print 7")
+                                                                        }
+
+                                                                        // Create a new object for finalObj to ensure immutability
+                                                                        const newObj = cloneDeep(finalObj)
+
+                                                                        if (currPage === "button") {
+                                                                            newObj[`${mobileCondition}button`] = desktopArr
+                                                                            newObj[`${mobileConditionRev}button`] = mobileArr
+                                                                            console.log("this is delete 2 print 8")
+                                                                        } else {
+                                                                            const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                            const mobilePageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+
+                                                                            if (newCurrPosition.selectedType === "main") {
+                                                                                newObj[`${mobileCondition}pages`][pageIndex].values = desktopArr
+                                                                                console.log("this is delete 2 print 11")
+                                                                            } else {
+                                                                                newObj[`${mobileConditionRev}pages`][mobilePageIndex].values = mobileArr
+                                                                                console.log("this is delete 2 print 10")
+                                                                            }
+                                                                            console.log("this is delete 2 print 9")
+                                                                        }
+
+                                                                        // Update the state with the new object
+                                                                        updatePresent(newObj)
+                                                                        setCurrPosition(newCurrPosition)
+                                                                        setIndexes(newIndexes)
+                                                                        toggleModal()
+                                                                    }}
+                                                                >
+                                                                    Both
+                                                                </Button>
+                                                                <Button
+                                                                    color="primary"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
+
+                                                                        const newCurrPosition = { ...currPosition }
+                                                                        let newIndexes = { ...indexes }
+
+                                                                        if (colWise.length <= 1) {
+                                                                            newCurrPosition.selectedType = "main"
+                                                                            newIndexes = { cur: 0, curElem: "left", subElem: "grandparent" }
+                                                                            console.log("this is delete 3 print 1")
+                                                                        } else {
+                                                                            newCurrPosition.selectedType = "block"
+                                                                            newIndexes = { cur: key - 1, curElem: "left", subElem: "grandparent" }
+                                                                            console.log("this is delete 3 print 2")
+                                                                        }
+
+                                                                        // Deep clone the arrays for desktop and mobile
+                                                                        const cloneDeep = (obj) => JSON.parse(JSON.stringify(obj))
+
+                                                                        const desktopArr = currPage === "button"
+                                                                            ? cloneDeep(finalObj?.button)
+                                                                            : cloneDeep(finalObj?.pages?.find($ => $.id === currPage)?.values)
+
+                                                                        const mobileArr = currPage === "button"
+                                                                            ? cloneDeep(finalObj?.mobile_button)
+                                                                            : cloneDeep(finalObj?.mobile_pages?.find($ => $.id === currPage)?.values)
+console.log("111 desktopArr", desktopArr)
+console.log("111 mobileArr", mobileArr)
+                                                                        // Process deletion for a given array
+                                                                        const processDeletion = (arr) => {
+                                                                            if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                arr.splice(key, 1)
+                                                                                console.log("this is delete 3 print 3")
+                                                                            } else if (curElem?.element?.length && cur?.elements?.length) {
+                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                console.log("this is delete 3 print 4")
+                                                                            } else {
+                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                console.log("this is delete 3 print 5")
+                                                                            }
+                                                                            return arr
+                                                                        }
+
+                                                                        // Apply deletion based on the selectedType
+                                                                        if (newCurrPosition.selectedType === "main") {
+                                                                            processDeletion(desktopArr)
+                                                                            console.log("this is delete 3 print 6")
+                                                                        } else {
+                                                                            processDeletion(mobileArr)
+                                                                            console.log("this is delete 3 print 7")
+                                                                        }
+
+                                                                        // Create a new object for finalObj to ensure immutability
+                                                                        const newObj = cloneDeep(finalObj)
+
+                                                                        if (currPage === "button") {
+                                                                            newObj[`${mobileCondition}button`] = desktopArr
+                                                                            newObj[`${mobileConditionRev}button`] = mobileArr
+                                                                            console.log("this is delete 3 print 8")
+                                                                        } else {
+                                                                            const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                            const mobilePageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+
+                                                                            if (newCurrPosition.selectedType === "main") {
+                                                                                newObj[`${mobileCondition}pages`][pageIndex].values = desktopArr
+                                                                                console.log("this is delete 3 print 11")
+                                                                            } else {
+                                                                                newObj[`${mobileConditionRev}pages`][mobilePageIndex].values = mobileArr
+                                                                                console.log("this is delete 3 print 10")
+                                                                            }
+                                                                            console.log("this is delete 3 print 9")
+                                                                        }
+
+                                                                        // Update the state with the new object
+                                                                        updatePresent(newObj)
+                                                                        setCurrPosition(newCurrPosition)
+                                                                        setIndexes(newIndexes)
+                                                                        toggleModal()
+                                                                    }}
+                                                                >
+                                                                    Current Page
+                                                                </Button>
+                                                                <Button color="secondary" onClick={toggleModal}>
+                                                                    Cancel
+                                                                </Button>
+                                                            </ModalFooter>
+                                                        </Modal> */}
+
+
                                                         {/* <DropdownItem
                                                             onClick={(e) => {
                                                                 e.stopPropagation()
@@ -5046,7 +5417,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                             </button>
                             <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Elements</span>
                         </div>
-                        <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "offers" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => {
+                        {finalObj?.pages?.find(page => page.pageName === "Offer Display")?.pageName === "Offer Display" && <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "offers" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => {
                             setSideNav(sideNav === "offers" ? "" : "offers")
                             setCurrPage("offers")
                         }}>
@@ -5054,7 +5425,8 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                 <Tag size={15} />
                             </button>
                             <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Offers</span>
-                        </div>
+                        </div>}
+
                         <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "criteria" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => setSideNav(sideNav === "criteria" ? "" : "criteria")}>
                             <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
                                 <Crosshair size={15} />
@@ -6368,7 +6740,9 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                         </div>}
                                         {/* Button Section */}
                                         {/* Offer Section */}
-                                        {sideNav === "offers" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%", maxHeight: "100%", overflow: "auto" }}>
+                                        {/* {console.log(finalObj?.pages?.find(page => page.pageName === "Offer Display")?.pageName === "Offer Display", "finalObj")} */}
+                                        {sideNav === "offers" && (
+                                            <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%", maxHeight: "100%", overflow: "auto" }}>
                                             <div className="toggleSection border-end d-flex align-items-stretch justify-content-start mb-1">
                                                 <div style={{ width: `33.3333%`, padding: "0.35rem", height: "100%" }}>
                                                     <div draggable={isMobile ? phoneIsOfferDraggable : isOfferDraggable} onDragStart={(e) => {
@@ -6450,7 +6824,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                                     </AccordionBody>
                                                 </AccordionItem>
                                             </UncontrolledAccordion>
-                                        </div>}
+                                            </div>)}
                                         {/* Offer Section */}
                                         {/* Criteria section */}
                                         {sideNav === "criteria" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%" }}>
@@ -6930,7 +7304,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                                             const newFinalObj = finalObj
                                                             const arr = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
                                                             const arrRev = currPage === "button" ? [...finalObj?.[`${mobileConditionRev}button`]] : [...finalObj?.[`${mobileConditionRev}pages`][finalObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $.id === currPage)].values]
-                                                            if (arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type) {
+                                                            if (arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem]?.type) {
                                                                 arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type = "image"
                                                             }
                                                             if (arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src) {

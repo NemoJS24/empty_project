@@ -38,6 +38,7 @@ import Accounts_Routes from './Accounts'
 import NewBlankLayout from '../../@core/layouts/NewBlankLayout'
 import { WhatsAppRoutes } from './WhatsAppRoutes'
 import { EmailRoutes } from './Email'
+import QR_Process_Routes from './QR_Process'
 
 
 const getLayout = {
@@ -98,7 +99,8 @@ const Routes = [
   ...OhMyCustomer_Routes,
   ...Accounts_Routes,
   ...WhatsAppRoutes,
-  ...EmailRoutes
+  ...EmailRoutes,
+  ...QR_Process_Routes
 ]
 // if (app_name && Routess[app_name]) {
 //   Routes = [

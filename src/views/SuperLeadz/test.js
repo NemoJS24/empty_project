@@ -44,28 +44,31 @@ import { Reload } from 'tabler-icons-react'
 import { TiClipboard } from "react-icons/ti"
 import { GrUserAdmin } from "react-icons/gr"
 import { RenderTemplateUI } from '../Whatsapp/SmallFunction'
+import { FONT_FAMILY_OPTIONS } from '../NewCustomizationFlow/plugins/ToolbarPlugin'
 
 
-export const fontStyles = [
-    { label: "Abril Fatface", value: `Abril Fatface` },
-    { label: "Acme", value: `Acme` },
-    { label: "Caveat", value: `Caveat` },
-    { label: "Dancing Script", value: `Dancing Script` },
-    { label: "Kalam", value: `Kalam` },
-    { label: "Lato", value: `Lato` },
-    { label: "Lexend", value: `Lexend` },
-    { label: "Lilita One", value: `Lilita One` },
-    { label: "Montserrat", value: `Montserrat` },
-    { label: "Noto Sans", value: `Noto Sans` },
-    { label: "Open Sans", value: `Open Sans` },
-    { label: "Oswald", value: `Oswald` },
-    { label: "Pacifico", value: `Pacifico` },
-    { label: "Play", value: `Play` },
-    { label: "Roboto", value: `Roboto` },
-    { label: "Satisfy", value: `Satisfy` },
-    { label: "sans-serif", value: `sans-serif` },
-    { label: "Ubuntu", value: `Ubuntu` }
-]
+// export const fontStyles = [
+//     { label: "Abril Fatface", value: `Abril Fatface` },
+//     { label: "Acme", value: `Acme` },
+//     { label: "Caveat", value: `Caveat` },
+//     { label: "Dancing Script", value: `Dancing Script` },
+//     { label: "Kalam", value: `Kalam` },
+//     { label: "Lato", value: `Lato` },
+//     { label: "Lexend", value: `Lexend` },
+//     { label: "Lilita One", value: `Lilita One` },
+//     { label: "Montserrat", value: `Montserrat` },
+//     { label: "Noto Sans", value: `Noto Sans` },
+//     { label: "Open Sans", value: `Open Sans` },
+//     { label: "Oswald", value: `Oswald` },
+//     { label: "Pacifico", value: `Pacifico` },
+//     { label: "Play", value: `Play` },
+//     { label: "Roboto", value: `Roboto` },
+//     { label: "Satisfy", value: `Satisfy` },
+//     { label: "sans-serif", value: `sans-serif` },
+//     { label: "Ubuntu", value: `Ubuntu` }
+// ]
+
+export const fontStyles = FONT_FAMILY_OPTIONS
 
 const sourceList = [
     { label: "Facebook", value: `facebook` },
@@ -159,7 +162,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
         // console.log("error in 3")
     } else if (selectedThemeIds !== "") {
         const index = allPreviews.findIndex($ => $?.id === selectedThemeIds)
-        defObj = { ...allPreviews[index], campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}
+        defObj = { ...allPreviews[index], campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") }
         // console.log("allThemes2", allPreviews[index])
         // console.log("error in 4")
     } else {
@@ -167,13 +170,14 @@ const CustomizationParent = ({ isAdmin = false }) => {
         // console.log("error in 5")
     }
 
+
     // else if (Boolean(localStorage.getItem("defaultTheme"))) {
     //     defObj = JSON.parse(localStorage.getItem("defaultTheme"))
     //     console.log("error in 2")
     //     defObj = JSON.parse(localStorage.getItem("defaultTheme"))
     // }
 
-    // console.log("defObj", defObj)
+    console.log("defObj", defObj)
 
     const navigate = useNavigate()
     const [mousePos, setMousePos] = useState({})
@@ -181,7 +185,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
     const [past, setPast] = useState([])
     const [future, setFuture] = useState([])
     const [themeName, setThemeName] = useState(themeLoc.state?.campaign_name ? themeLoc.state?.campaign_name : `Campaign - ${generateRandomString()}`)
-    // console.log("theme_names ", finalObj)
+    console.log("theme_names ", finalObj)
     // const [themeName, setThemeName] = useState(() => {
     //     const generatedTheme = `Campaign-${generateRandomString()}`
     //     const initialTheme = themeLoc?.state?.custom_theme ? defObj?.theme_name : generatedTheme
@@ -203,8 +207,8 @@ const CustomizationParent = ({ isAdmin = false }) => {
     const [currPage, setCurrPage] = useState(defObj?.[`${mobileCondition}pages`][0]?.id)
     const [draggedInputType, setDraggedInputType] = useState("none")
     const [whatsAppTem, setWhatsappTem] = useState([])
+    const [campaignTem, setCampaignTem] = useState([])
     const pageCondition = currPage === "button" ? "button" : "main"
-
 
     // const [whatsappJson, setWhatsappJson] = useState({
     //     template: "",
@@ -237,7 +241,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
         { value: 'all_pages', label: 'All Pages' },
         { value: 'home_page', label: 'Home Page' },
         { value: 'product_page', label: 'Product Page' },
-        { value: 'product_list_page', label: 'Product List Page' },
+        { value: 'collections_page', label: 'Collection Page' },
         { value: 'cart_page', label: 'Cart Page' },
         { value: 'custom_page', label: 'Custom Pages' },
         { value: 'custom_source', label: 'Source' }
@@ -308,7 +312,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
 
     const [isOfferDraggable, setIsOfferDraggable] = useState(true)
     const [phoneIsOfferDraggable, setPhoneIsOfferDraggable] = useState(true)
-
+    const [collectionList, setCollectionList] = useState([])
     const [cancelCust, setCancelCust] = useState(false)
     const [verifyYourEmail, setVerifyYourEmail] = useState(false)
     const [changeSenderEmail, setChangeSenderEmail] = useState(false)
@@ -442,7 +446,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
             })
             .catch((error) => {
                 console.log(error)
-                setIsloading(false)
+                setIsLoading(false)
             })
     }
 
@@ -1593,8 +1597,8 @@ const CustomizationParent = ({ isAdmin = false }) => {
         } else if (selectedType === "image") {
             const arr = [...colWise]
             const positionIndex = colWise[indexes?.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
-            const imgWidth = colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.width
-            const imgHeight = colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.height
+            // const imgWidth = colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.width
+            // const imgHeight = colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.height
             styles = (
                 <>
                     <UncontrolledAccordion defaultOpen={['1', '2']} stayOpen>
@@ -1668,40 +1672,84 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                         </div>
                                         <img style={{ maxWidth: "100%", maxHeight: "100%" }} src={colWise[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.isBrandLogo ? finalObj?.defaultThemeColors?.brandLogo : colWise[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.src} alt="" />
                                     </div>
-                                    <div className='mb-1'>
-                                        {getMDToggle({
-                                            label: <>Width: <input value={parseFloat(imgWidth)} type='number' className='form-control' style={{ width: "8ch" }} onChange={e => {
-                                                arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandWidth = false
-                                                setcolWise([...arr])
-                                                setValues({ ...values, width: `${parseFloat(e.target.value)}px` })
-                                            }} />px</>,
-                                            value: `width`
-                                        })}
-                                        <div className="p-0 justify-content-start align-items-center gap-2">
-                                            <input value={parseFloat(imgWidth)} onChange={(e) => {
-                                                arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandWidth = false
-                                                setcolWise([...arr])
-                                                setValues({ ...values, width: `${e.target.value}px` })
-                                            }} type='range' className='w-100' name="height" min="20" max="1500" />
+                                    <div className='p-0 mx-0 my-1'>
+                                        <div className='p-0 mb-2 justify-content-start align-items-center'>
+                                            {getMDToggle({ label: `Width Type: `, value: `widthType` })}
+                                            <Select
+                                                value={[
+                                                    { value: '100%', label: '100%' },
+                                                    { value: 'custom', label: 'Custom' }
+                                                ].filter($ => $?.value === values?.widthType)}
+                                                className='w-100'
+                                                onChange={e => {
+                                                    if (e.value === "100%") {
+                                                        setValues({ ...values, widthType: e.value, width: e.value, minHeight: "0px", padding: "10px" })
+                                                    } else if (e.value === "custom") {
+                                                        setValues({ ...values, widthType: e.value, padding: "10px" })
+                                                    }
+                                                }}
+                                                options={[
+                                                    { value: '100%', label: '100%' },
+                                                    { value: 'custom', label: 'Custom' }
+                                                ]}
+                                            />
                                         </div>
+                                        {values?.widthType === "custom" && (
+                                            <div className='mb-2'>
+                                                {getMDToggle({ label: `Width: ${values?.width}`, value: `width` })}
+                                                <div className="d-flex p-0 justify-content-between align-items-center gap-2">
+                                                    <input
+                                                        value={parseFloat(values?.width)}
+                                                        type='range'
+                                                        className='w-100'
+                                                        onChange={e => {
+                                                            setValues({ ...values, width: `${e.target.value}px` })
+                                                        }}
+                                                        name="height"
+                                                        min="20"
+                                                        max="600"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                        {values?.widthType === "custom" && (
+                                            <div className='mb-2'>
+                                                {getMDToggle({ label: `Height: ${values?.minHeight}`, value: `minHeight` })}
+                                                <div className="d-flex p-0 justify-content-between align-items-center gap-2">
+                                                    <input
+                                                        value={parseFloat(values?.minHeight)}
+                                                        type='range'
+                                                        className='w-100'
+                                                        onChange={e => {
+                                                            setValues({ ...values, minHeight: `${e.target.value}px` })
+                                                        }}
+                                                        name="height"
+                                                        min="0"
+                                                        max="600"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                        {colWise[indexes?.cur].elements[positionIndex]?.element[indexes?.subElem]?.hasLabel && (
+                                            <div className='mb-2'>
+                                                {getMDToggle({ label: `Label and Input gap: ${values?.elemGap ? values?.elemGap : "0px"}`, value: `elemGap` })}
+                                                <div className="d-flex p-0 justify-content-between align-items-center gap-2">
+                                                    <input
+                                                        value={parseFloat(values?.elemGap ? values?.elemGap : "0px")}
+                                                        type='range'
+                                                        className='w-100'
+                                                        onChange={e => {
+                                                            setValues({ ...values, elemGap: `${e.target.value}px` })
+                                                        }}
+                                                        name="height"
+                                                        min="0"
+                                                        max="600"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className='mb-1'>
-                                        {getMDToggle({
-                                            label: <>Height: <input value={parseFloat(imgHeight)} type='number' className='form-control' style={{ width: "8ch" }} onChange={e => {
-                                                arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandHeight = false
-                                                setcolWise([...arr])
-                                                setValues({ ...values, height: `${parseFloat(e.target.value)}px` })
-                                            }} />px</>,
-                                            value: `height`
-                                        })}
-                                        <div className="p-0 justify-content-start align-items-center gap-2">
-                                            <input value={parseFloat(imgHeight)} onChange={(e) => {
-                                                arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandHeight = false
-                                                setcolWise([...arr])
-                                                setValues({ ...values, height: `${e.target.value}px` })
-                                            }} type='range' className='w-100' name="height" min="20" max="1500" />
-                                        </div>
-                                    </div>
+
                                     <div className='p-0 mb-1 align-items-center'>
                                         {getMDToggle({ label: `Alignment`, value: `margin` })}
                                         <Select value={alignOptions?.filter(item => {
@@ -1783,12 +1831,17 @@ const CustomizationParent = ({ isAdmin = false }) => {
                 </>
             )
             general = (
-                <div className={`h-100 d-flex flex-column justify-content-between`}>
+                <div className="h-100 d-flex flex-column justify-content-between">
                     <div>
                         {/* Column Count Starts */}
                         <h6 style={{ marginLeft: "7px", marginTop: "10px" }}>Column Count</h6>
                         <div className='d-flex justify-content-around align-items-center'>
-                            {colWise[indexes?.cur].elements.length === 1 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("1", { left: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            {colWise?.[indexes?.cur]?.elements?.length === 1 ? (
+                                <button
+                                    className="btn p-0 d-flex justify-content-center align-items-center"
+                                    onClick={() => changeColumn("1", { left: "100%" }, false)}
+                                    style={{ aspectRatio: "1", width: "50px" }}
+                                >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <rect
                                         x={2}
@@ -1801,11 +1854,17 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                         stroke="#727272"
                                     />
                                 </svg>
-                            </button> : (
+                                </button>
+                            ) : colWise?.[indexes?.cur] ? (
                                 <UncontrolledDropdown className='more-options-dropdown'>
-                                    <DropdownToggle onClick={() => {
-                                        setDeleteCols(colWise[indexes?.cur].elements.length === 2 ? ["right"] : ["center", "right"])
-                                    }} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
+                                    <DropdownToggle
+                                        onClick={() => {
+                                            setDeleteCols(colWise[indexes.cur].elements.length === 2 ? ["right"] : ["center", "right"])
+                                        }}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                        color='transparent'
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <rect
                                                 x={2}
@@ -1821,29 +1880,49 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                     </DropdownToggle>
                                     <DropdownMenu style={{ width: "280px" }} end>
                                         <div className="p-1 d-flex gap-1">
-                                            {colWise[indexes?.cur].elements.map((element, index) => {
-                                                return (
-                                                    <div key={index} className="form-check m-0 p-0 flex-grow-1 d-flex align-items-center" style={{ gap: "0.5rem" }}>
-                                                        <input checked={deleteCols.includes(element.positionType)} name={`deleteCol`} id={`deleteCol-${index}`} type={colWise[indexes?.cur].elements.length === 2 ? "radio" : "checkbox"} onChange={(e) => {
-                                                            if (colWise[indexes?.cur].elements.length === 2) {
+                                            {colWise[indexes.cur].elements.map((element, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="form-check m-0 p-0 flex-grow-1 d-flex align-items-center"
+                                                    style={{ gap: "0.5rem" }}
+                                                >
+                                                    <input
+                                                        checked={deleteCols.includes(element.positionType)}
+                                                        name={`deleteCol`}
+                                                        id={`deleteCol-${index}`}
+                                                        type={colWise[indexes.cur].elements.length === 2 ? "radio" : "checkbox"}
+                                                        onChange={(e) => {
+                                                            if (colWise[indexes.cur].elements.length === 2) {
                                                                 setDeleteCols([element?.positionType])
                                                             } else {
-                                                                e.target.checked ? setDeleteCols((deleteCols.length < colWise[indexes?.cur].elements.length - 1) ? [...deleteCols, element?.positionType] : deleteCols) : setDeleteCols(deleteCols.filter($ => $ !== element.positionType))
+                                                                e.target.checked
+                                                                    ? setDeleteCols(
+                                                                        deleteCols.length < colWise[indexes.cur].elements.length - 1
+                                                                            ? [...deleteCols, element?.positionType]
+                                                                            : deleteCols
+                                                                    )
+                                                                    : setDeleteCols(deleteCols.filter($ => $ !== element.positionType))
                                                             }
-                                                        }} className="form-check-input m-0 p-0" />
-                                                        <label htmlFor={`deleteCol-${index}`} className="form-check-label m-0 p-0 text-capitalize">{element?.positionType}</label>
+                                                        }}
+                                                        className="form-check-input m-0 p-0"
+                                                    />
+                                                    <label htmlFor={`deleteCol-${index}`} className="form-check-label m-0 p-0 text-capitalize">
+                                                        {element?.positionType}
+                                                    </label>
                                                     </div>
-                                                )
-                                            })}
+                                            ))}
                                         </div>
                                         <div className="d-flex align-items-center">
-                                            <DropdownItem onClick={() => {
+                                            <DropdownItem
+                                                onClick={() => {
                                                 if (deleteCols.length < colWise[indexes.cur].elements.length - 1) {
                                                     toast.error(`Select at least ${colWise[indexes.cur].elements.length - 1} columns`)
                                                 } else {
                                                     changeColumn("1", { left: "100%" }, true)
                                                 }
-                                            }} className='flex-grow-1 text-center'>
+                                                }}
+                                                className='flex-grow-1 text-center'
+                                            >
                                                 Remove Columns
                                             </DropdownItem>
                                             <DropdownItem className='flex-grow-1 text-center'>
@@ -1852,19 +1931,28 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                         </div>
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
-                            )}
-                            {colWise[indexes?.cur].elements.length <= 2 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            ) : null}
+                            {colWise?.[indexes?.cur]?.elements?.length <= 2 ? (
+                                <button
+                                    className="btn p-0 d-flex justify-content-center align-items-center"
+                                    onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)}
+                                    style={{ aspectRatio: "1", width: "50px" }}
+                                >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <g strokeWidth={3} stroke="#727272">
                                         <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
                                         <path d="M32 52V2" />
                                     </g>
                                 </svg>
-                            </button> : (
+                                </button>
+                            ) : colWise?.[indexes?.cur] ? (
                                 <UncontrolledDropdown className='more-options-dropdown'>
-                                    <DropdownToggle onClick={() => {
-                                        setDeleteCols(["right"])
-                                    }} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
+                                    <DropdownToggle
+                                        onClick={() => setDeleteCols(["right"])}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                        color='transparent'
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1874,25 +1962,37 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                     </DropdownToggle>
                                     <DropdownMenu style={{ width: "280px" }} end>
                                         <div className="p-1 d-flex gap-1">
-                                            {colWise[indexes?.cur].elements.map((element, index) => {
-                                                return (
-                                                    <div key={index} className="form-check m-0 p-0 flex-grow-1 d-flex align-items-center" style={{ gap: "0.5rem" }}>
-                                                        <input checked={deleteCols.includes(element.positionType)} name={`deleteCol`} id={`deleteCol-${index}`} type={"radio"} onChange={() => {
-                                                            setDeleteCols([element?.positionType])
-                                                        }} className="form-check-input m-0 p-0" />
-                                                        <label htmlFor={`deleteCol-${index}`} className="form-check-label m-0 p-0 text-capitalize">{element?.positionType}</label>
+                                            {colWise[indexes.cur].elements.map((element, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="form-check m-0 p-0 flex-grow-1 d-flex align-items-center"
+                                                    style={{ gap: "0.5rem" }}
+                                                >
+                                                    <input
+                                                        checked={deleteCols.includes(element.positionType)}
+                                                        name={`deleteCol`}
+                                                        id={`deleteCol-${index}`}
+                                                        type={"radio"}
+                                                        onChange={() => setDeleteCols([element?.positionType])}
+                                                        className="form-check-input m-0 p-0"
+                                                    />
+                                                    <label htmlFor={`deleteCol-${index}`} className="form-check-label m-0 p-0 text-capitalize">
+                                                        {element?.positionType}
+                                                    </label>
                                                     </div>
-                                                )
-                                            })}
+                                            ))}
                                         </div>
                                         <div className="d-flex align-items-center">
-                                            <DropdownItem onClick={() => {
+                                            <DropdownItem
+                                                onClick={() => {
                                                 if (deleteCols.length < colWise[indexes.cur].elements.length - 2) {
                                                     toast.error(`Select at least ${colWise[indexes.cur].elements.length - 2} columns`)
                                                 } else {
                                                     changeColumn("2", { left: "50%", right: "50%" }, true)
                                                 }
-                                            }} className='flex-grow-1 text-center'>
+                                                }}
+                                                className='flex-grow-1 text-center'
+                                            >
                                                 Remove Columns
                                             </DropdownItem>
                                             <DropdownItem className='flex-grow-1 text-center'>
@@ -1901,8 +2001,12 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                         </div>
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
-                            )}
-                            <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("3", { left: `${100 / 3}%`, center: `${100 / 3}%`, right: `${100 / 3}%` }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            ) : null}
+                            <button
+                                className="btn p-0 d-flex justify-content-center align-items-center"
+                                onClick={() => changeColumn("3", { left: `${100 / 3}%`, center: `${100 / 3}%`, right: `${100 / 3}%` }, false)}
+                                style={{ aspectRatio: "1", width: "50px" }}
+                            >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <g strokeWidth={3} stroke="#727272">
                                         <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1914,37 +2018,27 @@ const CustomizationParent = ({ isAdmin = false }) => {
                         {/* Column Count Ends*/}
                         {/* Column Split Starts*/}
                         {/* Column Split For 2 Columns Starts*/}
-                        {colWise[indexes.cur]?.elements?.length === 2 && (
+                        {colWise?.[indexes?.cur]?.elements?.length === 2 && (
                             <div>
                                 <h6 style={{ marginLeft: "7px", marginTop: "20px" }}>Column Split</h6>
                                 <div className='d-flex justify-content-around align-items-center'>
-                                    <button onClick={() => changeColumn("2", { left: "25%", right: "75%" }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M16 52 L 16 2"></path>
+                                    <button
+                                        onClick={() => changeColumn("2", { left: "25%", right: "75%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
+                                            <g strokeWidth={3} stroke="#727272">
+                                                <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
+                                                <path d="M17 52V2" />
                                             </g>
                                         </svg>
                                     </button>
-                                    <button onClick={() => changeColumn("2", { left: `${100 / 3}%`, right: `${200 / 3}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M21 52 L 21 2"></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                    <button onClick={() => changeColumn("2", { left: `${(250 * 100) / 600}%`, right: `${(350 * 100) / 600}%` })} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M26 52 L 26 2" ></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div className='d-flex justify-content-around align-items-center'>
-                                    <button onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button
+                                        onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1952,42 +2046,44 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                             </g>
                                         </svg>
                                     </button>
-                                    <button onClick={() => changeColumn("2", { left: `${(350 * 100) / 600}%`, right: `${(250 * 100) / 600}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M37 52 L 37 2"></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                    <button onClick={() => changeColumn("2", { left: `${200 / 3}%`, right: `${100 / 3}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M42 52 L 42 2" ></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div className='d-flex justify-content-start align-items-center' style={{ marginLeft: "14.5px" }}>
-                                    <button onClick={() => changeColumn("2", { left: "75%", right: "25%" }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M48 52 L 48 2"></path>
+                                    <button
+                                        onClick={() => changeColumn("2", { left: "75%", right: "25%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
+                                            <g strokeWidth={3} stroke="#727272">
+                                                <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
+                                                <path d="M47 52V2" />
                                             </g>
                                         </svg>
                                     </button>
                                 </div>
                             </div>
                         )}
-                        {/* Column Split for 2 Columns Ends */}
-                        {/* Column Split for 3 Columns Starts */}
-                        {colWise[indexes?.cur]?.elements?.length === 3 && (
+                        {/* Column Split For 2 Columns Ends*/}
+                        {/* Column Split For 3 Columns Starts*/}
+                        {colWise?.[indexes?.cur]?.elements?.length === 3 && (
                             <div>
                                 <h6 style={{ marginLeft: "7px", marginTop: "20px" }}>Column Split</h6>
                                 <div className='d-flex justify-content-around align-items-center'>
-                                    <button onClick={() => changeColumn("3", { left: `${100 / 3}%`, center: `${100 / 3}%`, right: `${100 / 3}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button
+                                        onClick={() => changeColumn("3", { left: "25%", center: "25%", right: "50%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
+                                            <g strokeWidth={3} stroke="#727272">
+                                                <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
+                                                <path d="M17 52V2M32 52V2" />
+                                            </g>
+                                        </svg>
+                                    </button>
+                                    <button
+                                        onClick={() => changeColumn("3", { left: "50%", center: "25%", right: "25%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1995,32 +2091,15 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                             </g>
                                         </svg>
                                     </button>
-                                    <button onClick={() => changeColumn("3", { left: `${100 / 2}%`, center: `${100 / 4}%`, right: `${100 / 4}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button
+                                        onClick={() => changeColumn("3", { left: "25%", center: "50%", right: "25%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent"></rect>
-                                                <path d="M32 52 L 32 2"></path>
-                                                <path d="M48 52 L 48 2"></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                    <button onClick={() => changeColumn("3", { left: `${100 / 4}%`, center: `${100 / 2}%`, right: `${100 / 4}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth={3} stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M16 52 L 16 2" ></path>
-                                                <path d="M48 52 L 48 2" ></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div className='d-flex justify-content-start align-items-center' style={{ marginLeft: "14.5px" }}>
-                                    <button onClick={() => changeColumn("3", { left: `${100 / 4}%`, center: `${100 / 4}%`, right: `${100 / 2}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth={3} stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M16 52 L 16 2" ></path>
-                                                <path d="M32 52 L 32 2" ></path>
+                                                <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
+                                                <path d="M17 52V2M47 52V2" />
                                             </g>
                                         </svg>
                                     </button>
@@ -2403,6 +2482,16 @@ const CustomizationParent = ({ isAdmin = false }) => {
         } else if (selectedType === "close") {
             styles = (
                 <div className='mx-0 my-1 px-1'>
+                    {currPage === "button" &&
+                        <div className='d-flex p-0 mb-1 justify-content-between align-items-center '>
+                            <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Disable X Button</span>
+                            <div className="form-check form-switch form-check-dark m-0 p-0" style={{ transform: 'scale(0.8)' }}>
+                                <input className="form-check-input cursor-pointer" checked={finalObj?.closePopUpOn?.disable} onChange={e => {
+                                    updatePresent({ ...finalObj, closePopUpOn: { ...finalObj?.closePopUpOn, disable: e.target.checked } })
+                                }} type="checkbox" id="flexSwitchCheckChecked"  defaultChecked/>
+                            </div>
+                        </div>}
+                    {<div className={`${(finalObj?.closePopUpOn?.disable === true && currPage === 'button') && "opacity-25"}`} style={{ pointerEvents: finalObj?.closePopUpOn?.disable === true ? "none" : "auto"}}>
                     <div className='d-flex p-0 mb-1 justify-content-between align-items-center '>
                         <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Close when "Esc" is pressed</span>
                         <div className="form-check form-switch form-check-dark m-0 p-0" style={{ transform: 'scale(0.8)' }}>
@@ -2496,7 +2585,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                     </div>
                     <div className='my-1'>
                         {getMDToggle({
-                            label: <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Corner radius {finalObj?.crossButtons[`${pageCondition}`]?.width}</span>,
+                            label: <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Corner radius {finalObj?.crossButtons[`${pageCondition}`]?.borderRadius}</span>,
                             value: `borderRadius`
                         })}
                         <div className=" p-0 justify-content-start align-items-center gap-2">
@@ -2524,6 +2613,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                 }} />
                         </div>
                     </div>
+                    </div>}
                 </div>
             )
             spacing = (
@@ -3056,7 +3146,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                     </div>
                                 </div>
                             )}
-                            <div className="form-check form-switch mb-2 d-none">
+                            <div className="form-check form-switch mb-2">
                                 <input checked={finalObj?.rules?.exit_intent} onChange={updateRules} type="checkbox" role='switch' id='exit_intent' name={"exit_intent"} className="form-check-input cursor-pointer" />
                                 <label htmlFor="exit_intent" className="cursor-pointer" style={{ fontSize: "13px" }}>Exit intent</label>
                             </div>
@@ -3164,9 +3254,9 @@ const CustomizationParent = ({ isAdmin = false }) => {
                     {finalObj?.behaviour?.PAGES?.includes("collections_page") && (
                         <>
                             <div className="row mt-2">
-                                <label style={{display: "flex", justifyContent: 'between', alignItems: 'center', gap: '4px', fontSize: '12px'}}>
+                                <label style={{ display: "flex", justifyContent: 'between', alignItems: 'center', gap: '4px', fontSize: '12px' }}>
                                     Collections:
-                                    <a className='text-primary' onClick={() => updatePresent({...finalObj, behaviour: {...finalObj.behaviour, collections: collectionList?.map((cur) => cur?.value)}})}>Select All</a>
+                                    <a className='text-primary' onClick={() => updatePresent({ ...finalObj, behaviour: { ...finalObj.behaviour, collections: collectionList?.map((cur) => cur?.value) } })}>Select All</a>
                                 </label>
                                 <Select
                                     isMulti={true}
@@ -3183,65 +3273,9 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                         })
                                         // const newObj = { ...finalObj }
                                         // newObj.behaviour.COLLECTION_LIST = [...finalObj.behaviour.CUSTOM_PAGE_LINK, value.value]
-                                        updatePresent({...finalObj, behaviour: {...finalObj.behaviour, collections: option_list}})
+                                        updatePresent({ ...finalObj, behaviour: { ...finalObj.behaviour, collections: option_list } })
                                     }}
                                 />
-                            </div>
-
-                            <div className="row mt-2">
-                                <label htmlFor="" style={{ fontSize: "12px" }}>Include URLs:</label>
-                                {finalObj?.behaviour?.INCLUDES_PAGE_LINK?.map((ele, key) => {
-                                    return (
-                                        <div className="col-12" key={key}>
-                                            <div className="p-0 position-relative d-flex align-items-center mb-1">
-                                                <input style={{ fontSize: "12px" }} onChange={e => {
-                                                    const newObj = { ...finalObj }
-                                                    newObj.behaviour.INCLUDES_PAGE_LINK[key] = e.target.value
-                                                    updatePresent(newObj)
-                                                }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj?.behaviour?.INCLUDES_PAGE_LINK?.length > 1 && <span onClick={() => {
-                                                    const newObj = { ...finalObj }
-                                                    newObj?.behaviour?.INCLUDES_PAGE_LINK?.splice(key, 1)
-                                                    updatePresent(newObj)
-                                                }} className="d-flex justify-content-center alignn-items-center position-absolute end-0 p-1 cursor-pointer"><Trash stroke='red' size={12.5} /></span>}
-                                            </div>
-                                        </div>
-                                    )
-                                })}
-                                {<div className="col-12">
-                                    <button onClick={() => {
-                                        const newObj = { ...finalObj }
-                                        newObj.behaviour.INCLUDES_PAGE_LINK = [...finalObj?.behaviour?.INCLUDES_PAGE_LINK, ""]
-                                        updatePresent(newObj)
-                                    }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
-                                </div>}
-                            </div>
-
-                            <div className="row mt-2">
-                                <label htmlFor="" style={{ fontSize: "12px" }}>Exclude URLs:</label>
-                                {finalObj?.behaviour?.EXCLUDE_PAGE_LINK?.map((ele, key) => {
-                                    return (
-                                        <div className="col-12" key={key}>
-                                            <div className="p-0 position-relative d-flex align-items-center mb-1">
-                                                <input style={{ fontSize: "12px" }} onChange={e => {
-                                                    const newObj = { ...finalObj }
-                                                    newObj.behaviour.EXCLUDE_PAGE_LINK[key] = e.target.value
-                                                    updatePresent(newObj)
-                                                }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj?.behaviour?.EXCLUDE_PAGE_LINK?.length > 1 && <span onClick={() => {
-                                                    const newObj = { ...finalObj }
-                                                    newObj?.behaviour?.EXCLUDE_PAGE_LINK?.splice(key, 1)
-                                                    updatePresent(newObj)
-                                                }} className="d-flex justify-content-center alignn-items-center position-absolute end-0 p-1 cursor-pointer"><Trash stroke='red' size={12.5} /></span>}
-                                            </div>
-                                        </div>
-                                    )
-                                })}
-                                {<div className="col-12">
-                                    <button onClick={() => {
-                                        const newObj = { ...finalObj }
-                                        newObj.behaviour.EXCLUDE_PAGE_LINK = [...finalObj?.behaviour?.EXCLUDE_PAGE_LINK, ""]
-                                        updatePresent(newObj)
-                                    }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
-                                </div>}
                             </div>
 
                             {/* <div className="row mt-2">
@@ -3258,9 +3292,65 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                 </span>
                             </div> */}
 
-                            
+
                         </>
                     )}
+
+                    <div className="row mt-2">
+                        <label htmlFor="" style={{ fontSize: "12px" }}>Include URLs:</label>
+                        {finalObj?.behaviour?.INCLUDES_PAGE_LINK?.map((ele, key) => {
+                            return (
+                                <div className="col-12" key={key}>
+                                    <div className="p-0 position-relative d-flex align-items-center mb-1">
+                                        <input style={{ fontSize: "12px" }} onChange={e => {
+                                            const newObj = { ...finalObj }
+                                            newObj.behaviour.INCLUDES_PAGE_LINK[key] = e.target.value
+                                            updatePresent(newObj)
+                                        }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj?.behaviour?.INCLUDES_PAGE_LINK?.length > 1 && <span onClick={() => {
+                                            const newObj = { ...finalObj }
+                                            newObj?.behaviour?.INCLUDES_PAGE_LINK?.splice(key, 1)
+                                            updatePresent(newObj)
+                                        }} className="d-flex justify-content-center alignn-items-center position-absolute end-0 p-1 cursor-pointer"><Trash stroke='red' size={12.5} /></span>}
+                                    </div>
+                                </div>
+                            )
+                        })}
+                        {<div className="col-12">
+                            <button onClick={() => {
+                                const newObj = { ...finalObj }
+                                newObj.behaviour.INCLUDES_PAGE_LINK = [...finalObj?.behaviour?.INCLUDES_PAGE_LINK, ""]
+                                updatePresent(newObj)
+                            }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
+                        </div>}
+                    </div>
+
+                    <div className="row mt-2">
+                        <label htmlFor="" style={{ fontSize: "12px" }}>Exclude URLs:</label>
+                        {finalObj?.behaviour?.EXCLUDE_PAGE_LINK?.map((ele, key) => {
+                            return (
+                                <div className="col-12" key={key}>
+                                    <div className="p-0 position-relative d-flex align-items-center mb-1">
+                                        <input style={{ fontSize: "12px" }} onChange={e => {
+                                            const newObj = { ...finalObj }
+                                            newObj.behaviour.EXCLUDE_PAGE_LINK[key] = e.target.value
+                                            updatePresent(newObj)
+                                        }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj?.behaviour?.EXCLUDE_PAGE_LINK?.length > 1 && <span onClick={() => {
+                                            const newObj = { ...finalObj }
+                                            newObj?.behaviour?.EXCLUDE_PAGE_LINK?.splice(key, 1)
+                                            updatePresent(newObj)
+                                        }} className="d-flex justify-content-center alignn-items-center position-absolute end-0 p-1 cursor-pointer"><Trash stroke='red' size={12.5} /></span>}
+                                    </div>
+                                </div>
+                            )
+                        })}
+                        {<div className="col-12">
+                            <button onClick={() => {
+                                const newObj = { ...finalObj }
+                                newObj.behaviour.EXCLUDE_PAGE_LINK = [...finalObj?.behaviour?.EXCLUDE_PAGE_LINK, ""]
+                                updatePresent(newObj)
+                            }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
+                        </div>}
+                    </div>
 
                     {/* {finalObj?.behaviour?.PAGES?.includes("custom_source") && (
                         <div className="row mt-2">
@@ -3534,6 +3624,335 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                                         {/* <DropdownItem
                                                             onClick={(e) => {
                                                                 e.stopPropagation()
+                                                                if (colWise.length <= 1) {
+                                                                    setCurrPosition({ ...currPosition, selectedType: "main" })
+                                                                    setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                                } else {
+                                                                    setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                    setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
+                                                                }
+                                                                const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
+
+                                                                if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                    if (currPosition.selectedType === "main") {
+                                                                        arr.splice(key, 1)
+                                                                    } else {
+                                                                        arrRev.splice(key, 1)
+                                                                    }
+                                                                } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                    if (currPosition.selectedType === "main") {
+                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                    } else {
+                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                    }
+                                                                } else {
+                                                                    if (currPosition.selectedType === "main") {
+                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                    } else {
+                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                    }
+                                                                }
+
+                                                                const newObj = { ...finalObj }
+                                                                if (currPage === "button") {
+                                                                    newObj[`${mobileCondition}button`] = arr
+                                                                    newObj[`${mobileConditionRev}button`] = arrRev
+                                                                } else {
+                                                                    const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                    const mobile_pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+                                                                    newObj[`${mobileCondition}pages`][pageIndex].values = currPosition.selectedType === "main" ? arr : newObj[`${mobileCondition}pages`][pageIndex].values
+                                                                    newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = currPosition.selectedType === "block" ? arrRev : newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values
+                                                                }
+                                                                updatePresent({ ...newObj })
+                                                            }}
+                                                            className='w-100'
+                                                        >
+                                                            <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                                                <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Deletes</span>
+                                                            </div>
+                                                        </DropdownItem> */}
+                                                        <DropdownItem
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+
+                                                                const newCurrPosition = { ...currPosition }
+                                                                let newIndexes = { ...indexes }
+
+                                                                if (colWise.length <= 1) {
+                                                                    newCurrPosition.selectedType = "main"
+                                                                    newIndexes = { cur: 0, curElem: "left", subElem: "grandparent" }
+                                                                    // console.log("this is delete 1 print 1")
+                                                                } else {
+                                                                    newCurrPosition.selectedType = "block"
+                                                                    newIndexes = { cur: key - 1, curElem: "left", subElem: "grandparent" }
+                                                                    // console.log("this is delete 1 print 2")
+                                                                }
+
+                                                                // Deep clone the arrays for desktop and mobile
+                                                                const cloneDeep = (obj) => JSON.parse(JSON.stringify(obj))
+
+                                                                const desktopArr = currPage === "button"
+                                                                    ? cloneDeep(finalObj?.button)
+                                                                    : cloneDeep(finalObj?.pages?.find($ => $.id === currPage)?.values)
+
+                                                                const mobileArr = currPage === "button"
+                                                                    ? cloneDeep(finalObj?.mobile_button)
+                                                                    : cloneDeep(finalObj?.mobile_pages?.find($ => $.id === currPage)?.values)
+                                                                // Process deletion for a given array
+                                                                const processDeletion = (arr) => {
+                                                                    if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                        arr.splice(key, 1)
+                                                                        // console.log("this is delete 1 print 3")
+                                                                    } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                        // console.log("this is delete 1 print 4")
+                                                                    } else {
+                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                        // console.log("this is delete 1 print 5")
+                                                                    }
+                                                                    return arr
+                                                                }
+
+                                                                // Apply deletion based on the selectedType
+                                                                if (newCurrPosition.selectedType === "main") {
+                                                                    processDeletion(desktopArr)
+                                                                    // console.log("this is delete 1 print 6")
+                                                                } else {
+                                                                    processDeletion(mobileArr)
+                                                                    // console.log("this is delete 1 print 7")
+                                                                }
+
+                                                                // Create a new object for finalObj to ensure immutability
+                                                                const newObj = cloneDeep(finalObj)
+
+                                                                if (currPage === "button") {
+                                                                    newObj[`${mobileCondition}button`] = desktopArr
+                                                                    newObj[`${mobileConditionRev}button`] = mobileArr
+                                                                    // console.log("this is delete 1 print 8")
+                                                                } else {
+                                                                    const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                    const mobilePageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+
+                                                                    if (newCurrPosition.selectedType === "main") {
+                                                                        newObj[`${mobileCondition}pages`][pageIndex].values = desktopArr
+                                                                        // console.log("this is delete 1 print 11")
+                                                                    } else {
+                                                                        newObj[`${mobileConditionRev}pages`][mobilePageIndex].values = mobileArr
+                                                                        // console.log("this is delete 1 print 10")
+                                                                    }
+                                                                    // console.log("this is delete 1 print 9")
+                                                                }
+
+                                                                // Update the state with the new object
+                                                                updatePresent(newObj)
+                                                                setCurrPosition(newCurrPosition)
+                                                                setIndexes(newIndexes)
+                                                            }}
+                                                            className='w-100'
+                                                        >
+                                                            <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                                                <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Delete for Current View</span>
+                                                            </div>
+                                                        </DropdownItem>
+                                                        {/* <DropdownItem
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                toggleModal()
+                                                            }}
+                                                            className="w-100"
+                                                        >
+                                                            <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                                                <Trash stroke="red" size={"15px"} className="cursor-pointer" />{" "}
+                                                                <span className="fw-bold text-black" style={{ fontSize: "0.75rem" }}>
+                                                                    Delete
+                                                                </span>
+                                                            </div>
+                                                        </DropdownItem>
+
+                                                        <Modal isOpen={modalOpen} toggle={toggleModal}>
+                                                            <ModalHeader toggle={toggleModal}>Delete Item</ModalHeader>
+                                                            <ModalBody>
+                                                                Do you want to delete this item on both mobile and desktop, or only on the current page?
+                                                            </ModalBody>
+                                                            <ModalFooter>
+                                                                <Button
+                                                                    color="danger"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
+
+                                                                        const newCurrPosition = { ...currPosition }
+                                                                        let newIndexes = { ...indexes }
+
+                                                                        if (colWise.length <= 1) {
+                                                                            newCurrPosition.selectedType = "main"
+                                                                            newIndexes = { cur: 0, curElem: "left", subElem: "grandparent" }
+                                                                            console.log("this is delete 2 print 1")
+                                                                        } else {
+                                                                            newCurrPosition.selectedType = "block"
+                                                                            newIndexes = { cur: key - 1, curElem: "left", subElem: "grandparent" }
+                                                                            console.log("this is delete 2 print 2")
+                                                                        }
+
+                                                                        // Deep clone the arrays for desktop and mobile
+                                                                        const cloneDeep = (obj) => JSON.parse(JSON.stringify(obj))
+
+                                                                        const desktopArr = currPage === "button"
+                                                                            ? cloneDeep(finalObj?.button)
+                                                                            : cloneDeep(finalObj?.pages?.find($ => $.id === currPage)?.values)
+
+                                                                        const mobileArr = currPage === "button"
+                                                                            ? cloneDeep(finalObj?.mobile_button)
+                                                                            : cloneDeep(finalObj?.mobile_pages?.find($ => $.id === currPage)?.values)
+
+                                                                        // Process deletion for a given array
+                                                                        const processDeletion = (arr) => {
+                                                                            if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                arr.splice(key, 1)
+                                                                                console.log("this is delete 2 print 3")
+                                                                            } else if (curElem?.element?.length && cur?.elements?.length) {
+                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                console.log("this is delete 2 print 4")
+                                                                            } else {
+                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                console.log("this is delete 2 print 5")
+                                                                            }
+                                                                            return arr
+                                                                        }
+
+                                                                        // Apply deletion based on the selectedType
+                                                                        if (newCurrPosition.selectedType === "main") {
+                                                                            processDeletion(desktopArr)
+                                                                            console.log("this is delete 2 print 6")
+                                                                        } else {
+                                                                            processDeletion(mobileArr)
+                                                                            console.log("this is delete 2 print 7")
+                                                                        }
+
+                                                                        // Create a new object for finalObj to ensure immutability
+                                                                        const newObj = cloneDeep(finalObj)
+
+                                                                        if (currPage === "button") {
+                                                                            newObj[`${mobileCondition}button`] = desktopArr
+                                                                            newObj[`${mobileConditionRev}button`] = mobileArr
+                                                                            console.log("this is delete 2 print 8")
+                                                                        } else {
+                                                                            const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                            const mobilePageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+
+                                                                            if (newCurrPosition.selectedType === "main") {
+                                                                                newObj[`${mobileCondition}pages`][pageIndex].values = desktopArr
+                                                                                console.log("this is delete 2 print 11")
+                                                                            } else {
+                                                                                newObj[`${mobileConditionRev}pages`][mobilePageIndex].values = mobileArr
+                                                                                console.log("this is delete 2 print 10")
+                                                                            }
+                                                                            console.log("this is delete 2 print 9")
+                                                                        }
+
+                                                                        // Update the state with the new object
+                                                                        updatePresent(newObj)
+                                                                        setCurrPosition(newCurrPosition)
+                                                                        setIndexes(newIndexes)
+                                                                        toggleModal()
+                                                                    }}
+                                                                >
+                                                                    Both
+                                                                </Button>
+                                                                <Button
+                                                                    color="primary"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
+
+                                                                        const newCurrPosition = { ...currPosition }
+                                                                        let newIndexes = { ...indexes }
+
+                                                                        if (colWise.length <= 1) {
+                                                                            newCurrPosition.selectedType = "main"
+                                                                            newIndexes = { cur: 0, curElem: "left", subElem: "grandparent" }
+                                                                            console.log("this is delete 3 print 1")
+                                                                        } else {
+                                                                            newCurrPosition.selectedType = "block"
+                                                                            newIndexes = { cur: key - 1, curElem: "left", subElem: "grandparent" }
+                                                                            console.log("this is delete 3 print 2")
+                                                                        }
+
+                                                                        // Deep clone the arrays for desktop and mobile
+                                                                        const cloneDeep = (obj) => JSON.parse(JSON.stringify(obj))
+
+                                                                        const desktopArr = currPage === "button"
+                                                                            ? cloneDeep(finalObj?.button)
+                                                                            : cloneDeep(finalObj?.pages?.find($ => $.id === currPage)?.values)
+
+                                                                        const mobileArr = currPage === "button"
+                                                                            ? cloneDeep(finalObj?.mobile_button)
+                                                                            : cloneDeep(finalObj?.mobile_pages?.find($ => $.id === currPage)?.values)
+console.log("111 desktopArr", desktopArr)
+console.log("111 mobileArr", mobileArr)
+                                                                        // Process deletion for a given array
+                                                                        const processDeletion = (arr) => {
+                                                                            if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                arr.splice(key, 1)
+                                                                                console.log("this is delete 3 print 3")
+                                                                            } else if (curElem?.element?.length && cur?.elements?.length) {
+                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                console.log("this is delete 3 print 4")
+                                                                            } else {
+                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                console.log("this is delete 3 print 5")
+                                                                            }
+                                                                            return arr
+                                                                        }
+
+                                                                        // Apply deletion based on the selectedType
+                                                                        if (newCurrPosition.selectedType === "main") {
+                                                                            processDeletion(desktopArr)
+                                                                            console.log("this is delete 3 print 6")
+                                                                        } else {
+                                                                            processDeletion(mobileArr)
+                                                                            console.log("this is delete 3 print 7")
+                                                                        }
+
+                                                                        // Create a new object for finalObj to ensure immutability
+                                                                        const newObj = cloneDeep(finalObj)
+
+                                                                        if (currPage === "button") {
+                                                                            newObj[`${mobileCondition}button`] = desktopArr
+                                                                            newObj[`${mobileConditionRev}button`] = mobileArr
+                                                                            console.log("this is delete 3 print 8")
+                                                                        } else {
+                                                                            const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                            const mobilePageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+
+                                                                            if (newCurrPosition.selectedType === "main") {
+                                                                                newObj[`${mobileCondition}pages`][pageIndex].values = desktopArr
+                                                                                console.log("this is delete 3 print 11")
+                                                                            } else {
+                                                                                newObj[`${mobileConditionRev}pages`][mobilePageIndex].values = mobileArr
+                                                                                console.log("this is delete 3 print 10")
+                                                                            }
+                                                                            console.log("this is delete 3 print 9")
+                                                                        }
+
+                                                                        // Update the state with the new object
+                                                                        updatePresent(newObj)
+                                                                        setCurrPosition(newCurrPosition)
+                                                                        setIndexes(newIndexes)
+                                                                        toggleModal()
+                                                                    }}
+                                                                >
+                                                                    Current Page
+                                                                </Button>
+                                                                <Button color="secondary" onClick={toggleModal}>
+                                                                    Cancel
+                                                                </Button>
+                                                            </ModalFooter>
+                                                        </Modal> */}
+
+
+                                                        {/* <DropdownItem
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
                                                                 setCurrPosition({ ...currPosition, selectedType: "block" })
                                                                 setIndexes({ cur: key, curElem: curElem.positionType, subElem: j + 1 })
                                                                 const arr = [...colWise]
@@ -3725,10 +4144,19 @@ const CustomizationParent = ({ isAdmin = false }) => {
         const form_data = new FormData()
         form_data.append("superleadz_template", id)
         const secondsConverted = await convertToSeconds({ time: Number(finalObj?.whatsapp?.time), type: finalObj?.whatsapp?.timeType })
+        const campaign_secondsConverted = await convertToSeconds({ time: Number(finalObj?.whatsapp?.campaign_time), type: finalObj?.whatsapp?.campaign_timeType })
+        const campaign_two_secondsConverted = await convertToSeconds({ time: Number(finalObj?.whatsapp?.second_campaign_time), type: finalObj?.whatsapp?.second_campaign_timeType })
+
         // console.log(secondsConverted, "secondsConverted")
+        const now = moment(new Date())
+        const scheduledTime = now.add(campaign_secondsConverted, 'seconds')
         const json_data = {
             template: finalObj?.whatsapp?.template,
-            delay: secondsConverted
+            campaign: finalObj?.whatsapp?.campaign,
+            delay: secondsConverted,
+            campagin_delay: campaign_secondsConverted,
+            second_campagin_delay: campaign_two_secondsConverted,
+            timestamp_schedule_str: scheduledTime
         }
         form_data.append("json_data", JSON.stringify(json_data))
 
@@ -3784,6 +4212,12 @@ const CustomizationParent = ({ isAdmin = false }) => {
             form_data.append('shop', outletData[0]?.web_url)
             form_data.append('app', 'superleadz')
             Object.entries(finalObj.behaviour).forEach(([key, value]) => {
+                console.log(key, "========key")
+                // if (finalObj.behaviour?.EXCLUDE_PAGE_LINK.length > 0) {
+                //     concat_val = `exclude${value}`
+                // } else {
+                //     concat_val = value
+                // }
                 if (Array.isArray(value)) {
                     value.forEach(ele => form_data.append(key, ele))
                 } else {
@@ -4653,31 +5087,45 @@ const CustomizationParent = ({ isAdmin = false }) => {
 
     const integratedList = () => {
         getReq("integration", `?app_name=${userPermission?.appName}`)
-            .then((resp) => {
-                setConnectedList(resp?.data?.connected_app_list?.map((curElem) => curElem?.integrated_app?.slug))
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        .then((resp) => {
+            setConnectedList(resp?.data?.connected_app_list?.map((curElem) => curElem?.integrated_app?.slug))
+        })
+        .catch((error) => {
+            console.log(error)
+        })
 
         getReq("getTemplates")
-            .then((resp) => {
-                // console.log(resp, "ppppppp")
-                setWhatsAppTemplate(resp?.data?.data)
-                const activeTemplate = resp?.data?.data?.map((curElem) => {
-                    if (resp?.data?.active_id.includes(curElem?.id)) {
-                        return { label: curElem?.name, value: curElem?.id }
-                    } else {
-                        return null
-                    }
-                }).filter(elem => elem !== null)
-                // console.log(activeTemplate, "ppppppp")
-                setWhatsappTem(activeTemplate)
+        .then((resp) => {
+            // console.log(resp, "ppppppp")
+            setWhatsAppTemplate(resp?.data?.data)
+            const activeTemplate = resp?.data?.data?.map((curElem) => {
+                if (resp?.data?.active_id.includes(curElem?.id)) {
+                    return { label: curElem?.name, value: curElem?.id }
+                } else {
+                    return null
+                }
+            }).filter(elem => elem !== null)
+            // console.log(activeTemplate, "ppppppp")
+            setWhatsappTem(activeTemplate)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+
+        getReq("campaign_details_list")
+        .then((resp) => {
+            console.log(resp, "campaign_details_list")
+            const campaign_list = resp?.data?.data?.map((curElem) => {
+                return { label: curElem?.campaign_name, value: curElem?.id }
             })
-            .catch((error) => {
-                console.log(error)
-            })
+            setCampaignTem(campaign_list)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }
+
+    // console.log(campaignTem)
 
     useEffect(() => {
         getEmailSettings()
@@ -4782,17 +5230,17 @@ const CustomizationParent = ({ isAdmin = false }) => {
             method: "POST",
             body: form_data
         })
-        .then((resp) => resp.json())
-        .then((data) => {
-            console.log(data)
-            // setCollectionData(data?.response?.custom_collections ? data.response.custom_collections : [])
-            setCollectionList(data.response.custom_collections.map((curElem) => {
-                return { value: curElem.id, label: curElem.title }
-            }))
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log(data)
+                // setCollectionData(data?.response?.custom_collections ? data.response.custom_collections : [])
+                setCollectionList(data.response.custom_collections.map((curElem) => {
+                    return { value: curElem.id, label: curElem.title }
+                }))
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     useEffect(() => {
@@ -4908,11 +5356,11 @@ const CustomizationParent = ({ isAdmin = false }) => {
                             {/* <a onClick={(e) => sendData(e, "Save & Preview")} id='saveBtn1' className="btn custom-btn-outline" target="_blank" rel="noopener noreferrer" style={{ whiteSpace: 'nowrap' }}>Previews</a>
                             <a href="/merchant/SuperLeadz/preview/19012/" id="previewLink" target="_blank" rel="noopener noreferrer" style={{ display: 'none' }}></a> */}
                             {/* <button onClick={isAdmin ? (e) => handleSaveDataAdmin(e, "Save") : (e) => sendData(e, "Save")} id='saveBtn2' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Save</button> */}
-                             {/* <button onClick={isAdmin ? (e) => handleSaveDataAdmin(e, "Save & Close") : (e) => sendData(e, "Save & Close")} id='saveBtn3' className="btn btn-primary-main" style={{ whiteSpace: 'nowrap' }}>Save & Close</button> */}
+                            {/* <button onClick={isAdmin ? (e) => handleSaveDataAdmin(e, "Save & Close") : (e) => sendData(e, "Save & Close")} id='saveBtn3' className="btn btn-primary-main" style={{ whiteSpace: 'nowrap' }}>Save & Close</button> */}
                             <button onClick={isAdmin ? (e) => handleSaveDataAdmin(e, "Save") : (e) => { localStorage.removeItem("defaultTheme"); sendData(e, "Save") }} id='saveBtn2' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Save</button>
                             <button onClick={isAdmin ? (e) => handleSaveDataAdmin(e, "Save & Close") : (e) => { localStorage.removeItem("defaultTheme"); sendData(e, "Save & Close") }} id='saveBtn3' className="btn btn-primary-main" style={{ whiteSpace: 'nowrap' }}>Save & Close</button>
-                            
-                            </div>
+
+                        </div>
                     </Row>
                 </Container>
                 <div className="d-flex justify-content-center align-items-stretch border position-relative" style={{ height: "calc(100vh - 55px)" }}>
@@ -4969,7 +5417,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                             </button>
                             <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Elements</span>
                         </div>
-                        <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "offers" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => {
+                        {finalObj?.pages?.find(page => page.pageName === "Offer Display")?.pageName === "Offer Display" && <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "offers" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => {
                             setSideNav(sideNav === "offers" ? "" : "offers")
                             setCurrPage("offers")
                         }}>
@@ -4977,7 +5425,8 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                 <Tag size={15} />
                             </button>
                             <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Offers</span>
-                        </div>
+                        </div>}
+
                         <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "criteria" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => setSideNav(sideNav === "criteria" ? "" : "criteria")}>
                             <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
                                 <Crosshair size={15} />
@@ -6291,7 +6740,9 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                         </div>}
                                         {/* Button Section */}
                                         {/* Offer Section */}
-                                        {sideNav === "offers" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%", maxHeight: "100%", overflow: "auto" }}>
+                                        {/* {console.log(finalObj?.pages?.find(page => page.pageName === "Offer Display")?.pageName === "Offer Display", "finalObj")} */}
+                                        {sideNav === "offers" && (
+                                            <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%", maxHeight: "100%", overflow: "auto" }}>
                                             <div className="toggleSection border-end d-flex align-items-stretch justify-content-start mb-1">
                                                 <div style={{ width: `33.3333%`, padding: "0.35rem", height: "100%" }}>
                                                     <div draggable={isMobile ? phoneIsOfferDraggable : isOfferDraggable} onDragStart={(e) => {
@@ -6373,7 +6824,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                                     </AccordionBody>
                                                 </AccordionItem>
                                             </UncontrolledAccordion>
-                                        </div>}
+                                            </div>)}
                                         {/* Offer Section */}
                                         {/* Criteria section */}
                                         {sideNav === "criteria" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%" }}>
@@ -6569,6 +7020,99 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                                                             </>
                                                                         )
                                                                     }
+
+                                                                    <div className='py-1'>
+                                                                        <div className="form-check d-flex align-items-center gap-1 mx-0 p-0">
+                                                                            <input id="is_campagin" checked={finalObj?.whatsapp?.is_campaign} type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, is_campaign: e.target.checked } })} />
+                                                                            <label htmlFor='is_campagin' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Send to Abandoned Leads</label>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {
+                                                                        finalObj?.whatsapp?.is_campaign && (
+                                                                            <>
+                                                                                <div className='py-1 pt-0'>
+                                                                                    <Row className='match-height'>
+                                                                                        <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Delay</label>
+                                                                                        <Col md="6">
+                                                                                            <div className='h-100'>
+                                                                                                <input type="text"
+                                                                                                    className='form-control h-100'
+                                                                                                    value={finalObj?.whatsapp?.campaign_time}
+                                                                                                    onChange={(e) => {
+                                                                                                        if (!isNaN(e.target.value)) {
+                                                                                                            updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, campaign_time: e.target.value } })
+                                                                                                        }
+                                                                                                    }}
+                                                                                                />
+                                                                                            </div>
+                                                                                        </Col>
+                                                                                        <Col md="6">
+                                                                                            <div>
+                                                                                                <Select
+                                                                                                    options={deplayTime}
+                                                                                                    value={deplayTime?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.campaign_timeType))}
+                                                                                                    // onChange={(e) => setWhatsappJson({...whatsappJson, delay: e.value})}
+                                                                                                    onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, campaign_timeType: e.value } })}
+                                                                                                />
+                                                                                            </div>
+                                                                                        </Col>
+                                                                                    </Row>
+                                                                                </div>
+                                                                                <div className='py-1'>
+                                                                                    <div className="form-check d-flex align-items-center gap-1 mx-0 p-0">
+                                                                                        <input id="is_second_delay" checked={finalObj?.whatsapp?.is_second_delay} type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, is_second_delay: e.target.checked } })} />
+                                                                                        <label htmlFor='is_second_delay' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Add Second Delay</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                                
+                                                                                {
+                                                                                    finalObj?.whatsapp?.is_second_delay && (
+                                                                                        <>
+                                                                                            <div className='py-1 pt-0'>
+                                                                                                <Row className='match-height'>
+                                                                                                    <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Second Delay</label>
+                                                                                                    <Col md="6">
+                                                                                                        <div className='h-100'>
+                                                                                                            <input type="text"
+                                                                                                                className='form-control h-100'
+                                                                                                                value={finalObj?.whatsapp?.second_campaign_time}
+                                                                                                                onChange={(e) => {
+                                                                                                                    if (!isNaN(e.target.value)) {
+                                                                                                                        updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, second_campaign_time: e.target.value } })
+                                                                                                                    }
+                                                                                                                }}
+                                                                                                            />
+                                                                                                        </div>
+                                                                                                    </Col>
+                                                                                                    <Col md="6">
+                                                                                                        <div>
+                                                                                                            <Select
+                                                                                                                options={deplayTime}
+                                                                                                                value={deplayTime?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.second_campaign_timeType))}
+                                                                                                                // onChange={(e) => setWhatsappJson({...whatsappJson, delay: e.value})}
+                                                                                                                onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, second_campaign_timeType: e.value } })}
+                                                                                                            />
+                                                                                                        </div>
+                                                                                                    </Col>
+                                                                                                </Row>
+                                                                                            </div>
+                                                                                        </>
+                                                                                    )
+                                                                                }
+
+                                                                                <div className='py-1'>
+                                                                                    <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Campaign's</label>
+
+                                                                                    <Select
+                                                                                        options={campaignTem}
+                                                                                        value={campaignTem?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.campaign))}
+                                                                                        onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, campaign: e.value } })}
+                                                                                    />
+                                                                                </div>
+                                                                            </>
+                                                                        )
+                                                                    }
                                                                 </>
                                                             ) : (
                                                                 <>
@@ -6760,7 +7304,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                                             const newFinalObj = finalObj
                                                             const arr = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
                                                             const arrRev = currPage === "button" ? [...finalObj?.[`${mobileConditionRev}button`]] : [...finalObj?.[`${mobileConditionRev}pages`][finalObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $.id === currPage)].values]
-                                                            if (arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type) {
+                                                            if (arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem]?.type) {
                                                                 arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type = "image"
                                                             }
                                                             if (arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src) {
@@ -6910,7 +7454,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
                                 <button onClick={() => setCancelCust(!cancelCust)} className="btn btn-outline-dark">No</button><button onClick={() => {
                                     cancelAction()
                                     navigate("/merchant/SuperLeadz/all_campaigns/")
-                                     localStorage.removeItem("defaultTheme")
+                                    localStorage.removeItem("defaultTheme")
                                 }} className="btn btn-dark">Yes</button>
                             </div>
                         </Card>

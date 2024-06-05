@@ -17,7 +17,7 @@ import {
 } from 'reactstrap'
 import { postReq } from '../../../../assets/auth/jwtService'
 import FrontBaseLoader from '../../../Components/Loader/Loader'
-import { RenderTemplateUI, getBoldStr } from '../../SmallFunction'
+import { CarouselUI, RenderTemplateUI, getBoldStr } from '../../SmallFunction'
 import wp_back from '../imgs/wp_back.png'
 import '../whatsapp.scss'
 import AllTempTable from './pages/AllTempTable'
@@ -269,7 +269,7 @@ export default function TemplateDashboard() {
       setLoader(true)
       postReq("getTemplateById", formData)
          .then(res => {
-            // console.log('Response:', res.data)
+            console.log('Response:', res.data)
             if (res.data.name) {
                setCurrentTemplate(res.data)
                // console.log(res.data.components[0].format)
@@ -702,7 +702,9 @@ export default function TemplateDashboard() {
 
                                  </div>
                               </div>
-
+                              {
+            CurrentTemplate?.components?.find((elm) => elm.type === "CAROUSEL") && <> <CarouselUI useCarouselData={CurrentTemplate?.components?.find((elm) => elm.type === "CAROUSEL")} /> </>
+         }
                            </Card>
                         </Col>
                      </Row>
