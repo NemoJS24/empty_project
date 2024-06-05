@@ -29,7 +29,7 @@ export const WhatsappNavigation = [
         id: 'Templates',
         title: 'Templates',
         icon: <AiOutlineHighlight size={16} />,
-        navLink: '/merchant/whatsapp/message/'
+        navLink: '/merchant/whatsapp/templates/'
     },
     {
         id: 'campaigns',

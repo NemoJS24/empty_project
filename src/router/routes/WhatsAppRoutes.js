@@ -2,7 +2,7 @@ import TemplateDashboard from "../../views/Whatsapp/Templates/TemplateDashboard/
 import OtpinManage from "../../views/Whatsapp/Templates/OtpinManage"
 import ProjectTable from "../../views/Whatsapp/Tables/ProjectTable"
 import EmbededSignup from "../../views/Whatsapp/Forms/EmbededSignup"
-import CreateTemplate from "../../views/Whatsapp/Templates/CreateTemplate"
+// import CreateTemplate from "../../views/Whatsapp/Templates/CreateTemplate"
 import EditTemplate from "../../views/Whatsapp/Templates/EditTemplate"
 import GroupTable from "../../views/Whatsapp/Tables/GroupTable"
 import Dashboard from "../../views/Whatsapp/Dashboard"
@@ -30,7 +30,7 @@ export const WhatsAppRoutes = [
         element: <Dashboard />
     },
     {
-        path: '/merchant/whatsapp/message/',
+        path: '/merchant/whatsapp/templates/',
         element: <TemplateDashboard />
     },
     {

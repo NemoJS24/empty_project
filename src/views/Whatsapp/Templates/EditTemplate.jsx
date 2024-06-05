@@ -666,7 +666,7 @@ export default function EditTemplate() {
         console.log(res)
         if (res.data.status) {
           toast.success(useIsNewTemp ? "Template has been created!" : "Template has updated!")
-          navigate('/merchant/whatsapp/message/')
+          navigate('/merchant/whatsapp/templates/')
           // toast.success(res.data.error_msg)
         } else if (!res.data.status) {
           toast.error(res.data.error_user_msg)

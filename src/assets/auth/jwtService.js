@@ -205,6 +205,7 @@ export const configUrl = {
     whatsapp_dashboard_view: "talk/dashboard_view/",
 
     getTemplates: "talk/getTemplates/",
+    getMailTemplates: "mail/getTemplates/",
     project_get: "talk/project_get/",
     getTemplateById: "talk/getTemplateById/",
     createTemplate: "talk/createTemplate/",
@@ -277,6 +278,7 @@ export const configUrl = {
     update_status: "/mail/update_status/",
     delete_mail: "/mail/delete_mail/",
     whatsapp_create_campaign: "/talk/create_campaign/",
+    email_create_campaign: "/mail/create_campaign/",
     whatsapp_view_campaign: "/talk/view_campaign/",
     change_campaign_status: "/talk/change_campaign_status/",
     default_settings: "/api/v1/set_default_settings/",

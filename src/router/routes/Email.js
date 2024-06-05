@@ -12,6 +12,8 @@ import EmailCampaigns from "@src/views/Email/EmailCampaigns"
 import EmailScheduleDetails from "@src/views/Email/send/EmailScheduleDetails"
 import Test from "@src/views/Email/Create/test/Test"
 import AddEmailForm from "@src/views/Email/tables/AddEmailForm"
+import { CampaignType } from "../../views/Whatsapp/Campaign/CampaignType"
+import CreateCampaign from "../../views/Email/CreateCampaign"
 
 export const EmailRoutes = [
   {
@@ -73,5 +75,17 @@ export const EmailRoutes = [
   {
     path: '/merchant/Email/Test',
     element: <Test/>
+  },
+  {
+    path: '/merchant/Email/create-campaign/type/',
+    element: <CampaignType />
+  },
+  {
+    path: '/merchant/Email/create-campaign/:campaign_type/:temp_id/',
+    element: <CreateCampaign />
+  },
+  {
+    path: '/merchant/Email/create-campaign/:campaign_type/:temp_id/:campaign_id',
+    element: <CreateCampaign />
   }
 ]

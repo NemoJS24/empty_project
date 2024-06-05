@@ -10,7 +10,7 @@ import skeletonBg from './skeleton.svg'
 export default function EmailTemplatesDashboard() {
   const [modal, setModal] = useState(false)
   const [useTemplatesList, setTemplatesList] = useState([])
-
+  const params = new URLSearchParams(location.search)
   const toggle = () => setModal(!modal)
 
   useEffect(() => {
@@ -76,7 +76,7 @@ export default function EmailTemplatesDashboard() {
                           {/* <div className='items text-danger ' onClick={() => toggleActive(SingleTemplate.id, false)} >Deactivate</div> */}
                         </div>
                       </div>
-                      <Link to={`/merchant/Email/selectGroup/${data.unique_id}`} className='btn btn-primary px-3 send-btn ' >Use Template </Link>
+                      <Link to={params.get('campagin_type') ? params.get('campagin_type') === "broadcast" ? `/merchant/Email/selectGroup/${data.unique_id}` : `/merchant/Email/create-campaign/${params.get('campagin_type')}/${data.id}` : `/merchant/Email/campaign/${data.id}`} className='btn btn-primary px-3 send-btn ' >Use Template </Link>
 
                     </div>
                   </CardBody>

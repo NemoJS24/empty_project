@@ -628,16 +628,16 @@ export default function EditTemplate() {
     //  useIsNewTemp ? postReq("createTemplate", formData) : postReq("editTemplate", formData)
     postReq(useIsNewTemp ? "createTemplate" : "editTemplate", formData)
       .then((res) => {
-        // console.log(res)
-        toast.success(useIsNewTemp ? "Template has been created!" : "Template has updated!")
-        navigate('/merchant/whatsapp/message/')
-        // if (res.data.success) {
-        //   // toast.success(res.data.error_msg)
-        // } else if (!res.data.success) {
-        //   toast.error(res.data.error_msg)
-        // } else {
-        //   toast.error("Something went wrong!")
-        // }
+        console.log(res)
+        if (res.data.success) {
+          // toast.success(res.data.error_msg)
+          toast.success("Template has updated!")
+          navigate('/merchant/whatsapp/templates/')
+        } else if (!res.data.success) {
+          toast.error(res.data.error_msg)
+        } else {
+          toast.error("Something went wrong!")
+        }
         setLoader(false)
 
       }).catch((err) => { console.log(err); toast.error("Something went wrong!") })

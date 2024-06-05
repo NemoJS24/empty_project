@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ownUrl } from '../../Validator'
+import { PermissionProvider } from '../../../Helper/Context'
 
 export const CampaignType = () => {
 
   const [selectedCampaignType, setSelectedCampaignType] = useState('broadcast')
-
+  const { userPermission } = useContext(PermissionProvider)
   const campaignTypeCard = [
     {
       img: `${ownUrl}/images/dashboard/broadcast_campaign.png`,
@@ -64,7 +65,7 @@ export const CampaignType = () => {
 
       <div className="row">
         <div className="d-flex justify-content-end align-items-center">
-          <a className="btn btn-primary" onClick={() => navigate(`/merchant/whatsapp/message/?campagin_type=${selectedCampaignType}`)}>
+          <a className="btn btn-primary" onClick={() => navigate(`/merchant/${userPermission?.appName}/templates/?campagin_type=${selectedCampaignType}`)}>
             Next
           </a>
         </div>
