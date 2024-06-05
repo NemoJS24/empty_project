@@ -69,6 +69,24 @@ const EmailCampaigns = ({ custom = false, name = "All Campaigns", draft = true, 
             isEnable: true
         },
         {
+            name: 'Status',
+            selector: row => {
+                return <>
+                    <div className='form-check form-switch form-check-success cursor-pointer d-flex justify-content-start p-0' style={{cursor: 'pointer'}}>
+                        <input className='form-check-input cursor-pointer m-0' type='checkbox' id='verify' defaultChecked={row.whatsapp_is_active} onChange={(e) => confirmStatus(e, row.whatsapp_id)} />
+                    </div>
+                </>
+            },
+            type: 'select',
+            options: [
+                { label: "Select", value: "" },
+                { label: "Active", value: 1 },
+                { label: "Inactive", value: 0 },
+                { label: "Draft", value: "is_draft" }
+            ],
+            isEnable: true
+        },
+        {
             name: 'Sender Email',
             selector: row => <div>{row.template_sender ?? ''}</div>,
             dataType: 'offer_code',

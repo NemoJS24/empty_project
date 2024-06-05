@@ -145,7 +145,7 @@ const CreateCampaign = () => {
                 console.log(resp)
                 toast.success('Campaign Saved Successfully')
                 if (type === "save&close") {
-                    navigate('/merchant/whatsapp/campaigns')
+                    navigate('/merchant/Email/campaigns')
                 }
             })
             .catch((error) => {
