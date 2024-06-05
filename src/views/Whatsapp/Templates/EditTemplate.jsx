@@ -33,7 +33,7 @@ export default function EditTemplate() {
 
   // headrer
   const [Header, setHeader] = useState({
-    type: 'Carousel',
+    type: 'Image',
     text: '',
     file: ''
   })
