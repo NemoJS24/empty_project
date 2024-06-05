@@ -7,13 +7,15 @@ import { getReq, postReq } from '../../assets/auth/jwtService'
 // import { getCurrentOutlet } from '../Validator'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import { Edit, Info } from 'react-feather'
-import { defaultFormatDate } from '../Validator'
+import { defaultFormatDate, getCurrentOutlet } from '../Validator'
 // import pixels from "../../assets/images/superLeadz/pixels.png"
 import AdvanceServerSide from '../Components/DataTable/AdvanceServerSide'
+import Swal from 'sweetalert2'
+import toast from 'react-hot-toast'
 
 const EmailCampaigns = ({ custom = false, name = "All Campaigns", draft = true, create = true }) => {
     const { userPermission } = useContext(PermissionProvider)
-
+    const outletData = getCurrentOutlet()
     const [count, setCount] = useState(30)
     const [useTableData, setTableData] = useState([])
     const [modal, setModal] = useState(false)
@@ -42,6 +44,51 @@ const EmailCampaigns = ({ custom = false, name = "All Campaigns", draft = true, 
                 console.error('Error:', error)
                 // toast.error(error.response.data.error)
             })
+    }
+
+    const checkState = (e, id) => {
+        const form_data = new FormData()
+
+        form_data.append('status', e.target.checked)
+        form_data.append('id', id)
+        form_data.append('action', "ACTIVE")
+        form_data.append('shop', outletData[0]?.web_url)
+
+        postReq("email_change_campaign_status", form_data)
+        .then((resp) => {
+            console.log(resp, "ppp")
+            e.target.checked ? toast.success('Campaign Activated ') : toast.success('Campaign Deactivated ')
+            getAllThemes()
+        })
+        .catch((error) => {
+            console.log(error)
+            toast.error('Something went wrong')
+        })
+    }
+
+    const confirmStatus = (e, id) => {
+        console.log(e)
+        let text = ""
+        if (e.target.checked) {
+            text = "<h4>Are you sure you want activate this Campaign</h4>"
+        } else {
+            text = "<h4>Are you sure you want deactivate this Campaign</h4>"
+        }
+        Swal.fire({
+            title: text,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#7367f0',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                checkState(e, id)
+            } else {
+                e.target.checked = !e.target.checked
+            }
+        })
+
     }
 
     const columns = [
@@ -73,7 +120,7 @@ const EmailCampaigns = ({ custom = false, name = "All Campaigns", draft = true, 
             selector: row => {
                 return <>
                     <div className='form-check form-switch form-check-success cursor-pointer d-flex justify-content-start p-0' style={{cursor: 'pointer'}}>
-                        <input className='form-check-input cursor-pointer m-0' type='checkbox' id='verify' defaultChecked={row.whatsapp_is_active} onChange={(e) => confirmStatus(e, row.whatsapp_id)} />
+                        <input className='form-check-input cursor-pointer m-0' type='checkbox' id='verify' defaultChecked={row.campaign_is_active} onChange={(e) => confirmStatus(e, row.campaign_id)} />
                     </div>
                 </>
             },

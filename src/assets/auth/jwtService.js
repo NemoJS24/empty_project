@@ -281,6 +281,7 @@ export const configUrl = {
     email_create_campaign: "/mail/create_campaign/",
     whatsapp_view_campaign: "/talk/view_campaign/",
     change_campaign_status: "/talk/change_campaign_status/",
+    email_change_campaign_status: "/mail/change_campaign_status/",
     default_settings: "/api/v1/set_default_settings/",
     import_leads: "/customers/group_import_leads/",
     assign_lead: "customers/assign_lead/",
