@@ -169,7 +169,7 @@ const Dashboard = () => {
                 </div>
 
                 <div className='col-md-6 cursor-default'>
-                    <Link to="/merchant/whatsapp/message" >
+                    <Link to="/merchant/whatsapp/templates" >
                         <CardCom icon={<AlignCenter width={'27px'} />} title="Total Templates" data={useDashboardData?.total_template ?? 0 }  />
                     </Link>
 

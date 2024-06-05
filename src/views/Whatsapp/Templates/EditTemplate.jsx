@@ -697,7 +697,7 @@ export default function EditTemplate() {
       {
         useLoader && <FrontBaseLoader />
       }
-      <Link to='/merchant/whatsapp/message' className='btn btn-primary btn-sm mb-1' >Back</Link>
+      <Link to='/merchant/whatsapp/templates' className='btn btn-primary btn-sm mb-1' >Back</Link>
 
       <Card className=''>
         <CardBody className=''>
