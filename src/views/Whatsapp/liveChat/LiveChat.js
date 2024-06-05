@@ -32,7 +32,7 @@ import {
 import { SocketBaseURL, deleteReq, getReq, postReq } from '../../../assets/auth/jwtService'
 import Spinner from '../../Components/DataTable/Spinner'
 import FrontBaseLoader from '../../Components/Loader/Loader'
-import { ActiveTabList, RenderLiveTemplateUI, RenderTemplateUI, chatsTagList, getBoldStr, getRemainingTime, timeDateLiveFormatter, timeLiveFormatter } from '../SmallFunction'
+import { ActiveTabList, RenderLiveTemplateUI, RenderTemplateUI, TooltipButton, chatsTagList, getBoldStr, getRemainingTime, timeDateLiveFormatter, timeLiveFormatter } from '../SmallFunction'
 import WA_BG_2 from '../imgs/WA_BG_2.png'
 import xircls_LOGO from '../imgs/xircls_LOGO.jpg'
 import StaticPage1 from './StaticPage'
@@ -513,29 +513,29 @@ const [useDefaultPage, setDefaultPage] = useState("SUPPORT")
   }, [useQuickReplySearch])
 
 // tooltip
-  const TooltipButton = ({ id, tooltipText, children, position = 'right' }) => {
-    const [tooltipOpen, setTooltipOpen] = useState(false)
+  // const TooltipButton = ({ id, tooltipText, children, position = 'right' }) => {
+  //   const [tooltipOpen, setTooltipOpen] = useState(false)
 
-    const toggleTooltip = () => {
-      setTooltipOpen(!tooltipOpen)
-    }
+  //   const toggleTooltip = () => {
+  //     setTooltipOpen(!tooltipOpen)
+  //   }
 
 
-    // send template
-    return (
-      <div className='rounded-circle' id={id ?? tooltipText} >
-        {children}
-        <Tooltip
-          placement={position}
-          isOpen={tooltipOpen}
-          target={id ?? tooltipText}
-          toggle={toggleTooltip}
-        >
-          {tooltipText}
-        </Tooltip>
-      </div>
-    )
-  }
+  //   // send template
+  //   return (
+  //     <div className='rounded-circle' id={id ?? tooltipText} >
+  //       {children}
+  //       <Tooltip
+  //         placement={position}
+  //         isOpen={tooltipOpen}
+  //         target={id ?? tooltipText}
+  //         toggle={toggleTooltip}
+  //       >
+  //         {tooltipText}
+  //       </Tooltip>
+  //     </div>
+  //   )
+  // }
 
     // templates
     const getTemplatesList = (currentPage = 0, currentEntry = 10, searchValue = "") => {
