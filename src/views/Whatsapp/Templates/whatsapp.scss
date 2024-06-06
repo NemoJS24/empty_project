@@ -153,6 +153,10 @@ cursor: pointer !important;
     background-color: #eaeaea !important;
   }
 }
+.icon_color_active{
+  background-color: #e4e4e4 !important;
+
+}
 
 // live
 .select-grey {
@@ -286,6 +290,10 @@ cursor: pointer !important;
   &:hover{
     background-color: #f5f6f6;
   }
+}
+.whats-bg-grey-hover-active{
+  background-color: #f5f6f6;
+
 }
 .whats-text-green-100{
   color: #3b4a54;

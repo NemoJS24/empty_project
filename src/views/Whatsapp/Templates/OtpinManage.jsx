@@ -29,10 +29,6 @@ export default function OtpinManage() {
         {
             value: "Video",
             label: "Video"
-        },
-        {
-            value: "Audio",
-            label: "Audio"
         }
     ]
 
@@ -86,8 +82,8 @@ export default function OtpinManage() {
             }
 
         } else {
-           const newArray = optOutKeyWords.filter((_, index) =>  index !== id)
-           setOptOutKeyWords(newArray)
+            const newArray = optOutKeyWords.filter((_, index) => index !== id)
+            setOptOutKeyWords(newArray)
         }
     }
 
@@ -180,36 +176,105 @@ export default function OtpinManage() {
             </Card>
         )
     }
+    const renderMediaContent = () => (
+        <div className='d-flex flex-column gap-2'>
+            <div>
+                <h4 className="m-0">Media</h4>
+                <div className='d-flex align-items-center gap-1 '>
+                    <div className='d-flex align-items-center gap-1'>
+                        <input type="file" className='d-none' name="carouselMediaUrl" id="carouselMediaUrl"
+                            onChange={(e) => {
+                                const selectedFile = e.target.files[0]
+                                if (selectedFile) {
+                                    let acceptedTypes
+                                    switch (optOutMsg_type.value) {
+                                        case 'Image':
+                                            acceptedTypes = ['image/png', 'image/jpeg']
+                                            break
+                                        case 'Video':
+                                            acceptedTypes = ['video/mp4']
+                                            break
+                                        case 'Document':
+                                            acceptedTypes = ['application/pdf']
+                                            break
+                                        default:
+                                            acceptedTypes = []
+                                    }
+                                    if (acceptedTypes.includes(selectedFile.type)) {
+                                        // setHeader({ ...Header, file: selectedFile })
+                                        // Clone the existing array
+                                        // const updatedList = [...useCarouselMedia]
+                                        // updatedList[useCurrCarouselIndex] = selectedFile
+                                        // setCarouselMedia(updatedList)
+                                        // console.log("list", updatedList)
 
+                                        toast.dismiss()
+                                    } else {
+                                        toast.error(`Incorrect file type. Only ${acceptedTypes.join(', ')} allowed.`)
+                                    }
+                                }
+                            }} />
+                        <label htmlFor="carouselMediaUrl" className='d-flex gap-1 btn btn-secondary rounded-2  justify-content-center  align-items-center  border' style={{ width: "300px", padding: "3px 0" }}><Image /> <p className="m-0">Upload from  Library</p> </label>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h4 className="m-0">Caption</h4>
+                <p className="fs m-0 text-secondary">Your message can be up to 4096 characters long.</p>
+                <ResizableTextarea
+                    maxLength={4096}
+                    initialContent={useOptOutRespConfig?.caption ?? ''}
+                    placeholder='Your caption goes here'
+                    onChange={(e) => updateState('caption', e.target.value)}
+                />
+            </div>
+        </div>
+    )
+    const renderMessageContent = () => (
+        <div>
+            <h4 className="m-0">Message</h4>
+            <p className="fs- m-0 text-secondary">Your message can be up to 4096 characters long.</p>
+            <ResizableTextarea
+                maxLength={4096}
+                initialContent={useOptOutRespConfig?.msgBody ?? ''}
+                placeholder='Opt-out Message'
+                onChange={(e) => updateState('msgBody', e.target.value)}
+            />
+        </div>
+    )
     useEffect(() => {
         getReq("opt_settings")
-        .then((resp) => {
-            console.log(resp)
-            setOptOutKeyWords(resp?.data?.keyword_list)
-            // console.log("999", JSON.parse(resp?.data?.keyword_list))
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((resp) => {
+                console.log(resp)
+                // setOptOutKeyWords(resp?.data?.keyword_list)
+                // console.log("999", JSON.parse(resp?.data?.keyword_list))
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }, [])
-    
+
 
     const submitForm = () => {
         const newformData = new FormData()
         const optOutKeyValues = optOutKeyWords.filter(item => item !== "") // Filter out objects with empty values
-    
+
+        // newformData.append('keyword_list', optOutKeyValues)
         newformData.append('keyword_list', optOutKeyValues)
+      form_data.append("message_body", useInputMessage)
+
+        newformData.append('out', true)
         // newformData.append('optOutKeyValues', JSON.stringify(optOutKeyValues))
 
 
         postReq("opt_settings", newformData)
-        .then((resp) => {
-            console.log(resp)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-        
+            .then((resp) => {
+                console.log(resp)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+
     }
     return (
         <Container>
@@ -230,15 +295,6 @@ export default function OtpinManage() {
 
                 </CardBody>
             </Card>
-            {/* <Card>
-                <CardBody>
-                    <h4 className="">Quick Guide</h4>
-                    <p className="fs-5">Setup keywords that user can type to Opt-in & Opt-out from messaging campaign</p>
-                    <div>
-                        <Link to="/merchant/whatsapp/">How to Create Opt-out/Opt-in User?</Link>
-                    </div>
-                </CardBody>
-            </Card> */}
             <Card>
                 <CardBody>
                     <Row>
@@ -249,7 +305,7 @@ export default function OtpinManage() {
                                     on which they should be automatically opted-out
                                 </p>
                                 <Row className='d-flex flex-column  gap-1'>
-                                    {optOutKeyWords.map((elm, index) => (
+                                    {optOutKeyWords?.map((elm, index) => (
                                         <Col key={index} md="7" className=' d-flex align-items-center'>
                                             <input
                                                 type="text"
@@ -257,9 +313,9 @@ export default function OtpinManage() {
                                                 name={`email_${index}`}
                                                 value={elm}
                                                 placeholder='Enter Keywords'
-                                               onChange={(e) => handleKeyWordChange(index, e.target.value)}
+                                                onChange={(e) => handleKeyWordChange(index, e.target.value)}
                                             />
-                                            <div className='ms-2' onClick={() => delInputField(1, index) }><Trash2 size={20}/> </div>
+                                            <div className='ms-2' onClick={() => delInputField(1, index)}><Trash2 size={20} /> </div>
                                         </Col>
                                     ))}
                                 </Row>
@@ -286,57 +342,6 @@ export default function OtpinManage() {
                                 </div>
                                 <div className='d-flex align-items-center  flex-column  mt-4 '>
                                     <RenderWhatsppUI UIdata={useOptOutRespConfig} msgDataType={optOutMsg_type} />
-                                    <p >Auto response is disabled</p>
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
-                </CardBody>
-            </Card>
-
-            <Card>
-                <CardBody>
-                    <Row>
-                        <Col md="6" >
-                            <div className="p-2">
-                                <h4 className="">Opt-in Keywords</h4>
-                                <p className="fs-5">The user will have to type exactly one of these messages on which they should be automatically opted-in</p>
-                                <Row className='d-flex flex-column  gap-1'>
-                                    {optInKeyWords.map((field) => (
-                                        <Col key={field.id} md="6">
-                                            <input
-                                                type="text"
-                                                className="form-control form-control-lg"
-                                                name={`email_${field.id}`}
-                                                defaultValue={field.value}
-                                                placeholder='Enter Keywords'
-                                            />
-                                        </Col>
-                                    ))}
-                                </Row>
-
-                                <button className='btn text-success mt-3' onClick={() => addInputField(2)}>+ Add more</button>
-                                <button className='btn btn-success text-white mt-3 ms-1' onClick={() => makeToast("opt-out save")}>Save Setting</button>
-                            </div>
-                        </Col>
-                        <Col md="6" >
-                            <div className="p-2">
-                                <div className='d-flex justify-content-between '>
-                                    <div>
-                                        <h4 className="">Opt-in Response</h4>
-                                        <p className="fs-5">Setup a response message for Opt-in user keywords </p>
-                                    </div>
-                                    <div className='d-flex justify-content-center align-items-center '>
-                                        <div className='form-check form-switch form-check-success'>
-                                            <Input type='checkbox' id='inviteReceived' onChange={() => makeToast("opt-in Enable")} />
-                                        </div>
-                                        <button className='btn btn-outline-primary  ' onClick={toggle2}>Configure</button>
-
-                                    </div>
-                                </div>
-                                <div className='d-flex align-items-center  flex-column  mt-4 '>
-                                    <RenderWhatsppUI UIdata={useOptInRespConfig} msgDataType={optInMsg_type} />
-
                                     <p >Auto response is disabled</p>
                                 </div>
                             </div>
@@ -410,162 +415,13 @@ export default function OtpinManage() {
                                             </div>
                                             <div className='mt-2'>
                                                 {(() => {
-                                                    switch (optOutMsg_type.value) {
-                                                        case "Text":
-                                                            return (
-                                                                <div>
-                                                                    <h4 className="m-0">Message</h4>
-                                                                    <p className="fs-5 m-0 text-secondary">Your message can be up to 4096 characters long.</p>
-                                                                    <ResizableTextarea maxLength={4096} initialContent={useOptOutRespConfig?.msgBody ?? ''} placeholder='Opt-out Message' onChange={(e) => updateState('msgBody', e.target.value)} />
-                                                                </div>
-                                                            )
-                                                        case "Image":
-                                                            return (
-                                                                <div className='d-flex flex-column gap-2'>
-                                                                    <div>
-                                                                        <h4 className="m-0">Caption</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Your message can be up to 4096 characters long.</p>
-                                                                        <ResizableTextarea maxLength={4096} initialContent={useOptOutRespConfig?.caption ?? ''} placeholder='Your caption goes here' onChange={(e) => updateState('caption', e.target.value)} />
-                                                                        {/* <input
-                                                                            type="file"
-                                                                            id="imageInput"
-                                                                            accept="image/*"
-                                                                            onChange={(e) => console.log(e.target)}
-                                                                        /> */}
-                                                                    </div>
-                                                                    <div>
-                                                                        <h4 className="m-0">Media</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Size &lt; 5MB, Accepted formats - .png or .jpeg</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Opt-out Message'
-                                                                            onChange={(e) => updateState('mediaUrl', e.target.value)}
-                                                                            maxLength={4096}
-                                                                            value={useOptOutRespConfig?.mediaUrl ?? ''}
-                                                                        />
-                                                                        <div className='d-flex align-items-center gap-1 mt-1'>
-                                                                            <h5 className='m-0'>OR</h5>
-                                                                            <div className='d-flex gap-1 btn btn-secondary rounded-2  justify-content-center  align-items-center  border' style={{ width: "300px", padding: "3px 0" }}><Image /> <p className="m-0">Upload from Media Library</p> </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <h4 className="m-0">File Name</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Display name of media file, visible on download.</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Enter Here'
-                                                                            value={useOptOutRespConfig?.file_name ?? ''}
-                                                                            onChange={(e) => updateState('file_name', e.target.value)}
-                                                                            maxLength={4096}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                        case "File":
-                                                            return (
-                                                                <div className='d-flex flex-column gap-2'>
-                                                                    <div>
-                                                                        <h4 className="m-0">Media</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Size &lt; 100MB, Accepted formats - .pdf, .DOCX & .XLSX</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Opt-out Message'
-                                                                            onChange={(e) => updateState('mediaUrl', e.target.value)}
-                                                                            maxLength={4096}
-                                                                            value={useOptOutRespConfig?.mediaUrl ?? ''}
-                                                                        />
-                                                                        <div className='d-flex align-items-center gap-1 mt-1'>
-                                                                            <h5 className='m-0'>OR</h5>
-                                                                            <div className='d-flex gap-1 btn btn-secondary rounded-2  justify-content-center  align-items-center  border' style={{ width: "300px", padding: "3px 0" }}><Image /> <p className="m-0">Upload from Media Library</p> </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <h4 className="m-0">File Name</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Display name of media file, visible on download.</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Enter Here'
-                                                                            onChange={(e) => updateState('file_name', e.target.value)}
-                                                                            maxLength={4096}
-                                                                            value={useOptOutRespConfig?.file_name ?? ''}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                        case "Video":
-                                                            return (
-                                                                <div className='d-flex flex-column gap-2'>
-                                                                    <div>
-                                                                        <h4 className="m-0">Caption</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Your message can be up to 4096 characters long.</p>
-                                                                        <ResizableTextarea maxLength={4096} initialContent={useOptOutRespConfig?.caption ?? ''} placeholder='Your caption goes here' onChange={(e) => updateState('caption', e.target.value)} />
-                                                                    </div>
-                                                                    <div>
-                                                                        <h4 className="m-0">Media</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Size &lt;16MB, Accepted formats - .mp4</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Opt-out Message'
-                                                                            onChange={(e) => updateState('mediaUrl', e.target.value)}
-                                                                            maxLength={4096}
-                                                                            value={useOptOutRespConfig?.mediaUrl ?? ''}
-                                                                        />
-                                                                        <div className='d-flex align-items-center gap-1 mt-1'>
-                                                                            <h5 className='m-0'>OR</h5>
-                                                                            <div className='d-flex gap-1 btn btn-secondary rounded-2  justify-content-center  align-items-center  border' style={{ width: "300px", padding: "3px 0" }}><Image /> <p className="m-0">Upload from Media Library</p> </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <h4 className="m-0">File Name</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Display name of media file, visible on download.</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Enter Here'
-                                                                            onChange={(e) => updateState('file_name', e.target.value)}
-                                                                            value={useOptOutRespConfig?.file_name ?? ''}
-                                                                            maxLength={4096}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                        case "Audio":
-                                                            return (
-                                                                <div className='d-flex flex-column gap-2'>
-                                                                    <div>
-                                                                        <h4 className="m-0">Media</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Size &lt;16MB, Accepted formats - .mp3</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Opt-out Message'
-                                                                            onChange={(e) => updateState('mediaUrl', e.target.value)}
-                                                                            maxLength={4096}
-                                                                        />
-                                                                        <div className='d-flex align-items-center gap-1 mt-1'>
-                                                                            <h5 className='m-0'>OR</h5>
-                                                                            <div className='d-flex gap-1 btn btn-secondary rounded-2  justify-content-center  align-items-center  border' style={{ width: "300px", padding: "3px 0" }}><Image /> <p className="m-0">Upload from Media Library</p> </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <h4 className="m-0">File Name</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Display name of media file, visible on download.</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Enter Here'
-                                                                            onChange={(e) => updateState('file_name', e.target.value)}
-                                                                            value={useOptOutRespConfig?.file_name ?? ''}
-                                                                            maxLength={4096}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            )
+                                                    switch (optOutMsg_type?.value) {
+                                                        case 'Text':
+                                                            return renderMessageContent()
+                                                        case 'Image':
+                                                        case 'File':
+                                                        case 'Video':
+                                                            return renderMediaContent()
                                                         default:
                                                             return null
                                                     }
@@ -607,286 +463,15 @@ export default function OtpinManage() {
                     </Row>
                 </ModalBody>
                 <ModalFooter className=''>
-                    <Button color="primary" onClick={toggle}>
-                        Do Something
-                    </Button>{' '}
                     <Button color="secondary" onClick={toggle}>
                         Cancel
                     </Button>
-                </ModalFooter>
-            </Modal>
-
-            {/* modal 2 */}
-            <Modal isOpen={modal_2} toggle2={toggle2} scrollable={true} size="lg"  >
-                <ModalHeader toggle2={toggle2} className='mt-2 px-3'>
-                    <h4 className="">Configure Message</h4>
-                    <p className="fs-5 text-secondary">Send template message from one of your pre approved templates. You can also opt to send regular message to active users.</p>
-                </ModalHeader>
-                <ModalBody className='px-3 ' style={{ minHeight: "435px" }}>
-                    <Row >
-                        <Col lg="6" >
-                            <div style={{ maxWidth: "380px" }}>
-
-                                <div className='d-flex flex-column gap-1'>
-                                    <div className='form-check p-0'>
-                                        <Label className=' rounded form-check-label d-flex justify-content-start align-items-center gap-1' for='radio1' >
-                                            <Input type='radio' id='radio1' style={{ marginLeft: '15px' }} name='radio1' value='Pre-approved' checked={optInTemp_type === 'Pre-approved'} onChange={(e) => setoptInTemp_type(e.target.value)} />
-                                            <p className="m-0">Pre-approved template message</p>
-                                        </Label>
-
-                                    </div>
-                                    <div className='form-check p-0'>
-                                        <Label className=' rounded form-check-label d-flex justify-content-start align-items-center gap-1' for='radio2' >
-                                            <Input type='radio' id='radio2' style={{ marginLeft: '15px' }} name='radio1' value='Regular' checked={optInTemp_type === 'Regular'} onChange={(e) => setoptInTemp_type(e.target.value)} />
-                                            <p className="m-0">Regular Message</p>
-                                        </Label>
-                                    </div>
-                                </div>
-
-
-                                {/*  type of msg content */}
-                                {
-                                    // eslint-disable-next-line multiline-ternary
-                                    optInTemp_type === 'Regular' ?
-                                        // eslint-disable-next-line multiline-ternary
-                                        <div>
-                                            <div className='mt-3' >
-                                                <h4 className="m-0">Message Type {optInMsg_type.value}</h4>
-                                                <p className="fs-5 m-0 text-secondary">Select one of available message types</p>
-
-                                                <Select
-                                                    className='mt-1'
-                                                    isMulti={false}
-                                                    options={msgTypeData}
-                                                    closeMenuOnSelect={true}
-                                                    defaultValue={optInMsg_type}
-                                                    name="phone_code"
-                                                    onChange={(e) => {
-                                                        // Check if the selected value is different from the current value
-                                                        if (e && e.value !== optInMsg_type.value) {
-                                                            setoptInMsg_type(e)
-                                                            setOptInRespConfig(null)
-                                                        } else {
-                                                            // Handle the case when the selected value is the same
-                                                            // You can choose to do something else or omit this block
-                                                        }
-                                                    }}
-                                                    styles={{
-                                                        control: (baseStyles) => ({
-                                                            ...baseStyles,
-                                                            fontSize: '12px'
-                                                        })
-                                                    }}
-                                                />
-                                            </div>
-                                            <div className='mt-2'>
-                                                {(() => {
-                                                    switch (optInMsg_type.value) {
-                                                        case "Text":
-                                                            return (
-                                                                <div>
-                                                                    <h4 className="m-0">Message</h4>
-                                                                    <p className="fs-5 m-0 text-secondary">Your message can be up to 4096 characters long.</p>
-                                                                    <ResizableTextarea maxLength={4096} initialContent={useOptInRespConfig?.msgBody ?? ''} placeholder='Opt-out Message' onChange={(e) => updateState2('msgBody', e.target.value)} />
-                                                                </div>
-                                                            )
-                                                        case "Image":
-                                                            return (
-                                                                <div className='d-flex flex-column gap-2'>
-                                                                    <div>
-                                                                        <h4 className="m-0">Caption</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Your message can be up to 4096 characters long.</p>
-                                                                        <ResizableTextarea maxLength={4096} initialContent={useOptInRespConfig?.caption ?? ''} placeholder='Your caption goes here' onChange={(e) => updateState2('caption', e.target.value)} />
-                                                                        <input
-                                                                            type="file"
-                                                                            id="imageInput"
-                                                                            accept="image/*"
-                                                                            onChange={(e) => console.log(e.target)}
-                                                                        />
-                                                                    </div>
-                                                                    <div>
-                                                                        <h4 className="m-0">Media</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Size &lt; 5MB, Accepted formats - .png or .jpeg</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Opt-out Message'
-                                                                            onChange={(e) => updateState2('mediaUrl', e.target.value)}
-                                                                            maxLength={4096}
-                                                                            value={useOptInRespConfig?.mediaUrl ?? ''}
-                                                                        />
-                                                                        <div className='d-flex align-items-center gap-1 mt-1'>
-                                                                            <h5 className='m-0'>OR</h5>
-                                                                            <div className='d-flex gap-1 btn btn-secondary rounded-2  justify-content-center  align-items-center  border' style={{ width: "300px", padding: "3px 0" }}><Image /> <p className="m-0">Upload from Media Library</p> </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <h4 className="m-0">File Name</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Display name of media file, visible on download.</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Enter Here'
-                                                                            value={useOptInRespConfig?.file_name ?? ''}
-                                                                            onChange={(e) => updateState2('file_name', e.target.value)}
-                                                                            maxLength={4096}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                        case "File":
-                                                            return (
-                                                                <div className='d-flex flex-column gap-2'>
-                                                                    <div>
-                                                                        <h4 className="m-0">Media</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Size &lt; 100MB, Accepted formats - .pdf, .DOCX & .XLSX</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Opt-out Message'
-                                                                            onChange={(e) => updateState2('mediaUrl', e.target.value)}
-                                                                            maxLength={4096}
-                                                                            value={useOptInRespConfig?.mediaUrl ?? ''}
-                                                                        />
-                                                                        <div className='d-flex align-items-center gap-1 mt-1'>
-                                                                            <h5 className='m-0'>OR</h5>
-                                                                            <div className='d-flex gap-1 btn btn-secondary rounded-2  justify-content-center  align-items-center  border' style={{ width: "300px", padding: "3px 0" }}><Image /> <p className="m-0">Upload from Media Library</p> </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <h4 className="m-0">File Name</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Display name of media file, visible on download.</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Enter Here'
-                                                                            onChange={(e) => updateState2('file_name', e.target.value)}
-                                                                            maxLength={4096}
-                                                                            value={useOptInRespConfig?.file_name ?? ''}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                        case "Video":
-                                                            return (
-                                                                <div className='d-flex flex-column gap-2'>
-                                                                    <div>
-                                                                        <h4 className="m-0">Caption</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Your message can be up to 4096 characters long.</p>
-                                                                        <ResizableTextarea maxLength={4096} initialContent={useOptInRespConfig?.caption ?? ''} placeholder='Your caption goes here' onChange={(e) => updateState2('caption', e.target.value)} />
-                                                                    </div>
-                                                                    <div>
-                                                                        <h4 className="m-0">Media</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Size &lt;16MB, Accepted formats - .mp4</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Opt-out Message'
-                                                                            onChange={(e) => updateState2('mediaUrl', e.target.value)}
-                                                                            maxLength={4096}
-                                                                            value={useOptInRespConfig?.mediaUrl ?? ''}
-                                                                        />
-                                                                        <div className='d-flex align-items-center gap-1 mt-1'>
-                                                                            <h5 className='m-0'>OR</h5>
-                                                                            <div className='d-flex gap-1 btn btn-secondary rounded-2  justify-content-center  align-items-center  border' style={{ width: "300px", padding: "3px 0" }}><Image /> <p className="m-0">Upload from Media Library</p> </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <h4 className="m-0">File Name</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Display name of media file, visible on download.</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Enter Here'
-                                                                            onChange={(e) => updateState2('file_name', e.target.value)}
-                                                                            value={useOptInRespConfig?.file_name ?? ''}
-                                                                            maxLength={4096}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                        case "Audio":
-                                                            return (
-                                                                <div className='d-flex flex-column gap-2'>
-                                                                    <div>
-                                                                        <h4 className="m-0">Media</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Size &lt;16MB, Accepted formats - .mp3</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Opt-out Message'
-                                                                            onChange={(e) => updateState2('mediaUrl', e.target.value)}
-                                                                            maxLength={4096}
-                                                                        />
-                                                                        <div className='d-flex align-items-center gap-1 mt-1'>
-                                                                            <h5 className='m-0'>OR</h5>
-                                                                            <div className='d-flex gap-1 btn btn-secondary rounded-2  justify-content-center  align-items-center  border' style={{ width: "300px", padding: "3px 0" }}><Image /> <p className="m-0">Upload from Media Library</p> </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <h4 className="m-0">File Name</h4>
-                                                                        <p className="fs-5 m-0 text-secondary">Display name of media file, visible on download.</p>
-                                                                        <input
-                                                                            type="text"
-                                                                            className="form-control form-control-lg"
-                                                                            placeholder='Enter Here'
-                                                                            onChange={(e) => updateState2('file_name', e.target.value)}
-                                                                            value={useOptInRespConfig?.file_name ?? ''}
-                                                                            maxLength={4096}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                        default:
-                                                            return null
-                                                    }
-                                                })()}
-                                            </div>
-                                        </div>
-
-                                        : <div className='mt-3' >
-                                            <h4 className="m-0">Template Name {optInMsg_type.value}</h4>
-                                            <p className="fs-5 m-0 text-secondary">Please choose a WhatsApp template message from your approved list</p>
-
-                                            <Select
-                                                className='mt-1'
-                                                isMulti={false}
-                                                options={msgTypeData}
-                                                closeMenuOnSelect={true}
-                                                defaultValue={msgTypeData[0]}
-                                                name="phone_code"
-                                                onChange={(e) => { setoptInMsg_type(e.value); setOptInRespConfig(null) }}
-                                                styles={{
-                                                    control: (baseStyles) => ({
-                                                        ...baseStyles,
-                                                        fontSize: '12px'
-                                                    })
-                                                }}
-                                            />
-                                        </div>}
-
-
-                            </div>
-                        </Col>
-
-                        {/* UI output */}
-                        <Col lg="6" className='d-flex align-items-center  justify-content-center pt-5 pt-lg-1' >
-
-                            <RenderWhatsppUI UIdata={useOptInRespConfig} msgDataType={optInMsg_type} />
-
-
-                        </Col>
-                    </Row>
-                </ModalBody>
-                <ModalFooter className=''>
-                    <Button color="primary" onClick={toggle2}>
-                        Do Something
-                    </Button>{' '}
-                    <Button color="secondary" onClick={toggle2}>
-                        Cancel
+                    <Button color="primary" onClick={() => submitForm()}>
+                        Save
                     </Button>
                 </ModalFooter>
             </Modal>
+
         </Container>
     )
 }
