@@ -193,7 +193,33 @@ export default function EditTemplate() {
     console.log("useCurrCarouselIndex", useCurrCarouselIndex)
     console.log("buttons", useCarouselData.cards[useCurrCarouselIndex]?.components?.find((elm) => elm.type === "BUTTONS")?.buttons?.length)
   }
+// Handler for changing body text
+const handleBodyInputChange = (e) => {
+  const val = e.target.value
+  setCarouselData(prev => {
+    const updatedCards = [...prev.cards]
+    const currentCard = { ...updatedCards[useCurrCarouselIndex] }
+    const currentComponents = currentCard.components.map(component => {
+      if (component.type === "BODY") {
+        return {
+          ...component,
+          text: val
+        }
+      }
+      return component
+    })
 
+    updatedCards[useCurrCarouselIndex] = {
+      ...currentCard,
+      components: currentComponents
+    }
+
+    return {
+      ...prev,
+      cards: updatedCards
+    }
+  })
+}
   const addCarBtn = (type) => {
     // Make a copy of the state
     let oldData = { ...useCarouselData }
@@ -308,7 +334,6 @@ export default function EditTemplate() {
 
   const addCarouselParam = () => {
     const res = useCarouselData.cards[useCurrCarouselIndex].components.find(component => component.type === "BODY").text
-
   }
   // carousel xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -669,7 +694,7 @@ export default function EditTemplate() {
           navigate('/merchant/whatsapp/templates/')
           // toast.success(res.data.error_msg)
         } else if (!res.data.status) {
-          toast.error(res.data.error_user_msg)
+          toast.error(res.data.error_user_msg && res.data.message)
         } else {
           toast.error("Something went wrong!")
         }
@@ -968,14 +993,7 @@ export default function EditTemplate() {
                     className="form-control "
                     placeholder='card body'
                     value={useCarouselData.cards[useCurrCarouselIndex].components.find(component => component.type === "BODY").text}
-                    onChange={(e) => {
-                      const val = e.target.value
-                      setCarouselData(prev => {
-                        const updatedData = { ...prev }
-                        updatedData.cards[useCurrCarouselIndex].components.find(component => component.type === "BODY").text = val
-                        return updatedData
-                      })
-                    }}
+                    onChange={handleBodyInputChange}
 
                   />
                 </div>

@@ -110,7 +110,7 @@ export default function TemplateReports() {
     {
       name: 'Total Sent',
       minWidth: '100px',
-      selector: row => row?.template_template_clicks ?? '', // Assuming 'category' is the property in your data for the category
+      selector: row => row?.template_template_total_sent ?? '', // Assuming 'category' is the property in your data for the category
       type: 'text',
       isEnable: true
     },
