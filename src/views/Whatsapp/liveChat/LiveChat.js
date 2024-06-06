@@ -32,12 +32,12 @@ import {
 import { SocketBaseURL, deleteReq, getReq, postReq } from '../../../assets/auth/jwtService'
 import Spinner from '../../Components/DataTable/Spinner'
 import FrontBaseLoader from '../../Components/Loader/Loader'
-import { ActiveTabList, RenderLiveTemplateUI, RenderTemplateUI, TooltipButton, chatsTagList, getBoldStr, getRemainingTime, timeDateLiveFormatter, timeLiveFormatter } from '../SmallFunction'
+import { ActiveTabList, CarouselUI, LiveCarouselUI, RenderLiveTemplateUI, RenderTemplateUI, TooltipButton, chatsTagList, getBoldStr, getRemainingTime, timeDateLiveFormatter, timeLiveFormatter } from '../SmallFunction'
 import WA_BG_2 from '../imgs/WA_BG_2.png'
 import xircls_LOGO from '../imgs/xircls_LOGO.jpg'
 import StaticPage1 from './StaticPage'
 const LiveChat = () => {
-  const {defaultPage} = useParams()
+  const { defaultPage } = useParams()
   const [useLiveContactLoader, setLiveContactLoader] = useState(true)
   const [useLiveChatLoader, setLiveChatLoader] = useState(true)
   const [useTemplateLoader, setTemplateLoader] = useState(true)
@@ -49,8 +49,8 @@ const LiveChat = () => {
   const [useQuickReplyList, setQuickReplyList] = useState([])
   const [useRemainingTime, setRemainingTime] = useState('')
   const [useNewContact, setNewContact] = useState({
-    contact:"",
-    phone_code:""
+    contact: "",
+    phone_code: ""
   })
 
   // console.log("useProfileDetails", useProfileDetails)
@@ -75,7 +75,7 @@ const LiveChat = () => {
   const [useTagsCustomer, setTagsCustomer] = useState([])
   const [useTagsSelect, setTagsSelect] = useState([])
   const [useNotesList, setNotesList] = useState("")
-const [useDefaultPage, setDefaultPage] = useState("SUPPORT")
+  const [useDefaultPage, setDefaultPage] = useState("SUPPORT")
 
   // modals
   const [useReplyModal, setReplyModal] = useState(false)
@@ -153,14 +153,14 @@ const [useDefaultPage, setDefaultPage] = useState("SUPPORT")
     formData.append("phone_code", useProfileDetails?.messages_reciever?.slice(0, 2))
     formData.append("contact", useProfileDetails?.messages_reciever?.slice(-10))
     postReq("customer_tags_notes", formData)
-    .then(res => {
-      console.log("res", res.data.tags)
-      getTagsCustomerFun(useProfileDetails)
-      setTagsOpen(false)
-    })
-    .catch(error => {
-      console.error('Error:', error)
-    })
+      .then(res => {
+        console.log("res", res.data.tags)
+        getTagsCustomerFun(useProfileDetails)
+        setTagsOpen(false)
+      })
+      .catch(error => {
+        console.error('Error:', error)
+      })
   }
 
   // niotes
@@ -512,7 +512,7 @@ const [useDefaultPage, setDefaultPage] = useState("SUPPORT")
     return () => clearTimeout(delayDebounceFn)
   }, [useQuickReplySearch])
 
-// tooltip
+  // tooltip
   // const TooltipButton = ({ id, tooltipText, children, position = 'right' }) => {
   //   const [tooltipOpen, setTooltipOpen] = useState(false)
 
@@ -537,46 +537,46 @@ const [useDefaultPage, setDefaultPage] = useState("SUPPORT")
   //   )
   // }
 
-    // templates
-    const getTemplatesList = (currentPage = 0, currentEntry = 10, searchValue = "") => {
-      const formData = new FormData()
-  
-      formData.append("page", currentPage + 1)
-      formData.append("size", currentEntry)
-      formData.append("searchValue", searchValue)
-      setTemplateLoader(true)
-      postReq("getTemplates", formData)
-        .then(data => {
-          setTemplatesList(data.data.data)
-          setActiveTemplatesList(data.data.active_id)
-        })
-        .catch(error => {
-          console.error('Error:', error)
-          // toast.error("Please complete the onboarding process to create a template")
-        })
-        .finally(() => {
-          setTemplateLoader(false)
-        })
-    }
+  // templates
+  const getTemplatesList = (currentPage = 0, currentEntry = 10, searchValue = "") => {
+    const formData = new FormData()
 
-    const sendTemplate = (ContactData, templateID) => {
-      const formData = new FormData()
-      formData.append("contact", ContactData?.messages_reciever?.slice(-10))
-      formData.append("phone_code", ContactData?.messages_reciever?.slice(0, 2))
-      formData.append("template", templateID)
-  
-      setTemplateLoader(true)
-      postReq("contact_to_send_template", formData)
-        .then(data => {
-          console.log(data)
-        })
-        .catch(error => {
-          console.error('Error:', error)
-        })
-        .finally(() => {
-          setTemplateLoader(false)
-        })
-    }
+    formData.append("page", currentPage + 1)
+    formData.append("size", currentEntry)
+    formData.append("searchValue", searchValue)
+    setTemplateLoader(true)
+    postReq("getTemplates", formData)
+      .then(data => {
+        setTemplatesList(data.data.data)
+        setActiveTemplatesList(data.data.active_id)
+      })
+      .catch(error => {
+        console.error('Error:', error)
+        // toast.error("Please complete the onboarding process to create a template")
+      })
+      .finally(() => {
+        setTemplateLoader(false)
+      })
+  }
+
+  const sendTemplate = (ContactData, templateID) => {
+    const formData = new FormData()
+    formData.append("contact", ContactData?.messages_reciever?.slice(-10))
+    formData.append("phone_code", ContactData?.messages_reciever?.slice(0, 2))
+    formData.append("template", templateID)
+
+    setTemplateLoader(true)
+    postReq("contact_to_send_template", formData)
+      .then(data => {
+        console.log(data)
+      })
+      .catch(error => {
+        console.error('Error:', error)
+      })
+      .finally(() => {
+        setTemplateLoader(false)
+      })
+  }
 
   // console.log("350 ======", users)
   return (
@@ -659,16 +659,7 @@ const [useDefaultPage, setDefaultPage] = useState("SUPPORT")
         .timestamp-btn:focus .timestamp-box {
           display: block;
         }
-        .liveChatsTab .swiper{
-         padding:0px 20px
-        }
-        .liveChatsTab .swiper-button-prev{
-          margin-left: -17px;
-        }
-        .liveChatsTab .swiper-button-prev::after{
-          background-color:none;
-          outline:none
-        }
+      
  `}</style>
       {
         useIsLoading && <FrontBaseLoader />
@@ -697,23 +688,23 @@ const [useDefaultPage, setDefaultPage] = useState("SUPPORT")
                 </TooltipButton>
 
                 <TooltipButton tooltipText="Support" >
-                  <div className="icon_color" onClick={() => { filterAllContacts("live"); setDefaultPage("SUPPORT") }}>
+                  <div className={`icon_color ${useDefaultPage === "SUPPORT" && "icon_color_active"}`} onClick={() => { filterAllContacts("live"); setDefaultPage("SUPPORT") }}>
                     <RiCustomerService2Line />
                   </div>
                 </TooltipButton>
-                
+
                 <TooltipButton tooltipText="Lapsed" >
-                  <div className="icon_color" onClick={() => { filterAllContacts("lapsed"); setDefaultPage("LAPSED") }} >
+                  <div className={`icon_color ${useDefaultPage === "LAPSED" && "icon_color_active"}`} onClick={() => { filterAllContacts("lapsed"); setDefaultPage("LAPSED") }} >
                     <IoWarningOutline />
                   </div>
                 </TooltipButton>
                 <TooltipButton tooltipText="Broadcast">
-                  <div className="icon_color">
+                  <div className={`icon_color ${useDefaultPage === "" && "icon_color_active"}`}>
                     <BsBroadcast />
                   </div>
                 </TooltipButton>
                 <TooltipButton tooltipText="Bot">
-                  <div className="icon_color">
+                  <div className={`icon_color ${useDefaultPage === "" && "icon_color_active"}`}>
                     <RiRobot2Line />
                   </div>
                 </TooltipButton>
@@ -771,7 +762,7 @@ const [useDefaultPage, setDefaultPage] = useState("SUPPORT")
                 </div>
                 <div className='d-flex gap-1 px-1 flex-wrap ' style={{ marginTop: "7px" }}>
                   {
-                   useDefaultPage === "SUPPORT" && ActiveTabList.map((elm, index) => (
+                    useDefaultPage === "SUPPORT" && ActiveTabList.map((elm, index) => (
                       <div className={`rounded-5 d-flex justify-content-center align-items-center cursor-pointer position-relative ${elm?.id === useSortBy ? 'prime-green' : "prime-grey-bg whats-text-green-100"} `}
                         onClick={() => { filterAllContacts(elm.id); setSortBy(elm.id); setContactPage(1) }}>
                         {
@@ -900,19 +891,19 @@ const [useDefaultPage, setDefaultPage] = useState("SUPPORT")
                           : 'prime-green'
                         }`}>
                         {/* <p className='m-0 font-small-3 fw-bolder' style={{ padding: "10px 15px" }}>{timeLiveFormatter(useProfileDetails?.messages_servicing_window)}</p> */}
-                        <TooltipButton position='bottom' id="chatExpire" tooltipText={`${useRemainingTime?.status === 0 ? 'Chat has Expired. Now you can send templates' : `Chat expires in ${useRemainingTime?.hour } hrs ${useRemainingTime?.minutes } mins. Once expired, WhatsApp allows only template messages to be sent.`}`}>
-                         
-                         {
-                          useRemainingTime?.status !== 0 && <p className='m-0 font-small-3 fw-bolder' style={{ padding: "10px 15px" }}>{useRemainingTime ? `${useRemainingTime?.hour } : ${useRemainingTime?.minutes }` : '--'}</p>
-                         }
+                        <TooltipButton position='bottom' id="chatExpire" tooltipText={`${useRemainingTime?.status === 0 ? 'Chat has Expired. Now you can send templates' : `Chat expires in ${useRemainingTime?.hour} hrs ${useRemainingTime?.minutes} mins. Once expired, WhatsApp allows only template messages to be sent.`}`}>
+
                           {
-                          useRemainingTime?.status === 0 && <p className='m-0 font-small-3 fw-bolder' style={{ padding: "10px 15px" }}>Expired</p>
-                         }
+                            useRemainingTime?.status !== 0 && <p className='m-0 font-small-3 fw-bolder' style={{ padding: "10px 15px" }}>{useRemainingTime ? `${useRemainingTime?.hour} : ${useRemainingTime?.minutes}` : '--'}</p>
+                          }
+                          {
+                            useRemainingTime?.status === 0 && <p className='m-0 font-small-3 fw-bolder' style={{ padding: "10px 15px" }}>Expired</p>
+                          }
 
                         </TooltipButton>
                       </div>
                     </div>
-                    <div style={{ minWidth: "120px" }}>
+                    <div style={{ minWidth: "160px" }}>
 
                       <Select
                         className=''
@@ -1141,8 +1132,30 @@ const [useDefaultPage, setDefaultPage] = useState("SUPPORT")
                                 </div> */}
                               </div>
                             </div>
-                          }
 
+
+                          }
+                          {messageJson &&
+
+                            messageJson?.components?.find((elm) => elm.type === "CAROUSEL") && <div key={index} className={`message-box  `} style={{
+                              display: 'flex',
+                              align,
+                              flexDirection: 'column',
+                              margin: '5px 10px',
+                              padding: '5px',
+                              borderRadius: '8px',
+                              justifyContent: 'center',
+                              alignSelf: align,
+                              maxWidth: "fit-content",
+                              maxWidth: "100%",
+                              minWidth: "150px",
+                              wordWrap: "break-word",
+                              position: "relative"
+                            }}>
+                              <LiveCarouselUI useCarouselData={messageJson?.components?.find((elm) => elm.type === "CAROUSEL")}  />
+                            </div>
+
+                          }
                         </>
                       )
                     })}
@@ -1401,18 +1414,18 @@ const [useDefaultPage, setDefaultPage] = useState("SUPPORT")
                       <div className='d-flex justify-content-between align-items-center '>
                         <p className='fs-4 mb-0'>Note <span className='' ><LiaTagSolid style={{ transform: "scale(-1) rotate(90deg)", marginLeft: "2px" }} /></span> </p>
                         <button onClick={() => setNotesOpen(!useNotesOpen)} className=' border rounded-2 whats-bg-grey' style={{ padding: "5px 10px" }}>
-                        { useNotesList ? <Edit color="#3b4a54" size={15} /> : <TiPlus color="#3b4a54" size={15} />
-}
-                          </button>
+                          {useNotesList ? <Edit color="#3b4a54" size={15} /> : <TiPlus color="#3b4a54" size={15} />
+                          }
+                        </button>
 
                       </div>
 
                       <div className='d-flex flex-column   px-1' style={{ marginTop: "7px", gap: "5px" }}>
-                        { useNotesList && !useNotesOpen &&
-                            <div className={`rounded-2  cursor-pointer  prime-grey-bg whats-text-green-100  position-relative`}>
-                              <p className='m-0  ' style={{ padding: "6px 12px", fontSize: "13px", wordWrap:"break-word" }}>{useNotesList}</p>
-                              <div className=' position-absolute top-0 end-0 prime-grey-bg rounded-5 cursor-pointer ' onClick={() => delNoteFun(useProfileDetails)}  style={{ marginTop: "-5px", marginRight: "-5px" }}><RxCross2 size={12} /></div>
-                            </div>
+                        {useNotesList && !useNotesOpen &&
+                          <div className={`rounded-2  cursor-pointer  prime-grey-bg whats-text-green-100  position-relative`}>
+                            <p className='m-0  ' style={{ padding: "6px 12px", fontSize: "13px", wordWrap: "break-word" }}>{useNotesList}</p>
+                            <div className=' position-absolute top-0 end-0 prime-grey-bg rounded-5 cursor-pointer ' onClick={() => delNoteFun(useProfileDetails)} style={{ marginTop: "-5px", marginRight: "-5px" }}><RxCross2 size={12} /></div>
+                          </div>
                         }
 
                       </div>

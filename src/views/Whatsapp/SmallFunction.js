@@ -403,10 +403,16 @@ export const convertToEmoji = (codee) => {
 export const updateDisplayedMessage = (inputString, defData) => {
    let updatedMessage = getBoldStr(inputString)
    if (defData.example) {
+      // eslint-disable-next-line no-unused-vars
       const data = defData.example?.body_text[0]
-      updatedMessage = updatedMessage.replace(/{{(\d+)}}/g, (_match, index) => {
-         return `[${data[index - 1]}]`
-      })
+      try {
+         updatedMessage = updatedMessage.replace(/{{(\d+)}}/g, (_match, index) => {
+            return `[${data[index - 1]}]`
+         })
+      } catch (error) {
+         console.log(error)
+      }
+    
    }
    return updatedMessage
 }
@@ -525,6 +531,105 @@ export const RenderTemplateUI = ({ SingleTemplate }) => {
    )
 }
 
+// CAROUSEL
+
+export const CarouselUI = ({ useCarouselData }) => {
+   return (
+      <Card className='rounded-3 shadow-lg p-0 position-relative mb-0 border-0' style={{ background: "none" }} >
+          <style>
+                  {
+                    `
+                    .swiper{
+                      max-width:300px;
+                      border:"solid red 2px";
+                      margin-left:0 !important;
+                      margin-right:auto !important;
+                    }
+                    .swiper-slide{
+                     max-width:300px !important;
+
+                    }
+                    `
+                  }
+                </style>
+         <Swiper
+            slidesPerView={1}
+            spaceBetween={5}
+            navigation={true}
+            // autoplay={{ delay: 1000 }}
+            speed={500}
+            // loop={true}
+            modules={[Pagination, Navigation, Autoplay]}
+            initialSlide={0}
+            maxWidth={330}
+         >
+            {
+               useCarouselData && useCarouselData?.cards.map((currData, key) => {
+                  return (
+                     <SwiperSlide
+            maxWidth={330}
+            key={key} >
+                        <div className='p-1 rounded-2 ' style={{ background: "#fff" }}>
+                           {currData?.components?.find((elm) => elm.format === "IMAGE") && <div className='overflow-hidden d-flex' style={{maxWidth:"300px", height:"180px"}} >
+                              <img className='rounded-3 img-fluid border-0 rounded w-100 object-fit-cover ' src={currData?.components?.find((elm) => elm.format === "IMAGE")?.example?.header_handle[0] ?? ''} alt="" />
+                           </div>}
+                          
+                           {/* {useCarouselBasic?.mediaType === "VIDEO" && <div className='border rounded-3 d-flex justify-content-center  align-items-center ' style={{ height: "190px", background: "#bbc7ff" }}>
+
+                    {
+                      useCarouselMedia[key] === '' ? <PlayCircle size={45} color='#5f66cd' /> : <video className='rounded-3  object-fit-cover w-100' controls style={{ height: "190px" }}>
+                        <source
+                          src={useCarouselMedia[key] === '' ? '' : URL.createObjectURL(useCarouselMedia[key])}
+                          type="video/mp4"
+                        />
+                        Video not supported.
+                      </video>
+                    }
+                  </div>} */}
+                           <div className='mt-1'>
+                              <p className='fs-6' dangerouslySetInnerHTML={{ __html: getBoldStr(currData?.components?.find(elm => elm.type === "BODY").text) }}></p>
+
+                           </div>
+                        </div>
+
+                        {/* Buttons */}
+                        {
+                            currData && currData?.components?.map((elem) => {
+                              if (elem.type === "BUTTONS") {
+                                 return elem.buttons.map((ele) => {
+                                    if (ele.type === 'PHONE_NUMBER') {
+                                       return (
+                                          <div className="border-top bg-white rounded-bottom-2  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                                             <Phone size={17} /><h6 className='m-0 text-primary' > {ele.text}</h6>
+                                          </div>)
+                                    }
+                                    if (ele.type === 'URL') {
+                                       return (
+                                          <div className="border-top bg-white rounded-bottom-2  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                                             <ExternalLink size={17} /><h6 className='m-0 text-primary' > {ele.text}</h6>
+                                          </div>)
+                                    }
+                                    if (ele.type === 'QUICK_REPLY') {
+                                       return (
+                                          <div className="border-top bg-white rounded-bottom-2  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                                             <CornerDownLeft size={17} /> <h6 className='m-0 text-primary' > {ele.text}</h6>
+                                          </div>)
+                                    }
+                                 })
+                              }
+                           })
+                        }
+                     </SwiperSlide>
+                  )
+               })
+            }
+         </Swiper>
+      </Card>
+   )
+}
+
+
+// live chat
 export const RenderLiveTemplateUI = ({ SingleTemplate }) => {
    return (
       <CardBody className="border-0  rounded-2 " style={{ whiteSpace: 'pre-wrap' }}>
@@ -622,66 +727,57 @@ export const RenderLiveTemplateUI = ({ SingleTemplate }) => {
 
             </div>
          </div>
-
+        
       </CardBody>
    )
 }
 
-// CAROUSEL
-
-export const CarouselUI = ({ useCarouselData }) => {
+export const LiveCarouselUI = ({ useCarouselData }) => {
    return (
-      <Card className='rounded-3 shadow-lg p-0 position-relative mb-0 border-0' style={{ background: "none" }} >
+      <Card className='rounded-3  p-0 position-relative mb-0 border-0' style={{ background: "none" }} >
           <style>
                   {
                     `
                     .swiper{
-                      max-width:300px;
+                      max-width:600px;
+                      min-width:300px;
                       border:"solid red 2px";
+                     //  width:100%
                       margin-left:0 !important;
                       margin-right:auto !important;
-                    }
-                    .swiper-slide{
-                     max-width:300px !important;
+                     }
+                     .swiper-slide{
+                        min-width:300px !important;
+                        max-width:300px !important;
+                        padding:5px
 
                     }
                     `
                   }
                 </style>
          <Swiper
-            slidesPerView={1}
-            spaceBetween={5}
+            slidesPerView={2}
+            // spaceBetween={5}
             navigation={true}
             // autoplay={{ delay: 1000 }}
             speed={500}
             // loop={true}
             modules={[Pagination, Navigation, Autoplay]}
             initialSlide={0}
-            maxWidth={330}
+            // Width={330}
          >
             {
                useCarouselData && useCarouselData?.cards.map((currData, key) => {
                   return (
-                     <SwiperSlide
-            maxWidth={330}
-            key={key} >
-                        <div className='p-1 rounded-2 ' style={{ background: "#fff" }}>
-                           {currData?.components?.find((elm) => elm.format === "IMAGE") && <div className=''  >
+                     <SwiperSlide key={key} >
+                        <div style={{ background: "#d8ffd4" }}>
+
+                        <div className='p-1 rounded-2 ' >
+                           {currData?.components?.find((elm) => elm.format === "IMAGE") && <div className='overflow-hidden d-flex' style={{maxWidth:"300px", height:"180px"}} >
                               <img className='rounded-3 img-fluid border-0 rounded w-100 object-fit-cover ' src={currData?.components?.find((elm) => elm.format === "IMAGE")?.example?.header_handle[0] ?? ''} alt="" />
                            </div>}
                           
-                           {/* {useCarouselBasic?.mediaType === "VIDEO" && <div className='border rounded-3 d-flex justify-content-center  align-items-center ' style={{ height: "190px", background: "#bbc7ff" }}>
-
-                    {
-                      useCarouselMedia[key] === '' ? <PlayCircle size={45} color='#5f66cd' /> : <video className='rounded-3  object-fit-cover w-100' controls style={{ height: "190px" }}>
-                        <source
-                          src={useCarouselMedia[key] === '' ? '' : URL.createObjectURL(useCarouselMedia[key])}
-                          type="video/mp4"
-                        />
-                        Video not supported.
-                      </video>
-                    }
-                  </div>} */}
+               
                            <div className='mt-1'>
                               <p className='fs-6' dangerouslySetInnerHTML={{ __html: getBoldStr(currData?.components?.find(elm => elm.type === "BODY").text) }}></p>
 
@@ -695,19 +791,19 @@ export const CarouselUI = ({ useCarouselData }) => {
                                  return elem.buttons.map((ele) => {
                                     if (ele.type === 'PHONE_NUMBER') {
                                        return (
-                                          <div className="border-top bg-white rounded-bottom-2  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                                          <div className="border-top  rounded-bottom-2  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
                                              <Phone size={17} /><h6 className='m-0 text-primary' > {ele.text}</h6>
                                           </div>)
                                     }
                                     if (ele.type === 'URL') {
                                        return (
-                                          <div className="border-top bg-white rounded-bottom-2  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                                          <div className="border-top  rounded-bottom-2  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
                                              <ExternalLink size={17} /><h6 className='m-0 text-primary' > {ele.text}</h6>
                                           </div>)
                                     }
                                     if (ele.type === 'QUICK_REPLY') {
                                        return (
-                                          <div className="border-top bg-white rounded-bottom-2  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
+                                          <div className="border-top  rounded-bottom-2  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
                                              <CornerDownLeft size={17} /> <h6 className='m-0 text-primary' > {ele.text}</h6>
                                           </div>)
                                     }
@@ -715,6 +811,7 @@ export const CarouselUI = ({ useCarouselData }) => {
                               }
                            })
                         }
+                        </div>
                      </SwiperSlide>
                   )
                })
@@ -723,5 +820,4 @@ export const CarouselUI = ({ useCarouselData }) => {
       </Card>
    )
 }
-// live chat
 
