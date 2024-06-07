@@ -7059,6 +7059,17 @@ console.log("111 mobileArr", mobileArr)
                                                                                         </Col>
                                                                                     </Row>
                                                                                 </div>
+
+                                                                                <div className='py-1'>
+                                                                                    <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Campaign's</label>
+
+                                                                                    <Select
+                                                                                        options={campaignTem}
+                                                                                        value={campaignTem?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.campaign))}
+                                                                                        onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, campaign: e.value } })}
+                                                                                    />
+                                                                                </div>
+
                                                                                 <div className='py-1'>
                                                                                     <div className="form-check d-flex align-items-center gap-1 mx-0 p-0">
                                                                                         <input id="is_second_delay" checked={finalObj?.whatsapp?.is_second_delay} type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, is_second_delay: e.target.checked } })} />
@@ -7097,19 +7108,19 @@ console.log("111 mobileArr", mobileArr)
                                                                                                     </Col>
                                                                                                 </Row>
                                                                                             </div>
+
+                                                                                            <div className='py-1'>
+                                                                                                <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Campaign's</label>
+
+                                                                                                <Select
+                                                                                                    options={campaignTem}
+                                                                                                    value={campaignTem?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.second_campaign))}
+                                                                                                    onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, second_campaign: e.value } })}
+                                                                                                />
+                                                                                            </div>
                                                                                         </>
                                                                                     )
                                                                                 }
-
-                                                                                <div className='py-1'>
-                                                                                    <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Campaign's</label>
-
-                                                                                    <Select
-                                                                                        options={campaignTem}
-                                                                                        value={campaignTem?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.campaign))}
-                                                                                        onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, campaign: e.value } })}
-                                                                                    />
-                                                                                </div>
                                                                             </>
                                                                         )
                                                                     }
