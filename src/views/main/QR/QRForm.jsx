@@ -31,7 +31,8 @@ const QRForm = () => {
                 inner_xircls_id: resp?.response?.inner_xircls_id,
                 selected_list: resp?.response?.selected_list,
                 selected_whatsapp_template: resp?.response?.selected_whatsapp_template ? JSON.parse(resp?.response?.selected_whatsapp_template) : [],
-                outlet_logo: resp?.response?.outlet_logo
+                outlet_logo: resp?.response?.outlet_logo,
+                platforms: resp?.response?.platforms
                 // htmlcode: resp?.response?.htmlcode
             }
             try {
@@ -237,7 +238,7 @@ const QRForm = () => {
                                                                                         <a
                                                                                             className="border-hover"
                                                                                             onClick={() => {
-                                                                                                window.open(`https://${curElem?.web_url}/discount/${curElem?.seller_ref_code}/`, '_blank')
+                                                                                                window.open(data?.platforms === 'shopify' ? `https://${curElem?.web_url}/discount/${curElem?.seller_ref_code}/` : `https://${curElem?.web_url}`, '_blank')
                                                                                                 // window.location.href = 
                                                                                             }}
                                                                                             style={{
