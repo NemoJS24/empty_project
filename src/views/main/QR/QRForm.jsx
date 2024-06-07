@@ -32,7 +32,7 @@ const QRForm = () => {
                 selected_list: resp?.response?.selected_list,
                 selected_whatsapp_template: resp?.response?.selected_whatsapp_template ? JSON.parse(resp?.response?.selected_whatsapp_template) : [],
                 outlet_logo: resp?.response?.outlet_logo,
-                platforms: resp?.response?.platforms,
+                platforms: resp?.response?.platforms
                 // htmlcode: resp?.response?.htmlcode
             }
             try {
