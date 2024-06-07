@@ -647,11 +647,12 @@ const handleBodyInputChange = (e) => {
 
     // const payData = JSON.stringify(payload, null, 2)
 
-    formData.append('name', BasicTemplateData.templateName)
+    formData.append('name', BasicTemplateData?.templateName)
+    formData.append('file_type', Header?.type)
     // eslint-disable-next-line no-unused-expressions
     !useIsNewTemp ? formData.append('templateId', CurrentTemplate.id) : ''
-    formData.append('category', BasicTemplateData.templateCategory)
-    formData.append('language', BasicTemplateData.language)
+    formData.append('category', BasicTemplateData?.templateCategory)
+    formData.append('language', BasicTemplateData?.language)
     formData.append('components', JSON.stringify(components))
 // console.log("useCarouselMedia", useCarouselMedia)
     // return null
@@ -689,12 +690,12 @@ const handleBodyInputChange = (e) => {
     postReq(useIsNewTemp ? "createTemplate" : "editTemplate", formData)
       .then((res) => {
         console.log(res)
-        if (res.data.status) {
-          toast.success(useIsNewTemp ? "Template has been created!" : "Template has updated!")
+        if (res.data.status || res.data.success) {
+          toast.success(useIsNewTemp ? "Template has been created!" : "Template has been updated!")
           navigate('/merchant/whatsapp/templates/')
           // toast.success(res.data.error_msg)
         } else if (!res.data.status) {
-          toast.error(res.data.error_user_msg && res.data.message)
+          toast.error(res.data.error_user_msg ?? res.data.error_msg ?? res.data.message)
         } else {
           toast.error("Something went wrong!")
         }
