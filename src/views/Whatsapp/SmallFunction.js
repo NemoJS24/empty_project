@@ -384,6 +384,9 @@ export const getRemainingTime = (endTime) => {
 // }
 // functions
 export const getBoldStr = (str) => {
+   if (!str) {
+      return str
+   }
    str = str.replace(/\*(.*?)\*/g, (_, p1) => `<strong>${p1}</strong>`)
       .replace(/\~(\b.*?)\b\~/g, (_, p1) => `<del>${p1}</del>`)
       .replace(/(?<=\s|^)(_.*?_)(?=\s|$)/g, (_, p1) => `<em>${p1.slice(1, -1)}</em>`)
