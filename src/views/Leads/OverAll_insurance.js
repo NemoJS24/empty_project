@@ -1,4 +1,4 @@
-import { Col, Row, Card, CardBody, CardHeader, Button, Modal, ModalHeader, ModalBody } from "reactstrap"
+import { Col, Row, Card, CardBody, CardHeader, Button, Modal, ModalHeader, ModalBody, Input, ModalFooter } from "reactstrap"
 import { useRef, useState } from "react"
 import AdvanceServerSide from "@src/views/Components/DataTable/AdvanceServerSide.js"
 import { Edit3, Eye, Trash2 } from "react-feather"
@@ -10,16 +10,244 @@ import moment from "moment/moment"
 import { baseURL, crmURL, postReq } from "../../assets/auth/jwtService"
 import { FiUpload } from "react-icons/fi"
 import { IoIosCheckmarkCircleOutline } from "react-icons/io"
+import toast from "react-hot-toast"
+import ComTable from "../Components/DataTable/ComTable"
 
 /* eslint-disable */
 const Customers = () => {
   const [tableData, setTableData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [fileData, setFileData] = useState({})
+  const [useLoader, setLoader] = useState(false)
   const containerRef = useRef(null)
   const [modal1, setModal1] = useState(false)
   const [modal2, setModal2] = useState(false)
+  const [fileJson, setFileJson] = useState({})
+  // const [searchValue, setSearchValue] = useState('')
+  // const [vehicleSearchValue, setVehicleSearchValue] = useState('')
+  const [insuranceSearchValue, setInsuranceSearchValue] = useState('')
+  // const [filteredData, setFilteredData] = useState([])
+  // const [vehicleFilteredData, setVehicleFilteredData] = useState([])
+  const [insuranceFilteredData, setInsuranceFilteredData] = useState([])
+  const [modal3, setModal3] = useState(false)
   const fileInputRef = useRef(null)
+  const [conflictData, setConflictData] = useState([])
+  const [conflictDataInput, setConflictDataInput] = useState({})
+
+  // const customerHandleFilter = e => {
+  //   const value = e.target.value
+  //   let updatedData = []
+  //   setSearchValue(value)
+
+  //   if (value.length) {
+  //     updatedData = data.filter(item => {
+  //       const startsWith =
+  //         item.email_id.toLowerCase().startsWith(value.toLowerCase())
+
+  //       const includes =
+  //         item.email_id.toLowerCase().includes(value.toLowerCase())
+
+  //       if (startsWith) {
+  //         return startsWith
+  //       } else if (!startsWith && includes) {
+  //         return includes
+  //       } else return null
+  //     })
+  //     setVehicleFilteredData(updatedData)
+  //     setSearchValue(value)
+  //   }
+  // }
+
+  // const vehicleHandleFilter = e => {
+  //   const value = e.target.value
+  //   let updatedData = []
+  //   setVehicleSearchValue(value)
+
+  //   if (value.length) {
+  //     updatedData = data.filter(item => {
+  //       const startsWith =
+  //         item.email_id.toLowerCase().startsWith(value.toLowerCase())
+
+  //       const includes =
+  //         item.email_id.toLowerCase().includes(value.toLowerCase())
+
+  //       if (startsWith) {
+  //         return startsWith
+  //       } else if (!startsWith && includes) {
+  //         return includes
+  //       } else return null
+  //     })
+  //     setVehicleFilteredData(updatedData)
+  //     setVehicleSearchValue(value)
+  //   }
+  // }
+
+  const insuranceHandleFilter = e => {
+    const value = e.target.value
+    let updatedData = []
+    setInsuranceSearchValue(value)
+
+    if (value.length) {
+      updatedData = data.filter(item => {
+        const startsWith =
+          item.email_id.toLowerCase().startsWith(value.toLowerCase())
+
+        const includes =
+          item.email_id.toLowerCase().includes(value.toLowerCase())
+
+        if (startsWith) {
+          return startsWith
+        } else if (!startsWith && includes) {
+          return includes
+        } else return null
+      })
+      setInsuranceFilteredData(updatedData)
+      setInsuranceSearchValue(value)
+    }
+  }
+
+  const insuranceColumns = [
+    {
+      name: "Created On",
+      minWidth: "200px",
+      selector: (row) => row?.created_at ? moment(row.created_at).format("YYYY-MM-DD") : "-",
+      type: 'date',
+      isEnable: true
+    },
+    {
+      name: "Customer Name",
+      minWidth: "150px",
+      selector: (row) => (
+        <Link to={`/merchant/customers/view_customer/${row?.xircls_customer_id}`}>{row?.customer_name ? row?.customer_name : "-"}</Link>
+      ),
+      type: 'text',
+      isEnable: true
+    },
+    {
+      name: "Email",
+      minWidth: "200px",
+      selector: (row) => row?.email ?row?.email : "-",
+      type: 'text',
+      isEnable: true
+    },
+    {
+      name: "Phone No.",
+      minWidth: "200px",
+      selector: (row) => row?.phone_no ?row?.phone_no : "-",
+      type: 'text',
+      isEnable: true
+    },
+    {
+      name: "Brand",
+      minWidth: "150px",
+      selector: (row) => row?.brand ? row.brand : "-",
+      type: 'text',
+      isEnable: true
+    },
+    {
+      name: "Model",
+      minWidth: "200px",
+      selector: (row) => row?.car_model ? row.car_model : "-",
+      type: 'text',
+      isEnable: true
+    },
+    {
+      name: "Variant",
+      minWidth: "200px",
+      selector: (row) => row?.variant ? row.variant : "-",
+      type: 'text',
+      isEnable: true
+    },
+    {
+      name: "Policy Number",
+      minWidth: "200px",
+      selector: (row) => row?.policy_number ? row.policy_number : "-",
+      type: 'text',
+      isEnable: true
+    },
+    {
+      name: "Insurance Company",
+      minWidth: "200px",
+      selector: (row) => row?.insurance_company ? row.insurance_company : "-",
+      type: 'text',
+      isEnable: true
+    },
+    {
+      name: "Policy Purchase Date",
+      minWidth: "200px",
+      selector: (row) => row?.policy_purchase_date ? moment(row.policy_purchase_date).format("YYYY-MM-DD") : "-",
+      type: 'date',
+      isEnable: true
+    },
+    {
+      name: "Policy Expiry Date",
+      minWidth: "200px",
+      selector: (row) => row?.policy_expiry_date ? moment(row.policy_expiry_date).format("YYYY-MM-DD") : "-",
+      type: 'date',
+      isEnable: true
+    },
+    {
+      name: "Amount",
+      minWidth: "200px",
+      selector: (row) => row?.amount ? row.amount : "-",
+      type: 'text',
+      isEnable: true
+    }
+  ]
+
+  // const defferContent = <>
+  //   <Col className='d-flex align-items-center justify-content-center' md='4' sm='12'>
+  //     <h4 className='m-0'>Customer</h4>
+  //   </Col>
+  //   <Col className='d-flex align-items-center justify-content-end' md='4' sm='12'>
+  //     <Input
+  //       className='dataTable-filter form-control ms-1'
+  //       style={{ width: `180px`, height: `2.714rem` }}
+  //       type='text'
+  //       bsSize='sm'
+  //       id='search-input-1'
+  //       placeholder='Search...'
+  //       value={searchValue}
+  //       onChange={customerHandleFilter}
+  //     />
+  //   </Col>
+  // </>
+
+  // const vehicleDefferContent = <>
+  //   <Col className='d-flex align-items-center justify-content-center' md='4' sm='12'>
+  //     <h4 className='m-0'>Vehicle</h4>
+  //   </Col>
+  //   <Col className='d-flex align-items-center justify-content-end' md='4' sm='12'>
+  //     <Input
+  //       className='dataTable-filter form-control ms-1'
+  //       style={{ width: `180px`, height: `2.714rem` }}
+  //       type='text'
+  //       bsSize='sm'
+  //       id='search-input-1'
+  //       placeholder='Search...'
+  //       value={vehicleSearchValue}
+  //       onChange={vehicleHandleFilter}
+  //     />
+  //   </Col>
+  // </>
+
+  const insuranceDefferContent = <>
+    <Col className='d-flex align-items-center justify-content-center' md='4' sm='12'>
+      <h4 className='m-0'>Insurance</h4>
+    </Col>
+    <Col className='d-flex align-items-center justify-content-end' md='4' sm='12'>
+      <Input
+        className='dataTable-filter form-control ms-1'
+        style={{ width: `180px`, height: `2.714rem` }}
+        type='text'
+        bsSize='sm'
+        id='search-input-1'
+        placeholder='Search...'
+        value={insuranceSearchValue}
+        onChange={insuranceHandleFilter}
+      />
+    </Col>
+  </>
   // const [selected, setSelected] = useState([])
   const getData = (currentPage = 0, currentEntry = 10, searchValue = "", advanceSearchValue = {}) => {
     setIsLoading(true)
@@ -157,35 +385,47 @@ const Customers = () => {
     }
   ]
 
+  console.log(conflictDataInput)
+
   const uploadFile = (file, conflict) => {
     const form_data = new FormData()
     console.log('csvFile', fileData)
     form_data.append('csvFile', file)
     form_data.append('check_conflict', conflict)
+    Object.entries(conflictDataInput).map(([key, value]) => {
+      form_data.append(key, value)
+    })
     setLoader(true)
-    postReq('import_insurance', form_data)
-      .then(res => {
-        console.log(res)
-        if (res.data.success) {
-          toast.success(res.data.message)
-          getData()
-          setModal2(false)
-        } else if (res.data.message) {
-          toast.alert(res.data.message)
+    postReq('import_insurance', form_data, crmURL)
+    .then(res => {
+      console.log(res, "=====170")
+      if (conflict === "TRUE") {
+        if (res?.data?.insurance_obj?.length > 0) {
+          setConflictData(res?.data)
+          setModal3(true)
         } else {
-          toast.alert("Something went wrong")
-        }
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 500) {
-          // Handle 500 error
-          toast.error('Internal Server Error')
-        } else {
-          // Handle other errors
-          console.log(error)
+          uploadFile(file, "FALSE")
         }
 
-      }).finally(() => setLoader(false))
+      } else {
+        getData()
+        
+        toast.success("File Uploaded SuccessFully")
+      }
+    })
+    .catch((error) => {
+      if (error.response && error.response.status === 500) {
+        // Handle 500 error
+        toast.error('Internal Server Error')
+      } else {
+        // Handle other errors
+        console.log(error)
+      }
+
+    }).finally(() => {
+      setLoader(false)
+      setModal2(false)
+    })
 
 
   }
@@ -204,8 +444,13 @@ const Customers = () => {
     }
   }
 
+  const conflictSubmit = () => {
+    uploadFile(fileJson, 'FALSE')
+  }
+
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0]
+    setFileJson(e.target.files[0])
     console.log('Selected file:', selectedFile)
     handleFile(selectedFile)
   }
@@ -305,6 +550,52 @@ const Customers = () => {
               </div>
             </div>
         </ModalBody>
+      </Modal>
+
+
+      <Modal size='xl' isOpen={modal3} toggle={() => setModal3(!modal3)} >
+        <ModalHeader toggle={() => setModal3(!modal3)}></ModalHeader>
+          
+          <ModalBody>
+            <div className="p-2">
+              <div className="row">
+
+                <div className="col-md-12">
+                  <ComTable
+                    // tableName="Verified Email"
+                    custom={true}
+                    content={insuranceDefferContent}
+                    tableCol={insuranceColumns}
+                    data={conflictData?.insurance_obj}
+                    searchValue={insuranceSearchValue}
+                    // handleFilter={handleFilter}
+                    filteredData={insuranceFilteredData}
+                  />
+                  <div className="main d-flex justify-content-center algin-items-center my-1 gap-1">
+                    <div className="form-check d-flex align-items-center mx-0 p-0" style={{gap: '5px'}}>
+                      <input id="insurance_new" type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => setConflictDataInput({ ...conflictDataInput, new: e.target.checked ? "1" : "0" })} />
+                      <label htmlFor='new' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Create New</label>
+                    </div>
+                    <div className="form-check d-flex align-items-center mx-0 p-0" style={{gap: '5px'}}>
+                      <input id="overflow_write" type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => setConflictDataInput({ ...conflictDataInput, overwrite: e.target.checked ? "1" : "0" })} />
+                      <label htmlFor='overflow_write' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Over Write</label>
+                    </div>
+                    <div className="form-check d-flex align-items-center mx-0 p-0" style={{gap: '5px'}}>
+                      <input id="both" type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => setConflictDataInput({ ...conflictDataInput, both: e.target.checked ? "1" : "0" })} />
+                      <label htmlFor='both' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Both</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+        </ModalBody>
+        <ModalFooter>
+          <div className="d-flex justify-content-between align-items-center">
+            <a className="btn btn-outline" onClick={() => setModal3(!modal3)}>Cancel</a>
+            <a className="btn btn-primary" onClick={() => conflictSubmit()}>Submit</a>
+          </div>
+        </ModalFooter>
       </Modal>
     </>
   )
