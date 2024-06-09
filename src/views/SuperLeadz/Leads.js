@@ -75,6 +75,14 @@ export default function SuperLeadzLeads() {
             isEnable: true
         },
         {
+            name: 'Phone Number',
+            minWidth: '200px',
+            selector: row => row.mobile,
+            dataType: 'mobile',
+            type: 'text',
+            isEnable: false
+        },
+        {
             name: 'Status',
             minWidth: '10%',
             cell: (row) => {

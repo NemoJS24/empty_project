@@ -207,7 +207,7 @@ const CustomizationParent = ({ isAdmin = false }) => {
     const [currPage, setCurrPage] = useState(defObj?.[`${mobileCondition}pages`][0]?.id)
     const [draggedInputType, setDraggedInputType] = useState("none")
     const [whatsAppTem, setWhatsappTem] = useState([])
-    const [campaignTem, setCampaignTem] = useState([])
+    // const [campaignTem, setCampaignTem] = useState([])
     const pageCondition = currPage === "button" ? "button" : "main"
 
     // const [whatsappJson, setWhatsappJson] = useState({
@@ -5113,17 +5113,17 @@ console.log("111 mobileArr", mobileArr)
             console.log(error)
         })
 
-        getReq("campaign_details_list")
-        .then((resp) => {
-            console.log(resp, "campaign_details_list")
-            const campaign_list = resp?.data?.data?.map((curElem) => {
-                return { label: curElem?.campaign_name, value: curElem?.id }
-            })
-            setCampaignTem(campaign_list)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+        // getReq("campaign_details_list")
+        // .then((resp) => {
+        //     console.log(resp, "campaign_details_list")
+        //     const campaign_list = resp?.data?.data?.map((curElem) => {
+        //         return { label: curElem?.campaign_name, value: curElem?.id }
+        //     })
+        //     setCampaignTem(campaign_list)
+        // })
+        // .catch((error) => {
+        //     console.log(error)
+        // })
     }
 
     // console.log(campaignTem)
@@ -7061,11 +7061,11 @@ console.log("111 mobileArr", mobileArr)
                                                                                     </Row>
                                                                                 </div>
                                                                                 <div className='py-1'>
-                                                                                    <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Campaign's</label>
+                                                                                    <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Template</label>
 
                                                                                     <Select
-                                                                                        options={campaignTem}
-                                                                                        value={campaignTem?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.campaign))}
+                                                                                        options={whatsAppTem}
+                                                                                        value={whatsAppTem?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.campaign))}
                                                                                         onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, campaign: e.value } })}
                                                                                     />
                                                                                 </div>
@@ -7108,11 +7108,11 @@ console.log("111 mobileArr", mobileArr)
                                                                                                 </Row>
                                                                                             </div>
                                                                                             <div className='py-1'>
-                                                                                                <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Campaign's</label>
+                                                                                                <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Template</label>
 
                                                                                                 <Select
-                                                                                                    options={campaignTem}
-                                                                                                    value={campaignTem?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.second_campaign))}
+                                                                                                    options={whatsAppTem}
+                                                                                                    value={whatsAppTem?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.second_campaign))}
                                                                                                     onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, second_campaign: e.value } })}
                                                                                                 />
                                                                                             </div>

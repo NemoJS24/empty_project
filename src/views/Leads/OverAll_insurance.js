@@ -32,7 +32,14 @@ const Customers = () => {
   const [modal3, setModal3] = useState(false)
   const fileInputRef = useRef(null)
   const [conflictData, setConflictData] = useState([])
-  const [conflictDataInput, setConflictDataInput] = useState({})
+  const [conflictDataInput, setConflictDataInput] = useState({
+    customer_new:true,
+    customer_overflow_write:false,
+    vehicle_new:true,
+    vehicle_overflow_write:false,
+    insurance_new:true,
+    insurance_overflow_write:false
+  })
 
   // const customerHandleFilter = e => {
   //   const value = e.target.value
@@ -392,11 +399,12 @@ const Customers = () => {
     console.log('csvFile', fileData)
     form_data.append('csvFile', file)
     form_data.append('check_conflict', conflict)
+    form_data.append('TYPE', 'INSURANCE')
     Object.entries(conflictDataInput).map(([key, value]) => {
-      form_data.append(key, value)
+      form_data.append(key, value ? '1' : '0')
     })
     setLoader(true)
-    postReq('import_insurance', form_data, crmURL)
+    postReq('import_bulk_data', form_data, crmURL)
     .then(res => {
       console.log(res, "=====170")
       if (conflict === "TRUE") {
@@ -483,6 +491,9 @@ const Customers = () => {
 
   return (
     <>
+    {
+      useLoader ? <FrontBaseLoader /> : ''
+    }
       <Row>
         <Col>
           <Card>
@@ -571,23 +582,63 @@ const Customers = () => {
                     // handleFilter={handleFilter}
                     filteredData={insuranceFilteredData}
                   />
-                  <div className="main d-flex justify-content-center algin-items-center my-1 gap-1">
-                    <div className="form-check d-flex align-items-center mx-0 p-0" style={{gap: '5px'}}>
-                      <input id="insurance_new" type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => setConflictDataInput({ ...conflictDataInput, new: e.target.checked ? "1" : "0" })} />
-                      <label htmlFor='new' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Create New</label>
+                  <div className="pb-1 Customer">
+                    <h5>Customer</h5>
+                    <div className="main d-flex justify-content-start algin-items-center my-1 gap-1">
+                      <div className="form-check d-flex align-items-center mx-0 p-0" style={{gap: '5px'}}>
+                        <input checked={conflictDataInput?.customer_new} id="customer_new" type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => setConflictDataInput({ ...conflictDataInput, customer_new: !conflictDataInput?.customer_new })} />
+                        <label htmlFor='customer_new' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Create New</label>
+                      </div>
+                      <div className="form-check d-flex align-items-center mx-0 p-0" style={{gap: '5px'}}>
+                        <input checked={conflictDataInput?.customer_overflow_write} id="customer_overflow_write" type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => setConflictDataInput({ ...conflictDataInput, customer_overflow_write: !conflictDataInput?.customer_overflow_write })} />
+                        <label htmlFor='customer_overflow_write' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Over Write</label>
+                      </div>
+                      {/* <div className="form-check d-flex align-items-center mx-0 p-0" style={{gap: '5px'}}>
+                        <input id="customer_both" type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => setConflictDataInput({ ...conflictDataInput, customer_both: !conflictDataInput?.customer_both })} />
+                        <label htmlFor='customer_both' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Both</label>
+                      </div> */}
                     </div>
-                    <div className="form-check d-flex align-items-center mx-0 p-0" style={{gap: '5px'}}>
-                      <input id="overflow_write" type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => setConflictDataInput({ ...conflictDataInput, overwrite: e.target.checked ? "1" : "0" })} />
-                      <label htmlFor='overflow_write' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Over Write</label>
+                  </div>
+                  <div className="pb-1 Vehicle">
+                    <h5>Vehicle</h5>
+                    <div className="main d-flex justify-content-start algin-items-center my-1 gap-1">
+                      <div className="form-check d-flex align-items-center mx-0 p-0" style={{gap: '5px'}}>
+                        <input checked={conflictDataInput?.vehicle_new} id="vehicle_new" type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => setConflictDataInput({ ...conflictDataInput, vehicle_new: !conflictDataInput?.vehicle_new })} />
+                        <label htmlFor='vehicle_new' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Create New</label>
+                      </div>
+                      <div className="form-check d-flex align-items-center mx-0 p-0" style={{gap: '5px'}}>
+                        <input checked={conflictDataInput?.vehicle_overflow_write} id="vehicle_overflow_write" type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => setConflictDataInput({ ...conflictDataInput, vehicle_overflow_write: !conflictDataInput?.vehicle_overflow_write })} />
+                        <label htmlFor='vehicle_overflow_write' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Over Write</label>
+                      </div>
+                      {/* <div className="form-check d-flex align-items-center mx-0 p-0" style={{gap: '5px'}}>
+                        <input id="vehicle_both" type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => setConflictDataInput({ ...conflictDataInput, vehicle_both: !conflictDataInput?.vehicle_both })} />
+                        <label htmlFor='vehicle_both' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Both</label>
+                      </div> */}
                     </div>
-                    <div className="form-check d-flex align-items-center mx-0 p-0" style={{gap: '5px'}}>
-                      <input id="both" type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => setConflictDataInput({ ...conflictDataInput, both: e.target.checked ? "1" : "0" })} />
-                      <label htmlFor='both' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Both</label>
+                  </div>
+                  <div className="pb-1 Insurance">
+                    <h5>Insurance</h5>
+                    <div className="main d-flex justify-content-start algin-items-center my-1 gap-1">
+                      <div className="form-check d-flex align-items-center mx-0 p-0" style={{gap: '5px'}}>
+                        <input checked={conflictDataInput?.insurance_new} id="insurance_new" type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => setConflictDataInput({ ...conflictDataInput, insurance_new: !conflictDataInput?.insurance_new })} />
+                        <label htmlFor='insurance_new' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Create New</label>
+                      </div>
+                      <div className="form-check d-flex align-items-center mx-0 p-0" style={{gap: '5px'}}>
+                        <input checked={conflictDataInput?.insurance_overflow_write} id="insurance_overflow_write" type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => setConflictDataInput({ ...conflictDataInput, insurance_overflow_write: !conflictDataInput?.insurance_overflow_write })} />
+                        <label htmlFor='insurance_overflow_write' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Over Write</label>
+                      </div>
+                      {/* <div className="form-check d-flex align-items-center mx-0 p-0" style={{gap: '5px'}}>
+                        <input id="insurance_both" type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => setConflictDataInput({ ...conflictDataInput, insurance_both: !conflictDataInput?.insurance_both })} />
+                        <label htmlFor='insurance_both' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Both</label>
+                      </div> */}
                     </div>
+
                   </div>
                 </div>
               </div>
+                    
 
+                    
             </div>
         </ModalBody>
         <ModalFooter>

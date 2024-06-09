@@ -252,7 +252,7 @@ export const configUrl = {
     chat_status: "/talk/chat_status/",
     opt_settings: "/talk/opt_settings/",
     contact_to_send_template: "/talk/contact_to_send_template/",
-    import_insurance: "/insurance/import_insurance/",
+    import_bulk_data: "/insurance/api/v1/import_bulk_data/",
     // Email
     email_details: "/mail/contact_details/",
     import_email: "/mail/import_customer/",
