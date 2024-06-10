@@ -2330,3 +2330,16 @@ label {
         color: #FFF;
     }
 }
+
+.custom_padding {
+    padding: 0.62rem 1rem !important;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #d8d6de;
+    border-radius: 0.357rem;
+    width: 100%
+}
+
+.custom_padding:disabled {
+    background-color: #efefef;
+}

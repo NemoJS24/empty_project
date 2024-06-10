@@ -67,7 +67,7 @@ export const formatNumberWithCommas = (number) => {
     return data
 }
 
-export const pageNo = [{ label: 10, value: 10 }, { label: 25, value: 25 }, { label: 50, value: 50 }, { label: 100, value: 100 }]
+export const pageNo = [{ label: 10, value: 10 }, { label: 25, value: 25 }, { label: 50, value: 50 }, { label: 100, value: 100 }, { label: 500, value: 500 }, { label: 1000, value: 1000 }]
 
 export const timelineName = {
     infiniti: {
@@ -101,7 +101,7 @@ export const timelineName = {
         // is_business: "/merchant/whatsapp/is_business/",
         is_project: "/merchant/whatsapp/is_business/",
         is_fb_verified: "/merchant/whatsapp/EmbeddedSignup/",
-        is_template: "/merchant/whatsapp/is_template/"
+        is_template: "/merchant/whatsapp/template/new/"
     }
 }
 
@@ -271,6 +271,54 @@ export const Tone = [
     { label: 'Privacy-Focused', value: 'Privacy-Focused', strategy_id: ["5"], id: "12" }
 ]
 
+
+// export const SuperLeadzStrategy = [
+//     { label: 'Newsletter Subscription', value: 'Newsletter Subscription', purpose_id: ["1", "2", "3"], id: "1" }, // 1
+//     { label: 'VIP Membership', value: 'VIP Membership', purpose_id: ["1", "2", "3", "5", "6", "7"], id: "2" },
+//     { label: 'Discount for Data', value: 'Discount for Data', purpose_id: ["1", "2", "3", "4"], id: "3" },
+//     { label: 'Returning Shopper Engagement', value: 'Returning Shopper Engagement', purpose_id: ["2", "3", "4", "5", "6", "7"], id: "4" },
+//     { label: 'Discount on Product Collection', value: 'Discount on Product Collection', purpose_id: ["3", "4", "6", "7", "8"], id: "5" },
+//     { label: 'Discount at Exit Intent', value: 'Discount at Exit Intent', purpose_id: ["3", "4", "5", "6", "7"], id: "6" },
+//     { label: 'Limited Time Offer', value: 'Limited Time Offer', purpose_id: ["4", "5", "6", "7"], id: "7" },
+//     { label: 'Discount for Specific Product', value: 'Discount for Specific Product', purpose_id: ["4", "6", "8"], id: "8" }
+// ]
+// 4 5 6
+export const SuperLeadzPurpose = [
+//     { label: 'Increase brand recall', value: 'Increase brand recall', id: "1" }, // 1
+    { label: 'Increase Registered Users', value: 'Increase registered users', id: "2" },
+    { label: 'Build High-Quality Email Lists', value: 'Build High-Quality Email Lists', id: "3" },
+    { label: 'Reduce Website Drop-Offs', value: 'Reduce Website Drop-Offs', id: "4" },
+    { label: 'Reduce Cart Abandonments', value: 'Reduce Cart Abandonments', id: "5" },
+    { label: 'Increase Sales', value: 'Increase Sales', id: "6" },
+    { label: 'Convert Returning Shoppers', value: 'Convert Returning Shoppers', id: "7" }
+//     { label: 'Increase AOV', value: 'Increase AOV', id: "8" }
+]
+// //  3 7 
+export const SuperLeadzStrategy = [
+//     { label: 'Newsletter Subscription', value: 'Newsletter Subscription', SuperLeadz_purpose_id: ["1", "2", "3"], id: "1" }, // 1
+    { label: 'VIP Membership', value: 'VIP Membership', SuperLeadz_purpose_id: ["1", "2", "3", "5", "6", "7"], id: "2" },
+    { label: 'Discount for Data', value: 'Discount for Data', SuperLeadz_purpose_id: ["1", "2", "3"], id: "3" },
+    { label: 'Returning Shopper Engagement', value: 'Returning Shopper Engagement', SuperLeadz_purpose_id: ["2", "3", "4", "7"], id: "4" },
+    { label: 'Discount at Exit Intent, Returning Shopper Engagement', value: 'Discount at Exit Intent, Returning Shopper Engagement', SuperLeadz_purpose_id: ["3", "4", "5", "6", "7"], id: "5" },
+//     { label: 'Discount on Product Collection', value: 'Discount on Product Collection', SuperLeadz_purpose_id: ["3", "4", "6", "7", "8"], id: "6" },
+//     { label: 'Discount at Exit Intent', value: 'Discount at Exit Intent', SuperLeadz_purpose_id: ["4", "5", "6"], id: "7" },
+    { label: 'Limited Time Offer', value: 'Limited Time Offer', SuperLeadz_purpose_id: ["4", "5", "6", "7"], id: "8" }
+//     { label: 'Discount for Specific Product', value: 'Discount for Specific Product', SuperLeadz_purpose_id: ["4", "6", "8"], id: "9" }
+]
+
+// // 5 6 7
+export const SuperLeadzTone = [
+    { label: 'Direct', value: 'Direct', SuperLeadz_strategy_id: ["3", "2", "1"], id: "1" },
+    { label: 'Casual/Chatty', value: 'Casual/Chatty', SuperLeadz_strategy_id: ["1", "4", "5"], id: "2" },
+    { label: 'Urgent', value: 'Urgent', SuperLeadz_strategy_id: ["6", "8"], id: "4" },
+    { label: 'Incentivizing', value: 'Incentivizing', SuperLeadz_strategy_id: ["4", "5", "6", "7", "8", "9"], id: "5" },
+    { label: 'Enticing', value: 'Enticing', SuperLeadz_strategy_id: ["2", "6", "7", "8", "9"], id: "6" },
+    { label: 'Enthusiastic', value: 'Enthusiastic', SuperLeadz_strategy_id: ["7"], id: "7" },
+//     { label: 'Warm', value: 'Warm', SuperLeadz_strategy_id: ["1"], id: "9" },
+    { label: 'Complimentary', value: 'Complimentary', SuperLeadz_strategy_id: ["3"], id: "10" }
+]
+
+
 export const affiliateTracking = (aft_no) => {
 
     fetch(`${SuperLeadzBaseURL}/protein`)
@@ -359,5 +407,12 @@ export function lightOrDark(color) {
         return 'dark'
     }
 }
+
+export const deplayTime = [
+    { label: "Seconds", value: "seconds" },
+    { label: "Minutes", value: "minutes" },
+    { label: "Hours", value: "hours" },
+    { label: "Days", value: "days" }
+]
 
 export const allFonts = `https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Acme&family=Caveat:wght@400;500;600&family=Dancing+Script:wght@400;500;600;700&family=Kalam:wght@300;400;700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lexend:wght@100;200;300;400;500;600;700;800;900&family=Lilita+One&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Oswald:wght@200;300;400;500;600;700&family=Pacifico&family=Play:wght@400;700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Satisfy&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Lora:ital,wght@0,400..700;1,400..700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300..700&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Manrope:wght@200..800&family=Heebo:wght@100..900&family=Annapurna+SIL:wght@400;700&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Mukta:wght@200;300;400;500;600;700;800&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Nanum+Gothic&family=Noto+Sans+SC:wght@100..900&family=Inconsolata:wght@200..900&family=Hind+Siliguri:wght@300;400;500;600;700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Arimo:ital,wght@0,400..700;1,400..700&family=Jacquarda+Bastarda+9&family=Archivo:ital,wght@0,100..900;1,100..900&family=Bebas+Neue&family=Dosis:wght@200..800&family=Abel&display=swap`

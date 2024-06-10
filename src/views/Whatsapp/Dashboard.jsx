@@ -11,7 +11,7 @@ import { SiConvertio } from 'react-icons/si'
 import { BiDollar } from 'react-icons/bi'
 import { getCurrentOutlet } from '../Validator'
 import { getReq } from '../../assets/auth/jwtService'
-import WhatsappCampaign from './WhatsappCampaign'
+import WhatsappCampaign from './Campaign/WhatsappCampaign'
 
 const Dashboard = () => {
     const { userPermission } = useContext(PermissionProvider)
@@ -111,7 +111,7 @@ const Dashboard = () => {
                                         <div className='col-md-4'>
                                             <div className='d-flex justify-content-center align-items-center h-100 gap-1'>
                                                 {/* <Link className="btn btn-primary" to="/merchant/SuperLeadz/"> Quick Set-Up</Link> */}
-                                                <Link className="btn btn-primary" to="/merchant/whatsapp/campaign_type"> Create Campaign</Link>
+                                                <Link className="btn btn-primary" to="/merchant/whatsapp/create-campaign/type/"> Create Campaign</Link>
                                             </div>
 
                                         </div>
@@ -169,7 +169,7 @@ const Dashboard = () => {
                 </div>
 
                 <div className='col-md-6 cursor-default'>
-                    <Link to="/merchant/whatsapp/message" >
+                    <Link to="/merchant/whatsapp/templates" >
                         <CardCom icon={<AlignCenter width={'27px'} />} title="Total Templates" data={useDashboardData?.total_template ?? 0 }  />
                     </Link>
 

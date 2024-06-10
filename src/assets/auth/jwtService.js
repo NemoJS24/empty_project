@@ -8,6 +8,7 @@ import { Navigate } from "react-router-dom"
 // export const SuperLeadzBaseURL = "https://apps.demo.xircls.in"
 // export const crmURL = "https://crm.demo.xircls.in"
 // export const affiliateURL = "https://api.demo.affiliate.xircls.com"
+// export const SocketBaseURL = "wss://api.demo.xircls.in"
 
 // const URLs = {
 //     baseURL,
@@ -15,7 +16,7 @@ import { Navigate } from "react-router-dom"
 //     crmURL
 // }
 
-// Live 
+// // Live 
 export const baseURL = "https://api.xircls.com"
 export const SuperLeadzBaseURL = "https://apps.xircls.com"
 export const crmURL = "https://crm.xircls.com"
@@ -173,6 +174,7 @@ export const configUrl = {
     saveUser: "/member/member_permission/",
     memebersDetails: "/member/members_details/",
     getAllCustomer: "/customers/get_customers/",
+    getAllCustomerNew: "/customers/get_customer_options/",
     cross_leads: "/customers/cross_leads/",
     add_leads: '/customers/merchant/add_leads/',
     leads_get:'/customers/merchant/leads_get/',
@@ -184,7 +186,7 @@ export const configUrl = {
     automotivetransaction:'/vehicle/automotivetransaction/',
     check_customer_details:'/vehicle/check_customer_details/',
     used_car_dashboard:'/vehicle/used_cust_all_vehicle/',
-
+    campagin_view: "/talk/campaign_view_data/",
     // crm leads profile
     add_variant: `/vehicle/add_variant/`,
 
@@ -203,6 +205,7 @@ export const configUrl = {
     whatsapp_dashboard_view: "talk/dashboard_view/",
 
     getTemplates: "talk/getTemplates/",
+    getMailTemplates: "mail/getTemplates/",
     project_get: "talk/project_get/",
     getTemplateById: "talk/getTemplateById/",
     createTemplate: "talk/createTemplate/",
@@ -238,7 +241,18 @@ export const configUrl = {
     test: "merchant/update_field",
     active_refeeral_offer: "/referral/referralpoints/",
     referral_dashboard: "referral/dashboard/",
-    
+    group_import_customer: "/talk/group_import_customer/",
+    mark_message_read: "/talk/mark_message_read/",
+    get_project_profile: "/talk/get_project_profile/",
+    update_profile: "/talk/update_profile/",
+    quick_replay: "/talk/quick_replay/",
+    campaign_details_list: "/talk/campaign_details_list/",
+    customer_tags_notes: "/talk/customer_tags_notes/",
+    tags: "/talk/tags/",
+    chat_status: "/talk/chat_status/",
+    opt_settings: "/talk/opt_settings/",
+    contact_to_send_template: "/talk/contact_to_send_template/",
+    import_bulk_data: "/insurance/api/v1/import_bulk_data/",
     // Email
     email_details: "/mail/contact_details/",
     import_email: "/mail/import_customer/",
@@ -260,14 +274,18 @@ export const configUrl = {
     email_dashboard_view: "/mail/email_dashboard_view/",
     email_check: "/mail/mail_check/",
     email_campaign_details: "/mail/email_campaign_details/",
-
-    
     mail_info: "/mail/mail_info/",
     update_status: "/mail/update_status/",
     delete_mail: "/mail/delete_mail/",
     whatsapp_create_campaign: "/talk/create_campaign/",
+    email_create_campaign: "/mail/create_campaign/",
     whatsapp_view_campaign: "/talk/view_campaign/",
-    change_campaign_status: "/talk/change_campaign_status/"
+    change_campaign_status: "/talk/change_campaign_status/",
+    email_change_campaign_status: "/mail/change_campaign_status/",
+    default_settings: "/api/v1/set_default_settings/",
+    import_leads: "/customers/group_import_leads/",
+    assign_lead: "customers/assign_lead/",
+    form_view: "/qr/get_all_data/"
 }
 
 const axiosInstance = axios.create({

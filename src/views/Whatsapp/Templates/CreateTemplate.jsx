@@ -2,7 +2,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react'
-import { CornerDownLeft, ExternalLink, FileText, Image, MapPin, Phone, PlayCircle, Plus } from 'react-feather'
+import { Copy, CornerDownLeft, ExternalLink, FileText, Image, MapPin, Phone, PlayCircle, Plus } from 'react-feather'
 import toast from 'react-hot-toast'
 import Select from 'react-select'
 import { Card, CardBody, Col, Container, Input, Label, Row } from 'reactstrap'
@@ -28,7 +28,7 @@ export default function CreateTemplate() {
     isValidName: true,
     templateCategory: '',
     language: 'en',
-    footer: ''
+    footer: 'Please reply with "STOP" to opt-out'
   })
 
   // headrer
@@ -129,7 +129,8 @@ export default function CreateTemplate() {
   const [useButtons, setButtons] = useState({
     QUICK_REPLY: 0,
     URL: 0,
-    PHONE_NUMBER: 0
+    PHONE_NUMBER: 0,
+    COPY_CODE: 0
   })
 
   // interactive change---------------------------------------------------
@@ -155,15 +156,21 @@ export default function CreateTemplate() {
         text: "",
         value: ""
       }
+    } else if (type === 'COPY_CODE') {
+      newData = {
+        type: "COPY_CODE",
+        example: "250FF"
+      }
     } else {
       setInteractive([])
       // console.log(oldData)
       return // No need to proceed further if type is not recognized
     }
     const priorityMap = {
-      QUICK_REPLY: 1,
-      URL: 2,
-      PHONE_NUMBER: 3
+      COPY_CODE: 1,
+      QUICK_REPLY: 2,
+      URL: 3,
+      PHONE_NUMBER: 4
     }
 
     // Sort the buttons based on their priority
@@ -177,6 +184,9 @@ export default function CreateTemplate() {
     const count = useInteractive.reduce((acc, elm) => {
       if (elm.type === "QUICK_REPLY") {
         acc.QUICK_REPLY++
+      } else if (elm.type === "COPY_CODE") {
+        acc.COPY_CODE++
+        acc.QUICK_REPLY++
       } else if (elm.type === "URL") {
         acc.URL++
         acc.QUICK_REPLY++
@@ -188,6 +198,7 @@ export default function CreateTemplate() {
     }, {
       QUICK_REPLY: 0,
       URL: 0,
+      COPY_CODE: 0,
       PHONE_NUMBER: 0
     })
     setButtons(count)
@@ -266,6 +277,8 @@ export default function CreateTemplate() {
 
   const handleTemplateSubmit = () => {
     // console.log("useInteractive", useInteractive)
+    // console.log("useInteractive", useInteractive)
+    // return 
     if (!formValidation()) {
       return false
     }
@@ -294,6 +307,7 @@ export default function CreateTemplate() {
       return toast.error('Body parameters required!')
     }
 
+    const formData = new FormData()
 
     const newInteractiveData = useInteractive.map(item => {
       if (item.title === '') {
@@ -324,10 +338,17 @@ export default function CreateTemplate() {
           type: item.type,
           text: item.text
         }
+      } else if (item.type === "COPY_CODE") {
+      formData.append('coupon_variables', item.value)
+        return {
+          type: "COPY_CODE",
+          example: item.value
+        }
       } else {
         // Handle unmatched cases
         return null
       }
+      
     }).filter(Boolean) // Remove null entries from the result
     // return null
     const components = [
@@ -382,7 +403,6 @@ export default function CreateTemplate() {
     ].filter(Boolean)
 
     // const payData = JSON.stringify(payload, null, 2)
-    const formData = new FormData()
 
     formData.append('name', BasicTemplateData.templateName)
     formData.append('category', BasicTemplateData.templateCategory)
@@ -421,7 +441,7 @@ export default function CreateTemplate() {
         console.log(res.data)
         if (res.data.id) {
           toast.success("Template has been created")
-          nagivate('/merchant/whatsapp/message/')
+          nagivate('/merchant/whatsapp/templates/')
         } else if (res.data.message) {
           toast.error(res.data.message)
         } else if (res.data.code === 100) {
@@ -440,7 +460,7 @@ export default function CreateTemplate() {
 
         useLoader && <FrontBaseLoader />
       }
-      <Link to='/merchant/whatsapp/message' className='btn btn-primary btn-sm mb-1' >Back</Link>
+      <Link to='/merchant/whatsapp/templates' className='btn btn-primary btn-sm mb-1' >Back</Link>
       <Card>
         <CardBody>
           <h4 className="">New Message </h4>
@@ -665,7 +685,7 @@ export default function CreateTemplate() {
                     {Header.type === "Video" && <div className='border rounded-3 d-flex justify-content-center  align-items-center ' style={{ height: "170px", background: "#bbc7ff" }}>
 
                       {
-                        Header.file === '' ? <PlayCircle size={45} color='#5f66cd' /> : <video className='rounded-3  object-fit-cover w-100' controls autoPlay mute style={{ height: "170px" }}>
+                        Header.file === '' ? <PlayCircle size={45} color='#5f66cd' /> : <video className='rounded-3  object-fit-cover w-100' controls   style={{ height: "170px" }}>
                           <source
                             src={Header.file === '' ? '' : Header?.file?.name ?? ''}
                             type="video/mp4"
@@ -694,6 +714,13 @@ export default function CreateTemplate() {
                   </CardBody>
                   {
                     useInteractive && useInteractive.map((elem) => {
+                      if (elem.type === "COPY_CODE") {
+                        return (
+                           <div className="border-top  d-flex text-primary justify-content-center  align-items-center   " style={{ padding: "10px", gap: "8px" }} >
+                              <Copy sze={17} /><h6 className='m-0 text-primary' >Copy offer code</h6>
+                           </div>
+                        )
+                     }
                       if (elem.type === 'PHONE_NUMBER' && elem.text !== '') {
                         return (
                           <div className="border-top bg-white  d-flex text-primary justify-content-center align-items-center" style={{ padding: "10px", gap: "8px" }} >
@@ -737,6 +764,25 @@ export default function CreateTemplate() {
                     <div className='gap-1 d-flex flex-column  '>
                       {useInteractive?.map((ele, index) => {
 
+                        if (ele.type === 'COPY_CODE') {
+                          return (
+                            <Row key={index}>
+                              <Col lg="2" className='d-flex justify-content-center  align-items-center '><p className='m-0'>Coupon Code {index + 1} :</p></Col>
+                              <Col lg="4">
+                                <input
+                                  type="text"
+                                  className="form-control "
+                                  placeholder='code eg.XDFGDD'
+                                  maxLength={25}
+                                  value={ele.value}
+                                  onChange={(e) => handleInputChange(index, 'value', e.target.value)}
+                                />
+                              </Col>
+                              <Col lg="1" className=' d-flex  justify-content-center  align-items-center fs-4'>
+                                <div className='cursor-pointer' onClick={() => handleDeleteAction(index, ele.type)}>X</div>
+                              </Col>
+                            </Row>)
+                        }
                         if (ele.type === 'QUICK_REPLY') {
                           return (
                             <Row key={index}>
@@ -866,6 +912,7 @@ export default function CreateTemplate() {
                       })}
 
                     </div>}
+
                   <div className='d-flex gap-2 mt-1'>
                     <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center   gap-1 ${(useButtons.QUICK_REPLY - 10) === 0 ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("QUICK_REPLY")} >
                       <Plus size={18} /> <p className='m-0'>Quick Reply</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{10 - (useButtons.QUICK_REPLY)}</p></div>
@@ -875,6 +922,9 @@ export default function CreateTemplate() {
                     </div>
                     <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center  gap-1 ${((useButtons.PHONE_NUMBER - 1) === 0) ? 'disabled' : ''}`} onClick={() => addInteractiveBtn("PHONE_NUMBER")}>
                       <Plus size={18} /> <p className='m-0'>Phone Number</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{1 - useButtons.PHONE_NUMBER}</p></div>
+                    </div>
+                    <div className={`btn btn-primary btn-sm d-flex justify-content-center  align-items-center  gap-1 ${((useButtons.COPY_CODE - 1) === 0) ? 'disabled' : ''} ${BasicTemplateData?.templateCategory !== "MARKETING" ? 'disabled ' : ''}`} onClick={() => addInteractiveBtn("COPY_CODE")}>
+                      <Plus size={18} /> <p className='m-0'>Coupon Code</p> <div className='border d-flex justify-content-center  align-items-center rounded-5 m-0' style={{ background: "#b9b9b9", color: "#fff", height: "20px", width: "20px" }}><p className="m-0 font-small-3">{1 - useButtons.COPY_CODE}</p></div>
                     </div>
                   </div>
                 </div>

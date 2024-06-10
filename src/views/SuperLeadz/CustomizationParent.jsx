@@ -1,3 +1,4 @@
+/* eslint-disable multiline-ternary */
 import React, { Suspense, useContext, useEffect, useState } from 'react'
 import { Crosshair, Edit, Image, Monitor, PlusCircle, Smartphone, Square, Tag, Target, Type, X, Trash2, XCircle, Columns, Disc, Trash, Percent, MoreVertical, ArrowLeft, Home, CheckSquare, Mail, RotateCcw, RotateCw, Check, ChevronRight, Plus } from 'react-feather'
 import { AccordionBody, AccordionHeader, AccordionItem, Card, Container, DropdownItem, DropdownMenu, DropdownToggle, Modal, ModalBody, Row, UncontrolledAccordion, UncontrolledDropdown, Col, ModalHeader, UncontrolledButtonDropdown, CardBody, ModalFooter, Button, Input } from 'reactstrap'
@@ -20,13 +21,13 @@ import isEqual from "lodash.isequal"
 import { PermissionProvider, ThemesProvider } from '../../Helper/Context'
 import { SuperLeadzBaseURL, getReq, postReq } from '../../assets/auth/jwtService'
 import Spinner from '../Components/DataTable/Spinner'
-import { generateRandomString, getCurrentOutlet, xircls_url } from '../Validator'
+import { generateRandomString, getCurrentOutlet, xircls_url, SuperLeadzTone, SuperLeadzPurpose, SuperLeadzStrategy } from '../Validator'
 import 'swiper/swiper.min.css'
 import 'swiper/modules/pagination/pagination.min.css'
 import 'swiper/modules/navigation/navigation.min.css'
 import 'swiper/modules/autoplay/autoplay.min.css'
 import moment from 'moment/moment'
-import ReturnOfferHtml, { defaultOfferStyles } from '../NewCustomizationFlow/ReturnOfferHtml'
+import ReturnOfferHtml from '../NewCustomizationFlow/ReturnOfferHtml'
 import slPrevBg from "../../assets/images/vector/slPrevBg.png"
 import FrontBaseLoader from '../Components/Loader/Loader'
 import RenderPreview from "./RenderPreview"
@@ -40,30 +41,34 @@ import "./Customization.css"
 import { FaCrown, FaWhatsapp } from "react-icons/fa"
 import { MdOutlineRefresh } from "react-icons/md"
 import { Reload } from 'tabler-icons-react'
+import { TiClipboard } from "react-icons/ti"
+import { GrUserAdmin } from "react-icons/gr"
 import { RenderTemplateUI } from '../Whatsapp/SmallFunction'
-import { FaListCheck } from "react-icons/fa6"
+import { FONT_FAMILY_OPTIONS } from '../NewCustomizationFlow/plugins/ToolbarPlugin'
 
 
-export const fontStyles = [
-    { label: "Abril Fatface", value: `Abril Fatface` },
-    { label: "Acme", value: `Acme` },
-    { label: "Caveat", value: `Caveat` },
-    { label: "Dancing Script", value: `Dancing Script` },
-    { label: "Kalam", value: `Kalam` },
-    { label: "Lato", value: `Lato` },
-    { label: "Lexend", value: `Lexend` },
-    { label: "Lilita One", value: `Lilita One` },
-    { label: "Montserrat", value: `Montserrat` },
-    { label: "Noto Sans", value: `Noto Sans` },
-    { label: "Open Sans", value: `Open Sans` },
-    { label: "Oswald", value: `Oswald` },
-    { label: "Pacifico", value: `Pacifico` },
-    { label: "Play", value: `Play` },
-    { label: "Roboto", value: `Roboto` },
-    { label: "Satisfy", value: `Satisfy` },
-    { label: "sans-serif", value: `sans-serif` },
-    { label: "Ubuntu", value: `Ubuntu` }
-]
+// export const fontStyles = [
+//     { label: "Abril Fatface", value: `Abril Fatface` },
+//     { label: "Acme", value: `Acme` },
+//     { label: "Caveat", value: `Caveat` },
+//     { label: "Dancing Script", value: `Dancing Script` },
+//     { label: "Kalam", value: `Kalam` },
+//     { label: "Lato", value: `Lato` },
+//     { label: "Lexend", value: `Lexend` },
+//     { label: "Lilita One", value: `Lilita One` },
+//     { label: "Montserrat", value: `Montserrat` },
+//     { label: "Noto Sans", value: `Noto Sans` },
+//     { label: "Open Sans", value: `Open Sans` },
+//     { label: "Oswald", value: `Oswald` },
+//     { label: "Pacifico", value: `Pacifico` },
+//     { label: "Play", value: `Play` },
+//     { label: "Roboto", value: `Roboto` },
+//     { label: "Satisfy", value: `Satisfy` },
+//     { label: "sans-serif", value: `sans-serif` },
+//     { label: "Ubuntu", value: `Ubuntu` }
+// ]
+
+export const fontStyles = FONT_FAMILY_OPTIONS
 
 const sourceList = [
     { label: "Facebook", value: `facebook` },
@@ -105,18 +110,18 @@ const sectionWidths = {
 
 }
 
-const CustomizationParent = () => {
+const CustomizationParent = ({ isAdmin = false }) => {
     const { userPermission } = useContext(PermissionProvider)
 
     // themeLoc variable has the transferred from the AllCampaigns page 
     const themeLoc = useLocation()
 
-    console.log({ themeLoc })
+    // console.log({ themeLoc }, generateRandomString())
 
     const { EditThemeId } = useParams()
 
     const defaultIsMobile = new URLSearchParams(themeLoc.search)
-    console.log(defaultIsMobile, "defaultIsMobile")
+    // console.log(defaultIsMobile, "defaultIsMobile")
     // const dateFormat = "%Y-%m-%d %H:%M:%S"
 
     // status variable shows whether the user has monile view or desktop view selected while visiting the page
@@ -131,21 +136,70 @@ const CustomizationParent = () => {
     const mobileCondition = isMobile ? "mobile_" : ""
     const mobileConditionRev = !isMobile ? "mobile_" : ""
     const [selectedTemID, setSelectedTemID] = useState("")
-    const { allThemes, selectedThemeId } = useContext(ThemesProvider)
+    const { selectedThemeId } = useContext(ThemesProvider)
+    const [allThemes, setAllThemes] = useState([])
+    const outletData = getCurrentOutlet()
 
-    const allPreviews = [...allThemes]
+    const allPreviews = [allThemes]
+    const selectedThemeIds = allThemes
 
-    console.log("finalObj: ", localStorage.getItem("defaultThemeId"))
+    // const defObj = themeLoc?.state?.custom_theme?.theme_name ? JSON.parse(themeLoc?.state?.custom_theme) : Boolean(localStorage.getItem("defaultTheme")) ? JSON.parse(localStorage.getItem("defaultTheme")) : Boolean(localStorage.getItem("defaultThemeId")) ? allPreviews[allPreviews.findIndex($ => $?.theme_id === parseFloat(localStorage.getItem("defaultThemeId")))]?.object : selectedThemeId !== "" ? { ...allPreviews[allPreviews?.findIndex($ => $?.theme_id === selectedThemeId)]?.object, campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") } : defaultObj
 
-    const defObj = themeLoc?.state?.custom_theme ? JSON.parse(themeLoc?.state?.custom_theme) : Boolean(localStorage.getItem("defaultTheme")) ? JSON.parse(localStorage.getItem("defaultTheme")) : Boolean(localStorage.getItem("defaultThemeId")) ? allPreviews[allPreviews.findIndex($ => $?.theme_id === parseFloat(localStorage.getItem("defaultThemeId")))]?.object : selectedThemeId !== "" ? { ...allPreviews[allPreviews?.findIndex($ => $?.theme_id === selectedThemeId)]?.object, campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") } : defaultObj
+    let defObj
+
+    if (Boolean(localStorage.getItem("defaultTheme"))) {
+        defObj = JSON.parse(localStorage.getItem("defaultTheme"))
+        // console.log("error in 2")
+        defObj = JSON.parse(localStorage.getItem("defaultTheme"))
+        defObj.campaignStartDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
+    } else if (themeLoc?.state?.custom_theme) {
+        defObj = JSON.parse(themeLoc?.state?.custom_theme)
+        // console.log("error in 1")
+    } else if (Boolean(localStorage.getItem("defaultThemeId"))) {
+        const index = allPreviews[0]?.filter(($) => $?.id === parseFloat(localStorage.getItem("defaultThemeId")))
+        // const index = allPreviews?.[0].findIndex($ => $?.id === parseFloat(localStorage.getItem("defaultThemeId")))
+        defObj = allPreviews[index]?.object
+        // console.log("error in 3")
+    } else if (selectedThemeIds !== "") {
+        const index = allPreviews.findIndex($ => $?.id === selectedThemeIds)
+        defObj = { ...allPreviews[index], campaignStartDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss") }
+        // console.log("allThemes2", allPreviews[index])
+        // console.log("error in 4")
+    } else {
+        defObj = defaultObj
+        // console.log("error in 5")
+    }
+
+
+    // else if (Boolean(localStorage.getItem("defaultTheme"))) {
+    //     defObj = JSON.parse(localStorage.getItem("defaultTheme"))
+    //     console.log("error in 2")
+    //     defObj = JSON.parse(localStorage.getItem("defaultTheme"))
+    // }
+
+    console.log("defObj", defObj)
 
     const navigate = useNavigate()
     const [mousePos, setMousePos] = useState({})
     const [finalObj, setFinalObj] = useState(defObj)
     const [past, setPast] = useState([])
     const [future, setFuture] = useState([])
-    const [themeName, setThemeName] = useState(themeLoc?.state?.custom_theme ? defObj?.theme_name : `Campaign-${generateRandomString()}`)
-    const [defColors, setDefColors] = useState(defObj.defaultThemeColors || {})
+    const [themeName, setThemeName] = useState(themeLoc.state?.campaign_name ? themeLoc.state?.campaign_name : `Campaign - ${generateRandomString()}`)
+    console.log("theme_names ", finalObj)
+    // const [themeName, setThemeName] = useState(() => {
+    //     const generatedTheme = `Campaign-${generateRandomString()}`
+    //     const initialTheme = themeLoc?.state?.custom_theme ? defObj?.theme_name : generatedTheme
+
+    //     if (initialTheme === generatedTheme) {
+    //         const storedThemeName = localStorage.getItem('themeName')
+    //         // console.log(storedThemeName, 'buhbjhvhv')
+    //         return storedThemeName || initialTheme
+    //     }
+
+    //     return initialTheme
+    // })
+    const [defColors, setDefColors] = useState(defObj?.defaultThemeColors || {})
+    // console.log(defObj?.defaultThemeColors, "jhgvdfgbvfbfdbhufhguhufd")
     const [textValue, setTextValue] = useState("")
     const [senderName, setSenderName] = useState("")
     const [currColor, setCurrColor] = useState("primary")
@@ -153,12 +207,24 @@ const CustomizationParent = () => {
     const [currPage, setCurrPage] = useState(defObj?.[`${mobileCondition}pages`][0]?.id)
     const [draggedInputType, setDraggedInputType] = useState("none")
     const [whatsAppTem, setWhatsappTem] = useState([])
+    // const [campaignTem, setCampaignTem] = useState([])
     const pageCondition = currPage === "button" ? "button" : "main"
+
     // const [whatsappJson, setWhatsappJson] = useState({
     //     template: "",
     //     delay: ""
     // })
-    const outletData = getCurrentOutlet()
+
+    // const handleThemeNameChange = (value) => {
+    //     setThemeName(value)
+
+    //     if (value) {
+    //         localStorage.setItem('themeName', value)
+    //     } else {
+    //         localStorage.removeItem('themeName')
+    //     }
+    // }
+    const outletDetail = getCurrentOutlet()
     const visibleOnOptions = [
         { value: 'scroll', label: 'Scroll' },
         { value: 'delay', label: 'Delay' },
@@ -175,7 +241,7 @@ const CustomizationParent = () => {
         { value: 'all_pages', label: 'All Pages' },
         { value: 'home_page', label: 'Home Page' },
         { value: 'product_page', label: 'Product Page' },
-        { value: 'product_list_page', label: 'Product List Page' },
+        { value: 'collections_page', label: 'Collection Page' },
         { value: 'cart_page', label: 'Cart Page' },
         { value: 'custom_page', label: 'Custom Pages' },
         { value: 'custom_source', label: 'Source' }
@@ -246,7 +312,7 @@ const CustomizationParent = () => {
 
     const [isOfferDraggable, setIsOfferDraggable] = useState(true)
     const [phoneIsOfferDraggable, setPhoneIsOfferDraggable] = useState(true)
-
+    const [collectionList, setCollectionList] = useState([])
     const [cancelCust, setCancelCust] = useState(false)
     const [verifyYourEmail, setVerifyYourEmail] = useState(false)
     const [changeSenderEmail, setChangeSenderEmail] = useState(false)
@@ -288,6 +354,20 @@ const CustomizationParent = () => {
     // const [textValue, setTextValue] = useState("")
     // const [senderName, setSenderName] = useState("")
     // const [apiLoader, setApiLoader] = useState(false)
+
+    const SuperLeadzStrategyFilter = SuperLeadzStrategy?.filter((curElem) => {
+        return curElem?.SuperLeadz_purpose_id.some((pur_id) => {
+            return finalObj?.SuperLeadzPurpose?.includes(pur_id)
+        })
+    })
+
+    const SuperLeadzToneFilter = SuperLeadzTone?.filter((curElem) => {
+        return curElem?.SuperLeadz_strategy_id?.some((strat_id) => {
+            return finalObj?.SuperLeadzStrategy?.includes(strat_id)
+        })
+    })
+
+    // console.log(finalObj, 'jhguyguyguyg')
 
     const refreshOfferDraggable = () => {
         const arr = []
@@ -356,6 +436,18 @@ const CustomizationParent = () => {
         return () => {
             clearTimeout(request)
         }
+    }
+
+    const getAllThemes = () => {
+        fetch(`${SuperLeadzBaseURL}/api/v1/add_default_theme/?app=${userPermission?.appName}&shop=${outletDetail[0]?.web_url}`)
+            .then((data) => data.json())
+            .then((resp) => {
+                setAllThemes(resp?.success)
+            })
+            .catch((error) => {
+                console.log(error)
+                setIsLoading(false)
+            })
     }
 
     // console.log(past, future, "ppppppp")
@@ -1505,8 +1597,8 @@ const CustomizationParent = () => {
         } else if (selectedType === "image") {
             const arr = [...colWise]
             const positionIndex = colWise[indexes?.cur]?.elements?.findIndex($ => $?.positionType === indexes?.curElem)
-            const imgWidth = colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.width
-            const imgHeight = colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.height
+            // const imgWidth = colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.width
+            // const imgHeight = colWise[indexes?.cur]?.elements[positionIndex]?.element[indexes?.subElem]?.style?.height
             styles = (
                 <>
                     <UncontrolledAccordion defaultOpen={['1', '2']} stayOpen>
@@ -1580,40 +1672,84 @@ const CustomizationParent = () => {
                                         </div>
                                         <img style={{ maxWidth: "100%", maxHeight: "100%" }} src={colWise[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.isBrandLogo ? finalObj?.defaultThemeColors?.brandLogo : colWise[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.src} alt="" />
                                     </div>
-                                    <div className='mb-1'>
-                                        {getMDToggle({
-                                            label: <>Width: <input value={parseFloat(imgWidth)} type='number' className='form-control' style={{ width: "8ch" }} onChange={e => {
-                                                arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandWidth = false
-                                                setcolWise([...arr])
-                                                setValues({ ...values, width: `${parseFloat(e.target.value)}px` })
-                                            }} />px</>,
-                                            value: `width`
-                                        })}
-                                        <div className="p-0 justify-content-start align-items-center gap-2">
-                                            <input value={parseFloat(imgWidth)} onChange={(e) => {
-                                                arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandWidth = false
-                                                setcolWise([...arr])
-                                                setValues({ ...values, width: `${e.target.value}px` })
-                                            }} type='range' className='w-100' name="height" min="20" max="1500" />
+                                    <div className='p-0 mx-0 my-1'>
+                                        <div className='p-0 mb-2 justify-content-start align-items-center'>
+                                            {getMDToggle({ label: `Width Type: `, value: `widthType` })}
+                                            <Select
+                                                value={[
+                                                    { value: '100%', label: '100%' },
+                                                    { value: 'custom', label: 'Custom' }
+                                                ].filter($ => $?.value === values?.widthType)}
+                                                className='w-100'
+                                                onChange={e => {
+                                                    if (e.value === "100%") {
+                                                        setValues({ ...values, widthType: e.value, width: e.value, minHeight: "0px", padding: "10px" })
+                                                    } else if (e.value === "custom") {
+                                                        setValues({ ...values, widthType: e.value, padding: "10px" })
+                                                    }
+                                                }}
+                                                options={[
+                                                    { value: '100%', label: '100%' },
+                                                    { value: 'custom', label: 'Custom' }
+                                                ]}
+                                            />
                                         </div>
+                                        {values?.widthType === "custom" && (
+                                            <div className='mb-2'>
+                                                {getMDToggle({ label: `Width: ${values?.width}`, value: `width` })}
+                                                <div className="d-flex p-0 justify-content-between align-items-center gap-2">
+                                                    <input
+                                                        value={parseFloat(values?.width)}
+                                                        type='range'
+                                                        className='w-100'
+                                                        onChange={e => {
+                                                            setValues({ ...values, width: `${e.target.value}px` })
+                                                        }}
+                                                        name="height"
+                                                        min="20"
+                                                        max="600"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                        {values?.widthType === "custom" && (
+                                            <div className='mb-2'>
+                                                {getMDToggle({ label: `Height: ${values?.minHeight}`, value: `minHeight` })}
+                                                <div className="d-flex p-0 justify-content-between align-items-center gap-2">
+                                                    <input
+                                                        value={parseFloat(values?.minHeight)}
+                                                        type='range'
+                                                        className='w-100'
+                                                        onChange={e => {
+                                                            setValues({ ...values, minHeight: `${e.target.value}px` })
+                                                        }}
+                                                        name="height"
+                                                        min="0"
+                                                        max="600"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                        {colWise[indexes?.cur].elements[positionIndex]?.element[indexes?.subElem]?.hasLabel && (
+                                            <div className='mb-2'>
+                                                {getMDToggle({ label: `Label and Input gap: ${values?.elemGap ? values?.elemGap : "0px"}`, value: `elemGap` })}
+                                                <div className="d-flex p-0 justify-content-between align-items-center gap-2">
+                                                    <input
+                                                        value={parseFloat(values?.elemGap ? values?.elemGap : "0px")}
+                                                        type='range'
+                                                        className='w-100'
+                                                        onChange={e => {
+                                                            setValues({ ...values, elemGap: `${e.target.value}px` })
+                                                        }}
+                                                        name="height"
+                                                        min="0"
+                                                        max="600"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className='mb-1'>
-                                        {getMDToggle({
-                                            label: <>Height: <input value={parseFloat(imgHeight)} type='number' className='form-control' style={{ width: "8ch" }} onChange={e => {
-                                                arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandHeight = false
-                                                setcolWise([...arr])
-                                                setValues({ ...values, height: `${parseFloat(e.target.value)}px` })
-                                            }} />px</>,
-                                            value: `height`
-                                        })}
-                                        <div className="p-0 justify-content-start align-items-center gap-2">
-                                            <input value={parseFloat(imgHeight)} onChange={(e) => {
-                                                arr[indexes?.cur].elements[positionIndex].element[indexes?.subElem].isBrandHeight = false
-                                                setcolWise([...arr])
-                                                setValues({ ...values, height: `${e.target.value}px` })
-                                            }} type='range' className='w-100' name="height" min="20" max="1500" />
-                                        </div>
-                                    </div>
+
                                     <div className='p-0 mb-1 align-items-center'>
                                         {getMDToggle({ label: `Alignment`, value: `margin` })}
                                         <Select value={alignOptions?.filter(item => {
@@ -1695,12 +1831,17 @@ const CustomizationParent = () => {
                 </>
             )
             general = (
-                <div className={`h-100 d-flex flex-column justify-content-between`}>
+                <div className="h-100 d-flex flex-column justify-content-between">
                     <div>
                         {/* Column Count Starts */}
                         <h6 style={{ marginLeft: "7px", marginTop: "10px" }}>Column Count</h6>
                         <div className='d-flex justify-content-around align-items-center'>
-                            {colWise[indexes?.cur].elements.length === 1 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("1", { left: "100%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            {colWise?.[indexes?.cur]?.elements?.length === 1 ? (
+                                <button
+                                    className="btn p-0 d-flex justify-content-center align-items-center"
+                                    onClick={() => changeColumn("1", { left: "100%" }, false)}
+                                    style={{ aspectRatio: "1", width: "50px" }}
+                                >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <rect
                                         x={2}
@@ -1713,11 +1854,17 @@ const CustomizationParent = () => {
                                         stroke="#727272"
                                     />
                                 </svg>
-                            </button> : (
+                                </button>
+                            ) : colWise?.[indexes?.cur] ? (
                                 <UncontrolledDropdown className='more-options-dropdown'>
-                                    <DropdownToggle onClick={() => {
-                                        setDeleteCols(colWise[indexes?.cur].elements.length === 2 ? ["right"] : ["center", "right"])
-                                    }} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
+                                    <DropdownToggle
+                                        onClick={() => {
+                                            setDeleteCols(colWise[indexes.cur].elements.length === 2 ? ["right"] : ["center", "right"])
+                                        }}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                        color='transparent'
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <rect
                                                 x={2}
@@ -1733,29 +1880,49 @@ const CustomizationParent = () => {
                                     </DropdownToggle>
                                     <DropdownMenu style={{ width: "280px" }} end>
                                         <div className="p-1 d-flex gap-1">
-                                            {colWise[indexes?.cur].elements.map((element, index) => {
-                                                return (
-                                                    <div key={index} className="form-check m-0 p-0 flex-grow-1 d-flex align-items-center" style={{ gap: "0.5rem" }}>
-                                                        <input checked={deleteCols.includes(element.positionType)} name={`deleteCol`} id={`deleteCol-${index}`} type={colWise[indexes?.cur].elements.length === 2 ? "radio" : "checkbox"} onChange={(e) => {
-                                                            if (colWise[indexes?.cur].elements.length === 2) {
+                                            {colWise[indexes.cur].elements.map((element, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="form-check m-0 p-0 flex-grow-1 d-flex align-items-center"
+                                                    style={{ gap: "0.5rem" }}
+                                                >
+                                                    <input
+                                                        checked={deleteCols.includes(element.positionType)}
+                                                        name={`deleteCol`}
+                                                        id={`deleteCol-${index}`}
+                                                        type={colWise[indexes.cur].elements.length === 2 ? "radio" : "checkbox"}
+                                                        onChange={(e) => {
+                                                            if (colWise[indexes.cur].elements.length === 2) {
                                                                 setDeleteCols([element?.positionType])
                                                             } else {
-                                                                e.target.checked ? setDeleteCols((deleteCols.length < colWise[indexes?.cur].elements.length - 1) ? [...deleteCols, element?.positionType] : deleteCols) : setDeleteCols(deleteCols.filter($ => $ !== element.positionType))
+                                                                e.target.checked
+                                                                    ? setDeleteCols(
+                                                                        deleteCols.length < colWise[indexes.cur].elements.length - 1
+                                                                            ? [...deleteCols, element?.positionType]
+                                                                            : deleteCols
+                                                                    )
+                                                                    : setDeleteCols(deleteCols.filter($ => $ !== element.positionType))
                                                             }
-                                                        }} className="form-check-input m-0 p-0" />
-                                                        <label htmlFor={`deleteCol-${index}`} className="form-check-label m-0 p-0 text-capitalize">{element?.positionType}</label>
+                                                        }}
+                                                        className="form-check-input m-0 p-0"
+                                                    />
+                                                    <label htmlFor={`deleteCol-${index}`} className="form-check-label m-0 p-0 text-capitalize">
+                                                        {element?.positionType}
+                                                    </label>
                                                     </div>
-                                                )
-                                            })}
+                                            ))}
                                         </div>
                                         <div className="d-flex align-items-center">
-                                            <DropdownItem onClick={() => {
+                                            <DropdownItem
+                                                onClick={() => {
                                                 if (deleteCols.length < colWise[indexes.cur].elements.length - 1) {
                                                     toast.error(`Select at least ${colWise[indexes.cur].elements.length - 1} columns`)
                                                 } else {
                                                     changeColumn("1", { left: "100%" }, true)
                                                 }
-                                            }} className='flex-grow-1 text-center'>
+                                                }}
+                                                className='flex-grow-1 text-center'
+                                            >
                                                 Remove Columns
                                             </DropdownItem>
                                             <DropdownItem className='flex-grow-1 text-center'>
@@ -1764,19 +1931,28 @@ const CustomizationParent = () => {
                                         </div>
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
-                            )}
-                            {colWise[indexes?.cur].elements.length <= 2 ? <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            ) : null}
+                            {colWise?.[indexes?.cur]?.elements?.length <= 2 ? (
+                                <button
+                                    className="btn p-0 d-flex justify-content-center align-items-center"
+                                    onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)}
+                                    style={{ aspectRatio: "1", width: "50px" }}
+                                >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <g strokeWidth={3} stroke="#727272">
                                         <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
                                         <path d="M32 52V2" />
                                     </g>
                                 </svg>
-                            </button> : (
+                                </button>
+                            ) : colWise?.[indexes?.cur] ? (
                                 <UncontrolledDropdown className='more-options-dropdown'>
-                                    <DropdownToggle onClick={() => {
-                                        setDeleteCols(["right"])
-                                    }} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }} color='transparent'>
+                                    <DropdownToggle
+                                        onClick={() => setDeleteCols(["right"])}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                        color='transparent'
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1786,25 +1962,37 @@ const CustomizationParent = () => {
                                     </DropdownToggle>
                                     <DropdownMenu style={{ width: "280px" }} end>
                                         <div className="p-1 d-flex gap-1">
-                                            {colWise[indexes?.cur].elements.map((element, index) => {
-                                                return (
-                                                    <div key={index} className="form-check m-0 p-0 flex-grow-1 d-flex align-items-center" style={{ gap: "0.5rem" }}>
-                                                        <input checked={deleteCols.includes(element.positionType)} name={`deleteCol`} id={`deleteCol-${index}`} type={"radio"} onChange={() => {
-                                                            setDeleteCols([element?.positionType])
-                                                        }} className="form-check-input m-0 p-0" />
-                                                        <label htmlFor={`deleteCol-${index}`} className="form-check-label m-0 p-0 text-capitalize">{element?.positionType}</label>
+                                            {colWise[indexes.cur].elements.map((element, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="form-check m-0 p-0 flex-grow-1 d-flex align-items-center"
+                                                    style={{ gap: "0.5rem" }}
+                                                >
+                                                    <input
+                                                        checked={deleteCols.includes(element.positionType)}
+                                                        name={`deleteCol`}
+                                                        id={`deleteCol-${index}`}
+                                                        type={"radio"}
+                                                        onChange={() => setDeleteCols([element?.positionType])}
+                                                        className="form-check-input m-0 p-0"
+                                                    />
+                                                    <label htmlFor={`deleteCol-${index}`} className="form-check-label m-0 p-0 text-capitalize">
+                                                        {element?.positionType}
+                                                    </label>
                                                     </div>
-                                                )
-                                            })}
+                                            ))}
                                         </div>
                                         <div className="d-flex align-items-center">
-                                            <DropdownItem onClick={() => {
+                                            <DropdownItem
+                                                onClick={() => {
                                                 if (deleteCols.length < colWise[indexes.cur].elements.length - 2) {
                                                     toast.error(`Select at least ${colWise[indexes.cur].elements.length - 2} columns`)
                                                 } else {
                                                     changeColumn("2", { left: "50%", right: "50%" }, true)
                                                 }
-                                            }} className='flex-grow-1 text-center'>
+                                                }}
+                                                className='flex-grow-1 text-center'
+                                            >
                                                 Remove Columns
                                             </DropdownItem>
                                             <DropdownItem className='flex-grow-1 text-center'>
@@ -1813,8 +2001,12 @@ const CustomizationParent = () => {
                                         </div>
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
-                            )}
-                            <button className="btn p-0 d-flex justify-content-center align-items-center" onClick={() => changeColumn("3", { left: `${100 / 3}%`, center: `${100 / 3}%`, right: `${100 / 3}%` }, false)} style={{ aspectRatio: "1", width: "50px" }}>
+                            ) : null}
+                            <button
+                                className="btn p-0 d-flex justify-content-center align-items-center"
+                                onClick={() => changeColumn("3", { left: `${100 / 3}%`, center: `${100 / 3}%`, right: `${100 / 3}%` }, false)}
+                                style={{ aspectRatio: "1", width: "50px" }}
+                            >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                     <g strokeWidth={3} stroke="#727272">
                                         <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1826,37 +2018,27 @@ const CustomizationParent = () => {
                         {/* Column Count Ends*/}
                         {/* Column Split Starts*/}
                         {/* Column Split For 2 Columns Starts*/}
-                        {colWise[indexes.cur]?.elements?.length === 2 && (
+                        {colWise?.[indexes?.cur]?.elements?.length === 2 && (
                             <div>
                                 <h6 style={{ marginLeft: "7px", marginTop: "20px" }}>Column Split</h6>
                                 <div className='d-flex justify-content-around align-items-center'>
-                                    <button onClick={() => changeColumn("2", { left: "25%", right: "75%" }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M16 52 L 16 2"></path>
+                                    <button
+                                        onClick={() => changeColumn("2", { left: "25%", right: "75%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
+                                            <g strokeWidth={3} stroke="#727272">
+                                                <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
+                                                <path d="M17 52V2" />
                                             </g>
                                         </svg>
                                     </button>
-                                    <button onClick={() => changeColumn("2", { left: `${100 / 3}%`, right: `${200 / 3}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M21 52 L 21 2"></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                    <button onClick={() => changeColumn("2", { left: `${(250 * 100) / 600}%`, right: `${(350 * 100) / 600}%` })} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M26 52 L 26 2" ></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div className='d-flex justify-content-around align-items-center'>
-                                    <button onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button
+                                        onClick={() => changeColumn("2", { left: "50%", right: "50%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1864,42 +2046,44 @@ const CustomizationParent = () => {
                                             </g>
                                         </svg>
                                     </button>
-                                    <button onClick={() => changeColumn("2", { left: `${(350 * 100) / 600}%`, right: `${(250 * 100) / 600}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M37 52 L 37 2"></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                    <button onClick={() => changeColumn("2", { left: `${200 / 3}%`, right: `${100 / 3}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M42 52 L 42 2" ></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div className='d-flex justify-content-start align-items-center' style={{ marginLeft: "14.5px" }}>
-                                    <button onClick={() => changeColumn("2", { left: "75%", right: "25%" }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth="3" stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M48 52 L 48 2"></path>
+                                    <button
+                                        onClick={() => changeColumn("2", { left: "75%", right: "25%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
+                                            <g strokeWidth={3} stroke="#727272">
+                                                <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
+                                                <path d="M47 52V2" />
                                             </g>
                                         </svg>
                                     </button>
                                 </div>
                             </div>
                         )}
-                        {/* Column Split for 2 Columns Ends */}
-                        {/* Column Split for 3 Columns Starts */}
-                        {colWise[indexes?.cur]?.elements?.length === 3 && (
+                        {/* Column Split For 2 Columns Ends*/}
+                        {/* Column Split For 3 Columns Starts*/}
+                        {colWise?.[indexes?.cur]?.elements?.length === 3 && (
                             <div>
                                 <h6 style={{ marginLeft: "7px", marginTop: "20px" }}>Column Split</h6>
                                 <div className='d-flex justify-content-around align-items-center'>
-                                    <button onClick={() => changeColumn("3", { left: `${100 / 3}%`, center: `${100 / 3}%`, right: `${100 / 3}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button
+                                        onClick={() => changeColumn("3", { left: "25%", center: "25%", right: "50%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
+                                            <g strokeWidth={3} stroke="#727272">
+                                                <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
+                                                <path d="M17 52V2M32 52V2" />
+                                            </g>
+                                        </svg>
+                                    </button>
+                                    <button
+                                        onClick={() => changeColumn("3", { left: "50%", center: "25%", right: "25%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
                                                 <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
@@ -1907,32 +2091,15 @@ const CustomizationParent = () => {
                                             </g>
                                         </svg>
                                     </button>
-                                    <button onClick={() => changeColumn("3", { left: `${100 / 2}%`, center: `${100 / 4}%`, right: `${100 / 4}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
+                                    <button
+                                        onClick={() => changeColumn("3", { left: "25%", center: "50%", right: "25%" }, false)}
+                                        className="btn p-0 d-flex justify-content-center align-items-center"
+                                        style={{ aspectRatio: "1", width: "50px" }}
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
                                             <g strokeWidth={3} stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent"></rect>
-                                                <path d="M32 52 L 32 2"></path>
-                                                <path d="M48 52 L 48 2"></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                    <button onClick={() => changeColumn("3", { left: `${100 / 4}%`, center: `${100 / 2}%`, right: `${100 / 4}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth={3} stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M16 52 L 16 2" ></path>
-                                                <path d="M48 52 L 48 2" ></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div className='d-flex justify-content-start align-items-center' style={{ marginLeft: "14.5px" }}>
-                                    <button onClick={() => changeColumn("3", { left: `${100 / 4}%`, center: `${100 / 4}%`, right: `${100 / 2}%` }, false)} className="btn p-0 d-flex justify-content-center align-items-center" style={{ aspectRatio: "1", width: "50px" }}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 54" className='w-75'>
-                                            <g strokeWidth={3} stroke="#727272">
-                                                <rect x="2" y="2" width="60" rx="5" height="50" fill="transparent" ></rect>
-                                                <path d="M16 52 L 16 2" ></path>
-                                                <path d="M32 52 L 32 2" ></path>
+                                                <rect x={2} y={2} width={60} rx={5} height={50} fill="transparent" />
+                                                <path d="M17 52V2M47 52V2" />
                                             </g>
                                         </svg>
                                     </button>
@@ -2315,6 +2482,16 @@ const CustomizationParent = () => {
         } else if (selectedType === "close") {
             styles = (
                 <div className='mx-0 my-1 px-1'>
+                    {currPage === "button" &&
+                        <div className='d-flex p-0 mb-1 justify-content-between align-items-center '>
+                            <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Disable X Button</span>
+                            <div className="form-check form-switch form-check-dark m-0 p-0" style={{ transform: 'scale(0.8)' }}>
+                                <input className="form-check-input cursor-pointer" checked={finalObj?.closePopUpOn?.disable} onChange={e => {
+                                    updatePresent({ ...finalObj, closePopUpOn: { ...finalObj?.closePopUpOn, disable: e.target.checked } })
+                                }} type="checkbox" id="flexSwitchCheckChecked"  defaultChecked/>
+                            </div>
+                        </div>}
+                    {<div className={`${(finalObj?.closePopUpOn?.disable === true && currPage === 'button') && "opacity-25"}`} style={{ pointerEvents: finalObj?.closePopUpOn?.disable === true ? "none" : "auto"}}>
                     <div className='d-flex p-0 mb-1 justify-content-between align-items-center '>
                         <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Close when "Esc" is pressed</span>
                         <div className="form-check form-switch form-check-dark m-0 p-0" style={{ transform: 'scale(0.8)' }}>
@@ -2408,7 +2585,7 @@ const CustomizationParent = () => {
                     </div>
                     <div className='my-1'>
                         {getMDToggle({
-                            label: <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Corner radius {finalObj?.crossButtons[`${pageCondition}`]?.width}</span>,
+                            label: <span className='fw-bolder text-black' style={{ fontSize: "0.75rem" }}>Corner radius {finalObj?.crossButtons[`${pageCondition}`]?.borderRadius}</span>,
                             value: `borderRadius`
                         })}
                         <div className=" p-0 justify-content-start align-items-center gap-2">
@@ -2436,6 +2613,7 @@ const CustomizationParent = () => {
                                 }} />
                         </div>
                     </div>
+                    </div>}
                 </div>
             )
             spacing = (
@@ -2968,7 +3146,7 @@ const CustomizationParent = () => {
                                     </div>
                                 </div>
                             )}
-                            <div className="form-check form-switch mb-2 d-none">
+                            <div className="form-check form-switch mb-2">
                                 <input checked={finalObj?.rules?.exit_intent} onChange={updateRules} type="checkbox" role='switch' id='exit_intent' name={"exit_intent"} className="form-check-input cursor-pointer" />
                                 <label htmlFor="exit_intent" className="cursor-pointer" style={{ fontSize: "13px" }}>Exit intent</label>
                             </div>
@@ -3064,7 +3242,7 @@ const CustomizationParent = () => {
                                 </div>
                             )
                         })}
-                        {finalObj.behaviour.CUSTOM_PAGE_LINK.length < 6 && <div className="col-12">
+                        {<div className="col-12">
                             <button onClick={() => {
                                 const newObj = { ...finalObj }
                                 newObj.behaviour.CUSTOM_PAGE_LINK = [...finalObj.behaviour.CUSTOM_PAGE_LINK, ""]
@@ -3072,6 +3250,107 @@ const CustomizationParent = () => {
                             }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
                         </div>}
                     </div>}
+
+                    {finalObj?.behaviour?.PAGES?.includes("collections_page") && (
+                        <>
+                            <div className="row mt-2">
+                                <label style={{ display: "flex", justifyContent: 'between', alignItems: 'center', gap: '4px', fontSize: '12px' }}>
+                                    Collections:
+                                    <a className='text-primary' onClick={() => updatePresent({ ...finalObj, behaviour: { ...finalObj.behaviour, collections: collectionList?.map((cur) => cur?.value) } })}>Select All</a>
+                                </label>
+                                <Select
+                                    isMulti={true}
+                                    options={collectionList}
+                                    inputId="aria-example-input"
+                                    closeMenuOnSelect={true}
+                                    name="customer_collection_list"
+                                    placeholder="Add Collection/s"
+                                    value={collectionList?.filter((option) => finalObj?.behaviour?.collections?.includes(option.value))}
+                                    onChange={(options) => {
+                                        console.log(options, "pppppppppp")
+                                        const option_list = options.map((cur) => {
+                                            return cur.value
+                                        })
+                                        // const newObj = { ...finalObj }
+                                        // newObj.behaviour.COLLECTION_LIST = [...finalObj.behaviour.CUSTOM_PAGE_LINK, value.value]
+                                        updatePresent({ ...finalObj, behaviour: { ...finalObj.behaviour, collections: option_list } })
+                                    }}
+                                />
+                            </div>
+
+                            {/* <div className="row mt-2">
+                                <span className="form-check form-check-success m-0 d-flex justify-content-start align-items-center gap-1">
+                                    <input
+                                        type="checkbox"
+                                        id="all_product_page"
+                                        className="form-check-input m-0"
+                                        name="all_product_page"
+                                        value="all_product_page"
+                                        checked={true}
+                                    />
+                                    <label htmlFor="all_product_page">All Product Pages</label>
+                                </span>
+                            </div> */}
+
+
+                        </>
+                    )}
+
+                    <div className="row mt-2">
+                        <label htmlFor="" style={{ fontSize: "12px" }}>Include URLs:</label>
+                        {finalObj?.behaviour?.INCLUDES_PAGE_LINK?.map((ele, key) => {
+                            return (
+                                <div className="col-12" key={key}>
+                                    <div className="p-0 position-relative d-flex align-items-center mb-1">
+                                        <input style={{ fontSize: "12px" }} onChange={e => {
+                                            const newObj = { ...finalObj }
+                                            newObj.behaviour.INCLUDES_PAGE_LINK[key] = e.target.value
+                                            updatePresent(newObj)
+                                        }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj?.behaviour?.INCLUDES_PAGE_LINK?.length > 1 && <span onClick={() => {
+                                            const newObj = { ...finalObj }
+                                            newObj?.behaviour?.INCLUDES_PAGE_LINK?.splice(key, 1)
+                                            updatePresent(newObj)
+                                        }} className="d-flex justify-content-center alignn-items-center position-absolute end-0 p-1 cursor-pointer"><Trash stroke='red' size={12.5} /></span>}
+                                    </div>
+                                </div>
+                            )
+                        })}
+                        {<div className="col-12">
+                            <button onClick={() => {
+                                const newObj = { ...finalObj }
+                                newObj.behaviour.INCLUDES_PAGE_LINK = [...finalObj?.behaviour?.INCLUDES_PAGE_LINK, ""]
+                                updatePresent(newObj)
+                            }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
+                        </div>}
+                    </div>
+
+                    <div className="row mt-2">
+                        <label htmlFor="" style={{ fontSize: "12px" }}>Exclude URLs:</label>
+                        {finalObj?.behaviour?.EXCLUDE_PAGE_LINK?.map((ele, key) => {
+                            return (
+                                <div className="col-12" key={key}>
+                                    <div className="p-0 position-relative d-flex align-items-center mb-1">
+                                        <input style={{ fontSize: "12px" }} onChange={e => {
+                                            const newObj = { ...finalObj }
+                                            newObj.behaviour.EXCLUDE_PAGE_LINK[key] = e.target.value
+                                            updatePresent(newObj)
+                                        }} value={ele} className='form-control' type="text" placeholder={`www.mystore.com/example${key + 1}`} />{finalObj?.behaviour?.EXCLUDE_PAGE_LINK?.length > 1 && <span onClick={() => {
+                                            const newObj = { ...finalObj }
+                                            newObj?.behaviour?.EXCLUDE_PAGE_LINK?.splice(key, 1)
+                                            updatePresent(newObj)
+                                        }} className="d-flex justify-content-center alignn-items-center position-absolute end-0 p-1 cursor-pointer"><Trash stroke='red' size={12.5} /></span>}
+                                    </div>
+                                </div>
+                            )
+                        })}
+                        {<div className="col-12">
+                            <button onClick={() => {
+                                const newObj = { ...finalObj }
+                                newObj.behaviour.EXCLUDE_PAGE_LINK = [...finalObj?.behaviour?.EXCLUDE_PAGE_LINK, ""]
+                                updatePresent(newObj)
+                            }} style={{ padding: "5px" }} className="btn btn-dark w-100"><PlusCircle color='white' size={17.5} /></button>
+                        </div>}
+                    </div>
 
                     {/* {finalObj?.behaviour?.PAGES?.includes("custom_source") && (
                         <div className="row mt-2">
@@ -3345,6 +3624,335 @@ const CustomizationParent = () => {
                                                         {/* <DropdownItem
                                                             onClick={(e) => {
                                                                 e.stopPropagation()
+                                                                if (colWise.length <= 1) {
+                                                                    setCurrPosition({ ...currPosition, selectedType: "main" })
+                                                                    setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                                } else {
+                                                                    setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                    setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
+                                                                }
+                                                                const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
+
+                                                                if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                    if (currPosition.selectedType === "main") {
+                                                                        arr.splice(key, 1)
+                                                                    } else {
+                                                                        arrRev.splice(key, 1)
+                                                                    }
+                                                                } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                    if (currPosition.selectedType === "main") {
+                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                    } else {
+                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                    }
+                                                                } else {
+                                                                    if (currPosition.selectedType === "main") {
+                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                    } else {
+                                                                        arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                    }
+                                                                }
+
+                                                                const newObj = { ...finalObj }
+                                                                if (currPage === "button") {
+                                                                    newObj[`${mobileCondition}button`] = arr
+                                                                    newObj[`${mobileConditionRev}button`] = arrRev
+                                                                } else {
+                                                                    const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                    const mobile_pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+                                                                    newObj[`${mobileCondition}pages`][pageIndex].values = currPosition.selectedType === "main" ? arr : newObj[`${mobileCondition}pages`][pageIndex].values
+                                                                    newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = currPosition.selectedType === "block" ? arrRev : newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values
+                                                                }
+                                                                updatePresent({ ...newObj })
+                                                            }}
+                                                            className='w-100'
+                                                        >
+                                                            <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                                                <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Deletes</span>
+                                                            </div>
+                                                        </DropdownItem> */}
+                                                        <DropdownItem
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+
+                                                                const newCurrPosition = { ...currPosition }
+                                                                let newIndexes = { ...indexes }
+
+                                                                if (colWise.length <= 1) {
+                                                                    newCurrPosition.selectedType = "main"
+                                                                    newIndexes = { cur: 0, curElem: "left", subElem: "grandparent" }
+                                                                    // console.log("this is delete 1 print 1")
+                                                                } else {
+                                                                    newCurrPosition.selectedType = "block"
+                                                                    newIndexes = { cur: key - 1, curElem: "left", subElem: "grandparent" }
+                                                                    // console.log("this is delete 1 print 2")
+                                                                }
+
+                                                                // Deep clone the arrays for desktop and mobile
+                                                                const cloneDeep = (obj) => JSON.parse(JSON.stringify(obj))
+
+                                                                const desktopArr = currPage === "button"
+                                                                    ? cloneDeep(finalObj?.button)
+                                                                    : cloneDeep(finalObj?.pages?.find($ => $.id === currPage)?.values)
+
+                                                                const mobileArr = currPage === "button"
+                                                                    ? cloneDeep(finalObj?.mobile_button)
+                                                                    : cloneDeep(finalObj?.mobile_pages?.find($ => $.id === currPage)?.values)
+                                                                // Process deletion for a given array
+                                                                const processDeletion = (arr) => {
+                                                                    if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                        arr.splice(key, 1)
+                                                                        // console.log("this is delete 1 print 3")
+                                                                    } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                        // console.log("this is delete 1 print 4")
+                                                                    } else {
+                                                                        arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                        // console.log("this is delete 1 print 5")
+                                                                    }
+                                                                    return arr
+                                                                }
+
+                                                                // Apply deletion based on the selectedType
+                                                                if (newCurrPosition.selectedType === "main") {
+                                                                    processDeletion(desktopArr)
+                                                                    // console.log("this is delete 1 print 6")
+                                                                } else {
+                                                                    processDeletion(mobileArr)
+                                                                    // console.log("this is delete 1 print 7")
+                                                                }
+
+                                                                // Create a new object for finalObj to ensure immutability
+                                                                const newObj = cloneDeep(finalObj)
+
+                                                                if (currPage === "button") {
+                                                                    newObj[`${mobileCondition}button`] = desktopArr
+                                                                    newObj[`${mobileConditionRev}button`] = mobileArr
+                                                                    // console.log("this is delete 1 print 8")
+                                                                } else {
+                                                                    const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                    const mobilePageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+
+                                                                    if (newCurrPosition.selectedType === "main") {
+                                                                        newObj[`${mobileCondition}pages`][pageIndex].values = desktopArr
+                                                                        // console.log("this is delete 1 print 11")
+                                                                    } else {
+                                                                        newObj[`${mobileConditionRev}pages`][mobilePageIndex].values = mobileArr
+                                                                        // console.log("this is delete 1 print 10")
+                                                                    }
+                                                                    // console.log("this is delete 1 print 9")
+                                                                }
+
+                                                                // Update the state with the new object
+                                                                updatePresent(newObj)
+                                                                setCurrPosition(newCurrPosition)
+                                                                setIndexes(newIndexes)
+                                                            }}
+                                                            className='w-100'
+                                                        >
+                                                            <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                                                <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Delete for Current View</span>
+                                                            </div>
+                                                        </DropdownItem>
+                                                        {/* <DropdownItem
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                toggleModal()
+                                                            }}
+                                                            className="w-100"
+                                                        >
+                                                            <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
+                                                                <Trash stroke="red" size={"15px"} className="cursor-pointer" />{" "}
+                                                                <span className="fw-bold text-black" style={{ fontSize: "0.75rem" }}>
+                                                                    Delete
+                                                                </span>
+                                                            </div>
+                                                        </DropdownItem>
+
+                                                        <Modal isOpen={modalOpen} toggle={toggleModal}>
+                                                            <ModalHeader toggle={toggleModal}>Delete Item</ModalHeader>
+                                                            <ModalBody>
+                                                                Do you want to delete this item on both mobile and desktop, or only on the current page?
+                                                            </ModalBody>
+                                                            <ModalFooter>
+                                                                <Button
+                                                                    color="danger"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
+
+                                                                        const newCurrPosition = { ...currPosition }
+                                                                        let newIndexes = { ...indexes }
+
+                                                                        if (colWise.length <= 1) {
+                                                                            newCurrPosition.selectedType = "main"
+                                                                            newIndexes = { cur: 0, curElem: "left", subElem: "grandparent" }
+                                                                            console.log("this is delete 2 print 1")
+                                                                        } else {
+                                                                            newCurrPosition.selectedType = "block"
+                                                                            newIndexes = { cur: key - 1, curElem: "left", subElem: "grandparent" }
+                                                                            console.log("this is delete 2 print 2")
+                                                                        }
+
+                                                                        // Deep clone the arrays for desktop and mobile
+                                                                        const cloneDeep = (obj) => JSON.parse(JSON.stringify(obj))
+
+                                                                        const desktopArr = currPage === "button"
+                                                                            ? cloneDeep(finalObj?.button)
+                                                                            : cloneDeep(finalObj?.pages?.find($ => $.id === currPage)?.values)
+
+                                                                        const mobileArr = currPage === "button"
+                                                                            ? cloneDeep(finalObj?.mobile_button)
+                                                                            : cloneDeep(finalObj?.mobile_pages?.find($ => $.id === currPage)?.values)
+
+                                                                        // Process deletion for a given array
+                                                                        const processDeletion = (arr) => {
+                                                                            if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                arr.splice(key, 1)
+                                                                                console.log("this is delete 2 print 3")
+                                                                            } else if (curElem?.element?.length && cur?.elements?.length) {
+                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                console.log("this is delete 2 print 4")
+                                                                            } else {
+                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                console.log("this is delete 2 print 5")
+                                                                            }
+                                                                            return arr
+                                                                        }
+
+                                                                        // Apply deletion based on the selectedType
+                                                                        if (newCurrPosition.selectedType === "main") {
+                                                                            processDeletion(desktopArr)
+                                                                            console.log("this is delete 2 print 6")
+                                                                        } else {
+                                                                            processDeletion(mobileArr)
+                                                                            console.log("this is delete 2 print 7")
+                                                                        }
+
+                                                                        // Create a new object for finalObj to ensure immutability
+                                                                        const newObj = cloneDeep(finalObj)
+
+                                                                        if (currPage === "button") {
+                                                                            newObj[`${mobileCondition}button`] = desktopArr
+                                                                            newObj[`${mobileConditionRev}button`] = mobileArr
+                                                                            console.log("this is delete 2 print 8")
+                                                                        } else {
+                                                                            const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                            const mobilePageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+
+                                                                            if (newCurrPosition.selectedType === "main") {
+                                                                                newObj[`${mobileCondition}pages`][pageIndex].values = desktopArr
+                                                                                console.log("this is delete 2 print 11")
+                                                                            } else {
+                                                                                newObj[`${mobileConditionRev}pages`][mobilePageIndex].values = mobileArr
+                                                                                console.log("this is delete 2 print 10")
+                                                                            }
+                                                                            console.log("this is delete 2 print 9")
+                                                                        }
+
+                                                                        // Update the state with the new object
+                                                                        updatePresent(newObj)
+                                                                        setCurrPosition(newCurrPosition)
+                                                                        setIndexes(newIndexes)
+                                                                        toggleModal()
+                                                                    }}
+                                                                >
+                                                                    Both
+                                                                </Button>
+                                                                <Button
+                                                                    color="primary"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
+
+                                                                        const newCurrPosition = { ...currPosition }
+                                                                        let newIndexes = { ...indexes }
+
+                                                                        if (colWise.length <= 1) {
+                                                                            newCurrPosition.selectedType = "main"
+                                                                            newIndexes = { cur: 0, curElem: "left", subElem: "grandparent" }
+                                                                            console.log("this is delete 3 print 1")
+                                                                        } else {
+                                                                            newCurrPosition.selectedType = "block"
+                                                                            newIndexes = { cur: key - 1, curElem: "left", subElem: "grandparent" }
+                                                                            console.log("this is delete 3 print 2")
+                                                                        }
+
+                                                                        // Deep clone the arrays for desktop and mobile
+                                                                        const cloneDeep = (obj) => JSON.parse(JSON.stringify(obj))
+
+                                                                        const desktopArr = currPage === "button"
+                                                                            ? cloneDeep(finalObj?.button)
+                                                                            : cloneDeep(finalObj?.pages?.find($ => $.id === currPage)?.values)
+
+                                                                        const mobileArr = currPage === "button"
+                                                                            ? cloneDeep(finalObj?.mobile_button)
+                                                                            : cloneDeep(finalObj?.mobile_pages?.find($ => $.id === currPage)?.values)
+console.log("111 desktopArr", desktopArr)
+console.log("111 mobileArr", mobileArr)
+                                                                        // Process deletion for a given array
+                                                                        const processDeletion = (arr) => {
+                                                                            if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                arr.splice(key, 1)
+                                                                                console.log("this is delete 3 print 3")
+                                                                            } else if (curElem?.element?.length && cur?.elements?.length) {
+                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                console.log("this is delete 3 print 4")
+                                                                            } else {
+                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                console.log("this is delete 3 print 5")
+                                                                            }
+                                                                            return arr
+                                                                        }
+
+                                                                        // Apply deletion based on the selectedType
+                                                                        if (newCurrPosition.selectedType === "main") {
+                                                                            processDeletion(desktopArr)
+                                                                            console.log("this is delete 3 print 6")
+                                                                        } else {
+                                                                            processDeletion(mobileArr)
+                                                                            console.log("this is delete 3 print 7")
+                                                                        }
+
+                                                                        // Create a new object for finalObj to ensure immutability
+                                                                        const newObj = cloneDeep(finalObj)
+
+                                                                        if (currPage === "button") {
+                                                                            newObj[`${mobileCondition}button`] = desktopArr
+                                                                            newObj[`${mobileConditionRev}button`] = mobileArr
+                                                                            console.log("this is delete 3 print 8")
+                                                                        } else {
+                                                                            const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                            const mobilePageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+
+                                                                            if (newCurrPosition.selectedType === "main") {
+                                                                                newObj[`${mobileCondition}pages`][pageIndex].values = desktopArr
+                                                                                console.log("this is delete 3 print 11")
+                                                                            } else {
+                                                                                newObj[`${mobileConditionRev}pages`][mobilePageIndex].values = mobileArr
+                                                                                console.log("this is delete 3 print 10")
+                                                                            }
+                                                                            console.log("this is delete 3 print 9")
+                                                                        }
+
+                                                                        // Update the state with the new object
+                                                                        updatePresent(newObj)
+                                                                        setCurrPosition(newCurrPosition)
+                                                                        setIndexes(newIndexes)
+                                                                        toggleModal()
+                                                                    }}
+                                                                >
+                                                                    Current Page
+                                                                </Button>
+                                                                <Button color="secondary" onClick={toggleModal}>
+                                                                    Cancel
+                                                                </Button>
+                                                            </ModalFooter>
+                                                        </Modal> */}
+
+
+                                                        {/* <DropdownItem
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
                                                                 setCurrPosition({ ...currPosition, selectedType: "block" })
                                                                 setIndexes({ cur: key, curElem: curElem.positionType, subElem: j + 1 })
                                                                 const arr = [...colWise]
@@ -3532,14 +4140,24 @@ const CustomizationParent = () => {
     }
 
     const saveWhatsAppTemplate = async (id) => {
-        console.log(id, ">>>>>>>>>> id")
+        // console.log(id, ">>>>>>>>>> id")
         const form_data = new FormData()
         form_data.append("superleadz_template", id)
         const secondsConverted = await convertToSeconds({ time: Number(finalObj?.whatsapp?.time), type: finalObj?.whatsapp?.timeType })
-        console.log(secondsConverted, "secondsConverted")
+        const campaign_secondsConverted = await convertToSeconds({ time: Number(finalObj?.whatsapp?.campaign_time), type: finalObj?.whatsapp?.campaign_timeType })
+        const campaign_two_secondsConverted = await convertToSeconds({ time: Number(finalObj?.whatsapp?.second_campaign_time), type: finalObj?.whatsapp?.second_campaign_timeType })
+
+        // console.log(secondsConverted, "secondsConverted")
+        const now = moment(new Date())
+        const scheduledTime = now.add(campaign_secondsConverted, 'seconds')
         const json_data = {
             template: finalObj?.whatsapp?.template,
-            delay: secondsConverted
+            campaign: finalObj?.whatsapp?.campaign,
+            second_campaign: finalObj?.whatsapp?.second_campaign,
+            delay: secondsConverted,
+            campagin_delay: campaign_secondsConverted,
+            second_campagin_delay: campaign_two_secondsConverted,
+            timestamp_schedule_str: scheduledTime
         }
         form_data.append("json_data", JSON.stringify(json_data))
 
@@ -3595,6 +4213,12 @@ const CustomizationParent = () => {
             form_data.append('shop', outletData[0]?.web_url)
             form_data.append('app', 'superleadz')
             Object.entries(finalObj.behaviour).forEach(([key, value]) => {
+                console.log(key, "========key")
+                // if (finalObj.behaviour?.EXCLUDE_PAGE_LINK.length > 0) {
+                //     concat_val = `exclude${value}`
+                // } else {
+                //     concat_val = value
+                // }
                 if (Array.isArray(value)) {
                     value.forEach(ele => form_data.append(key, ele))
                 } else {
@@ -3618,6 +4242,7 @@ const CustomizationParent = () => {
             form_data.append("is_edit", themeId === 0 ? 0 : 1)
             // form_data.append("source", )
             finalObj?.behaviour?.SOURCE_PAGE_LINK?.map((curElem) => form_data.append("source", `${curElem}_page`))
+            finalObj?.behaviour?.collections?.map((curElem) => form_data.append("collection_id", curElem))
 
             form_data.append("theme_id", themeId)
             form_data.append("is_draft", 0)
@@ -3651,7 +4276,7 @@ const CustomizationParent = () => {
                             data: form_data
                         })
                             .then((resp) => {
-                                console.log(resp)
+                                // console.log(resp)
                                 if (resp.data.response.length === 0) {
                                     const form_data = new FormData()
                                     form_data.append("shop", outletData[0]?.web_url)
@@ -3667,7 +4292,7 @@ const CustomizationParent = () => {
                                             if (actionType === "Save & Close") {
                                                 navigate('/merchant/SuperLeadz/all_campaigns/')
                                             } else if (actionType === "Save & Preview") {
-                                                navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) } })
+                                                navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) }, target: '_blank' })
                                             }
                                             setApiLoader(false)
                                         })
@@ -3683,7 +4308,7 @@ const CustomizationParent = () => {
                                     if (actionType === "Save & Close") {
                                         navigate('/merchant/SuperLeadz/all_campaigns/')
                                     } else if (actionType === "Save & Preview") {
-                                        navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) } })
+                                        navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) }, target: '_blank' })
                                     }
                                     setApiLoader(false)
                                 }
@@ -3701,7 +4326,7 @@ const CustomizationParent = () => {
                         if (actionType === "Save & Close") {
                             navigate('/merchant/SuperLeadz/all_campaigns/')
                         } else if (actionType === "Save & Preview") {
-                            navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) } })
+                            navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) }, target: '_blank' })
                         }
                     }
                 }
@@ -3714,6 +4339,227 @@ const CustomizationParent = () => {
                 })
         }
     }
+
+    const handleSaveDataAdmin = (e, actionType) => {
+        e.preventDefault()
+        setApiLoader(true)
+        const includesInput = []
+        finalObj?.pages?.forEach((ele) => {
+            ele?.values?.forEach((cur) => {
+                cur?.elements?.forEach((curElem) => {
+                    curElem?.element?.forEach((subElem) => {
+                        if (subElem?.type === "input" && subElem?.inputType === "") {
+                            includesInput?.push({ page: ele?.pageName, screen: "desktop" })
+                        }
+                    })
+                })
+            })
+        })
+        finalObj?.mobile_pages?.forEach((ele) => {
+            ele?.values?.forEach((cur) => {
+                cur?.elements?.forEach((curElem) => {
+                    curElem?.element?.forEach((subElem) => {
+                        if (subElem?.type === "input" && subElem?.inputType === "") {
+                            includesInput?.push({ page: ele?.pageName, screen: "phone" })
+                        }
+                    })
+                })
+            })
+        })
+        if (!finalObj.SuperLeadzPurpose || finalObj.SuperLeadzPurpose.length === 0) {
+            toast.error("Please select Purpose.")
+            return setApiLoader(false)
+        }
+
+        if (!finalObj.SuperLeadzStrategy || finalObj.SuperLeadzStrategy.length === 0) {
+            toast.error("Please select Strategy.")
+            return setApiLoader(false)
+        }
+
+        if (!finalObj.SuperLeadzTone || finalObj.SuperLeadzTone.length === 0) {
+            toast.error("Please select Brand Voice (Tone).")
+            return setApiLoader(false)
+        }
+        if (themeName === "") {
+            toast.error("Enter a theme name")
+            setApiLoader(false)
+        } else if (isOfferDraggable && phoneIsOfferDraggable && finalObj.selectedOffers.length === 0) {
+            setApiLoader(false)
+            toast.error("Add some offers to your Theme!")
+        } else if (includesInput?.length > 0) {
+            setApiLoader(false)
+            toast.error(<span> You have not selected input type {includesInput.map((ip, i) => {
+                return <span>in {ip?.screen} view on {<span className='text-capitalize'>{ip?.page}</span>}{ip?.page?.toLowerCase()?.includes("page") ? "" : "page"}{includesInput.length - 1 === i ? "." : ", "}</span>
+            })}
+            </span>)
+        } else {
+            const form_data = new FormData()
+            form_data.append('shop', outletData[0]?.web_url)
+            form_data.append('app', 'superleadz')
+            // Object.entries(finalObj.behaviour).forEach(([key, value]) => {
+            //     if (Array.isArray(value)) {
+            //         value.forEach(ele => form_data.append(key, ele))
+            //     } else {
+            //         form_data.append(key, value)
+            //     }
+            // })
+            // finalObj.selectedOffers.forEach((offer) => {
+            form_data.append("selected_offer_list", JSON.stringify(finalObj.selectedOffers))
+            // })
+            const dupFinalObj = { ...finalObj }
+            dupFinalObj.rules.display_frequency_value_converted = convertToSeconds({ time: finalObj?.rules?.display_frequency_value, type: finalObj?.rules?.display_frequency_time })
+            dupFinalObj.rules.spent_on_page_value_converted = convertToSeconds({ time: finalObj?.rules?.spent_on_page_value, type: finalObj?.rules?.spent_on_page_time })
+            dupFinalObj.rules.spent_on_website_value_converted = convertToSeconds({ time: finalObj?.rules?.spent_on_website_value, type: finalObj?.rules?.spent_on_website_time })
+            dupFinalObj.rules.not_active_page_value_converted = convertToSeconds({ time: finalObj?.rules?.not_active_page_value, type: finalObj?.rules?.not_active_page_time })
+            form_data.append("default_theme", JSON.stringify(dupFinalObj))
+            // form_data.append("email_template_json", JSON.stringify(finalObj?.email_settings))
+            // form_data.append("campaign_name", themeName)
+            // form_data.append("start_date", finalObj.campaignStartDate)
+            // form_data.append("end_date", finalObj.campaignEndDate)
+            form_data.append("default_id", selectedThemeId)
+            form_data.append("is_edit", themeId === 0 ? 0 : 1)
+            // form_data.append("source", )
+            finalObj?.behaviour?.SOURCE_PAGE_LINK?.map((curElem) => form_data.append("source", `${curElem}_page`))
+
+            form_data.append("theme_id", themeId)
+            form_data.append("is_draft", 0)
+
+            axios({
+                method: "POST", url: `${SuperLeadzBaseURL}/api/v1/add_default_theme/`, data: form_data
+            }).then((data) => {
+
+                if (data?.data?.exist) {
+                    setApiLoader(false)
+                    toast.error("Campaign name already exist")
+                } else {
+
+                    localStorage.removeItem("draftId")
+                    setThemeId(data?.data.theme_id)
+                    toast.success(<div style={{ fontSize: '14px' }}><span className='pb-1'>Your campaign is ready to go live!</span>  <br /><span>Toggle the status to activate the campaign.</span> </div>)
+
+                    saveWhatsAppTemplate(data?.data.theme_id)
+
+
+                    if (defaultIsMobile.get("status") === "true") {
+                        const getUrl = new URL(`${SuperLeadzBaseURL}/api/v1/add_default_theme/`)
+                        const form_data = new FormData()
+                        form_data.append("shop", outletData[0]?.web_url)
+                        form_data.append("app", "superleadz")
+                        form_data.append('theme_id', data?.data.theme_id)
+                        form_data.append('campaign_name', themeName)
+                        axios({
+                            method: "POST",
+                            url: getUrl,
+                            data: form_data
+                        })
+                            .then((resp) => {
+                                // console.log(resp)
+                                if (resp.data.response.length === 0) {
+                                    const form_data = new FormData()
+                                    form_data.append("shop", outletData[0]?.web_url)
+                                    form_data.append("app", "superleadz")
+                                    form_data.append('theme_id', data?.data.theme_id)
+                                    form_data.append('campaign_name', themeName)
+                                    form_data.append('is_active', 1)
+                                    axios(`${SuperLeadzBaseURL}/api/v1/add_default_theme/`, {
+                                        method: 'POST',
+                                        data: form_data
+                                    })
+                                        .then(() => {
+                                            if (actionType === "Save & Close") {
+                                                navigate('/merchant/SuperLeadz/all_campaigns/')
+                                            } else if (actionType === "Save & Preview") {
+                                                navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) }, target: '_blank' })
+                                            }
+                                            setApiLoader(false)
+                                        })
+                                        .catch(err => {
+                                            console.log(err)
+                                            toast.error("Somthing went wrong!")
+                                        })
+                                        .finally(() => {
+                                            setApiLoader(false)
+                                        })
+
+                                } else {
+                                    if (actionType === "Save & Close") {
+                                        navigate('/merchant/SuperLeadz/all_campaigns/')
+                                    } else if (actionType === "Save & Preview") {
+                                        navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) }, target: '_blank' })
+                                    }
+                                    setApiLoader(false)
+                                }
+
+                            })
+                            .catch((error) => {
+                                console.log(error)
+                                toast.error("Somthing went wrong!")
+                            })
+                            .finally(() => {
+                                setApiLoader(false)
+                            })
+                    } else {
+                        setApiLoader(false)
+                        if (actionType === "Save & Close") {
+                            navigate('/merchant/SuperLeadz/all_campaigns/')
+                        } else if (actionType === "Save & Preview") {
+                            navigate(`/merchant/SuperLeadz/preview/${data?.data.theme_id}/`, { state: { custom_theme: JSON.stringify(finalObj) }, target: '_blank' })
+                        }
+                    }
+                }
+            }).catch((error) => {
+                setApiLoader(false)
+                console.log({ error })
+            })
+                .finally(() => {
+                    setApiLoader(false)
+                })
+        }
+    }
+
+    // const handleSaveDataAdmin = (e, type) => {
+    //     // if (prevData?.page_1?.campaignStartDate) {
+    //     //     toast.error("Please select a start date")
+    //     //     return
+    //     // }
+    //     e.preventDefault()
+    //     setApiLoader(true)
+    //     const timeout = 300
+    //     clearTimeout(saveTimer)
+    //     saveTimer = setTimeout(() => {
+    //         const form_data = new FormData()
+    //         const sendObj = {
+    //             shop: outletData[0]?.web_url,
+    //             app: userPermission?.appName,
+    //             default_theme: JSON.stringify(finalObj)
+    //         }
+    //         console.log(sendObj, "kuguyuygyu")
+    //         Object.entries({ ...sendObj })?.map(([key, value]) => {
+    //             form_data.append(key, value)
+    //         })
+    //         // form_data.append('email_template', prevData?.htmlContent)
+    //         const url = new URL(`${SuperLeadzBaseURL}/api/v1/add_default_theme/`)
+    //         axios({
+    //             method: "POST",
+    //             data: form_data,
+    //             url
+    //         }).then((data) => {
+    //             console.log(data)
+    //             toast.success('Saved Successfully')
+    //             setApiLoader(false)
+    //             if (type === "Save & Close") {
+    //                 navigate("/merchant/Flash_Accounts/all_campaigns/")
+    //             } else {
+    //                 navigate(`/merchant/Flash_Accounts/settings/${data.data.theme_id}`, { replace: true })
+    //             }
+    //         }).catch((error) => {
+    //             console.log({ error })
+    //             toast.error("There was an error while saving your data")
+    //             setApiLoader(false)
+    //         })
+    //     }, timeout)
+    // }
+
 
     const saveDraft = async () => {
         const form_data = new FormData()
@@ -3783,7 +4629,7 @@ const CustomizationParent = () => {
     //     // form_data.append("type_of_content", "coupon text")
     //     form_data.append("prompt", "redeem OFFER_CODE and get 20% off")
 
-    //     // for (let index = 0; index < 5; index++) {
+    //     // for (let index = 0 index < 5 index++) {
     //     axios({
     //         method: "POST",
     //         url: suggestionUrl,
@@ -3835,7 +4681,15 @@ const CustomizationParent = () => {
             setValues(currPage === "button" ? { ...finalObj?.[`${mobileCondition}button`][indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style } : { ...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style })
         }
 
+        getAllThemes()
+
     }, [isMobile, currPage])
+
+    useEffect(() => {
+        if (localStorage) {
+            localStorage.setItem('themeName', themeName)
+        }
+    }, [themeName])
 
     useEffect(() => {
         const newObj = { ...finalObj }
@@ -4157,14 +5011,14 @@ const CustomizationParent = () => {
         } else {
             setValues(currPage === "button" ? { ...newObj?.button[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style } : { ...newObj?.pages[newObj?.pages?.findIndex($ => $?.id === currPage)]?.values[indexes.cur]?.elements[positionIndex]?.element[indexes.subElem]?.style })
         }
-        updatePresent({ ...newObj, defaultThemeColors: { ...finalObj.defaultThemeColors, [currColor]: defColors[currColor] } })
+        updatePresent({ ...newObj, defaultThemeColors: { ...finalObj?.defaultThemeColors, [currColor]: defColors[currColor] } })
     }, [defColors, currColor])
 
     useEffect(() => {
-        if (finalObj.whatsapp?.template) {
-            setSingleTemplate(whatsAppTemplate?.filter((curElem) => String(curElem?.id) === String(finalObj.whatsapp?.template)))
+        if (finalObj?.whatsapp?.template) {
+            setSingleTemplate(whatsAppTemplate?.filter((curElem) => String(curElem?.id) === String(finalObj?.whatsapp?.template)))
         }
-    }, [finalObj.whatsapp?.template])
+    }, [finalObj?.whatsapp?.template])
 
     useEffect(() => {
         localStorage.setItem("draftId", themeId)
@@ -4174,30 +5028,35 @@ const CustomizationParent = () => {
     //     updatePresent({ ...finalObj, offerTheme })
     // }, [offerTheme])
 
-    useEffect(() => {
-        const draggedTypes = new Array()
-        const colWise = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
-        colWise?.forEach(cur => {
-            cur?.elements?.forEach(curElem => {
-                curElem.element?.forEach(subElem => {
-                    if (subElem?.type === "input") {
-                        draggedTypes?.push(subElem?.inputType)
-                    }
+    if (!isAdmin) {
+        useEffect(() => {
+            const draggedTypes = new Array()
+            const colWise = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
+            colWise?.forEach(cur => {
+                cur?.elements?.forEach(curElem => {
+                    curElem.element?.forEach(subElem => {
+                        if (subElem?.type === "input") {
+                            draggedTypes?.push(subElem?.inputType)
+                        }
+                    })
                 })
             })
-        })
 
-        setDisableIpDrag([...draggedTypes])
-        localStorage.setItem("defaultTheme", JSON.stringify(finalObj))
-        const draftIntervalTimer = 30000
-        const draftInterval = setInterval(() => {
-            if (themeLoc?.pathname?.includes("/merchant/SuperLeadz/new_customization/")) {
-                saveDraft()
-            }
-        }, draftIntervalTimer)
+            setDisableIpDrag([...draggedTypes])
+            localStorage.setItem("defaultTheme", JSON.stringify(finalObj))
+            const draftIntervalTimer = 30000
+            const draftInterval = setInterval(() => {
+                if (themeLoc?.pathname?.includes("/merchant/SuperLeadz/new_customization/")) {
+                    saveDraft()
+                }
+            }, draftIntervalTimer)
 
-        return () => clearInterval(draftInterval)
-    }, [finalObj])
+            // localStorage.setItem("defaultTheme", final)
+
+            return () => clearInterval(draftInterval)
+        }, [finalObj])
+    }
+
 
     useEffect(() => {
         setCurrPosition({ ...currPosition, selectedType: sideNav === "rules" ? "display_frequency" : "navMenuStyles" })
@@ -4229,31 +5088,45 @@ const CustomizationParent = () => {
 
     const integratedList = () => {
         getReq("integration", `?app_name=${userPermission?.appName}`)
-            .then((resp) => {
-                setConnectedList(resp?.data?.connected_app_list?.map((curElem) => curElem?.integrated_app?.slug))
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        .then((resp) => {
+            setConnectedList(resp?.data?.connected_app_list?.map((curElem) => curElem?.integrated_app?.slug))
+        })
+        .catch((error) => {
+            console.log(error)
+        })
 
         getReq("getTemplates")
-            .then((resp) => {
-                console.log(resp, "ppppppp")
-                setWhatsAppTemplate(resp?.data?.data)
-                const activeTemplate = resp?.data?.data?.map((curElem) => {
-                    if (resp?.data?.active_id.includes(curElem?.id)) {
-                        return { label: curElem?.name, value: curElem?.id }
-                    } else {
-                        return null
-                    }
-                }).filter(elem => elem !== null)
-                // console.log(activeTemplate, "ppppppp")
-                setWhatsappTem(activeTemplate)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        .then((resp) => {
+            // console.log(resp, "ppppppp")
+            setWhatsAppTemplate(resp?.data?.data)
+            const activeTemplate = resp?.data?.data?.map((curElem) => {
+                if (resp?.data?.active_id.includes(curElem?.id)) {
+                    return { label: curElem?.name, value: curElem?.id }
+                } else {
+                    return null
+                }
+            }).filter(elem => elem !== null)
+            // console.log(activeTemplate, "ppppppp")
+            setWhatsappTem(activeTemplate)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+
+        // getReq("campaign_details_list")
+        // .then((resp) => {
+        //     console.log(resp, "campaign_details_list")
+        //     const campaign_list = resp?.data?.data?.map((curElem) => {
+        //         return { label: curElem?.campaign_name, value: curElem?.id }
+        //     })
+        //     setCampaignTem(campaign_list)
+        // })
+        // .catch((error) => {
+        //     console.log(error)
+        // })
     }
+
+    // console.log(campaignTem)
 
     useEffect(() => {
         getEmailSettings()
@@ -4314,7 +5187,7 @@ const CustomizationParent = () => {
                 const moveObj = { ...finalObj }
 
                 const dupArr = currPage === "button" ? moveObj.button : moveObj.pages[moveObj.pages.findIndex($ => $.id === currPage)].values
-                console.log("co-ordinates onMouseMove", e, e.clientX - resizeMouse?.initial, resizeMouse?.initial, e.clientX, { rowSize, colWidth1, colWidth2, calcWidth: e.clientX - resizeMouse?.initial, resizeMouse })
+                // console.log("co-ordinates onMouseMove", e, e.clientX - resizeMouse?.initial, resizeMouse?.initial, e.clientX, { rowSize, colWidth1, colWidth2, calcWidth: e.clientX - resizeMouse?.initial, resizeMouse })
 
                 dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col1].style.width = `${colWidth1}%`
                 dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col2].style.width = `${colWidth2}%`
@@ -4331,6 +5204,12 @@ const CustomizationParent = () => {
 
         integratedList()
 
+        // if (!themeName) {
+        //     const name = `Campaign - ${generateRandomString}`
+        //     setThemeName(name)
+        //     updatePresent({...finalObj, theme_name: name})
+        // }
+
         // if (status) {
         //     document.getElementById("phone").click()
         // } else if (defaultIsMobile.get('isMobile') === 'false') {
@@ -4338,11 +5217,38 @@ const CustomizationParent = () => {
         // }
         return () => {
             localStorage.removeItem("draftId")
-            localStorage.removeItem("defaultThemeId")
-            localStorage.removeItem("defaultTheme")
+            // localStorage.removeItem("defaultThemeId")
+            // localStorage.removeItem("defaultTheme")
         }
 
     }, [])
+
+    const getCollections = () => {
+        const form_data = new FormData()
+        form_data.append("shop", outletData[0]?.web_url)
+        form_data.append("app_name", "superleadz")
+        fetch(`${SuperLeadzBaseURL}/api/v1/get/get_shopify_collections/`, {
+            method: "POST",
+            body: form_data
+        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log(data)
+                // setCollectionData(data?.response?.custom_collections ? data.response.custom_collections : [])
+                setCollectionList(data.response.custom_collections.map((curElem) => {
+                    return { value: curElem.id, label: curElem.title }
+                }))
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
+    useEffect(() => {
+        if (finalObj?.behaviour?.PAGES?.includes("collections_page")) {
+            getCollections()
+        }
+    }, [finalObj?.behaviour?.PAGES])
 
     return (
         <Suspense fallback={null}>
@@ -4367,7 +5273,7 @@ const CustomizationParent = () => {
                         const newObj = { ...finalObj }
 
                         const dupArr = currPage === "button" ? newObj.button : newObj.pages[newObj.pages.findIndex($ => $.id === currPage)].values
-                        console.log("co-ordinates onMouseMove", e, e.clientX - resizeMouse?.initial, resizeMouse?.initial, e.clientX, { rowSize, colWidth1, colWidth2, calcWidth: e.clientX - resizeMouse?.initial, resizeMouse })
+                        // console.log("co-ordinates onMouseMove", e, e.clientX - resizeMouse?.initial, resizeMouse?.initial, e.clientX, { rowSize, colWidth1, colWidth2, calcWidth: e.clientX - resizeMouse?.initial, resizeMouse })
 
                         dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col1].style.width = `${colWidth1}%`
                         dupArr[resizeMouse?.move?.cur].elements[resizeMouse?.move?.col2].style.width = `${colWidth2}%`
@@ -4388,6 +5294,7 @@ const CustomizationParent = () => {
                     <Row className='align-items-center px-0'>
                         <div className='col-md-2 d-flex justify-content-start align-items-center gap-1'>
                             <button onClick={() => {
+                                localStorage.removeItem("defaultTheme")
                                 navigate(-1)
                             }} className="btn" style={{ border: "none", outline: "none" }}><ArrowLeft /></button>
                             <div className="d-flex flex-column align-items-center justify-content-center" style={{ gap: "0.5rem", cursor: "pointer", height: "55px" }}>
@@ -4406,6 +5313,8 @@ const CustomizationParent = () => {
                             <div className="d-flex justify-content-center align-items-center" style={{ border: '1px solid #d8d6de', borderRadius: '0.357rem', gap: '5px' }}>
                                 <input id='campaignNameInput' type="text" placeholder='Enter theme name' value={themeName} onKeyDown={e => e.key === "Enter" && setNameEdit(!nameEdit)} onChange={e => {
                                     setThemeName(e.target.value)
+                                    // updatePresent({ ...finalObj, theme_name: { ...finalObj, theme_name: e.target.value } })
+
                                 }} disabled={nameEdit} className="form-control" style={{ width: '250px', border: 'none' }} />
                                 <a style={{ marginRight: '5px' }} onClick={() => setNameEdit(!nameEdit)}>
                                     {
@@ -4413,11 +5322,29 @@ const CustomizationParent = () => {
                                     }
                                 </a>
                             </div>
+                            {/* <div className="d-flex justify-content-center align-items-center" style={{ border: '1px solid #d8d6de', borderRadius: '0.357rem', gap: '5px' }}>
+                                <input
+                                    id='campaignNameInput'
+                                    type="text"
+                                    placeholder='Enter theme name'
+                                    value={themeName}
+                                    onKeyDown={e => e.key === "Enter" && setNameEdit(!nameEdit)}
+                                    onChange={e => handleThemeNameChange(e.target.value)}
+                                    disabled={nameEdit}
+                                    className="form-control"
+                                    style={{ width: '250px', border: 'none' }}
+                                />
+                                <a style={{ marginRight: '5px' }} onClick={() => setNameEdit(!nameEdit)}>
+                                    {
+                                        nameEdit ? <Edit size={'18px'} /> : <Check size={'18px'} />
+                                    }
+                                </a>
+                            </div> */}
                             <div style={{ gap: "0.5rem" }} className="d-flex align-items-center">
                                 <button title="Undo" id="xircls_undo" className="btn border btn-dark" style={{ padding: "0.75rem" }} onClick={() => undo()}><RotateCcw size={15} /></button>
                                 <button title="Redo" id="xircls_redo" className="btn border btn-dark" style={{ padding: "0.75rem" }} onClick={() => redo()}><RotateCw size={15} /></button>
                             </div>
-                            <button className="btn custom-btn-outline" onClick={() => setCancelCust(!cancelCust)}>Cancel</button>
+                            <button className="btn custom-btn-outline" onClick={() => { setCancelCust(!cancelCust) }}>Cancel</button>
                             {/* <button onClick={() => undo()}>Undo</button>
                             <button onClick={() => redo()}>Redo</button> */}
                             <button disabled={currPageIndex === 0} onClick={() => {
@@ -4426,9 +5353,14 @@ const CustomizationParent = () => {
                             <button disabled={currPage === "button"} onClick={() => {
                                 setCurrPage(currPage === finalObj.pages[finalObj.pages.length - 1].id ? "button" : finalObj.pages[currPageIndex + 1].id)
                             }} className="btn custom-btn-outline">Next</button>
-                            <button onClick={(e) => sendData(e, "Save & Preview")} id='saveBtn1' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Preview</button>
-                            <button onClick={(e) => sendData(e, "Save")} id='saveBtn2' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Save</button>
-                            <button onClick={(e) => sendData(e, "Save & Close")} id='saveBtn3' className="btn btn-primary-main" style={{ whiteSpace: 'nowrap' }}>Save & Close</button>
+                            <button onClick={isAdmin ? (e) => handleSaveDataAdmin(e, "Save & Preview") : (e) => sendData(e, "Save & Preview")} id='saveBtn1' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Preview</button>
+                            {/* <a onClick={(e) => sendData(e, "Save & Preview")} id='saveBtn1' className="btn custom-btn-outline" target="_blank" rel="noopener noreferrer" style={{ whiteSpace: 'nowrap' }}>Previews</a>
+                            <a href="/merchant/SuperLeadz/preview/19012/" id="previewLink" target="_blank" rel="noopener noreferrer" style={{ display: 'none' }}></a> */}
+                            {/* <button onClick={isAdmin ? (e) => handleSaveDataAdmin(e, "Save") : (e) => sendData(e, "Save")} id='saveBtn2' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Save</button> */}
+                            {/* <button onClick={isAdmin ? (e) => handleSaveDataAdmin(e, "Save & Close") : (e) => sendData(e, "Save & Close")} id='saveBtn3' className="btn btn-primary-main" style={{ whiteSpace: 'nowrap' }}>Save & Close</button> */}
+                            <button onClick={isAdmin ? (e) => handleSaveDataAdmin(e, "Save") : (e) => { localStorage.removeItem("defaultTheme"); sendData(e, "Save") }} id='saveBtn2' className="btn custom-btn-outline" style={{ whiteSpace: 'nowrap' }}>Save</button>
+                            <button onClick={isAdmin ? (e) => handleSaveDataAdmin(e, "Save & Close") : (e) => { localStorage.removeItem("defaultTheme"); sendData(e, "Save & Close") }} id='saveBtn3' className="btn btn-primary-main" style={{ whiteSpace: 'nowrap' }}>Save & Close</button>
+
                         </div>
                     </Row>
                 </Container>
@@ -4486,7 +5418,7 @@ const CustomizationParent = () => {
                             </button>
                             <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Elements</span>
                         </div>
-                        <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "offers" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => {
+                        {finalObj?.pages?.find(page => page.pageName === "Offer Display")?.pageName === "Offer Display" && <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "offers" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => {
                             setSideNav(sideNav === "offers" ? "" : "offers")
                             setCurrPage("offers")
                         }}>
@@ -4494,7 +5426,8 @@ const CustomizationParent = () => {
                                 <Tag size={15} />
                             </button>
                             <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Offers</span>
-                        </div>
+                        </div>}
+
                         <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "criteria" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => setSideNav(sideNav === "criteria" ? "" : "criteria")}>
                             <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
                                 <Crosshair size={15} />
@@ -4505,7 +5438,7 @@ const CustomizationParent = () => {
                             setSideNav(sideNav === "rules" ? "" : "rules")
                         }}>
                             <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
-                                <FaListCheck size={15} />
+                                <TiClipboard size={15} />
                             </button>
                             <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Rules</span>
                         </div>
@@ -4528,6 +5461,21 @@ const CustomizationParent = () => {
                                 <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Whatsapp</span>
                             </div>
                         }
+                        {
+                            isAdmin ? <>
+                                {
+                                    <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "admin" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => {
+                                        setSideNav("admin")
+                                    }}>
+                                        <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
+                                            <GrUserAdmin size={15} />
+                                        </button>
+                                        <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase transformSideBar`}>Admin</span>
+                                    </div>
+                                }
+                            </> : ''
+                        }
+
                     </div>
                     {/* Sidebar */}
 
@@ -5018,29 +5966,29 @@ const CustomizationParent = () => {
                                                                 </>
                                                             }
                                                             <div className='py-1 px-2 mt-1'>
-                                                                    <div className="row mt-2">
-                                                                        <p className='m-0 fw-bolder text-black text-uppercase' style={{ fontSize: "0.75rem" }}>Source:</p>
-                                                                        {/* <label htmlFor="" className='mb-1' style={{ fontSize: "12px" }}>Source:</label> */}
-                                                                        <Select
-                                                                            isMulti={true}
-                                                                            options={sourceList}
-                                                                            inputId="aria-example-input"
-                                                                            closeMenuOnSelect={false}
-                                                                            name="source"
-                                                                            placeholder="Add Source"
-                                                                            value={sourceList?.filter(option => finalObj?.behaviour?.SOURCE_PAGE_LINK?.includes(option.value))}
-                                                                            onChange={(options) => {
-                                                                                const option_list = options.map((cur) => {
-                                                                                    return cur.value
-                                                                                })
-                                                                                updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, SOURCE_PAGE_LINK: option_list } })
-                                                                                console.log(finalObj?.behaviour?.PAGES?.includes("custom_source"), 'jyguyuyuyg')
-                                                                                // const newObj = { ...finalObj }
-                                                                                // newObj.behaviour.SOURCE_PAGE_LINK = [...finalObj.behaviour.CUSTOM_PAGE_LINK, ""]
-                                                                                // updatePresent(newObj)
-                                                                            }}
-                                                                        />
-                                                                    </div>
+                                                                <div className="row mt-2">
+                                                                    <p className='m-0 fw-bolder text-black text-uppercase' style={{ fontSize: "0.75rem" }}>Source:</p>
+                                                                    {/* <label htmlFor="" className='mb-1' style={{ fontSize: "12px" }}>Source:</label> */}
+                                                                    <Select
+                                                                        isMulti={true}
+                                                                        options={sourceList}
+                                                                        inputId="aria-example-input"
+                                                                        closeMenuOnSelect={false}
+                                                                        name="source"
+                                                                        placeholder="Add Source"
+                                                                        value={sourceList?.filter(option => finalObj?.behaviour?.SOURCE_PAGE_LINK?.includes(option.value))}
+                                                                        onChange={(options) => {
+                                                                            const option_list = options.map((cur) => {
+                                                                                return cur.value
+                                                                            })
+                                                                            updatePresent({ ...finalObj, behaviour: { ...finalObj?.behaviour, SOURCE_PAGE_LINK: option_list } })
+                                                                            // console.log(finalObj?.behaviour?.PAGES?.includes("custom_source"), 'jyguyuyuyg')
+                                                                            // const newObj = { ...finalObj }
+                                                                            // newObj.behaviour.SOURCE_PAGE_LINK = [...finalObj.behaviour.CUSTOM_PAGE_LINK, ""]
+                                                                            // updatePresent(newObj)
+                                                                        }}
+                                                                    />
+                                                                </div>
                                                             </div>
 
                                                         </div>
@@ -5793,7 +6741,9 @@ const CustomizationParent = () => {
                                         </div>}
                                         {/* Button Section */}
                                         {/* Offer Section */}
-                                        {sideNav === "offers" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%", maxHeight: "100%", overflow: "auto" }}>
+                                        {/* {console.log(finalObj?.pages?.find(page => page.pageName === "Offer Display")?.pageName === "Offer Display", "finalObj")} */}
+                                        {sideNav === "offers" && (
+                                            <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%", maxHeight: "100%", overflow: "auto" }}>
                                             <div className="toggleSection border-end d-flex align-items-stretch justify-content-start mb-1">
                                                 <div style={{ width: `33.3333%`, padding: "0.35rem", height: "100%" }}>
                                                     <div draggable={isMobile ? phoneIsOfferDraggable : isOfferDraggable} onDragStart={(e) => {
@@ -5875,7 +6825,7 @@ const CustomizationParent = () => {
                                                     </AccordionBody>
                                                 </AccordionItem>
                                             </UncontrolledAccordion>
-                                        </div>}
+                                            </div>)}
                                         {/* Offer Section */}
                                         {/* Criteria section */}
                                         {sideNav === "criteria" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "100%" }}>
@@ -6032,7 +6982,7 @@ const CustomizationParent = () => {
                                                                                         value={finalObj?.whatsapp?.time}
                                                                                         onChange={(e) => {
                                                                                             if (!isNaN(e.target.value)) {
-                                                                                                updatePresent({ ...finalObj, whatsapp: { ...finalObj.whatsapp, time: e.target.value } })
+                                                                                                updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, time: e.target.value } })
                                                                                             }
                                                                                         }}
                                                                                     />
@@ -6044,7 +6994,7 @@ const CustomizationParent = () => {
                                                                                         options={deplayTime}
                                                                                         value={deplayTime?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.timeType))}
                                                                                         // onChange={(e) => setWhatsappJson({...whatsappJson, delay: e.value})}
-                                                                                        onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj.whatsapp, timeType: e.value } })}
+                                                                                        onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, timeType: e.value } })}
                                                                                     />
                                                                                 </div>
                                                                             </Col>
@@ -6055,9 +7005,9 @@ const CustomizationParent = () => {
 
                                                                         <Select
                                                                             options={whatsAppTem}
-                                                                            value={whatsAppTem?.filter((curElem) => String(curElem?.value) === String(finalObj.whatsapp?.template))}
+                                                                            value={whatsAppTem?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.template))}
                                                                             // onChange={(e) => setWhatsappJson({...whatsappJson, template: e.value})}
-                                                                            onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj.whatsapp, template: e.value } })}
+                                                                            onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, template: e.value } })}
 
                                                                         />
                                                                     </div>
@@ -6068,6 +7018,108 @@ const CustomizationParent = () => {
                                                                                     <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Preview</label>
                                                                                     <RenderTemplateUI SingleTemplate={singleTemplate[0]} />
                                                                                 </div>
+                                                                            </>
+                                                                        )
+                                                                    }
+
+                                                                    <div className='py-1'>
+                                                                        <div className="form-check d-flex align-items-center gap-1 mx-0 p-0">
+                                                                            <input id="is_campagin" checked={finalObj?.whatsapp?.is_campaign} type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, is_campaign: e.target.checked } })} />
+                                                                            <label htmlFor='is_campagin' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Send to Abandoned Leads</label>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {
+                                                                        finalObj?.whatsapp?.is_campaign && (
+                                                                            <>
+                                                                                <div className='py-1 pt-0'>
+                                                                                    <Row className='match-height'>
+                                                                                        <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Delay</label>
+                                                                                        <Col md="6">
+                                                                                            <div className='h-100'>
+                                                                                                <input type="text"
+                                                                                                    className='form-control h-100'
+                                                                                                    value={finalObj?.whatsapp?.campaign_time}
+                                                                                                    onChange={(e) => {
+                                                                                                        if (!isNaN(e.target.value)) {
+                                                                                                            updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, campaign_time: e.target.value } })
+                                                                                                        }
+                                                                                                    }}
+                                                                                                />
+                                                                                            </div>
+                                                                                        </Col>
+                                                                                        <Col md="6">
+                                                                                            <div>
+                                                                                                <Select
+                                                                                                    options={deplayTime}
+                                                                                                    value={deplayTime?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.campaign_timeType))}
+                                                                                                    // onChange={(e) => setWhatsappJson({...whatsappJson, delay: e.value})}
+                                                                                                    onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, campaign_timeType: e.value } })}
+                                                                                                />
+                                                                                            </div>
+                                                                                        </Col>
+                                                                                    </Row>
+                                                                                </div>
+                                                                                <div className='py-1'>
+                                                                                    <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Template</label>
+
+                                                                                    <Select
+                                                                                        options={whatsAppTem}
+                                                                                        value={whatsAppTem?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.campaign))}
+                                                                                        onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, campaign: e.value } })}
+                                                                                    />
+                                                                                </div>
+                                                                                <div className='py-1'>
+                                                                                    <div className="form-check d-flex align-items-center gap-1 mx-0 p-0">
+                                                                                        <input id="is_second_delay" checked={finalObj?.whatsapp?.is_second_delay} type="checkbox" name='title' min="0" max="300" className='form-check-input m-0' onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, is_second_delay: e.target.checked } })} />
+                                                                                        <label htmlFor='is_second_delay' style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Add Second Delay</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                                
+                                                                                {
+                                                                                    finalObj?.whatsapp?.is_second_delay && (
+                                                                                        <>
+                                                                                            <div className='py-1 pt-0'>
+                                                                                                <Row className='match-height'>
+                                                                                                    <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Second Delay</label>
+                                                                                                    <Col md="6">
+                                                                                                        <div className='h-100'>
+                                                                                                            <input type="text"
+                                                                                                                className='form-control h-100'
+                                                                                                                value={finalObj?.whatsapp?.second_campaign_time}
+                                                                                                                onChange={(e) => {
+                                                                                                                    if (!isNaN(e.target.value)) {
+                                                                                                                        updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, second_campaign_time: e.target.value } })
+                                                                                                                    }
+                                                                                                                }}
+                                                                                                            />
+                                                                                                        </div>
+                                                                                                    </Col>
+                                                                                                    <Col md="6">
+                                                                                                        <div>
+                                                                                                            <Select
+                                                                                                                options={deplayTime}
+                                                                                                                value={deplayTime?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.second_campaign_timeType))}
+                                                                                                                // onChange={(e) => setWhatsappJson({...whatsappJson, delay: e.value})}
+                                                                                                                onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, second_campaign_timeType: e.value } })}
+                                                                                                            />
+                                                                                                        </div>
+                                                                                                    </Col>
+                                                                                                </Row>
+                                                                                            </div>
+                                                                                            <div className='py-1'>
+                                                                                                <label style={{ fontSize: "0.85rem", width: '100%' }} className="form-check-label m-0 p-0">Template</label>
+
+                                                                                                <Select
+                                                                                                    options={whatsAppTem}
+                                                                                                    value={whatsAppTem?.filter((curElem) => String(curElem?.value) === String(finalObj?.whatsapp?.second_campaign))}
+                                                                                                    onChange={(e) => updatePresent({ ...finalObj, whatsapp: { ...finalObj?.whatsapp, second_campaign: e.value } })}
+                                                                                                />
+                                                                                            </div>
+                                                                                        </>
+                                                                                    )
+                                                                                }
+
                                                                             </>
                                                                         )
                                                                     }
@@ -6083,6 +7135,82 @@ const CustomizationParent = () => {
                                                 </AccordionItem>
                                             </UncontrolledAccordion>
                                         </div>}
+
+                                        {sideNav === "admin" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "90%", height: '100%' }}>
+                                            {/* <div className='d-flex flex-column justify-content-end align-items-center' style={{ padding: "0.5rem", gap: "0.5rem" }}>
+                                                <div className=" mb-1 align-items-center" style={{ gap: '15px', padding: '0px 10px' }}> */}
+                                            {
+                                                isAdmin ? <>
+
+                                                    <div className='ms-1'>
+                                                        <label className="form-check-label m-0 p-0 text-capitalize">Purpose</label>
+                                                        <Select
+                                                            className="form-control mb-1"
+                                                            isMulti={true}
+                                                            options={SuperLeadzPurpose}
+                                                            closeMenuOnSelect={false}
+                                                            value={SuperLeadzPurpose?.filter((curElem) => finalObj?.SuperLeadzPurpose?.includes(String(curElem?.id)))}
+                                                            // value={(option) =>  finalObj?.SuperLeadzPurposeShow || []}
+                                                            onChange={(e) => updatePresent({ ...finalObj, SuperLeadzPurpose: e.map(option => option.id) })}
+                                                        />
+                                                        <label className="form-check-label m-0 p-0 text-capitalize">Strategy</label>
+                                                        <Select
+                                                            className="form-control mb-1"
+                                                            isMulti={true}
+                                                            options={SuperLeadzStrategyFilter}
+                                                            closeMenuOnSelect={false}
+                                                            value={SuperLeadzStrategyFilter.filter(option => finalObj.SuperLeadzStrategy?.includes(option.id))}
+                                                            onChange={(selectedOptions) => {
+                                                                const selectedIds = selectedOptions.map(option => option.id)
+                                                                updatePresent({ ...finalObj, SuperLeadzStrategy: selectedIds })
+                                                            }}
+                                                        />
+
+                                                        <label className="form-check-label m-0 p-0 text-capitalize">Brand Voice</label>
+                                                        <Select
+                                                            className="form-control mb-1"
+                                                            isMulti={true}
+                                                            options={SuperLeadzToneFilter}
+                                                            closeMenuOnSelect={false}
+                                                            value={SuperLeadzToneFilter.filter(option => finalObj.SuperLeadzTone?.includes(option.id))}
+                                                            onChange={(selectedOptions) => {
+                                                                const selectedIds = selectedOptions.map(option => option.id)
+                                                                updatePresent({ ...finalObj, SuperLeadzTone: selectedIds })
+                                                            }}
+                                                        />
+
+                                                    </div>
+
+                                                </> : ''
+                                            }
+                                            {/* <div className='w-100'>
+                                                        <Select
+                                                            className="form-control mb-1"
+                                                            isMulti={true}
+                                                            options={SuperLeadzPurpose.map(curElem => ({ value: curElem.id, label: curElem.label }))}
+                                                            closeMenuOnSelect={false}
+                                                            value={finalObj?.SuperLeadzPurpose || []}
+                                                            onChange={(selectedOptions) => setFinalObj({ ...finalObj, SuperLeadzPurposeShow: selectedOptions, SuperLeadzPurpose: selectedOptions.map(option => option.value) })}
+                                                        />
+                                                        <Select
+                                                            className="form-control mb-1"
+                                                            isMulti={true}
+                                                            options={SuperLeadzStrategy.map(curElem => ({ value: curElem.id, label: curElem.label }))}
+                                                            closeMenuOnSelect={false}
+                                                            value={finalObj?.SuperLeadzStrategyShow || []}
+                                                            onChange={(selectedOptions) => setFinalObj({ ...finalObj, SuperLeadzStrategyShow: selectedOptions, SuperLeadzStrategy: selectedOptions.map(option => option.value) })}
+                                                        />
+
+                                                        <Select
+                                                            className="form-control mb-1"
+                                                            isMulti={true}
+                                                            options={SuperLeadzTone.map(curElem => ({ value: curElem.id, label: curElem.label }))}
+                                                            closeMenuOnSelect={false}
+                                                            value={finalObj?.SuperLeadzToneShow || []}
+                                                            onChange={(selectedOptions) => setFinalObj({ ...finalObj, SuperLeadzToneShow: selectedOptions, SuperLeadzTone: selectedOptions.map(option => option.value) })}
+                                                        />
+                                                    </div> */}
+                                        </div>}
                                         {/* Criteria section */}
                                     </div>
                                 </div>
@@ -6091,7 +7219,7 @@ const CustomizationParent = () => {
                         {/* Section Drawer */}
                         {/* Theme Preview */}
                         <div className="d-flex flex-column align-items-center bg-light-secondary flex-grow-1" style={{ width: sideNav === "rules" ? "auto" : `calc(100vw - ${sideNav !== "" ? sectionWidths.editSection : "0"}px - ${sectionWidths.drawerWidth}px - ${sectionWidths.sidebar}px)`, transition: "0.3s ease-in-out" }}>
-                            {returnRender({ outletData, slPrevBg, bgsettings: finalObj?.overlayStyles, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition: finalObj?.positions?.[`${mobileCondition}${pageCondition}`], bgStyles: finalObj?.backgroundStyles?.[`${mobileCondition}main`], crossStyle: finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise: currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values], setcolWise, dragStartIndex, setDragStartIndex, dragOverIndex, setDragOverIndex, isMobile, setIsMobile, finalObj, setFinalObj: updatePresent, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles: finalObj?.backgroundStyles[`${mobileCondition}button`], offerTheme: finalObj?.offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, setRearr, isColDragging, setIsColDragging, isColRes, setIsColRes, resizeMouse, setResizeMouse, selectedTemID })}
+                            {returnRender({ outletData, slPrevBg, bgsettings: finalObj?.overlayStyles, currPage, setCurrPage, currPosition, setCurrPosition, indexes, setIndexes, popPosition: finalObj?.positions?.[`${mobileCondition}${pageCondition}`], bgStyles: finalObj?.backgroundStyles?.[`${mobileCondition}main`], crossStyle: finalObj?.crossButtons[`${mobileCondition}${pageCondition}`], values, setValues, showBrand, handleElementDrop, handleColDrop, handleDragOver, handleNewDrop, handleLayoutDrop, handleRearrangeElement, mouseEnterIndex, setMouseEnterIndex, mousePos, setMousePos, isEqual, makActive, colWise: currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)]?.values], setcolWise, dragStartIndex, setDragStartIndex, dragOverIndex, setDragOverIndex, isMobile, setIsMobile, finalObj, setFinalObj: updatePresent, mobileCondition, mobileConditionRev, openPage, setOpenPage, brandStyles, gotOffers, setTransfered, sideNav, setSideNav, btnStyles: finalObj?.backgroundStyles[`${mobileCondition}button`], offerTheme: finalObj?.offerTheme, navigate, triggerImage, gotDragOver, setGotDragOver, indicatorPosition, setIndicatorPosition, selectedOffer, setSelectedOffer, renamePage, setRenamePage, pageName, setPageName, undo, updatePresent, openToolbar, setOpenToolbar, updateTextRes, rearr, setRearr, isColDragging, setIsColDragging, isColRes, setIsColRes, resizeMouse, setResizeMouse, selectedTemID })}
                         </div>
                         {/* Theme Preview */}
                         {/* Edit Section */}
@@ -6186,7 +7314,7 @@ const CustomizationParent = () => {
                                                             const newFinalObj = finalObj
                                                             const arr = currPage === "button" ? [...finalObj?.[`${mobileCondition}button`]] : [...finalObj?.[`${mobileCondition}pages`][finalObj?.[`${mobileCondition}pages`]?.findIndex($ => $.id === currPage)].values]
                                                             const arrRev = currPage === "button" ? [...finalObj?.[`${mobileConditionRev}button`]] : [...finalObj?.[`${mobileConditionRev}pages`][finalObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $.id === currPage)].values]
-                                                            if (arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type) {
+                                                            if (arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem]?.type) {
                                                                 arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].type = "image"
                                                             }
                                                             if (arr[indexes.cur].elements[arr[indexes.cur].elements.findIndex($ => $?.positionType === indexes.curElem)].element[indexes.subElem].src) {
@@ -6218,7 +7346,7 @@ const CustomizationParent = () => {
                                                             const finalData = finalObj
 
                                                             // const imageList = arr?.filter((curElem) => curElem?.elements).filter((subElem) => subElem?.element).filter((childElem) => childElem.type === "image" ? isBrandLogo)
-                                                            updatePresent({ ...finalData, defaultThemeColors: { ...finalData.defaultThemeColors, brandLogo: ele.image } })
+                                                            updatePresent({ ...finalData, defaultThemeColors: { ...finalData?.defaultThemeColors, brandLogo: ele.image } })
                                                             setImgModal(!imgModal)
                                                         }
                                                     }}>Use Image</button>
@@ -6292,7 +7420,7 @@ const CustomizationParent = () => {
                                                             const finalData = finalObj
 
                                                             // const imageList = arr?.filter((curElem) => curElem?.elements).filter((subElem) => subElem?.element).filter((childElem) => childElem.type === "image" ? isBrandLogo)
-                                                            updatePresent({ ...finalData, defaultThemeColors: { ...finalData.defaultThemeColors, brandLogo: ele.image } })
+                                                            updatePresent({ ...finalData, defaultThemeColors: { ...finalData?.defaultThemeColors, brandLogo: ele.image } })
                                                             setImgModal(!imgModal)
                                                         }
                                                     }}>Use Image</button>
@@ -6336,6 +7464,7 @@ const CustomizationParent = () => {
                                 <button onClick={() => setCancelCust(!cancelCust)} className="btn btn-outline-dark">No</button><button onClick={() => {
                                     cancelAction()
                                     navigate("/merchant/SuperLeadz/all_campaigns/")
+                                    localStorage.removeItem("defaultTheme")
                                 }} className="btn btn-dark">Yes</button>
                             </div>
                         </Card>
@@ -6432,7 +7561,8 @@ const CustomizationParent = () => {
 
                             <Container>
                                 <Row className="match-height">
-                                    {defaultOfferStyles?.map((ele, key) => {
+                                    <ReturnOfferHtml type="render" updatePresent={updatePresent} finalObj={finalObj} setOffersModal={setOffersModal} offersModal={offersModal} />
+                                    {/* {defaultOfferStyles?.map((ele, key) => {
                                         return (
                                             <Col key={key} md={6}>
                                                 <div onClick={() => {
@@ -6444,7 +7574,7 @@ const CustomizationParent = () => {
                                                 </div>
                                             </Col>
                                         )
-                                    })}
+                                    })} */}
                                 </Row>
                             </Container>
                         </ModalBody>

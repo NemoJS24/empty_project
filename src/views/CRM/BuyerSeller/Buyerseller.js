@@ -113,6 +113,9 @@ const Buyerseller = () => {
         .then((resp) => {
           console.log("Response:", resp)
           toast.success('Buyer Seller saved successfully')
+          if (btn === "SAVE & CLOSE") {
+            navigate(-1)
+          }
         }).catch((error) => {
           console.error("Error:", error)
           if (error.message === 'Customer already exists') {

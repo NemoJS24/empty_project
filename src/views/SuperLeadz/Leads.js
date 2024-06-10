@@ -75,6 +75,14 @@ export default function SuperLeadzLeads() {
             isEnable: true
         },
         {
+            name: 'Phone Number',
+            minWidth: '200px',
+            selector: row => row.mobile,
+            dataType: 'mobile',
+            type: 'text',
+            isEnable: false
+        },
+        {
             name: 'Status',
             minWidth: '10%',
             cell: (row) => {
@@ -137,7 +145,7 @@ export default function SuperLeadzLeads() {
         },
         {
             name: 'Source',
-            minWidth: '200px',
+            minWidth: '100px',
             selector: row => <span style={{ marginTop: '3px' }}>{row?.source ? row?.source : "Direct"}</span>,
             type: 'text',
             isEnable: true
@@ -153,6 +161,18 @@ export default function SuperLeadzLeads() {
                 { label: "No", value: 0 }
             ],
             isEnable: true
+        },
+        {
+            name: 'Abandoned',
+            minWidth: '100px',
+            selector: row => <span style={{ marginTop: '3px' }}>{row?.is_abandoned === 1 || row?.is_abandoned === "1" ? "Yes" : "No"}</span>,
+            type: 'select',
+            options: [
+                { label: "Select", value: "" },
+                { label: "Yes", value: 1 },
+                { label: "No", value: 0 }
+            ],
+            isEnable: false
         }
     ]
 

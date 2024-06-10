@@ -65,7 +65,7 @@ export default function AffiliateTable() {
 
   const columns = [
     {
-      name: 'Created at',
+      name: 'Created On',
       minWidth: '150px',
       selector: row => moment(row.created_at).format("DD-MM-YYYY, h:mm:ss")
       // selector: row => row.created_at

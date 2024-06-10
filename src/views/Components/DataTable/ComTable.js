@@ -78,7 +78,17 @@ const ComTable = ({ tableCol, data, searchValue, filteredData, isLoading, isDeff
     // ** Custom Pagination Component
     const CustomPagination = () => (
         <div className="d-flex w-100 align-items-center justify-content-between">
-        <span>Showing {currentPage + 1} to {currentEntry} of {data.length} entries</span>
+        {
+           Array.isArray(data) && data.length <= 10 ? (
+            <>
+              <span>Showing {currentPage + 1} to {data.length} of {data.length} entries</span>
+            </>
+          ) : (
+            <>
+              <span>Showing {currentPage + 1} to {currentEntry} of {data.length} entries</span>
+            </>
+          )
+        }
         <ReactPaginate
             previousLabel={<Previous size={15} />}
             nextLabel={<Next size={15} />}

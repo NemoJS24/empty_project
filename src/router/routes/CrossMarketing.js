@@ -97,7 +97,8 @@ const CrossMarketing_Routes = [
     {
       path: "/merchant/outlets/tandc/:id/",
       meta: {
-        layout: "custom"
+        layout: "custom",
+        publicRoute: true
       },
       element: <TermsConditions />
     }

@@ -3,11 +3,11 @@ import { Card, CardBody, Col, Row } from 'reactstrap'
 import Select from 'react-select'
 import { getReq, postReq } from '../../assets/auth/jwtService'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getCurrentOutlet, validForm } from '../Validator'
 import Flatpickr from 'react-flatpickr'
 import moment from 'moment'
 import toast from 'react-hot-toast'
 import { PermissionProvider } from '../../Helper/Context'
+import { getCurrentOutlet, validForm } from '../Validator'
 
 const CreateCampaign = () => {
     const { campaign_type, temp_id, campaign_id } = useParams()
@@ -81,16 +81,12 @@ const CreateCampaign = () => {
 
 
     const getDefaultData = () => {
-        getReq("getTemplates")
+        getReq("template_details")
         .then((resp) => {
-            console.log(resp, "ppppppp")
+            console.log(resp, "szdfsdfdsf")
             // setTemplateList(resp?.data?.data)
-            const activeTemplate = resp?.data?.data?.map((curElem) => {
-                if (resp?.data?.active_id.includes(curElem?.id)) {
-                    return { label: curElem?.name, value: curElem?.id }
-                } else {
-                    return null
-                }
+            const activeTemplate = resp?.data?.email_template?.map((curElem) => {
+                return { label: curElem?.template_name, value: curElem?.id }
             }).filter(elem => elem !== null)
             // console.log(activeTemplate, "ppppppp")
             setTemplateList(activeTemplate)
@@ -144,12 +140,12 @@ const CreateCampaign = () => {
                 form_data.append('id', campaign_id)
             }
 
-            postReq('whatsapp_create_campaign', form_data)
+            postReq('email_create_campaign', form_data)
             .then((resp) => {
                 console.log(resp)
                 toast.success('Campaign Saved Successfully')
                 if (type === "save&close") {
-                    navigate('/merchant/whatsapp/campaigns')
+                    navigate('/merchant/Email/campaigns')
                 }
             })
             .catch((error) => {
@@ -159,7 +155,7 @@ const CreateCampaign = () => {
     }
 
     const getCampaignDeatils = () => {
-        getReq('whatsapp_create_campaign', `?campaign_id=${campaign_id}`)
+        getReq('email_create_campaign', `?campaign_id=${campaign_id}`)
         .then((data) => {
             console.log(data?.data?.data?.custom_json, "ppppppppppppp")
             const custom_json_data = JSON.parse(data?.data?.data?.custom_json)

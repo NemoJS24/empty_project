@@ -53,7 +53,7 @@ const supportedBlockTypes = new Set([
   "ol"
 ])
 
-const FONT_FAMILY_OPTIONS = [
+export const FONT_FAMILY_OPTIONS = [
   { label: "Abril Fatface", value: `Abril Fatface` },
   { label: "Acme", value: `Acme` },
   { label: "Caveat", value: `Caveat` },
@@ -71,7 +71,40 @@ const FONT_FAMILY_OPTIONS = [
   { label: "Roboto", value: `Roboto` },
   { label: "Satisfy", value: `Satisfy` },
   { label: "sans-serif", value: `sans-serif` },
-  { label: "Ubuntu", value: `Ubuntu` }
+  { label: "Ubuntu", value: `Ubuntu` },
+  { label: "Advent Pro", value: "Advent Pro" },
+  { label: "Archivo", value: "Archivo" },
+  { label: "Asap", value: "Asap" },
+  { label: "Barlow Condensed", value: "Barlow Condensed" },
+  { label: "Barlow Semi Condensed", value: "Barlow Semi Condensed" },
+  { label: "Barlow", value: "Barlow" },
+  { label: "Be Vietnam Pro", value: "Be Vietnam Pro" },
+  { label: "Bitter", value: "Bitter" },
+  { label: "Chivo", value: "Chivo" },
+  { label: "DM Sans", value: "DM Sans" },
+  { label: "Epilogue", value: "Epilogue" },
+  { label: "Exo 2", value: "Exo 2" },
+  { label: "Exo", value: "Exo" },
+  { label: "Fira Sans Condensed", value: "Fira Sans Condensed" },
+  { label: "Fira Sans", value: "Fira Sans" },
+  { label: "Fraunces", value: "Fraunces" },
+  { label: "Inter Tight", value: "Inter Tight" },
+  { label: "Jost", value: "Jost" },
+  { label: "Kanit", value: "Kanit" },
+  { label: "Libre Franklin", value: "Libre Franklin" },
+  { label: "Montserrat Alternates", value: "Montserrat Alternates" },
+  { label: "Mulish", value: "Mulish" },
+  { label: "Noto Sans Display", value: "Noto Sans Display" },
+  { label: "Noto Serif", value: "Noto Serif" },
+  { label: "Overpass", value: "Overpass" },
+  { label: "Prompt", value: "Prompt" },
+  { label: "Public Sans", value: "Public Sans" },
+  { label: "Rokkitt", value: "Rokkitt" },
+  { label: "Saira", value: "Saira" },
+  { label: "Urbanist", value: "Urbanist" },
+  { label: "Fanwood Text", value: "Fanwood Text" },
+  { label: "Nunito Sans", value: "Nunito Sans" },
+  { label: "Poppins", value: "Poppins" }
 ]
 
 const FONT_SIZE_OPTIONS = []
@@ -88,7 +121,7 @@ const LINE_HEIGHT_OPTIONS = [
   { label: '1', value: '1' },
   { label: '1.25', value: '1.25' },
   { label: '1.5', value: '1.5' },
-  { label: '17.5', value: '1.75' },
+  { label: '1.75', value: '1.75' },
   { label: '2', value: '2' },
   { label: '2.25', value: '2.25' },
   { label: '2.5', value: '2.5' },
@@ -558,7 +591,7 @@ function FontDropDown({
         {(style === 'font-family' ? FONT_FAMILY_OPTIONS : style === "line-height" ? LINE_HEIGHT_OPTIONS : style === "font-weight" ? FONT_WEIGHT_OPTIONS : FONT_SIZE_OPTIONS).map(
           (option, key) => (
             <DropdownItem tag={'button'} className={`item ${dropDownActiveClass(value === option?.value)} ${style === 'font-size' ? 'fontsize-item' : ''}`} onClick={() => handleClick(option?.value)} key={key}>
-              <span className="text">{option?.label}</span>
+              <span className="text" style={{fontFamily : option?.value}}>{option?.label}</span>
             </DropdownItem>
             // <button
             //   className={`item ${dropDownActiveClass(value === option)} ${style === 'font-size' ? 'fontsize-item' : ''

@@ -3,7 +3,7 @@ import { Circle } from 'react-feather'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 
-const PricingCard = ({ purchaseDate, data, id, title, price, selectedPlan, setSelectedPlan, btnCondition, callPlans, features }) => {
+const PricingCard = ({ minutesDifference, purchaseDate, data, id, title, price, selectedPlan, setSelectedPlan, btnCondition, callPlans, features }) => {
     const navigate = useNavigate()
 
     return (
@@ -61,7 +61,7 @@ const PricingCard = ({ purchaseDate, data, id, title, price, selectedPlan, setSe
                     </div>
                     <div className="action">
                         <a className={`btn ${selectedPlan === title ? 'bg-primary text-white' : 'btn btn-outline-primary'} w-100 btn-block`} onClick={() => {
-                            if (purchaseDate < 30 && title === "Forever Free") {
+                            if (minutesDifference > 0 && purchaseDate < 30 && title === "Forever Free") {
                                 toast.error(<>Renewal available after full plan usage or expiration. You will be notified as your plan nears expiry or completion.</>)
                                 return
                             }

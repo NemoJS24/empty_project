@@ -145,7 +145,7 @@ const AddCall = () => {
    }
 
    const getCustomer = () => {
-      getReq("getAllCustomer", "", crmURL)
+      getReq("getAllCustomerNew", "", crmURL)
       .then((resp) => {
          console.log(resp)
          setCustomerList(resp?.data?.success?.map((curElem) => {

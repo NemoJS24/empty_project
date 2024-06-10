@@ -20,16 +20,28 @@ import { postReq } from '../../../assets/auth/jwtService'
 // import { Link } from 'react-router-dom'
 // import { pageNo } from '../../Validator'
 
-const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, data, isLoading, count, isExpand, ExpandableTable, custom, isStyling, selectableRows = false, selectedRows, setSelectedRows, getData, exportUrl, viewAll, isExport, selectedContent, advanceFilter, viewType = "table", setViewType, viewContent, deleteContent, create, createLink, createText, toggledClearRows, customButtonLeft, customButtonRight }) => {
+const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, data, isLoading, count, isExpand, ExpandableTable, custom, isStyling, selectableRows = false, selectedRows, setSelectedRows, getData, exportUrl, viewAll, isExport, selectedContent, advanceFilter, viewType = "table", setViewType, viewContent, deleteContent, create, createLink, createText, toggledClearRows, customButtonLeft, customButtonRight, exportAdditionalData }) => {
   // ** State
   const [currentPage, setCurrentPage] = useState(0)
   const [currentEntry, setCurrentEntry] = useState(custom ? 5 : 10)
   const [exportData, setExportData] = useState({
     fileType: "csv",
-    range: "ALL",
-    selectedData: []
+    range: "10",
+    selectedData: [],
+    batch: "0"
   })
-  
+
+  // const [paginater, setPaginater] = useState(0)
+
+  const exportPageOtp = [
+    { label: '10', value: 10 },
+    { label: '25', value: 25 },
+    { label: '50', value: 50 },
+    { label: '100', value: 100 },
+    { label: '1,000', value: 1000 },
+    { label: '5,000', value: 10000 }
+  ]
+
   const [searchValue, setSearchValue] = useState("")
   const [apiLoader, setApiLoader] = useState(false)
   const outletData = getCurrentOutlet()
@@ -114,6 +126,21 @@ const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, 
   //   getData({currentPage, currentEntry, advanceSearchValue, searchValue})
   // }, [])
 
+  console.log(Math.ceil(count / currentEntry))
+
+  // useEffect(() => {
+  //   if (currentEntry && count) {
+  //     setPaginater(Math.ceil(count / currentEntry))
+  //   }
+
+  // }, [count, currentEntry])
+
+  // const getBatch = () => {
+  //   for (let i = 0; i >= Math.ceil(count / currentEntry); i++) {
+  //     return <option value={i}>{i}</option>
+  //   }
+  // }
+
   const downloadCsv = () => {
     setApiLoader(true)
     setIsDownLoad(false)
@@ -126,9 +153,18 @@ const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, 
     form_data.append('page_size', exportData.range)
     form_data.append('table_data', JSON.stringify(data))
     form_data.append('count', count ? count : 10)
+    form_data.append('batch', exportData?.batch)
     if (exportData.selectedData[0] && exportData.selectedData[1]) {
       form_data.append('start_date', moment(exportData.selectedData[0]).format('YYYY-MM-DD'))
       form_data.append('end_date', moment(exportData.selectedData[1]).format('YYYY-MM-DD'))
+    }
+
+    if (exportAdditionalData) {
+      Object.entries(exportAdditionalData).map(([key, value]) => {
+        if (value) {
+          form_data.append(key, value)
+        }
+      })
     }
 
     // fetch(exportUrl, {
@@ -136,61 +172,72 @@ const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, 
     //   body: form_data
     // })
     postReq('export', form_data, '', '', exportUrl)
-    // .then((resp) => resp.json())
-    // .then(response => response.blob())
-    .then(blob => {
-      console.log(blob.data)
-      const url = window.URL.createObjectURL(new Blob([blob.data]))
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `export_file.${exportData.fileType}`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      window.URL.revokeObjectURL(url)
-      setApiLoader(false)
-    })
-    .catch((error) => {
-      console.log(error)
-      setApiLoader(false)
-    })
+      // .then((resp) => resp.json())
+      // .then(response => response.blob())
+      .then(blob => {
+        console.log(blob.data)
+        const url = window.URL.createObjectURL(new Blob([blob.data]))
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `export_file.${exportData.fileType}`
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        window.URL.revokeObjectURL(url)
+        setApiLoader(false)
+      })
+      .catch((error) => {
+        console.log(error)
+        setApiLoader(false)
+      })
 
   }
 
   // ** Custom Pagination Component
   const CustomPagination = () => {
-    console.log("ppp")
+    // console.log("ppp", data.length, count)
     return (
       <div className="d-flex w-100 align-items-center justify-content-between">
-        <span>Showing {currentPage + 1} to {currentEntry} of {count} entries</span>
+        {
+           Array.isArray(data) && data.length < 10 ? (
+            <>
+              <span>Showing {currentPage + 1} to {count} of {count} entries</span>
+            </>
+          ) : (
+            <>
+              <span>Showing {currentPage + 1} to {currentEntry} of {count} entries</span>
+            </>
+          )
+        }
+
         <div className="d-none gap-1 align-items-center">
-            <input type="number" className='form-control' value={pageNumber}
-              onChange={(e) => {
-                setPageNumber(e.target.value)
-                // setDisplayedPageNumber(inputValue)
-              }}
-            />
-            <Button className='btn' onClick={() => setCurrentPage(pageNumber + 1)}>Go</Button>
-            <ReactPaginate
-              previousLabel={<Previous size={15} />}
-              nextLabel={<Next size={15} />}
-              forcePage={currentPage}
-              onPageChange={page => handlePagination(page)}
-              pageCount={Math.ceil(count / currentEntry) || 1}
-              breakLabel={'...'}
-              pageRangeDisplayed={2}
-              marginPagesDisplayed={2}
-              activeClassName={'active'}
-              pageClassName={'page-item'}
-              nextLinkClassName={'page-link'}
-              nextClassName={'page-item next'}
-              previousClassName={'page-item prev'}
-              previousLinkClassName={'page-link'}
-              pageLinkClassName={'page-link'}
-              breakClassName='page-item'
-              breakLinkClassName='page-link'
-              containerClassName={'pagination react-paginate pagination-sm justify-content-end pe-1 mt-1'}
-            />
+          <input type="number" className='form-control' value={pageNumber}
+            onChange={(e) => {
+              setPageNumber(e.target.value)
+              // setDisplayedPageNumber(inputValue)
+            }}
+          />
+          <Button className='btn' onClick={() => setCurrentPage(pageNumber + 1)}>Go</Button>
+          <ReactPaginate
+            previousLabel={<Previous size={15} />}
+            nextLabel={<Next size={15} />}
+            forcePage={currentPage}
+            onPageChange={page => handlePagination(page)}
+            pageCount={Math.ceil(count / currentEntry) || 1}
+            breakLabel={'...'}
+            pageRangeDisplayed={2}
+            marginPagesDisplayed={2}
+            activeClassName={'active'}
+            pageClassName={'page-item'}
+            nextLinkClassName={'page-link'}
+            nextClassName={'page-item next'}
+            previousClassName={'page-item prev'}
+            previousLinkClassName={'page-link'}
+            pageLinkClassName={'page-link'}
+            breakClassName='page-item'
+            breakLinkClassName='page-link'
+            containerClassName={'pagination react-paginate pagination-sm justify-content-end pe-1 mt-1'}
+          />
         </div>
         <ReactPaginate
           previousLabel={<Previous size={15} />}
@@ -275,7 +322,7 @@ const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, 
             </label>
             <select className='form-control' disabled={custom} value={currentEntry} onChange={(e) => {
               setCurrentEntry(Number(e.target.value))
-            }} style={{ appearance: 'auto', minWidth:"70px" }}>
+            }} style={{ appearance: 'auto', minWidth: "70px" }}>
               {
                 custom ? <option value={5}>5</option> : pageNo.map(page => <option value={page.value}>{page.label}</option>)
               }
@@ -286,13 +333,13 @@ const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, 
           {
             viewContent ? <>
               <div className="d-flex justify-content-end">
-                <div className="d-flex align-items-center" style={{border: '1px solid #ccc'}}>
-                    <div className={`datatableView ${viewType === "table" ? "active" : ""}`} onClick={() => setViewType("table")}>
-                        <Table size={22} />
-                    </div>
-                    <div className={`datatableView ${viewType === "grid" ? "active" : ""}`} onClick={() => setViewType("grid")}>
-                        <Grid size={22} />
-                    </div>
+                <div className="d-flex align-items-center" style={{ border: '1px solid #ccc' }}>
+                  <div className={`datatableView ${viewType === "table" ? "active" : ""}`} onClick={() => setViewType("table")}>
+                    <Table size={22} />
+                  </div>
+                  <div className={`datatableView ${viewType === "grid" ? "active" : ""}`} onClick={() => setViewType("grid")}>
+                    <Grid size={22} />
+                  </div>
 
                 </div>
               </div>
@@ -300,7 +347,7 @@ const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, 
           }
           {
             deleteContent && selectedRows.length > 0 ? <>
-                {deleteContent}
+              {deleteContent}
             </> : ''
           }
           {
@@ -321,7 +368,7 @@ const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, 
               {selectedContent}
             </> : ''
           }
-{
+          {
             customButtonLeft && <>
               {customButtonLeft()}
             </>
@@ -330,13 +377,13 @@ const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, 
         <Col className='d-flex align-items-center justify-content-center' md='4' sm='12'>
           <h4 className='m-0'>{tableName}</h4>
         </Col>
-        <Col className='d-flex align-items-center justify-content-end' style={{gap: '15px'}} md='4' sm='12'>
+        <Col className='d-flex align-items-center justify-content-end' style={{ gap: '15px' }} md='4' sm='12'>
           {
             create ? <>
               <Link className='btn btn-primary-main' to={createLink}>{createText}</Link>
             </> : ''
           }
-           {
+          {
             customButtonRight && <>
               {customButtonRight()}
             </>
@@ -443,13 +490,29 @@ const AdvanceServerSide = ({ date = true, tableName, dynamicCol = [], tableCol, 
                 </select>
               </div>
               <div className="col-12 mb-1">
-                <label htmlFor="number_of_rows">Number of Rows</label>
-                <select name='number_of_rows' className='form-control' onChange={(e) => setExportData({ ...exportData, range: e.target.value })}>
-                  <option value="ALL">All</option>
-                  {
-                    pageNo.map(page => <option value={page.value} selected={Number(page.value) === Number(exportData.range)}>{page.label}</option>)
-                  }
-                </select>
+                <div className='row'>
+                  <div className='col-md-6'>
+                    <label htmlFor="number_of_rows">Number of Rows</label>
+                    <select name='number_of_rows' className='form-control' value={exportData.range} onChange={(e) => setExportData({ ...exportData, range: e.target.value })}>
+                      <option value="">Select No. of Rows</option>
+                      {
+                        exportPageOtp.map(page => <option value={page.value} selected={Number(page.value) === Number(exportData.range)}>{page.label}</option>)
+                      }
+                    </select>
+                  </div>
+                  <div className='col-md-6'>
+                    <label htmlFor="number_of_rows">Batch</label>
+                    <select name='number_of_rows' value={exportData.batch} className='form-control' onChange={(e) => setExportData({ ...exportData, batch: e.target.value })}>
+                      <option value="">Select Batch</option>
+                      {
+                        count && Number(exportData.range) ? Array(Math.ceil(count / Number(exportData.range))).fill(0).map((_, i) => {
+                          console.log(i)
+                          return <option value={i}>{i + 1}</option>
+                        }) : ''
+                      }
+                    </select>
+                  </div>
+                </div>
               </div>
               {
                 date ? (

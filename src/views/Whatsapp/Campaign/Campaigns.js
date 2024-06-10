@@ -3,16 +3,16 @@ import moment from 'moment/moment'
 import React, { useState } from 'react'
 import { Card, CardBody, Col, Row } from 'reactstrap'
 // import { PermissionProvider } from '../../Helper/Context'
-import { postReq } from '../../assets/auth/jwtService'
+import { postReq } from '../../../assets/auth/jwtService'
 // import { getCurrentOutlet } from '../Validator'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import { Edit, Info, Trash } from 'react-feather'
-import { getCurrentOutlet } from '../Validator'
+import { getCurrentOutlet } from '../../Validator'
 // import pixels from "../../assets/images/superLeadz/pixels.png"
-import AdvanceServerSide from '../Components/DataTable/AdvanceServerSide'
+import AdvanceServerSide from '../../Components/DataTable/AdvanceServerSide'
 import Swal from 'sweetalert2'
 import toast from 'react-hot-toast'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Campaigns = ({ custom = false, name = "All Campaigns", draft = true, create = true }) => {
     // const { userPermission } = useContext(PermissionProvider)
@@ -23,7 +23,7 @@ const Campaigns = ({ custom = false, name = "All Campaigns", draft = true, creat
     const toggle = () => setModal(!modal)
     const [isLoading, setIsLoading] = useState(true)
     const outletData = getCurrentOutlet()
-
+    const navigate = useNavigate()
     const [deleteModal, setDeleteModal] = useState(false)
     const [checkedThemes, setCheckedThemes] = useState([])
 
@@ -189,9 +189,9 @@ const Campaigns = ({ custom = false, name = "All Campaigns", draft = true, creat
         }
 
     ]
-    const RenderData = ({ title, data, info }) => {
+    const RenderData = ({ title, data, info, url }) => {
         return <>
-            <Card>
+            <Card onClick={() => url && navigate(url)} className={'cursor-pointer'}>
                 <CardBody>
                     <div className="d-flex justify-content-between align-items-center">
                         <h4 style={{ borderBottom: '0px dotted lightgray', fontSize: '18px', whiteSpace: 'nowrap', paddingRight: '10px' }} className='m-0 position-relative cursor-default'>
@@ -210,25 +210,28 @@ const Campaigns = ({ custom = false, name = "All Campaigns", draft = true, creat
         console.log("data tempokate", data)
         return (
             <div className='mt-2'>
-                <h5>Sender Email : {data.data.template_sender} </h5>
-                <h5>Delay : {data.data.template_delay}s </h5>
+                {/* <h5>Sender Number : {data.data.template_sender} </h5> */}
+                {/* <h5>Delay : {data.data.template_delay}s </h5> */}
 
                 <Row className='mt-2'>
                     <Col md="4">
-                        <RenderData title="Total Sent" data={data.data.template_template_sent ?? 0} />
+                        <RenderData title="Total Sent" data={data?.data?.whatsapp_campaign_sent ?? 0} url={`/merchant/whatsapp/sent_reports/${data?.data?.whatsapp_id}`} />
                     </Col>
                     <Col md="4">
-                        <RenderData title="Delivered" data={data.data.template_template_delivered ?? 0} />
+                        <RenderData title="Delivered" data={data?.data?.whatsapp_campaign_delivered ?? 0} />
                     </Col>
                     <Col md="4">
-                        <RenderData title="Read" data={data.data.template_template_read ?? 0} />
+                        <RenderData title="Read" data={data?.data?.whatsapp_campaign_read ?? 0} />
                     </Col>
+                    {/* <Col md="4">
+                        <RenderData title="Clicks" data={data?.data?.whatsapp_campaign_click ?? 0} />
+                    </Col> */}
                     <Col md="4">
-                        <RenderData title="Clicks" data={data.data.template_template_click ?? 0} />
+                        <RenderData title="Failed" data={data?.data?.whatsapp_campaign_failed ?? 0} />
                     </Col>
-                    <Col md="4">
-                        <RenderData title="Failed" data={data.data.template_template_failed ?? 0} />
-                    </Col>
+                    {/* <Col md="4">
+                        <RenderData title="Replies" data={data?.data?.whatsapp_campaign_failed ?? 0} />
+                    </Col> */}
 
                 </Row>
 

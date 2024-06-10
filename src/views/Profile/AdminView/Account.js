@@ -114,7 +114,7 @@ const Account = () => {
     //         )
     //     },
     //     {
-    //         name: 'Created at',
+    //         name: 'Created On',
     //         width: ' 150px',
     //         selector: row => row.date
     //     },

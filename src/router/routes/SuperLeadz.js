@@ -11,6 +11,9 @@ import Rules from '../../views/SuperLeadz/campaignView/Rules'
 import Duration from '../../views/SuperLeadz/campaignView/Duration'
 import Campaign from '../../views/SuperLeadz/reports/Campaign'
 import Offers from '../../views/SuperLeadz/reports/Offers'
+// import WebPush from '../../views/SuperLeadz/PushBuilderCustomization.js'
+// import PushWeb from '../../views/SuperLeadz/PushBuilderRender.js'
+import Settings from '../../views/SuperLeadz/Settings'
 const CreateOffers = lazy(() => import('../../views/SuperLeadz/CreateOffers'))
 const EditSupport = lazy(() => import('../../views/SuperLeadz/EditSupport'))
 const LiveUpdates = lazy(() => import('../../views/SuperLeadz/Live'))
@@ -33,6 +36,7 @@ const SuperLeadzBilling = lazy(() => import('../../views/SuperLeadz/Billing'))
 const SuperLeadzFAQ = lazy(() => import('../../views/SuperLeadz/FAQ'))
 const SuperLeadzSupport = lazy(() => import('../../views/SuperLeadz/Support'))
 const Themes = lazy(() => import('../../views/SuperLeadz/Customization/Themes'))
+const ThemesAdmin = lazy(() => import('../../views/SuperLeadz/Customization/ThemesAdmin'))
 const SemperFi = lazy(() => import('../../views/SuperLeadz/SemperFi'))
 const Editor = lazy(() => import('../../views/NewCustomizationFlow/Editor'))
 
@@ -153,9 +157,14 @@ const SuperLeads_Routes = [
     }
   }, 
   {
-    path: '/merchant/superleadz/templates',
+    path: '/merchant/superleadz/templates/',
     app: appName,
     element: <Themes />
+  },
+  {
+    path: "/merchant/superleadz/templates/admin",
+    app: appName,
+    element: <ThemesAdmin />
   },
   {
     path: '/merchant/SuperLeadz/testfmb/',
@@ -182,6 +191,14 @@ const SuperLeads_Routes = [
     path: '/merchant/SuperLeadz/new_customization/:EditThemeId/',
     app: appName,
     element: <CustomizationParent />,
+    meta: {
+      layout: 'fullWidthLayout'
+    }
+  },
+  {
+    path: '/merchant/SuperLeadz/new_customization/admin/',
+    app: appName,
+    element: <CustomizationParent isAdmin={true}/>,
     meta: {
       layout: 'fullWidthLayout'
     }
@@ -242,7 +259,28 @@ const SuperLeads_Routes = [
     path: '/merchant/SuperLeadz/reports/offers/',
     app: appName,
     element: <SuperLeadzPerformance />
+  },
+  {
+    path: '/merchant/SuperLeadz/settings/',
+    app: appName,
+    element: <Settings />
   }
+  // {
+  //   path: '/merchant/SuperLeadz/webpush/',
+  //   app: appName,
+  //   element: <WebPush />,
+  //   meta: {
+  //     layout: 'fullWidthLayout'
+  //   }
+  // },
+  // {
+  //   path: '/merchant/SuperLeadz/pushweb/',
+  //   app: appName,
+  //   element: <PushWeb />,
+  //   meta: {
+  //     layout: 'fullWidthLayout'
+  //   }
+  // }
 ]
 
 export default SuperLeads_Routes

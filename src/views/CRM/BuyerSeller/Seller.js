@@ -15,6 +15,7 @@ import moment from 'moment'
 import { useNavigate, useParams } from 'react-router-dom'
 import Spinner from '../../Components/DataTable/Spinner'
 import { Eye } from "react-feather"
+import { VirtualizedSelect } from '../Test'
 
 const Buyer = ({ allData }) => {
     const { id } = useParams()
@@ -262,7 +263,8 @@ const Buyer = ({ allData }) => {
         const checkForm = validForm(addFormvalueToCheck, check.addForm)  // Use addFormvalueToCheck for validation
         console.log(checkForm, "dd")
         if (checkForm) {
-            postData()
+            // postData()
+            postNewCustomerData()
         }
     }
 
@@ -474,7 +476,7 @@ const Buyer = ({ allData }) => {
     ]
 
     const getCustomer = () => {
-        getReq("getAllCustomer", "", crmURL)
+        getReq("getAllCustomerNew", "", crmURL)
             .then((resp) => {
                 console.log(resp, "customer")
 
@@ -734,7 +736,7 @@ const Buyer = ({ allData }) => {
                     <h4 className="mb-0">Add Product</h4>
                 </Col>
                 <Col md={12} className="mt-2">
-                    <label htmlFor="customer-name">
+                    <label htmlFor="customer-name" className="form-label" style={{ margin: '0px' }}>
                         Customer Name
                     </label>
                     <Select
@@ -990,39 +992,18 @@ const Buyer = ({ allData }) => {
                                 <h4 className="mb-0">Applicant Details</h4>
                             </Col>
                             <Col md={6} className="mt-2" style={{ zIndex: '9' }}>
-                                <label htmlFor="customer-name" className="form-label" style={{ margin: '0px' }}>
+                                <label htmlFor="customer-name" className="form-label" style={{ margin: '0px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     Customer Name
+                                    <a onClick={() => handleShow("customer")} className='text-primary'>Add New Customer</a>
                                 </label>
-                                {/* <Select
+                                <VirtualizedSelect
                                     placeholder='Customer Name'
                                     isDisabled={isCustomer}
                                     id="insurance-type"
                                     options={customerList}
                                     closeMenuOnSelect={true}
                                     name='customer_name'
-                                    components={{ Menu: CustomSelectComponent }}
-                                    value={customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.xircls_customer_id))}
-                                    onChange={(e) => {
-                                        console.log(e);
-                                        const updatedData = {
-                                            customer_name: e.label,
-                                            xircls_customer_id: e.value
-                                        }
-                                        setFormData((preData) => ({
-                                            ...preData,
-                                            ...updatedData
-                                        }))
-                                        handleAddInputChange({ target: { value: e.value, name: "xircls_customer_id" } }, 'productForm');
-                                    }}
-                                /> */}
-                                <Select
-                                    placeholder='Customer Name'
-                                    isDisabled={isCustomer}
-                                    id="insurance-type"
-                                    options={customerList}
-                                    closeMenuOnSelect={true}
-                                    name='customer_name'
-                                    components={{ Menu: CustomSelectComponent }}
+                                    // components={{ Menu: CustomSelectComponent }}
                                     // value={customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.xircls_customer_id))}
                                     value={(customerList?.filter((curElem) => Number(curElem?.value) === Number(formData.xircls_customer_id)))}
                                     onChange={(e) => {
@@ -1110,7 +1091,7 @@ const Buyer = ({ allData }) => {
                             <Col md={6} className="mt-2">
                             {/* <iframe src={`https://crm.xircls.com/static/${formData?.productroc_document}`}></iframe>  */}
                                 <div className='d-flex'><label htmlFor="basicDetails-rot">
-                                    ROC Document
+                                    RC Document
                                 </label> 
                                 {console.log(customer?.vehicle?.roc_document, "============")}
                             {isEdit === true && customer?.vehicle?.roc_document ? (<span className='d-flex'><span className='fs-6'>view </span><a target='_blank' href={`https://crm.xircls.com/static${customer?.vehicle?.roc_document}`}> <Eye size={15}/></a></span>) : (<></>)}
