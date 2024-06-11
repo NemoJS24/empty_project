@@ -18,8 +18,7 @@ import 'swiper/modules/navigation/navigation.min.css'
 import 'swiper/modules/autoplay/autoplay.min.css'
 import "./Form.css"
 import BasicEditor from "../Components/Editor/BaseEditor"
-import { useNavigate } from "react-router"
-import { Link, useParams, useLocation } from "react-router-dom"
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom"
 import PickerDefault from "../Components/Date-picker/NormalDatePicker"
 import ComTable from "../Components/DataTable/ComTable"
 import moment from "moment"
@@ -71,9 +70,9 @@ const Setting = ({ isAdmin = false }) => {
             opt_in_email: "email",
             opt_in_sms: "",
             opt_in_both: "",
-            label_text_email: "Subscribe to email",
-            label_text_sms: "Subscribe to sms",
-            label_text_both: "Subscribe",
+            label_text_email: "I consent to receiving email marketing communication",
+            label_text_sms: "I consent to receiving SMS marketing communication",
+            label_text_both: "I consent to receiving email & SMS marketing communication",
             email_check: true,
             sms_check: true,
             both_check: true,
@@ -91,7 +90,7 @@ const Setting = ({ isAdmin = false }) => {
             heading_colorAf: "rgba(12,12,12,1)",
             heading_font_sizeAf: "24px",
             passwordLength: "6",
-            validationMessage: "Password should be {{n}} digits",
+            validationMessage: "Password should be {{n}} characters",
             editorState: "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":1,\"mode\":\"normal\",\"style\":\"font-weight: 600;font-size: 17px;line-height: 2;\",\"text\":\"Hello,\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"center\",\"indent\":0,\"type\":\"paragraph\",\"version\":1},{\"children\":[{\"detail\":0,\"format\":1,\"mode\":\"normal\",\"style\":\"font-weight: 600;font-size: 17px;line-height: 1;\",\"text\":\"Activate Your Account\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"center\",\"indent\":0,\"type\":\"paragraph\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}",
             htmlContent: "<p class=\"editor-paragraph\" style=\"text-align: center;\" dir=\"ltr\"><b><strong class=\"editor-text-bold\" style=\"font-weight: 600; font-size: 17px; line-height: 2; white-space: pre-wrap;\">Hello,</strong></b></p><p class=\"editor-paragraph\" style=\"text-align: center;\" dir=\"ltr\"><b><strong class=\"editor-text-bold\" style=\"font-weight: 600; font-size: 17px; line-height: 1; white-space: pre-wrap;\">Activate Your Account</strong></b></p>",
             purpose: "2",
@@ -479,7 +478,7 @@ const Setting = ({ isAdmin = false }) => {
     }
 
     const handleSaveData = (e, type) => {
-        console.log({prevData})
+        console.log({ prevData })
         e.preventDefault()
         setApiLoader(true)
         const timeout = 300
@@ -571,6 +570,12 @@ const Setting = ({ isAdmin = false }) => {
         })
     })
 
+    useEffect(() => {
+        if (themeName) {
+            setCurrObj({ ...currObj, campaign_name: themeName })
+        }
+    }, [themeName])
+
     return (
         <>
             <Container fluid className='border-bottom px-0' style={{ height: "55px" }}>
@@ -644,6 +649,7 @@ const Setting = ({ isAdmin = false }) => {
                             <div className="d-flex justify-content-center align-items-center" style={{ border: '1px solid #d8d6de', borderRadius: '0.357rem', gap: '5px' }}>
                                 <input id='campaignNameInput' type="text" placeholder='Enter theme name' value={themeName} onKeyDown={e => e.key === "Enter" && setNameEdit(!nameEdit)} onChange={e => {
                                     setThemeName(e.target.value)
+
                                 }} disabled={nameEdit} className="form-control" style={{ width: '250px', border: 'none' }} />
                                 <a style={{ marginRight: '5px' }} onClick={() => setNameEdit(!nameEdit)}>
                                     {
@@ -712,6 +718,12 @@ const Setting = ({ isAdmin = false }) => {
                                                 </button>
                                                 <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase`}>Fields</span>
                                             </div>
+                                            <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "button" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => setSideNav(sideNav === "button" ? "" : "button")}>
+                                                <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
+                                                    <Circle size={'15px'} />
+                                                </button>
+                                                <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase`}>Button</span>
+                                            </div>
                                             <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "contentAF" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => setSideNav(sideNav === "contentAF" ? "" : "contentAF")}>
                                                 <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
                                                     <Circle size={'15px'} />
@@ -728,13 +740,6 @@ const Setting = ({ isAdmin = false }) => {
                                                     </div>
                                                 </> : ''
                                             }
-
-                                            <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "button" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => setSideNav(sideNav === "button" ? "" : "button")}>
-                                                <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
-                                                    <Circle size={'15px'} />
-                                                </button>
-                                                <span style={{ fontSize: "8.5px", fontStyle: "normal", fontWeight: "500", lineHeight: "10px", transition: "0.3s ease-in-out" }} className={`text-uppercase`}>Button</span>
-                                            </div>
 
                                             <div className={`sideNav-items d-flex flex-column align-items-center justify-content-center ${sideNav === "securityOptions" ? "text-black active-item" : ""}`} style={{ gap: "0.5rem", cursor: "pointer", padding: "0.75rem 0px" }} onClick={() => setSideNav(sideNav === "securityOptions" ? "" : "securityOptions")}>
                                                 <button className={`btn d-flex align-items-center justify-content-center`} style={{ aspectRatio: "1", padding: "0rem", border: "none", outline: "none", transition: "0.3s ease-in-out" }}>
@@ -781,7 +786,7 @@ const Setting = ({ isAdmin = false }) => {
                             {sideNav === "contentBF" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "450px", transform: `translateX(${sideNav === "contentBF" ? "0px" : "-450px"})`, position: "absolute", inset: "0px" }}>
                                 <UncontrolledAccordion stayOpen defaultOpen={["1"]}>
                                     <AccordionItem>
-                                        <AccordionHeader className='acc-header border-top' targetId='1' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
+                                        <AccordionHeader className='acc-header border-top' targetId='heading' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
                                             <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Header</label>
                                         </AccordionHeader>
                                         <AccordionBody accordionId='1'>
@@ -832,16 +837,16 @@ const Setting = ({ isAdmin = false }) => {
                                         </AccordionBody>
                                     </AccordionItem>
                                     <AccordionItem>
-                                        <AccordionHeader className='acc-header border-top' targetId='2' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
-                                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub Header</label>
+                                        <AccordionHeader className='acc-header border-top' targetId='subheading' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
+                                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading</label>
                                         </AccordionHeader>
                                         <AccordionBody accordionId='2'>
                                             <div className="py-1">
-                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading</label>
-                                                <textarea onChange={handleDataChange} value={prevData?.page_1?.sub_heading} name="sub_heading" className="form-control" id="sub_heading" placeholder="Sub-heading" />
+                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading</label>
+                                                <textarea onChange={handleDataChange} value={prevData?.page_1?.sub_heading} name="sub_heading" className="form-control" id="sub_heading" placeholder="Subheading" />
                                             </div>
                                             <div className="py-1">
-                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading Font</label>
+                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading Font</label>
                                                 <Select styles={{
                                                     option: (provided, state) => {
                                                         return ({ ...provided, fontFamily: fontStyles[fontStyles?.findIndex($ => $?.value === state.value)]?.value })
@@ -853,7 +858,7 @@ const Setting = ({ isAdmin = false }) => {
                                             </div>
 
                                             <div className="py-1">
-                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading Color</label>
+                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading Color</label>
                                                 <UncontrolledDropdown className="w-100 p-0" direction="start">
                                                     <DropdownToggle style={{ fontSize: "10px" }} className="rounded w-100 p-0">
                                                         <div style={{ backgroundColor: "#ffffff", padding: "0.525rem" }} className="rounded form-control d-flex align-items-center gap-1">
@@ -940,15 +945,15 @@ const Setting = ({ isAdmin = false }) => {
                                     </AccordionItem>
                                     <AccordionItem>
                                         <AccordionHeader className='acc-header border-top' targetId='2' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
-                                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub Header</label>
+                                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading</label>
                                         </AccordionHeader>
                                         <AccordionBody accordionId='2'>
                                             <div className="py-1">
-                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading</label>
-                                                <textarea onChange={handleDataChange} value={prevData?.page_1?.sub_headingAf} name="sub_headingAf" className="form-control" id="sub_headingAf" placeholder="Sub-heading" />
+                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading</label>
+                                                <textarea onChange={handleDataChange} value={prevData?.page_1?.sub_headingAf} name="sub_headingAf" className="form-control" id="sub_headingAf" placeholder="Subheading" />
                                             </div>
                                             <div className="py-1">
-                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading Font</label>
+                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading Font</label>
                                                 <Select styles={{
                                                     option: (provided, state) => {
                                                         return ({ ...provided, fontFamily: fontStyles[fontStyles?.findIndex($ => $?.value === state.value)]?.value })
@@ -960,7 +965,7 @@ const Setting = ({ isAdmin = false }) => {
                                             </div>
 
                                             <div className="py-1">
-                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading Color</label>
+                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading Color</label>
                                                 <UncontrolledDropdown className="w-100 p-0" direction="start">
                                                     <DropdownToggle style={{ fontSize: "10px" }} className="rounded w-100 p-0">
                                                         <div style={{ backgroundColor: "#ffffff", padding: "0.525rem" }} className="rounded form-control d-flex align-items-center gap-1">
@@ -1047,15 +1052,15 @@ const Setting = ({ isAdmin = false }) => {
                                     </AccordionItem>
                                     <AccordionItem>
                                         <AccordionHeader className='acc-header border-top' targetId='2' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
-                                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub Header</label>
+                                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading</label>
                                         </AccordionHeader>
                                         <AccordionBody accordionId='2'>
                                             <div className="py-1">
-                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading</label>
-                                                <textarea onChange={handleDataChange} value={prevData?.page_1?.successsub_heading} name="successsub_heading" className="form-control" id="successsub_heading" placeholder="Sub-heading" />
+                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading</label>
+                                                <textarea onChange={handleDataChange} value={prevData?.page_1?.successsub_heading} name="successsub_heading" className="form-control" id="successsub_heading" placeholder="Subheading" />
                                             </div>
                                             <div className="py-1">
-                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading Font</label>
+                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading Font</label>
                                                 <Select styles={{
                                                     option: (provided, state) => {
                                                         return ({ ...provided, fontFamily: fontStyles[fontStyles?.findIndex($ => $?.value === state.value)]?.value })
@@ -1067,7 +1072,7 @@ const Setting = ({ isAdmin = false }) => {
                                             </div>
 
                                             <div className="py-1">
-                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Sub-heading Color</label>
+                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Subheading Color</label>
                                                 <UncontrolledDropdown className="w-100 p-0" direction="start">
                                                     <DropdownToggle style={{ fontSize: "10px" }} className="rounded w-100 p-0">
                                                         <div style={{ backgroundColor: "#ffffff", padding: "0.525rem" }} className="rounded form-control d-flex align-items-center gap-1">
@@ -1106,7 +1111,7 @@ const Setting = ({ isAdmin = false }) => {
                                                 <input onChange={handleDataChange} value={prevData?.[currPage]?.successbutton_text} name="successbutton_text" type="text" className="form-control" id="successbutton_text" placeholder="Button Text" />
                                             </div>
                                             <div className="py-1">
-                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Button Text Color</label>
+                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Button Text & Outline Color</label>
                                                 <UncontrolledDropdown className="w-100 p-0" direction="start">
                                                     <DropdownToggle style={{ fontSize: "10px" }} className="rounded w-100 p-0">
                                                         <div style={{ backgroundColor: "#ffffff", padding: "0.525rem" }} className="rounded form-control d-flex align-items-center gap-1">
@@ -1148,134 +1153,7 @@ const Setting = ({ isAdmin = false }) => {
                             </div>}
 
                             {sideNav === "formFeilds" && <div style={{ transition: "0.3s ease-in-out", overflow: "auto", width: "450px", transform: `translateX(${sideNav === "formFeilds" ? "0px" : "-450px"})`, position: "absolute", inset: "0px" }}>
-                                <UncontrolledAccordion stayOpen defaultOpen={["1"]}>
-                                    <AccordionItem>
-                                        <AccordionHeader className='acc-header border-top' targetId='1' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
-                                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Email Marketing Settings</label>
-                                        </AccordionHeader>
-                                        <AccordionBody accordionId='1'>
-
-                                            {currPage === "page_1" && <div className="py-1">
-                                                <Col md={12} style={{ marginBottom: "1.25rem" }}>
-                                                    <h5 style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0 mb-1">Opt-in</h5>
-                                                    <div className="d-flex gap-2 flex-column">
-
-                                                        <div className="d-flex justify-content-between align-items-center">
-                                                            <label htmlFor="opt_in_email" className="form-check-label">Email Opt-in</label>
-                                                            <div className="form-check-success form-switch cursor-pointer">
-                                                                <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.opt_in_email === "email"} id="opt_in_email" onChange={(e) => {
-                                                                    const updatedData = {
-                                                                        opt_in_both: "",
-                                                                        opt_in_email: e.target.checked ? e.target.value : ""
-                                                                    }
-                                                                    // setPrevData({ ...prevData, page_1: { ...prevData.page_1, ...updatedData } })
-                                                                    setCurrObj({ ...currObj, ...updatedData })
-                                                                }} name="opt_in_email" value={"email"} />
-
-                                                            </div>
-
-                                                        </div>
-
-
-                                                        <div className="d-flex justify-content-between align-items-center">
-                                                            <label htmlFor="opt_in_sms" className="form-check-label">SMS Opt-in</label>
-                                                            <div className="form-check-success form-switch cursor-pointer">
-                                                                <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.opt_in_sms === "sms"} id="opt_in_sms" onChange={(e) => {
-                                                                    const updatedData = {
-                                                                        opt_in_both: "",
-                                                                        opt_in_sms: e.target.checked ? e.target.value : ""
-                                                                    }
-                                                                    // setPrevData({ ...prevData, page_1: { ...prevData.page_1, ...updatedData } })
-                                                                    setCurrObj({ ...currObj, ...updatedData })
-                                                                }} name="opt_in_sms" value={"sms"} />
-
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div className="d-flex justify-content-between align-items-center">
-                                                            <label htmlFor="opt_in_both" className="form-check-label">Opt-in for marketing communication</label>
-                                                            <div className="form-check-success form-switch cursor-pointer">
-                                                                <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.opt_in_both === "both"} id="opt_in_both" onChange={(e) => {
-
-                                                                    const updatedData = {
-                                                                        opt_in_both: e.target.checked ? e.target.value : "",
-                                                                        opt_in_email: "",
-                                                                        opt_in_sms: ""
-                                                                    }
-                                                                    // setPrevData({ ...prevData, page_1: { ...prevData.page_1, ...updatedData } })
-                                                                    setCurrObj({ ...currObj, ...updatedData })
-                                                                }} name="opt_in_both" value={"both"} />
-
-                                                            </div>
-
-                                                        </div>
-
-                                                    </div>
-                                                </Col>
-
-                                                {currPage === "page_1" && (
-                                                    <>
-                                                        {
-                                                            prevData?.page_1?.opt_in_email === "email" && (
-                                                                <>
-                                                                    <Col md={12} style={{ marginBottom: "1.25rem" }}>
-                                                                        <div className="d-flex justify-content-between align-items-center" style={{ marginBottom: '6px' }}>
-                                                                            <label style={{ fontSize: "0.85rem" }} htmlFor="label_text">Email Text</label>
-                                                                            <div className="d-flex align-items-center justify-content-between gap-1 form-check form-check-success m-0 p-0">
-                                                                                <label style={{ fontSize: "0.85rem" }} htmlFor="keep_email_check">Keep Selected by Default</label>
-                                                                                <input id="keep_email_check" checked={prevData?.page_1?.email_check} type='checkbox' className='form-check-input m-0 p-0' name="email_check" onChange={(e) => setCurrObj({ ...currObj, email_check: e.target.checked })} />
-                                                                            </div>
-                                                                        </div>
-                                                                        <input className="form-control" value={prevData?.page_1?.label_text_email} id="label_text_email" name="label_text_email" onChange={handleDataChange} />
-                                                                    </Col>
-
-                                                                </>
-                                                            )
-                                                        }
-                                                        {
-                                                            prevData?.page_1?.opt_in_sms === "sms" && (
-                                                                <>
-                                                                    <Col md={12} style={{ marginBottom: "1.25rem" }}>
-                                                                        <div className="d-flex justify-content-between align-items-center" style={{ marginBottom: '6px' }}>
-                                                                            <label style={{ fontSize: "0.85rem" }} htmlFor="label_text">Sms Text</label>
-                                                                            <div className="d-flex align-items-center justify-content-between gap-1 form-check form-check-success m-0 p-0">
-                                                                                <label style={{ fontSize: "0.85rem" }} htmlFor="keep_sms_check">Keep Selected by Default</label>
-                                                                                <input id="keep_sms_check" checked={prevData?.page_1?.sms_check} type='checkbox' className='form-check-input m-0 p-0' name="sms_check" onChange={(e) => setCurrObj({ ...currObj, sms_check: e.target.checked })} />
-                                                                            </div>
-                                                                        </div>
-                                                                        <input className="form-control" value={prevData?.page_1?.label_text_sms} id="label_text_sms" name="label_text_sms" onChange={handleDataChange} />
-                                                                    </Col>
-
-                                                                </>
-                                                            )
-                                                        }
-
-                                                        {
-                                                            prevData?.page_1?.opt_in_both === "both" && (
-                                                                <>
-                                                                    <Col md={12} style={{ marginBottom: "1.25rem" }}>
-                                                                        <div className="d-flex justify-content-between align-items-center" style={{ marginBottom: '6px' }}>
-                                                                            <label style={{ fontSize: "0.85rem" }} htmlFor="label_text">Opt-in for marketing communication</label>
-                                                                            <div className="d-flex align-items-center justify-content-between gap-1 form-check form-check-success m-0 p-0">
-                                                                                <label style={{ fontSize: "0.85rem" }} htmlFor="keep_both_check">Keep Selected by Default</label>
-                                                                                <input id="keep_both_check" checked={prevData?.page_1?.both_check} type='checkbox' className='form-check-input m-0 p-0' name="both_check" onChange={(e) => setCurrObj({ ...currObj, both_check: e.target.checked })} />
-                                                                            </div>
-                                                                        </div>
-                                                                        <input className="form-control" value={prevData?.page_1?.label_text_both} id="label_text_both" name="label_text_both" onChange={handleDataChange} />
-                                                                    </Col>
-
-                                                                </>
-                                                            )
-                                                        }
-                                                    </>
-                                                )}
-
-
-                                            </div>}
-
-                                        </AccordionBody>
-                                    </AccordionItem>
+                                <UncontrolledAccordion stayOpen defaultOpen={["2"]}>
                                     <AccordionItem>
                                         <AccordionHeader className='acc-header border-top' targetId='2' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
                                             <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Passwords</label>
@@ -1283,7 +1161,7 @@ const Setting = ({ isAdmin = false }) => {
                                         <AccordionBody accordionId='2'>
                                             <div className="py-1 pt-0">
                                                 <div className="row">
-                                                    <h5 style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0 mb-1">Password</h5>
+                                                    {/* <h5 style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0 mb-1">Password</h5> */}
 
                                                     <div className="col-md-6">
                                                         <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Title</label>
@@ -1323,7 +1201,7 @@ const Setting = ({ isAdmin = false }) => {
                                                         <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.hidePassword} id="hidePassword" onChange={(e) => {
                                                             // setPrevData({...prevData, page_1: {...prevData?.page_1, hidePassword: e.target.checked}})
                                                             setCurrObj({ ...currObj, hidePassword: e.target.checked })
-                                                        }} name="hidePassword" /><label htmlFor="hidePassword" className="form-check-label ms-1">Show and Hide password icon.</label>
+                                                        }} name="hidePassword" /><label htmlFor="hidePassword" className="form-check-label ms-1">Show/Hide password field.</label>
                                                     </div>
                                                 </Col>
                                             </div>
@@ -1334,11 +1212,138 @@ const Setting = ({ isAdmin = false }) => {
                                                         <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.reEnter} id="reEnter" onChange={(e) => {
                                                             // setPrevData({...prevData, page_1: {...prevData?.page_1, reEnter: e.target.checked}})
                                                             setCurrObj({ ...currObj, reEnter: e.target.checked })
-                                                        }} name="reEnter" /><label htmlFor="reEnter" className="form-check-label ms-1">Enter Re-Type password functionality.</label>
+                                                        }} name="reEnter" /><label htmlFor="reEnter" className="form-check-label ms-1">Re-Type password field</label>
                                                     </div>
                                                 </Col>
                                             </div>
 
+
+                                        </AccordionBody>
+                                    </AccordionItem>
+                                    <AccordionItem>
+                                        <AccordionHeader className='acc-header border-top' targetId='1' style={{ borderBottom: '1px solid #EBE9F1', borderRadius: '0' }}>
+                                            <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Opt-Ins</label>
+                                        </AccordionHeader>
+                                        <AccordionBody accordionId='1'>
+
+                                            {currPage === "page_1" && <div className="py-1">
+                                                <Col md={12} style={{ marginBottom: "1.25rem" }}>
+                                                    {/* <h5 style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0 mb-1">Opt-in</h5> */}
+                                                    <div className="d-flex gap-2 flex-column">
+
+                                                        <div className="d-flex justify-content-between align-items-center">
+                                                            <label htmlFor="opt_in_email" className="form-check-label">Via Email</label>
+                                                            <div className="form-check-success form-switch cursor-pointer">
+                                                                <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.opt_in_email === "email"} id="opt_in_email" onChange={(e) => {
+                                                                    const updatedData = {
+                                                                        opt_in_both: "",
+                                                                        opt_in_email: e.target.checked ? e.target.value : ""
+                                                                    }
+                                                                    // setPrevData({ ...prevData, page_1: { ...prevData.page_1, ...updatedData } })
+                                                                    setCurrObj({ ...currObj, ...updatedData })
+                                                                }} name="opt_in_email" value={"email"} />
+
+                                                            </div>
+
+                                                        </div>
+
+
+                                                        <div className="d-flex justify-content-between align-items-center">
+                                                            <label htmlFor="opt_in_sms" className="form-check-label">Via SMS</label>
+                                                            <div className="form-check-success form-switch cursor-pointer">
+                                                                <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.opt_in_sms === "sms"} id="opt_in_sms" onChange={(e) => {
+                                                                    const updatedData = {
+                                                                        opt_in_both: "",
+                                                                        opt_in_sms: e.target.checked ? e.target.value : ""
+                                                                    }
+                                                                    // setPrevData({ ...prevData, page_1: { ...prevData.page_1, ...updatedData } })
+                                                                    setCurrObj({ ...currObj, ...updatedData })
+                                                                }} name="opt_in_sms" value={"sms"} />
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div className="d-flex justify-content-between align-items-center">
+                                                            <label htmlFor="opt_in_both" className="form-check-label">Both</label>
+                                                            <div className="form-check-success form-switch cursor-pointer">
+                                                                <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.opt_in_both === "both"} id="opt_in_both" onChange={(e) => {
+
+                                                                    const updatedData = {
+                                                                        opt_in_both: e.target.checked ? e.target.value : "",
+                                                                        opt_in_email: "",
+                                                                        opt_in_sms: ""
+                                                                    }
+                                                                    // setPrevData({ ...prevData, page_1: { ...prevData.page_1, ...updatedData } })
+                                                                    setCurrObj({ ...currObj, ...updatedData })
+                                                                }} name="opt_in_both" value={"both"} />
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </Col>
+
+                                                {currPage === "page_1" && (
+                                                    <>
+                                                        {
+                                                            prevData?.page_1?.opt_in_email === "email" && (
+                                                                <>
+                                                                    <Col md={12} style={{ marginBottom: "1.25rem" }}>
+                                                                        <div className="d-flex justify-content-between align-items-center" style={{ marginBottom: '6px' }}>
+                                                                            <label style={{ fontSize: "0.85rem" }} htmlFor="label_text">Email Text</label>
+                                                                            <div className="d-flex align-items-center justify-content-between gap-1 form-check form-check-success m-0 p-0">
+                                                                                <label style={{ fontSize: "0.85rem" }} htmlFor="keep_email_check">Pre-select by default</label>
+                                                                                <input id="keep_email_check" checked={prevData?.page_1?.email_check} type='checkbox' className='form-check-input m-0 p-0' name="email_check" onChange={(e) => setCurrObj({ ...currObj, email_check: e.target.checked })} />
+                                                                            </div>
+                                                                        </div>
+                                                                        <input className="form-control" value={prevData?.page_1?.label_text_email} id="label_text_email" name="label_text_email" onChange={handleDataChange} />
+                                                                    </Col>
+
+                                                                </>
+                                                            )
+                                                        }
+                                                        {
+                                                            prevData?.page_1?.opt_in_sms === "sms" && (
+                                                                <>
+                                                                    <Col md={12} style={{ marginBottom: "1.25rem" }}>
+                                                                        <div className="d-flex justify-content-between align-items-center" style={{ marginBottom: '6px' }}>
+                                                                            <label style={{ fontSize: "0.85rem" }} htmlFor="label_text">SMS Text</label>
+                                                                            <div className="d-flex align-items-center justify-content-between gap-1 form-check form-check-success m-0 p-0">
+                                                                                <label style={{ fontSize: "0.85rem" }} htmlFor="keep_sms_check">Pre-select by default</label>
+                                                                                <input id="keep_sms_check" checked={prevData?.page_1?.sms_check} type='checkbox' className='form-check-input m-0 p-0' name="sms_check" onChange={(e) => setCurrObj({ ...currObj, sms_check: e.target.checked })} />
+                                                                            </div>
+                                                                        </div>
+                                                                        <input className="form-control" value={prevData?.page_1?.label_text_sms} id="label_text_sms" name="label_text_sms" onChange={handleDataChange} />
+                                                                    </Col>
+
+                                                                </>
+                                                            )
+                                                        }
+
+                                                        {
+                                                            prevData?.page_1?.opt_in_both === "both" && (
+                                                                <>
+                                                                    <Col md={12} style={{ marginBottom: "1.25rem" }}>
+                                                                        <div className="d-flex justify-content-between align-items-center" style={{ marginBottom: '6px' }}>
+                                                                            <label style={{ fontSize: "0.85rem" }} htmlFor="label_text">Both</label>
+                                                                            <div className="d-flex align-items-center justify-content-between gap-1 form-check form-check-success m-0 p-0">
+                                                                                <label style={{ fontSize: "0.85rem" }} htmlFor="keep_both_check">Pre-select by default</label>
+                                                                                <input id="keep_both_check" checked={prevData?.page_1?.both_check} type='checkbox' className='form-check-input m-0 p-0' name="both_check" onChange={(e) => setCurrObj({ ...currObj, both_check: e.target.checked })} />
+                                                                            </div>
+                                                                        </div>
+                                                                        <input className="form-control" value={prevData?.page_1?.label_text_both} id="label_text_both" name="label_text_both" onChange={handleDataChange} />
+                                                                    </Col>
+
+                                                                </>
+                                                            )
+                                                        }
+                                                    </>
+                                                )}
+
+
+                                            </div>}
 
                                         </AccordionBody>
                                     </AccordionItem>
@@ -1473,7 +1478,7 @@ const Setting = ({ isAdmin = false }) => {
                                             <AccordionBody accordionId='1'>
 
                                                 <div className="py-1">
-                                                    <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Set Password length</label>
+                                                    <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Set Password Length (in characters)</label>
                                                     <input onChange={(e) => {
                                                         if (!isNaN(e.target.value)) {
                                                             handleDataChange(e)
@@ -1482,7 +1487,7 @@ const Setting = ({ isAdmin = false }) => {
                                                 </div>
 
                                                 <div className="py-1">
-                                                    <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Default Form Validation Message. Note {'{{n}}'} is replaced by actual length</label>
+                                                    <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Default Password Validation Message. Note {'{{n}}'} is replaced by actual length</label>
                                                     <input onChange={handleDataChange} value={prevData?.["page_1"]?.validationMessage} name="validationMessage" type="text" className="form-control" id="validationMessage" placeholder="Default Form Validation Message" />
                                                 </div>
 
@@ -1492,7 +1497,7 @@ const Setting = ({ isAdmin = false }) => {
                                                             <input className="form-check-input cursor-pointer" type="checkbox" checked={prevData?.[`page_1`]?.contain} id="contain" onChange={(e) => {
                                                                 setCurrObj({ ...currObj, contain: e.target.checked })
                                                                 // setPrevData({...prevData, page_1: {...prevData?.page_1, contain: e.target.checked}})
-                                                            }} name="contain" /><label htmlFor="contain" className="form-check-label ms-1">Must Contain both numeric and alphabetic characters.</label>
+                                                            }} name="contain" /><label htmlFor="contain" className="form-check-label ms-1">Password must be alphanumeric i.e. include both numbers and letters.</label>
                                                         </div>
                                                     </Col>
                                                 </div>
@@ -1547,7 +1552,7 @@ const Setting = ({ isAdmin = false }) => {
                                                 <input onChange={handleDataChange} value={prevData?.[currPage]?.button_text} name="button_text" type="text" className="form-control" id="button_text" placeholder="Button Text" />
                                             </div>
                                             <div className="py-1">
-                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Button Text Color</label>
+                                                <label style={{ fontSize: "0.85rem" }} className="form-check-label m-0 p-0">Button Text & Outline Color</label>
                                                 <UncontrolledDropdown className="w-100 p-0" direction="start">
                                                     <DropdownToggle style={{ fontSize: "10px" }} className="rounded w-100 p-0">
                                                         <div style={{ backgroundColor: "#ffffff", padding: "0.525rem" }} className="rounded form-control d-flex align-items-center gap-1">
@@ -1624,7 +1629,7 @@ const Setting = ({ isAdmin = false }) => {
                                                         .then((resp) => {
                                                             if (resp.data) {
                                                                 const updatedData = {
-                                                                    email_settings: {...resp.data},
+                                                                    email_settings: { ...resp.data },
                                                                     selected_email_id: e.value
                                                                 }
                                                                 setCurrObj((preData) => ({
@@ -1637,9 +1642,9 @@ const Setting = ({ isAdmin = false }) => {
                                                         .catch((error) => {
                                                             console.log(error)
                                                         })
-                                                }} 
-                                                options={emailTemplate} 
-                                                value={emailTemplate?.filter((option) => String(option.value) === String(prevData?.page_1?.selected_email_id))} 
+                                                }}
+                                                    options={emailTemplate}
+                                                    value={emailTemplate?.filter((option) => String(option.value) === String(prevData?.page_1?.selected_email_id))}
                                                 />
                                             </div>
 
@@ -2071,6 +2076,12 @@ const Setting = ({ isAdmin = false }) => {
                                                                     {prevData?.["page_1"]?.button_text}
                                                                 </div>
                                                                 <div
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
+                                                                        setSideHeaderNav("form")
+                                                                        setSideNav("contentAF")
+                                                                    }}
+                                                                    className="cursor-pointer"
                                                                     style={{
                                                                         color: prevData?.["page_1"]?.heading_colorAf,
                                                                         marginTop: "0px",
@@ -2085,6 +2096,12 @@ const Setting = ({ isAdmin = false }) => {
                                                                     {prevData?.["page_1"]?.headingAf}
                                                                 </div>
                                                                 <div
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
+                                                                        setSideHeaderNav("form")
+                                                                        setSideNav("contentAF")
+                                                                    }}
+                                                                    className="cursor-pointer"
                                                                     style={{
                                                                         fontSize: prevData?.["page_1"]?.sub_heading_font_sizeAf,
                                                                         fontWeight: "300",

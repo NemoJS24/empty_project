@@ -100,7 +100,7 @@ export default function StartCampaign() {
     postReq("bulk_message", formData)
       .then(data => {
         toast.success("Message has sent!")
-        navigate('/merchant/whatsapp/message/')
+        navigate('/merchant/whatsapp/templates/')
       })
       .catch(error => {
         // Handle errors here
@@ -160,11 +160,11 @@ export default function StartCampaign() {
               })
             }
           </Row>
-          {/* <Link to="/merchant/whatsapp/is_template/" className="btn btn-primary " >Create Template</Link> */}
+          {/* <Link to="/merchant/whatsapp/template/new/" className="btn btn-primary " >Create Template</Link> */}
         </CardBody>
       </Card>
       <div class="d-flex justify-content-between">
-      <Link to='/merchant/whatsapp/message/' className='btn btn-primary btn' > Back</Link>
+      <Link to='/merchant/whatsapp/templates/' className='btn btn-primary btn' > Back</Link>
       <button onClick={() => setPage(2)} className={`btn  btn-primary ${useSelectedGroups.length === 0 ? 'opacity-0' : 'opacity-100'}`}>Next </button>
       </div>
     </>
@@ -195,7 +195,7 @@ export default function StartCampaign() {
               advanceFilter={false}
             />
           </div>
-          {/* <Link to="/merchant/whatsapp/is_template/" className="btn btn-primary " >Create Template</Link> */}
+          {/* <Link to="/merchant/whatsapp/template/new/" className="btn btn-primary " >Create Template</Link> */}
         </CardBody>
       </Card>
       <div class="d-flex justify-content-between">

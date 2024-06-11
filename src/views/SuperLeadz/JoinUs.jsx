@@ -27,7 +27,8 @@ const JoinUs = () => {
     console.log(appName, "appName")
     const [selectedPlan, setSelectedPlan] = useState(location.state?.plan_id ? location.state?.plan_id : "grow plan")
     const purchaseDate = moment(new Date()).diff(moment(location.state?.main[0]?.created_at), 'days')
-    console.log(purchaseDate)
+    const minutesDifference = moment().diff(moment(location.state?.main[0]?.created_at), 'minutes')
+    console.log(purchaseDate, minutesDifference)
     const outletData = getCurrentOutlet()
     const callPlans = (id, data) => {
 
@@ -190,7 +191,7 @@ const JoinUs = () => {
                                                             } catch (error) {
                                                                 details = cur?.details
                                                             }
-                                                            return cur.plan_name !== "Custom Pricing" ? <PricingCard purchaseDate={purchaseDate} data={cur} id={cur.id} title={cur.plan_name} price={cur.app_price} planTitle={cur.plan_name} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} callPlans={callPlans} btnCondition={String(location?.state?.plan_id).toLowerCase() === String(cur.plan_name).toLowerCase()} features={details ? details : []} popular={false} /> : ''
+                                                            return cur.plan_name !== "Custom Pricing" ? <PricingCard minutesDifference={minutesDifference} purchaseDate={purchaseDate} data={cur} id={cur.id} title={cur.plan_name} price={cur.app_price} planTitle={cur.plan_name} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} callPlans={callPlans} btnCondition={String(location?.state?.plan_id).toLowerCase() === String(cur.plan_name).toLowerCase()} features={details ? details : []} popular={false} /> : ''
             
                                                         })
                                                     }
@@ -203,7 +204,7 @@ const JoinUs = () => {
                                                             } catch (error) {
                                                                 details = cur?.details
                                                             }
-                                                            return cur.plan_name === "Custom Pricing" ? <PricingCard purchaseDate={purchaseDate} data={cur} id={cur.id} title={cur.plan_name} price={cur.app_price} planTitle={cur.plan_name} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} callPlans={callPlans} btnCondition={String(location?.state?.plan_id).toLowerCase() === String(cur.plan_name).toLowerCase()} features={details ? details : []} popular={false} /> : ''
+                                                            return cur.plan_name === "Custom Pricing" ? <PricingCard minutesDifference={minutesDifference} purchaseDate={purchaseDate} data={cur} id={cur.id} title={cur.plan_name} price={cur.app_price} planTitle={cur.plan_name} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} callPlans={callPlans} btnCondition={String(location?.state?.plan_id).toLowerCase() === String(cur.plan_name).toLowerCase()} features={details ? details : []} popular={false} /> : ''
             
                                                         })
                                                     }

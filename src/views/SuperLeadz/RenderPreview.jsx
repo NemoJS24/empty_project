@@ -1,3 +1,4 @@
+/* eslint-disable multiline-ternary */
 import React, { useContext, useEffect, useState } from 'react'
 import { Lock, PlusCircle, X, Download, Trash, ChevronUp, MoreVertical, Airplay, StopCircle, Edit3, Check, Copy, Edit, Monitor, Smartphone } from 'react-feather'
 import Editor from '../NewCustomizationFlow/Editor'
@@ -10,7 +11,7 @@ import 'swiper/modules/autoplay/autoplay.min.css'
 import Spinner from '../Components/DataTable/Spinner'
 import ReturnOfferHtml from '../NewCustomizationFlow/ReturnOfferHtml'
 import { elementStyles, commonObj } from '../NewCustomizationFlow/defaultStyles'
-import { Card, CardBody, DropdownItem, DropdownMenu, DropdownToggle, List, UncontrolledButtonDropdown } from 'reactstrap'
+import { Card, CardBody, DropdownItem, DropdownMenu, DropdownToggle, List, UncontrolledButtonDropdown, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 import { ImDisplay } from 'react-icons/im'
 import { PermissionProvider } from '../../Helper/Context'
 import toast from 'react-hot-toast'
@@ -34,6 +35,36 @@ const RenderPreview = (props) => {
             setIndicatorPosition("bottom")
         }
     }
+
+    // const handleDeletion = (isMobile) => {
+    //     const arr = currPage === "button" ? [...finalObj[isMobile ? `mobile_button` : `button`]] : [...finalObj[isMobile ? `mobile_pages` : `pages`][finalObj[isMobile ? `mobile_pages` : `pages`].findIndex($ => $.id === currPage)].values]
+
+    //     if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+    //         arr.splice(key, 1)
+    //     } else if (curElem?.element?.length && cur?.elements?.length) {
+    //         arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+    //     } else {
+    //         arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+    //     }
+
+    //     const newObj = { ...finalObj }
+    //     if (currPage === "button") {
+    //         newObj[isMobile ? `mobile_button` : `button`] = arr
+    //     } else {
+    //         const pageIndex = newObj[isMobile ? `mobile_pages` : `pages`].findIndex($ => $?.id === currPage)
+    //         newObj[isMobile ? `mobile_pages` : `pages`][pageIndex].values = arr
+    //     }
+
+    //     updatePresent({ ...newObj })
+    // }
+
+
+    const [modalOpen, setModalOpen] = useState(false)
+
+    const toggleModal = () => {
+        setModalOpen(!modalOpen)
+    }
+
 
     function capitalizeFirstLetter(str) {
         return str.charAt(0).toUpperCase() + str.slice(1)
@@ -59,7 +90,7 @@ const RenderPreview = (props) => {
     useEffect(() => {
         const rules = Object.keys(finalObj.rules).filter(
             (rule) => finalObj.rules[rule] &&
-                ['spent_on_page', 'spent_on_website', 'read_page_by', 'visited', 'not_active_page'].includes(rule)
+                ['spent_on_page', 'spent_on_website', 'read_page_by', 'visited', 'not_active_page', 'exit_intent'].includes(rule)
         )
 
         const uniqueTrueRules = [...new Set(rules)]
@@ -70,7 +101,8 @@ const RenderPreview = (props) => {
         finalObj.rules.spent_on_website,
         finalObj.rules.read_page_by,
         finalObj.rules.visited,
-        finalObj.rules.not_active_page
+        finalObj.rules.not_active_page,
+        finalObj.rules.exit_intent
     ])
 
     useEffect(() => {
@@ -353,7 +385,8 @@ const RenderPreview = (props) => {
                             <div className="flex-grow-1 position-relative h-100" style={{ backgroundImage: `url(${slPrevBg})`, backgroundSize: '100% 100%', backgroundPosition: 'top center', overflowY: "auto", position: "relative", ...bgsettings, backgroundImage: currPage === "button" ? "none" : bgsettings?.backgroundImage, backgroundColor: currPage === "button" ? "none" : bgsettings?.backgroundColor, display: "flex", flexDirection: "column" }}>
                                 <div id='preview_section' style={{ width: "100%", height: "100%", position: "relative", overflowY: "auto", display: "flex", justifyContent: popPosition?.includes("L") ? "start" : popPosition?.includes("C") ? "center" : "end", alignItems: popPosition?.includes("T") ? "start" : popPosition?.includes("M") ? "center" : "end", flexGrow: "1" }}>
                                     <div style={currPage === "button" ? { position: "relative", width: btnStyles?.width, maxWidth: btnStyles?.maxWidth, maxHeight: "100%", minHeight: btnStyles?.minHeight, marginTop: btnStyles?.marginTop, marginRight: btnStyles?.marginRight, marginBottom: btnStyles?.marginBottom, marginLeft: btnStyles?.marginLeft, borderRadius: btnStyles?.borderRadius } : { position: "relative", width: bgStyles?.width, maxWidth: bgStyles?.maxWidth, maxHeight: "100%", minHeight: bgStyles?.minHeight, marginTop: bgStyles?.marginTop, marginRight: bgStyles?.marginRight, marginBottom: bgStyles?.marginBottom, marginLeft: bgStyles?.marginLeft, borderRadius: bgStyles?.borderRadius }}>
-                                        {currPage !== "button" &&
+                                        {
+                                            ((currPage === "button" && !finalObj?.closePopUpOn?.disable) || (currPage !== "button")) &&
                                             <div id="cross_btn_cont" tabindex="0" style={{ position: "absolute", inset: "0px 0px auto auto", zIndex: "2", backgroundColor: crossStyle?.backgroundColor, borderRadius: crossStyle?.borderRadius, marginBottom: crossStyle?.marginBottom, transform: `translate(${crossStyle?.translateX}, ${crossStyle?.translateY})` }}>
                                                 <div id="cross_btn_box" className={`${currPosition?.selectedType === "close" ? "cross_btn_box_border" : ""}`}>
                                                     <X size={crossStyle?.width} height={crossStyle?.height} color={crossStyle?.color}
@@ -365,6 +398,7 @@ const RenderPreview = (props) => {
                                                 </div>
                                             </div>
                                         }
+
                                         <div id="dropZoneParent" onClick={(e) => {
                                             e.stopPropagation()
                                             setCurrPosition({ ...currPosition, selectedType: "main" })
@@ -381,7 +415,7 @@ const RenderPreview = (props) => {
                                                     setCurrPosition({ ...currPosition, id: colWise.length, selectedType: transferType.includes("col") ? "block" : transferType })
                                                     setValues(elementStyles[transferType.includes("col") ? "block" : transferType])
                                                 }
-                                            }} className="pop-up" style={currPage === "button" ? { position: 'relative', zIndex: '1', overflow: "visible", ...btnStyles, backgroundColor: btnStyles?.backgroundColor, backgroundImage: btnStyles?.backgroundImage, width: "100%", maxWidth: "100%", marginTop: "0px", marginRight: "0px", marginBottom: "0px", marginLeft: "0px", position: "relative" } : { position: 'relative', zIndex: '1', overflow: "visible", ...bgStyles, backgroundColor: bgStyles?.backgroundColor, backgroundImage: bgStyles?.backgroundImage, width: "100%", maxWidth: "100%", marginTop: "0px", marginRight: "0px", marginBottom: "0px", marginLeft: "0px", position: "relative" }}>
+                                            }} className="pop-ups" style={currPage === "button" ? { position: 'relative', zIndex: '1', overflow: "visible", ...btnStyles, backgroundColor: btnStyles?.backgroundColor, backgroundImage: btnStyles?.backgroundImage, width: "100%", maxWidth: "100%", marginTop: "0px", marginRight: "0px", marginBottom: "0px", marginLeft: "0px", position: "relative" } : { position: 'relative', zIndex: '1', overflow: "visible", ...bgStyles, backgroundColor: bgStyles?.backgroundColor, backgroundImage: bgStyles?.backgroundImage, width: "100%", maxWidth: "100%", marginTop: "0px", marginRight: "0px", marginBottom: "0px", marginLeft: "0px", position: "relative" }}>
                                             {currPage !== "button" && showBrand && <div className="branding" style={{ position: "absolute", inset: "auto 0px 0px auto", zIndex: "9999999999999999999999999", ...brandStyles }}><span className="cursor-pointer" onClick={e => {
                                                 e.preventDefault()
                                                 e.stopPropagation()
@@ -615,40 +649,162 @@ const RenderPreview = (props) => {
                                                                                                     e.stopPropagation()
                                                                                                     setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
                                                                                                 }} className="d-flex w-100" style={{ position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
-                                                                                                <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
+                                                                                                {/* <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
                                                                                                     e.stopPropagation()
                                                                                                     if (colWise.length <= 1) {
                                                                                                         setCurrPosition({ ...currPosition, selectedType: "main" })
                                                                                                         setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                                                                        console.log("inside first condition", colWise.length)
                                                                                                     } else {
                                                                                                         setCurrPosition({ ...currPosition, selectedType: "block" })
                                                                                                         setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
+                                                                                                        console.log("inside second condition")
                                                                                                     }
                                                                                                     const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
                                                                                                     const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
                                                                                                     if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
                                                                                                         arr.splice(key, 1)
                                                                                                         arrRev.splice(key, 1)
-                                                                                                    } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                        console.log("inside second first condition")
+                                                                                                    } else if (curElem?.element?.length && cur?.elements?.length) {
                                                                                                         arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
                                                                                                         arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                        console.log("inside second second condition")
                                                                                                     } else {
                                                                                                         arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
                                                                                                         arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                        console.log("inside second third condition", curElem?.element?.length, cur?.elements?.length)
                                                                                                     }
                                                                                                     const newObj = { ...finalObj }
                                                                                                     if (currPage === "button") {
                                                                                                         newObj[`${mobileCondition}button`] = arr
                                                                                                         newObj[`${mobileConditionRev}button`] = arrRev
+                                                                                                        console.log("inside third first condition")
                                                                                                     } else {
                                                                                                         const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
                                                                                                         const mobile_pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
                                                                                                         newObj[`${mobileCondition}pages`][pageIndex].values = arr
                                                                                                         newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = arrRev
+                                                                                                        console.log("inside third second condition")
                                                                                                     }
 
                                                                                                     updatePresent({ ...newObj })
-                                                                                                }} />
+                                                                                                }} /> */}
+                                                                                                <Trash
+                                                                                                    color="#ffffff"
+                                                                                                    size={30}
+                                                                                                    className="cursor-pointer"
+                                                                                                    style={{ backgroundColor: "#727272", padding: "0.5rem" }}
+                                                                                                    onClick={(e) => {
+                                                                                                        e.stopPropagation()
+                                                                                                        toggleModal()
+                                                                                                    }}
+                                                                                                />
+                                                                                                {/* {console.log("curElem?.element?.length", currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values][key].elements[currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values][key].element]?.findIndex($ => $?.positionType === curElem.positionType).element?.splice(j, 1))} */}
+
+                                                                                                <Modal isOpen={modalOpen} toggle={toggleModal}>
+                                                                                                    <ModalHeader toggle={toggleModal}>Delete Item</ModalHeader>
+                                                                                                    <ModalBody>
+                                                                                                        Do you want to delete this item on both mobile and desktop, or only on the Current View?
+                                                                                                    </ModalBody>
+                                                                                                    <ModalFooter>
+                                                                                                        <Button
+                                                                                                            color="danger"
+                                                                                                            onClick={(e) => {
+                                                                                                                e.stopPropagation()
+                                                                                                                if (colWise.length <= 1) {
+                                                                                                                    setCurrPosition({ ...currPosition, selectedType: "main" })
+                                                                                                                    setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                                                                                    console.log("inside first condition", colWise.length)
+                                                                                                                } else {
+                                                                                                                    setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                                    setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
+                                                                                                                    console.log("inside second condition")
+                                                                                                                }
+                                                                                                                const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                                const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                                if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                                    arr.splice(key, 1)
+                                                                                                                    arrRev.splice(key, 1)
+                                                                                                                    console.log("inside second first condition")
+                                                                                                                } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                                    arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                                    arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                                    console.log("inside second second condition")
+                                                                                                                } else {
+                                                                                                                    arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                                    arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                                    console.log("inside second third condition", curElem?.element?.length, cur?.elements?.length)
+                                                                                                                }
+                                                                                                                // console.log("push console", curElem)
+                                                                                                                const newObj = { ...finalObj }
+                                                                                                                if (currPage === "button") {
+                                                                                                                    newObj[`${mobileCondition}button`] = arr
+                                                                                                                    newObj[`${mobileConditionRev}button`] = arrRev
+                                                                                                                    console.log("inside third first condition")
+                                                                                                                } else {
+                                                                                                                    const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                                    const mobile_pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                                    newObj[`${mobileCondition}pages`][pageIndex].values = arr
+                                                                                                                    newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = arrRev
+                                                                                                                    console.log("inside third second condition", pageIndex)
+                                                                                                                }
+                                                                                                                console.log("push console", newObj)
+
+                                                                                                                updatePresent({ ...newObj })
+                                                                                                                toggleModal()
+                                                                                                            }}
+                                                                                                        >
+                                                                                                            Both
+                                                                                                        </Button>
+                                                                                                        <Button color="primary" onClick={() => {
+                                                                                                            const arr = currPage === "button"
+                                                                                                                ? [...finalObj[isMobile ? `mobile_button` : `button`]]
+                                                                                                                : [
+                                                                                                                    ...finalObj[isMobile ? `mobile_pages` : `pages`][
+                                                                                                                        finalObj[isMobile ? `mobile_pages` : `pages`].findIndex(
+                                                                                                                            ($) => $.id === currPage
+                                                                                                                        )
+                                                                                                                    ].values
+                                                                                                                ]
+
+                                                                                                            if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                                arr.splice(key, 1)
+                                                                                                            } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                                arr[key].elements[
+                                                                                                                    arr[key].elements.findIndex(
+                                                                                                                        ($) => $?.positionType === curElem.positionType
+                                                                                                                    )
+                                                                                                                ].element.splice(j, 1, { ...commonObj })
+                                                                                                            } else {
+                                                                                                                arr[key].elements[
+                                                                                                                    arr[key].elements.findIndex(
+                                                                                                                        ($) => $?.positionType === curElem.positionType
+                                                                                                                    )
+                                                                                                                ].element.splice(j, 1)
+                                                                                                            }
+
+                                                                                                            const newObj = { ...finalObj }
+                                                                                                            if (currPage === "button") {
+                                                                                                                newObj[isMobile ? `mobile_button` : `button`] = arr
+                                                                                                            } else {
+                                                                                                                const pageIndex = newObj[isMobile ? `mobile_pages` : `pages`].findIndex(
+                                                                                                                    ($) => $?.id === currPage
+                                                                                                                )
+                                                                                                                newObj[isMobile ? `mobile_pages` : `pages`][pageIndex].values = arr
+                                                                                                            }
+
+                                                                                                            updatePresent({ ...newObj })
+                                                                                                            toggleModal()
+                                                                                                        }}
+                                                                                                        >
+                                                                                                            Current View
+                                                                                                        </Button>
+                                                                                                        <Button color="secondary" onClick={toggleModal}>
+                                                                                                            Cancel
+                                                                                                        </Button>
+                                                                                                    </ModalFooter>
+                                                                                                </Modal>
                                                                                                 <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />
                                                                                             </span>}
                                                                                             {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute resizeDiv" style={{ inset: "0px", outline: "2px solid #727272", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
@@ -704,7 +860,7 @@ const RenderPreview = (props) => {
                                                                                                                     newObj.mobile_pages[pageIndex].values[key].elements[positionIndex].element[j].editorState = editorState
                                                                                                                 }
                                                                                                             }
-                                                                                                            // const delay = 5000
+                                                                                                            // const delay = 50
                                                                                                             // const request = setTimeout(() => {
                                                                                                             updatePresent(newObj)
                                                                                                             // }, delay)
@@ -712,6 +868,8 @@ const RenderPreview = (props) => {
                                                                                                             //     clearTimeout(request)
                                                                                                             // }
                                                                                                         }
+                                                                                                        console.log("subElem?.editorState", curElem)
+
                                                                                                     }}
                                                                                                     // htmlContent={subElem?.textValue}
                                                                                                     editorState={subElem?.editorState ? subElem?.editorState : `{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"font-family: Montserrat;font-weight: 100;font-size: 12px;","text":"Enter text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`}
@@ -787,7 +945,7 @@ const RenderPreview = (props) => {
                                                                                                         e.stopPropagation()
                                                                                                         setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
                                                                                                     }} style={{ backgroundColor: "#727272", position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
-                                                                                                    <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }} onClick={(e) => {
+                                                                                                    {/* <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }} onClick={(e) => {
                                                                                                         e.stopPropagation()
                                                                                                         if (colWise.length <= 1) {
                                                                                                             setCurrPosition({ ...currPosition, selectedType: "main" })
@@ -820,7 +978,146 @@ const RenderPreview = (props) => {
                                                                                                         }
                                                                                                         updatePresent({ ...newObj })
                                                                                                         // setcolWise([...arr])
-                                                                                                    }} />
+                                                                                                    }} /> */}
+                                                                                                    {/* <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }} onClick={(e) => {
+                                                                                                        e.stopPropagation()
+                                                                                                        if (colWise.length <= 1) {
+                                                                                                            setCurrPosition({ ...currPosition, selectedType: "main" })
+                                                                                                            setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                                                                        } else {
+                                                                                                            setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                            setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
+                                                                                                        }
+                                                                                                        const arr = [...colWise]
+                                                                                                        if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                            arr.splice(key, 1)
+                                                                                                        } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                            arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                        } else {
+                                                                                                            arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                        }
+                                                                                                        setcolWise([...arr])
+                                                                                                    }} /> */}
+
+
+                                                                                                    <Trash
+                                                                                                        color="#ffffff"
+                                                                                                        size={30}
+                                                                                                        className="cursor-pointer"
+                                                                                                        style={{ padding: "0.5rem" }}
+                                                                                                        onClick={(e) => {
+                                                                                                            e.stopPropagation()
+                                                                                                            toggleModal()
+                                                                                                        }}
+                                                                                                    />
+
+                                                                                                    <Modal isOpen={modalOpen} toggle={toggleModal}>
+                                                                                                        <ModalHeader toggle={toggleModal}>Delete Item</ModalHeader>
+                                                                                                        <ModalBody>
+                                                                                                            Do you want to delete this item on both mobile and desktop, or only on the Current View?
+                                                                                                        </ModalBody>
+                                                                                                        <ModalFooter>
+                                                                                                            <Button
+                                                                                                                color="danger"
+                                                                                                                onClick={() => {
+                                                                                                                    const handleDeletion = (isMobile) => {
+                                                                                                                        const arr = currPage === "button"
+                                                                                                                            ? [...finalObj[isMobile ? `mobile_button` : `button`]]
+                                                                                                                            : [
+                                                                                                                                ...finalObj[isMobile ? `mobile_pages` : `pages`][
+                                                                                                                                    finalObj[isMobile ? `mobile_pages` : `pages`].findIndex(
+                                                                                                                                        ($) => $.id === currPage
+                                                                                                                                    )
+                                                                                                                                ].values
+                                                                                                                            ]
+
+                                                                                                                        if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                                            arr.splice(key, 1)
+                                                                                                                        } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                                            arr[key].elements[
+                                                                                                                                arr[key].elements.findIndex(
+                                                                                                                                    ($) => $?.positionType === curElem.positionType
+                                                                                                                                )
+                                                                                                                            ].element.splice(j, 1, { ...commonObj })
+                                                                                                                        } else {
+                                                                                                                            arr[key].elements[
+                                                                                                                                arr[key].elements.findIndex(
+                                                                                                                                    ($) => $?.positionType === curElem.positionType
+                                                                                                                                )
+                                                                                                                            ].element.splice(j, 1)
+                                                                                                                        }
+
+                                                                                                                        const newObj = { ...finalObj }
+                                                                                                                        if (currPage === "button") {
+                                                                                                                            newObj[isMobile ? `mobile_button` : `button`] = arr
+                                                                                                                        } else {
+                                                                                                                            const pageIndex = newObj[isMobile ? `mobile_pages` : `pages`].findIndex(
+                                                                                                                                ($) => $?.id === currPage
+                                                                                                                            )
+                                                                                                                            newObj[isMobile ? `mobile_pages` : `pages`][pageIndex].values = arr
+                                                                                                                        }
+
+                                                                                                                        updatePresent({ ...newObj })
+                                                                                                                    }
+
+                                                                                                                    handleDeletion(false) // Delete for desktop
+                                                                                                                    handleDeletion(true) // Delete for mobile
+                                                                                                                    toggleModal()
+                                                                                                                }}
+                                                                                                            >
+                                                                                                                Both
+                                                                                                            </Button>
+                                                                                                            <Button
+                                                                                                                color="primary"
+                                                                                                                onClick={() => {
+                                                                                                                    const arr = currPage === "button"
+                                                                                                                        ? [...finalObj[isMobile ? `mobile_button` : `button`]]
+                                                                                                                        : [
+                                                                                                                            ...finalObj[isMobile ? `mobile_pages` : `pages`][
+                                                                                                                                finalObj[isMobile ? `mobile_pages` : `pages`].findIndex(
+                                                                                                                                    ($) => $.id === currPage
+                                                                                                                                )
+                                                                                                                            ].values
+                                                                                                                        ]
+
+                                                                                                                    if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                                        arr.splice(key, 1)
+                                                                                                                    } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                                        arr[key].elements[
+                                                                                                                            arr[key].elements.findIndex(
+                                                                                                                                ($) => $?.positionType === curElem.positionType
+                                                                                                                            )
+                                                                                                                        ].element.splice(j, 1, { ...commonObj })
+                                                                                                                    } else {
+                                                                                                                        arr[key].elements[
+                                                                                                                            arr[key].elements.findIndex(
+                                                                                                                                ($) => $?.positionType === curElem.positionType
+                                                                                                                            )
+                                                                                                                        ].element.splice(j, 1)
+                                                                                                                    }
+
+                                                                                                                    const newObj = { ...finalObj }
+                                                                                                                    if (currPage === "button") {
+                                                                                                                        newObj[isMobile ? `mobile_button` : `button`] = arr
+                                                                                                                    } else {
+                                                                                                                        const pageIndex = newObj[isMobile ? `mobile_pages` : `pages`].findIndex(
+                                                                                                                            ($) => $?.id === currPage
+                                                                                                                        )
+                                                                                                                        newObj[isMobile ? `mobile_pages` : `pages`][pageIndex].values = arr
+                                                                                                                    }
+
+                                                                                                                    updatePresent({ ...newObj })
+                                                                                                                    toggleModal()
+                                                                                                                }}
+                                                                                                            >
+                                                                                                                Current View
+                                                                                                            </Button>
+                                                                                                            <Button color="secondary" onClick={toggleModal}>
+                                                                                                                Cancel
+                                                                                                            </Button>
+                                                                                                        </ModalFooter>
+                                                                                                    </Modal>
+
                                                                                                     {/* <Copy color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }}
                                                                                                                                     onClick={(e) => {
                                                                                                                                         e.stopPropagation()
@@ -918,7 +1215,7 @@ const RenderPreview = (props) => {
                                                                                                     e.stopPropagation()
                                                                                                     setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
                                                                                                 }} className="d-flex w-100" style={{ position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
-                                                                                                <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
+                                                                                                {/* <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
                                                                                                     e.stopPropagation()
                                                                                                     if (colWise.length <= 1) {
                                                                                                         setCurrPosition({ ...currPosition, selectedType: "main" })
@@ -951,7 +1248,167 @@ const RenderPreview = (props) => {
                                                                                                     }
                                                                                                     updatePresent({ ...newObj })
                                                                                                     // setcolWise([...arr])
-                                                                                                }} />
+                                                                                                }} /> */}
+                                                                                                {/* <Trash
+                                                                                                    color="#ffffff"
+                                                                                                    size={30}
+                                                                                                    className="cursor-pointer"
+                                                                                                    style={{ backgroundColor: "#727272", padding: "0.5rem" }}
+                                                                                                    onClick={(e) => {
+                                                                                                        e.stopPropagation()
+
+                                                                                                        const userChoice = window.confirm("Do you want to delete for mobile only? Click 'Cancel' to delete for desktop only. Click 'OK' to delete for both.")
+
+                                                                                                        const handleDeletion = (isMobile) => {
+                                                                                                            const arr = currPage === "button" ? [...finalObj[isMobile ? `mobile_button` : `button`]] : [...finalObj[isMobile ? `mobile_pages` : `pages`][finalObj[isMobile ? `mobile_pages` : `pages`].findIndex($ => $.id === currPage)].values]
+
+                                                                                                            if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                                arr.splice(key, 1)
+                                                                                                                    console.log("1 1")
+                                                                                                            } else if (curElem?.element?.length && cur?.elements?.length) {
+                                                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                                console.log("1 2")
+                                                                                                            } else {
+                                                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                                console.log("1 3")
+                                                                                                            }
+
+                                                                                                            const newObj = { ...finalObj }
+                                                                                                            if (currPage === "button") {
+                                                                                                                newObj[isMobile ? `mobile_button` : `button`] = arr
+                                                                                                                console.log("1 4")
+                                                                                                            } else {
+                                                                                                                const pageIndex = newObj[isMobile ? `mobile_pages` : `pages`].findIndex($ => $?.id === currPage)
+                                                                                                                newObj[isMobile ? `mobile_pages` : `pages`][pageIndex].values = arr
+                                                                                                                console.log("1 5")
+                                                                                                            }
+
+                                                                                                            updatePresent({ ...newObj })
+                                                                                                        }
+
+                                                                                                        if (userChoice) {
+                                                                                                            // Delete for both mobile and desktop
+                                                                                                            handleDeletion(false) // Desktop
+                                                                                                            handleDeletion(true)  // Mobile
+                                                                                                        } else {
+                                                                                                            const mobileChoice = window.confirm("Do you want to delete for mobile only?")
+                                                                                                            if (mobileChoice) {
+                                                                                                                handleDeletion(true)  // Mobile
+                                                                                                            } else {
+                                                                                                                handleDeletion(false) // Desktop
+                                                                                                            }
+                                                                                                        }
+
+                                                                                                        if (colWise.length <= 1) {
+                                                                                                            setCurrPosition({ ...currPosition, selectedType: "main" })
+                                                                                                            setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                                                                        } else {
+                                                                                                            setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                            setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
+                                                                                                        }
+                                                                                                    }}
+                                                                                                /> */}
+                                                                                                <Trash
+                                                                                                    color="#ffffff"
+                                                                                                    size={30}
+                                                                                                    className="cursor-pointer"
+                                                                                                    style={{ backgroundColor: "#727272", padding: "0.5rem" }}
+                                                                                                    onClick={(e) => {
+                                                                                                        e.stopPropagation()
+                                                                                                        toggleModal()
+                                                                                                    }}
+                                                                                                />
+                                                                                                <Modal isOpen={modalOpen} toggle={toggleModal}>
+                                                                                                    <ModalHeader toggle={toggleModal}>Delete Item</ModalHeader>
+                                                                                                    <ModalBody>
+                                                                                                        Do you want to delete this item on both mobile and desktop, or only on the Current View?
+                                                                                                    </ModalBody>
+                                                                                                    <ModalFooter>
+                                                                                                        <Button color="danger" onClick={(e) => {
+                                                                                                            e.stopPropagation()
+                                                                                                            if (colWise.length <= 1) {
+                                                                                                                setCurrPosition({ ...currPosition, selectedType: "main" })
+                                                                                                                setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                                                                                console.log("Button 1")
+                                                                                                            } else {
+                                                                                                                setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                                setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
+                                                                                                                console.log("Button 2")
+                                                                                                            }
+                                                                                                            const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                            const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                            if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                                arr.splice(key, 1)
+                                                                                                                arrRev.splice(key, 1)
+                                                                                                                console.log("Button 3")
+                                                                                                            } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                                arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                                console.log("Button 4")
+                                                                                                            } else {
+                                                                                                                arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                                arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                                console.log("Button 5")
+                                                                                                            }
+                                                                                                            const newObj = { ...finalObj }
+                                                                                                            if (currPage === "button") {
+                                                                                                                newObj[`${mobileCondition}button`] = arr
+                                                                                                                newObj[`${mobileConditionRev}button`] = arrRev
+                                                                                                                console.log("Button 6")
+                                                                                                            } else {
+                                                                                                                const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                                const mobile_pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                                newObj[`${mobileCondition}pages`][pageIndex].values = arr
+                                                                                                                newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = arrRev
+                                                                                                                console.log("Button 7")
+                                                                                                            }
+                                                                                                            updatePresent({ ...newObj })
+                                                                                                            // setcolWise([...arr])
+                                                                                                        }}>Both</Button>
+                                                                                                        <Button color="primary" onClick={() => {
+                                                                                                            const arr = currPage === "button"
+                                                                                                                ? [...finalObj[isMobile ? `mobile_button` : `button`]]
+                                                                                                                : [
+                                                                                                                    ...finalObj[isMobile ? `mobile_pages` : `pages`][
+                                                                                                                        finalObj[isMobile ? `mobile_pages` : `pages`].findIndex(
+                                                                                                                            ($) => $.id === currPage
+                                                                                                                        )
+                                                                                                                    ].values
+                                                                                                                ]
+
+                                                                                                            if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                                arr.splice(key, 1)
+                                                                                                            } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                                arr[key].elements[
+                                                                                                                    arr[key].elements.findIndex(
+                                                                                                                        ($) => $?.positionType === curElem.positionType
+                                                                                                                    )
+                                                                                                                ].element.splice(j, 1, { ...commonObj })
+                                                                                                            } else {
+                                                                                                                arr[key].elements[
+                                                                                                                    arr[key].elements.findIndex(
+                                                                                                                        ($) => $?.positionType === curElem.positionType
+                                                                                                                    )
+                                                                                                                ].element.splice(j, 1)
+                                                                                                            }
+
+                                                                                                            const newObj = { ...finalObj }
+                                                                                                            if (currPage === "button") {
+                                                                                                                newObj[isMobile ? `mobile_button` : `button`] = arr
+                                                                                                            } else {
+                                                                                                                const pageIndex = newObj[isMobile ? `mobile_pages` : `pages`].findIndex(
+                                                                                                                    ($) => $?.id === currPage
+                                                                                                                )
+                                                                                                                newObj[isMobile ? `mobile_pages` : `pages`][pageIndex].values = arr
+                                                                                                            }
+
+                                                                                                            updatePresent({ ...newObj })
+                                                                                                            toggleModal()
+                                                                                                        }}>Current View</Button>
+                                                                                                        <Button color="secondary" onClick={toggleModal}>Cancel</Button>
+                                                                                                    </ModalFooter>
+                                                                                                </Modal>
+
                                                                                                 <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />
                                                                                                 {/* <Copy color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }}
                                                                                                         onClick={(e) => {
@@ -1078,11 +1535,11 @@ const RenderPreview = (props) => {
                                                                                                     e.stopPropagation()
                                                                                                     setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
                                                                                                 }} style={{ backgroundColor: "#727272", position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
-                                                                                                <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }} onClick={(e) => {
+                                                                                                {/* <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }} onClick={(e) => {
                                                                                                     e.stopPropagation()
                                                                                                     if (colWise.length <= 1) {
                                                                                                         setCurrPosition({ ...currPosition, selectedType: "main" })
-                                                                                                        setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                                                                        setIndexes({ cur: -1, curElem: "left", subElem: "grandparent" })
                                                                                                     } else {
                                                                                                         setCurrPosition({ ...currPosition, selectedType: "block" })
                                                                                                         setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
@@ -1111,7 +1568,123 @@ const RenderPreview = (props) => {
                                                                                                     }
                                                                                                     updatePresent({ ...newObj })
                                                                                                     // setcolWise([...arr])
-                                                                                                }} />
+                                                                                                }} /> */}
+                                                                                                <Trash
+                                                                                                    color="#ffffff"
+                                                                                                    size={30}
+                                                                                                    className="cursor-pointer"
+                                                                                                    style={{ padding: "0.5rem" }}
+                                                                                                    onClick={(e) => {
+                                                                                                        e.stopPropagation()
+                                                                                                        toggleModal()
+                                                                                                    }}
+                                                                                                />
+
+                                                                                                <Modal isOpen={modalOpen} toggle={toggleModal}>
+                                                                                                    <ModalHeader toggle={toggleModal}>Delete Item</ModalHeader>
+                                                                                                    <ModalBody>
+                                                                                                        Do you want to delete this item on both mobile and desktop, or only on the Current View?
+                                                                                                    </ModalBody>
+                                                                                                    <ModalFooter>
+                                                                                                        <Button
+                                                                                                            color="danger"
+                                                                                                            onClick={(e) => {
+                                                                                                                e.stopPropagation()
+                                                                                                                if (colWise.length <= 1) {
+                                                                                                                    setCurrPosition({ ...currPosition, selectedType: "main" })
+                                                                                                                    setIndexes({ cur: -1, curElem: "left", subElem: "grandparent" })
+                                                                                                                    console.log("Input 1")
+                                                                                                                } else {
+                                                                                                                    setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                                    setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
+                                                                                                                    console.log("Input 1")
+                                                                                                                }
+                                                                                                                const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                                const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                                if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                                    arr.splice(key, 1)
+                                                                                                                    arrRev.splice(key, 1)
+                                                                                                                    console.log("Input 1")
+                                                                                                                } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                                    arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                                    arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                                    console.log("Input 1")
+                                                                                                                } else {
+                                                                                                                    arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                                    arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                                    console.log("Input 1")
+                                                                                                                }
+                                                                                                                const newObj = { ...finalObj }
+                                                                                                                if (currPage === "button") {
+                                                                                                                    newObj[`${mobileCondition}button`] = arr
+                                                                                                                    newObj[`${mobileConditionRev}button`] = arrRev
+                                                                                                                    console.log("Input 1")
+                                                                                                                } else {
+                                                                                                                    const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                                    const mobile_pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                                    newObj[`${mobileCondition}pages`][pageIndex].values = arr
+                                                                                                                    newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = arrRev
+                                                                                                                    console.log("Input 1")
+                                                                                                                }
+                                                                                                                updatePresent({ ...newObj })
+                                                                                                                toggleModal()
+                                                                                                                // setcolWise([...arr])
+                                                                                                            }}
+                                                                                                        >
+                                                                                                            Both
+                                                                                                        </Button>
+                                                                                                        <Button
+                                                                                                            color="primary"
+                                                                                                            onClick={() => {
+                                                                                                                const arr = currPage === "button"
+                                                                                                                    ? [...finalObj[isMobile ? `mobile_button` : `button`]]
+                                                                                                                    : [
+                                                                                                                        ...finalObj[isMobile ? `mobile_pages` : `pages`][
+                                                                                                                            finalObj[isMobile ? `mobile_pages` : `pages`].findIndex(
+                                                                                                                                ($) => $.id === currPage
+                                                                                                                            )
+                                                                                                                        ].values
+                                                                                                                    ]
+
+                                                                                                                if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                                    arr.splice(key, 1)
+                                                                                                                } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                                    arr[key].elements[
+                                                                                                                        arr[key].elements.findIndex(
+                                                                                                                            ($) => $?.positionType === curElem.positionType
+                                                                                                                        )
+                                                                                                                    ].element.splice(j, 1, { ...commonObj })
+                                                                                                                } else {
+                                                                                                                    arr[key].elements[
+                                                                                                                        arr[key].elements.findIndex(
+                                                                                                                            ($) => $?.positionType === curElem.positionType
+                                                                                                                        )
+                                                                                                                    ].element.splice(j, 1)
+                                                                                                                }
+
+                                                                                                                const newObj = { ...finalObj }
+                                                                                                                if (currPage === "button") {
+                                                                                                                    newObj[isMobile ? `mobile_button` : `button`] = arr
+                                                                                                                } else {
+                                                                                                                    const pageIndex = newObj[isMobile ? `mobile_pages` : `pages`].findIndex(
+                                                                                                                        ($) => $?.id === currPage
+                                                                                                                    )
+                                                                                                                    newObj[isMobile ? `mobile_pages` : `pages`][pageIndex].values = arr
+                                                                                                                }
+
+                                                                                                                updatePresent({ ...newObj })
+                                                                                                                toggleModal()
+                                                                                                            }}
+                                                                                                        >
+                                                                                                            Current View
+                                                                                                        </Button>
+                                                                                                        <Button color="secondary" onClick={toggleModal}>
+                                                                                                            Cancel
+                                                                                                        </Button>
+                                                                                                    </ModalFooter>
+                                                                                                </Modal>
+
+
                                                                                                 {subElem?.hasLabel && <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />}
                                                                                                 {/* <Copy color="#ffffff" size={30} className="cursor-pointer" style={{ padding: "0.5rem" }}
                                                                                                         onClick={(e) => {
@@ -1388,7 +1961,7 @@ const RenderPreview = (props) => {
                                                                                                     e.stopPropagation()
                                                                                                     setMouseEnterIndex({ cur: false, curElem: false, subElem: false })
                                                                                                 }} className="d-flex w-100" style={{ position: "absolute", top: "0px", left: "0px", transform: "translateY(-99%)", zIndex: "99999999999999999999999999999999999999" }}>
-                                                                                                <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
+                                                                                                {/* <Trash color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={(e) => {
                                                                                                     e.stopPropagation()
                                                                                                     if (colWise.length <= 1) {
                                                                                                         setCurrPosition({ ...currPosition, selectedType: "main" })
@@ -1421,7 +1994,121 @@ const RenderPreview = (props) => {
                                                                                                     }
                                                                                                     updatePresent({ ...newObj })
                                                                                                     // setcolWise([...arr])
-                                                                                                }} />
+                                                                                                }} /> */}
+                                                                                                <Trash
+                                                                                                    color="#ffffff"
+                                                                                                    size={30}
+                                                                                                    className="cursor-pointer"
+                                                                                                    style={{ backgroundColor: "#727272", padding: "0.5rem" }}
+                                                                                                    onClick={(e) => {
+                                                                                                        e.stopPropagation()
+                                                                                                        toggleModal()
+                                                                                                    }}
+                                                                                                />
+
+                                                                                                <Modal isOpen={modalOpen} toggle={toggleModal}>
+                                                                                                    <ModalHeader toggle={toggleModal}>Delete Item</ModalHeader>
+                                                                                                    <ModalBody>
+                                                                                                        Do you want to delete this item on both mobile and desktop, or only on the Current View?
+                                                                                                    </ModalBody>
+                                                                                                    <ModalFooter>
+                                                                                                        <Button
+                                                                                                            color="danger"
+                                                                                                            onClick={(e) => {
+                                                                                                                e.stopPropagation()
+                                                                                                                if (colWise.length <= 1) {
+                                                                                                                    setCurrPosition({ ...currPosition, selectedType: "main" })
+                                                                                                                    setIndexes({ cur: 0, curElem: "left", subElem: "grandparent" })
+                                                                                                                    console.log("T&C 1")
+                                                                                                                } else {
+                                                                                                                    setCurrPosition({ ...currPosition, selectedType: "block" })
+                                                                                                                    setIndexes({ cur: key - 1, curElem: "left", subElem: "grandparent" })
+                                                                                                                    console.log("T&C 1")
+                                                                                                                }
+                                                                                                                const arr = currPage === "button" ? [...finalObj?.[`button`]] : [...finalObj?.[`pages`][finalObj?.[`pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                                const arrRev = currPage === "button" ? [...finalObj?.[`mobile_button`]] : [...finalObj?.[`mobile_pages`][finalObj?.[`mobile_pages`]?.findIndex($ => $.id === currPage)].values]
+                                                                                                                if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                                    arr.splice(key, 1)
+                                                                                                                    arrRev.splice(key, 1)
+                                                                                                                    console.log("T&C 1")
+                                                                                                                } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                                    arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                                    arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1, { ...commonObj })
+                                                                                                                    console.log("T&C 1")
+                                                                                                                } else {
+                                                                                                                    arr[key].elements[arr[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                                    arrRev[key].elements[arrRev[key].elements.findIndex($ => $?.positionType === curElem.positionType)].element.splice(j, 1)
+                                                                                                                    console.log("T&C 1")
+                                                                                                                }
+                                                                                                                const newObj = { ...finalObj }
+                                                                                                                if (currPage === "button") {
+                                                                                                                    newObj[`${mobileCondition}button`] = arr
+                                                                                                                    newObj[`${mobileConditionRev}button`] = arrRev
+                                                                                                                    console.log("T&C 1")
+                                                                                                                } else {
+                                                                                                                    const pageIndex = newObj?.[`${mobileCondition}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                                    const mobile_pageIndex = newObj?.[`${mobileConditionRev}pages`]?.findIndex($ => $?.id === currPage)
+                                                                                                                    newObj[`${mobileCondition}pages`][pageIndex].values = arr
+                                                                                                                    newObj[`${mobileConditionRev}pages`][mobile_pageIndex].values = arrRev
+                                                                                                                    console.log("T&C 1")
+                                                                                                                }
+                                                                                                                updatePresent({ ...newObj })
+                                                                                                                // setcolWise([...arr])
+                                                                                                            }}
+                                                                                                        >
+                                                                                                            Both
+                                                                                                        </Button>
+                                                                                                        <Button
+                                                                                                            color="primary"
+                                                                                                            onClick={() => {
+                                                                                                                const arr = currPage === "button"
+                                                                                                                    ? [...finalObj[isMobile ? `mobile_button` : `button`]]
+                                                                                                                    : [
+                                                                                                                        ...finalObj[isMobile ? `mobile_pages` : `pages`][
+                                                                                                                            finalObj[isMobile ? `mobile_pages` : `pages`].findIndex(
+                                                                                                                                ($) => $.id === currPage
+                                                                                                                            )
+                                                                                                                        ].values
+                                                                                                                    ]
+
+                                                                                                                if (curElem?.element?.length <= 1 && cur?.elements?.length <= 1) {
+                                                                                                                    arr.splice(key, 1)
+                                                                                                                } else if (curElem?.element?.length <= 1 && cur?.elements?.length >= 1) {
+                                                                                                                    arr[key].elements[
+                                                                                                                        arr[key].elements.findIndex(
+                                                                                                                            ($) => $?.positionType === curElem.positionType
+                                                                                                                        )
+                                                                                                                    ].element.splice(j, 1, { ...commonObj })
+                                                                                                                } else {
+                                                                                                                    arr[key].elements[
+                                                                                                                        arr[key].elements.findIndex(
+                                                                                                                            ($) => $?.positionType === curElem.positionType
+                                                                                                                        )
+                                                                                                                    ].element.splice(j, 1)
+                                                                                                                }
+
+                                                                                                                const newObj = { ...finalObj }
+                                                                                                                if (currPage === "button") {
+                                                                                                                    newObj[isMobile ? `mobile_button` : `button`] = arr
+                                                                                                                } else {
+                                                                                                                    const pageIndex = newObj[isMobile ? `mobile_pages` : `pages`].findIndex(
+                                                                                                                        ($) => $?.id === currPage
+                                                                                                                    )
+                                                                                                                    newObj[isMobile ? `mobile_pages` : `pages`][pageIndex].values = arr
+                                                                                                                }
+
+                                                                                                                updatePresent({ ...newObj })
+                                                                                                                toggleModal()
+                                                                                                            }}
+                                                                                                        >
+                                                                                                            Current View
+                                                                                                        </Button>
+                                                                                                        <Button color="secondary" onClick={toggleModal}>
+                                                                                                            Cancel
+                                                                                                        </Button>
+                                                                                                    </ModalFooter>
+                                                                                                </Modal>
+
                                                                                                 <Edit color="#ffffff" size={30} className="cursor-pointer" style={{ backgroundColor: "#727272", padding: "0.5rem" }} onClick={() => setOpenToolbar(!openToolbar)} />
                                                                                             </span>}
                                                                                             {isEqual({ ...mouseEnterIndex }, { cur: key, curElem: curElem?.positionType, subElem: j }) && <div className="position-absolute" style={{ inset: "0px", outline: "2px solid #727272", pointerEvents: "none", zIndex: "0", backgroundColor: "rgb(114, 114, 114, 0.3)" }}></div>}
@@ -1468,7 +2155,7 @@ const RenderPreview = (props) => {
                                                                                         </div>
                                                                                     )
                                                                                 default:
-                                                                                    return <div key={i} className='' style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}
+                                                                                    return (<div key={i} className='' style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}
                                                                                         // onClick={(e) => makActive(e, cur)}
                                                                                         onDragOver={(e) => {
                                                                                             e.preventDefault()
@@ -1488,8 +2175,8 @@ const RenderPreview = (props) => {
                                                                                             handleNewDrop(e, curElem?.positionType, key, i, curElem, j)
                                                                                         }}>
                                                                                         <Download size={10} style={{ color: 'grey' }} />
-                                                                                        {/* <p style={{ margin: '0px', fontSize: '10px', color: 'grey' }}>Drop an element here</p> */}
-                                                                                    </div>
+                                                                                        <p style={{ margin: '0px', fontSize: '10px', color: 'grey' }}>Drop an element here</p>
+                                                                                    </div>)
                                                                             }
                                                                         })}
                                                                     </div>
@@ -1703,7 +2390,7 @@ const RenderPreview = (props) => {
                                                                         <MoreVertical size='18' />
                                                                     </span>
                                                                 </DropdownToggle>
-                                                                <DropdownMenu end className='custom_dropMenu' style={{ transform: 'translate(140px, -90px)' }}>
+                                                                <DropdownMenu end className='custom_dropMenu bg-white' style={{ transform: 'translate(140px, -90px)', height: '100vh' }}>
                                                                     <DropdownItem onClick={e => {
                                                                         e.stopPropagation()
                                                                         setRenamePage(ele?.id)
@@ -1713,7 +2400,28 @@ const RenderPreview = (props) => {
                                                                             <Edit3 stroke='blue' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Rename</span>
                                                                         </div>
                                                                     </DropdownItem>
-                                                                    {ele?.id?.includes("Page") && <DropdownItem className='w-100' onClick={() => {
+                                                                    <DropdownItem className='w-100' onClick={() => {
+
+                                                                        function deepCopy(obj) {
+                                                                            if (typeof obj !== 'object' || obj === null) {
+                                                                                return obj // Return primitives and null as is
+                                                                            }
+
+                                                                            const copiedObj = Array.isArray(obj) ? [] : {} // Determine if obj is an array or object
+
+                                                                            for (const key in obj) {
+                                                                                if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                                                                                    // Recursively deep copy nested objects
+                                                                                    copiedObj[key] = deepCopy(obj[key])
+                                                                                }
+                                                                            }
+
+                                                                            return copiedObj
+                                                                        }
+
+                                                                        // Usage example:
+                                                                        // Modify the IDs and page names
+
 
                                                                         const newObj = finalObj
                                                                         const pageCurrentIndex = newObj?.pages?.findIndex(($) => $?.id === ele?.id)
@@ -1721,9 +2429,16 @@ const RenderPreview = (props) => {
 
                                                                         const page = newObj?.pages[pageCurrentIndex]
                                                                         const mobilePage = newObj?.mobile_pages[mobilePageCurrentIndex]
+                                                                        const duplicatedPage = deepCopy(page)
+                                                                        const duplicatedMobilePage = deepCopy(mobilePage)
+                                                                        duplicatedPage.id = `Page${newObj.pages.length + 1}`
+                                                                        duplicatedPage.pageName = `Page ${newObj.pages.length + 1}`
 
-                                                                        const duplicatedPage = { ...page, id: `Page${newObj?.pages.length + 1}`, pageName: `Page ${newObj?.pages.length + 1}` }
-                                                                        const duplicatedMobilePage = { ...mobilePage, id: `Page${newObj?.mobile_pages.length + 1}`, pageName: `Page ${newObj?.mobile_pages.length + 1}` }
+                                                                        duplicatedMobilePage.id = `Page${newObj.mobile_pages.length + 1}`
+                                                                        duplicatedMobilePage.pageName = `Page ${newObj.mobile_pages.length + 1}`
+
+                                                                        // const duplicatedPage = { ...page, id: `Page${newObj?.pages.length + 1}`, pageName: `Page ${newObj?.pages.length + 1}` }
+                                                                        // const duplicatedMobilePage = { ...mobilePage, id: `Page${newObj?.mobile_pages.length + 1}`, pageName: `Page ${newObj?.mobile_pages.length + 1}` }
                                                                         newObj?.pages?.splice(pageCurrentIndex + 1, 0, duplicatedPage)
                                                                         newObj?.mobile_pages?.splice(mobilePageCurrentIndex + 1, 0, duplicatedMobilePage)
                                                                         updatePresent({ ...newObj })
@@ -1731,12 +2446,27 @@ const RenderPreview = (props) => {
                                                                         <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
                                                                             <Copy stroke='green' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Duplicate</span>
                                                                         </div>
-                                                                    </DropdownItem>}
-                                                                    {ele?.id?.includes("Page") && <DropdownItem onClick={() => {
+                                                                    </DropdownItem>
+                                                                    {/* {!ele?.id?.includes("offers") &&  */}
+                                                                    <DropdownItem onClick={() => {
                                                                         const newObj = { ...finalObj }
 
                                                                         const pageArray = newObj?.pages?.filter($ => $?.id !== ele?.id)
                                                                         const mobilePageArray = newObj?.mobile_pages?.filter($ => $?.id !== ele?.id)
+
+                                                                        if (pageArray.length === 0) {
+                                                                            // Add a new page instead of deleting
+                                                                            updatePresent({
+                                                                                ...finalObj,
+                                                                                pages: [...finalObj?.pages, { pageName: `Page${finalObj.pages.length + 1}`, id: `Page${finalObj.pages.length + 1}`, values: [] }],
+                                                                                mobile_pages: [...finalObj?.mobile_pages, { pageName: `Page${finalObj.mobile_pages.length + 1}`, id: `Page${finalObj.mobile_pages.length + 1}`, values: [] }]
+                                                                            })
+                                                                            setCurrPage(`Page${finalObj[`${mobileCondition}pages`]?.length + 1}`)
+                                                                            setCurrPosition({ ...currPosition, selectedType: "navMenuStyles" })
+                                                                            return // Exit the function to prevent further execution
+                                                                        }
+
+
                                                                         if (currPage === ele?.id) {
                                                                             setCurrPage(pageArray[0]?.id)
                                                                         }
@@ -1746,7 +2476,7 @@ const RenderPreview = (props) => {
                                                                         <div className="d-flex align-items-center" style={{ gap: "0.5rem" }}>
                                                                             <Trash stroke='red' size={"15px"} className='cursor-pointer' /> <span className='fw-bold text-black' style={{ fontSize: "0.75rem" }}>Delete</span>
                                                                         </div>
-                                                                    </DropdownItem>}
+                                                                    </DropdownItem>
                                                                     {ele?.id?.includes("Page") && <DropdownItem onClick={() => {
                                                                         const newObj = { ...finalObj }
 
@@ -1802,9 +2532,9 @@ const RenderPreview = (props) => {
                                                                                                                 case 'text':
                                                                                                                     // return <span contentEditable="true" className="text-secondary p-1 rounded-2 " style={{ fontSize: '14.4px', border: '1px solid black' }} onClick={(e) => makActive(e, cur)} >Text Element</span>
                                                                                                                     return (
-                                                                                                                        <div id={`button-${key}-${curElem?.positionType}-${j}`} style={{ ...subElem.style, backgroundImage: subElem?.style?.backgroundImage, width: "100%", position: "relative", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                                                                                                            <div style={{ width: "100%" }} id={`textField-${key}-${curElem?.positionType}-${j}`} dangerouslySetInnerHTML={{ __html: subElem?.textValue }} />
-                                                                                                                        </div>
+                                                                                                                            <div id={`button-${key}-${curElem?.positionType}-${j}`} style={{ ...subElem.style, backgroundImage: subElem?.style?.backgroundImage, width: "100%", position: "relative", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                                                                                                                <div style={{ width: "100%" }} id={`textField-${key}-${curElem?.positionType}-${j}`} dangerouslySetInnerHTML={{ __html: subElem?.textValue }} />
+                                                                                                                            </div>
                                                                                                                     )
                                                                                                                 case 'image':
                                                                                                                     // const imageSelector = document.getElementById("hidden-image-input")

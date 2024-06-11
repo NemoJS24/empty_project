@@ -95,7 +95,7 @@ export default function EmailTemplateReport() {
 
   const columns = [
     {
-      name: 'Created at',
+      name: 'Created On',
       minWidth: '150px',
       // selector: row => `${moment(row.messagelog_created_at).format('HH:mm:ss')}, ${moment(row.messagelog_created_at).format('DD MMM YYYY')}`, // Assuming 'name' is the property in your data for the name
       selector: row => `${defaultFormatDate(row.email_instance_created_at, userPermission?.user_settings?.date_format)}, ${moment(row.email_instance_created_at).format('HH:mm:ss')}`,

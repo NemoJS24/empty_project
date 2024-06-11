@@ -1,4 +1,5 @@
-import { Circle, MessageSquare } from "react-feather"
+import { Circle, Home, MessageSquare, Settings, Users } from "react-feather"
+import { AiOutlineBars, AiOutlineHighlight, AiOutlineUser } from "react-icons/ai"
 import { DefaultNav } from "./DefualtNav"
 
 export const WhatsappNavigation = [
@@ -9,36 +10,36 @@ export const WhatsappNavigation = [
     {
         id: 'dashboard',
         title: 'Dashboard',
-        icon: <Circle size={16} />,
+        icon: <Home size={20} />,
         navLink: '/merchant/whatsapp/'
     },
     {
         id: 'Contacts',
         title: 'Contacts',
-        icon: <Circle size={16} />,
+        icon: <AiOutlineUser size={16} />,
         navLink: '/merchant/whatsapp/whatsapp_contact/'
     },
     {
         id: 'Groups',
         title: 'Groups',
-        icon: <Circle size={16} />,
+        icon: <Users size={16} />,
         navLink: '/merchant/whatsapp/groups/'
     },
     {
-        id: 'message',
+        id: 'Templates',
         title: 'Templates',
-        icon: <Circle size={16} />,
-        navLink: '/merchant/whatsapp/message/'
+        icon: <AiOutlineHighlight size={16} />,
+        navLink: '/merchant/whatsapp/templates/'
     },
     {
         id: 'campaigns',
         title: 'Campaigns',
-        icon: <Circle size={16} />,
+        icon: <AiOutlineBars size={16} />,
         navLink: '/merchant/whatsapp/campaigns'
     },
     {
         id: 'LiveChat',
-        title: 'LiveChat',
+        title: 'Chats',
         icon: <MessageSquare size={16} />,
         navLink: '/merchant/whatsapp/LiveChat'
     },
@@ -54,18 +55,31 @@ export const WhatsappNavigation = [
     //     icon: <Circle size={16} />,
     //     navLink: '/merchant/whatsapp/business_creation/'
     // },
-    // {
-    //     id: 'optin',
-    //     title: 'Manage Opt-in',
-    //     icon: <Circle size={16} />,
-    //     navLink: '/merchant/whatsapp/optinManage/'
-    // }
+
     {
         id: 'setting',
         title: 'Settings',
-        icon: <Circle size={16} />,
+        icon: <Settings size={16} />,
         // icon: <img style={{ marginRight: '18px' }} src={`${ownUrl}/images/website-slide/navbar/crm.png`} width='16px' />,
         children: [
+            {
+                id: 'profile',
+                title: 'Project',
+                icon: <Circle size={16} />,
+                navLink: '/merchant/whatsapp/project-profile/'
+            },
+            {
+                id: 'optin',
+                title: 'Manage Opt-in',
+                icon: <Circle size={16} />,
+                navLink: '/merchant/whatsapp/optinManage/'
+            },
+            {
+                id: 'quickReply',
+                title: 'Quick Reply',
+                icon: <Circle size={16} />,
+                navLink: '/merchant/whatsapp/quick-reply/'
+            },
             {
                 id: 'project',
                 title: 'Project Details',
@@ -79,5 +93,5 @@ export const WhatsappNavigation = [
                 navLink: '/merchant/whatsapp/EmbeddedSignup/'
             }
         ]
-      }
+    }
 ]

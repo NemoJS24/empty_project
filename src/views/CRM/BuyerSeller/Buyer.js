@@ -12,6 +12,7 @@ import Flatpickr from 'react-flatpickr'
 import moment from 'moment'
 import { useNavigate, useParams } from 'react-router-dom'
 import Spinner from '../../Components/DataTable/Spinner'
+import { VirtualizedSelect } from '../Test'
 
 const Buyer = ({ allData }) => {
     const { id } = useParams()
@@ -150,11 +151,42 @@ const Buyer = ({ allData }) => {
             })
     }
 
+    const checkCustomerDetails = () => {
+        // getReq(`automotivetransaction`, `?customer_id=${formData?.xircls_customer_id}&vehicle_id=${formData?.product_name_id}`, crmURL)
+        getReq('check_customer_details', `?customer_id=${formData?.buyer_xircls_customer_id}&vehicle_id=${formData?.product_name_id || ''}`, crmURL)
+            .then((resp) => {
+                console.log("ResponseMail", resp?.data?.customer?.email)
+                console.log("Get Customer", resp?.data?.customer?.is_finance)
+                const updatedData = {
+                    customer: resp?.data?.customer ? resp?.data?.customer : {},
+                    finance: resp?.data?.customer?.is_finance ? resp?.data?.customer?.is_finance : {},
+
+                    vehicle: resp?.data?.vehicle ? resp?.data?.vehicle : {},
+                    insurance: resp?.data?.insurance ? resp?.data?.insurance : []
+                }
+
+                setCustomer((preData) => ({
+                    ...preData,
+                    ...updatedData
+                }))
+                setFormData({...formData, is_insurance: resp?.data?.insurance?.length === 0 ? false : true})
+                if (resp?.data?.car_variant) {
+                    changeProductName(resp)
+                    console.log(resp, "vehicle")
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error)
+                toast.error('Something went wrong')
+
+            })
+    }
+
     useEffect(() => {
-        if (formData?.xircls_customer_id) {
-            selectInsurance()
+        if (formData?.buyer_xircls_customer_id) {
+            checkCustomerDetails()
         }
-    }, [formData?.xircls_customer_id, formData?.product_name_id])
+    }, [formData?.buyer_xircls_customer_id, formData?.product_name_id])
 
     const postNewCustomerData = () => {
         console.log(check.addForm)
@@ -415,7 +447,7 @@ const Buyer = ({ allData }) => {
     ]
 
     const getCustomer = () => {
-        getReq("getAllCustomer", "", crmURL)
+        getReq("getAllCustomerNew", "", crmURL)
             .then((resp) => {
                 console.log(resp, 'jghkuhk')
                 setCustomerList(resp?.data?.success?.map((curElem) => {
@@ -633,7 +665,13 @@ const Buyer = ({ allData }) => {
     return (
         <>
             {InnerStyles}
-
+            <Offcanvas show={isHidden} onHide={() => handleClose('customer')} placement="end">
+                <Offcanvas.Header closeButton>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                    {AddCustomerForm}
+                </Offcanvas.Body>
+            </Offcanvas>
             {
                 !isLoading ? (
                     <Container fluid className="px-0 py-1">
@@ -642,17 +680,18 @@ const Buyer = ({ allData }) => {
                                 <h4 className="mb-0">Applicant Details</h4>
                             </Col>
                             <Col md={6} className="mt-2" style={{ zIndex: '9' }}>
-                                <label htmlFor="customer-name" className="form-label" style={{ margin: '0px' }}>
+                                <label htmlFor="customer-name" className="form-label" style={{ margin: '0px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     Customer Name
+                                    <a onClick={() => handleShow("customer")} className='text-primary'>Add New Customer</a>
                                 </label>
-                                <Select
+                                <VirtualizedSelect
                                     placeholder='Customer Name'
                                     isDisabled={isCustomer}
                                     id="insurance-type"
                                     options={customerList}
                                     closeMenuOnSelect={true}
                                     name='buyer_customer_name'
-                                    components={{ Menu: CustomSelectComponent }}
+                                    // components={{ Menu: CustomSelectComponent }}
                                     onChange={(e) => {
                                         console.log(e);
                                         setFormData((prevData) => {
@@ -667,7 +706,7 @@ const Buyer = ({ allData }) => {
                                             };
                                         }, () => {
                                             handleAddInputChange({ target: { value: e.value, name: "xircls_customer_id_2" } }, 'productForm');
-                                            selectInsurance();
+                                            // selectInsurance();
                                         });
                                     }}
                                     value={customerList?.find((curElem) => Number(curElem?.value) === Number(formData.buyer_xircls_customer_id))}

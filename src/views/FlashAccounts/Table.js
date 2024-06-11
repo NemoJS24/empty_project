@@ -85,7 +85,7 @@ const Table = () => {
       isEnable: true
     },
     {
-      name: 'Phone No',
+      name: 'Mobile No.',
       minWidth: '250px',
       selector: (row) => {
         return  row?.customer_phone_no ? row?.customer_phone_no : "--"
@@ -108,13 +108,13 @@ const Table = () => {
       isEnable: true
     },
     {
-      name: 'Sign up Status',
+      name: 'Sign-up Status',
       minWidth: '180px',
       cell: (row) => {
         return row?.is_guest === false ? (
-          <span>Completed</span>
+          <span>Converted</span>
         ) : (
-          <span>Not Completed</span>
+          <span>Not Converted</span>
         )
       },
       type: 'select',
@@ -211,7 +211,7 @@ const Table = () => {
               isLoading={isLoading}
             /> */}
             <AdvanceServerSide
-              tableName="All Customers"
+              tableName="Customers"
               tableCol={columns}
               data={tableData?.customers_obj}
               isLoading={isLoading}

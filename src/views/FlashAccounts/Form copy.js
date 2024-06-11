@@ -44,7 +44,7 @@ const Form = () => {
                       type="password"
                       class="form-control"
                       id="inputPassword3"
-                      placeholder="Password must be at least {{n}} characters"
+                      placeholder="Password should be {{n}} characters"
                       
                     />
                 </form>

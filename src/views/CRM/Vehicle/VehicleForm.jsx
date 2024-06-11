@@ -14,6 +14,7 @@ import Flatpickr from 'react-flatpickr'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import Spinner from '../../Components/DataTable/Spinner'
+import { VirtualizedSelect } from '../Test'
 
 const VehicleForm = ({ isView, apiCall, defaultData, setData, isCustomer }) => {
     // const { id } = useParams()
@@ -141,7 +142,7 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData, isCustomer }) => {
     }
 
     const getCustomer = () => {
-        getReq("getAllCustomer", "", crmURL)
+        getReq("getAllCustomerNew", "", crmURL)
             .then((resp) => {
                 console.log(resp)
                 setCustomerList(resp?.data?.success?.map((curElem) => {
@@ -221,7 +222,7 @@ const VehicleForm = ({ isView, apiCall, defaultData, setData, isCustomer }) => {
                                 <label htmlFor="customer-name">
                                     Customer Name
                                 </label>
-                                <Select
+                                <VirtualizedSelect
                                     placeholder='Customer Name'
                                     id="vehicle-type"
                                     options={customerList}
