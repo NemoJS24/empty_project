@@ -1,6 +1,7 @@
 import { Circle, Home, MessageSquare, Settings, Users } from "react-feather"
 import { AiOutlineBars, AiOutlineHighlight, AiOutlineUser } from "react-icons/ai"
 import { DefaultNav } from "./DefualtNav"
+import Document from "../../views/Whatsapp/Integration/Document"
 
 export const WhatsappNavigation = [
     ...DefaultNav,
@@ -42,6 +43,12 @@ export const WhatsappNavigation = [
         title: 'Chats',
         icon: <MessageSquare size={16} />,
         navLink: '/merchant/whatsapp/LiveChat/support'
+    },
+    {
+        id: 'document',
+        title: 'Chats',
+        icon: <Document />,
+        navLink: '/merchant/whatsapp/document/'
     },
     // {
     //     id: 'Catalogue',
