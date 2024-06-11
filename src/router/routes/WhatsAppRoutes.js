@@ -22,6 +22,7 @@ import CreateCampaign from "../../views/Whatsapp/Campaign/CreateCampaign"
 import CampaignReports from "../../views/Whatsapp/Campaign/CampaignReports"
 import ProjectProfile from "../../views/Whatsapp/settings/ProjectProfile"
 import QuickReplySetting from "../../views/Whatsapp/settings/QuickReplySetting"
+import Document from "../../views/Whatsapp/Integration/Document"
 // import ProjectTable from "../../views/Whatsapp/Templates/ProjectTable"
 
 export const WhatsAppRoutes = [
@@ -48,6 +49,10 @@ export const WhatsAppRoutes = [
     {
         path: '/merchant/whatsapp/EmbeddedSignup/',
         element: <EmbededSignup />
+    },
+    {
+        element: <Document />,
+        path: '/merchant/whatsapp/document/'
     },
     // {
     //     path: '/merchant/whatsapp/is_template/',
