@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  {% schema %}
+
+    {
+      "name": "XIRCLS SuperLeadz",
+      "target": "body",
+      "stylesheet": "app.css",
+      "javascript": "app.js"
+    }
+  {% endschema %}
+  <body>
+
+    <input id="ip_here" type="hidden" value="" />
+    <input id="append_shop_val" type="hidden" value="" />
+    <input id="currentIndex" type="hidden" value="" />
+    <input id="mainObject" type="hidden" value="" />
+    <input id="outlet_name" type="hidden" value="{{shop.name}}" />
+    <input id="outlet_url" type="hidden" value="{{shop.url}}" />
+    <input id="customer" type="hidden" value="{{customer}}" />
+    <input id="vailidateObj" type="hidden" value="" />
+    <input id="settingType" type="hidden" value="" />
+    <input type="hidden" id="cart_data" value='{{ cart | json }}'>
+    <input type="hidden" id="newsletter">
+    <input type="hidden" id="collection_id" value='{{collection.id}}'>
+    <input type="hidden" id="abandoned_delay" value="">
+
+    <div id="xircls_main_content">
+      <div id="xircls_main_div" style="display: none; z-index: 99999999999; opacity: 0;">
+        <div id="xircls_backdrop" style="z-index: 999999"></div>
+        <div id="xircls_toastr" style="position: fixed; left: 50%; transform: translateX(-50%); z-index: 99999999999;max-width: 95%; transition: 0.3s;"></div>
+        <div id="xircls_popup" style="position: relative;">
+          <div onclick="closePopUp(event)" style="cursor: pointer;">
+            <svg id="cross_btn" style="position: absolute; inset: 0px 0px auto auto; z-index: 350; box-sizing: content-box;" xmlns="http://www.w3.org/2000/svg" width="19px" height="19px" viewBox="0 0 24 24" stroke="rgba(255, 255, 255, 1)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </div>
+          <div id="main_popup" style="z-index: 99999999999;">
+          </div>
+          <div id="branding_here" style="position: absolute; right: 0px; bottom: 0; z-index: 9999999999999999999">
+            <span>Powered by <a target="_blank" href="https://www.xircls.com" style="text-decoration: underline; color: #464646 !important;">XIRCLS</a></span>
+          </div>
+        </div>
+      </div>
+  
+      <div id="xircls_btn_main_div" style="display: none; width: 100%; pointer-events: none;">
+        <div id="main_btn_popup" style="z-index: 99999999999; cursor: pointer; margin-bottom: 10px !important; margin-left: 10px !important;pointer-events: all" onclick="openPopUp()">
+        </div>
+      </div>
+
+    </div>
+    <!-- <script src="https://apps.demo.xircls.in/static/flash_accounts/test.js" defer async></script> -->
+    <script>
+
+    //   let spent_on_page, spent_on_website, read_page_by, visited, not_active_page, spent_on_websiteInterval, spent_on_pageInterval;
+    //   var spendOnPageCount = 0
+      console.log("Update - 13")
+      const baseUrl = "https://apps.xircls.com"
+      localStorage.removeItem('leadId')
+      function usageBilling () {
+        var form_data = new FormData()
+        form_data.append("shop", Shopify.shop)
+        form_data.append("app", "superleadz")
+        fetch(`${baseUrl}/api/v1/usage_billing/`, {
+          method: "POST",
+          body: form_data
+        })
+        .then((data) => data.json())
+        .then((resp) => {
+          console.log(resp)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      }
+
+      function generateMacID(length) {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        const charactersLength = characters.length;
+        for (let i = 0; i < length; i++) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+      }
+      
+      try {
+        usageBilling()
+      } catch (error) {
+        console.log(error)
+      }
+
+      var params = new URLSearchParams(location.search);
+      if (params.get('utm_source')) {
+        sessionStorage.setItem("source", params.get('utm_source'))
+      }
+
+      let macString
+      
+      if (localStorage.getItem('macID')) {
+        macString = localStorage.getItem('macID')
+      } else {
+        macString = generateMacID(16);
+        localStorage.setItem('macID', macString)
+      }
+    
+      fetch(`${baseUrl}/protein`) //{"ip_address": "45.127.45.222"}
+      .then((data) => data.json())
+      .then((resp) => {
+        // console.log(resp)
+        document.getElementById("ip_here").value = resp.ip_address
+        const srceenWidth = window.innerWidth < 576 ? "mobile_" : ""
+
+        const analyticsForm = new FormData();
+        analyticsForm.append("shop", Shopify.shop);
+        analyticsForm.append("ip_address", resp.ip_address);
+        analyticsForm.append("mac_id", macString)
+        analyticsForm.append("created_at", new Date());
+        analyticsForm.append("app_name", "superleadz");
+        analyticsForm.append("browser_details", navigator.userAgent);
+        analyticsForm.append("page", window.location.pathname);
+        try {
+          analyticsForm.append("pageType", ShopifyAnalytics.meta.page.pageType);
+        } catch (error) {
+          analyticsForm.append("pageType", "Preview");
+        }
+        analyticsForm.append("customer_email", '{{ customer.email }}');
+
+        source = sessionStorage.getItem("source")
+        // console.log(source, "source")
+        if (source) {
+          analyticsForm.append("source", source)
+        }
+
+        fetch(`${baseUrl}/api/v1/add/customer_visit/`, {
+          method: "POST",
+          body: analyticsForm
+        })
+        .then((data) => data.json())
+        .then((response) => {
+          const domain = document.getElementById('outlet_url').value.split("https://")
+
+        // Main code 
+        const form_data = new FormData();
+        form_data.append("shop", Shopify.shop);
+        form_data.append("domain", domain[1])
+        form_data.append("app", "superleadz");
+
+        fetch(`https://api.xircls.com/utility/api/v1/get_timeline_detail/`, {
+          method: "POST",
+          body: form_data
+        })
+        .then((data) => data.json())
+        .then((timeline) => {
+          // console.log(timeline, "resp")
+          if (timeline.response) {
+            get_key_url = `${baseUrl}/api/v1/get/pop-up-widgets/`;
+            var name_here = Shopify.shop
+            document.getElementById('append_shop_val').append(Shopify.shop)
+            get_json_key_parm = {
+              shopify_shop: Shopify.shop
+            };
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", window.API_KEY);
+            myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+            var urlencoded = new URLSearchParams();
+            urlencoded.append("shop", Shopify.shop);
+            urlencoded.append("customer_id", "0");
+            urlencoded.append("pageUrl", window.location.pathname);
+            urlencoded.append("ip", resp.ip_address);
+            urlencoded.append("mac_id", macString)
+            urlencoded.append("app_name", "superleadz");
+            urlencoded.append("isFirstVisit", localStorage.getItem('isFirstTime') ? localStorage.getItem('isFirstTime') : 0);
+            urlencoded.append("customer_email", '{{ customer.email }}')
+          
+              urlencoded.append('collection_id', '{{ collection.id }}')
+        
+            urlencoded.append('collection_id', document.getElementById('collection_id').value)
+            if (params.get('utm_source')) {
+              urlencoded.append("page", `${source}_page`)
+            } else {
+              var current_url = window.location.href;
+  
+              if (current_url.includes('/cart')) {
+                urlencoded.append('page', `cart_page`)
+              } else {
+                try {
+                  if (ShopifyAnalytics.meta.page.pageType == "collection") {
+                    urlencoded.append('page', `collections_page`)
+                  } else {
+                    urlencoded.append('page', `${ShopifyAnalytics.meta.page.pageType}_page`)
+                  }
+                } catch (error) {
+                  urlencoded.append('page', `home_page`)
+                }
+              }
+            }
+
+            var requestOptions = {
+              method: 'POST',
+              headers: myHeaders,
+              body: urlencoded,
+              redirect: 'follow'
+            };
+            fetch(get_key_url, requestOptions)
+            .then((data) => data.json())
+            .then((resp) => {
+              // console.log(resp)
+              var mainJson = JSON.parse(resp?.data[0]?.custom_theme)
+              console.log(mainJson, typeof(mainJson))
+
+              document.getElementById('abandoned_delay').value = resp?.abandoned_delay
+
+              // const collection_id = document.getElementById('collection_id').value
+              // console.log(collection_id, "=============")
+              if (mainJson?.behaviour?.EXCLUDE_PAGE_LINK?.includes(window.location.pathname)) {
+                console.log("excluded not found!")
+                return
+              }
+              // if (ShopifyAnalytics.meta.page.pageType == "collections" || ShopifyAnalytics.meta.page.pageType == "product") {
+              //   if (mainJson?.behaviour?.collections?.includes(Number(collection_id)) || mainJson?.behaviour?.collections?.includes(String(collection_id))) {
+              //     console.log("collection found!")
+              //   } else {
+              //     console.log("collection not found!")
+              //     return
+              //   }
+
+              // }
+
+              var toastr = `
+                <div class="xircls_toastr" style="background-color: #28A745; display: flex; justify-content: center; align-items: center; padding: 10px; border-radius: 3px; font-family: sans-serif;gap: 10px; transition: 0.3s opacity; opacity: 1">
+                  <img class="check_icon" src="https://www.api.xircls.com/static/images/website-slide/external/check.svg" width="25px"  height="25px">
+                  <img class="cross_icon" src="https://www.api.xircls.com/static/images/website-slide/external/x.svg" width="25px"  height="25px">
+                  <p style="color: #fff;margin: 0;padding: 0;font-size: 14px;" id="text_for_toastr"></p>
+                </div>
+              `
+
+
+              previewsThemeId = localStorage.getItem('theme_id')
+              if (String(previewsThemeId) != String(resp?.data[0]?.id)) {
+                localStorage.removeItem("isFirstTime")
+                sessionStorage.removeItem('offer_data')
+              }
+
+              checkCart()
+
+              localStorage.setItem('theme_id', resp?.data[0].id)
+      
+              var isFirstTime = localStorage.getItem("isFirstTime") ? localStorage.getItem("isFirstTime"): 0
+              isFirstTime = Number(isFirstTime) + 1
+              localStorage.setItem("isFirstTime", isFirstTime);
+
+              document.querySelector("#xircls_toastr").innerHTML = toastr
+              // const responseJson = JSON.parse(resp.data[0].custom_theme)
+              document.getElementById('settingType').value = mainJson?.verificationEnabled
+
+              document.getElementById('mainObject').value = JSON.stringify(mainJson)
+
+              const mainDiv = document.getElementById('xircls_main_div')
+              const mainBtnDiv = document.getElementById('xircls_btn_main_div')
+
+              mainDiv.classList.add(`xircls_${mainJson?.positions[`${srceenWidth}main`]}`) // adding class to popUp for position
+              mainBtnDiv.classList.add(`xircls_button_${mainJson?.positions[`${srceenWidth}button`]}`) // adding class to button for position
+
+              addStyle('xircls_backdrop', mainJson?.overlayStyles) // adding overlay
+              // addStyle('main_popup', mainJson?.backgroundStyles?.main)
+              addStyle('xircls_popup', mainJson?.backgroundStyles[`${srceenWidth}main`]) // adding popup width height main style
+              addStyle('cross_btn', mainJson?.crossButtons[`${srceenWidth}main`]) // adding style for cross button
+              if (mainJson?.crossButtons[`${srceenWidth}main`]?.color) {
+                document.getElementById('cross_btn').setAttribute('stroke', mainJson?.crossButtons[`${srceenWidth}main`]?.color)
+              } else {
+                document.getElementById('cross_btn').setAttribute('stroke', "#000")
+              }
+              addStyle('branding_here', mainJson?.brandStyles)
+              addStyle('main_btn_popup', mainJson?.backgroundStyles[`${srceenWidth}button`]) //adding button width height main style
+              // console.log(mainJson?.closePopUpOn?.overlay, "overlay")
+              
+              if (mainJson?.closePopUpOn?.overlay) {
+                // console.log("ppp")
+                document.getElementById('xircls_backdrop').addEventListener('click', function(event) {
+                  closePopUp(event)
+                })
+              }
+    
+              if (mainJson?.closePopUpOn?.escape) {
+                document.addEventListener('keydown', function(event) {
+                  if (event.key === 'Escape') {
+                    closePopUp()
+                  }
+                });
+              }
+    
+              // Button content here
+              const main_btn_popup = document.getElementById('main_btn_popup')
+              const main_popup = document.getElementById('main_popup')
+              const buttonContent = mainJson?.button
+              const popUpContent = [mainJson[`${srceenWidth}pages`][0]]
+
+              // const popUpContent = mainJson[`${srceenWidth}pages`]?.filter((curElem) => {
+              //   return curElem.id === "main"
+              // })
+              console.log(popUpContent, "idojsaidj")
+              // const currentIndex = mainJson[`${srceenWidth}pages`]?.findIndex((curElem) => curElem.id === "main")
+              document.getElementById('currentIndex').value = 0
+              // mainJson?.pages[0]?.values
+              appendPopUp("button", buttonContent)
+              appendPopUp("popUp", popUpContent[0]?.values)
+
+              var display_frequency = mainJson?.rules?.display_frequency
+              var display_when = mainJson?.rules?.display_when
+              var visited = mainJson?.rules?.visited
+              var stop_display_after_closing = mainJson?.rules?.stop_display_after_closing
+              var stop_display_after_closing_value = mainJson?.rules?.stop_display_after_closing_value
+              var stop_display_pages = mainJson?.rules?.stop_display_pages
+              var stop_display_pages_value = mainJson?.rules?.stop_display_pages_value
+
+              if (display_frequency == "once_session") {
+                var StopvisitedPageCount = parseInt(sessionStorage.getItem('StopvisitedPageCount')) || 0;
+                var closeTimes = parseInt(sessionStorage.getItem('closeTimes')) || 0;
+              } else {
+                var StopvisitedPageCount = parseInt(localStorage.getItem('StopvisitedPageCount')) || 0;
+                var closeTimes = parseInt(localStorage.getItem('closeTimes')) || 0;
+              }
+              
+              if (stop_display_pages) {
+                StopvisitedPageCount++;
+                if (display_frequency == "once_session") {
+                  sessionStorage.setItem('StopvisitedPageCount', StopvisitedPageCount);
+                } else {
+                  localStorage.setItem('StopvisitedPageCount', StopvisitedPageCount);
+                }
+              }
+
+              function getPopUp() {
+                if (display_frequency == "only_once") {
+                  if (Number(isFirstTime) == 1) {
+                    rulesToOpen(display_frequency)
+                    if (visited) {
+                      let visitedPageCount = localStorage.getItem('visitedPageCount') ? localStorage.getItem('visitedPageCount') : 0;
+  
+                      if (Number(mainJson?.rules?.visted_value) == Number(visitedPageCount)) {
+                          console.log("visted_value_converted", "display_frequency")
+                          openPopUp(display_frequency)
+                      }
+                    }
+                  } else {
+                    openButton()
+                  }
+                  console.log("only_once", "display_frequency")
+                }
+
+                if (display_frequency == "once_session") {
+                  var once_session = sessionStorage.getItem("once_session") ? sessionStorage.getItem("once_session"): 0
+                  // once_session = Number(once_session) + 1
+                  sessionStorage.setItem("once_session", once_session);
+
+                  if (Number(once_session) == 0) {
+                    rulesToOpen(display_frequency)
+                    if (visited) {
+                      if (display_frequency == "once_session") {
+                        var visitedPageCount = sessionStorage.getItem('visitedPageCount') ? sessionStorage.getItem('visitedPageCount') : 0;
+                      } else {
+                        var visitedPageCount = localStorage.getItem('visitedPageCount') ? localStorage.getItem('visitedPageCount') : 0;
+                      }
+  
+                      if (Number(mainJson?.rules?.visted_value) == Number(visitedPageCount)) {
+                        console.log("visted_value_converted", "display_frequency")
+                        openPopUp(display_frequency)
+                      }
+                    }
+
+                  } else {
+                    openButton()
+                  }
+                  console.log("once_session", "display_frequency")
+                }
+
+                if (display_frequency == "no_limit") {
+                  rulesToOpen(display_frequency)
+                  if (visited) {
+                      if (display_frequency == "once_session") {
+                        var visitedPageCount = sessionStorage.getItem('visitedPageCount') ? sessionStorage.getItem('visitedPageCount') : 0;
+                      } else {
+                        var visitedPageCount = localStorage.getItem('visitedPageCount') ? localStorage.getItem('visitedPageCount') : 0;
+                      }
+
+                      if (Number(mainJson?.rules?.visted_value) == Number(visitedPageCount)) {
+                        console.log("visted_value_converted", "display_frequency")
+                        openPopUp(display_frequency)
+                      }
+                    }
+                  console.log("no_limit", "display_frequency")
+                }
+
+              }
+
+              if (display_when === "button_click") {
+                openButton()
+              } else {
+                if ((stop_display_pages && Number(stop_display_pages_value) <= Number(StopvisitedPageCount))) {
+                  openButton()
+                } else {
+
+                  if ((stop_display_after_closing && Number(stop_display_after_closing_value) <= Number(closeTimes))) {
+                    openButton()
+                  } else {
+                    getPopUp()  
+                  }
+  
+                }
+
+              }
+
+              if (!mainJson?.teaserEnabled) {
+                document.getElementById('xircls_btn_main_div').style.display = "none"
+              }
+
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+
+          } else {
+            console.log("Campaign Not Completed")
+          }
+
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+          // console.log(response.status)
+        }).catch((error) => {
+          console.log(error, "customer visit")
+        })
+
+        const domain = document.getElementById('outlet_url').value.split("https://")
+
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
+      function addStyle (id, style) {
+        // console.log(id, style)
+        const element = document.getElementById(id)
+        const styles = Object.entries(style)
+
+        styles.forEach(([key, value]) => {
+          element.style[key] = `${value}`
+        })
+      }
+
+      function appendPopUp(type, array, offer_data) {
+        // console.log(array)
+        const mainJson  = JSON.parse(document.getElementById('mainObject').value)
+        const main_btn_popup = document.getElementById('main_btn_popup')
+        const main_popup = document.getElementById('main_popup')
+        if (type === "button") {
+          main_btn_popup.innerHTML = ""
+        } else {
+          main_popup.innerHTML = ""
+        }
+        var vaildArray = []
+        array.forEach((curElem, key) => {
+          const parentDiv = document.createElement('div')
+          parentDiv.id = `buttonParent_${key}_${type}`
+          if (type === "button") {
+            main_btn_popup.appendChild(parentDiv)
+          } else {
+            main_popup.appendChild(parentDiv)
+          }
+          // const btn_parent_styles = curElem.style['overflow'] = 'hidden'
+          // console.log(btn_parent_styles, "btn_parent_styles")
+          addStyle(`buttonParent_${key}_${type}`, curElem?.style)
+
+          const subDiv = document.createElement('div')
+          if (type !== "button") {
+            subDiv.classList.add('make_responsive_here')
+          }
+          subDiv.style.cssText = `
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            position: relative;
+            width: 100%;
+            z-index: 1;
+          `
+          parentDiv.appendChild(subDiv)
+          curElem?.elements?.forEach((elementsObj, elementsKey) => {
+            const elementsDiv = document.createElement('div')
+            elementsDiv.id = `buttonElement_${elementsKey}_${key}_${type}`
+            if (type !== "button") {
+              elementsDiv.classList.add('make_width_change')
+            }
+            subDiv.appendChild(elementsDiv)
+            addStyle(`buttonElement_${elementsKey}_${key}_${type}`, elementsObj?.style)
+
+            elementsObj?.element?.forEach((elementObj, elementKey) => {
+              // console.log(elementObj.type, "elementObjtype")
+              let eleDiv
+              if (elementObj.type == 'text') {
+                // console.log("text", elementObj)
+                eleDiv = document.createElement('div')
+                eleDiv.id = `main-text-${key}-${elementsObj.positionType}-${elementKey}_${type}`
+                elementsDiv.appendChild(eleDiv)
+                addStyle(`main-text-${key}-${elementsObj.positionType}-${elementKey}_${type}`, elementObj?.style)
+
+                if (elementObj?.isInitialFont) {
+                  addStyle(`main-text-${key}-${elementsObj.positionType}-${elementKey}_${type}`, {"font-family": mainJson?.fontFamilies[elementObj?.textType]})
+                }
+                
+                eleDiv.innerHTML = elementObj.textValue
+
+              }
+              else if (elementObj.type == 'image') {
+                // console.log("image", elementObj)
+                eleDiv = document.createElement('div')
+                eleDiv.id = `main-image-${key}-${elementsObj.positionType}-${elementKey}_${type}`
+                elementsDiv.appendChild(eleDiv)
+                addStyle(`main-image-${key}-${elementsObj.positionType}-${elementKey}_${type}`, elementObj?.style)
+                addStyle(`main-image-${key}-${elementsObj.positionType}-${elementKey}_${type}`, {overflow: 'hidden'})
+                if (elementObj?.isBrandWidth) {
+
+                  addStyle(`main-image-${key}-${elementsObj.positionType}-${elementKey}_${type}`, {"width": mainJson?.defaultThemeColors?.brandWidth})
+                }
+                if (elementObj?.isBrandHeight) {
+                  addStyle(`main-image-${key}-${elementsObj.positionType}-${elementKey}_${type}`, {"height": mainJson?.defaultThemeColors?.brandHeight})
+                }
+
+                if (elementObj?.isBrandAlignment) {
+                  addStyle(`main-image-${key}-${elementsObj.positionType}-${elementKey}_${type}`, {"margin": mainJson?.defaultThemeColors?.brandAlignment})
+                }
+                // eleSpan = document.createElement('span')
+                // eleSpan.style.cssText = `
+                //   overflow: hidden;
+                //   width: 100%;
+                //   height: 100%;
+                //   border-radius: 
+                // `
+                const createImage = document.createElement('img')
+
+                if (type === "button") {
+                  createImage.src = elementObj.src
+                } else {
+                  createImage.src = elementObj?.isBrandLogo ? mainJson?.defaultThemeColors?.brandLogo : elementObj.src
+                }
+                
+                createImage.style.width = '100%'
+                createImage.style.height = '100%'
+                eleDiv.appendChild(createImage)
+                // eleDiv.appendChild(eleSpan)
+              } else if (elementObj.type == 'button') {
+                // console.log("button", elementObj)
+                eleDiv = document.createElement('div')
+                eleDiv.id = `main-${key}-${elementsObj.positionType}-${elementKey}_${type}`
+                
+                eleDiv.style.cssText = `
+                  width: 100%;
+                  display: flex;
+                  justify-content: ${elementObj?.style?.alignType};
+                  position: relative;
+                  align-items: center;
+                `
+                
+                elementsDiv.appendChild(eleDiv)
+
+                buttonSubDiv = document.createElement('div')
+                buttonSubDiv.id = `subButton_button_${elementKey}_${type}`
+                buttonSubDiv.classList.add(`xircls_button_enter`, `xircls_${elementObj?.redirectType}`)
+                buttonSubDiv.addEventListener('click', function(e) {
+                  popUpActionButton(elementObj, e)
+                })
+                buttonSubDiv.style.cssText = `
+                  height: ${Number(elementObj?.style?.height) === 0 ? "auto" : `${elementObj?.style?.height}px`};
+                  display: inline-flex;
+                  justify-content: center;
+                  align-items: center;
+                  cursor: pointer;
+                `
+                buttonSubDiv.innerHTML = elementObj?.textValue
+                eleDiv.appendChild(buttonSubDiv)
+                addStyle(`subButton_button_${elementKey}_${type}`, elementObj?.style)
+              } else if (elementObj.type == 'input') {
+                eleDiv = document.createElement('div')
+                eleDiv.id = `main-input-${key}-${elementsObj.positionType}-${elementKey}_${type}`
+                eleDiv.classList.add(elementObj.inputType == "enter_otp" ? 'enterOtpMainDiv' : 'normalInputDiv')
+                if (elementObj.inputType == "enter_otp") {
+                  eleDiv.style.cssText = `
+                    width: 100%;
+                    display: flex;
+                    align-items: ${elementObj?.style?.alignType};
+                    position: relative;
+                  `
+                } else {
+                  eleDiv.style.cssText = `
+                    width: 100%;
+                    display: flex;
+                    justify-content: ${elementObj?.style?.alignType};
+                    position: relative;
+                  `
+                }
+                elementsDiv.appendChild(eleDiv)
+
+                if (elementObj.hasLabel) {
+                  var inputLabel = document.createElement('label')
+                  inputLabel.innerHTML = elementObj.labelText
+                  eleDiv.appendChild(inputLabel)
+                }
+
+                if(type !== "button") {
+                  var requiredInput = {
+                    name: elementObj?.inputType,
+                    isRequired: elementObj?.isRequired,
+                    errorMessage: elementObj?.isRequiredText ? elementObj?.isRequiredText : `${elementObj?.labelText} is required.`
+                  }
+                  vaildArray.push(requiredInput)
+
+                }
+
+                inputSubDiv = document.createElement('input')
+                // inputSubDiv.type = elementObj.inputType
+                inputSubDiv.placeholder = elementObj.placeholder
+                inputSubDiv.id = `subButton_input_${elementObj.inputType}`
+                inputSubDiv.addEventListener('keypress', function(e) {
+                  if (e.key === 'Enter') {
+                    checkEnterButton()
+                  } 
+                })
+                // inputSubDiv.class = `subButton_input_${elementObj.inputType}`
+                eleDiv.appendChild(inputSubDiv)
+
+                if (elementObj.inputType == "enter_otp") {
+                  errorMessage = document.createElement('span')
+                  errorMessage.id = "xircls_otp_counter"
+                  errorMessage.style.cssText = `
+                    display: flex !important;
+                    padding-bottom: 10px !important;
+                    justify-content: end !important;
+                    align-items: end !important;
+                    font-size: 12px !important;
+                    width: ${elementObj?.style?.width} !important;
+                  `
+                  eleDiv.appendChild(errorMessage)
+                }
+
+                addStyle(`subButton_input_${elementObj.inputType}`, elementObj?.style)
+              } else if (elementObj.type == 'tnc') {
+                eleDiv = document.createElement('div')
+                eleDiv.id = `main-tnc-${key}-${elementsObj.positionType}-${elementKey}_${type}`
+                elementsDiv.appendChild(eleDiv)
+                addStyle(`main-tnc-${key}-${elementsObj.positionType}-${elementKey}_${type}`, elementObj?.style)
+
+                eleDiv.innerHTML = `
+                  <input type="checkbox" id="main-checkbox-${key}-${elementsObj.positionType}-${elementKey}_${type}" name="${elementObj.checkboxType}" onchange="updateTnc('main-checkbox-${key}-${elementsObj.positionType}-${elementKey}_${type}')" />
+                  <label id="main-label-${key}-${elementsObj.positionType}-${elementKey}_${type}" for="main-checkbox-${key}-${elementsObj.positionType}-${elementKey}_${type}">
+                    ${elementObj?.textValue}
+                  </label>
+                `
+
+              } else if (elementObj.type == 'offer') {
+                eleDiv = document.createElement('div')
+                eleDiv.id = `xircls_offers_div`
+                elementsDiv.appendChild(eleDiv)
+                addStyle(`xircls_offers_div`, elementObj?.style)
+                
+                // addOffers(`xircls_offers_div`)
+                addOffers(`xircls_offers_div`, offer_data)
+              }
+            })
+
+          })
+          
+          if(type !== "button") {
+            document.getElementById('vailidateObj').value = JSON.stringify(vaildArray)
+            // console.log(vaildArray, "end vaildArray")
+          }
+          
+        })
+
+      }
+
+    </script>
+  </body>
+</html>
