@@ -1,61 +1,47 @@
-// import React, { useState, useEffect, Suspense } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 
-// // ** Router Import
-// import Router from './router/Router'
+// ** Router Import
+import Router from './router/Router'
 
-// // ** Routes & Default Routes
-// import { getRoutes } from './router/routes'
-// //ReactGA.initialize('G-4NRGB5EKCP') //xircls
-// // ReactGA.initialize('G-0K44CMK09X') //demo
+// ** Routes & Default Routes
+import { getRoutes } from './router/routes'
+//ReactGA.initialize('G-4NRGB5EKCP') //xircls
+// ReactGA.initialize('G-0K44CMK09X') //demo
 
-// // // ** Hooks Imports
-// import { useLayout } from '@hooks/useLayout'
-// // import CustomizationWrap from './views/Components/SuperLeadz/CustomizationWrap'
-// // import PermissionWrapper from './configs/PermissionWrapper'
-// import '@styles/react/libs/flatpickr/flatpickr.scss'
-// // import { SuperLeadzLinkValidation, ActiveAppsProvider } from './Helper/Context'
-
-// const App = () => {
-//   const [allRoutes, setAllRoutes] = useState([])
-//   // const [validateLink, setValidateLink] = useState({ audience: false, templates: false, editTheme: false })
-//   // const [activeApps, setActiveApps] = useState([])
-//   // const [visitorSettings, setVisitorSettings] = useState("ALL_VISITORS")
-  
-//   // ** Hooks
-//   const { layout } = useLayout()
-
-
-//   useEffect(() => {
-//     setAllRoutes(getRoutes(layout))
-//   }, [layout])
-
-
-//   return (
-//     <Router allRoutes={allRoutes} />
-//     // <CustomizationWrap>
-//     //   <ActiveAppsProvider.Provider value={{ activeApps, setActiveApps }}>
-//     //     <SuperLeadzLinkValidation.Provider value={{ validateLink, setValidateLink, visitorSettings, setVisitorSettings }}>
-//     //       <PermissionWrapper>
-//     //         <Suspense fallback={null}>
-//     //           <Router allRoutes={allRoutes} />
-//     //         </Suspense>
-//     //       </PermissionWrapper>
-//     //     </SuperLeadzLinkValidation.Provider>
-//     //   </ActiveAppsProvider.Provider>
-//     // </CustomizationWrap>
-//   )
-// }
-
-// export default App
-
-import React from 'react'
+// ** Hooks Imports
+import { useLayout } from '@hooks/useLayout'
+import CustomizationWrap from './views/Components/SuperLeadz/CustomizationWrap'
+import PermissionWrapper from './configs/PermissionWrapper'
+import '@styles/react/libs/flatpickr/flatpickr.scss'
+import { SuperLeadzLinkValidation, ActiveAppsProvider } from './Helper/Context'
 
 const App = () => {
+  const [allRoutes, setAllRoutes] = useState([])
+  const [validateLink, setValidateLink] = useState({ audience: false, templates: false, editTheme: false })
+  const [activeApps, setActiveApps] = useState([])
+  const [visitorSettings, setVisitorSettings] = useState("ALL_VISITORS")
+
+  // ** Hooks
+  const { layout } = useLayout()
+
+
+  useEffect(() => {
+    setAllRoutes(getRoutes(layout))
+  }, [layout])
+
+
   return (
-    <div>App
-      <h1>This is heading tag</h1>
-      <p>This is paragraphy</p>
-    </div>
+    <CustomizationWrap>
+      <ActiveAppsProvider.Provider value={{ activeApps, setActiveApps }}>
+        <SuperLeadzLinkValidation.Provider value={{ validateLink, setValidateLink, visitorSettings, setVisitorSettings }}>
+          <PermissionWrapper>
+            <Suspense fallback={null}>
+              <Router allRoutes={allRoutes} />
+            </Suspense>
+          </PermissionWrapper>
+        </SuperLeadzLinkValidation.Provider>
+      </ActiveAppsProvider.Provider>
+    </CustomizationWrap>
   )
 }
 
